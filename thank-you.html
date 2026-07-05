@@ -63,14 +63,27 @@ a {
   font-weight: 900;
   text-decoration: none;
 }
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.35);
+  color: var(--white);
+}
 </style>
 </head>
 <body>
 <main>
   <div class="logo">ARC <span>SIGNAGE</span></div>
   <h1>Thank you.</h1>
-  <p>Your quote request has been received. Arc Signage Co. will review the project details and follow up as soon as possible.</p>
-  <a href="/">Back to homepage</a>
+  <p>Your quote request has been received. Next, email any drawings, photos, sign schedules, permit notes, or deadline details to Arc@arcsignco.com with the project address in the subject line.</p>
+  <div class="actions">
+    <a href="mailto:Arc@arcsignco.com?subject=Drawings%20for%20Arc%20Signage%20quote%20request&body=Please%20attach%20drawings%2C%20photos%2C%20sign%20schedules%2C%20permit%20notes%2C%20or%20deadline%20details.%0A%0AProject%20address%3A%0ACompany%3A%0AContact%20name%3A">Email drawings now</a>
+    <a class="secondary" href="/">Back to homepage</a>
+  </div>
 </main>
 </body>
 </html>
