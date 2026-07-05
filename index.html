@@ -5,7 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arc Signage Co. | NYC Signage Design, Fabrication, Permits & Install</title>
 <meta name="description" content="Arc Signage Co. is a Bronx-based full-service signage company serving NYC with design, fabrication, permits, ADA signage, wayfinding, illuminated signs, and installation.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230b1d33'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Arial' font-size='20' font-weight='900' fill='%23d4a843'%3EARC%3C/text%3E%3C/svg%3E">
+<link rel="canonical" href="https://arcsignco.com/">
+<meta name="theme-color" content="#0b1d33">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Arc Signage Co. | NYC Signage Design, Fabrication, Permits & Install">
+<meta property="og:description" content="Full-service NYC sign company: design, fabrication, DOB permits, ADA signage, wayfinding, illuminated signs, and installation across all five boroughs.">
+<meta property="og:url" content="https://arcsignco.com/">
+<meta property="og:image" content="https://arcsignco.com/logo_horizontal_navy_transparent.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon_512.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Arc Signage Co. LLC",
+  "description": "Full-service signage company: design, fabrication, permitting, ADA compliance, and installation across New York City.",
+  "email": "Arc@arcsignco.com",
+  "telephone": "+1-917-569-1076",
+  "url": "https://arcsignco.com/",
+  "image": "https://arcsignco.com/logo_horizontal_navy_transparent.png",
+  "address": { "@type": "PostalAddress", "addressLocality": "Bronx", "addressRegion": "NY", "addressCountry": "US" },
+  "areaServed": ["Bronx", "Manhattan", "Brooklyn", "Queens", "Staten Island"],
+  "knowsAbout": ["ADA signage", "Wayfinding", "Channel letters", "Blade signs", "DOB sign permits", "FDNY signage", "Illuminated signs", "Sign installation"]
+}
+</script>
 <style>
 :root {
   --navy: #0b1d33;
@@ -24,6 +47,26 @@
   --soft: 0 8px 24px rgba(11, 29, 51, 0.08);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 10px 16px;
+  font-weight: 900;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus { left: 0; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
 html { scroll-behavior: smooth; }
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -51,16 +94,6 @@ button, input, select, textarea { font: inherit; }
   gap: 22px;
 }
 .brand-logo { width: 188px; height: auto; }
-.text-logo {
-  display: inline-flex;
-  align-items: center;
-  min-height: 42px;
-  color: var(--white);
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-.text-logo span { color: var(--gold); }
 .navlinks { display: flex; align-items: center; gap: 4px; }
 .navlinks a {
   color: rgba(255,255,255,0.82);
@@ -525,15 +558,6 @@ footer {
   align-items: center;
   gap: 24px;
 }
-.footer-logo {
-  display: inline-block;
-  margin-bottom: 12px;
-  color: var(--white);
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: .08em;
-}
-.footer-logo span { color: var(--gold); }
 footer img { width: 190px; margin-bottom: 12px; }
 footer p { color: #cfd9e6; font-size: 13px; }
 .footer-links { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; font-weight: 800; }
@@ -558,9 +582,10 @@ footer p { color: #cfd9e6; font-size: 13px; }
 </style>
 </head>
 <body>
+<a class="skip-link" href="#top">Skip to main content</a>
 <header class="topbar">
   <div class="wrap nav">
-    <a href="#top" class="text-logo" aria-label="Arc Signage Co. home">ARC&nbsp;<span>SIGNAGE</span></a>
+    <a href="#top" aria-label="Arc Signage Co. home"><img class="brand-logo" src="logo_horizontal_white_transparent.png" alt="Arc Signage Co."></a>
     <nav class="navlinks" aria-label="Primary navigation">
       <a href="#about">About</a>
       <a href="#services">Services</a>
@@ -716,7 +741,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
             <button class="btn navy" id="nextBtn" type="button">Next</button>
           </div>
         </div>
-        <div class="result">
+        <div class="result" aria-live="polite">
           <span class="badge">Live recommendation</span>
           <h3 id="resultTitle">Interior Signage Package</h3>
           <p id="resultText">Your recommendation updates as you answer.</p>
@@ -758,15 +783,14 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <p>Send the project address, drawings, photos, deadline, and any sign schedule you already have. Arc can review the scope and respond with the next step.</p>
           <div class="contact-list">
             <div><strong>Phone</strong><span><a href="tel:+19175691076" style="color:inherit;">(917) 569-1076</a></span></div>
-            <div><strong>Email</strong><span>Arc@arcsignco.com</span></div>
+            <div><strong>Email</strong><span><a href="mailto:Arc@arcsignco.com" style="color:inherit;text-decoration:underline;">Arc@arcsignco.com</a></span></div>
             <div><strong>Service area</strong><span>Bronx, Manhattan, Brooklyn, Queens, Staten Island, and metro area</span></div>
             <div><strong>Urgent projects</strong><span>Put URGENT in the subject line for active jobsite requests.</span></div>
           </div>
         </div>
-        <form class="quote-card" name="quote-request" method="POST" action="/thank-you.html" data-netlify="true" netlify-honeypot="bot-field">
+        <form class="quote-card" name="quote-request" method="POST" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="quote-request">
           <input type="hidden" name="bot-field" style="display:none;">
-          <input type="hidden" id="generatedScopeInput" name="generated_scope" value="Interior Signage Package">
           <h3>Request a quote</h3>
           <p>Share the basics and include any drawings, photos, deadlines, or sign schedules when you email the request.</p>
           <div class="formgrid">
@@ -788,7 +812,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
 <footer>
   <div class="wrap footer-grid">
     <div>
-      <div class="footer-logo">ARC <span>SIGNAGE</span></div>
+      <img src="logo_horizontal_white_transparent.png" alt="Arc Signage Co.">
       <p>NYC's full-service sign company: design, fabrication, permits, ADA compliance, and installation.</p>
     </div>
     <div class="footer-links">
@@ -798,6 +822,10 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <a href="#selector">Scope Finder</a>
       <a href="#quote">Contact</a>
     </div>
+  </div>
+  <div class="wrap" style="margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:#a9b8ca;">
+    <span>&copy; 2026 Arc Signage Co. LLC &mdash; Bronx, NY</span>
+    <span><a href="tel:+19175691076" style="color:inherit;">(917) 569-1076</a> &nbsp;|&nbsp; <a href="mailto:Arc@arcsignco.com" style="color:inherit;">Arc@arcsignco.com</a></span>
   </div>
 </footer>
 
@@ -843,7 +871,6 @@ const resultTitle = document.getElementById("resultTitle");
 const resultText = document.getElementById("resultText");
 const recs = document.getElementById("recs");
 const scopeBox = document.getElementById("scopeBox");
-const generatedScopeInput = document.getElementById("generatedScopeInput");
 
 function renderQuestion() {
   const q = questions[step];
@@ -914,13 +941,20 @@ Priority: ${answers.priority || "TBD"}
 
 Recommended items:
 - ${unique.join("\n- ")}`;
-  generatedScopeInput.value = scopeBox.value;
 }
 
 nextBtn.addEventListener("click", () => {
-  if (step < questions.length - 1) step += 1;
-  renderQuestion();
-  updateResult();
+  if (step < questions.length - 1) {
+    step += 1;
+    renderQuestion();
+    updateResult();
+  } else {
+    updateResult();
+    const msg = document.getElementById("message");
+    if (msg && scopeBox.value) msg.value = scopeBox.value;
+    const quote = document.getElementById("quote");
+    if (quote) quote.scrollIntoView({ behavior: "smooth" });
+  }
 });
 backBtn.addEventListener("click", () => {
   if (step > 0) step -= 1;
