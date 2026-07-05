@@ -87,13 +87,13 @@ button, input, select, textarea { font: inherit; }
   backdrop-filter: blur(10px);
 }
 .nav {
-  height: 70px;
+  height: 108px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 22px;
 }
-.brand-logo { width: 188px; height: auto; }
+.brand-logo { width: min(376px, 46vw); height: auto; }
 .navlinks { display: flex; align-items: center; gap: 4px; }
 .navlinks a {
   color: rgba(255,255,255,0.82);
@@ -142,7 +142,7 @@ button, input, select, textarea { font: inherit; }
 }
 .hero .wrap {
   position: relative;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 108px);
   display: grid;
   grid-template-columns: minmax(0, 1.04fr) minmax(360px, .82fr);
   gap: 38px;
@@ -198,6 +198,33 @@ h1 {
   border-radius: 8px;
   box-shadow: var(--shadow);
   overflow: hidden;
+}
+.hero-visual img { width: 100%; height: auto; }
+.lifecycle-card {
+  position: relative;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.03));
+}
+.lifecycle-logo-overlay {
+  position: absolute;
+  left: 50%;
+  top: 54.5%;
+  width: min(21%, 112px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.lifecycle-logo-overlay img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.lifecycle-note {
+  padding: 13px 16px 15px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  color: #dbe5f1;
+  font-size: 13px;
+  font-weight: 700;
 }
 .visual-toolbar {
   display: flex;
@@ -377,7 +404,7 @@ h1 {
 .revision p { color: var(--muted); font-size: 14px; }
 .services {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
 }
 .service {
@@ -395,6 +422,20 @@ h1 {
   color: var(--gold);
 }
 .service-art svg { width: 74px; height: 74px; }
+.service-art.photo {
+  min-height: 156px;
+  background-image: linear-gradient(180deg, rgba(11,29,51,0), rgba(11,29,51,.16)), url("service_photoreal_sprite_codex.png");
+  background-size: 400% 200%;
+  background-repeat: no-repeat;
+}
+.photo-exterior { background-position: 0% 0%; }
+.photo-wayfinding { background-position: 33.333% 0%; }
+.photo-ada { background-position: 66.666% 0%; }
+.photo-led { background-position: 100% 0%; }
+.photo-permits { background-position: 0% 100%; }
+.photo-awnings { background-position: 33.333% 100%; }
+.photo-construction { background-position: 66.666% 100%; }
+.photo-stickers { background-position: 100% 100%; }
 .service-body { padding: 16px; }
 .service h3 { color: var(--navy); font-size: 16px; margin-bottom: 8px; }
 .service p { color: var(--muted); font-size: 13px; }
@@ -445,6 +486,46 @@ h1 {
 }
 .card h3 { color: var(--navy); margin-bottom: 8px; }
 .card p { color: var(--muted); font-size: 14px; }
+.experience-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr);
+  gap: 18px;
+  align-items: stretch;
+}
+.project-collage {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--white);
+  box-shadow: var(--soft);
+}
+.project-collage img {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+}
+.experience-notes {
+  display: grid;
+  gap: 12px;
+}
+.experience-note {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: var(--soft);
+}
+.experience-note h3 {
+  color: var(--navy);
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+.experience-note p {
+  color: var(--muted);
+  font-size: 14px;
+}
 .specs { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .specs div { display: flex; justify-content: space-between; gap: 14px; font-size: 12px; }
 .specs span:first-child { color: var(--muted); font-weight: 800; }
@@ -565,14 +646,14 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .hero .wrap, .selector, .quote-grid { grid-template-columns: 1fr; }
   .hero .wrap { min-height: auto; }
   .services { grid-template-columns: repeat(2, 1fr); }
-  .portfolio, .revision-list { grid-template-columns: 1fr 1fr; }
+  .portfolio, .revision-list, .experience-showcase { grid-template-columns: 1fr 1fr; }
   .process { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
-  .nav { height: 64px; }
-  .brand-logo { width: 154px; }
+  .nav { height: 86px; gap: 12px; }
+  .brand-logo { width: min(238px, 62vw); }
   .navlinks a:not(.nav-cta) { display: none; }
-  .hero-proof, .asset-grid, .portfolio, .revision-list, .services, .process, .formgrid { grid-template-columns: 1fr; }
+  .hero-proof, .asset-grid, .portfolio, .revision-list, .services, .process, .formgrid, .experience-showcase { grid-template-columns: 1fr; }
   .hero-visual { display: none; }
   .section { padding: 56px 0; }
   .section-head { display: block; }
@@ -614,17 +695,12 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <div class="proof"><strong>24h</strong><span>Typical quote response</span></div>
         </div>
       </div>
-      <div class="hero-visual" aria-label="Exterior signage mockup">
-        <div class="visual-toolbar"><span>ARC Project Planning</span><span class="dots"><i></i><i></i><i></i></span></div>
-        <div class="sign-scene">
-          <div class="facade">
-            <div class="building"></div>
-            <div class="channel-sign"><div><b>ARC SIGNAGE</b><span>DESIGN | FABRICATE | PERMIT | INSTALL</span></div></div>
-            <div class="blade">ARC<br>SIGN<br>CO</div>
-            <div class="mini-board"><div></div><div></div><div></div></div>
-            <div class="sidewalk"></div>
-          </div>
+      <div class="hero-visual" aria-label="Arc Signage package lifecycle infographic">
+        <div class="lifecycle-card">
+          <img src="signage_package_lifecycle_codex.svg" alt="Arc Signage package lifecycle from intake through installation closeout">
+          <span class="lifecycle-logo-overlay" aria-hidden="true"><img src="logo_icon_white_transparent_codex.png" alt=""></span>
         </div>
+        <p class="lifecycle-note">Arc keeps intake, survey, design, approvals, fabrication, and installation moving through one accountable workflow.</p>
       </div>
     </div>
   </section>
@@ -653,28 +729,40 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Services</span>
           <h2>Full-service signage for NYC projects</h2>
         </div>
-        <p class="lead">From a single storefront sign to a multi-floor ADA wayfinding package, Arc handles the scope from planning through punch list.</p>
+        <p class="lead">From a single storefront sign to a multi-floor ADA package, awning, construction sign, or orientation sticker rollout, Arc handles the scope from planning through punch list.</p>
       </div>
       <div class="services">
         <article class="service">
-          <div class="service-art"><svg viewBox="0 0 80 80" fill="none"><rect x="12" y="23" width="56" height="28" rx="3" stroke="currentColor" stroke-width="5"/><path d="M20 57h40" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div>
+          <div class="service-art photo photo-exterior" role="img" aria-label="Photorealistic exterior storefront sign"></div>
           <div class="service-body"><h3>Exterior Signs</h3><p>Storefronts, channel letters, blade signs, projecting signs, awnings, cabinets, and dimensional letters.</p></div>
         </article>
         <article class="service">
-          <div class="service-art"><svg viewBox="0 0 80 80" fill="none"><path d="M18 18h44v15H18zM18 47h32v15H18z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M50 54h13m0 0-7-7m7 7-7 7" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="service-art photo photo-wayfinding" role="img" aria-label="Photorealistic interior wayfinding signs"></div>
           <div class="service-body"><h3>Interior Wayfinding</h3><p>Lobby signs, directory boards, directional signs, floor IDs, elevator signage, and room identification.</p></div>
         </article>
         <article class="service">
-          <div class="service-art"><svg viewBox="0 0 80 80" fill="none"><circle cx="40" cy="22" r="7" stroke="currentColor" stroke-width="5"/><path d="M40 31v30m-14-18h28m-8 18-6-18-6 18" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="service-art photo photo-ada" role="img" aria-label="Photorealistic ADA tactile sign with wheelchair symbol"></div>
           <div class="service-body"><h3>ADA & Code Signs</h3><p>ADA room IDs, restroom signs, tactile text, Grade 2 Braille, stairwell IDs, exits, and egress signage.</p></div>
         </article>
         <article class="service">
-          <div class="service-art"><svg viewBox="0 0 80 80" fill="none"><path d="M40 10v10M40 60v10M18 18l7 7M55 55l7 7M10 40h10M60 40h10M18 62l7-7M55 25l7-7" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><rect x="28" y="28" width="24" height="24" rx="5" stroke="currentColor" stroke-width="5"/></svg></div>
+          <div class="service-art photo photo-led" role="img" aria-label="Photorealistic illuminated LED sign"></div>
           <div class="service-body"><h3>LED & Illuminated</h3><p>Front-lit, back-lit, halo-lit, lightbox, cabinet, LED display, and electrical coordination.</p></div>
         </article>
         <article class="service">
-          <div class="service-art"><svg viewBox="0 0 80 80" fill="none"><path d="M24 10h25l11 12v48H24z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/><path d="M48 10v15h12M32 42h18M32 54h12" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg></div>
+          <div class="service-art photo photo-permits" role="img" aria-label="Photorealistic signage permit and submittal drawings"></div>
           <div class="service-body"><h3>Permits & Submittals</h3><p>DOB permits, FDNY coordination, shop drawings, stamped drawing coordination, and inspection support.</p></div>
+        </article>
+        <article class="service">
+          <div class="service-art photo photo-awnings" role="img" aria-label="Photorealistic storefront awning"></div>
+          <div class="service-body"><h3>Awnings</h3><p>Storefront awnings, branded valances, recover layouts, frame coordination, graphics, and install planning.</p></div>
+        </article>
+        <article class="service">
+          <div class="service-art photo photo-construction" role="img" aria-label="Photorealistic construction site signage"></div>
+          <div class="service-body"><h3>Construction Signs</h3><p>Site boards, safety notices, directional signs, hoarding graphics, project IDs, and temporary install scopes.</p></div>
+        </article>
+        <article class="service">
+          <div class="service-art photo photo-stickers" role="img" aria-label="Photorealistic orientation stickers and vinyl decals"></div>
+          <div class="service-body"><h3>Orientation Stickers</h3><p>Door, glass, floor, wall, room, and directional stickers for openings, tenant moves, and punch-list fixes.</p></div>
         </article>
       </div>
     </div>
@@ -687,36 +775,26 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Selected work</span>
           <h2>Project experience</h2>
         </div>
-        <p class="lead">A focused look at three common project types Arc supports across NYC.</p>
+        <p class="lead">A visual sample of common signage scopes Arc supports across NYC, from permanent code packages to temporary jobsite visibility.</p>
       </div>
-      <div class="portfolio">
-        <article class="card">
-          <div class="project-art"><div class="mock">575 LEX<br>WAYFINDING</div></div>
-          <div class="card-body">
-            <div class="tags"><span class="tag">Healthcare</span><span class="tag">Manhattan</span><span class="tag">ADA</span></div>
-            <h3>575 Lexington Ave</h3>
-            <p>Institutional signage scope with blade signage, wayfinding, shop drawings, and compliance coordination.</p>
-            <div class="specs"><div><span>Scope</span><span>Healthcare signage</span></div><div><span>Focus</span><span>Submittals + compliance</span></div></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="project-art"><div class="mock light">ADA ROOM<br>PACKAGE</div></div>
-          <div class="card-body">
-            <div class="tags"><span class="tag">ADA</span><span class="tag">Interior</span><span class="tag">Code</span></div>
-            <h3>Code-Required Interiors</h3>
-            <p>Room IDs, stair signs, restroom signs, egress signage, tactile lettering, Braille, and message schedules.</p>
-            <div class="specs"><div><span>Scope</span><span>Interior code signs</span></div><div><span>Focus</span><span>ADA + egress</span></div></div>
-          </div>
-        </article>
-        <article class="card">
-          <div class="project-art"><div class="mock gold">NY MEAT<br>PROVS</div></div>
-          <div class="card-body">
-            <div class="tags"><span class="tag">Retail</span><span class="tag">Exterior</span><span class="tag">Vinyl</span></div>
-            <h3>NY Meat & Provs</h3>
-            <p>Retail-facing signage direction for storefront graphics, banners, A-frame concepts, and price catalog work.</p>
-            <div class="specs"><div><span>Scope</span><span>Retail signage</span></div><div><span>Focus</span><span>Brand + storefront</span></div></div>
-          </div>
-        </article>
+      <div class="experience-showcase">
+        <figure class="project-collage">
+          <img src="service_photoreal_sprite_codex.png" alt="Collage of storefront signage, wayfinding, ADA signage, illuminated letters, permit drawings, awnings, construction signs, and orientation decals">
+        </figure>
+        <div class="experience-notes" aria-label="Project experience categories">
+          <article class="experience-note">
+            <h3>Exterior & illuminated signs</h3>
+            <p>Storefront signs, channel letters, blade signs, cabinets, dimensional letters, awnings, and LED coordination.</p>
+          </article>
+          <article class="experience-note">
+            <h3>Interior, ADA & wayfinding</h3>
+            <p>Room IDs, tactile signs, Braille, directories, floor IDs, directional signs, glass decals, and code-required packages.</p>
+          </article>
+          <article class="experience-note">
+            <h3>Permits, jobsite & rollout support</h3>
+            <p>Shop drawings, permit coordination, temporary construction signage, hoarding graphics, orientation stickers, and install planning.</p>
+          </article>
+        </div>
       </div>
     </div>
   </section>
