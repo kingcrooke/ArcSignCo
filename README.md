@@ -41,6 +41,25 @@ If it can't be backed up, soften or remove it.
 - Successful submissions redirect to `/thank-you`.
 - Submissions, spam, and notification settings live in the Netlify UI
   (Forms, and Project configuration > Notifications). The notification email target is set there, not in code.
+- **Notification target: arc@arcsignco.com** (owner decision). Configure it in Netlify under
+  Project configuration > Notifications > Emails and webhooks > Form submission notifications, for the
+  `quote-request` form.
+- The public contact email shown on the site is also arc@arcsignco.com (lowercase).
+
+## Location and address
+
+- No street address anywhere: not in visible copy, the footer, or JSON-LD. The location label is
+  "New York / Tri-State".
+- JSON-LD `LocalBusiness` uses `areaServed` (New York, New Jersey, Connecticut) and has no `address`
+  or `streetAddress`.
+- Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search `index.html` for
+  `TODO(GBP)`: add the URL to the empty `sameAs` array in the JSON-LD and uncomment the footer link.
+  Never guess the URL.
+
+## Portfolio photos (later phase)
+
+Past Crown and Certified install photos may be used in a later portfolio PR, with those company names
+and logos blurred out before they are committed. None are in the repo yet.
 
 ## Images and caching
 
