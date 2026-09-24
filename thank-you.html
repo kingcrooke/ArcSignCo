@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thank You | Arc Signage Co.</title>
+<title>Thank You | Arc Signage Co</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b1d33">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
 :root {
   --navy: #0b1d33;
@@ -33,13 +37,11 @@ main {
   box-shadow: 0 18px 44px rgba(0,0,0,.18);
 }
 .logo {
-  color: var(--white);
-  font-size: 20px;
-  font-weight: 900;
-  letter-spacing: .08em;
+  display: block;
+  width: min(220px, 70%);
+  height: auto;
   margin-bottom: 28px;
 }
-.logo span { color: var(--gold); }
 h1 {
   font-size: clamp(34px, 6vw, 54px);
   line-height: 1;
@@ -73,15 +75,24 @@ a {
   border: 1px solid rgba(255,255,255,.35);
   color: var(--white);
 }
+@media (max-width: 480px) {
+  body { padding: 16px; }
+  main { padding: 24px; }
+  p { font-size: 16px; }
+  .actions a { width: 100%; justify-content: center; }
+}
 </style>
 </head>
 <body>
 <main>
-  <div class="logo">ARC <span>SIGNAGE</span></div>
+  <picture>
+    <source type="image/webp" srcset="/assets/img/logo-lockup-white-560.v1.webp">
+    <img class="logo" src="/assets/img/logo-lockup-white-560.v1.png" width="847" height="174" alt="Arc Signage Co">
+  </picture>
   <h1>Thank you.</h1>
-  <p>Your quote request has been received. Next, email any drawings, photos, sign schedules, permit notes, or deadline details to Arc@arcsignco.com with the project address in the subject line.</p>
+  <p>Your quote request has been received. Next, email any drawings, photos, sign schedules, permit notes, or deadline details to Arc@arcsignco.com with the project address in the subject line. Arc aims to send your quote within 24 hours of receiving drawings, photos, and site details.</p>
   <div class="actions">
-    <a href="mailto:Arc@arcsignco.com?subject=Drawings%20for%20Arc%20Signage%20quote%20request&body=Please%20attach%20drawings%2C%20photos%2C%20sign%20schedules%2C%20permit%20notes%2C%20or%20deadline%20details.%0A%0AProject%20address%3A%0ACompany%3A%0AContact%20name%3A">Email drawings now</a>
+    <a href="mailto:Arc@arcsignco.com?subject=Drawings%20for%20Arc%20Signage%20Co%20quote%20request&body=Please%20attach%20drawings%2C%20photos%2C%20sign%20schedules%2C%20permit%20notes%2C%20or%20deadline%20details.%0A%0AProject%20address%3A%0ACompany%3A%0AContact%20name%3A">Email drawings now</a>
     <a class="secondary" href="/">Back to homepage</a>
   </div>
 </main>

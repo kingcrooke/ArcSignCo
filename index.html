@@ -3,32 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arc Signage Co. | NYC Signage Design, Fabrication, Permits & Install</title>
-<meta name="description" content="Arc Signage Co. is a Bronx-based full-service signage company serving NYC with design, fabrication, permits, ADA signage, wayfinding, illuminated signs, and installation.">
+<title>Arc Signage Co | NYC Signage Design, Fabrication, Permits & Install</title>
+<meta name="description" content="Arc Signage Co designs, fabricates, permits, and installs signage across New York City and the tri-state area: ADA, wayfinding, storefront, and illuminated signs.">
 <link rel="canonical" href="https://arcsignco.com/">
 <meta name="theme-color" content="#0b1d33">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Arc Signage Co. | NYC Signage Design, Fabrication, Permits & Install">
-<meta property="og:description" content="Full-service NYC sign company: design, fabrication, DOB permits, ADA signage, wayfinding, illuminated signs, and installation across all five boroughs.">
+<meta property="og:site_name" content="Arc Signage Co">
+<meta property="og:title" content="Arc Signage Co | NYC Signage Design, Fabrication, Permits & Install">
+<meta property="og:description" content="Full-service New York / tri-state sign company: design, fabrication, DOB permits, ADA signage, wayfinding, illuminated signs, and installation across the five boroughs and nearby New Jersey and Connecticut.">
 <meta property="og:url" content="https://arcsignco.com/">
-<meta property="og:image" content="https://arcsignco.com/logo_horizontal_navy_transparent.png">
+<meta property="og:image" content="https://arcsignco.com/assets/img/og-image-1200x630.v1.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Arc Signage Co logo">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="favicon_512.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "Arc Signage Co. LLC",
-  "description": "Full-service signage company: design, fabrication, permitting, ADA compliance, and installation across New York City.",
+  "name": "Arc Signage Co",
+  "legalName": "Arc Signage Co LLC",
+  "description": "Full-service signage company: design, fabrication, permitting, ADA compliance, and installation across New York City and the tri-state area.",
   "email": "Arc@arcsignco.com",
   "telephone": "+1-917-569-1076",
   "url": "https://arcsignco.com/",
-  "image": "https://arcsignco.com/logo_horizontal_navy_transparent.png",
-  "address": { "@type": "PostalAddress", "addressLocality": "Bronx", "addressRegion": "NY", "addressCountry": "US" },
-  "areaServed": ["Bronx", "Manhattan", "Brooklyn", "Queens", "Staten Island"],
+  "image": "https://arcsignco.com/assets/img/og-image-1200x630.v1.png",
+  "address": { "@type": "PostalAddress", "addressRegion": "NY", "addressCountry": "US" },
+  "areaServed": ["Bronx, NY", "Manhattan, NY", "Brooklyn, NY", "Queens, NY", "Staten Island, NY", "New York tri-state area"],
   "knowsAbout": ["ADA signage", "Wayfinding", "Channel letters", "Blade signs", "DOB sign permits", "FDNY signage", "Illuminated signs", "Sign installation"]
 }
 </script>
+<!-- Analytics: none installed. Add the approved provider snippet here only after Jesus approves a tool and ID (see README "Analytics"). -->
 <style>
 :root {
   --navy: #0b1d33;
@@ -36,6 +45,7 @@
   --navy-3: #1a3a5c;
   --gold: #d4a843;
   --gold-2: #f0d080;
+  --gold-ink: #7a5a12;
   --paper: #f5f6f8;
   --cream: #fbfaf6;
   --ink: #172233;
@@ -67,7 +77,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 111px; }
 body {
   font-family: Arial, Helvetica, sans-serif;
   color: var(--ink);
@@ -93,9 +103,13 @@ button, input, select, textarea { font: inherit; }
   justify-content: space-between;
   gap: 22px;
 }
-.brand-logo { width: min(376px, 46vw); height: auto; }
-.navlinks { display: flex; align-items: center; gap: 4px; }
+.brand { display: inline-flex; align-items: center; min-height: 48px; }
+.brand-logo { width: min(265px, 32.5vw); height: auto; }
+.navlinks, .navmenu { display: flex; align-items: center; gap: 4px; }
 .navlinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: rgba(255,255,255,0.82);
   font-size: 13px;
   font-weight: 800;
@@ -103,6 +117,20 @@ button, input, select, textarea { font: inherit; }
   border-radius: 7px;
 }
 .navlinks a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+.navlinks a.nav-cta, .navlinks a.nav-cta:hover { color: var(--navy); background: var(--gold); }
+.nav-toggle {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.42);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
 .btn {
   display: inline-flex;
   align-items: center;
@@ -153,7 +181,7 @@ button, input, select, textarea { font: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--gold-2);
+  color: var(--gold-ink);
   border: 1px solid rgba(212,168,67,.5);
   background: rgba(212,168,67,.13);
   padding: 7px 10px;
@@ -163,6 +191,7 @@ button, input, select, textarea { font: inherit; }
   letter-spacing: .09em;
   text-transform: uppercase;
 }
+.hero .eyebrow, .dark .eyebrow { color: var(--gold-2); }
 h1 {
   max-width: 820px;
   margin-top: 18px;
@@ -423,19 +452,23 @@ h1 {
 }
 .service-art svg { width: 74px; height: 74px; }
 .service-art.photo {
+  position: relative;
+  display: block;
   min-height: 156px;
-  background-image: linear-gradient(180deg, rgba(11,29,51,0), rgba(11,29,51,.16)), url("service_photoreal_sprite_codex.png");
-  background-size: 400% 200%;
-  background-repeat: no-repeat;
 }
-.photo-exterior { background-position: 0% 0%; }
-.photo-wayfinding { background-position: 33.333% 0%; }
-.photo-ada { background-position: 66.666% 0%; }
-.photo-led { background-position: 100% 0%; }
-.photo-permits { background-position: 0% 100%; }
-.photo-awnings { background-position: 33.333% 100%; }
-.photo-construction { background-position: 66.666% 100%; }
-.photo-stickers { background-position: 100% 100%; }
+.service-art.photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11,29,51,0), rgba(11,29,51,.16));
+  pointer-events: none;
+}
+.service-art.photo img {
+  width: 100%;
+  height: 156px;
+  object-fit: cover;
+  object-position: center 40%;
+}
 .service-body { padding: 16px; }
 .service h3 { color: var(--navy); font-size: 16px; margin-bottom: 8px; }
 .service p { color: var(--muted); font-size: 13px; }
@@ -499,11 +532,20 @@ h1 {
   background: var(--white);
   box-shadow: var(--soft);
 }
+.project-collage { display: flex; flex-direction: column; }
+.project-collage picture { flex: 1; display: flex; }
 .project-collage img {
   width: 100%;
   height: 100%;
   min-height: 420px;
   object-fit: cover;
+}
+.project-collage figcaption {
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
 }
 .experience-notes {
   display: grid;
@@ -538,7 +580,7 @@ h1 {
 .quiz, .result { padding: 22px; }
 .progress { height: 8px; background: #e7edf5; border-radius: 999px; overflow: hidden; margin-bottom: 18px; }
 .bar { height: 100%; width: 20%; background: var(--gold); transition: width .2s ease; }
-.q-num { color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+.q-num { color: var(--gold-ink); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
 .quiz h3, .result h3 { color: var(--navy); font-size: 24px; line-height: 1.12; margin-bottom: 16px; }
 .options { display: grid; gap: 10px; }
 .option {
@@ -608,6 +650,7 @@ h1 {
 }
 .contact-list strong { display: block; color: var(--navy); font-size: 13px; }
 .contact-list span { color: var(--muted); font-size: 13px; }
+.contact-list a { display: inline-flex; align-items: center; min-height: 44px; }
 .formgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .field { display: flex; flex-direction: column; gap: 6px; }
 .field.full { grid-column: 1 / -1; }
@@ -627,6 +670,13 @@ h1 {
   color: var(--ink);
 }
 .field textarea { min-height: 112px; resize: vertical; }
+.hp-field {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 footer {
   background: var(--navy);
   color: #dbe5f1;
@@ -639,9 +689,22 @@ footer {
   align-items: center;
   gap: 24px;
 }
-footer img { width: 190px; margin-bottom: 12px; }
+footer img { width: 134px; height: auto; margin-bottom: 12px; }
 footer p { color: #cfd9e6; font-size: 13px; }
-.footer-links { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; font-weight: 800; }
+.footer-links { display: flex; gap: 4px 14px; flex-wrap: wrap; font-size: 13px; font-weight: 800; }
+.footer-links a { display: inline-flex; align-items: center; min-height: 44px; }
+.footer-meta {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #a9b8ca;
+}
+.footer-meta a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; }
 @media (max-width: 1040px) {
   .hero .wrap, .selector, .quote-grid { grid-template-columns: 1fr; }
   .hero .wrap { min-height: auto; }
@@ -650,13 +713,36 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .process { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 720px) {
-  .nav { height: 86px; gap: 12px; }
-  .brand-logo { width: min(238px, 62vw); }
-  .navlinks a:not(.nav-cta) { display: none; }
-  .hero-proof, .asset-grid, .portfolio, .revision-list, .services, .process, .formgrid, .experience-showcase { grid-template-columns: 1fr; }
+  html { scroll-padding-top: 75px; }
+  .nav { height: 72px; gap: 10px; }
+  .brand-logo { width: min(168px, 44vw); }
+  .navlinks { gap: 8px; }
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .navmenu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 18px 14px;
+    background: var(--navy);
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 18px 30px rgba(0,0,0,.25);
+  }
+  .navmenu.open { display: flex; }
+  .navmenu a { min-height: 48px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.08); border-radius: 0; }
+  .navmenu a:last-child { border-bottom: 0; }
+  .hero .wrap { padding: 36px 0 34px; }
+  .hero-proof { grid-template-columns: 1fr 1fr; }
+  .asset-grid, .portfolio, .revision-list, .services, .process, .formgrid, .experience-showcase { grid-template-columns: 1fr; }
+  .project-collage img { min-height: 0; aspect-ratio: 2 / 1; height: auto; }
   .hero-visual { display: none; }
   .section { padding: 56px 0; }
   .section-head { display: block; }
+  .section-head .lead { margin-top: 12px; }
   .swatches { grid-template-columns: 1fr 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
 }
@@ -666,13 +752,21 @@ footer p { color: #cfd9e6; font-size: 13px; }
 <a class="skip-link" href="#top">Skip to main content</a>
 <header class="topbar">
   <div class="wrap nav">
-    <a href="#top" aria-label="Arc Signage Co. home"><img class="brand-logo" src="logo_horizontal_white_transparent.png" alt="Arc Signage Co."></a>
+    <a class="brand" href="#top" aria-label="Arc Signage Co home">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v1.webp 280w, /assets/img/logo-lockup-white-560.v1.webp 560w, /assets/img/logo-lockup-white-847.v1.webp 847w" sizes="(max-width: 720px) 168px, 265px">
+        <img class="brand-logo" src="/assets/img/logo-lockup-white-560.v1.png" srcset="/assets/img/logo-lockup-white-280.v1.png 280w, /assets/img/logo-lockup-white-560.v1.png 560w, /assets/img/logo-lockup-white-847.v1.png 847w" sizes="(max-width: 720px) 168px, 265px" width="847" height="174" alt="Arc Signage Co">
+      </picture>
+    </a>
     <nav class="navlinks" aria-label="Primary navigation">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#work">Work</a>
-      <a href="#selector">Scope Finder</a>
+      <div class="navmenu" id="nav-menu">
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#selector">Scope Finder</a>
+      </div>
       <a href="#quote" class="btn gold nav-cta">Get Quote</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
     </nav>
   </div>
 </header>
@@ -681,9 +775,9 @@ footer p { color: #cfd9e6; font-size: 13px; }
   <section class="hero">
     <div class="wrap">
       <div>
-        <span class="eyebrow">Bronx, New York | All Five Boroughs</span>
+        <span class="eyebrow">New York / Tri-State | Five Boroughs, NJ &amp; CT</span>
         <h1>NYC signage scoped, approved, fabricated, and installed by one team.</h1>
-        <p class="hero-copy">Arc Signage Co. helps contractors, architects, property teams, and business owners move from drawings to field-ready signs without chasing separate designers, fabricators, permit runners, and installers.</p>
+        <p class="hero-copy">Arc Signage Co helps contractors, architects, property teams, and business owners move from drawings to field-ready signs without chasing separate designers, fabricators, permit runners, and installers.</p>
         <div class="hero-actions">
           <a class="btn gold" href="#quote">Send drawings for a quote</a>
           <a class="btn ghost" href="#selector">Find your signage package</a>
@@ -692,13 +786,13 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <div class="proof"><strong>5</strong><span>NYC boroughs served</span></div>
           <div class="proof"><strong>ADA</strong><span>Code-first packages</span></div>
           <div class="proof"><strong>DOB</strong><span>Permit coordination</span></div>
-          <div class="proof"><strong>24h</strong><span>Typical quote response</span></div>
+          <div class="proof"><strong>24h</strong><span>Quote target once drawings, photos &amp; site details are in</span></div>
         </div>
       </div>
       <div class="hero-visual" aria-label="Arc Signage package lifecycle infographic">
         <div class="lifecycle-card">
-          <img src="signage_package_lifecycle_codex.svg" alt="Arc Signage package lifecycle from intake through installation closeout">
-          <span class="lifecycle-logo-overlay" aria-hidden="true"><img src="logo_icon_white_transparent_codex.png" alt=""></span>
+          <img src="/assets/img/signage-package-lifecycle.v1.svg" width="920" height="760" alt="Arc Signage package lifecycle from intake through installation closeout">
+          <span class="lifecycle-logo-overlay" aria-hidden="true"><picture><source type="image/webp" srcset="/assets/img/logo-icon-white-240.v1.webp"><img src="/assets/img/logo-icon-white-240.v1.png" width="240" height="240" loading="lazy" decoding="async" alt=""></picture></span>
         </div>
         <p class="lifecycle-note">Arc keeps intake, survey, design, approvals, fabrication, and installation moving through one accountable workflow.</p>
       </div>
@@ -712,7 +806,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Why Arc</span>
           <h2>Built for NYC. Built to pass review. Built to last.</h2>
         </div>
-        <p class="lead">Arc Signage Co. is a Bronx-based, full-service sign company serving businesses, general contractors, architects, healthcare facilities, retail operators, and property teams across New York City.</p>
+        <p class="lead">Arc Signage Co is a full-service sign company serving businesses, general contractors, architects, healthcare facilities, retail operators, and property teams across the five boroughs and nearby New Jersey and Connecticut.</p>
       </div>
       <div class="revision-list">
         <article class="revision"><b>1</b><h3>One accountable team</h3><p>Design, fabrication, permitting, and installation stay under one point of contact from first review to closeout.</p></article>
@@ -733,35 +827,35 @@ footer p { color: #cfd9e6; font-size: 13px; }
       </div>
       <div class="services">
         <article class="service">
-          <div class="service-art photo photo-exterior" role="img" aria-label="Photorealistic exterior storefront sign"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-exterior-300.v1.avif 300w, /assets/img/service-exterior-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-exterior-300.v1.webp 300w, /assets/img/service-exterior-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-exterior-428.v1.jpg" srcset="/assets/img/service-exterior-300.v1.jpg 300w, /assets/img/service-exterior-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Storefront with dimensional letter sign"></picture></div>
           <div class="service-body"><h3>Exterior Signs</h3><p>Storefronts, channel letters, blade signs, projecting signs, awnings, cabinets, and dimensional letters.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-wayfinding" role="img" aria-label="Photorealistic interior wayfinding signs"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-wayfinding-300.v1.avif 300w, /assets/img/service-wayfinding-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-wayfinding-300.v1.webp 300w, /assets/img/service-wayfinding-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-wayfinding-428.v1.jpg" srcset="/assets/img/service-wayfinding-300.v1.jpg 300w, /assets/img/service-wayfinding-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Interior wayfinding sign in a corridor"></picture></div>
           <div class="service-body"><h3>Interior Wayfinding</h3><p>Lobby signs, directory boards, directional signs, floor IDs, elevator signage, and room identification.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-ada" role="img" aria-label="Photorealistic ADA tactile sign with wheelchair symbol"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-ada-300.v1.avif 300w, /assets/img/service-ada-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-ada-300.v1.webp 300w, /assets/img/service-ada-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-ada-428.v1.jpg" srcset="/assets/img/service-ada-300.v1.jpg 300w, /assets/img/service-ada-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="ADA tactile room sign with wheelchair symbol and Braille"></picture></div>
           <div class="service-body"><h3>ADA & Code Signs</h3><p>ADA room IDs, restroom signs, tactile text, Grade 2 Braille, stairwell IDs, exits, and egress signage.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-led" role="img" aria-label="Photorealistic illuminated LED sign"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-led-300.v1.avif 300w, /assets/img/service-led-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-led-300.v1.webp 300w, /assets/img/service-led-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-led-428.v1.jpg" srcset="/assets/img/service-led-300.v1.jpg 300w, /assets/img/service-led-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Installer mounting an illuminated channel letter"></picture></div>
           <div class="service-body"><h3>LED & Illuminated</h3><p>Front-lit, back-lit, halo-lit, lightbox, cabinet, LED display, and electrical coordination.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-permits" role="img" aria-label="Photorealistic signage permit and submittal drawings"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-permits-300.v1.avif 300w, /assets/img/service-permits-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-permits-300.v1.webp 300w, /assets/img/service-permits-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-permits-428.v1.jpg" srcset="/assets/img/service-permits-300.v1.jpg 300w, /assets/img/service-permits-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Sign permit drawings with a stamp and ruler"></picture></div>
           <div class="service-body"><h3>Permits & Submittals</h3><p>DOB permits, FDNY coordination, shop drawings, stamped drawing coordination, and inspection support.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-awnings" role="img" aria-label="Photorealistic storefront awning"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-awnings-300.v1.avif 300w, /assets/img/service-awnings-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-awnings-300.v1.webp 300w, /assets/img/service-awnings-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-awnings-428.v1.jpg" srcset="/assets/img/service-awnings-300.v1.jpg 300w, /assets/img/service-awnings-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Navy storefront awning with gooseneck lights"></picture></div>
           <div class="service-body"><h3>Awnings</h3><p>Storefront awnings, branded valances, recover layouts, frame coordination, graphics, and install planning.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-construction" role="img" aria-label="Photorealistic construction site signage"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-construction-300.v1.avif 300w, /assets/img/service-construction-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-construction-300.v1.webp 300w, /assets/img/service-construction-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-construction-428.v1.jpg" srcset="/assets/img/service-construction-300.v1.jpg 300w, /assets/img/service-construction-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Construction site hoarding with safety and directional signs"></picture></div>
           <div class="service-body"><h3>Construction Signs</h3><p>Site boards, safety notices, directional signs, hoarding graphics, project IDs, and temporary install scopes.</p></div>
         </article>
         <article class="service">
-          <div class="service-art photo photo-stickers" role="img" aria-label="Photorealistic orientation stickers and vinyl decals"></div>
+          <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-stickers-300.v1.avif 300w, /assets/img/service-stickers-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-stickers-300.v1.webp 300w, /assets/img/service-stickers-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-stickers-428.v1.jpg" srcset="/assets/img/service-stickers-300.v1.jpg 300w, /assets/img/service-stickers-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Directional arrow decal being applied to glass"></picture></div>
           <div class="service-body"><h3>Orientation Stickers</h3><p>Door, glass, floor, wall, room, and directional stickers for openings, tenant moves, and punch-list fixes.</p></div>
         </article>
       </div>
@@ -772,14 +866,19 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <div class="wrap">
       <div class="section-head">
         <div>
-          <span class="eyebrow">Selected work</span>
-          <h2>Project experience</h2>
+          <span class="eyebrow">Scope examples</span>
+          <h2>Typical project scopes</h2>
         </div>
-        <p class="lead">A visual sample of common signage scopes Arc supports across NYC, from permanent code packages to temporary jobsite visibility.</p>
+        <p class="lead">Illustrative images of the signage scopes Arc takes on across New York and the tri-state area, from permanent code packages to temporary jobsite visibility.</p>
       </div>
       <div class="experience-showcase">
         <figure class="project-collage">
-          <img src="service_photoreal_sprite_codex.png" alt="Collage of storefront signage, wayfinding, ADA signage, illuminated letters, permit drawings, awnings, construction signs, and orientation decals">
+          <picture>
+            <source type="image/avif" srcset="/assets/img/scope-collage-800.v1.avif 800w, /assets/img/scope-collage-1200.v1.avif 1200w, /assets/img/scope-collage-1774.v1.avif 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px">
+            <source type="image/webp" srcset="/assets/img/scope-collage-800.v1.webp 800w, /assets/img/scope-collage-1200.v1.webp 1200w, /assets/img/scope-collage-1774.v1.webp 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px">
+            <img src="/assets/img/scope-collage-1200.v1.jpg" srcset="/assets/img/scope-collage-800.v1.jpg 800w, /assets/img/scope-collage-1200.v1.jpg 1200w, /assets/img/scope-collage-1774.v1.jpg 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px" width="1774" height="887" loading="lazy" decoding="async" alt="Collage of storefront signage, wayfinding, ADA signage, illuminated letters, permit drawings, awnings, construction signs, and orientation decals">
+          </picture>
+          <figcaption>Illustrative images of typical scopes, not photos of completed Arc Signage Co projects.</figcaption>
         </figure>
         <div class="experience-notes" aria-label="Project experience categories">
           <article class="experience-note">
@@ -862,19 +961,20 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <div class="contact-list">
             <div><strong>Phone</strong><span><a href="tel:+19175691076" style="color:inherit;">(917) 569-1076</a></span></div>
             <div><strong>Email</strong><span><a href="mailto:Arc@arcsignco.com" style="color:inherit;text-decoration:underline;">Arc@arcsignco.com</a></span></div>
-            <div><strong>Service area</strong><span>Bronx, Manhattan, Brooklyn, Queens, Staten Island, and metro area</span></div>
+            <div><strong>Service area</strong><span>New York / tri-state: Bronx, Manhattan, Brooklyn, Queens, Staten Island, plus nearby New Jersey and Connecticut</span></div>
             <div><strong>Urgent projects</strong><span>Put URGENT in the subject line for active jobsite requests.</span></div>
           </div>
         </div>
-        <form class="quote-card" name="quote-request" method="POST" action="/thank-you.html" data-netlify="true" netlify-honeypot="bot-field">
+        <form class="quote-card" id="quoteForm" name="quote-request" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="quote-request">
-          <input type="hidden" name="bot-field" style="display:none;">
+          <input type="hidden" name="scope-finder" id="scopeField" value="">
+          <p class="hp-field" aria-hidden="true"><label>Leave this field empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
           <h3>Request a quote</h3>
-          <p>Share the basics here. After submitting, email drawings, photos, deadlines, or sign schedules to Arc@arcsignco.com so Arc can review the full scope.</p>
+          <p>Share the basics here. After submitting, email drawings, photos, deadlines, or sign schedules to Arc@arcsignco.com so Arc can review the full scope. The 24-hour quote target starts once Arc has your drawings, photos, and site details.</p>
           <div class="formgrid">
-            <div class="field"><label for="name">Name</label><input id="name" name="name" placeholder="Your name" required></div>
-            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="email@company.com" required></div>
-            <div class="field"><label for="company">Company</label><input id="company" name="company" placeholder="GC / architect / owner"></div>
+            <div class="field"><label for="name">Name</label><input id="name" name="name" placeholder="Your name" autocomplete="name" required></div>
+            <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="email@company.com" autocomplete="email" required></div>
+            <div class="field"><label for="company">Company</label><input id="company" name="company" placeholder="GC / architect / owner" autocomplete="organization"></div>
             <div class="field"><label for="location">Project location</label><input id="location" name="location" placeholder="Borough or address"></div>
             <div class="field"><label for="type">Project type</label><select id="type" name="type"><option>Not sure</option><option>Exterior sign</option><option>Interior wayfinding</option><option>ADA signage</option><option>LED and illuminated</option><option>Permits and compliance</option></select></div>
             <div class="field"><label for="deadline">Deadline</label><input id="deadline" name="deadline" placeholder="Bid date / install date"></div>
@@ -890,8 +990,11 @@ footer p { color: #cfd9e6; font-size: 13px; }
 <footer>
   <div class="wrap footer-grid">
     <div>
-      <img src="logo_horizontal_white_transparent.png" alt="Arc Signage Co.">
-      <p>NYC's full-service sign company: design, fabrication, permits, ADA compliance, and installation.</p>
+      <picture>
+        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v1.webp 280w, /assets/img/logo-lockup-white-560.v1.webp 560w" sizes="134px">
+        <img src="/assets/img/logo-lockup-white-280.v1.png" srcset="/assets/img/logo-lockup-white-280.v1.png 280w, /assets/img/logo-lockup-white-560.v1.png 560w" sizes="134px" width="847" height="174" loading="lazy" decoding="async" alt="Arc Signage Co">
+      </picture>
+      <p>Full-service signage for New York and the tri-state area: design, fabrication, permits, ADA compliance, and installation.</p>
     </div>
     <div class="footer-links">
       <a href="#about">About</a>
@@ -901,9 +1004,9 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <a href="#quote">Contact</a>
     </div>
   </div>
-  <div class="wrap" style="margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:#a9b8ca;">
-    <span>&copy; 2026 Arc Signage Co. LLC &mdash; Bronx, NY</span>
-    <span><a href="tel:+19175691076" style="color:inherit;">(917) 569-1076</a> &nbsp;|&nbsp; <a href="mailto:Arc@arcsignco.com" style="color:inherit;">Arc@arcsignco.com</a></span>
+  <div class="wrap footer-meta">
+    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / tri-state</span>
+    <span><a href="tel:+19175691076">(917) 569-1076</a> &nbsp;|&nbsp; <a href="mailto:Arc@arcsignco.com">Arc@arcsignco.com</a></span>
   </div>
 </footer>
 
@@ -1021,6 +1124,22 @@ Recommended items:
 - ${unique.join("\n- ")}`;
 }
 
+let lastInsertedScope = "";
+function insertScopeIntoNotes() {
+  const msg = document.getElementById("message");
+  const scope = scopeBox.value.trim();
+  if (!msg || !scope) return;
+  const notes = msg.value.trim();
+  if (!notes || notes === lastInsertedScope) {
+    msg.value = scope;
+  } else if (lastInsertedScope && msg.value.includes(lastInsertedScope)) {
+    msg.value = msg.value.replace(lastInsertedScope, scope);
+  } else if (!notes.includes(scope)) {
+    msg.value = `${msg.value.trimEnd()}\n\n${scope}`;
+  }
+  lastInsertedScope = scope;
+}
+
 nextBtn.addEventListener("click", () => {
   if (step < questions.length - 1) {
     step += 1;
@@ -1028,10 +1147,34 @@ nextBtn.addEventListener("click", () => {
     updateResult();
   } else {
     updateResult();
-    const msg = document.getElementById("message");
-    if (msg && scopeBox.value) msg.value = scopeBox.value;
+    insertScopeIntoNotes();
     const quote = document.getElementById("quote");
     if (quote) quote.scrollIntoView({ behavior: "smooth" });
+  }
+});
+
+// Scope Finder answers reach the lead even if the visitor never presses Finish.
+document.getElementById("quoteForm").addEventListener("submit", () => {
+  const scopeField = document.getElementById("scopeField");
+  const msg = document.getElementById("message");
+  const scope = scopeBox.value.trim();
+  const used = Object.keys(answers).length > 0;
+  scopeField.value = used && scope && !(msg && msg.value.includes(scope)) ? scope : "";
+});
+
+const navToggle = document.getElementById("navToggle");
+const navMenu = document.getElementById("nav-menu");
+function setMenu(open) {
+  navMenu.classList.toggle("open", open);
+  navToggle.setAttribute("aria-expanded", String(open));
+  navToggle.textContent = open ? "Close" : "Menu";
+}
+navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
+navMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && navMenu.classList.contains("open")) {
+    setMenu(false);
+    navToggle.focus();
   }
 });
 backBtn.addEventListener("click", () => {
