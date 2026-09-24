@@ -1,1 +1,18 @@
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local tooling
+node_modules/
+.netlify/
