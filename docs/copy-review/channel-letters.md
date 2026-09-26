@@ -20,7 +20,7 @@ _Label: LED & Illuminated | New York / Tri-State_
 
 # Front-lit, halo-lit, and reverse channel letters for New York storefronts
 
-Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them, and some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician.
+Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician.
 
 [Button: Request a quote](/#quote)
 
@@ -56,7 +56,7 @@ Front-lit faces with a halo glow behind, for a layered look at night.
 
 ### Non-lit dimensional letters
 
-The same letter shapes without lighting, in metal or acrylic. With no electrical connection there is no electrical permit, but a sign permit is still usually needed unless the sign falls under DOB's exceptions.
+The same letter shapes without lighting, in metal or acrylic. With no electrical connection, there's no electrical permit. You still usually need a sign permit unless the sign falls under DOB's exceptions.
 
 [Image, alt text: "Installer mounting an illuminated channel letter"]
 
@@ -68,11 +68,11 @@ _Label: Mounting_
 
 ### Direct (flush) mount
 
-Letters are fastened to the facade one by one. It gives the cleanest look, but every letter needs its own attachment points and wiring path, so it depends on the wall, access behind it, and landlord approval.
+Letters are fastened to the facade one by one. This gives the cleanest look, but every letter needs its own attachment points and wiring path. So direct mounting depends on the wall, the access behind it, and landlord approval.
 
 ### Raceway
 
-Letters mount on a narrow metal box that carries the wiring and power supplies. It means fewer wall penetrations and an easier removal later. The raceway stays visible and is usually painted to match the wall.
+Letters mount on a narrow metal box that carries the wiring and power supplies. That means fewer wall penetrations and easier removal later. The raceway stays visible and is usually painted to match the wall.
 
 ### Backer panel
 
@@ -148,11 +148,11 @@ A licensed electrician files the electrical permit through DOB NOW: Build and ma
 
 ### Who installs the letters?
 
-Under Construction Code §28-415.1, a Licensed Sign Hanger must perform or directly supervise exterior sign installation, apart from the exemptions in §28-415.2, such as signs of 75 square feet or less that weigh 25 pounds or less. Arc coordinates a Licensed Sign Hanger where one is required.
+Under Construction Code §28-415.1, a Licensed Sign Hanger must perform or directly supervise exterior sign installation. §28-415.2 exempts some signs, such as signs of 75 square feet or less that weigh 25 pounds or less. Arc coordinates with a Licensed Sign Hanger where one is required.
 
 ### Can my landlord or the building limit my sign?
 
-Yes. Many leases and buildings set sign criteria for size, placement, materials, and lighting. The Zoning Resolution also limits sign size and lighting by zoning district, and a landmarked building or historic district needs a Landmarks Preservation Commission (LPC) permit, filed through Portico. Arc asks for the criteria at the start and designs to them.
+Yes. Many leases and buildings set sign criteria for size, placement, materials, and lighting. The Zoning Resolution also limits sign size and lighting by zoning district. A landmarked building or historic district needs a Landmarks Preservation Commission (LPC) permit, filed through Portico. Arc asks for the criteria at the start and designs to them.
 
 ### What do you need to price channel letters?
 

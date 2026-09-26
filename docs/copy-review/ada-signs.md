@@ -20,7 +20,7 @@ _Label: ADA & Code Signs | New York / Tri-State_
 
 # Tactile and Braille sign packages for New York buildouts
 
-Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code.
+Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code.
 
 [Button: Request a quote](/#quote)
 
@@ -75,14 +75,14 @@ Section 703 of the 2010 ADA Standards sets the details. The main points:
 - Raised characters are duplicated in Braille (§703.2).
 - Braille is contracted (Grade 2) and sits below the text, at least 3/8 inch from other tactile characters and from raised borders (§703.3).
 - Characters and background have a non-glare finish and contrast light-on-dark or dark-on-light (§703.5.1).
-- Tactile characters sit between 48 inches, measured to the baseline of the lowest tactile character, and 60 inches, measured to the baseline of the highest, above the finish floor (§703.4.1).
-- At a door, the sign goes alongside the door on the latch side, with an 18 by 18 inch clear floor space centered on the tactile characters beyond the arc of the door swing (§703.4.2).
+- Tactile characters sit 48 to 60 inches above the finish floor. The lower limit is measured to the baseline of the lowest tactile character, and the upper limit to the baseline of the highest (§703.4.1).
+- At a door, the sign goes alongside the door on the latch side. It needs an 18 by 18 inch clear floor space, centered on the tactile characters and beyond the arc of the door swing (§703.4.2).
 
-There are more rules for character height, stroke, spacing, and pictograms. Arc lays out each sign type to the standard and to the project's drawings, and the architect reviews the sign-type drawings before fabrication.
+There are more rules for character height, stroke, spacing, and pictograms. Arc lays out each sign type to the standard and to the project's drawings. The architect reviews the sign-type drawings before fabrication.
 
 ### NYC-specific items
 
-The 2022 NYC Building Code's accessibility chapter (Chapter 11) points to ICC A117.1, and DOB identifies the 2009 edition as the one referenced. A few NYC provisions affect signs directly:
+The 2022 NYC Building Code's accessibility chapter (Chapter 11) points to ICC A117.1. DOB says the code references the 2009 edition. A few NYC provisions affect signs directly:
 
 - **BC 1111.1** calls for the dynamic accessibility symbol at listed locations, such as accessible entrances where not all entrances are accessible, and accessible parking and passenger loading zones.
 - **BC 1023.9.3** requires floor-level signs in visual characters, raised characters, and Braille at each floor-level landing, next to the door on the stair side.
@@ -132,11 +132,11 @@ Under the 2010 ADA Standards, signs that identify permanent rooms and spaces nee
 
 ### What is Grade 2 Braille and where does it go on the sign?
 
-Grade 2 is contracted Braille, which uses shortened forms for common words and letter groups. The 2010 ADA Standards require it on tactile signs (§703.3). The Braille goes below the corresponding text, and below all of the text if it runs to more than one line, with at least 3/8 inch of space from other tactile characters and from raised borders or decorative elements.
+Grade 2 is contracted Braille, which uses shortened forms for common words and letter groups. The 2010 ADA Standards require it on tactile signs (§703.3). The Braille goes below the corresponding text, and below all of the text if it runs to more than one line. It needs at least 3/8 inch of space from other tactile characters and from raised borders or decorative elements.
 
 ### How high do ADA signs mount?
 
-Under §703.4.1 of the 2010 ADA Standards, tactile characters sit at least 48 inches above the finish floor, measured to the baseline of the lowest tactile character, and no more than 60 inches, measured to the baseline of the highest. At a single door, the sign goes alongside the door on the latch side, with an 18 by 18 inch clear floor space centered on the tactile characters beyond the arc of the door swing (§703.4.2). Double doors and doors without wall space on the latch side have their own rules.
+Under §703.4.1 of the 2010 ADA Standards, tactile characters sit at least 48 inches and no more than 60 inches above the finish floor. The lower limit is measured to the baseline of the lowest tactile character, and the upper limit to the baseline of the highest. At a single door, the sign goes alongside the door on the latch side. It needs an 18 by 18 inch clear floor space, centered on the tactile characters and beyond the arc of the door swing (§703.4.2). Double doors and doors without wall space on the latch side have their own rules.
 
 ### Does NYC have its own sign rules beyond the ADA?
 
