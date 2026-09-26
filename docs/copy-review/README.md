@@ -29,13 +29,13 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 
 ## Shared text on all four pages
 
-**Header navigation:** About · Services · Work · Scope Finder · Get Quote (links go to the homepage sections).
+**Header** (same as the homepage): About · Services · Work · Scope Finder · Call (917) 569-1076 · Request a quote (links go to the homepage sections). On phones, the Call and Request a quote buttons move to a bottom bar that appears once the page's own quote buttons scroll out of view.
 
 **Footer:**
 
-- Tagline: "Full-service signage for New York and the tri-state area: design, fabrication, permits, ADA signage, and installation." (The homepage footer still says "ADA compliance"; see below.)
+- Tagline: "Full-service signage for New York and the tri-state area: design, fabrication, permit coordination, ADA signage, and installation." (Same as the homepage after the Sales Ops wording pass.)
 - Social icon links: "Arc Signage Co on Instagram (opens in a new tab)", "Arc Signage Co on Facebook (opens in a new tab)" (screen-reader labels)
-- Links: About · Services · Work · Scope Finder · Contact
+- Links: About · Services · Work · Scope Finder · Contact · Google Business Profile (hidden until the URL is confirmed)
 - Services: Sign permits & shop drawings · ADA & tactile signs · Channel letters · Construction site signs
 - © 2026 Arc Signage Co LLC — New York / Tri-State · (917) 569-1076 · arc@arcsignco.com
 
@@ -51,9 +51,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 
 ## Existing homepage wording flagged for review (not changed here)
 
-These predate this PR and sit awkwardly next to the new pages' wording. Left alone to keep this PR scoped and avoid conflicts with the parallel homepage PRs:
+The Sales Ops wording pass (PR #3) already fixed "ADA compliance", "DOB permits … stamped drawing coordination", and "Built to pass review". Two items remain:
 
-- Footer tagline: "…permits, ADA compliance, and installation." Suggest "ADA signage".
-- Permits & Submittals card: "DOB permits, FDNY coordination, shop drawings, stamped drawing coordination, and inspection support." Suggest "DOB permit coordination" to match the new page.
-- Hero proof tile "ADA — Code-first packages" and heading "Built to pass review." Read as outcome promises.
 - Construction Signs card: "hoarding graphics, project IDs." In NYC, §3301.9.7 restricts these on fences and sheds; consider "project information panels" instead.
+- Hero proof tile "ADA — Code-first packages." Reads close to an outcome promise.
