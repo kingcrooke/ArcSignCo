@@ -9,7 +9,10 @@ Netlify publishes the repository root as-is.
 
 | Path | Purpose |
 |---|---|
-| `index.html` | The single-page site (styles and scripts are inline) |
+| `index.html` | The homepage (styles and scripts are inline) |
+| `sign-permits-shop-drawings/`, `ada-signs/`, `channel-letters/`, `construction-signs/` | Service pages, each an `index.html` served at `/<slug>/` |
+| `assets/css/service-page.v1.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
+| `docs/copy-review/` | Plain-text copy of each service page for copy review (not published as a page) |
 | `thank-you.html` | Quote form success page, served at `/thank-you` (noindex) |
 | `netlify.toml` | Publish settings, security headers, cache headers |
 | `robots.txt`, `sitemap.xml` | Crawl rules and sitemap (update `sitemap.xml` when a page is added) |
@@ -17,6 +20,8 @@ Netlify publishes the repository root as-is.
 | `assets/img/` | Optimized, versioned web images (AVIF / WebP / JPEG / PNG) |
 | `*.png` in the root | Image masters used to generate `assets/img/` |
 | `tools/optimize-images.mjs` | Regenerates `assets/img/` and the icons from the masters |
+| `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
+| `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
 
 ## How changes ship
 
@@ -51,10 +56,32 @@ If it can't be backed up, soften or remove it.
 - No street address anywhere: not in visible copy, the footer, or JSON-LD. The location label is
   "New York / Tri-State".
 - JSON-LD `LocalBusiness` uses `areaServed` (New York, New Jersey, Connecticut) and has no `address`
-  or `streetAddress`.
+  or `streetAddress`. Its `@id` is `https://arcsignco.com/#business`; the service pages point their
+  `Service` `provider` at that same `@id`.
+- `sameAs` lists Instagram (`https://www.instagram.com/arcsignco`) and Facebook
+  (`https://www.facebook.com/1201574029704014`). The footer on every page links to both.
 - Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search `index.html` for
-  `TODO(GBP)`: add the URL to the empty `sameAs` array in the JSON-LD and uncomment the footer link.
+  `TODO(GBP)`: add the URL to the `sameAs` array in the JSON-LD and uncomment the footer link.
   Never guess the URL.
+
+## Service pages
+
+- Each page has three JSON-LD blocks: `Service`, `BreadcrumbList`, and `FAQPage`. The `FAQPage`
+  question and answer text must match the visible FAQ on the page word for word. If you edit an FAQ,
+  edit both, then update the matching file in `docs/copy-review/`.
+- Code and regulation references are cited in a "Public sources" list on each page. Re-check them
+  whenever the page is edited.
+- The header and footer are copied into each page (there is no build step). A change to the
+  homepage header or footer needs the same change in the four service pages.
+- `assets/css/service-page.v1.css` is cached for a year. To change it, copy it to `.v2.css` and
+  update the `<link>` in each service page.
+- After editing a service page, regenerate the copy-review files and run the checks:
+
+  ```bash
+  mkdir -p /tmp/sd-tools && (cd /tmp/sd-tools && npm i jsdom)
+  NODE_PATH=/tmp/sd-tools/node_modules node tools/export-copy.mjs
+  NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
+  ```
 
 ## Portfolio photos (later phase)
 

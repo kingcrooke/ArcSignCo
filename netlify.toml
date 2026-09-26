@@ -61,3 +61,9 @@
   for = "/apple-touch-icon.png"
   [headers.values]
     Cache-Control = "public, max-age=86400, must-revalidate"
+
+# Internal review docs are published with the site root but should never be indexed.
+[[headers]]
+  for = "/docs/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
