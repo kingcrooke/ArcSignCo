@@ -831,10 +831,8 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .portfolio, .revision-list, .experience-showcase { grid-template-columns: 1fr 1fr; }
   .process { grid-template-columns: 1fr 1fr; }
 }
-@media (max-width: 720px) {
-  html { scroll-padding-top: 75px; }
-  .nav { height: 72px; gap: 10px; }
-  .brand-logo { width: min(168px, 44vw); }
+/* The Menu button takes over below 880px: under that the nav links only fit by squeezing the logo. */
+@media (max-width: 880px) {
   .navlinks { gap: 8px; }
   .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
   .navmenu {
@@ -854,6 +852,11 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .navmenu.open { display: flex; }
   .navmenu a { min-height: 48px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.08); border-radius: 0; }
   .navmenu a:last-child { border-bottom: 0; }
+}
+@media (max-width: 720px) {
+  html { scroll-padding-top: 75px; }
+  .nav { height: 72px; gap: 10px; }
+  .brand-logo { width: min(168px, 44vw); }
   .hero .wrap { padding: 36px 0 34px; }
   .hero-proof { grid-template-columns: 1fr 1fr; }
   .asset-grid, .portfolio, .revision-list, .services, .process, .formgrid, .experience-showcase { grid-template-columns: 1fr; }
@@ -906,6 +909,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
         <a href="#about">About</a>
         <a href="#services">Services</a>
         <a href="#work">Work</a>
+        <a href="/portfolio">Portfolio</a>
         <a href="#selector">Scope Finder</a>
       </div>
       <a href="tel:+19175691076" class="btn ghost nav-call" aria-label="Call (917) 569-1076"><span class="call-long">Call (917) 569-1076</span><span class="call-short">Call</span></a>

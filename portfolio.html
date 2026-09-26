@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio | Arc Signage Co</title>
+<meta name="description" content="Signage projects Arc Signage Co founder Jesus Crooke managed as a Project Manager before starting Arc: wayfinding, ADA and life-safety packages, room IDs, plaques, and shop fabrication.">
+<link rel="canonical" href="https://arcsignco.com/portfolio">
+<meta name="theme-color" content="#0b1d33">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Arc Signage Co">
+<meta property="og:title" content="Portfolio | Arc Signage Co">
+<meta property="og:description" content="Signage projects Arc Signage Co founder Jesus Crooke managed as a Project Manager before starting Arc: wayfinding, ADA and life-safety packages, room IDs, plaques, and shop fabrication.">
+<meta property="og:url" content="https://arcsignco.com/portfolio">
+<meta property="og:image" content="https://arcsignco.com/assets/img/og-image-1200x630.v1.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Arc Signage Co logo">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- ANALYTICS(GA4): off. Nothing loads and no request is made while GA4_ID is empty. Set the same approved Measurement ID as index.html and thank-you.html (see README "Analytics"). -->
+<script>
+(function () {
+  var GA4_ID = "";
+  if (!/^G-[A-Z0-9]+$/.test(GA4_ID)) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag("js", new Date());
+  window.gtag("config", GA4_ID);
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
+  document.head.appendChild(s);
+})();
+</script>
+<style>
+/* Header, button, section and footer rules mirror index.html so the shared chrome looks identical. */
+:root {
+  --navy: #0b1d33;
+  --navy-2: #102944;
+  --navy-3: #1a3a5c;
+  --gold: #d4a843;
+  --gold-2: #f0d080;
+  --gold-ink: #7a5a12;
+  --paper: #f5f6f8;
+  --cream: #fbfaf6;
+  --ink: #172233;
+  --muted: #657287;
+  --line: #dfe5ee;
+  --white: #ffffff;
+  --shadow: 0 18px 44px rgba(11, 29, 51, 0.12);
+  --soft: 0 8px 24px rgba(11, 29, 51, 0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--gold);
+  color: var(--navy);
+  padding: 10px 16px;
+  font-weight: 900;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus { left: 0; }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+html { scroll-behavior: smooth; scroll-padding-top: 111px; }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink);
+  background: var(--cream);
+  line-height: 1.5;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+.wrap { width: min(1160px, calc(100% - 36px)); margin: 0 auto; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(11, 29, 51, 0.97);
+  border-bottom: 3px solid var(--gold);
+  backdrop-filter: blur(10px);
+}
+.nav {
+  height: 108px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+.brand { display: inline-flex; align-items: center; min-height: 48px; }
+.brand-logo { width: min(265px, 32.5vw); height: auto; }
+.navlinks, .navmenu { display: flex; align-items: center; gap: 4px; }
+.navlinks a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: rgba(255,255,255,0.82);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 12px;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+.navlinks a:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+.navlinks a.nav-cta, .navlinks a.nav-cta:hover { color: var(--navy); background: var(--gold); }
+.navlinks a.nav-call { color: var(--white); border-color: rgba(255,255,255,0.42); margin-left: 6px; }
+.nav-call .call-short { display: none; }
+.navlinks a[aria-current="page"] { color: var(--white); background: rgba(255,255,255,0.08); }
+.nav-toggle {
+  display: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.42);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.gold {
+  background: var(--gold);
+  color: var(--navy);
+  box-shadow: 0 10px 24px rgba(212,168,67,0.28);
+}
+.btn.ghost { border-color: rgba(255,255,255,0.42); color: var(--white); }
+.btn.ghost:hover { background: rgba(255,255,255,0.08); }
+.mobile-cta { display: none; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold-ink);
+  border: 1px solid rgba(212,168,67,.5);
+  background: rgba(212,168,67,.13);
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+.dark .eyebrow { color: var(--gold-2); }
+.section { padding: 76px 0; }
+.section.alt { background: var(--paper); }
+.section.dark { background: var(--navy); color: var(--white); }
+.section h2 {
+  margin-top: 12px;
+  color: var(--navy);
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+.dark h2 { color: var(--white); }
+.lead { max-width: 700px; color: var(--muted); font-size: 16px; }
+.dark .lead { color: #cfdae8; }
+footer {
+  background: var(--navy);
+  color: #dbe5f1;
+  border-top: 3px solid var(--gold);
+  padding: 34px 0;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+footer img { width: 134px; height: auto; margin-bottom: 12px; }
+footer p { color: #cfd9e6; font-size: 13px; }
+.footer-links { display: flex; gap: 4px 14px; flex-wrap: wrap; font-size: 13px; font-weight: 800; }
+.footer-links a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; }
+.footer-meta {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: #a9b8ca;
+}
+.footer-meta a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; }
+.footer-services { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; font-size: 13px; font-weight: 800; }
+.footer-services span { color: var(--gold-2); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
+.footer-services a { display: inline-flex; align-items: center; min-height: 44px; }
+.footer-social { display: flex; gap: 8px; margin-top: 12px; }
+.footer-social a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.28); border-radius: 8px; color: var(--white); }
+.footer-social a:hover { border-color: var(--gold); color: var(--gold-2); }
+.footer-social svg { width: 20px; height: 20px; }
+@media (max-width: 1100px) {
+  .nav-call .call-long { display: none; }
+  .nav-call .call-short { display: inline; }
+}
+@media (min-width: 721px) and (max-width: 960px) {
+  .navlinks a { padding: 10px 8px; }
+  .navlinks a.nav-call { display: none; }
+}
+
+/* Portfolio page */
+.pf-hero {
+  background:
+    radial-gradient(circle at 86% 12%, rgba(212,168,67,0.22), transparent 34%),
+    linear-gradient(135deg, #0b1d33, #1a3a5c);
+  color: var(--white);
+  padding: 58px 0 54px;
+}
+.pf-hero h1 {
+  max-width: 820px;
+  margin-top: 18px;
+  font-size: clamp(38px, 5.4vw, 64px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.pf-hero p {
+  max-width: 760px;
+  margin-top: 18px;
+  color: #d8e1ec;
+  font-size: clamp(16px, 1.8vw, 19px);
+}
+.pf-hero p + p { margin-top: 12px; color: #c4d1e1; font-size: 16px; }
+.pf-projects { padding: 56px 0 72px; }
+.pf-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.pf-card {
+  grid-column: 1 / -1;
+  min-width: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--soft);
+  overflow: hidden;
+}
+.pf-card--text { grid-column: auto; border-left: 4px solid var(--gold); }
+.pf-card--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+}
+.pf-card--flip .pf-media { order: 2; }
+.pf-media { background: var(--paper); }
+.pf-media .pf-fig figcaption { padding: 10px 16px 14px; margin: 0; }
+.pf-body { padding: 26px 28px; }
+.pf-card--split .pf-body { align-self: center; }
+.pf-tag {
+  display: inline-flex;
+  border-radius: 999px;
+  background: #fbf3df;
+  color: var(--gold-ink);
+  border: 1px solid rgba(212,168,67,.55);
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.pf-card h2, .pf-gallery h2 {
+  margin: 12px 0 8px;
+  color: var(--navy);
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.pf-meta { color: var(--navy-3); font-size: 13px; font-weight: 800; }
+.pf-card p:not(.pf-meta), .pf-gallery p { margin-top: 10px; color: #4a5870; font-size: 15px; }
+.pf-grid {
+  display: grid;
+  gap: 14px;
+  padding: 0 28px 28px;
+  align-items: start;
+}
+.pf-grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.pf-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pf-grid--shop { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.pf-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0; }
+.pf-grid img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+.pf-grid .pf-natural img { aspect-ratio: auto; }
+.pf-grid .pf-tall img { aspect-ratio: 2 / 3; }
+.pf-grid .pf-top img { object-position: 50% 0; }
+.pf-fig { min-width: 0; }
+.pf-fig figcaption { margin-top: 8px; color: var(--muted); font-size: 13px; font-weight: 700; line-height: 1.4; }
+.pf-zoom { position: relative; display: block; overflow: hidden; background: #e9edf3; cursor: zoom-in; }
+.pf-grid .pf-zoom { border-radius: 6px; }
+.pf-zoom:focus-visible { outline-offset: -3px; }
+.pf-zoom img { width: 100%; height: auto; transition: transform .25s ease; }
+.pf-zoom:hover img { transform: scale(1.02); }
+.pf-note { padding: 0 28px 26px; color: var(--muted); font-size: 13px; font-style: italic; }
+.pf-gallery .pf-panel {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 28px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--soft);
+}
+.pf-cta .wrap { display: flex; align-items: center; justify-content: space-between; gap: 18px 32px; flex-wrap: wrap; }
+.pf-cta h2 { margin-top: 0; }
+.pf-cta p { margin-top: 10px; }
+.pf-lightbox {
+  margin: auto;
+  width: auto;
+  max-width: 96vw;
+  max-height: 96vh;
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--navy);
+  color: var(--white);
+  overflow: hidden;
+}
+.pf-lightbox::backdrop { background: rgba(5, 13, 26, 0.86); }
+.pf-lightbox-bar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+.pf-lightbox-close {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,0.42);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+.pf-lightbox img { width: auto; height: auto; max-width: 100%; max-height: calc(96vh - 130px); margin: 0 auto; object-fit: contain; }
+.pf-lightbox figcaption { max-width: 72ch; margin: 10px auto 2px; color: #dbe5f1; font-size: 14px; font-weight: 700; text-align: center; }
+@media (max-width: 1040px) {
+  .pf-cta .wrap { display: block; }
+  .pf-cta .btn { margin-top: 20px; }
+}
+@media (max-width: 860px) {
+  .pf-card--split, .pf-gallery .pf-panel { grid-template-columns: 1fr; }
+  .pf-card--flip .pf-media { order: 0; }
+  .pf-grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* The Menu button takes over below 880px: under that the nav links only fit by squeezing the logo. */
+@media (max-width: 880px) {
+  .navlinks { gap: 8px; }
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .navmenu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px 18px 14px;
+    background: var(--navy);
+    border-bottom: 3px solid var(--gold);
+    box-shadow: 0 18px 30px rgba(0,0,0,.25);
+  }
+  .navmenu.open { display: flex; }
+  .navmenu a { min-height: 48px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.08); border-radius: 0; }
+  .navmenu a:last-child { border-bottom: 0; }
+}
+@media (max-width: 720px) {
+  html { scroll-padding-top: 75px; }
+  .nav { height: 72px; gap: 10px; }
+  .brand-logo { width: min(168px, 44vw); }
+  .section { padding: 56px 0; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .pf-hero { padding: 38px 0 40px; }
+  .pf-projects { padding: 36px 0 56px; }
+  .pf-list { grid-template-columns: 1fr; gap: 16px; }
+  .pf-card--text { grid-column: 1 / -1; }
+  .pf-body { padding: 20px 18px; }
+  .pf-grid { gap: 12px; padding: 0 18px 20px; }
+  .pf-grid--3, .pf-grid--shop { grid-template-columns: 1fr; }
+  .pf-grid--2 { padding: 0; }
+  .pf-note { padding: 0 18px 20px; }
+  .pf-gallery .pf-panel { padding: 20px 18px; gap: 18px; }
+  .pf-lightbox { padding: 8px; }
+  .navlinks .nav-cta, .navlinks .nav-call { display: none; }
+  .pf-cta .btn { width: 100%; }
+  .mobile-cta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(11, 29, 51, 0.97);
+    border-top: 3px solid var(--gold);
+    transform: translateY(110%);
+    visibility: hidden;
+    transition: transform .2s ease, visibility .2s;
+  }
+  .mobile-cta.show { transform: none; visibility: visible; }
+  .mobile-cta .btn { min-height: 48px; padding: 12px 8px; font-size: 14px; }
+  footer { padding-bottom: 110px; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#top">Skip to main content</a>
+<header class="topbar">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="Arc Signage Co home">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-360.v2.webp 360w, /assets/img/logo-lockup-white-560.v2.webp 560w, /assets/img/logo-lockup-white-847.v2.webp 847w" sizes="(max-width: 720px) 168px, 265px">
+        <img class="brand-logo" src="/assets/img/logo-lockup-white-560.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-360.v2.png 360w, /assets/img/logo-lockup-white-560.v2.png 560w, /assets/img/logo-lockup-white-847.v2.png 847w" sizes="(max-width: 720px) 168px, 265px" width="847" height="174" alt="Arc Signage Co">
+      </picture>
+    </a>
+    <nav class="navlinks" aria-label="Primary navigation">
+      <div class="navmenu" id="nav-menu">
+        <a href="/#about">About</a>
+        <a href="/#services">Services</a>
+        <a href="/#work">Work</a>
+        <a href="/portfolio" aria-current="page">Portfolio</a>
+        <a href="/#selector">Scope Finder</a>
+      </div>
+      <a href="tel:+19175691076" class="btn ghost nav-call" aria-label="Call (917) 569-1076"><span class="call-long">Call (917) 569-1076</span><span class="call-short">Call</span></a>
+      <a href="/#quote" class="btn gold nav-cta">Request a quote</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="pf-hero dark">
+    <div class="wrap">
+      <span class="eyebrow">Portfolio</span>
+      <h1>Founder's prior work</h1>
+      <p>Arc Signage Co is a one-person signage fabrication and install shop serving New York / Tri-State. The projects below are not Arc Signage Co jobs. They are earlier projects that Arc's founder, Jesus Crooke, managed as a Project Manager at other New York sign companies before he started Arc. Company names and logos in the photos have been blurred.</p>
+      <p>Arc brings the same shop-drawing-to-install discipline to client projects under the Arc Signage Co brand.</p>
+    </div>
+  </section>
+
+  <section class="pf-projects">
+    <div class="wrap pf-list">
+      <article class="pf-card pf-card--split" aria-labelledby="p-navy-yard">
+        <div class="pf-media">
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/navy-yard-storehouse-illuminated-id-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/navy-yard-storehouse-illuminated-id-480.v1.avif 480w, /assets/portfolio/navy-yard-storehouse-illuminated-id-800.v1.avif 800w, /assets/portfolio/navy-yard-storehouse-illuminated-id-1200.v1.avif 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px">
+              <source type="image/webp" srcset="/assets/portfolio/navy-yard-storehouse-illuminated-id-480.v1.webp 480w, /assets/portfolio/navy-yard-storehouse-illuminated-id-800.v1.webp 800w, /assets/portfolio/navy-yard-storehouse-illuminated-id-1200.v1.webp 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px">
+              <img src="/assets/portfolio/navy-yard-storehouse-illuminated-id-800.v1.jpg" srcset="/assets/portfolio/navy-yard-storehouse-illuminated-id-480.v1.jpg 480w, /assets/portfolio/navy-yard-storehouse-illuminated-id-800.v1.jpg 800w, /assets/portfolio/navy-yard-storehouse-illuminated-id-1200.v1.jpg 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px" width="1200" height="1020" fetchpriority="high" decoding="async" alt="Illuminated Brooklyn Storehouse identification sign on a warehouse wall at night.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Brooklyn Storehouse — Building 293 illuminated ID, installed October 2025.</figcaption>
+          </figure>
+        </div>
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-navy-yard">Brooklyn Navy Yard — Campus Wayfinding</h2>
+          <p class="pf-meta">Project Manager · GC: Hunter Roberts Construction · 2022–2026 (multi-phase)</p>
+          <p>Gate identification, building ID, gateway orientation maps, leadership names board, interior and street directional signage, street ID, ferry terminal ID, parking ID, shuttle stop ID, and vehicular directional signage.</p>
+        </div>
+      </article>
+
+      <article class="pf-card pf-card--split pf-card--flip" aria-labelledby="p-undc">
+        <div class="pf-media">
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/undc-room-id-packing-label-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/undc-room-id-packing-label-480.v1.avif 480w, /assets/portfolio/undc-room-id-packing-label-800.v1.avif 800w, /assets/portfolio/undc-room-id-packing-label-1200.v1.avif 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px">
+              <source type="image/webp" srcset="/assets/portfolio/undc-room-id-packing-label-480.v1.webp 480w, /assets/portfolio/undc-room-id-packing-label-800.v1.webp 800w, /assets/portfolio/undc-room-id-packing-label-1200.v1.webp 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px">
+              <img src="/assets/portfolio/undc-room-id-packing-label-800.v1.jpg" srcset="/assets/portfolio/undc-room-id-packing-label-480.v1.jpg 480w, /assets/portfolio/undc-room-id-packing-label-800.v1.jpg 800w, /assets/portfolio/undc-room-id-packing-label-1200.v1.jpg 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px" width="1200" height="864" loading="lazy" decoding="async" alt="Packing label for UNDC eighth-floor room ID signs listing Jesus Crooke as Project Manager.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Production/packing label for UNDC room IDs, listing Jesus Crooke as Project Manager, with status “installing” (September 2025).</figcaption>
+          </figure>
+        </div>
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-undc">United Nations Development Corporation — Room ID</h2>
+          <p class="pf-meta">Project Manager · GC: Turner Construction · 2025–2026</p>
+          <p>Room identification and full/partial floor signage layouts (Floors 8, 9, 10, and 12–15) for United Nations Development Corporation buildings.</p>
+        </div>
+      </article>
+
+      <article class="pf-card pf-card--text" aria-labelledby="p-weill-cornell">
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-weill-cornell">Weill Cornell Medicine — Healthcare Signage Systems Layout</h2>
+          <p class="pf-meta">Project Manager · GC: Turner · October–December 2024</p>
+          <p>Full signage systems layout for a Weill Cornell Medicine facility, including revised system signage issued across two rounds of construction-phase updates.</p>
+        </div>
+      </article>
+
+      <article class="pf-card pf-card--text" aria-labelledby="p-faena">
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-faena">Faena Hotel — Exterior &amp; Monogram Signage</h2>
+          <p class="pf-meta">Project Manager · GC: Suffolk Construction · March–June 2025</p>
+          <p>Exterior “X” building identification and monogram logo ID signage for the Faena Hotel, including an exterior drop-off sign, produced and reviewed across two job phases.</p>
+        </div>
+      </article>
+
+      <article class="pf-card" aria-labelledby="p-ada">
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-ada">ADA &amp; Life-Safety Packages</h2>
+          <p class="pf-meta">Project Manager · Example package: OMNIBUILD residential building (July 2024)</p>
+          <p>Residential ADA and life-safety wayfinding package types — stair, exit, and room IDs, including high-rise stair identification. The example package included apartment ID, address ID, close-the-door signage, directional ID, evacuation maps, exit ID, floor ID, FDNY red-and-white signage, restroom ID, room ID, stair ID, and trash chute warnings.</p>
+        </div>
+        <div class="pf-grid pf-grid--4">
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/ada-stair-k-floor-92-id-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/ada-stair-k-floor-92-id-480.v1.avif 480w, /assets/portfolio/ada-stair-k-floor-92-id-800.v1.avif 800w, /assets/portfolio/ada-stair-k-floor-92-id-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <source type="image/webp" srcset="/assets/portfolio/ada-stair-k-floor-92-id-480.v1.webp 480w, /assets/portfolio/ada-stair-k-floor-92-id-800.v1.webp 800w, /assets/portfolio/ada-stair-k-floor-92-id-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <img src="/assets/portfolio/ada-stair-k-floor-92-id-800.v1.jpg" srcset="/assets/portfolio/ada-stair-k-floor-92-id-480.v1.jpg 480w, /assets/portfolio/ada-stair-k-floor-92-id-800.v1.jpg 800w, /assets/portfolio/ada-stair-k-floor-92-id-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px" width="1200" height="1600" loading="lazy" decoding="async" alt="Stair K Floor 92 tactile stair identification sign.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Stair K / Floor 92 ID — high-rise stair identification.</figcaption>
+          </figure>
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/ada-stair-a-floor-1-id-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/ada-stair-a-floor-1-id-480.v1.avif 480w, /assets/portfolio/ada-stair-a-floor-1-id-800.v1.avif 800w, /assets/portfolio/ada-stair-a-floor-1-id-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <source type="image/webp" srcset="/assets/portfolio/ada-stair-a-floor-1-id-480.v1.webp 480w, /assets/portfolio/ada-stair-a-floor-1-id-800.v1.webp 800w, /assets/portfolio/ada-stair-a-floor-1-id-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <img src="/assets/portfolio/ada-stair-a-floor-1-id-800.v1.jpg" srcset="/assets/portfolio/ada-stair-a-floor-1-id-480.v1.jpg 480w, /assets/portfolio/ada-stair-a-floor-1-id-800.v1.jpg 800w, /assets/portfolio/ada-stair-a-floor-1-id-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px" width="1200" height="1600" loading="lazy" decoding="async" alt="Stair A Floor 1 identification sign mounted beside a stair door.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Stair A / Floor 1 ID with emergency light.</figcaption>
+          </figure>
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/ada-exit-sign-black-door-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/ada-exit-sign-black-door-480.v1.avif 480w, /assets/portfolio/ada-exit-sign-black-door-800.v1.avif 800w, /assets/portfolio/ada-exit-sign-black-door-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <source type="image/webp" srcset="/assets/portfolio/ada-exit-sign-black-door-480.v1.webp 480w, /assets/portfolio/ada-exit-sign-black-door-800.v1.webp 800w, /assets/portfolio/ada-exit-sign-black-door-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <img src="/assets/portfolio/ada-exit-sign-black-door-800.v1.jpg" srcset="/assets/portfolio/ada-exit-sign-black-door-480.v1.jpg 480w, /assets/portfolio/ada-exit-sign-black-door-800.v1.jpg 800w, /assets/portfolio/ada-exit-sign-black-door-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px" width="1200" height="1600" loading="lazy" decoding="async" alt="Exit sign installed on a black steel door.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Exit sign installed on black door.</figcaption>
+          </figure>
+          <figure class="pf-fig pf-top">
+            <a class="pf-zoom" href="/assets/portfolio/ada-elevator-bank-y-package-800.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/ada-elevator-bank-y-package-480.v1.avif 480w, /assets/portfolio/ada-elevator-bank-y-package-800.v1.avif 800w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <source type="image/webp" srcset="/assets/portfolio/ada-elevator-bank-y-package-480.v1.webp 480w, /assets/portfolio/ada-elevator-bank-y-package-800.v1.webp 800w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px">
+              <img src="/assets/portfolio/ada-elevator-bank-y-package-800.v1.jpg" srcset="/assets/portfolio/ada-elevator-bank-y-package-480.v1.jpg 480w, /assets/portfolio/ada-elevator-bank-y-package-800.v1.jpg 800w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(25vw - 32px), 265px" width="800" height="1665" loading="lazy" decoding="async" alt="Floor directory sign above an Elevator Bank Y panel with fire-safety signage.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Green Room 7 / Office Level 4 / Elevator Bank Y ADA package (Aug 2024).</figcaption>
+          </figure>
+        </div>
+        <p class="pf-note">The photos show ADA and life-safety sign types from this period of work and are not all from the example package above.</p>
+      </article>
+
+      <article class="pf-card pf-card--split" aria-labelledby="p-pool">
+        <div class="pf-media">
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/pool-lifeguard-packing-label-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/pool-lifeguard-packing-label-480.v1.avif 480w, /assets/portfolio/pool-lifeguard-packing-label-800.v1.avif 800w, /assets/portfolio/pool-lifeguard-packing-label-1200.v1.avif 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px">
+              <source type="image/webp" srcset="/assets/portfolio/pool-lifeguard-packing-label-480.v1.webp 480w, /assets/portfolio/pool-lifeguard-packing-label-800.v1.webp 800w, /assets/portfolio/pool-lifeguard-packing-label-1200.v1.webp 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px">
+              <img src="/assets/portfolio/pool-lifeguard-packing-label-800.v1.jpg" srcset="/assets/portfolio/pool-lifeguard-packing-label-480.v1.jpg 480w, /assets/portfolio/pool-lifeguard-packing-label-800.v1.jpg 800w, /assets/portfolio/pool-lifeguard-packing-label-1200.v1.jpg 1200w" sizes="(max-width: 860px) calc(100vw - 38px), (max-width: 1196px) calc(53vw - 20px), 620px" width="1200" height="925" loading="lazy" decoding="async" alt="Handwritten shop packing label for pool open/close and lifeguard duty signs.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Shop packing label — Triton Construction, pool and lifeguard signage (April 2024).</figcaption>
+          </figure>
+        </div>
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-pool">Pool &amp; Lifeguard Signage</h2>
+          <p class="pf-meta">Project Manager · GC: Triton Construction · April 2024</p>
+          <p>Pool open/close and life guard duty signage for an active NYC building amenity space. Confirmed fabricated and shipped via a shop packing label identifying Jesus Crooke as Project Manager on the job.</p>
+        </div>
+      </article>
+
+      <article class="pf-card" aria-labelledby="p-shop">
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-shop">Shop Fabrication &amp; QC</h2>
+          <p class="pf-meta">PM / shop coordination</p>
+          <p>Dimensional letters and shop QC — coordinating fabrication quality before material leaves the shop.</p>
+        </div>
+        <div class="pf-grid pf-grid--shop">
+          <figure class="pf-fig pf-natural">
+            <a class="pf-zoom" href="/assets/portfolio/shop-nomad-dimensional-letters-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/shop-nomad-dimensional-letters-480.v1.avif 480w, /assets/portfolio/shop-nomad-dimensional-letters-800.v1.avif 800w, /assets/portfolio/shop-nomad-dimensional-letters-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(66vw - 72px), 725px">
+              <source type="image/webp" srcset="/assets/portfolio/shop-nomad-dimensional-letters-480.v1.webp 480w, /assets/portfolio/shop-nomad-dimensional-letters-800.v1.webp 800w, /assets/portfolio/shop-nomad-dimensional-letters-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(66vw - 72px), 725px">
+              <img src="/assets/portfolio/shop-nomad-dimensional-letters-800.v1.jpg" srcset="/assets/portfolio/shop-nomad-dimensional-letters-480.v1.jpg 480w, /assets/portfolio/shop-nomad-dimensional-letters-800.v1.jpg 800w, /assets/portfolio/shop-nomad-dimensional-letters-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(66vw - 72px), 725px" width="1200" height="884" loading="lazy" decoding="async" alt="Black dimensional letters spelling NOMAD on a shop workbench.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>NOMAD dimensional letters — shop fabrication.</figcaption>
+          </figure>
+          <figure class="pf-fig pf-tall">
+            <a class="pf-zoom" href="/assets/portfolio/shop-exit-stair-e-bench-qc-800.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/shop-exit-stair-e-bench-qc-480.v1.avif 480w, /assets/portfolio/shop-exit-stair-e-bench-qc-800.v1.avif 800w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 363px">
+              <source type="image/webp" srcset="/assets/portfolio/shop-exit-stair-e-bench-qc-480.v1.webp 480w, /assets/portfolio/shop-exit-stair-e-bench-qc-800.v1.webp 800w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 363px">
+              <img src="/assets/portfolio/shop-exit-stair-e-bench-qc-800.v1.jpg" srcset="/assets/portfolio/shop-exit-stair-e-bench-qc-480.v1.jpg 480w, /assets/portfolio/shop-exit-stair-e-bench-qc-800.v1.jpg 800w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 363px" width="800" height="1665" loading="lazy" decoding="async" alt="Brushed metal Exit Stair E sign laid on a bench for quality check.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Exit Stair E sign — bench QC check.</figcaption>
+          </figure>
+        </div>
+      </article>
+
+      <article class="pf-card" aria-labelledby="p-plaques">
+        <div class="pf-body">
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="p-plaques">Directory &amp; Specialty Plaques</h2>
+          <p class="pf-meta">Project Manager</p>
+          <p>Directory and suite plaques — installed identification for tenants and building services.</p>
+        </div>
+        <div class="pf-grid pf-grid--3">
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/plaque-directory-a-b-c-m-800.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/plaque-directory-a-b-c-m-480.v1.avif 480w, /assets/portfolio/plaque-directory-a-b-c-m-800.v1.avif 800w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px">
+              <source type="image/webp" srcset="/assets/portfolio/plaque-directory-a-b-c-m-480.v1.webp 480w, /assets/portfolio/plaque-directory-a-b-c-m-800.v1.webp 800w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px">
+              <img src="/assets/portfolio/plaque-directory-a-b-c-m-800.v1.jpg" srcset="/assets/portfolio/plaque-directory-a-b-c-m-480.v1.jpg 480w, /assets/portfolio/plaque-directory-a-b-c-m-800.v1.jpg 800w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px" width="800" height="1665" loading="lazy" decoding="async" alt="Bronze-tone dimensional directory lettering A–B and C–M with an arrow.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Directory sign — A–B / C–M lettering.</figcaption>
+          </figure>
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/plaque-international-seabed-authority-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/plaque-international-seabed-authority-480.v1.avif 480w, /assets/portfolio/plaque-international-seabed-authority-800.v1.avif 800w, /assets/portfolio/plaque-international-seabed-authority-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px">
+              <source type="image/webp" srcset="/assets/portfolio/plaque-international-seabed-authority-480.v1.webp 480w, /assets/portfolio/plaque-international-seabed-authority-800.v1.webp 800w, /assets/portfolio/plaque-international-seabed-authority-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px">
+              <img src="/assets/portfolio/plaque-international-seabed-authority-800.v1.jpg" srcset="/assets/portfolio/plaque-international-seabed-authority-480.v1.jpg 480w, /assets/portfolio/plaque-international-seabed-authority-800.v1.jpg 800w, /assets/portfolio/plaque-international-seabed-authority-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px" width="1200" height="1600" loading="lazy" decoding="async" alt="Navy and gold International Seabed Authority emblem plaque on a wall.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>International Seabed Authority suite plaque (Nov 2025).</figcaption>
+          </figure>
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/plaque-sr-112-electrical-service-room-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/plaque-sr-112-electrical-service-room-480.v1.avif 480w, /assets/portfolio/plaque-sr-112-electrical-service-room-800.v1.avif 800w, /assets/portfolio/plaque-sr-112-electrical-service-room-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px">
+              <source type="image/webp" srcset="/assets/portfolio/plaque-sr-112-electrical-service-room-480.v1.webp 480w, /assets/portfolio/plaque-sr-112-electrical-service-room-800.v1.webp 800w, /assets/portfolio/plaque-sr-112-electrical-service-room-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px">
+              <img src="/assets/portfolio/plaque-sr-112-electrical-service-room-800.v1.jpg" srcset="/assets/portfolio/plaque-sr-112-electrical-service-room-480.v1.jpg 480w, /assets/portfolio/plaque-sr-112-electrical-service-room-800.v1.jpg 800w, /assets/portfolio/plaque-sr-112-electrical-service-room-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(100vw - 74px), (max-width: 1196px) calc(33vw - 36px), 358px" width="1200" height="1600" loading="lazy" decoding="async" alt="SR-112 Electrical Service Room identification sign on a gray door.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>SR-112 Electrical Service Room ID (Jul 2025).</figcaption>
+          </figure>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section alt pf-gallery" aria-labelledby="gallery-heading">
+    <div class="wrap">
+      <div class="pf-panel">
+        <div>
+          <span class="pf-tag">Founder's prior work</span>
+          <h2 id="gallery-heading">Installed ADA room IDs</h2>
+          <p>Photos from a June 2024 punch-list walk-through of installed ADA signage.</p>
+        </div>
+        <div class="pf-grid pf-grid--2">
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/gallery-room-id-6-711-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/gallery-room-id-6-711-480.v1.avif 480w, /assets/portfolio/gallery-room-id-6-711-800.v1.avif 800w, /assets/portfolio/gallery-room-id-6-711-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(27vw - 28px), 290px">
+              <source type="image/webp" srcset="/assets/portfolio/gallery-room-id-6-711-480.v1.webp 480w, /assets/portfolio/gallery-room-id-6-711-800.v1.webp 800w, /assets/portfolio/gallery-room-id-6-711-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(27vw - 28px), 290px">
+              <img src="/assets/portfolio/gallery-room-id-6-711-800.v1.jpg" srcset="/assets/portfolio/gallery-room-id-6-711-480.v1.jpg 480w, /assets/portfolio/gallery-room-id-6-711-800.v1.jpg 800w, /assets/portfolio/gallery-room-id-6-711-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(27vw - 28px), 290px" width="1200" height="1652" loading="lazy" decoding="async" alt="Room 6-711 tactile room ID sign with Braille and insert window.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Room ID with raised numbers and Braille — punch-list walk-through, June 2024.</figcaption>
+          </figure>
+          <figure class="pf-fig">
+            <a class="pf-zoom" href="/assets/portfolio/gallery-room-id-wardrobe-1200.v1.jpg"><picture>
+              <source type="image/avif" srcset="/assets/portfolio/gallery-room-id-wardrobe-480.v1.avif 480w, /assets/portfolio/gallery-room-id-wardrobe-800.v1.avif 800w, /assets/portfolio/gallery-room-id-wardrobe-1200.v1.avif 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(27vw - 28px), 290px">
+              <source type="image/webp" srcset="/assets/portfolio/gallery-room-id-wardrobe-480.v1.webp 480w, /assets/portfolio/gallery-room-id-wardrobe-800.v1.webp 800w, /assets/portfolio/gallery-room-id-wardrobe-1200.v1.webp 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(27vw - 28px), 290px">
+              <img src="/assets/portfolio/gallery-room-id-wardrobe-800.v1.jpg" srcset="/assets/portfolio/gallery-room-id-wardrobe-480.v1.jpg 480w, /assets/portfolio/gallery-room-id-wardrobe-800.v1.jpg 800w, /assets/portfolio/gallery-room-id-wardrobe-1200.v1.jpg 1200w" sizes="(max-width: 720px) calc(50vw - 43px), (max-width: 860px) calc(50vw - 54px), (max-width: 1196px) calc(27vw - 28px), 290px" width="1200" height="1605" loading="lazy" decoding="async" alt="Room 6-1002 Wardrobe tactile room ID sign with Braille.">
+            </picture><span class="sr-only"> (open larger photo)</span></a>
+            <figcaption>Wardrobe room ID with raised numbers and Braille — punch-list walk-through, June 2024.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark pf-cta" aria-labelledby="cta-heading">
+    <div class="wrap">
+      <div>
+        <h2 id="cta-heading">Have a sign project?</h2>
+        <p class="lead">Send drawings, photos, and site details and Arc will review the full scope.</p>
+      </div>
+      <a class="btn gold" href="/#quote">Request a quote</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <picture>
+        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-560.v2.webp 560w" sizes="134px">
+        <img src="/assets/img/logo-lockup-white-280.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="134px" width="847" height="174" loading="lazy" decoding="async" alt="Arc Signage Co">
+      </picture>
+      <p>Full-service signage for New York and the tri-state area: design, fabrication, permit coordination, ADA signage, and installation.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/arcsignco" target="_blank" rel="noopener" aria-label="Arc Signage Co on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.facebook.com/1201574029704014" target="_blank" rel="noopener" aria-label="Arc Signage Co on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M13.5 22v-8.2h2.8l.4-3.2h-3.2V8.6c0-.9.3-1.6 1.6-1.6h1.7V4.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2h2.8V22h3.4z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="/#about">About</a>
+      <a href="/#services">Services</a>
+      <a href="/#work">Work</a>
+      <a href="/#selector">Scope Finder</a>
+      <a href="/#quote">Contact</a>
+      <!-- TODO(GBP): put the confirmed Google Business Profile URL in href (same URL as index.html). Hidden until href is an https URL. -->
+      <a id="gbpLink" href="" rel="noopener" target="_blank" hidden>Google Business Profile</a>
+    </div>
+  </div>
+  <nav class="wrap footer-services" aria-label="Service pages">
+    <span>Services</span>
+    <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
+    <a href="/ada-signs/">ADA &amp; tactile signs</a>
+    <a href="/channel-letters/">Channel letters</a>
+    <a href="/construction-signs/">Construction site signs</a>
+  </nav>
+  <div class="wrap footer-meta">
+    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
+    <span><a href="tel:+19175691076">(917) 569-1076</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
+  </div>
+</footer>
+
+<div class="mobile-cta" id="mobileCta">
+  <a class="btn gold" href="/#quote">Request a quote</a>
+  <a class="btn ghost" href="tel:+19175691076">Call (917) 569-1076</a>
+</div>
+
+<dialog class="pf-lightbox" id="lightbox" aria-label="Enlarged photo">
+  <div class="pf-lightbox-bar"><button class="pf-lightbox-close" type="button" id="lightboxClose">Close</button></div>
+  <figure>
+    <div id="lightboxMedia"></div>
+    <figcaption id="lightboxCaption"></figcaption>
+  </figure>
+</dialog>
+
+<script>
+const navToggle = document.getElementById("navToggle");
+const navMenu = document.getElementById("nav-menu");
+function setMenu(open) {
+  navMenu.classList.toggle("open", open);
+  navToggle.setAttribute("aria-expanded", String(open));
+  navToggle.textContent = open ? "Close" : "Menu";
+}
+navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
+navMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && navMenu.classList.contains("open")) {
+    setMenu(false);
+    navToggle.focus();
+  }
+});
+
+const gbpLink = document.getElementById("gbpLink");
+if (/^https:\/\//.test(gbpLink.getAttribute("href") || "")) gbpLink.hidden = false;
+
+// Phone bar stays hidden while the intro or the closing quote section is on screen.
+const mobileCta = document.getElementById("mobileCta");
+if ("IntersectionObserver" in window) {
+  const inView = new Map();
+  const watch = new IntersectionObserver(entries => {
+    entries.forEach(entry => inView.set(entry.target, entry.isIntersecting));
+    mobileCta.classList.toggle("show", ![...inView.values()].some(Boolean));
+  });
+  document.querySelectorAll(".pf-hero, .pf-cta").forEach(el => watch.observe(el));
+} else {
+  mobileCta.classList.add("show");
+}
+
+document.addEventListener("click", event => {
+  const link = event.target.closest && event.target.closest('a[href^="tel:"]');
+  if (link && typeof window.gtag === "function") window.gtag("event", "click_to_call", { link_url: link.href });
+});
+
+// Enlarged view. Each photo is a plain link to its largest JPEG, so without <dialog> support the
+// link still opens the image.
+const lightbox = document.getElementById("lightbox");
+if (typeof lightbox.showModal === "function") {
+  const media = document.getElementById("lightboxMedia");
+  const caption = document.getElementById("lightboxCaption");
+  let opener = null;
+  document.querySelectorAll(".pf-zoom").forEach(link => {
+    link.addEventListener("click", event => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const picture = link.querySelector("picture").cloneNode(true);
+      const img = picture.querySelector("img");
+      const ratio = img.getAttribute("width") / img.getAttribute("height");
+      const shown = Math.min(window.innerWidth * 0.96 - 24, (window.innerHeight * 0.96 - 130) * ratio);
+      picture.querySelectorAll("source, img").forEach(el => el.setAttribute("sizes", `${Math.round(shown)}px`));
+      img.removeAttribute("loading");
+      img.removeAttribute("fetchpriority");
+      media.replaceChildren(picture);
+      caption.textContent = link.closest("figure").querySelector("figcaption").textContent;
+      opener = link;
+      lightbox.showModal();
+    });
+  });
+  document.getElementById("lightboxClose").addEventListener("click", () => lightbox.close());
+  lightbox.addEventListener("click", event => { if (event.target === lightbox) lightbox.close(); });
+  lightbox.addEventListener("close", () => {
+    media.replaceChildren();
+    if (opener) opener.focus();
+  });
+}
+</script>
+</body>
+</html>

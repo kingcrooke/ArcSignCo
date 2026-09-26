@@ -11,15 +11,18 @@ Netlify publishes the repository root as-is.
 |---|---|
 | `index.html` | The homepage (styles and scripts are inline) |
 | `sign-permits-shop-drawings/`, `ada-signs/`, `channel-letters/`, `construction-signs/` | Service pages, each an `index.html` served at `/<slug>/` |
-| `assets/css/service-page.v2.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
+| `assets/css/service-page.v3.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
 | `docs/copy-review/` | Plain-text copy of each service page for copy review (not published as a page) |
 | `thank-you.html` | Quote form success page, served at `/thank-you` (noindex) |
+| `portfolio.html` | Founder's prior work, served at `/portfolio` (styles and scripts are inline) |
 | `netlify.toml` | Publish settings, security headers, cache headers |
 | `robots.txt`, `sitemap.xml` | Crawl rules and sitemap (update `sitemap.xml` when a page is added) |
 | `favicon.ico`, `favicon-32.png`, `icon-192.png`, `apple-touch-icon.png` | Browser and home-screen icons |
 | `assets/img/` | Optimized, versioned web images (AVIF / WebP / JPEG / PNG) |
 | `*.png` in the root | Image masters used to generate `assets/img/` |
 | `tools/optimize-images.mjs` | Regenerates `assets/img/` and the icons from the masters |
+| `assets/portfolio/` | Optimized, versioned portfolio photos (AVIF / WebP / JPEG) |
+| `tools/optimize-portfolio-images.mjs` | Regenerates `assets/portfolio/` from the cleaned portfolio masters (kept outside the repo) |
 | `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
 | `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
 
@@ -83,7 +86,7 @@ If it can't be backed up, soften or remove it.
 - Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search all pages for
   `TODO(GBP)`. When the URL is confirmed, put it in these places:
   1. the `sameAs` array in the homepage JSON-LD (after Instagram and Facebook), and
-  2. the `href` of the footer link `id="gbpLink"` on the homepage and on each service page.
+  2. the `href` of the footer link `id="gbpLink"` on the homepage, on each service page, and in `portfolio.html`.
 
   The footer link stays hidden while its `href` is empty and shows automatically once it's an `https://`
   URL. Never guess the URL.
@@ -96,9 +99,10 @@ If it can't be backed up, soften or remove it.
 - Code and regulation references are cited in a "Public sources" list on each page. Re-check them
   whenever the page is edited.
 - The header and footer are copied into each page (there is no build step). A change to the
-  homepage header or footer needs the same change in the four service pages.
-- `assets/css/service-page.v2.css` is cached for a year. To change it, copy it to `.v3.css` and
-  update the `<link>` in each service page. (`v1` was only ever on a Deploy Preview.)
+  homepage header or footer needs the same change in the four service pages and `portfolio.html`.
+- `assets/css/service-page.v3.css` is cached for a year. To change it, copy it to `.v4.css` and
+  update the `<link>` in each service page. (`v1` was only ever on a Deploy Preview. `v2` is kept
+  because production served it; v3 only moves the Menu breakpoint from 720px to 880px.)
 - The service pages use the same header (Call + Request a quote), phone bottom bar, v2 logo, GBP
   footer slot, and GA4 hook as the homepage. The phone bar watches the hero buttons, the "What to
   send" section, and the closing CTA band, and shows only when none of them is on screen.
@@ -110,10 +114,30 @@ If it can't be backed up, soften or remove it.
   NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
   ```
 
-## Portfolio photos (later phase)
+## Portfolio photos
 
-Past Crown and Certified install photos may be used in a later portfolio PR, with those company names
-and logos blurred out before they are committed. None are in the repo yet.
+- `/portfolio` shows projects Jesus managed as a Project Manager at other New York sign companies
+  before starting Arc. It is always labelled as the founder's prior work, never as Arc Signage Co jobs.
+  Captions are owner-approved copy: don't reword them or add facts.
+- Source: 14 photos supplied by Jesus, already cleaned before they reached the repo. EXIF/GPS is
+  stripped, and former-employer names and logos, a street address, a phone number and some box/label
+  text are blurred. Don't sharpen or try to recover blurred areas, and don't name former employers in
+  page copy or alt text.
+- The cleaned masters (about 2400 px, JPEG q85) are **not committed**: the repo is public and Netlify
+  publishes the repo root, so a committed master would be downloadable at full size. Keep them with the
+  project files. `tools/optimize-portfolio-images.mjs` lists each master's SHA-256 and refuses to run on
+  a different file.
+- Only `assets/portfolio/` is published: AVIF / WebP / JPEG at 480, 800 and 1200 w (800 w max for very
+  tall photos), with no EXIF, XMP, IPTC or ICC data (the script checks every output).
+- Regenerate:
+
+  ```bash
+  mkdir -p /tmp/img-tools && (cd /tmp/img-tools && npm i sharp)
+  NODE_PATH=/tmp/img-tools/node_modules node tools/optimize-portfolio-images.mjs /path/to/cleaned/masters
+  ```
+
+  Masters are matched by their two-digit prefix (`01-…jpg` to `14-…jpg`). If a master is re-cleaned,
+  update its hash and bump `VERSION` in the script, then update the references in `portfolio.html`.
 
 ## Images and caching
 
@@ -145,8 +169,8 @@ While the ID is empty, the pages load no analytics script and make no request to
 **To turn it on** (after approval):
 
 1. In GA4, create a Web data stream for `https://arcsignco.com` and copy its Measurement ID (`G-XXXXXXXXXX`).
-2. Search for `ANALYTICS(GA4)` in `index.html`, `thank-you.html`, and the four service pages
-   (`*/index.html`). In every file, set
+2. Search for `ANALYTICS(GA4)` in `index.html`, `thank-you.html`, `portfolio.html`, and the four
+   service pages (`*/index.html`). In every file, set
    `var GA4_ID = "G-XXXXXXXXXX";` to the same ID. Anything that doesn't look like `G-` plus letters
    and digits is ignored.
 3. Open a PR, check the Deploy Preview's network tab for a `googletagmanager.com/gtag/js` request, then merge.
@@ -158,7 +182,7 @@ While the ID is empty, the pages load no analytics script and make no request to
 |---|---|
 | `page_view` | Every page, sent automatically by the GA4 config |
 | `generate_lead` (`form_name: quote-request`) | `/thank-you`, in the script at the bottom of `thank-you.html`. It fires only after a real quote form submit in the same tab, and only once per submit, so reloads and direct visits don't count. |
-| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer) and on the service pages (header, hero, quote card, phone bar, footer) |
+| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer), on the service pages (header, hero, quote card, phone bar, footer), and on `/portfolio` (header, phone bar, footer) |
 
 Nothing else is tracked. The GA4 `config` call uses Google's defaults.
 
