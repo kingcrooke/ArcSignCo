@@ -138,7 +138,7 @@ While the ID is empty, the pages load no analytics script and make no request to
 **To turn it on** (after approval):
 
 1. In GA4, create a Web data stream for `https://arcsignco.com` and copy its Measurement ID (`G-XXXXXXXXXX`).
-2. Search for `ANALYTICS(GA4)` in `index.html` and `thank-you.html`. In both files, set
+2. Search for `ANALYTICS(GA4)` in `index.html`, `thank-you.html` and `portfolio.html`. In all three files, set
    `var GA4_ID = "G-XXXXXXXXXX";` to the same ID. Anything that doesn't look like `G-` plus letters
    and digits is ignored.
 3. Open a PR, check the Deploy Preview's network tab for a `googletagmanager.com/gtag/js` request, then merge.
@@ -150,7 +150,7 @@ While the ID is empty, the pages load no analytics script and make no request to
 |---|---|
 | `page_view` | Every page, sent automatically by the GA4 config |
 | `generate_lead` (`form_name: quote-request`) | `/thank-you`, in the script at the bottom of `thank-you.html`. It fires only after a real quote form submit in the same tab, and only once per submit, so reloads and direct visits don't count. |
-| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer) |
+| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer) and on `/portfolio` (header, phone bar, footer) |
 
 Nothing else is tracked. The GA4 `config` call uses Google's defaults.
 
