@@ -16,6 +16,9 @@ const require = createRequire(import.meta.url);
 const sharp = require("sharp");
 
 const VERSION = "v1";
+// v2: palette-quantized lockup (about half the bytes of v1). The v1 lockup files stay in
+// assets/img so pages or branches that still reference them keep working.
+const LOCKUP_VERSION = "v2";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const out = path.join(root, "assets", "img");
 
@@ -56,6 +59,17 @@ async function transparent(input, name, widths) {
     const stem = path.join(out, `${name}-${width}.${VERSION}`);
     await sharp(input).resize({ width }).webp({ quality: 90, alphaQuality: 90, effort: 6 }).toFile(`${stem}.webp`);
     await sharp(input).resize({ width }).png({ compressionLevel: 9 }).toFile(`${stem}.png`);
+  }
+}
+
+// Flat artwork with few colours (logos): quantize to a palette, then store that palette image as
+// PNG and lossless WebP. Keep the default palette size: forcing 16 colours breaks up the thin ring.
+async function palette(input, name, widths, version) {
+  for (const width of widths) {
+    const stem = path.join(out, `${name}-${width}.${version}`);
+    const png = await sharp(input).resize({ width }).png({ palette: true, effort: 10, compressionLevel: 9 }).toBuffer();
+    await writeFile(`${stem}.png`, png);
+    await sharp(png).webp({ lossless: true, effort: 6 }).toFile(`${stem}.webp`);
   }
 }
 
@@ -135,7 +149,7 @@ for (const [name, col, row] of SERVICES) {
 }
 await photo(SPRITE, "scope-collage", [800, 1200, 1774]);
 const lockup = await lockupWithoutTagline(LOGO_WHITE);
-await transparent(lockup, "logo-lockup-white", [280, 560, 847]);
+await palette(lockup, "logo-lockup-white", [280, 360, 560, 847], LOCKUP_VERSION);
 await ogImage(lockup);
 await transparent(LOGO_ICON, "logo-icon-white", [240]);
 await favicons();

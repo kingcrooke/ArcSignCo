@@ -64,8 +64,15 @@ and logos blurred out before they are committed. None are in the repo yet.
 ## Images and caching
 
 - Files in `assets/img/` are cached by browsers for one year (`immutable`). **Never overwrite a file
-  there.** When an image changes, bump `VERSION` in `tools/optimize-images.mjs` (e.g. `v1` to `v2`),
-  regenerate, and update the references in the HTML.
+  there.** When an image changes, bump its version in `tools/optimize-images.mjs` (`VERSION` for the
+  photos and icon, `LOCKUP_VERSION` for the header/footer logo), regenerate, and update the references
+  in the HTML.
+- The logo lockup is on `v2` (palette-quantized, about half the bytes of `v1`). New pages should use
+  `logo-lockup-white-*.v2.*`. The `v1` lockup files are no longer generated but stay in `assets/img/`
+  until no page or open branch references them.
+- `service_photoreal_sprite_codex.png` (2.26 MB) is not used by any page. It is the master that the
+  service tiles and collage in `assets/img/` are cut from, so keep it unless a replacement master is
+  stored elsewhere.
 - Regenerate images:
 
   ```bash
