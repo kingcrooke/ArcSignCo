@@ -9,7 +9,7 @@
 Review on the Deploy Preview (`deploy-preview-<PR number>--arcsign.netlify.app`), not on production.
 
 - [ ] Page loads on desktop and on a phone (about 390px wide); nothing overlaps or scrolls sideways
-- [ ] Header menu, "Get Quote", phone and email links work on a phone
+- [ ] Header menu, "Request a quote", phone bar, phone and email links work on a phone
 - [ ] Scope Finder: answer all questions, press Finish, result lands in the quote form notes
 - [ ] Quote form submits and lands on `/thank-you`; the test submission shows up in Netlify Forms
 - [ ] Images look sharp (no visible compression artifacts) and load below the fold as you scroll
