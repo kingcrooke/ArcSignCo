@@ -90,7 +90,7 @@ NYC is strict about what goes on construction fences and sidewalk sheds, which t
 - **§3307.7.9, fence color.** Solid fences must be hunter green, metallic gray, or white. For many existing buildings, a color matching the facade, trim, cornice, or visible sloped roof is also acceptable. Where there is a sidewalk shed, the fence and shed must be the same color. This section was amended by Local Law 47 of 2025.
 - **§3307.11, artwork.** Sidewalk sheds, construction fences, and supported scaffolds that have been up at least 90 days are covered by an artwork provision: work approved by the NYC Department of Cultural Affairs, or artwork the owner solicits and gets Cultural Affairs approval for. The artwork can't be lit and can't cover the required signs.
 
-**What this means for your order:** Arc does not offer branded fence wraps or shed advertising on NYC sites. If you want anything on a fence or shed beyond the required panels, Arc flags these rules at quote, and you should confirm with DOB before ordering. For New Jersey and Connecticut sites, rules are set locally, so check with the municipality.
+**What this means for your order:** Branded fence wraps and shed advertising are generally not allowed on NYC sites under §3301.9.7 and §3301.9.8. If you want anything on a fence or shed beyond the required panels, Arc flags these rules at quote, and you should confirm with DOB before ordering. For New Jersey and Connecticut sites, rules are set locally, so check with the municipality.
 
 _Label: Process_
 

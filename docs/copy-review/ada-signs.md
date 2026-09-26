@@ -40,7 +40,7 @@ _Label: Scope_
 
 ## What an ADA sign package covers
 
-A package is every code-driven sign on the job, tracked on one schedule so nothing is missed at punch list.
+A package is every code-driven sign on the job, tracked on one schedule from submittal through punch list.
 
 ### Room identification
 

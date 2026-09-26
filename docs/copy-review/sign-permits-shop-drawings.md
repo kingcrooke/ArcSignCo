@@ -140,7 +140,7 @@ Usually, yes. The NYC Department of Buildings (DOB) says signs smaller than six 
 
 ### Who can file a sign permit in NYC?
 
-A registered design professional, meaning a New York State licensed professional engineer (PE) or registered architect (RA), can file. A Licensed Sign Hanger can also file for smaller wall-mounted accessory signs: up to 150 square feet and 300 pounds, projecting no more than 18 inches, and mounted entirely below the second-story ceiling (1 RCNY §105-04). Arc prepares drawings and information for the applicant and coordinates with them. Arc does not file as a licensed applicant.
+A registered design professional, meaning a New York State licensed professional engineer (PE) or registered architect (RA), can file. A Licensed Sign Hanger can also file for smaller wall-mounted accessory signs: up to 150 square feet and 300 pounds, projecting no more than 18 inches, and mounted entirely below the second-story ceiling (1 RCNY §105-04). Arc does not file as a licensed applicant. Instead, Arc prepares the drawings and information the applicant needs and coordinates with them, and with the project's expediter if there is one.
 
 ### Who has to install an exterior sign?
 

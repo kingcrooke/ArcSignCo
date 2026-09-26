@@ -34,7 +34,7 @@ Channel letters are individual three-dimensional letters, usually aluminum with 
 - Fabrication in aluminum, acrylic, and LED
 - Install coordination, punch list, and closeout photos
 
-Arc coordinates with licensed sign hangers and electricians where the job requires them. Arc is not an electrical contractor.
+Arc is not an electrical contractor. The project's licensed electrician files the electrical permit and makes the connection, and Arc coordinates the power location and handoff with them, plus a Licensed Sign Hanger where the job requires one.
 
 _Label: Styles_
 
@@ -144,7 +144,7 @@ Generally, yes. The NYC Department of Buildings (DOB) says signs smaller than si
 
 ### Who handles the electrical for an illuminated sign?
 
-A licensed electrician files the electrical permit through DOB NOW: Build and makes the connection. The NYC Electrical Code also requires electric signs made for installation in the city to be inspected and approved by DOB before installation (§600.3(C)). Arc coordinates the electrician and the power requirements. Arc is not an electrical contractor.
+A licensed electrician files the electrical permit through DOB NOW: Build and makes the connection. The NYC Electrical Code also requires electric signs made for installation in the city to be inspected and approved by DOB before installation (§600.3(C)). Arc is not an electrical contractor, so it doesn't file or wire; it coordinates the power requirements and the handoff with the project's licensed electrician.
 
 ### Who installs the letters?
 

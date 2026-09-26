@@ -22,7 +22,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - Arc **coordinates** permits. It does not file DOB applications as a licensed applicant, stamp drawings, or hold a Licensed Sign Hanger, electrical, or PE/RA license. The pages say Arc works with those licensed parties where the job requires them.
 - No promises of approvals, inspections, sign-offs, or production times. Agencies, architects, and inspectors make those calls.
 - ADA signs are "made to the project's drawings and specs, prepared to the applicable standards for architect and inspector review." Never "ADA compliant" or "certified."
-- Construction page: NYC Building Code §3301.9.7 and §3301.9.8 limit other signs and advertising on fences and sidewalk sheds and ban illuminated business signs on them. The page does not offer branded fence wraps or shed advertising in NYC.
+- Construction page: NYC Building Code §3301.9.7 and §3301.9.8 limit other signs and advertising on fences and sidewalk sheds and ban illuminated business signs on them. The page says branded fence wraps and shed advertising are generally not allowed on NYC sites under §3301.9.7 and §3301.9.8. Whether Arc declines them as a policy is pending Jesus's confirmation.
 - The 24-hour quote target is stated only as the site already states it: it starts once drawings, photos, and site details are in.
 - Every code or regulation reference was checked against the public source listed in each page's "Public sources" section (checked September 2026). Anything that couldn't be verified was left out.
 - No clients, projects, reviews, ratings, stats, years in business, hours, or street address.
@@ -51,7 +51,6 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 
 ## Existing homepage wording flagged for review (not changed here)
 
-The Sales Ops wording pass (PR #3) already fixed "ADA compliance", "DOB permits … stamped drawing coordination", and "Built to pass review". Two items remain:
+The Sales Ops wording pass (PR #3) already fixed "ADA compliance", "DOB permits … stamped drawing coordination", and "Built to pass review". The Sales Ops claims review (2026-09-26) fixed the meta description, the Scope Finder ADA question, the hero ADA tile, and the "Code-aware from day one" card. One item remains:
 
 - Construction Signs card: "hoarding graphics, project IDs." In NYC, §3301.9.7 restricts these on fences and sheds; consider "project information panels" instead.
-- Hero proof tile "ADA — Code-first packages." Reads close to an outcome promise.
