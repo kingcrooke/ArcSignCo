@@ -9,7 +9,10 @@ Netlify publishes the repository root as-is.
 
 | Path | Purpose |
 |---|---|
-| `index.html` | The single-page site (styles and scripts are inline) |
+| `index.html` | The homepage (styles and scripts are inline) |
+| `sign-permits-shop-drawings/`, `ada-signs/`, `channel-letters/`, `construction-signs/` | Service pages, each an `index.html` served at `/<slug>/` |
+| `assets/css/service-page.v2.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
+| `docs/copy-review/` | Plain-text copy of each service page for copy review (not published as a page) |
 | `thank-you.html` | Quote form success page, served at `/thank-you` (noindex) |
 | `portfolio.html` | Founder's prior work, served at `/portfolio` (styles and scripts are inline) |
 | `netlify.toml` | Publish settings, security headers, cache headers |
@@ -20,6 +23,8 @@ Netlify publishes the repository root as-is.
 | `tools/optimize-images.mjs` | Regenerates `assets/img/` and the icons from the masters |
 | `assets/portfolio/` | Optimized, versioned portfolio photos (AVIF / WebP / JPEG) |
 | `tools/optimize-portfolio-images.mjs` | Regenerates `assets/portfolio/` from the cleaned portfolio masters (kept outside the repo) |
+| `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
+| `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
 
 ## How changes ship
 
@@ -74,14 +79,39 @@ If it can't be backed up, soften or remove it.
 - No street address anywhere: not in visible copy, the footer, or JSON-LD. The location label is
   "New York / Tri-State".
 - JSON-LD `LocalBusiness` uses `areaServed` (New York, New Jersey, Connecticut) and has no `address`
-  or `streetAddress`.
-- Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search `index.html` for
-  `TODO(GBP)`. When the URL is confirmed, put it in two places:
-  1. the empty `sameAs` array in the JSON-LD, and
-  2. the `href` of the footer link `id="gbpLink"`.
+  or `streetAddress`. Its `@id` is `https://arcsignco.com/#business`; the service pages point their
+  `Service` `provider` at that same `@id`.
+- `sameAs` lists Instagram (`https://www.instagram.com/arcsignco`) and Facebook
+  (`https://www.facebook.com/1201574029704014`). The footer on every page links to both.
+- Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search all pages for
+  `TODO(GBP)`. When the URL is confirmed, put it in these places:
+  1. the `sameAs` array in the homepage JSON-LD (after Instagram and Facebook), and
+  2. the `href` of the footer link `id="gbpLink"` on the homepage and on each service page.
 
   The footer link stays hidden while its `href` is empty and shows automatically once it's an `https://`
   URL. Never guess the URL.
+
+## Service pages
+
+- Each page has three JSON-LD blocks: `Service`, `BreadcrumbList`, and `FAQPage`. The `FAQPage`
+  question and answer text must match the visible FAQ on the page word for word. If you edit an FAQ,
+  edit both, then update the matching file in `docs/copy-review/`.
+- Code and regulation references are cited in a "Public sources" list on each page. Re-check them
+  whenever the page is edited.
+- The header and footer are copied into each page (there is no build step). A change to the
+  homepage header or footer needs the same change in the four service pages.
+- `assets/css/service-page.v2.css` is cached for a year. To change it, copy it to `.v3.css` and
+  update the `<link>` in each service page. (`v1` was only ever on a Deploy Preview.)
+- The service pages use the same header (Call + Request a quote), phone bottom bar, v2 logo, GBP
+  footer slot, and GA4 hook as the homepage. The phone bar watches the hero buttons, the "What to
+  send" section, and the closing CTA band, and shows only when none of them is on screen.
+- After editing a service page, regenerate the copy-review files and run the checks:
+
+  ```bash
+  mkdir -p /tmp/sd-tools && (cd /tmp/sd-tools && npm i jsdom)
+  NODE_PATH=/tmp/sd-tools/node_modules node tools/export-copy.mjs
+  NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
+  ```
 
 ## Portfolio photos
 
@@ -138,7 +168,8 @@ While the ID is empty, the pages load no analytics script and make no request to
 **To turn it on** (after approval):
 
 1. In GA4, create a Web data stream for `https://arcsignco.com` and copy its Measurement ID (`G-XXXXXXXXXX`).
-2. Search for `ANALYTICS(GA4)` in `index.html`, `thank-you.html` and `portfolio.html`. In all three files, set
+2. Search for `ANALYTICS(GA4)` in `index.html`, `thank-you.html`, `portfolio.html`, and the four
+   service pages (`*/index.html`). In every file, set
    `var GA4_ID = "G-XXXXXXXXXX";` to the same ID. Anything that doesn't look like `G-` plus letters
    and digits is ignored.
 3. Open a PR, check the Deploy Preview's network tab for a `googletagmanager.com/gtag/js` request, then merge.
@@ -150,7 +181,7 @@ While the ID is empty, the pages load no analytics script and make no request to
 |---|---|
 | `page_view` | Every page, sent automatically by the GA4 config |
 | `generate_lead` (`form_name: quote-request`) | `/thank-you`, in the script at the bottom of `thank-you.html`. It fires only after a real quote form submit in the same tab, and only once per submit, so reloads and direct visits don't count. |
-| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer) and on `/portfolio` (header, phone bar, footer) |
+| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer), on the service pages (header, hero, quote card, phone bar, footer), and on `/portfolio` (header, phone bar, footer) |
 
 Nothing else is tracked. The GA4 `config` call uses Google's defaults.
 

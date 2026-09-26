@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arc Signage Co | NYC Signage Design, Fabrication, Permits & Install</title>
-<meta name="description" content="Arc Signage Co designs, fabricates, permits, and installs signage across New York City and the tri-state area: ADA, wayfinding, storefront, and illuminated signs.">
+<meta name="description" content="Arc Signage Co designs, fabricates, coordinates permits for, and installs signage across New York City and the tri-state area: ADA, wayfinding, storefront, and illuminated signs.">
 <link rel="canonical" href="https://arcsignco.com/">
 <meta name="theme-color" content="#0b1d33">
 <meta property="og:type" content="website">
@@ -25,6 +25,7 @@
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": "https://arcsignco.com/#business",
   "name": "Arc Signage Co",
   "legalName": "Arc Signage Co LLC",
   "description": "Full-service signage company: design, fabrication, permit coordination, ADA signage, and installation across New York and the tri-state area.",
@@ -32,16 +33,20 @@
   "telephone": "+1-917-569-1076",
   "url": "https://arcsignco.com/",
   "image": "https://arcsignco.com/assets/img/og-image-1200x630.v1.png",
+  "logo": "https://arcsignco.com/assets/img/og-image-1200x630.v1.png",
   "areaServed": [
     { "@type": "State", "name": "New York" },
     { "@type": "State", "name": "New Jersey" },
     { "@type": "State", "name": "Connecticut" }
   ],
-  "sameAs": [],
+  "sameAs": [
+    "https://www.instagram.com/arcsignco",
+    "https://www.facebook.com/1201574029704014"
+  ],
   "knowsAbout": ["ADA signage", "Wayfinding", "Channel letters", "Blade signs", "DOB sign permits", "FDNY signage", "Illuminated signs", "Sign installation"]
 }
 </script>
-<!-- TODO(GBP): Arc has a Google Business Profile but the URL isn't confirmed yet. When Jesus supplies it, add it to "sameAs" above and put the same URL in the footer link's href (id="gbpLink"); the link stays hidden while its href is empty. No street address: service area only (see README "Location and address"). -->
+<!-- TODO(GBP): Arc has a Google Business Profile but the URL isn't confirmed yet. When Jesus supplies it, add it to "sameAs" above (after Instagram and Facebook) and put the same URL in the footer link's href (id="gbpLink"); the link stays hidden while its href is empty. No street address: service area only (see README "Location and address"). -->
 <!-- ANALYTICS(GA4): off. Nothing loads and no request is made while GA4_ID is empty. Set the approved Measurement ID here and in thank-you.html (see README "Analytics"). -->
 <script>
 (function () {
@@ -800,6 +805,15 @@ footer p { color: #cfd9e6; font-size: 13px; }
   color: #a9b8ca;
 }
 .footer-meta a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; }
+.service-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; color: var(--navy); font-size: 13px; font-weight: 900; text-decoration: underline; text-underline-offset: 3px; }
+.service-link::after { content: "\2192"; display: inline-block; margin-left: 6px; }
+.footer-services { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 0 16px; font-size: 13px; font-weight: 800; }
+.footer-services span { color: var(--gold-2); font-size: 11px; letter-spacing: .09em; text-transform: uppercase; }
+.footer-services a { display: inline-flex; align-items: center; min-height: 44px; }
+.footer-social { display: flex; gap: 8px; margin-top: 12px; }
+.footer-social a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid rgba(255,255,255,.28); border-radius: 8px; color: var(--white); }
+.footer-social a:hover { border-color: var(--gold); color: var(--gold-2); }
+.footer-social svg { width: 20px; height: 20px; }
 @media (max-width: 1100px) {
   .nav-call .call-long { display: none; }
   .nav-call .call-short { display: inline; }
@@ -919,7 +933,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
         <p class="hero-more"><a href="#selector">Not sure what you need? Try the Scope Finder</a></p>
         <div class="hero-proof" aria-label="Arc Signage proof points">
           <div class="proof"><strong>New York / Tri-State</strong><span>Service area</span></div>
-          <div class="proof"><strong>ADA</strong><span>Code-first packages</span></div>
+          <div class="proof"><strong>ADA</strong><span>Code-aware drawings for architect review</span></div>
           <div class="proof"><strong>DOB</strong><span>Permit coordination</span></div>
           <div class="proof"><strong>24h</strong><span>Quote target once drawings, photos &amp; site details are in</span></div>
         </div>
@@ -969,7 +983,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       </div>
       <div class="revision-list">
         <article class="revision"><b>1</b><h3>One accountable team</h3><p>Design, fabrication, permitting, and installation stay under one point of contact from first review to closeout.</p></article>
-        <article class="revision"><b>2</b><h3>Code-aware from day one</h3><p>ADA, DOB, FDNY, landlord, and architect requirements are reviewed early so signage does not hold up approvals or punch list.</p></article>
+        <article class="revision"><b>2</b><h3>Code-aware from day one</h3><p>ADA, DOB, FDNY, landlord, and architect requirements are reviewed early, before drawings go out for approval.</p></article>
         <article class="revision"><b>3</b><h3>Field-ready execution</h3><p>Shop drawings, message schedules, materials, mounting details, access planning, and install coordination are handled with jobsite realities in mind.</p></article>
       </div>
     </div>
@@ -995,15 +1009,15 @@ footer p { color: #cfd9e6; font-size: 13px; }
         </article>
         <article class="service">
           <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-ada-300.v1.avif 300w, /assets/img/service-ada-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-ada-300.v1.webp 300w, /assets/img/service-ada-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-ada-428.v1.jpg" srcset="/assets/img/service-ada-300.v1.jpg 300w, /assets/img/service-ada-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="ADA tactile room sign with wheelchair symbol and Braille"></picture></div>
-          <div class="service-body"><h3>ADA & Code Signs</h3><p>ADA room IDs, restroom signs, tactile text, Grade 2 Braille, stairwell IDs, exits, and egress signage.</p></div>
+          <div class="service-body"><h3>ADA & Code Signs</h3><p>ADA room IDs, restroom signs, tactile text, Grade 2 Braille, stairwell IDs, exits, and egress signage.</p><a class="service-link" href="/ada-signs/">More on ADA &amp; tactile signs</a></div>
         </article>
         <article class="service">
           <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-led-300.v1.avif 300w, /assets/img/service-led-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-led-300.v1.webp 300w, /assets/img/service-led-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-led-428.v1.jpg" srcset="/assets/img/service-led-300.v1.jpg 300w, /assets/img/service-led-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Installer mounting an illuminated channel letter"></picture></div>
-          <div class="service-body"><h3>LED & Illuminated</h3><p>Front-lit, back-lit, halo-lit, lightbox, cabinet, LED display, and electrical coordination.</p></div>
+          <div class="service-body"><h3>LED & Illuminated</h3><p>Front-lit, back-lit, halo-lit, lightbox, cabinet, LED display, and electrical coordination.</p><a class="service-link" href="/channel-letters/">More on channel letters</a></div>
         </article>
         <article class="service">
           <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-permits-300.v1.avif 300w, /assets/img/service-permits-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-permits-300.v1.webp 300w, /assets/img/service-permits-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-permits-428.v1.jpg" srcset="/assets/img/service-permits-300.v1.jpg 300w, /assets/img/service-permits-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Sign shop drawings prepared for permit review"></picture></div>
-          <div class="service-body"><h3>Permits & Submittals</h3><p>DOB permit coordination, shop drawings, and submittal packages, working with licensed sign hangers, engineers, architects, and expediters where the job requires them.</p></div>
+          <div class="service-body"><h3>Permits & Submittals</h3><p>DOB permit coordination, shop drawings, and submittal packages, working with licensed sign hangers, engineers, architects, and expediters where the job requires them.</p><a class="service-link" href="/sign-permits-shop-drawings/">More on permits &amp; shop drawings</a></div>
         </article>
         <article class="service">
           <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-awnings-300.v1.avif 300w, /assets/img/service-awnings-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-awnings-300.v1.webp 300w, /assets/img/service-awnings-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-awnings-428.v1.jpg" srcset="/assets/img/service-awnings-300.v1.jpg 300w, /assets/img/service-awnings-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Navy storefront awning with gooseneck lights"></picture></div>
@@ -1011,7 +1025,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
         </article>
         <article class="service">
           <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-construction-300.v1.avif 300w, /assets/img/service-construction-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-construction-300.v1.webp 300w, /assets/img/service-construction-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-construction-428.v1.jpg" srcset="/assets/img/service-construction-300.v1.jpg 300w, /assets/img/service-construction-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Construction site hoarding with safety and directional signs"></picture></div>
-          <div class="service-body"><h3>Construction Signs</h3><p>Site boards, safety notices, directional signs, hoarding graphics, project IDs, and temporary install scopes.</p></div>
+          <div class="service-body"><h3>Construction Signs</h3><p>Site boards, safety notices, directional signs, hoarding graphics, project IDs, and temporary install scopes.</p><a class="service-link" href="/construction-signs/">More on construction site signs</a></div>
         </article>
         <article class="service">
           <div class="service-art photo"><picture><source type="image/avif" srcset="/assets/img/service-stickers-300.v1.avif 300w, /assets/img/service-stickers-428.v1.avif 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><source type="image/webp" srcset="/assets/img/service-stickers-300.v1.webp 300w, /assets/img/service-stickers-428.v1.webp 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px"><img src="/assets/img/service-stickers-428.v1.jpg" srcset="/assets/img/service-stickers-300.v1.jpg 300w, /assets/img/service-stickers-428.v1.jpg 428w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 24px), 281px" width="428" height="425" loading="lazy" decoding="async" alt="Directional arrow decal being applied to glass"></picture></div>
@@ -1177,6 +1191,10 @@ footer p { color: #cfd9e6; font-size: 13px; }
         <img src="/assets/img/logo-lockup-white-280.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="134px" width="847" height="174" loading="lazy" decoding="async" alt="Arc Signage Co">
       </picture>
       <p>Full-service signage for New York and the tri-state area: design, fabrication, permit coordination, ADA signage, and installation.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/arcsignco" target="_blank" rel="noopener" aria-label="Arc Signage Co on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.facebook.com/1201574029704014" target="_blank" rel="noopener" aria-label="Arc Signage Co on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M13.5 22v-8.2h2.8l.4-3.2h-3.2V8.6c0-.9.3-1.6 1.6-1.6h1.7V4.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2h2.8V22h3.4z"/></svg></a>
+      </div>
     </div>
     <div class="footer-links">
       <a href="#about">About</a>
@@ -1188,6 +1206,13 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <a id="gbpLink" href="" rel="noopener" target="_blank" hidden>Google Business Profile</a>
     </div>
   </div>
+  <nav class="wrap footer-services" aria-label="Service pages">
+    <span>Services</span>
+    <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
+    <a href="/ada-signs/">ADA &amp; tactile signs</a>
+    <a href="/channel-letters/">Channel letters</a>
+    <a href="/construction-signs/">Construction site signs</a>
+  </nav>
   <div class="wrap footer-meta">
     <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
     <span><a href="tel:+19175691076">(917) 569-1076</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
@@ -1211,7 +1236,7 @@ const questions = [
     ["no", "No", "No known permit requirement"],
     ["unsure", "Not sure", "Arc should review the approval path"]
   ]},
-  { t: "Is ADA or code compliance involved?", key: "ada", opts: [
+  { t: "Does the job involve ADA or code requirements?", key: "ada", opts: [
     ["yes", "Yes", "Restrooms, rooms, stairs, exits, elevators, or egress"],
     ["no", "No", "Branding, graphics, or decorative signage only"],
     ["unsure", "Not sure", "Arc should flag what is required"]
