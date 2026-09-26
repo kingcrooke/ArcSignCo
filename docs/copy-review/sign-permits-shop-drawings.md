@@ -20,7 +20,7 @@ _Label: Permits & Submittals | New York / Tri-State_
 
 # Sign permit coordination and shop drawings for New York projects
 
-Most business signs in New York City need a Department of Buildings (DOB) sign permit. Signs smaller than six square feet that are not illuminated are the main exception. Illuminated signs also need a separate electrical permit filed by a licensed electrician. A Licensed Sign Hanger or a registered engineer or architect files the sign permit, depending on the sign. Arc prepares the drawings and schedules and coordinates those parties.
+Most business signs in New York City need a Department of Buildings (DOB) sign permit. Signs smaller than six square feet that are not illuminated are the main exception. Illuminated signs also need a separate electrical permit filed by a licensed electrician. A Licensed Sign Hanger or a registered engineer or architect files the sign permit, depending on the sign. Arc prepares the drawings and schedules, and coordinates with those parties.
 
 [Button: Request a quote](/#quote)
 
@@ -47,7 +47,7 @@ DOB requires permits for sign displays and installations under Construction Code
 - **An electrical permit** for any sign that needs an electrical connection, filed by a licensed electrician.
 - **An annual illuminated sign permit**, which may also be required if the sign is illuminated and extends beyond the building line.
 
-DOB lists the exceptions to the permit requirement in Construction Code §28-105.4.5. Signs that don't need a permit still have to comply with the Construction Codes, the Zoning Resolution, and the Rules of the City of New York, so zoning limits on size, location, and lighting apply either way.
+DOB lists the exceptions to the permit requirement in Construction Code §28-105.4.5. Signs that don't need a permit still have to comply with the Construction Codes, the Zoning Resolution, and the Rules of the City of New York. Zoning limits on size, location, and lighting apply either way.
 
 **Who decides:** Arc reviews the likely permit path early and flags it at quote. The licensed applicant and the agencies make the final call on what the job needs and whether it is approved.
 
@@ -80,11 +80,11 @@ Shop drawings show exactly what will be built and how it will be attached. For a
 
 A sign schedule, also called a message schedule, lists every sign in a package by type, location, and message. It keeps larger interior and ADA packages organized from submittal to install.
 
-Depending on the job, the architect, owner, landlord, GC, and any licensed applicant review the drawings before fabrication. Clear, complete drawings make those reviews easier to run. They do not guarantee a timeline or an approval.
+Depending on the job, the architect, owner, landlord, GC, and any licensed applicant review the drawings before fabrication. Clear, complete drawings make those reviews easier, but they don't guarantee a timeline or an approval.
 
 ### Landmarks and historic districts
 
-If the building is an individual landmark or in a historic district, an LPC permit is needed before installing or replacing signs, awnings, or related lighting. LPC applications are filed through Portico, LPC's online permit portal. You can check a building's status on LPC's Discover NYC Landmarks map, and LPC's Permit Guidebook has separate chapters for signage and awnings that list what a complete application needs.
+If the building is an individual landmark or in a historic district, you need an LPC permit before installing or replacing signs, awnings, or related lighting. LPC applications are filed through Portico, LPC's online permit portal. You can check a building's status on LPC's Discover NYC Landmarks map. LPC's Permit Guidebook has separate chapters for signage and awnings that list what a complete application needs.
 
 ### Landlord sign criteria
 
@@ -98,7 +98,7 @@ _Label: Process_
 
 ## From drawings to install
 
-The same five steps Arc uses on every sign scope, with the permit step as coordination.
+Arc uses the same five steps on every sign scope. The permit step is coordination.
 
 - **01 Review:** Drawings, photos, sign schedule, landlord criteria, landmark status, and the likely permit path.
 - **02 Design:** Artwork, shop drawings, sign and message schedules, materials, and mounting details for review.
@@ -144,7 +144,7 @@ A registered design professional, meaning a New York State licensed professional
 
 ### Who has to install an exterior sign?
 
-Under Construction Code §28-415.1, a Licensed Sign Hanger must perform or directly supervise sign installation. §28-415.2 exempts some signs, including signs of 75 square feet or less that weigh 25 pounds or less, signs supported directly on the ground, directional signs, and temporary signs put up during construction and related to that work. Arc coordinates a Licensed Sign Hanger where one is required.
+Under Construction Code §28-415.1, a Licensed Sign Hanger must perform or directly supervise sign installation. §28-415.2 exempts some signs, including signs of 75 square feet or less that weigh 25 pounds or less, signs supported directly on the ground, directional signs, and temporary signs put up during construction and related to that work. Arc coordinates with a Licensed Sign Hanger where one is required.
 
 ### Does an illuminated sign need extra permits?
 
