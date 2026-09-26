@@ -9,10 +9,26 @@
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<!-- ANALYTICS(GA4): off. Nothing loads and no request is made while GA4_ID is empty. Use the same Measurement ID as index.html (see README "Analytics"). The quote conversion event fires further down this page. -->
+<script>
+(function () {
+  var GA4_ID = "";
+  if (!/^G-[A-Z0-9]+$/.test(GA4_ID)) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag("js", new Date());
+  window.gtag("config", GA4_ID);
+  var s = document.createElement("script");
+  s.async = true;
+  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
+  document.head.appendChild(s);
+})();
+</script>
 <style>
 :root {
   --navy: #0b1d33;
   --gold: #d4a843;
+  --gold-2: #f0d080;
   --paper: #f5f6f8;
   --white: #ffffff;
   --muted: #d8e1ec;
@@ -52,14 +68,39 @@ p {
   color: var(--muted);
   font-size: 18px;
   line-height: 1.5;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
-a {
+strong { color: var(--white); }
+h2 {
+  color: var(--gold-2);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+ul {
+  margin: 0 0 22px 20px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+li { margin-bottom: 6px; }
+.note {
+  border-left: 4px solid var(--gold);
+  padding: 10px 14px;
+  background: rgba(255,255,255,.06);
+  border-radius: 0 8px 8px 0;
+  font-size: 16px;
+}
+.btn {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  justify-content: center;
+  min-height: 48px;
   padding: 12px 18px;
   border-radius: 8px;
+  border: 1px solid transparent;
   background: var(--gold);
   color: var(--navy);
   font-weight: 900;
@@ -69,32 +110,82 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+  margin-bottom: 18px;
 }
-.secondary {
+.btn.secondary {
   background: transparent;
-  border: 1px solid rgba(255,255,255,.35);
+  border-color: rgba(255,255,255,.35);
   color: var(--white);
+}
+.links { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--white);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 @media (max-width: 480px) {
   body { padding: 16px; }
   main { padding: 24px; }
   p { font-size: 16px; }
-  .actions a { width: 100%; justify-content: center; }
+  ul { font-size: 16px; }
+  .actions .btn { width: 100%; }
 }
 </style>
 </head>
 <body>
 <main>
   <picture>
-    <source type="image/webp" srcset="/assets/img/logo-lockup-white-560.v1.webp">
-    <img class="logo" src="/assets/img/logo-lockup-white-560.v1.png" width="847" height="174" alt="Arc Signage Co">
+    <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-360.v2.webp 360w, /assets/img/logo-lockup-white-560.v2.webp 560w" sizes="220px">
+    <img class="logo" src="/assets/img/logo-lockup-white-560.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-360.v2.png 360w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="220px" width="847" height="174" alt="Arc Signage Co">
   </picture>
   <h1>Thank you.</h1>
-  <p>Your quote request has been received. Next, email any drawings, photos, sign schedules, permit notes, or deadline details to arc@arcsignco.com with the project address in the subject line. Arc aims to send your quote within 24 hours of receiving drawings, photos, and site details.</p>
+  <p>Your quote request has been received. <strong>Next step:</strong> email your drawings or sign schedule to <strong>arc@arcsignco.com</strong> with the <strong>project address in the subject line</strong>.</p>
+  <h2>What to attach</h2>
+  <ul>
+    <li>Drawings (plans, elevations, details) or a sign / message schedule</li>
+    <li>Photos of the facade, existing signs, interiors, or mounting surfaces</li>
+    <li>Permit notes and your bid due or install date</li>
+  </ul>
+  <p class="note">Active jobsite? Put <strong>URGENT</strong> in the subject line.</p>
+  <p>Arc aims to send your quote within 24 hours of receiving drawings, photos, and site details.</p>
   <div class="actions">
-    <a href="mailto:arc@arcsignco.com?subject=Drawings%20for%20Arc%20Signage%20Co%20quote%20request&body=Please%20attach%20drawings%2C%20photos%2C%20sign%20schedules%2C%20permit%20notes%2C%20or%20deadline%20details.%0A%0AProject%20address%3A%0ACompany%3A%0AContact%20name%3A">Email drawings now</a>
-    <a class="secondary" href="/">Back to homepage</a>
+    <a class="btn" id="emailDrawings" href="mailto:arc@arcsignco.com?subject=Drawings%20for%20quote%20-%20%5BProject%20street%20address%2C%20borough%5D&amp;body=Project%20street%20address%3A%0ABorough%20%2F%20area%3A%0ACompany%3A%0AContact%20name%3A%0ABid%20due%20or%20install%20date%3A%0A%0AAttached%3A%20drawings%20or%20sign%20schedule%2C%20and%20site%20photos.">Email drawings now</a>
+    <a class="btn secondary" id="emailUrgent" href="mailto:arc@arcsignco.com?subject=URGENT%20-%20Drawings%20for%20quote%20-%20%5BProject%20street%20address%2C%20borough%5D&amp;body=Project%20street%20address%3A%0ABorough%20%2F%20area%3A%0ACompany%3A%0AContact%20name%3A%0ABid%20due%20or%20install%20date%3A%0A%0AAttached%3A%20drawings%20or%20sign%20schedule%2C%20and%20site%20photos.">Email as URGENT (active jobsite)</a>
+  </div>
+  <div class="links">
+    <a href="tel:+19175691076">Questions? Call (917) 569-1076</a>
+    <a href="/">Back to homepage</a>
   </div>
 </main>
+<script>
+(function () {
+  var quote = null;
+  try { quote = JSON.parse(sessionStorage.getItem("arcQuote") || "null"); } catch (e) {}
+  if (!quote) return;
+
+  if (quote.address) {
+    var base = "Drawings for quote - " + quote.address;
+    var body = "Project street address: " + quote.address + "\n" +
+      "Company:\nContact name:\nBid due or install date:\n\n" +
+      "Attached: drawings or sign schedule, and site photos.";
+    var mailto = function (subject) {
+      return "mailto:arc@arcsignco.com?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    };
+    document.getElementById("emailDrawings").href = mailto(base);
+    document.getElementById("emailUrgent").href = mailto("URGENT - " + base);
+  }
+
+  // Quote conversion: only after a real form submit in this tab, once per submit, and only when GA4 is on.
+  if (!quote.counted && typeof window.gtag === "function") {
+    window.gtag("event", "generate_lead", { form_name: "quote-request" });
+    quote.counted = true;
+    try { sessionStorage.setItem("arcQuote", JSON.stringify(quote)); } catch (e) {}
+  }
+})();
+</script>
 </body>
 </html>

@@ -42,6 +42,26 @@ If it can't be backed up, soften or remove it.
   appear when viewing the live page source; that is expected.
 - Every input needs a `name`, and the field must exist in the static HTML, or Netlify drops it.
 - Successful submissions redirect to `/thank-you`.
+- Fields follow the Sales Ops intake checklist (Must have / Request next):
+
+  | Field (`name`) | Required | Notes |
+  |---|---|---|
+  | `name`, `email` | yes | |
+  | `phone` | no | |
+  | `company` | no | |
+  | `role` | yes | General contractor / Architect / Owner / Tenant / Other |
+  | `type` | defaults to "Not sure" | Every service the site lists, plus "Several of these" |
+  | `project-address`, `borough` | yes | The customer's job site, not Arc's address |
+  | `deadline-type` | yes | Bid due / Install / Both bid and install / No firm date yet |
+  | `deadline-date` | when a deadline type with a date is picked | Labelled "Bid due date" or "Install date" to match the type |
+  | `install-date` | no | Shown only for "Both bid and install" |
+  | `drawings` | yes | Yes / No / Will email |
+  | `permit[]` | no | Any of DOB / FDNY / Landlord / Not sure (multi-value) |
+  | `message` | no | Placeholder prompts for access, existing signs, power, GC name |
+  | `scope-finder` | hidden | Scope Finder result, if used and not already in the notes |
+
+- On submit, the page saves the project address in `sessionStorage` (this tab only) so `/thank-you` can
+  put it in the "Email drawings" subject line. Nothing is sent anywhere else.
 - Submissions, spam, and notification settings live in the Netlify UI
   (Forms, and Project configuration > Notifications). The notification email target is set there, not in code.
 - **Notification target: arc@arcsignco.com** (owner decision). Configure it in Netlify under
@@ -56,8 +76,12 @@ If it can't be backed up, soften or remove it.
 - JSON-LD `LocalBusiness` uses `areaServed` (New York, New Jersey, Connecticut) and has no `address`
   or `streetAddress`.
 - Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search `index.html` for
-  `TODO(GBP)`: add the URL to the empty `sameAs` array in the JSON-LD and uncomment the footer link.
-  Never guess the URL.
+  `TODO(GBP)`. When the URL is confirmed, put it in two places:
+  1. the empty `sameAs` array in the JSON-LD, and
+  2. the `href` of the footer link `id="gbpLink"`.
+
+  The footer link stays hidden while its `href` is empty and shows automatically once it's an `https://`
+  URL. Never guess the URL.
 
 ## Portfolio photos
 
@@ -87,8 +111,15 @@ If it can't be backed up, soften or remove it.
 ## Images and caching
 
 - Files in `assets/img/` are cached by browsers for one year (`immutable`). **Never overwrite a file
-  there.** When an image changes, bump `VERSION` in `tools/optimize-images.mjs` (e.g. `v1` to `v2`),
-  regenerate, and update the references in the HTML.
+  there.** When an image changes, bump its version in `tools/optimize-images.mjs` (`VERSION` for the
+  photos and icon, `LOCKUP_VERSION` for the header/footer logo), regenerate, and update the references
+  in the HTML.
+- The logo lockup is on `v2` (palette-quantized, about half the bytes of `v1`). New pages should use
+  `logo-lockup-white-*.v2.*`. The `v1` lockup files are no longer generated but stay in `assets/img/`
+  until no page or open branch references them.
+- `service_photoreal_sprite_codex.png` (2.26 MB) is not used by any page. It is the master that the
+  service tiles and collage in `assets/img/` are cut from, so keep it unless a replacement master is
+  stored elsewhere.
 - Regenerate images:
 
   ```bash
@@ -100,8 +131,28 @@ If it can't be backed up, soften or remove it.
 
 ## Analytics
 
-None installed. A placeholder comment in `index.html` marks where a snippet would go. Do not add a
-tracking ID until Jesus approves the provider and the ID.
+Google Analytics 4 is wired in but **off**. Do not add a Measurement ID until Jesus approves it.
+
+While the ID is empty, the pages load no analytics script and make no request to Google.
+
+**To turn it on** (after approval):
+
+1. In GA4, create a Web data stream for `https://arcsignco.com` and copy its Measurement ID (`G-XXXXXXXXXX`).
+2. Search for `ANALYTICS(GA4)` in `index.html` and `thank-you.html`. In both files, set
+   `var GA4_ID = "G-XXXXXXXXXX";` to the same ID. Anything that doesn't look like `G-` plus letters
+   and digits is ignored.
+3. Open a PR, check the Deploy Preview's network tab for a `googletagmanager.com/gtag/js` request, then merge.
+4. In GA4 (Admin > Events), mark `generate_lead` as a key event (conversion).
+
+**Events:**
+
+| Event | Where it fires |
+|---|---|
+| `page_view` | Every page, sent automatically by the GA4 config |
+| `generate_lead` (`form_name: quote-request`) | `/thank-you`, in the script at the bottom of `thank-you.html`. It fires only after a real quote form submit in the same tab, and only once per submit, so reloads and direct visits don't count. |
+| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer) |
+
+Nothing else is tracked. The GA4 `config` call uses Google's defaults.
 
 ## Environment variables
 
