@@ -60,8 +60,9 @@ If it can't be backed up, soften or remove it.
   `Service` `provider` at that same `@id`.
 - `sameAs` lists Instagram (`https://www.instagram.com/arcsignco`) and Facebook
   (`https://www.facebook.com/1201574029704014`). The footer on every page links to both.
-- Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search `index.html` for
-  `TODO(GBP)`: add the URL to the `sameAs` array in the JSON-LD and uncomment the footer link.
+- Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search all pages for
+  `TODO(GBP)`: add the URL to the `sameAs` array in the homepage JSON-LD and uncomment the footer
+  link on the homepage and each service page.
   Never guess the URL.
 
 ## Service pages
