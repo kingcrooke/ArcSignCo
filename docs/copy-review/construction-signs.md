@@ -20,7 +20,7 @@ _Label: Construction Signs | New York / Tri-State_
 
 # Jobsite and temporary signage for New York construction projects
 
-NYC Building Code §3301.9 requires specific signs on construction and demolition sites, including a project information panel on fences facing a public street and a parapet panel wherever a sidewalk shed is up. Other signs and advertising on fences and sheds are prohibited unless the law allows them, and illuminated business signs are not allowed on them at all. Arc lays out, produces, and installs the site package to the code's content and material rules.
+NYC Building Code §3301.9 requires specific signs on construction and demolition sites. These include a project information panel on fences facing a public street and a parapet panel wherever a sidewalk shed is up. Other signs and advertising on fences and sheds are prohibited unless the law allows them. Illuminated business signs aren't allowed on them at all. Arc lays out, produces, and installs the site package to the code's content and material rules.
 
 [Button: Request a quote](/#quote)
 
@@ -74,8 +74,8 @@ _Label: Jobsite signs_
 
 Beyond the code-required panels, Arc produces safety notices, gate and delivery signs, directional signs, project ID boards, and temporary wayfinding for phased openings.
 
-- **Safety sign formats.** OSHA's construction standard, 29 CFR 1926.200, sets formats for danger, caution, safety instruction, and directional signs and references the ANSI Z535 series. The GC's site safety plan decides which signs go where.
-- **Where they go in NYC.** Building Code §3301.9.5 says other temporary signs required by law are posted within the site, readily visible to workers, and not where they are readily visible to the public unless another law requires it.
+- **Safety sign formats.** OSHA's construction standard, 29 CFR 1926.200, sets formats for danger, caution, safety instruction, and directional signs and incorporates ANSI Z535 standards by reference. The GC's site safety plan decides which signs go where.
+- **Where they go in NYC.** Building Code §3301.9.5 says other temporary signs required by law go within the site, where workers can readily see them. They don't go where the public can readily see them unless another law requires it.
 - **Project ID boards.** In NYC, project ID and marketing boards can't go on fences, sidewalk sheds, or other temporary construction installations unless the law allows it (§3301.9.7). Outside the city, check the municipality's rules.
 
 _Label: Fences & sheds_
@@ -84,13 +84,13 @@ _Label: Fences & sheds_
 
 NYC is strict about what goes on construction fences and sidewalk sheds, which the trade also calls hoarding. Before designing anything for one, Arc checks it against these sections of the NYC Building Code.
 
-- **§3301.9.7, other signs prohibited.** Apart from the required panels and signs in §3301.9.1 through §3301.9.6, or where otherwise authorized by law, no sign, information, pictorial representation, or business or advertising message may be posted on construction or demolition equipment or on temporary construction installations, including sidewalk sheds and other protective structures.
+- **§3301.9.7, other signs prohibited.** No sign, information, pictorial representation, or business or advertising message may be posted on construction or demolition equipment or on temporary construction installations, including sidewalk sheds and other protective structures. The exceptions are the required panels and signs in §3301.9.1 through §3301.9.6, and anything otherwise authorized by law.
 - **§3301.9.8, illuminated signs prohibited.** No illuminated business or advertising sign is permitted on them.
 - **§3301.9.6, obscured lawful signs.** When a sidewalk shed or other protective structure hides an existing lawful sign, a temporary replacement sign may be posted on the structure, within limits on size, height, and placement.
-- **§3307.7.9, fence color.** Solid fences must be hunter green, metallic gray, or white. For many existing buildings, a color matching the facade, trim, cornice, or visible sloped roof is also acceptable. Where there is a sidewalk shed, the fence and shed must be the same color. This section was amended by Local Law 47 of 2025.
-- **§3307.11, artwork.** Sidewalk sheds, construction fences, and supported scaffolds that have been up at least 90 days are covered by an artwork provision: work approved by the NYC Department of Cultural Affairs, or artwork the owner solicits and gets Cultural Affairs approval for. The artwork can't be lit and can't cover the required signs.
+- **§3307.7.9, fence color.** Solid fences must be hunter green, metallic gray, or white. For many existing buildings, a color matching the facade, trim, cornice, or visible sloped roof is also acceptable. Where there is a sidewalk shed, the fence and shed must be the same color. Local Law 47 of 2025 amended this section.
+- **§3307.11, artwork.** An artwork provision covers sidewalk sheds, construction fences, and supported scaffolds that have been up at least 90 days. It applies to work approved by the NYC Department of Cultural Affairs, or artwork the owner solicits and gets Cultural Affairs approval for. The artwork can't be lit and can't cover the required signs.
 
-**What this means for your order:** Branded fence wraps and shed advertising are generally not allowed on NYC sites under §3301.9.7 and §3301.9.8. If you want anything on a fence or shed beyond the required panels, Arc flags these rules at quote, and you should confirm with DOB before ordering. For New Jersey and Connecticut sites, rules are set locally, so check with the municipality.
+**What this means for your order:** On NYC sites, if you want anything on a fence or shed beyond the required panels, Arc flags the rules above at quote. Confirm with DOB before ordering. For New Jersey and Connecticut sites, rules are set locally, so check with the municipality.
 
 _Label: Process_
 
@@ -140,11 +140,11 @@ Under §3301.9.1.1: a rendering, elevation, or zoning diagram without logos; a �
 
 ### Can we put our logo or marketing graphics on the construction fence or sidewalk shed?
 
-In NYC, generally not. §3301.9.7 prohibits other signs, pictures, and business or advertising messages on fences, sidewalk sheds, and other temporary construction installations unless the code or other law allows them, and §3301.9.8 bans illuminated business or advertising signs on them. The contractor's or owner's name, which may include a logo, is part of the required sidewalk shed parapet panel. Approved artwork is handled separately under §3307.11. Confirm with DOB before ordering any fence or shed graphics.
+In NYC, generally not. §3301.9.7 prohibits other signs, pictures, and business or advertising messages on fences, sidewalk sheds, and other temporary construction installations unless the code or other law allows them. §3301.9.8 bans illuminated business or advertising signs on them. The contractor's or owner's name, which may include a logo, is part of the required sidewalk shed parapet panel. Approved artwork is handled separately under §3307.11. Confirm with DOB before ordering any fence or shed graphics.
 
 ### Do construction safety signs have to follow a standard?
 
-Yes. OSHA's construction standard, 29 CFR 1926.200, sets the formats and colors for danger, caution, safety instruction, and directional signs and incorporates ANSI Z535 standards. The GC's site safety plan decides which signs go where. In NYC, §3301.9.5 says other legally required temporary signs go inside the site where workers can see them, not where the public can, unless another law requires it.
+Yes. OSHA's construction standard, 29 CFR 1926.200, sets the formats and colors for danger, caution, safety instruction, and directional signs and incorporates ANSI Z535 standards by reference. The GC's site safety plan decides which signs go where. In NYC, §3301.9.5 says other legally required temporary signs go inside the site where workers can see them, not where the public can, unless another law requires it.
 
 ### Do temporary construction signs need a licensed sign hanger?
 
