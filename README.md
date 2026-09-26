@@ -11,7 +11,7 @@ Netlify publishes the repository root as-is.
 |---|---|
 | `index.html` | The homepage (styles and scripts are inline) |
 | `sign-permits-shop-drawings/`, `ada-signs/`, `channel-letters/`, `construction-signs/` | Service pages, each an `index.html` served at `/<slug>/` |
-| `assets/css/service-page.v2.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
+| `assets/css/service-page.v3.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
 | `docs/copy-review/` | Plain-text copy of each service page for copy review (not published as a page) |
 | `thank-you.html` | Quote form success page, served at `/thank-you` (noindex) |
 | `portfolio.html` | Founder's prior work, served at `/portfolio` (styles and scripts are inline) |
@@ -86,7 +86,7 @@ If it can't be backed up, soften or remove it.
 - Google Business Profile: Arc has one, but the URL isn't confirmed yet. Search all pages for
   `TODO(GBP)`. When the URL is confirmed, put it in these places:
   1. the `sameAs` array in the homepage JSON-LD (after Instagram and Facebook), and
-  2. the `href` of the footer link `id="gbpLink"` on the homepage and on each service page.
+  2. the `href` of the footer link `id="gbpLink"` on the homepage, on each service page, and in `portfolio.html`.
 
   The footer link stays hidden while its `href` is empty and shows automatically once it's an `https://`
   URL. Never guess the URL.
@@ -99,9 +99,10 @@ If it can't be backed up, soften or remove it.
 - Code and regulation references are cited in a "Public sources" list on each page. Re-check them
   whenever the page is edited.
 - The header and footer are copied into each page (there is no build step). A change to the
-  homepage header or footer needs the same change in the four service pages.
-- `assets/css/service-page.v2.css` is cached for a year. To change it, copy it to `.v3.css` and
-  update the `<link>` in each service page. (`v1` was only ever on a Deploy Preview.)
+  homepage header or footer needs the same change in the four service pages and `portfolio.html`.
+- `assets/css/service-page.v3.css` is cached for a year. To change it, copy it to `.v4.css` and
+  update the `<link>` in each service page. (`v1` was only ever on a Deploy Preview. `v2` is kept
+  because production served it; v3 only moves the Menu breakpoint from 720px to 880px.)
 - The service pages use the same header (Call + Request a quote), phone bottom bar, v2 logo, GBP
   footer slot, and GA4 hook as the homepage. The phone bar watches the hero buttons, the "What to
   send" section, and the closing CTA band, and shows only when none of them is on screen.
