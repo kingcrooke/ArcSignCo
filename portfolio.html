@@ -15,7 +15,7 @@
 <meta property="og:image" content="https://arcsignco.com/assets/img/og-image-1200x630.v1.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Arc Signage Co logo">
+<meta property="og:image:alt" content="Arc Signage Co: full-service signage for New York / Tri-State">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
@@ -142,6 +142,32 @@ button { font: inherit; }
   font-weight: 900;
   cursor: pointer;
 }
+.nav-services-group { position: relative; display: flex; align-items: center; }
+.nav-services-sub {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 240px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 8px;
+  background: var(--navy-2);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  z-index: 35;
+}
+.nav-services-sub a {
+  border-radius: 6px;
+  white-space: normal;
+  font-size: 12px;
+  line-height: 1.35;
+  padding: 10px 12px;
+}
+.nav-services-group:hover .nav-services-sub,
+.nav-services-group:focus-within .nav-services-sub { display: flex; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -398,6 +424,22 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .navmenu.open { display: flex; }
   .navmenu a { min-height: 48px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.08); border-radius: 0; }
   .navmenu a:last-child { border-bottom: 0; }
+  .nav-services-group { flex-direction: column; align-items: stretch; width: 100%; }
+  .nav-services-sub {
+    display: flex;
+    position: static;
+    min-width: 0;
+    padding: 0 0 8px 12px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  .nav-services-sub a {
+    min-height: 44px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-radius: 0;
+  }
 }
 @media (max-width: 720px) {
   html { scroll-padding-top: 75px; }
@@ -453,8 +495,16 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <nav class="navlinks" aria-label="Primary navigation">
       <div class="navmenu" id="nav-menu">
         <a href="/#about">About</a>
-        <a href="/#services">Services</a>
-        <a href="/#work">Work</a>
+        <div class="nav-services-group">
+          <a href="/#services" class="nav-services-label">Services</a>
+          <div class="nav-services-sub" aria-label="Service pages">
+            <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
+            <a href="/ada-signs/">ADA &amp; tactile signs</a>
+            <a href="/channel-letters/">Channel letters</a>
+            <a href="/construction-signs/">Construction site signs</a>
+          </div>
+        </div>
+        <a href="/#work">Scopes</a>
         <a href="/portfolio" aria-current="page">Portfolio</a>
         <a href="/#selector">Scope Finder</a>
       </div>
@@ -717,7 +767,9 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <div class="footer-links">
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
-      <a href="/#work">Work</a>
+      <a href="/#work">Scopes</a>
+      <a href="/portfolio">Portfolio</a>
+      <a href="/#faq">FAQ</a>
       <a href="/#selector">Scope Finder</a>
       <a href="/#quote">Contact</a>
       <!-- TODO(GBP): put the confirmed Google Business Profile URL in href (same URL as index.html). Hidden until href is an https URL. -->
