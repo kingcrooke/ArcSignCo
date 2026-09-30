@@ -241,6 +241,14 @@ button, input, select, textarea { font: inherit; }
   box-shadow: var(--shadow);
   z-index: 35;
 }
+.nav-services-sub::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 6px;
+}
 .nav-services-sub a {
   border-radius: 6px;
   white-space: normal;
@@ -970,6 +978,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
     border-bottom: 1px solid rgba(255,255,255,.06);
     border-radius: 0;
   }
+  .nav-services-sub::before { content: none; }
 }
 @media (max-width: 720px) {
   html { scroll-padding-top: 75px; }
@@ -1243,7 +1252,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <div class="process">
         <article class="step"><b>01</b><h3>Review</h3><p>Plans, sign schedules, site photos, code issues, materials, and mounting conditions.</p></article>
         <article class="step"><b>02</b><h3>Design</h3><p>Artwork, shop drawings, message schedules, material specs, and approval packages.</p></article>
-        <article class="step"><b>03</b><h3>Permit</h3><p>DOB, FDNY, landlord, architect, and expediter coordination where required.</p></article>
+        <article class="step"><b>03</b><h3>Coordinate</h3><p>DOB, FDNY, landlord, architect, and expediter coordination where required.</p></article>
         <article class="step"><b>04</b><h3>Fabricate</h3><p>Acrylic, photopolymer, aluminum, vinyl, LED, illuminated, and dimensional signage.</p></article>
         <article class="step"><b>05</b><h3>Install</h3><p>Field coordination, access planning, installation, punch list, and closeout photos.</p></article>
       </div>
