@@ -8,9 +8,9 @@ Generated from `ada-signs/index.html` by `tools/export-copy.mjs`. This is every 
 
 - Proposed URL: https://arcsignco.com/ada-signs/
 - Title tag: ADA & Braille Signs in NYC | Arc Signage Co
-- Meta description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send your schedule for a quote.
+- Meta description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send a schedule to quote.
 - Social share title: ADA & Braille Signs in NYC | Arc Signage Co
-- Social share description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send your schedule for a quote.
+- Social share description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send a schedule to quote.
 
 ## Page text
 
@@ -20,7 +20,7 @@ _Label: ADA & Code Signs | New York / Tri-State_
 
 # Tactile and Braille sign packages for New York buildouts
 
-Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code.
+Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code. Arc builds the schedule, draws the sign types, fabricates the signs, and installs them, prepared for architect and inspector review.
 
 [Button: Request a quote](/#quote)
 

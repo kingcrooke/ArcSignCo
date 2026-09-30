@@ -8,9 +8,9 @@ Generated from `sign-permits-shop-drawings/index.html` by `tools/export-copy.mjs
 
 - Proposed URL: https://arcsignco.com/sign-permits-shop-drawings/
 - Title tag: NYC Sign Permits & Shop Drawings | Arc Signage Co
-- Meta description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send your drawings for a quote.
+- Meta description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send drawings for a quote.
 - Social share title: NYC Sign Permits & Shop Drawings | Arc Signage Co
-- Social share description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send your drawings for a quote.
+- Social share description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send drawings for a quote.
 
 ## Page text
 
