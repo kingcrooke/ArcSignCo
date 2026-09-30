@@ -29,7 +29,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 
 ## Shared text on all four pages
 
-**Header** (same as the homepage): About · Services · Work · Scope Finder · Call (917) 569-1076 · Request a quote (links go to the homepage sections). On phones, the Call and Request a quote buttons move to a bottom bar that appears once the page's own quote buttons scroll out of view.
+**Header** (same as the homepage): About · Services · Work · Scope Finder · Call (347) 450-2110 · Request a quote (links go to the homepage sections). On phones, the Call and Request a quote buttons move to a bottom bar that appears once the page's own quote buttons scroll out of view.
 
 **Footer:**
 
@@ -37,7 +37,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - Social icon links: "Arc Signage Co on Instagram (opens in a new tab)", "Arc Signage Co on Facebook (opens in a new tab)" (screen-reader labels)
 - Links: About · Services · Work · Scope Finder · Contact · Google Business Profile (hidden until the URL is confirmed)
 - Services: Sign permits & shop drawings · ADA & tactile signs · Channel letters · Construction site signs
-- © 2026 Arc Signage Co LLC — New York / Tri-State · (917) 569-1076 · arc@arcsignco.com
+- © 2026 Arc Signage Co LLC — New York / Tri-State · (347) 450-2110 · arc@arcsignco.com
 
 ## Homepage text added in this PR
 
