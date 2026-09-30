@@ -1051,7 +1051,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <div>
         <span class="eyebrow">New York / Tri-State | Five Boroughs, NJ &amp; CT</span>
         <h1>NYC signage scoped, drawn, fabricated, and installed, with one point of contact from intake to closeout.</h1>
-        <p class="hero-copy">Arc Signage Co is a one-person sign shop in New York / Tri-State. Jesus Crooke takes your job from shop drawings through fabrication and install, so you aren't chasing a separate designer, fabricator, and installer. Permits go through the licensed applicant, and Arc coordinates with them.</p>
+        <p class="hero-copy">Arc Signage Co is Jesus Crooke's sign shop, serving New York / Tri-State. Arc manages each job from design through fabrication and install. Design, engineering drawings, vinyl, and small 3D-printed parts are done in-house, and trusted subs handle larger fabrication and install. Permits go through the licensed applicant, and Arc coordinates with them.</p>
         <div class="hero-actions" id="heroActions">
           <a class="btn gold lg" href="#quote">Request a quote</a>
           <a class="btn ghost lg" href="tel:+13474502110">Call (347) 450-2110</a>
@@ -1069,7 +1069,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <img src="/assets/img/signage-package-lifecycle.v1.svg" width="920" height="760" alt="Arc Signage package lifecycle from intake through installation closeout">
           <span class="lifecycle-logo-overlay" aria-hidden="true"><picture><source type="image/webp" srcset="/assets/img/logo-icon-white-240.v1.webp"><img src="/assets/img/logo-icon-white-240.v1.png" width="240" height="240" loading="lazy" decoding="async" alt=""></picture></span>
         </div>
-        <p class="lifecycle-note">Arc keeps intake, survey, design, permit coordination, fabrication, and installation moving through one accountable workflow.</p>
+        <p class="lifecycle-note">Intake, survey, design, permit coordination, fabrication, and install run on one schedule, with one contact.</p>
       </div>
     </div>
   </section>
@@ -1089,7 +1089,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <div class="trust-area">
         <span class="trust-label">Service area</span>
         <strong>New York / Tri-State</strong>
-        <span class="trust-note">Five boroughs, nearby NJ &amp; CT</span>
+        <span class="trust-note">Five boroughs, all of NJ &amp; CT</span>
       </div>
       <div class="trust-cta" id="trustCta">
         <a class="btn gold" href="#quote">Request a quote</a>
@@ -1105,10 +1105,10 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Why Arc</span>
           <h2>Built for NYC. Drawn for review. Built to last.</h2>
         </div>
-        <p class="lead">Arc Signage Co is a full-service sign company serving businesses, general contractors, architects, healthcare facilities, retail operators, and property teams across the five boroughs and nearby New Jersey and Connecticut.</p>
+        <p class="lead">Arc Signage Co handles signage for GCs, architects, property managers, and store owners across the five boroughs and all of New Jersey and Connecticut.</p>
       </div>
       <div class="revision-list">
-        <article class="revision"><b>1</b><h3>One person accountable</h3><p>Design, fabrication, permit coordination, and installation stay with one point of contact from first review to closeout.</p></article>
+        <article class="revision"><b>1</b><h3>One point of contact</h3><p>Arc does design, engineering drawings, vinyl, and small 3D-printed parts in-house, runs larger fabrication and install through trusted subs, and coordinates permits with the licensed applicant. You deal with one person from first review to closeout.</p></article>
         <article class="revision"><b>2</b><h3>Code-aware from day one</h3><p>ADA, DOB, FDNY, landlord, and architect requirements are reviewed early, before drawings go out for approval.</p></article>
         <article class="revision"><b>3</b><h3>Field-ready execution</h3><p>Shop drawings, message schedules, materials, mounting details, access planning, and install coordination are handled with jobsite realities in mind.</p></article>
       </div>
@@ -1122,7 +1122,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Services</span>
           <h2>Full-service signage for NYC projects</h2>
         </div>
-        <p class="lead">From a single storefront sign to a multi-floor ADA package, awning, construction sign, or orientation sticker rollout, Arc handles the scope from planning through punch list.</p>
+        <p class="lead">No job too small to quote. From one storefront sign to a multi-floor ADA package, Arc manages the scope from planning through punch list.</p>
       </div>
       <div class="services">
         <article class="service">
@@ -1407,7 +1407,7 @@ const questions = [
     ["unsure", "Not sure", "Arc should flag what is required"]
   ]},
   { t: "What stage is the project in?", key: "stage", opts: [
-    ["pricing", "Pricing / bid", "Need budget or proposal fast"],
+    ["pricing", "Pricing / bid", "Need a number for a bid"],
     ["submittal", "Submittal", "Need drawings and approvals"],
     ["fabrication", "Ready to fabricate", "Approved and ready to release"],
     ["install", "Install / punch list", "Need field support"]
@@ -1490,7 +1490,7 @@ function updateResult() {
   const unique = [...new Set(items)];
   resultTitle.textContent = title;
   resultText.textContent = "Based on the answers so far, this is the likely signage package Arc should price and review.";
-  recs.innerHTML = unique.map(item => `<div class="rec"><strong>${item}</strong><span>Recommended for this scope.</span></div>`).join("");
+  recs.innerHTML = unique.map(item => `<div class="rec"><strong>${item}</strong></div>`).join("");
   scopeBox.value = `${title}
 
 Project: ${answers.project || "TBD"}
