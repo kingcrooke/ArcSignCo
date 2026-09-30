@@ -120,7 +120,7 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
@@ -154,7 +154,7 @@ Usually not. NYC Construction Code §28-415.2 exempts temporary signs put up dur
 
 ### How quickly can you turn around jobsite signs?
 
-It depends on the scope and materials, so Arc doesn't promise production times up front. For an active jobsite, put URGENT in your email subject line. Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+It depends on the scope and materials, so Arc doesn't promise production times up front. For an active jobsite, put URGENT in your email subject line. Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 _Label: Sources_
 

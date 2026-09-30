@@ -23,7 +23,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - No promises of approvals, inspections, sign-offs, or production times. Agencies, architects, and inspectors make those calls.
 - ADA signs are "made to the project's drawings and specs, prepared to the applicable standards for architect and inspector review." Never "ADA compliant" or "certified."
 - Construction page: NYC Building Code §3301.9.7 and §3301.9.8 limit other signs and advertising on fences and sidewalk sheds and ban illuminated business signs on them. Jesus decided to cut the sentence that used to follow this rule on the page (2026-09-26).
-- The 24-hour quote target is stated only as the site already states it: it starts once drawings, photos, and site details are in.
+- The 24-hour quote target is stated only as the site already states it: it starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 - Every code or regulation reference was checked against the public source listed in each page's "Public sources" section (checked September 2026). Anything that couldn't be verified was left out.
 - No clients, projects, reviews, ratings, stats, years in business, hours, or street address.
 

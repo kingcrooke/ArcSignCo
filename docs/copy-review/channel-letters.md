@@ -122,7 +122,7 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
@@ -156,7 +156,7 @@ Yes. Many leases and buildings set sign criteria for size, placement, materials,
 
 ### What do you need to price channel letters?
 
-Send straight-on facade photos with measurements if you have them, vector logo artwork, the sign band or storefront width, landlord sign criteria, where power is available, your deadline, and the street address. Email them to arc@arcsignco.com with the project address in the subject line. Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Send straight-on facade photos with measurements if you have them, vector logo artwork, the sign band or storefront width, landlord sign criteria, where power is available, your deadline, and the street address. Email them to arc@arcsignco.com with the project address in the subject line. Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 _Label: Sources_
 
