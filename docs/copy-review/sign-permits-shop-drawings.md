@@ -183,7 +183,7 @@ _Label: Request a quote_
 
 ## Have drawings for a sign project?
 
-Send the basics through the quote form, then email drawings and photos to arc@arcsignco.com with the project address in the subject line.
+Email drawings and photos to arc@arcsignco.com with the project address in the subject line. No drawings yet? Use the quote form and Arc will tell you what's needed.
 
 [Button: Request a quote](/#quote)
 

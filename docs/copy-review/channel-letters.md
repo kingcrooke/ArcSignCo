@@ -8,9 +8,9 @@ Generated from `channel-letters/index.html` by `tools/export-copy.mjs`. This is 
 
 - Proposed URL: https://arcsignco.com/channel-letters/
 - Title tag: Channel Letters & Illuminated Signs NYC | Arc Signage Co
-- Meta description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos and drawings for a quote.
+- Meta description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos with measurements for a quote; drawings welcome.
 - Social share title: Channel Letters & Illuminated Signs NYC | Arc Signage Co
-- Social share description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos and drawings for a quote.
+- Social share description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos with measurements for a quote; drawings welcome.
 
 ## Page text
 
@@ -182,7 +182,7 @@ _Label: Request a quote_
 
 ## Planning a lit storefront sign?
 
-Send the basics through the quote form, then email facade photos and artwork to arc@arcsignco.com with the project address in the subject line.
+Email facade photos with measurements and your logo artwork to arc@arcsignco.com with the project address in the subject line. For a storefront sign, lit letters included, that's enough to quote. No photos yet? Use the quote form and Arc will tell you what's needed.
 
 [Button: Request a quote](/#quote)
 

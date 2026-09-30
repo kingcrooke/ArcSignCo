@@ -178,7 +178,7 @@ _Label: Request a quote_
 
 ## Need signs for an active jobsite?
 
-Send the basics through the quote form, then email site details and photos to arc@arcsignco.com with the project address in the subject line. Add URGENT for active jobsites.
+Email site details and photos to arc@arcsignco.com with the project address in the subject line. Add URGENT for active jobsites. Nothing to send yet? Use the quote form.
 
 [Button: Request a quote](/#quote)
 

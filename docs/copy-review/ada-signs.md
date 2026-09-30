@@ -172,7 +172,7 @@ _Label: Request a quote_
 
 ## Have a sign schedule to price?
 
-Send the basics through the quote form, then email the schedule, plans, and photos to arc@arcsignco.com with the project address in the subject line.
+Email the schedule, plans, and photos to arc@arcsignco.com with the project address in the subject line. No schedule yet? Use the quote form and Arc will tell you what's needed.
 
 [Button: Request a quote](/#quote)
 
