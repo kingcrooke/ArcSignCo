@@ -20,7 +20,7 @@ _Label: LED & Illuminated | New York / Tri-State_
 
 # Front-lit, halo-lit, and reverse channel letters for New York storefronts
 
-Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and engineering drawings in-house, runs fabrication and install through trusted subs, and coordinates the sign permit with the licensed applicant and the power handoff with the electrician.
+Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and engineering drawings in-house (stamped by a third-party licensed PE when the job needs it), runs fabrication and install through trusted subs, and coordinates the sign permit with the licensed applicant and the power handoff with the project's electrician.
 
 [Button: Request a quote](/#quote)
 
