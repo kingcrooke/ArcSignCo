@@ -39,7 +39,6 @@ const TALL_WIDTHS = [480, 800];
 const AVIF_QUALITY = { "shop-exit-stair-e-bench-qc": 44 };
 
 const PHOTOS = [
-  ["01", "navy-yard-storehouse-illuminated-id", "23ae6b36f5ebc695d8b176a62d5ef113240b1ef0aa600a9cc179e3539040ea97"],
   ["03", "ada-stair-k-floor-92-id", "333c6619dee3718b057d659d959032e3bcf8fbf2afc7697014e99342b48545c3"],
   ["04", "ada-stair-a-floor-1-id", "d32533a11ed681c0e7cfaeac3a40f2e59cb21ae764bf9cb042425bdadc6b9dc9"],
   ["05", "ada-exit-sign-black-door", "31e4682d8c4031b408b3cade866088dce94b099398bb9bdafd377b990289e2e3"],
