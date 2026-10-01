@@ -18,12 +18,10 @@ const pages = [{ slug: "", file: "index.html" }, ...SERVICE_SLUGS.map(slug => ({
 
 const BUSINESS_ID = "https://arcsignco.com/#business";
 const APPROVED_ADDRESS = {
-  streetAddress: "1974 Crotona Ave",
-  addressLocality: "Bronx",
   addressRegion: "NY",
-  postalCode: "10457",
   addressCountry: "US",
 };
+const FORBIDDEN_ADDRESS_KEYS = ["streetAddress", "addressLocality", "postalCode"];
 
 // Claims the site must not make (case-insensitive, visible text only).
 const BANNED = [
@@ -60,6 +58,7 @@ function flattenLd(blocks) {
 function addressMatches(node) {
   const a = node?.address;
   if (!a || a["@type"] !== "PostalAddress") return false;
+  if (FORBIDDEN_ADDRESS_KEYS.some(k => k in a)) return false;
   return Object.entries(APPROVED_ADDRESS).every(([k, v]) => a[k] === v);
 }
 
@@ -90,6 +89,8 @@ for (const { slug, file } of pages) {
     }
     const ldText = JSON.stringify(blocks);
     if (/83 Post Ave/i.test(ldText)) fail(label, "JSON-LD contains forbidden address 83 Post Ave");
+    if (/1974 Crotona/i.test(ldText)) fail(label, "JSON-LD contains forbidden street address 1974 Crotona Ave");
+    if (keys.includes("streetAddress")) fail(label, "JSON-LD contains forbidden key streetAddress");
     if (/Apt\s*A/i.test(ldText)) fail(label, "JSON-LD contains forbidden Apt A in address");
     const biz = nodes.find(n => n["@id"] === BUSINESS_ID);
     if (!biz) fail(label, `no JSON-LD node with @id ${BUSINESS_ID}`);
