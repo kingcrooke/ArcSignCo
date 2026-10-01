@@ -23,13 +23,13 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - No promises of approvals, inspections, sign-offs, or production times. Agencies, architects, and inspectors make those calls.
 - ADA signs are "made to the project's drawings and specs, prepared to the applicable standards for architect and inspector review." Never "ADA compliant" or "certified."
 - Construction page: NYC Building Code §3301.9.7 and §3301.9.8 limit other signs and advertising on fences and sidewalk sheds and ban illuminated business signs on them. Jesus decided to cut the sentence that used to follow this rule on the page (2026-09-26).
-- The 24-hour quote target is stated only as the site already states it: it starts once drawings, photos, and site details are in.
+- The 24-hour quote target is stated only as the site already states it: it starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 - Every code or regulation reference was checked against the public source listed in each page's "Public sources" section (checked September 2026). Anything that couldn't be verified was left out.
 - No clients, projects, reviews, ratings, stats, years in business, hours, or street address.
 
 ## Shared text on all four pages
 
-**Header** (same as the homepage): About · Services · Work · Scope Finder · Call (917) 569-1076 · Request a quote (links go to the homepage sections). On phones, the Call and Request a quote buttons move to a bottom bar that appears once the page's own quote buttons scroll out of view.
+**Header** (same as the homepage): About · Services · Work · Scope Finder · Call (347) 450-2110 · Request a quote (links go to the homepage sections). On phones, the Call and Request a quote buttons move to a bottom bar that appears once the page's own quote buttons scroll out of view.
 
 **Footer:**
 
@@ -37,7 +37,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - Social icon links: "Arc Signage Co on Instagram (opens in a new tab)", "Arc Signage Co on Facebook (opens in a new tab)" (screen-reader labels)
 - Links: About · Services · Work · Scope Finder · Contact · Google Business Profile (hidden until the URL is confirmed)
 - Services: Sign permits & shop drawings · ADA & tactile signs · Channel letters · Construction site signs
-- © 2026 Arc Signage Co LLC — New York / Tri-State · (917) 569-1076 · arc@arcsignco.com
+- © 2026 Arc Signage Co LLC — New York / Tri-State · (347) 450-2110 · arc@arcsignco.com
 
 ## Homepage text added in this PR
 

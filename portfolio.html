@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio | Arc Signage Co</title>
+<title>Founder's prior work | Arc Signage Co</title>
 <meta name="description" content="Signage projects Arc Signage Co founder Jesus Crooke managed as a Project Manager before starting Arc: wayfinding, ADA and life-safety packages, room IDs, plaques, and shop fabrication.">
 <link rel="canonical" href="https://arcsignco.com/portfolio">
 <meta name="theme-color" content="#0b1d33">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arc Signage Co">
-<meta property="og:title" content="Portfolio | Arc Signage Co">
+<meta property="og:title" content="Founder's prior work | Arc Signage Co">
 <meta property="og:description" content="Signage projects Arc Signage Co founder Jesus Crooke managed as a Project Manager before starting Arc: wayfinding, ADA and life-safety packages, room IDs, plaques, and shop fabrication.">
 <meta property="og:url" content="https://arcsignco.com/portfolio">
 <meta property="og:image" content="https://arcsignco.com/assets/img/og-image-1200x630.v1.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Arc Signage Co logo">
+<meta property="og:image:alt" content="Arc Signage Co: full-service signage for New York / Tri-State">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
@@ -142,6 +142,40 @@ button { font: inherit; }
   font-weight: 900;
   cursor: pointer;
 }
+.nav-services-group { position: relative; display: flex; align-items: center; }
+.nav-services-sub {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 240px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 8px;
+  background: var(--navy-2);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  z-index: 35;
+}
+.nav-services-sub::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 6px;
+}
+.nav-services-sub a {
+  border-radius: 6px;
+  white-space: normal;
+  font-size: 12px;
+  line-height: 1.35;
+  padding: 10px 12px;
+}
+.nav-services-group:hover .nav-services-sub,
+.nav-services-group:focus-within .nav-services-sub { display: flex; }
 .btn {
   display: inline-flex;
   align-items: center;
@@ -398,6 +432,23 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .navmenu.open { display: flex; }
   .navmenu a { min-height: 48px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.08); border-radius: 0; }
   .navmenu a:last-child { border-bottom: 0; }
+  .nav-services-group { flex-direction: column; align-items: stretch; width: 100%; }
+  .nav-services-sub {
+    display: flex;
+    position: static;
+    min-width: 0;
+    padding: 0 0 8px 12px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  .nav-services-sub a {
+    min-height: 44px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    border-radius: 0;
+  }
+  .nav-services-sub::before { content: none; }
 }
 @media (max-width: 720px) {
   html { scroll-padding-top: 75px; }
@@ -453,12 +504,20 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <nav class="navlinks" aria-label="Primary navigation">
       <div class="navmenu" id="nav-menu">
         <a href="/#about">About</a>
-        <a href="/#services">Services</a>
-        <a href="/#work">Work</a>
-        <a href="/portfolio" aria-current="page">Portfolio</a>
+        <div class="nav-services-group">
+          <a href="/#services" class="nav-services-label">Services</a>
+          <div class="nav-services-sub" aria-label="Service pages">
+            <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
+            <a href="/ada-signs/">ADA &amp; tactile signs</a>
+            <a href="/channel-letters/">Channel letters</a>
+            <a href="/construction-signs/">Construction site signs</a>
+          </div>
+        </div>
+        <a href="/#work">Scopes</a>
+        <a href="/portfolio" aria-current="page">Founder's prior work</a>
         <a href="/#selector">Scope Finder</a>
       </div>
-      <a href="tel:+19175691076" class="btn ghost nav-call" aria-label="Call (917) 569-1076"><span class="call-long">Call (917) 569-1076</span><span class="call-short">Call</span></a>
+      <a href="tel:+13474502110" class="btn ghost nav-call" aria-label="Call (347) 450-2110"><span class="call-long">Call (347) 450-2110</span><span class="call-short">Call</span></a>
       <a href="/#quote" class="btn gold nav-cta">Request a quote</a>
       <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
     </nav>
@@ -468,10 +527,10 @@ footer p { color: #cfd9e6; font-size: 13px; }
 <main id="top">
   <section class="pf-hero dark">
     <div class="wrap">
-      <span class="eyebrow">Portfolio</span>
+      <span class="eyebrow">Founder's prior work</span>
       <h1>Founder's prior work</h1>
-      <p>Arc Signage Co is a one-person signage fabrication and install shop serving New York / Tri-State. The projects below are not Arc Signage Co jobs. They are earlier projects that Arc's founder, Jesus Crooke, managed as a Project Manager at other New York sign companies before he started Arc. Company names and logos in the photos have been blurred.</p>
-      <p>Arc brings the same shop-drawing-to-install discipline to client projects under the Arc Signage Co brand.</p>
+      <p>Arc Signage Co is a full-service sign company for New York / Tri-State. The projects below are not Arc Signage Co jobs. They are earlier projects that Arc's founder, Jesus Crooke, managed as a Project Manager at other New York sign companies before he started Arc. Company names and logos in the photos have been blurred.</p>
+      <p>That's how Jesus runs work at Arc: design and shop drawings first, then fabrication and install through trusted subs, with him as your one contact.</p>
     </div>
   </section>
 
@@ -694,7 +753,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <div class="wrap">
       <div>
         <h2 id="cta-heading">Have a sign project?</h2>
-        <p class="lead">Send drawings, photos, and site details and Arc will review the full scope.</p>
+        <p class="lead">Email drawings or photos to arc@arcsignco.com with the project address in the subject line, or use the quote form if you don't have files yet.</p>
       </div>
       <a class="btn gold" href="/#quote">Request a quote</a>
     </div>
@@ -717,7 +776,9 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <div class="footer-links">
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
-      <a href="/#work">Work</a>
+      <a href="/#work">Scopes</a>
+      <a href="/portfolio">Founder's prior work</a>
+      <a href="/#faq">FAQ</a>
       <a href="/#selector">Scope Finder</a>
       <a href="/#quote">Contact</a>
       <!-- TODO(GBP): put the confirmed Google Business Profile URL in href (same URL as index.html). Hidden until href is an https URL. -->
@@ -733,13 +794,13 @@ footer p { color: #cfd9e6; font-size: 13px; }
   </nav>
   <div class="wrap footer-meta">
     <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
-    <span><a href="tel:+19175691076">(917) 569-1076</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
+    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
 
 <div class="mobile-cta" id="mobileCta">
   <a class="btn gold" href="/#quote">Request a quote</a>
-  <a class="btn ghost" href="tel:+19175691076">Call (917) 569-1076</a>
+  <a class="btn ghost" href="tel:+13474502110">Call (347) 450-2110</a>
 </div>
 
 <dialog class="pf-lightbox" id="lightbox" aria-label="Enlarged photo">

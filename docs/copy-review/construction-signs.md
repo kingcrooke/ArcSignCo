@@ -8,9 +8,9 @@ Generated from `construction-signs/index.html` by `tools/export-copy.mjs`. This 
 
 - Proposed URL: https://arcsignco.com/construction-signs/
 - Title tag: Construction Site Signs NYC | Arc Signage Co
-- Meta description: NYC construction site signs: project information panels, sidewalk shed parapet panels, safety, directional, and project ID signs. Send site details for a quote.
+- Meta description: NYC construction site signs: project information panels, sidewalk shed parapet panels, safety, directional, and project ID signs. Send site details to quote.
 - Social share title: Construction Site Signs NYC | Arc Signage Co
-- Social share description: NYC construction site signs: project information panels, sidewalk shed parapet panels, safety, directional, and project ID signs. Send site details for a quote.
+- Social share description: NYC construction site signs: project information panels, sidewalk shed parapet panels, safety, directional, and project ID signs. Send site details to quote.
 
 ## Page text
 
@@ -24,12 +24,14 @@ NYC Building Code §3301.9 requires specific signs on construction and demolitio
 
 [Button: Request a quote](/#quote)
 
-[Button: Call (917) 569-1076](tel:+19175691076)
+[Button: Call (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
 - Fence project information panels
 - Sidewalk shed parapet information panels
+- Sidewalk shed art panels (NYC Cultural Affairs-approved artwork, §3307.11)
+- Temporary replacement signs for storefront signs hidden by a sidewalk shed (§3301.9.6)
 - Safety, directional, and gate signs
 - Temporary wayfinding for phased openings
 - Install, updates when details change, and removal at closeout
@@ -86,11 +88,11 @@ NYC is strict about what goes on construction fences and sidewalk sheds, which t
 
 - **§3301.9.7, other signs prohibited.** No sign, information, pictorial representation, or business or advertising message may be posted on construction or demolition equipment or on temporary construction installations, including sidewalk sheds and other protective structures. The exceptions are the required panels and signs in §3301.9.1 through §3301.9.6, and anything otherwise authorized by law.
 - **§3301.9.8, illuminated signs prohibited.** No illuminated business or advertising sign is permitted on them.
-- **§3301.9.6, obscured lawful signs.** When a sidewalk shed or other protective structure hides an existing lawful sign, a temporary replacement sign may be posted on the structure, within limits on size, height, and placement.
+- **§3301.9.6, obscured lawful signs.** When a sidewalk shed or other protective structure hides an existing lawful sign, a temporary replacement sign may be posted on the structure, within limits on size, height, and placement. Arc produces and installs temporary replacement signs that stay within those limits.
 - **§3307.7.9, fence color.** Solid fences must be hunter green, metallic gray, or white. For many existing buildings, a color matching the facade, trim, cornice, or visible sloped roof is also acceptable. Where there is a sidewalk shed, the fence and shed must be the same color. Local Law 47 of 2025 amended this section.
-- **§3307.11, artwork.** An artwork provision covers sidewalk sheds, construction fences, and supported scaffolds that have been up at least 90 days. It applies to work approved by the NYC Department of Cultural Affairs, or artwork the owner solicits and gets Cultural Affairs approval for. The artwork can't be lit and can't cover the required signs.
+- **§3307.11, artwork.** An artwork provision covers sidewalk sheds, construction fences, and supported scaffolds that have been up at least 90 days. It applies to work approved by the NYC Department of Cultural Affairs, or artwork the owner solicits and gets Cultural Affairs approval for. The artwork can't be lit and can't cover the required signs. Arc produces and installs art panels to the approved design. The owner or applicant obtains Cultural Affairs approval.
 
-**What this means for your order:** On NYC sites, if you want anything on a fence or shed beyond the required panels, Arc flags the rules above at quote. Confirm with DOB before ordering. For New Jersey and Connecticut sites, rules are set locally, so check with the municipality.
+**What this means for your order:** On NYC sites, if you want anything on a fence or shed beyond the required panels, Arc flags the rules above at quote. Arc also quotes §3307.11 art panels and §3301.9.6 temporary replacement signs when they fit the site. Confirm with DOB before ordering. For New Jersey and Connecticut sites, rules are set locally, so check with the municipality.
 
 _Label: Process_
 
@@ -118,11 +120,11 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
-[Link: (917) 569-1076](tel:+19175691076)
+[Link: (347) 450-2110](tel:+13474502110)
 
 [Button: Request a quote](/#quote)
 
@@ -140,7 +142,7 @@ Under §3301.9.1.1: a rendering, elevation, or zoning diagram without logos; a �
 
 ### Can we put our logo or marketing graphics on the construction fence or sidewalk shed?
 
-In NYC, generally not. §3301.9.7 prohibits other signs, pictures, and business or advertising messages on fences, sidewalk sheds, and other temporary construction installations unless the code or other law allows them. §3301.9.8 bans illuminated business or advertising signs on them. The contractor's or owner's name, which may include a logo, is part of the required sidewalk shed parapet panel. Approved artwork is handled separately under §3307.11. Confirm with DOB before ordering any fence or shed graphics.
+In NYC, generally not. §3301.9.7 prohibits other signs, pictures, and business or advertising messages on fences, sidewalk sheds, and other temporary construction installations unless the code or other law allows them. §3301.9.8 bans illuminated business or advertising signs on them. The contractor's or owner's name, which may include a logo, is part of the required sidewalk shed parapet panel. Approved artwork is handled separately under §3307.11. Arc quotes Cultural Affairs-approved art panels under §3307.11 and temporary replacement signs under §3301.9.6 when they apply. Confirm with DOB before ordering any fence or shed graphics.
 
 ### Do construction safety signs have to follow a standard?
 
@@ -152,7 +154,7 @@ Usually not. NYC Construction Code §28-415.2 exempts temporary signs put up dur
 
 ### How quickly can you turn around jobsite signs?
 
-It depends on the scope and materials, so Arc doesn't promise production times up front. For an active jobsite, put URGENT in your email subject line. Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+It depends on the scope and materials, so Arc doesn't promise production times up front. For an active jobsite, put URGENT in your email subject line. Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 _Label: Sources_
 
@@ -176,7 +178,7 @@ _Label: Request a quote_
 
 ## Need signs for an active jobsite?
 
-Send the basics through the quote form, then email site details and photos to arc@arcsignco.com with the project address in the subject line. Add URGENT for active jobsites.
+Email site details and photos to arc@arcsignco.com with the project address in the subject line. Add URGENT for active jobsites. Nothing to send yet? Use the quote form.
 
 [Button: Request a quote](/#quote)
 

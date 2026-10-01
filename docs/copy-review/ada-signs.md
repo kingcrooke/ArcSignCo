@@ -8,9 +8,9 @@ Generated from `ada-signs/index.html` by `tools/export-copy.mjs`. This is every 
 
 - Proposed URL: https://arcsignco.com/ada-signs/
 - Title tag: ADA & Braille Signs in NYC | Arc Signage Co
-- Meta description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send your schedule for a quote.
+- Meta description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send a schedule to quote.
 - Social share title: ADA & Braille Signs in NYC | Arc Signage Co
-- Social share description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send your schedule for a quote.
+- Social share description: ADA signs in NYC: room, restroom, stair, and exit signs with tactile text and Grade 2 Braille, made to your drawings and specs. Send a schedule to quote.
 
 ## Page text
 
@@ -20,11 +20,11 @@ _Label: ADA & Code Signs | New York / Tri-State_
 
 # Tactile and Braille sign packages for New York buildouts
 
-Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code.
+Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code. Arc does the sign schedule and sign-type drawings in-house and manages fabrication and install through trusted subs, with drawings prepared for architect and inspector review.
 
 [Button: Request a quote](/#quote)
 
-[Button: Call (917) 569-1076](tel:+19175691076)
+[Button: Call (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
@@ -114,11 +114,11 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
-[Link: (917) 569-1076](tel:+19175691076)
+[Link: (347) 450-2110](tel:+13474502110)
 
 [Button: Request a quote](/#quote)
 
@@ -148,7 +148,7 @@ Yes. Arc works from the sign schedule and a field survey, prepares sign-type dra
 
 ### What do you need to quote an ADA sign package?
 
-Send the sign or message schedule, or plans with room numbers and names, plus photos of the doors and walls, the signage finish or spec section, your TCO or punch-list date, and the street address. Email them to arc@arcsignco.com with the project address in the subject line. Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Send the sign or message schedule, or plans with room numbers and names, plus photos of the doors and walls, the signage finish or spec section, your TCO or punch-list date, and the street address. Email them to arc@arcsignco.com with the project address in the subject line. Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 _Label: Sources_
 
@@ -172,7 +172,7 @@ _Label: Request a quote_
 
 ## Have a sign schedule to price?
 
-Send the basics through the quote form, then email the schedule, plans, and photos to arc@arcsignco.com with the project address in the subject line.
+Email the schedule, plans, and photos to arc@arcsignco.com with the project address in the subject line. No schedule yet? Use the quote form and Arc will tell you what's needed.
 
 [Button: Request a quote](/#quote)
 

@@ -8,9 +8,9 @@ Generated from `channel-letters/index.html` by `tools/export-copy.mjs`. This is 
 
 - Proposed URL: https://arcsignco.com/channel-letters/
 - Title tag: Channel Letters & Illuminated Signs NYC | Arc Signage Co
-- Meta description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos and drawings for a quote.
+- Meta description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos with measurements for a quote; drawings welcome.
 - Social share title: Channel Letters & Illuminated Signs NYC | Arc Signage Co
-- Social share description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos and drawings for a quote.
+- Social share description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos with measurements for a quote; drawings welcome.
 
 ## Page text
 
@@ -20,11 +20,11 @@ _Label: LED & Illuminated | New York / Tri-State_
 
 # Front-lit, halo-lit, and reverse channel letters for New York storefronts
 
-Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician.
+Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and engineering drawings in-house (stamped by a third-party licensed PE when the job needs it), runs fabrication and install through trusted subs, and coordinates the sign permit with the licensed applicant and the power handoff with the project's electrician.
 
 [Button: Request a quote](/#quote)
 
-[Button: Call (917) 569-1076](tel:+19175691076)
+[Button: Call (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
@@ -122,11 +122,11 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
-[Link: (917) 569-1076](tel:+19175691076)
+[Link: (347) 450-2110](tel:+13474502110)
 
 [Button: Request a quote](/#quote)
 
@@ -156,7 +156,7 @@ Yes. Many leases and buildings set sign criteria for size, placement, materials,
 
 ### What do you need to price channel letters?
 
-Send straight-on facade photos with measurements if you have them, vector logo artwork, the sign band or storefront width, landlord sign criteria, where power is available, your deadline, and the street address. Email them to arc@arcsignco.com with the project address in the subject line. Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Send straight-on facade photos with measurements if you have them, vector logo artwork, the sign band or storefront width, landlord sign criteria, where power is available, your deadline, and the street address. Email them to arc@arcsignco.com with the project address in the subject line. Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 _Label: Sources_
 
@@ -182,7 +182,7 @@ _Label: Request a quote_
 
 ## Planning a lit storefront sign?
 
-Send the basics through the quote form, then email facade photos and artwork to arc@arcsignco.com with the project address in the subject line.
+Email facade photos with measurements and your logo artwork to arc@arcsignco.com with the project address in the subject line. For a storefront sign, lit letters included, that's enough to quote. No photos yet? Use the quote form and Arc will tell you what's needed.
 
 [Button: Request a quote](/#quote)
 

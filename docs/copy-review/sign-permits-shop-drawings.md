@@ -8,9 +8,9 @@ Generated from `sign-permits-shop-drawings/index.html` by `tools/export-copy.mjs
 
 - Proposed URL: https://arcsignco.com/sign-permits-shop-drawings/
 - Title tag: NYC Sign Permits & Shop Drawings | Arc Signage Co
-- Meta description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send your drawings for a quote.
+- Meta description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send drawings for a quote.
 - Social share title: NYC Sign Permits & Shop Drawings | Arc Signage Co
-- Social share description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send your drawings for a quote.
+- Social share description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send drawings for a quote.
 
 ## Page text
 
@@ -24,7 +24,7 @@ Most business signs in New York City need a Department of Buildings (DOB) sign p
 
 [Button: Request a quote](/#quote)
 
-[Button: Call (917) 569-1076](tel:+19175691076)
+[Button: Call (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
@@ -122,11 +122,11 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once drawings, photos, and site details are in.
+Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
-[Link: (917) 569-1076](tel:+19175691076)
+[Link: (347) 450-2110](tel:+13474502110)
 
 [Button: Request a quote](/#quote)
 
@@ -183,7 +183,7 @@ _Label: Request a quote_
 
 ## Have drawings for a sign project?
 
-Send the basics through the quote form, then email drawings and photos to arc@arcsignco.com with the project address in the subject line.
+Email drawings and photos to arc@arcsignco.com with the project address in the subject line. No drawings yet? Use the quote form and Arc will tell you what's needed.
 
 [Button: Request a quote](/#quote)
 
