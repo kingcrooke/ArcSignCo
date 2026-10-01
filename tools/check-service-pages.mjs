@@ -30,6 +30,7 @@ const BANNED = [
   /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i, /dob[- ]approved/i,
   /we (pull|file) (dob|the) permits?/i, /\bour license/i, /\bwe are (a )?licensed/i, /stamped by arc/i,
   /opening ?hours/i, /\breviews?\b.*\bstars?\b/i, /years in business/i, /83 Post Ave/i,
+  /Apt\s*A/i, /one-person/i, /\bone person\b/i,
 ];
 const FORBIDDEN_LD_KEYS_SERVICE = ["address", "streetAddress", "openingHours", "openingHoursSpecification", "aggregateRating", "review"];
 
@@ -87,7 +88,9 @@ for (const { slug, file } of pages) {
     if (keys.includes("openingHours") || keys.includes("openingHoursSpecification") || keys.includes("aggregateRating") || keys.includes("review")) {
       fail(label, "JSON-LD contains forbidden keys: hours or ratings");
     }
-    if (/83 Post Ave/i.test(JSON.stringify(blocks))) fail(label, "JSON-LD contains forbidden address 83 Post Ave");
+    const ldText = JSON.stringify(blocks);
+    if (/83 Post Ave/i.test(ldText)) fail(label, "JSON-LD contains forbidden address 83 Post Ave");
+    if (/Apt\s*A/i.test(ldText)) fail(label, "JSON-LD contains forbidden Apt A in address");
     const biz = nodes.find(n => n["@id"] === BUSINESS_ID);
     if (!biz) fail(label, `no JSON-LD node with @id ${BUSINESS_ID}`);
     else if (!addressMatches(biz)) fail(label, "homepage business address does not match approved PostalAddress");

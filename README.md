@@ -77,10 +77,10 @@ If it can't be backed up, soften or remove it.
 ## Location and address
 
 - No street address in visible copy or the footer. The location label is "New York / Tri-State".
-- Never use `83 Post Ave` anywhere on the site.
+- Never publish the old Post Avenue business address anywhere on the site.
 - The homepage JSON-LD `ProfessionalService` node (`@id` `https://arcsignco.com/#business`) may include
-  a schema-only `PostalAddress` for `1974 Crotona Ave, Bronx, NY 10457, US` (no Apt A unless Jesus
-  confirms). Service pages must not include `address` or `streetAddress` in JSON-LD; they point their
+  a schema-only `PostalAddress` for `1974 Crotona Ave, Bronx, NY 10457, US` (no unit or apt line in
+  schema or visible copy). Service pages must not include `address` or `streetAddress` in JSON-LD; they point their
   `Service` `provider` at the same `@id`.
 - `sameAs` lists Instagram (`https://www.instagram.com/arcsignco`) and Facebook
   (`https://www.facebook.com/1201574029704014`). The footer on every page links to both.
