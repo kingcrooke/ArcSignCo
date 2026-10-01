@@ -121,7 +121,7 @@ for (const { slug, file } of pages) {
   const visible = norm(body.textContent);
   for (const re of BANNED) if (re.test(visible)) fail(label, `visible text matches banned claim ${re}`);
   if (/\d+\s+[A-Z][a-z]+ (Street|St\.|Avenue|Ave\.|Blvd|Road)/.test(visible)) fail(label, "visible text looks like it contains a street address");
-  if (!visible.includes("arc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
+  if (!visible.includes("arc@arcsignco.com") || !visible.includes("jc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
 
   const faq = nodes.find(b => b["@type"] === "FAQPage");
   const items = [...document.querySelectorAll(".faq-item")].map(el => ({

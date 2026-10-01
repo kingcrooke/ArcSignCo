@@ -72,7 +72,7 @@ If it can't be backed up, soften or remove it.
 - **Notification target: arc@arcsignco.com** (owner decision). Configure it in Netlify under
   Project configuration > Notifications > Emails and webhooks > Form submission notifications, for the
   `quote-request` form.
-- The public contact email shown on the site is also arc@arcsignco.com (lowercase).
+- Public contact emails on the site: jc@arcsignco.com and arc@arcsignco.com (lowercase). Homepage business JSON-LD uses jc@.
 
 ## Location and address
 
@@ -120,9 +120,9 @@ If it can't be backed up, soften or remove it.
 - `/portfolio` shows projects Jesus managed as a Project Manager at other New York sign companies
   before starting Arc. It is always labelled as the founder's prior work, never as Arc Signage Co jobs.
   Captions are owner-approved copy: don't reword them or add facts.
-- Source: 14 photos supplied by Jesus, already cleaned before they reached the repo. EXIF/GPS is
-  stripped, and former-employer names and logos, a street address, a phone number and some box/label
-  text are blurred in the photos. Don't sharpen or try to recover blurred areas. Page copy may name
+- Source: sign photos supplied by Jesus; masters stay outside the repo. EXIF/GPS is stripped on
+  publish. Do not use packing-label or box photos that show personal names, addresses, or shipping
+  info — portfolio entries should show installed signs only. Page copy may name
   project owners/clients and general contractors where the repo already lists them; do not name former
   sign-company employers in copy or alt text.
 - The cleaned masters (about 2400 px, JPEG q85) are **not committed**: the repo is public and Netlify

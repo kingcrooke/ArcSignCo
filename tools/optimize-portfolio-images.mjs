@@ -39,14 +39,12 @@ const TALL_WIDTHS = [480, 800];
 const AVIF_QUALITY = { "shop-exit-stair-e-bench-qc": 44 };
 
 const PHOTOS = [
-  ["01", "navy-yard-storehouse-illuminated-id", "35466a793bfdea632c0e3b0d3d5054b6d9fb802902eb4916faf79c6f6a77275d"],
-  ["02", "undc-room-id-packing-label", "3e0f61ba0d2137a1ec75f04b69057391bf5e534875a77fa458eb87d0eb1dced8"],
+  ["01", "navy-yard-storehouse-illuminated-id", "23ae6b36f5ebc695d8b176a62d5ef113240b1ef0aa600a9cc179e3539040ea97"],
   ["03", "ada-stair-k-floor-92-id", "333c6619dee3718b057d659d959032e3bcf8fbf2afc7697014e99342b48545c3"],
   ["04", "ada-stair-a-floor-1-id", "d32533a11ed681c0e7cfaeac3a40f2e59cb21ae764bf9cb042425bdadc6b9dc9"],
   ["05", "ada-exit-sign-black-door", "31e4682d8c4031b408b3cade866088dce94b099398bb9bdafd377b990289e2e3"],
   ["06", "ada-elevator-bank-y-package", "3c13192ffe2dfdabb1d2dc6d6a1b227cfb0ce90a2d98d71c88f54ff9682ab99b"],
-  ["07", "pool-lifeguard-packing-label", "80aa13638db7283fd8164a37981fb233467b5650a583a3bcbde3fe5125a5b931"],
-  ["08", "shop-nomad-dimensional-letters", "eb3876ec02cab5616d4aa23572e1eea00c0d68cefe6dcebb895a612c3ce079fb"],
+  ["08", "shop-nomad-dimensional-letters", "4b87bf3ff9ae45dc9647644415d59c8945068dc97307a0d3f26173adf2230428"],
   ["09", "shop-exit-stair-e-bench-qc", "3ab3a1e0a9ee64c69fa34a3a910a0dc10dd051d3564978cf1ce9a195e1ad5fe1"],
   ["10", "plaque-directory-a-b-c-m", "60f5281f275437c70e0c7dee2887a9ab9b31c610130d2f90493aa156226d32a7"],
   ["11", "plaque-international-seabed-authority", "1199b5a749a2bddb4a528f067a78ed2e867bb33942ab0a2d8f1c692fdb83d534"],
