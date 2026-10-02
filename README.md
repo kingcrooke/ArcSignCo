@@ -72,15 +72,15 @@ If it can't be backed up, soften or remove it.
 - **Notification target: arc@arcsignco.com** (owner decision). Configure it in Netlify under
   Project configuration > Notifications > Emails and webhooks > Form submission notifications, for the
   `quote-request` form.
-- The public contact email shown on the site is also arc@arcsignco.com (lowercase).
+- Public contact emails on the site: jc@arcsignco.com and arc@arcsignco.com (lowercase). Homepage business JSON-LD uses jc@.
 
 ## Location and address
 
 - No street address in visible copy or the footer. The location label is "New York / Tri-State".
 - Never publish the old Post Avenue business address anywhere on the site.
 - The homepage JSON-LD `ProfessionalService` node (`@id` `https://arcsignco.com/#business`) may include
-  a schema-only `PostalAddress` for `1974 Crotona Ave, Bronx, NY 10457, US` (no unit or apt line in
-  schema or visible copy). Service pages must not include `address` or `streetAddress` in JSON-LD; they point their
+  a schema-only `PostalAddress` with `addressRegion` `NY` and `addressCountry` `US` only (no street,
+  city, or ZIP in schema or visible copy). Service pages must not include `address` or `streetAddress` in JSON-LD; they point their
   `Service` `provider` at the same `@id`.
 - `sameAs` lists Instagram (`https://www.instagram.com/arcsignco`) and Facebook
   (`https://www.facebook.com/1201574029704014`). The footer on every page links to both.
@@ -120,10 +120,11 @@ If it can't be backed up, soften or remove it.
 - `/portfolio` shows projects Jesus managed as a Project Manager at other New York sign companies
   before starting Arc. It is always labelled as the founder's prior work, never as Arc Signage Co jobs.
   Captions are owner-approved copy: don't reword them or add facts.
-- Source: 14 photos supplied by Jesus, already cleaned before they reached the repo. EXIF/GPS is
-  stripped, and former-employer names and logos, a street address, a phone number and some box/label
-  text are blurred. Don't sharpen or try to recover blurred areas, and don't name former employers in
-  page copy or alt text.
+- Source: sign photos supplied by Jesus; masters stay outside the repo. EXIF/GPS is stripped on
+  publish. Do not use packing-label or box photos that show personal names, addresses, or shipping
+  info — portfolio entries should show installed signs only. Page copy may name
+  project owners/clients and general contractors where the repo already lists them; do not name former
+  sign-company employers in copy or alt text.
 - The cleaned masters (about 2400 px, JPEG q85) are **not committed**: the repo is public and Netlify
   publishes the repo root, so a committed master would be downloadable at full size. Keep them with the
   project files. `tools/optimize-portfolio-images.mjs` lists each master's SHA-256 and refuses to run on
