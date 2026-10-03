@@ -178,11 +178,11 @@
     let inches = totalInches - feet * 12;
     inches = Math.round(inches * 8) / 8;
     if (inches >= 12) {
-      return `${feet + 1}′ 0″`;
+      return `${feet + 1} ft 0 in`;
     }
     const inchStr = inches % 1 === 0 ? String(inches) : inches.toFixed(2).replace(/\.?0+$/, "");
-    if (feet > 0) return `${feet}′ ${inchStr}″`;
-    return `${inchStr}″`;
+    if (feet > 0) return `${feet} ft ${inchStr} in`;
+    return `${inchStr} in`;
   }
 
   function updateDimReadout() {
@@ -198,7 +198,7 @@
     const rightPx = edgeLen(c[1], c[2]);
     const widthIn = ((topPx + bottomPx) / 2) / state.ppi;
     const heightIn = ((leftPx + rightPx) / 2) / state.ppi;
-    $("dimText").textContent = `Sign size ≈ ${formatFtIn(widthIn)} wide × ${formatFtIn(heightIn)} tall`;
+    $("dimText").textContent = `Sign size ~ ${formatFtIn(widthIn)} wide x ${formatFtIn(heightIn)} tall`;
     box.hidden = false;
   }
 
@@ -484,7 +484,7 @@
     y += 16;
     if (dims && state.calApplied) {
       doc.text(
-        `Approximate sign size: ${formatFtIn(dims.widthIn)} wide × ${formatFtIn(dims.heightIn)} tall (from photo calibration)`,
+        `Approximate sign size: ${formatFtIn(dims.widthIn)} wide x ${formatFtIn(dims.heightIn)} tall (from photo calibration)`,
         margin,
         y
       );
