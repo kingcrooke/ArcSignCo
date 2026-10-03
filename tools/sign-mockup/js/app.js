@@ -19,6 +19,10 @@ const NAVY = "#0b1d33", GOLD = "#d4a843", GOLD2 = "#f0d080";
 const API = "/api/sign-proofs";
 // Used for depth and lighting until the scale is set; sizes are only shown once it is.
 const ASSUMED_WIDTH_IN = 96;
+// Below this width (pixels) a photo is too small for a useful scale line.
+const SMALL_PHOTO = 800;
+// A reference outside this range (inches) is almost always a typo in feet or inches.
+const PLAUSIBLE_REF = [2, 1200];
 
 const state = {
   step: "photo",
@@ -550,6 +554,8 @@ async function loadPhoto(file) {
     $("zoomBar").hidden = false;
     stage.style.setProperty("--sm-ar", (c.height / c.width).toFixed(4));
     $("photoMeta").textContent = `${state.photo.name}${heic ? " · iPhone photo converted" : ""}`;
+    $("photoMeta").classList.toggle("warn", c.width < SMALL_PHOTO);
+    if (c.width < SMALL_PHOTO) $("photoMeta").textContent += ". This photo is small, so sizes and detail will be rough. Use the original photo if you have it.";
     if (state.art) placeSign();
     fit();
     setStatus(heic ? "iPhone photo converted. Next, set the scale." : "Photo loaded. Next, set the scale.");
@@ -671,6 +677,7 @@ async function loadSignFile(file) {
   setStatus("");
   try {
     const { canvas: c, heic } = await loadImageFile(file, { maxSide: 2048, onStatus: busy });
+    if (makeArtwork(c).empty) throw new Error("No artwork left after removing the background. Try a file with darker artwork, or one with a clear background.");
     state.fileSign = c;
     state.quadEdited = false;
     $("signMeta").textContent = `${file.name}${heic ? " · iPhone photo converted" : ""}`;
@@ -1285,7 +1292,10 @@ function updateUI() {
   else {
     const px = dist(state.cal.a, state.cal.b);
     if (!state.calInches) out.textContent = "Line drawn. Enter its real length.";
-    else if (px < 80) {
+    else if (state.calInches < PLAUSIBLE_REF[0] || state.calInches > PLAUSIBLE_REF[1]) {
+      out.textContent = `Scale set to ${formatFeetInches(state.calInches)}, which is unusual for a storefront. Check the feet and inches.`;
+      out.classList.add("warn");
+    } else if (px < 80) {
       out.textContent = "Scale set, but the line is short. Zoom in and use a longer reference for a closer estimate.";
       out.classList.add("warn");
     } else {

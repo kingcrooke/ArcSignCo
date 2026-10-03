@@ -198,6 +198,7 @@
 .sm-card .note a { font-weight: 800; }
 .sm-meta { font-size: 13px !important; font-weight: 700; color: var(--ink) !important; word-break: break-word; }
 .sm-meta:empty { display: none; }
+.sm-meta.warn { padding: 8px 10px; border-radius: 6px; background: #fff8e8; border: 1px solid rgba(212,168,67,.55); }
 .sm-tip { padding: 10px 12px; border-radius: 8px; background: var(--paper); }
 
 .sm-actions { display: flex; flex-wrap: wrap; gap: 8px; }

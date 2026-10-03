@@ -319,6 +319,8 @@ export function makeArtwork(source, { text = false } = {}) {
     source,
     text,
     get removed() { return k().removed; },
+    // Nothing left to place: blank artwork, or artwork that was all background.
+    get empty() { return !alphaBounds(k().canvas); },
     get cutout() { return text || hasTransparency(source) || k().removed; },
     get letters() { return cropToContent(k().canvas); },
     get color() { return averageColor(art.letters); },
