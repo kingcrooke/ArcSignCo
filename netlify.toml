@@ -76,11 +76,11 @@
   [headers.values]
     X-Robots-Tag = "noindex"
 
-# Sign mockup tool: a working tool, not a landing page, so keep it out of search results.
+# Phone approval links are private; keep them out of search results.
 [[headers]]
-  for = "/tools/sign-mockup/*"
+  for = "/tools/sign-mockup/proof/*"
   [headers.values]
-    X-Robots-Tag = "noindex"
+    X-Robots-Tag = "noindex, nofollow"
 
 # Vendored libraries carry their version in the filename: never overwrite one, add a new version.
 [[headers]]
