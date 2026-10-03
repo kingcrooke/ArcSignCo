@@ -2,8 +2,10 @@
 
 Website for Arc Signage Co (legal name: Arc Signage Co LLC), live at https://arcsignco.com.
 
-Static HTML hosted on Netlify (site name `arcsign`). There is no framework and no build step:
-Netlify publishes the repository root as-is.
+Static HTML hosted on Netlify (site name `arcsign`). There is no framework.
+`node tools/prepare-publish.mjs` copies the site to `_site` (the Netlify publish directory)
+so `node_modules` and `netlify/functions` are not served as public files. The sign mockup
+approval link uses a Netlify Function and Netlify Blobs; see `docs/sign-mockup.md`.
 
 ## Files
 

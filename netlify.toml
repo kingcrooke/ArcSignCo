@@ -1,5 +1,9 @@
 [build]
-  publish = "."
+  publish = "_site"
+  command = "node tools/prepare-publish.mjs"
+
+[functions]
+  directory = "netlify/functions"
 
 # Header rules below never set the same header name on overlapping paths, because Netlify
 # combines values when several rules match one URL.
@@ -39,6 +43,11 @@
   for = "/tools/sign-mockup/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
     X-Robots-Tag = "noindex"
 
 # Versioned images (filenames carry .v1, .v2, ...): never overwrite a file here, add a new version.
@@ -82,6 +91,31 @@
 # Block internal repo files and image masters (site pages use /assets/* only).
 [[redirects]]
   from = "/README.md"
+  to = "/404.html"
+  status = 404
+  force = true
+
+# Package metadata, dependencies, and function source are not part of the public site.
+[[redirects]]
+  from = "/package.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package-lock.json"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/node_modules/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify/*"
   to = "/404.html"
   status = 404
   force = true

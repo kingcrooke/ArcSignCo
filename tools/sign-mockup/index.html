@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Storefront Sign Mockup | Arc Signage Co</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Browser-only storefront sign mockup tool for Arc Signage Co. Photos stay on your device.">
+<meta name="description" content="Storefront sign mockup for Arc Signage Co. Day and night views, sign construction, and a phone approval link.">
 <meta name="theme-color" content="#0b1d33">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
@@ -24,7 +24,7 @@
   <aside class="panel" aria-label="Controls">
     <section class="section">
       <h2>1. Storefront photo</h2>
-      <p class="help">JPG or PNG. HEIC converts in your browser when supported. Nothing is uploaded to a server.</p>
+      <p class="help">JPG or PNG. HEIC converts in your browser when supported. The photo stays on this device until you create a phone link.</p>
       <label class="btn outline file-btn">
         <input type="file" id="photoInput" accept="image/jpeg,image/png,image/heic,image/heif,.heic,.heif">
         Choose photo
@@ -32,7 +32,7 @@
     </section>
     <section class="section">
       <h2>2. Scale calibration</h2>
-      <p class="help">Draw a line on a known dimension (door width, window, etc.), then enter its real size.</p>
+      <p class="help">Draw a line on a known dimension (door width, window, etc.), then enter its real size. The placeholder price uses this width.</p>
       <div class="btn-row">
         <button type="button" class="btn outline" id="calibrateBtn" disabled>Draw calibration line</button>
         <button type="button" class="btn outline" id="clearCalBtn" disabled>Clear line</button>
@@ -63,38 +63,93 @@
     </section>
     <section class="section">
       <h2>3. Sign artwork</h2>
-      <p class="help">PNG with transparency works best. Drag the four corners on the photo to match the facade.</p>
+      <p class="help">PNG with transparency works best. Drag the four corners on the photo. This file stays undistorted. It is the fabrication artwork.</p>
       <label class="btn outline file-btn">
         <input type="file" id="signInput" accept="image/png,image/jpeg,image/svg+xml,.svg">
         Choose sign image
       </label>
+      <div class="artwork-box" id="artworkBox" hidden>
+        <img id="artworkThumb" alt="Undistorted sign artwork">
+        <p>Fabrication artwork (undistorted). The storefront picture is only the placement.</p>
+      </div>
       <div class="field">
-        <label for="signOpacity">Sign opacity <span id="opacityVal">85%</span></label>
+        <label for="signOpacity">Face opacity <span id="opacityVal">85%</span></label>
         <input type="range" id="signOpacity" min="10" max="100" value="85">
       </div>
       <button type="button" class="btn outline" id="resetSignBtn" disabled>Reset sign placement</button>
       <div class="dim-readout" id="dimReadout" hidden>
         <span id="dimText">—</span>
-        <small>Approximate size from calibration plane; perspective and camera angle affect accuracy.</small>
+        <small>Approximate size from the calibration line. Perspective and camera angle affect accuracy.</small>
       </div>
     </section>
     <section class="section">
-      <h2>4. Export proof PDF</h2>
+      <h2>4. Construction</h2>
+      <p class="help">Same four corners. The sign is drawn with depth instead of a flat decal.</p>
+      <div class="choice-grid" role="radiogroup" aria-label="Sign type">
+        <button type="button" data-sign-type="channel-letters" aria-pressed="true">Channel letters<small>Returns and a raceway</small></button>
+        <button type="button" data-sign-type="lightbox" aria-pressed="false">Lightbox / cabinet<small>Depth and trim</small></button>
+        <button type="button" data-sign-type="blade" aria-pressed="false">Blade sign<small>Projects from the wall</small></button>
+        <button type="button" data-sign-type="flat-panel" aria-pressed="false">Flat panel<small>Standoffs, thin face</small></button>
+      </div>
+    </section>
+    <section class="section">
+      <h2>5. Day and night</h2>
+      <p class="help">Night uses the same pin. Light spills onto the wall.</p>
+      <div class="segment" role="radiogroup" aria-label="Day or night">
+        <button type="button" data-night="0" aria-pressed="true">Day</button>
+        <button type="button" data-night="1" aria-pressed="false">Night</button>
+      </div>
+      <div class="choice-grid" role="radiogroup" aria-label="Illumination">
+        <button type="button" data-illumination="face-lit" aria-pressed="true">Face-lit<small>Lit face, wall spill</small></button>
+        <button type="button" data-illumination="halo-lit" aria-pressed="false">Halo-lit<small>Light behind the sign</small></button>
+        <button type="button" data-illumination="internal" aria-pressed="false">Internal<small>Light inside the face</small></button>
+        <button type="button" data-illumination="neon" aria-pressed="false">Neon<small>Tube glow and spill</small></button>
+      </div>
+      <div class="field" id="neonField" hidden>
+        <label for="neonColor">Neon color</label>
+        <input type="color" id="neonColor" value="#ff3b30">
+      </div>
+    </section>
+    <section class="section">
+      <h2>6. Proof</h2>
+      <p class="help">The PDF keeps the day proof and adds the night view, plus the undistorted artwork. The phone link is where a client can comment and approve.</p>
       <div class="field">
         <label for="projectName">Project or client name (optional)</label>
-        <input type="text" id="projectName" maxlength="120" placeholder="e.g. 123 Main St storefront">
+        <input type="text" id="projectName" maxlength="120" placeholder="e.g. Main St storefront">
       </div>
+      <div class="price-card" id="pricePreview"></div>
       <button type="button" class="btn navy" id="exportPdfBtn" disabled>Download PDF proof</button>
+      <button type="button" class="btn gold" id="shareBtn" disabled>Create phone approval link</button>
+      <p class="status" id="shareStatus" hidden></p>
+      <div id="shareResult" hidden>
+        <label class="share-label" for="shareUrl">Approval link</label>
+        <input id="shareUrl" type="text" readonly>
+        <div class="btn-row">
+          <button type="button" class="btn outline" id="copyLinkBtn">Copy link</button>
+          <a class="btn navy" id="shareOpen" href="" target="_blank" rel="noopener">Open proof</a>
+        </div>
+      </div>
+      <p class="disclaimer">Concept only – not a shop drawing.</p>
     </section>
-    <p class="privacy-note">All processing happens in this tab. Images are not sent to Arc Signage Co unless you email them separately.</p>
+    <p class="privacy-note">The mockup is built in this browser. Creating a phone approval link uploads the proof so the client can open it. Arc can open that link too.</p>
+    <p class="contact-line">
+      <a href="tel:+13474502110">(347) 450-2110</a>
+      <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>
+      <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
+    </p>
   </aside>
   <div class="stage-wrap">
     <div class="stage-toolbar">
+      <div class="segment toolbar-segment" role="radiogroup" aria-label="Day or night view">
+        <button type="button" data-night="0" aria-pressed="true">Day</button>
+        <button type="button" data-night="1" aria-pressed="false">Night</button>
+      </div>
+      <span>View: <strong id="viewLabel">Day</strong></span>
       <span>Zoom: <strong id="zoomLabel">100%</strong></span>
-      <button type="button" class="btn outline" id="zoomOutBtn" style="width:auto;min-height:32px;padding:4px 10px;">−</button>
-      <button type="button" class="btn outline" id="zoomInBtn" style="width:auto;min-height:32px;padding:4px 10px;">+</button>
-      <button type="button" class="btn outline" id="zoomFitBtn" style="width:auto;min-height:32px;padding:4px 10px;">Fit</button>
-      <span id="modeLabel">Pan &amp; zoom</span>
+      <button type="button" class="btn outline tiny" id="zoomOutBtn">−</button>
+      <button type="button" class="btn outline tiny" id="zoomInBtn">+</button>
+      <button type="button" class="btn outline tiny" id="zoomFitBtn">Fit</button>
+      <span id="modeLabel">Pan and zoom</span>
     </div>
     <div class="canvas-host" id="canvasHost">
       <canvas id="viewCanvas"></canvas>
@@ -104,6 +159,6 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-<script src="/tools/sign-mockup/sign-mockup.js"></script>
+<script type="module" src="/tools/sign-mockup/sign-mockup.js"></script>
 </body>
 </html>

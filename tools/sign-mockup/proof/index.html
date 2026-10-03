@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sign concept proof | Arc Signage Co</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Review a storefront sign concept, comment, and approve. Concept only, not a shop drawing.">
+<meta name="theme-color" content="#0b1d33">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/tools/sign-mockup/proof/proof.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo-lockup-white-360.v2.png" width="360" height="74" alt="Arc Signage Co">
+  </a>
+  <a class="phone" href="tel:+13474502110">(347) 450-2110</a>
+</header>
+<main>
+  <p class="banner">Concept only – not a shop drawing.</p>
+  <p class="status" id="status">Loading proof…</p>
+  <article id="proof" hidden>
+    <p class="eyebrow" id="created"></p>
+    <h1 id="projectName">Storefront sign concept</h1>
+    <p class="meta" id="metaLine"></p>
+    <div class="segment" role="radiogroup" aria-label="Day or night">
+      <button type="button" id="dayBtn" aria-pressed="true">Day</button>
+      <button type="button" id="nightBtn" aria-pressed="false">Night</button>
+    </div>
+    <figure>
+      <img id="scene" alt="Sign placed on the storefront">
+      <figcaption id="sceneCaption">Day view. Same placement as the night view.</figcaption>
+    </figure>
+    <section class="card" id="priceCard"></section>
+    <section class="card">
+      <h2>Fabrication artwork</h2>
+      <p class="help">This file is undistorted. Build from this. The storefront picture is the placement concept.</p>
+      <div class="artwork-frame">
+        <img id="artwork" alt="Undistorted sign artwork">
+      </div>
+    </section>
+    <section class="card" id="approvalCard">
+      <h2>Approval</h2>
+      <div id="approvalState"></div>
+      <form id="approveForm">
+        <label for="approveName">Your name</label>
+        <input id="approveName" name="name" type="text" maxlength="80" required autocomplete="name" placeholder="Name">
+        <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn gold" type="submit">Approve this concept</button>
+      </form>
+      <p class="help">Approving records your name and the time. It is not a shop drawing and not a purchase order.</p>
+    </section>
+    <section class="card">
+      <h2>Comments</h2>
+      <ul id="comments"></ul>
+      <form id="commentForm">
+        <label for="commentName">Name</label>
+        <input id="commentName" name="name" type="text" maxlength="80" autocomplete="name" placeholder="Name">
+        <label for="commentText">Comment</label>
+        <textarea id="commentText" name="text" maxlength="800" required placeholder="What should change, or what looks right"></textarea>
+        <input class="hp" name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn navy" type="submit">Add comment</button>
+      </form>
+    </section>
+    <button class="btn outline" type="button" id="pdfBtn">Download PDF</button>
+  </article>
+  <footer class="contact">
+    <a href="tel:+13474502110">(347) 450-2110</a>
+    <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>
+    <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
+    <span>arcsignco.com</span>
+  </footer>
+</main>
+<form name="sign-proof-approval" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="sign-proof-approval">
+  <input name="bot-field">
+  <input name="proof-url">
+  <input name="project">
+  <input name="person">
+  <input name="action">
+  <textarea name="comment"></textarea>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script type="module" src="/tools/sign-mockup/proof/proof.js"></script>
+</body>
+</html>
