@@ -59,7 +59,7 @@ export function defineCategory(spec) {
   };
   cat.ui = {
     textLabel: `${capital(noun)} text`,
-    placeTip: `Drag the four corner handles onto the wall so the ${noun} follows its perspective. Drag inside the ${noun} to move it. Switch to <strong>Night</strong> on the photo to see it lit.`,
+    placeTip: `Drag the four corner handles onto the wall so the ${noun} lines up with it. Drag inside the ${noun} to move it. Switch to <strong>Night</strong> on the photo to see it lit.`,
     heightLabel: "Height",
     heightShort: "H",
     flatLabel: `The ${noun} artwork, flat`,

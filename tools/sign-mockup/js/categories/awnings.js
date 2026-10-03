@@ -74,7 +74,7 @@ export default defineCategory({
 
   ui: {
     textLabel: "Lettering",
-    placeTip: "Drag the four corner handles onto the wall area the awning covers; it is drawn out from the wall in perspective. Drag inside to move it. Switch to <strong>Night</strong> to see it after dark: only backlit awnings glow.",
+    placeTip: "Drag the four corner handles onto the wall the awning covers. It's drawn coming out from the wall. Drag inside to move it. Switch to <strong>Night</strong> to see it after dark. Only backlit awnings glow.",
     heightLabel: "Drop",
     heightShort: "drop",
     flatLabel: "The awning lettering surface, flat",

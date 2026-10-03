@@ -37,7 +37,7 @@ const LIGHT_CHOICES = [
   ["#fff1d6", "Warm white"], ["#eef5ff", "Cool white"], ["#ff4a3d", "Red"], ["#4aa3ff", "Blue"], ["#3ddc84", "Green"], ["#ffb02e", "Amber"],
 ];
 const FIELDS = {
-  returns: { label: "Returns", kind: "color", auto: "Match artwork", fallback: "#202226" },
+  returns: { label: "Sides (returns)", kind: "color", auto: "Match artwork", fallback: "#202226" },
   trim: { label: "Trim cap", kind: "color", fallback: "#24262b" },
   raceway: { label: "Raceway", kind: "color", auto: "Match wall", fallback: "#6b6f76" },
   panel: { label: "Panel", kind: "color", fallback: "#0b1d33" },

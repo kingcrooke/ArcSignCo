@@ -25,7 +25,7 @@ function decodeWithImg(blob) {
 }
 
 async function decodeHeic(file, onStatus) {
-  onStatus?.("Converting iPhone photo (HEIC)…");
+  onStatus?.("Converting the iPhone photo…");
   const { heicTo } = await import(HEIC_LIB);
   return heicTo({ blob: file, type: "bitmap" });
 }
@@ -55,14 +55,14 @@ export async function loadImageFile(file, { maxSide = 3200, onStatus } = {}) {
   try {
     source = await decodeWithImg(file);
   } catch (err) {
-    if (!heic) throw new Error("This file couldn't be opened as an image. Try a JPEG, PNG, WebP, SVG or HEIC file.");
+    if (!heic) throw new Error("This file couldn't be opened as an image. Try a JPEG, PNG, WebP, SVG, or an iPhone photo.");
   }
   if (!source) {
     try {
       source = await decodeHeic(file, onStatus);
     } catch (err) {
       console.error(err);
-      throw new Error("This HEIC photo couldn't be converted. On iPhone, set Settings > Camera > Formats to “Most Compatible”, or send it as a JPEG.");
+      throw new Error("This iPhone photo couldn't be converted. On the iPhone, go to Settings, then Camera, then Formats, and choose Most Compatible, or send it as a JPEG.");
     }
   }
   if (/svg/i.test(file.type) || /\.svg$/i.test(file.name || "")) {

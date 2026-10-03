@@ -549,7 +549,7 @@ async function loadPhoto(file) {
     $("drop").hidden = true;
     $("zoomBar").hidden = false;
     stage.style.setProperty("--sm-ar", (c.height / c.width).toFixed(4));
-    $("photoMeta").textContent = `${state.photo.name} · ${c.width} × ${c.height} px${heic ? " · converted from HEIC" : ""}`;
+    $("photoMeta").textContent = `${state.photo.name}${heic ? " · iPhone photo converted" : ""}`;
     if (state.art) placeSign();
     fit();
     setStatus(heic ? "iPhone photo converted. Next, set the scale." : "Photo loaded. Next, set the scale.");
@@ -673,7 +673,7 @@ async function loadSignFile(file) {
     const { canvas: c, heic } = await loadImageFile(file, { maxSide: 2048, onStatus: busy });
     state.fileSign = c;
     state.quadEdited = false;
-    $("signMeta").textContent = `${file.name} · ${c.width} × ${c.height} px${heic ? " · converted from HEIC" : ""}`;
+    $("signMeta").textContent = `${file.name}${heic ? " · iPhone photo converted" : ""}`;
     setSign(c);
     setStatus("Artwork placed. Drag the corners onto the wall.");
   } catch (err) {
@@ -1118,7 +1118,7 @@ async function runExport(label, fn) {
     await fn();
   } catch (err) {
     console.error(err);
-    if (err?.name !== "AbortError") setStatus(err?.userMessage || "Export failed. Try again, or try a smaller photo.", true);
+    if (err?.name !== "AbortError") setStatus(err?.userMessage || "The file couldn't be saved. Try again, or try a smaller photo.", true);
   } finally {
     busy("");
     requestRender();
@@ -1197,7 +1197,7 @@ async function createProof() {
   const body = await res.json().catch(() => null);
   if (!res.ok || !body?.id) {
     throw new UserError(res.status === 404 || res.status === 405
-      ? "Approval links aren't available on this copy of the site."
+      ? "Approval links aren't available here."
       : body?.error || "Couldn't create the link. Try again.");
   }
   const url = `${location.origin}/tools/sign-mockup/proof/#${body.id}`;
@@ -1284,12 +1284,12 @@ function updateUI() {
   if (!state.cal) out.textContent = "Draw the line on the photo.";
   else {
     const px = dist(state.cal.a, state.cal.b);
-    if (!state.calInches) out.textContent = `Line drawn (${Math.round(px)} px). Enter its real length.`;
+    if (!state.calInches) out.textContent = "Line drawn. Enter its real length.";
     else if (px < 80) {
-      out.textContent = `Scale set, but the line is short (${Math.round(px)} px). Zoom in and use a longer reference for a closer estimate.`;
+      out.textContent = "Scale set, but the line is short. Zoom in and use a longer reference for a closer estimate.";
       out.classList.add("warn");
     } else {
-      out.textContent = `Scale set: ${formatFeetInches(state.calInches)} over ${Math.round(px)} px of the photo.`;
+      out.textContent = `Scale set: ${formatFeetInches(state.calInches)}.`;
       out.classList.add("good");
     }
   }
