@@ -550,6 +550,7 @@ async function loadPhoto(file) {
     $("zoomBar").hidden = false;
     stage.style.setProperty("--sm-ar", (c.height / c.width).toFixed(4));
     $("photoMeta").textContent = `${state.photo.name} · ${c.width} × ${c.height} px${heic ? " · converted from HEIC" : ""}`;
+    if (state.art) placeSign();
     fit();
     setStatus(heic ? "iPhone photo converted. Next, set the scale." : "Photo loaded. Next, set the scale.");
   } catch (err) {
