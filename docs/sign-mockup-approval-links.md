@@ -15,7 +15,9 @@ https://arcsignco.com/tools/sign-mockup/proof/#3f9c0d6e2b7a41c58e0f1a2b3c4d5e6f
 The proof page (`tools/sign-mockup/proof/`) is built for phones. The client can:
 
 - switch between the day and night views (both rendered from the same pin in the editor)
-- read the sign type, approximate size and how it's built (the same cross-section as the picker)
+- read the sign type or awning shape, approximate size and how it's built (the same drawing as the
+  picker); for awnings, also the chosen cover, pattern, valance, lettering spot, sides, projection and
+  lighting
 - see a rough preliminary range from the placeholder rates, if the scale was set
 - post comments
 - approve with their name; the server records the time
@@ -58,7 +60,10 @@ Every response has `X-Robots-Tag: noindex`.
 
 The server ignores any price the browser sends. It recomputes the range from the sign type and
 measured size with `estimatePrice()` and the shared `pricing-config.js`, so a link can't carry a
-made-up number. The approval time comes from the server clock, not from the browser.
+made-up number. Awning sheets also carry an `options` object; the server keeps only the keys and
+values the shape allows (`sanitizeAwningOptions()` in `js/awning-types.js`) and prices awnings per
+linear foot of width, with the backlit adder when backlit is chosen. Sign sheets store
+`options: null`. Old links with the type id `awning` open as the traditional slope. The approval time comes from the server clock, not from the browser.
 
 ## Storage and namespacing
 
@@ -70,7 +75,7 @@ apart from anything else the site stores, and to keep test proofs apart from rea
   `deploy-preview`, `branch-deploy` or `dev`:
 
   ```
-  v1/production/<id>/sheet.json   project, type, size, price, comments, approval
+  v1/production/<id>/sheet.json   project, type, options, size, price, comments, approval
   v1/production/<id>/day.jpg
   v1/production/<id>/night.jpg
   v1/production/<id>/art.jpg      flat artwork

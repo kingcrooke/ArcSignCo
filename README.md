@@ -26,13 +26,14 @@ mockup's approval links (`netlify/functions/`); `package.json` exists only for i
 | `tools/optimize-portfolio-images.mjs` | Regenerates `assets/portfolio/` from the cleaned portfolio masters (kept outside the repo) |
 | `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
 | `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
-| `tools/sign-mockup/` | Storefront sign mockup tool, served at `/tools/sign-mockup/` (noindex, not in the sitemap or nav) |
+| `tools/sign-mockup/` | Storefront sign and awning mockup tool, served at `/tools/sign-mockup/` (noindex, not in the sitemap or nav) |
 | `tools/sign-mockup/proof/` | Phone proof page for approval links, served at `/tools/sign-mockup/proof/#<id>` (noindex) |
 | `netlify/functions/sign-proofs.mjs`, `netlify/lib/sign-proofs.mjs` | Approval link API (`/api/sign-proofs`), stored in Netlify Blobs |
 | `package.json` | `@netlify/blobs` for the function, and `npm test` for the mockup checks |
-| `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, sign types, PDF output, and copy guardrails |
+| `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, sign types, awning shapes and meshes, PDF output, and copy guardrails |
 | `tools/sign-mockup-pricing.test.mjs`, `tools/sign-proofs.test.mjs` | Unit tests: placeholder rates and the approval link API |
 | `docs/sign-mockup-approval-links.md` | How approval links work: API, Blobs namespacing, notifications |
+| `docs/awnings-research.md` | Awning shapes, covers, valances and lighting research behind the awning library (internal) |
 
 ## How changes ship
 
@@ -173,13 +174,23 @@ If it can't be backed up, soften or remove it.
 ## Sign mockup tool
 
 `/tools/sign-mockup/` lets a visitor upload a storefront photo, set the scale by drawing a line over
-something they measured, pick a sign type, pin the sign (typed text or uploaded artwork) to the wall
-with four corner handles, and see it built in perspective by day and at night. They can then
+something they measured, pick a sign type or an awning shape, pin it (typed text or uploaded artwork)
+to the wall with four corner handles, and see it built in perspective by day and at night. They can then
 download a three-page PDF or send a phone approval link.
 
-- **Sign types**: 18 types in `js/sign-types.js` (channel letters, non-lit letters, light boxes,
-  blade signs, panels, LED neon, vinyl, paint and a traditional awning). Each has a "how it's built"
+- **Sign types**: 17 types in `js/sign-types.js` (channel letters, non-lit letters, light boxes,
+  blade signs, panels, LED neon, vinyl and paint). Each has a "how it's built"
   cross-section drawn in code for this tool (`js/diagrams.js`): generic, typical construction, not to scale.
+- **Awnings**: a second category with 29 shapes in `js/awning-types.js` (sloped, curved, domes and
+  cones, sign-face and backlit, canopies and marquees, retractable), based on
+  `docs/awnings-research.md`. Options: projection, cover, color, solid or striped fabric, valance
+  style, lettering on the valance or the face, open or closed sides, frame color, and backlit where
+  the shape allows it. The pinned corners are the wall area the awning covers (width and drop); the
+  projection comes out from the wall. `js/awning-geometry.js` builds each shape as a 3D mesh,
+  `js/awning-scene.js` paints and lights it, and `js/awning-diagrams.js` draws the side-profile card
+  (frame and cover). `js/catalog.js` joins signs and awnings for the editor, PDF, proof page and server.
+  Only backlit awnings glow at night. Awnings are priced per linear foot of width
+  (`AWNING_RATES` in `js/pricing-config.js`, placeholders like the sign rates).
   Use generic type and shape names only: no catalog, vendor or awning maker names anywhere on the
   site, in PDFs or in code comments. `tools/check-sign-mockup.mjs` checks for this.
 - **Rendering**: `js/geometry.js` recovers a camera from the pinned corners, so depth (returns,
