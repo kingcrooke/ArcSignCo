@@ -924,7 +924,10 @@ function showLibrary(id) {
   }
   $("typeList").setAttribute("aria-labelledby", `tab-${c.id}`);
   for (const p of $("typeList").querySelectorAll("[data-cat-panel]")) p.hidden = p.dataset.catPanel !== c.id;
-  $("typeCats").querySelector(`[data-cat="${c.id}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  revealTab();
+}
+function revealTab() {
+  $("typeCats").querySelector(`[data-cat="${libraryCat}"]`)?.scrollIntoView({ block: "nearest", inline: "center" });
 }
 function openTypes(id = currentCat().id) {
   showLibrary(typeof id === "string" ? id : currentCat().id);
@@ -932,6 +935,7 @@ function openTypes(id = currentCat().id) {
   const dlg = $("typeDialog");
   if (dlg.showModal) dlg.showModal();
   else dlg.setAttribute("open", "");
+  revealTab();
   const focus = $("typeList").querySelector(`[data-cat-panel="${libraryCat}"] [aria-pressed="true"]`) || $("typeCats").querySelector(`[data-cat="${libraryCat}"]`);
   focus?.focus();
 }
