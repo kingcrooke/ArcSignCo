@@ -109,21 +109,10 @@
 }
 </script>
 <!-- TODO(GBP): Arc has a Google Business Profile but the URL isn't confirmed yet. When Jesus supplies it, add it to "sameAs" above (after Instagram and Facebook) and put the same URL in the footer link's href (id="gbpLink"); the link stays hidden while its href is empty. Schema-only PostalAddress: see README "Location and address". -->
-<!-- ANALYTICS(GA4): off. Nothing loads and no request is made while GA4_ID is empty. Set the approved Measurement ID here and in thank-you.html (see README "Analytics"). -->
-<script>
-(function () {
-  var GA4_ID = "";
-  if (!/^G-[A-Z0-9]+$/.test(GA4_ID)) return;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { window.dataLayer.push(arguments); };
-  window.gtag("js", new Date());
-  window.gtag("config", GA4_ID);
-  var s = document.createElement("script");
-  s.async = true;
-  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
-  document.head.appendChild(s);
-})();
-</script>
+<!-- ANALYTICS & verification: paste IDs in assets/js/measurement-config.js (see docs/ANALYTICS-AND-VERIFICATION.md). -->
+<script src="/assets/js/measurement-config.js"></script>
+<script>window.__ARC_HEAD_OPTS__={verification:true};</script>
+<script src="/assets/js/measurement.js"></script>
 <style>
 :root {
   --navy: #0b1d33;

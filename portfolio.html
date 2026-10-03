@@ -64,21 +64,9 @@
   ]
 }
 </script>
-<!-- ANALYTICS(GA4): off. Nothing loads and no request is made while GA4_ID is empty. Set the same approved Measurement ID as index.html and thank-you.html (see README "Analytics"). -->
-<script>
-(function () {
-  var GA4_ID = "";
-  if (!/^G-[A-Z0-9]+$/.test(GA4_ID)) return;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { window.dataLayer.push(arguments); };
-  window.gtag("js", new Date());
-  window.gtag("config", GA4_ID);
-  var s = document.createElement("script");
-  s.async = true;
-  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
-  document.head.appendChild(s);
-})();
-</script>
+<!-- ANALYTICS: paste IDs in assets/js/measurement-config.js (see docs/ANALYTICS-AND-VERIFICATION.md). -->
+<script src="/assets/js/measurement-config.js"></script>
+<script src="/assets/js/measurement.js"></script>
 <style>
 /* Header, button, section and footer rules mirror index.html so the shared chrome looks identical. */
 :root {

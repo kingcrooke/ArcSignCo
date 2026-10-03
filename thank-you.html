@@ -9,21 +9,9 @@
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<!-- ANALYTICS(GA4): off. Nothing loads and no request is made while GA4_ID is empty. Use the same Measurement ID as index.html (see README "Analytics"). The quote conversion event fires further down this page. -->
-<script>
-(function () {
-  var GA4_ID = "";
-  if (!/^G-[A-Z0-9]+$/.test(GA4_ID)) return;
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { window.dataLayer.push(arguments); };
-  window.gtag("js", new Date());
-  window.gtag("config", GA4_ID);
-  var s = document.createElement("script");
-  s.async = true;
-  s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
-  document.head.appendChild(s);
-})();
-</script>
+<!-- ANALYTICS: paste IDs in assets/js/measurement-config.js (see docs/ANALYTICS-AND-VERIFICATION.md). Quote conversion fires in the script at the bottom of this page. -->
+<script src="/assets/js/measurement-config.js"></script>
+<script src="/assets/js/measurement.js"></script>
 <style>
 :root {
   --navy: #0b1d33;

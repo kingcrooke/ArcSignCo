@@ -1282,6 +1282,7 @@ async function runExport(label, fn) {
 $("downloadPdf").addEventListener("click", () => runExport("Building PDF…", async () => {
   const file = await makePdf();
   download(file, file.name);
+  if (typeof window.gtag === "function") window.gtag("event", "mockup_pdf_download", { tool: "sign-mockup" });
   setStatus(`Saved ${file.name}`);
 }));
 $("downloadPng").addEventListener("click", () => runExport("Building image…", async () => {
@@ -1371,6 +1372,7 @@ function renderProofLink() {
 
 $("createLink").addEventListener("click", () => runExport("Creating approval link…", async () => {
   await createProof();
+  if (typeof window.gtag === "function") window.gtag("event", "mockup_approval_link_created", { tool: "sign-mockup" });
   renderProofLink();
   setStatus("Approval link ready. Send it to your client.");
   $("linkUrl").focus();

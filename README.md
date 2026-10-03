@@ -238,29 +238,12 @@ download a three-page PDF or send a phone approval link.
 
 ## Analytics
 
-Google Analytics 4 is wired in but **off**. Do not add a Measurement ID until Jesus approves it.
+GA4, Search Console HTML verification, and Bing Webmaster meta tags are wired through
+`assets/js/measurement-config.js` and **off** until IDs are pasted there. Do not add real IDs until
+Jesus approves them.
 
-While the ID is empty, the pages load no analytics script and make no request to Google.
-
-**To turn it on** (after approval):
-
-1. In GA4, create a Web data stream for `https://arcsignco.com` and copy its Measurement ID (`G-XXXXXXXXXX`).
-2. Search for `ANALYTICS(GA4)` in `index.html`, `thank-you.html`, `portfolio.html`, and the four
-   service pages (`*/index.html`). In every file, set
-   `var GA4_ID = "G-XXXXXXXXXX";` to the same ID. Anything that doesn't look like `G-` plus letters
-   and digits is ignored.
-3. Open a PR, check the Deploy Preview's network tab for a `googletagmanager.com/gtag/js` request, then merge.
-4. In GA4 (Admin > Events), mark `generate_lead` as a key event (conversion).
-
-**Events:**
-
-| Event | Where it fires |
-|---|---|
-| `page_view` | Every page, sent automatically by the GA4 config |
-| `generate_lead` (`form_name: quote-request`) | `/thank-you`, in the script at the bottom of `thank-you.html`. It fires only after a real quote form submit in the same tab, and only once per submit, so reloads and direct visits don't count. |
-| `click_to_call` | Any `tel:` link on the homepage (header, hero, trust row, phone bar, contact card, footer), on the service pages (header, hero, quote card, phone bar, footer), and on `/portfolio` (header, phone bar, footer) |
-
-Nothing else is tracked. The GA4 `config` call uses Google's defaults.
+See **`docs/ANALYTICS-AND-VERIFICATION.md`** for paste locations, events, verification steps, and
+`tools/check-analytics.mjs`.
 
 ## Environment variables
 
