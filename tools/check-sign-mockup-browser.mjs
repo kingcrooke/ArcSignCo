@@ -63,8 +63,6 @@ async function run() {
 
     await page.evaluate(() => window.signMockup.setStep("sign"));
     await page.waitForTimeout(300);
-    await page.locator(".sm-cattabs-wrap").screenshot({ path: path.join(SCREENSHOTS, "tab-bar-desktop-1280.png") });
-    ok("desktop category tab bar screenshot");
 
     for (const catId of NEW_CATS) {
       const cat = CATEGORIES.find(c => c.id === catId);
@@ -96,10 +94,23 @@ async function run() {
       }
     }
 
-    await page.evaluate(() => window.signMockup.setCategory("ada"));
-    await page.evaluate(() => window.signMockup.setType("ada-room"));
+    for (const vw of [1280, 1440]) {
+      await page.setViewportSize({ width: vw, height: 900 });
+      await page.waitForTimeout(250);
+      await page.evaluate(() => window.signMockup.setStep("sign"));
+      await page.locator(".sm-cattabs-wrap").screenshot({ path: path.join(SCREENSHOTS, `tab-bar-desktop-${vw}.png`) });
+      await page.evaluate(() => {
+        window.signMockup.setCategory("ada");
+        window.signMockup.setType("ada-room");
+      });
+      await page.click("#resetSign");
+      await page.waitForTimeout(400);
+      await page.screenshot({ path: path.join(SCREENSHOTS, `tab-ada-day-${vw}.png`), fullPage: false });
+      ok(`tab bar and ADA mockup screenshots at ${vw}px`);
+    }
+
     await page.setViewportSize({ width: 1280, height: 900 });
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(200);
     const stage = page.locator("#stage");
     await stage.screenshot({ path: path.join(SCREENSHOTS, "ada-tactile-braille-closeup-1280.png") });
     ok("ADA tactile layout close-up");

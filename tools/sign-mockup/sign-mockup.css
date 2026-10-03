@@ -9,7 +9,7 @@
   margin: 0 auto;
   padding: 24px 0 40px;
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
   grid-template-areas: "steps stage" "panel stage";
   grid-template-rows: auto 1fr;
   gap: 16px 22px;
@@ -172,7 +172,14 @@
 }
 @keyframes sm-spin { to { transform: rotate(360deg); } }
 
-.sm-panel { grid-area: panel; display: grid; gap: 12px; }
+.sm-panel {
+  grid-area: panel;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+}
 .sm-card {
   background: var(--white);
   border: 1px solid var(--line);
@@ -182,6 +189,8 @@
   box-shadow: var(--soft);
   display: grid;
   gap: 14px;
+  min-width: 0;
+  max-width: 100%;
 }
 .sm-card h2 { display: flex; align-items: center; gap: 10px; color: var(--navy); font-size: 20px; line-height: 1.2; letter-spacing: -0.01em; }
 .sm-card h2 b {
@@ -265,7 +274,13 @@
 .sm-seg input:focus-visible + span { outline: 3px solid var(--gold); }
 
 /* Category bar in step 3: short labels on scrollable pills (full name in aria-label / title). */
-.sm-cattabs-wrap { position: relative; margin-bottom: 4px; }
+.sm-cattabs-wrap {
+  position: relative;
+  margin-bottom: 4px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
 .sm-cattabs-wrap::after {
   content: "";
   position: absolute; right: 0; top: 1.4em; bottom: 0; width: 28px;
@@ -276,8 +291,14 @@
   margin: 0 0 6px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .04em;
 }
 .sm-cattabs {
-  display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity;
-  padding-bottom: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+  display: flex; flex-wrap: nowrap; gap: 8px;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 .sm-cattabs [role="radio"] {
   flex: 0 0 auto; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px;
@@ -336,6 +357,8 @@
 .sm-type {
   display: grid;
   grid-template-columns: 92px minmax(0, 1fr);
+  min-width: 0;
+  max-width: 100%;
   grid-template-areas: "art text" "btn btn";
   gap: 10px 12px;
   align-items: center;
@@ -477,7 +500,7 @@
 .sm-noscript { padding: 16px; background: #fff8e8; text-align: center; }
 
 @media (max-width: 1040px) {
-  .sm-grid { grid-template-columns: 320px minmax(0, 1fr); }
+  .sm-grid { grid-template-columns: minmax(0, 320px) minmax(0, 1fr); }
 }
 @media (max-width: 860px) {
   .sm-grid {

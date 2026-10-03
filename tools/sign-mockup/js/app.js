@@ -788,6 +788,21 @@ function scaledWidthPx(widthIn) {
   return widthIn / (state.calInches / calPx);
 }
 
+/** Wall pier beside a scaled door opening, about 60 in above the sidewalk. */
+function plaqueMountPoint(photo) {
+  if (!state.cal || !state.calInches) return null;
+  const calPx = dist(state.cal.a, state.cal.b);
+  if (calPx < 1) return null;
+  const inPerPx = state.calInches / calPx;
+  const doorRight = Math.max(state.cal.a.x, state.cal.b.x);
+  const doorY = (state.cal.a.y + state.cal.b.y) / 2;
+  const sidewalkY = Math.min(photo.height - 6, doorY + 10 / inPerPx);
+  return {
+    x: doorRight + 14 / inPerPx,
+    y: sidewalkY - 60 / inPerPx,
+  };
+}
+
 function defaultPlaceWidthPx(photo) {
   const cat = currentCat();
   const placeIn = typeof cat.ui.placeWidthIn === "function"
@@ -807,8 +822,9 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
   let c = (!cat.ui.plaque && state.home)
     ? { x: state.home.x, y: state.home.y }
     : { x: photo.width / 2, y: photo.height * 0.36 };
-  if (cat.ui.plaque && state.cal) {
-    c = { x: (state.cal.a.x + state.cal.b.x) / 2 + photo.width * 0.08, y: state.cal.a.y - photo.height * 0.06 };
+  if (cat.ui.plaque) {
+    const mount = plaqueMountPoint(photo);
+    if (mount) c = mount;
   }
   if (keepCenter && state.quad) {
     c = centroid(state.quad);
