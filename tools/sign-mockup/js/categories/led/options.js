@@ -31,7 +31,8 @@ export function defaultLedOptions(type) {
     cabinet: "black",
     bright: type.id === "led-window" ? "window" : "indoor",
     mount: type.id === "led-window" ? "hung" : "wall",
-    panel: "#101820",
+    // A running screen reads as a lit blue field in daylight, not a black slab.
+    panel: "#1d4e89",
     frame: "#24262b",
     light: "#eef5ff",
     size: sizes[0][0],
