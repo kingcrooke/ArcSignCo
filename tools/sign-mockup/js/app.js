@@ -1,7 +1,7 @@
 import {
   dist, centroid, pointInQuad, rectQuad, scaleQuad, quadSizeInches, quadSpans, formatFeetInches, formatArea, toInches,
 } from "./geometry.js";
-import { loadImageFile, renderTextSign, FONTS } from "./images.js";
+import { loadImageFile, renderTextSign, loadSignFonts, FONTS } from "./images.js";
 import { makeArtwork } from "./art.js";
 import { createScene } from "./scene.js";
 import {
@@ -988,6 +988,7 @@ $("dayNight").addEventListener("keydown", e => {
 });
 
 for (const [key, f] of Object.entries(FONTS)) $("signFont").add(new Option(f.label, key));
+loadSignFonts().then(() => { if (state.signMode === "text" && state.sign) updateTextSign(); });
 document.querySelectorAll('input[name="signMode"]').forEach(r => r.addEventListener("change", () => setSignMode(r.value)));
 ["signTextInput", "signFont", "signColor"].forEach(id => {
   $(id).addEventListener("input", updateTextSign);

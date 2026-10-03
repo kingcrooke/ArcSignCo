@@ -79,14 +79,37 @@ export async function loadImageFile(file, { maxSide = 3200, onStatus } = {}) {
   return { canvas, heic };
 }
 
+// Sign typefaces, self-hosted from ../fonts (SIL Open Font License, see fonts/LICENSE.txt).
+// Each file is a Latin-1 subset at one weight. The system stack after it covers the moment
+// before the file loads and any character outside the subset.
+const font = (family, file, weight, fallback) => ({ family, file, weight, css: (px) => `${weight} ${px}px "${family}", ${fallback}` });
 export const FONTS = {
-  sans: { label: "Bold sans", css: (px) => `900 ${px}px "Arial Black", "Helvetica Neue", Arial, sans-serif` },
-  serif: { label: "Classic serif", css: (px) => `700 ${px}px Georgia, "Times New Roman", serif` },
-  condensed: { label: "Condensed", css: (px) => `700 ${px}px Impact, "Arial Narrow", "Roboto Condensed", sans-serif-condensed, sans-serif` },
+  sans: { label: "Bold sans", ...font("Arc Montserrat", "montserrat-800.v1.woff2", 800, `"Arial Black", Arial, sans-serif`) },
+  wide: { label: "Wide sans", ...font("Arc Archivo Wide", "archivo-wide-800.v1.woff2", 800, `"Arial Black", Arial, sans-serif`) },
+  condensed: { label: "Condensed", ...font("Arc Oswald", "oswald-600.v1.woff2", 600, `"Arial Narrow", Impact, sans-serif`) },
+  block: { label: "Tall block", ...font("Arc Anton", "anton-400.v1.woff2", 400, `Impact, "Arial Narrow", sans-serif`) },
+  serif: { label: "Classic serif", ...font("Arc Source Serif", "sourceserif4-700.v1.woff2", 700, `Georgia, "Times New Roman", serif`) },
+  script: { label: "Script", ...font("Arc Pacifico", "pacifico-400.v1.woff2", 400, `"Brush Script MT", cursive`) },
 };
 
+let fontsReady = null;
+// Loads every sign font once. Resolves when all have loaded or failed; a failed font falls back
+// to its system stack, so the promise never rejects.
+export function loadSignFonts() {
+  if (fontsReady) return fontsReady;
+  if (typeof FontFace === "undefined" || !document.fonts) return (fontsReady = Promise.resolve());
+  fontsReady = Promise.all(Object.values(FONTS).map(async (f) => {
+    try {
+      const face = new FontFace(f.family, `url(${new URL(`../fonts/${f.file}`, import.meta.url)}) format("woff2")`, { weight: String(f.weight), display: "swap" });
+      document.fonts.add(await face.load());
+    } catch { /* system fallback */ }
+  }));
+  return fontsReady;
+}
+
 // Renders a one-line text sign. Returns a canvas whose size defines the sign's aspect ratio.
-export function renderTextSign({ text, font = "sans", color = "#ffffff", background = "#0b1d33", transparent = false, glow = false }) {
+// Only the letters are drawn: no shadow or glow, since depth and lighting come from the renderer.
+export function renderTextSign({ text, font = "sans", color = "#ffffff", background = "#0b1d33", transparent = false }) {
   const label = (text || "").trim() || "Your Business";
   const px = 220;
   const pad = Math.round(px * 0.42);
@@ -110,13 +133,6 @@ export function renderTextSign({ text, font = "sans", color = "#ffffff", backgro
   const scaleX = Math.min(1, (canvas.width - pad * 2) / tw);
   ctx.translate(canvas.width / 2, (canvas.height + ascent - descent) / 2);
   ctx.scale(scaleX, 1);
-  if (glow) {
-    ctx.shadowColor = color;
-    ctx.shadowBlur = px * 0.22;
-    ctx.fillStyle = color;
-    ctx.fillText(label, 0, 0);
-    ctx.shadowBlur = px * 0.08;
-  }
   ctx.fillStyle = color;
   ctx.fillText(label, 0, 0);
   return canvas;
