@@ -71,8 +71,18 @@
       cfg.baseMobilization +
       widthFt * cfg.perLinearFootWidth +
       areaSqFt * 120 * type.multiplier * illum.multiplier;
-    const low = Math.max(type.minEstimate, Math.round(core * 0.92));
-    const high = Math.round(core * 1.18);
+    let low = Math.round(core * 0.92);
+    let high = Math.round(core * 1.18);
+    if (low > high) {
+      const swap = low;
+      low = high;
+      high = swap;
+    }
+    low = Math.max(low, type.minEstimate);
+    const minSpread = Math.max(200, Math.round(low * 0.1));
+    if (high <= low) {
+      high = low + minSpread;
+    }
     return {
       low,
       high,

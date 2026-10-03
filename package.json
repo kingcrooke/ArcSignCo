@@ -1,6 +1,9 @@
 {
   "name": "arcsignco-site",
   "private": true,
+  "scripts": {
+    "test": "node --test tools/sign-mockup/*.test.mjs"
+  },
   "dependencies": {
     "@netlify/blobs": "^8.2.0"
   }

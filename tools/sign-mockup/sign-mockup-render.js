@@ -46,9 +46,16 @@
     ctx.restore();
   }
 
+  function signPixelSize(img) {
+    return {
+      sw: img.naturalWidth || img.width || 0,
+      sh: img.naturalHeight || img.height || 0,
+    };
+  }
+
   function drawWarpedSign(ctx, img, corners, opacity, tintFn) {
-    const sw = img.width;
-    const sh = img.height;
+    const { sw, sh } = signPixelSize(img);
+    if (!sw || !sh) return;
     const n = SIGN_SUBDIV;
     ctx.save();
     ctx.globalAlpha = opacity;
@@ -137,12 +144,12 @@
     ctx.restore();
   }
 
-  function drawHaloGlow(ctx, img, corners, color, blurScale) {
-    const expanded = scaleCornersFromCenter(corners, 1.06 + (blurScale || 0));
+  function drawHaloGlow(ctx, img, corners, blurScale) {
+    const expanded = scaleCornersFromCenter(corners, 1.05 + (blurScale || 0));
     ctx.save();
-    ctx.filter = `blur(${8 + (blurScale || 0) * 12}px)`;
-    drawWarpedSolidQuad(ctx, expanded, color, 0.55);
-    drawWarpedSign(ctx, img, expanded, 0.35);
+    ctx.filter = `blur(${12 + (blurScale || 0) * 14}px)`;
+    ctx.globalCompositeOperation = "screen";
+    drawWarpedSign(ctx, img, expanded, 0.75);
     ctx.restore();
   }
 
@@ -224,18 +231,21 @@
   }
 
   function illuminationFaceOpacity(mode, timeOfDay) {
-    if (timeOfDay === "day") return { face: 0.88, spill: false };
+    if (timeOfDay === "day") return { face: 0.88, spill: false, lit: false };
+    if (mode === "none") {
+      return { face: 0.7, spill: false, lit: false, ambient: true };
+    }
     switch (mode) {
       case "face":
-        return { face: 1, spill: true, spillColor: "rgba(255, 240, 200, 0.55)" };
+        return { face: 0.95, spill: true, spillColor: "rgba(255, 240, 200, 0.45)", lit: true };
       case "halo":
-        return { face: 0.42, spill: true, spillColor: "rgba(255, 220, 160, 0.45)" };
+        return { face: 0.92, spill: true, spillColor: "rgba(255, 220, 160, 0.38)", lit: true };
       case "internal":
-        return { face: 0.95, spill: true, spillColor: "rgba(255, 255, 240, 0.5)" };
+        return { face: 0.94, spill: true, spillColor: "rgba(255, 255, 240, 0.42)", lit: true };
       case "neon":
-        return { face: 0.75, spill: true, spillColor: "rgba(255, 100, 180, 0.5)" };
+        return { face: 0.9, spill: true, spillColor: "rgba(255, 100, 180, 0.42)", lit: true };
       default:
-        return { face: 0.85, spill: false };
+        return { face: 0.7, spill: false, lit: false, ambient: true };
     }
   }
 
@@ -270,11 +280,7 @@
 
     if (sign && signCorners) {
       const illum = illuminationFaceOpacity(illumination, timeOfDay);
-      const isLit = timeOfDay === "night" && illumination !== "none";
-
-      if (isLit && illum.spill) {
-        drawWallSpill(ctx, signCorners, illum.spillColor, 1);
-      }
+      const isLit = timeOfDay === "night" && illum.lit;
 
       if (signType === "flatPanel") {
         drawStandoffs(ctx, signCorners);
@@ -297,32 +303,35 @@
       }
 
       if (isLit && (illumination === "halo" || illumination === "neon")) {
-        const haloColor = illumination === "neon" ? "rgba(255, 80, 160, 0.7)" : "rgba(255, 220, 150, 0.65)";
-        drawHaloGlow(ctx, sign, signCorners, haloColor, illumination === "neon" ? 0.15 : 0.08);
+        drawHaloGlow(ctx, sign, signCorners, illumination === "neon" ? 0.12 : 0.06);
+      }
+
+      if (isLit && illum.spill) {
+        drawWallSpill(ctx, signCorners, illum.spillColor, 1);
       }
 
       let faceAlpha = signOpacity;
-      if (timeOfDay === "night" && illumination !== "none") {
-        faceAlpha = illum.face;
+      if (timeOfDay === "night") {
+        faceAlpha = illum.ambient ? Math.min(signOpacity, illum.face) : Math.max(illum.face, 0.88);
       }
 
-      if (timeOfDay === "night" && illumination === "internal") {
-        ctx.save();
-        ctx.globalCompositeOperation = "screen";
-        drawWarpedSign(ctx, sign, signCorners, 0.55);
-        ctx.restore();
-      }
-
-      drawWarpedSign(ctx, sign, signCorners, faceAlpha);
-
-      if (timeOfDay === "night" && illumination === "face") {
+      if (isLit && illumination === "internal") {
         ctx.save();
         ctx.globalCompositeOperation = "screen";
         drawWarpedSign(ctx, sign, signCorners, 0.35);
         ctx.restore();
       }
 
-      if (timeOfDay === "night" && illumination === "neon") {
+      drawWarpedSign(ctx, sign, signCorners, faceAlpha);
+
+      if (isLit && illumination === "face") {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        drawWarpedSign(ctx, sign, signCorners, 0.22);
+        ctx.restore();
+      }
+
+      if (isLit && illumination === "neon") {
         ctx.save();
         ctx.strokeStyle = "rgba(255, 120, 200, 0.85)";
         ctx.lineWidth = 2.5;

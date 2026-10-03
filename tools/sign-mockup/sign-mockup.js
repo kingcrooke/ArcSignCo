@@ -204,7 +204,10 @@
     $("dayBtn").classList.toggle("active", tod === "day");
     $("nightBtn").classList.toggle("active", tod === "night");
     $("illumField").style.opacity = tod === "night" ? "1" : "0.55";
-    if (tod === "day") state.illumination = "none";
+    if (tod === "day") {
+      state.illumination = "none";
+      $("illumination").value = "none";
+    }
     updateEstimate();
     draw();
   }
@@ -416,10 +419,9 @@
     const maxImgH = pageH - 210;
     const dayH = await addImageFit(doc, dayData, margin, 88, maxImgW, maxImgH);
 
-    const nightIllum = state.illumination === "none" ? "face" : state.illumination;
     const nightCanvas = window.ArcSignRender.renderCompositeCanvas(state, {
       timeOfDay: "night",
-      illumination: nightIllum,
+      illumination: state.timeOfDay === "night" ? state.illumination : "face",
     });
     const nightData = nightCanvas.toDataURL("image/jpeg", 0.9);
     await addImageFit(doc, nightData, margin + maxImgW + 12, 88, maxImgW, maxImgH);
@@ -497,10 +499,9 @@
       : null;
 
     const dayCanvas = window.ArcSignRender.renderCompositeCanvas(state, { timeOfDay: "day", illumination: "none" });
-    const nightIllum = state.illumination === "none" ? "face" : state.illumination;
     const nightCanvas = window.ArcSignRender.renderCompositeCanvas(state, {
       timeOfDay: "night",
-      illumination: nightIllum,
+      illumination: state.timeOfDay === "night" ? state.illumination : "face",
     });
     const fabCanvas = window.ArcSignRender.renderFabSourceCanvas(state.sign);
 
@@ -669,13 +670,7 @@
   });
 
   $("dayBtn").addEventListener("click", () => setTimeOfDay("day"));
-  $("nightBtn").addEventListener("click", () => {
-    setTimeOfDay("night");
-    if (state.illumination === "none") {
-      state.illumination = "face";
-      $("illumination").value = "face";
-    }
-  });
+  $("nightBtn").addEventListener("click", () => setTimeOfDay("night"));
 
   $("exportPdfBtn").addEventListener("click", () => exportPdf().catch((err) => alert(err.message || "PDF export failed.")));
   $("shareProofBtn").addEventListener("click", () => createShareProof());
