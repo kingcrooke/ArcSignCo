@@ -72,21 +72,26 @@ check(wrapText("one two three four five", false, 10, 40).length > 1, "wrapText w
 
 // Category registry: every tab is a valid module; the placeholders place nothing.
 const ids = CATEGORIES.map(c => c.id);
-const PLANNED = ["vinyl", "construction", "wayfinding", "ada", "led"];
-check(ids[0] === "sign" && ids[1] === "awning" && PLANNED.every(id => ids.includes(id)), `registry has Signs, Awnings and the planned tabs (${ids.join(", ")})`);
-check(["sign", "awning"].every(id => READY.some(c => c.id === id)), "Signs and Awnings are live");
+const NEW_CATS = ["vinyl", "construction", "wayfinding", "ada", "led"];
+check(ids[0] === "sign" && ids[1] === "awning" && NEW_CATS.every(id => ids.includes(id)), `registry has Signs, Awnings and the product-line tabs (${ids.join(", ")})`);
+check(NEW_CATS.every(id => READY.some(c => c.id === id)), "Vinyl, Construction, Wayfinding, ADA and LED tabs are live");
+check(READY.length === 7, `seven live categories (${READY.map(c => c.id).join(", ")})`);
 check(new Set(ids).size === ids.length, "category ids are unique");
 for (const c of CATEGORIES) {
   const problems = validateCategory(c);
   check(!problems.length, `${c.id}: valid ${c.status} category${problems.length ? ` (${problems.join("; ")})` : ""}`);
 }
 const labelOf = id => CATEGORIES.find(c => c.id === id).label;
-check(PLANNED.map(labelOf).join("|") === "Vinyl & Stickers|Construction Signs|Interior Wayfinding|ADA & Code Signs|LED Displays", "planned tab labels");
-// While a planned tab is still a placeholder, it lists what it will cover.
-const examplesOf = id => { const c = CATEGORIES.find(x => x.id === id); return c.status === "soon" ? c.examples.map(e => e.name).join("|") : null; };
-const ex = { construction: examplesOf("construction"), vinyl: examplesOf("vinyl") };
-if (ex.construction !== null) check(/Site boards/.test(ex.construction) && /Project information panels/.test(ex.construction) && /parapet/i.test(ex.construction) && /Safety notices/.test(ex.construction), "construction placeholder lists site boards, project panels, shed parapet panels and safety notices");
-if (ex.vinyl !== null) check(/Window/.test(ex.vinyl) && /Glass/.test(ex.vinyl) && /Wall/.test(ex.vinyl) && /Floor/.test(ex.vinyl), "vinyl placeholder covers window, glass, wall and floor decals");
+check(NEW_CATS.map(labelOf).join("|") === "Vinyl & Stickers|Construction Signs|Interior Wayfinding|ADA & Code Signs|LED Displays", "product-line tab labels");
+for (const id of NEW_CATS) {
+  const cat = CATEGORIES.find(c => c.id === id);
+  check(cat.types.length >= 4, `${id}: at least four types (${cat.types.length})`);
+  for (const t of cat.types) {
+    const svg = diagramSvg(t);
+    check(/^<svg[^>]+viewBox="0 0 320 200"/.test(svg) && svg.endsWith("</svg>") && /aria-label="[^"]+how it.s built"/.test(svg), `${id}/${t.id}: construction diagram`);
+  }
+}
+check(NEW_CATS.every(id => !CATEGORIES.find(c => c.id === id).examples.length), "live categories are not placeholders");
 for (const t of ALL_TYPES) {
   const fields = optionFields(t, defaultOptions(t), { width: 144, height: 40 });
   if (!fields.every(f => f.kind !== "select" || (f.choices.length && f.choices.some(([v]) => v === f.value)))) check(false, `${t.id}: every select field offers its current value`);

@@ -7,9 +7,13 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "test": "node --test ./tools/sign-mockup-pricing.test.mjs ./tools/sign-proofs.test.mjs && node tools/check-sign-mockup.mjs"
+    "test": "node --test ./tools/sign-mockup-pricing.test.mjs ./tools/sign-proofs.test.mjs && node tools/check-sign-mockup.mjs && npm run test:browser",
+    "test:browser": "node tools/check-sign-mockup-browser.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "11.1.3"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
   }
 }

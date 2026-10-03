@@ -25,8 +25,11 @@ test("every live type points at a row in pricing-config.js, and only types do", 
   }
   for (const t of ALL_TYPES) assert.ok(rowFor(t.id), t.id);
   assert.equal(rowFor("not-a-type"), null);
-  assert.equal(estimatePrice("vinyl-window", { width: 48, height: 24 }), null, "coming-soon categories have nothing to price");
-  assert.equal(getCategory("vinyl").status, "soon");
+  for (const id of ["vinyl", "construction", "wayfinding", "ada", "led"]) {
+    assert.equal(getCategory(id).status, "ready", id);
+    assert.ok(getCategory(id).types.length >= 4, `${id} has types`);
+  }
+  assert.equal(estimatePrice("vinyl-window-lettering", { width: 48, height: 24 })?.withheld, true);
 });
 
 test("category modules hold no price numbers", () => {

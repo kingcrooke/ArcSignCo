@@ -1,6 +1,6 @@
 # Adding a category to the sign mockup tool
 
-The mockup tool at `/tools/sign-mockup/` shows one tab per category: **Signs**, **Awnings**, and coming-soon tabs for **Vinyl & Stickers**, **Construction Signs**, **Interior Wayfinding**, **ADA & Code Signs** and **LED Displays**.
+The mockup tool at `/tools/sign-mockup/` shows one tab per category: **Signs**, **Awnings**, **Vinyl & Stickers**, **Construction Signs**, **Interior Wayfinding**, **ADA & Code Signs**, and **LED Displays**.
 
 A category is **one JavaScript module** plus **one line in the registry**. The engine (the editor, the 3D renderer, day/night lighting, the PDF, the phone approval page, the approval-link server, pricing and the checks) reads everything it needs from the module. It never names a category, so you do not edit engine files. `npm test` checks this and fails if an engine file mentions a category.
 
