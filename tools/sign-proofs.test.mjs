@@ -96,6 +96,36 @@ test("create rejects bad input", async () => {
   assert.equal((await call(store, post("/api/sign-proofs", {}), {})).status, 415);
 });
 
+test("awning proofs keep only allowed options and are priced per linear foot", async () => {
+  const store = memoryStore();
+  const req = createRequest({
+    ...baseSheet,
+    typeId: "aw-traditional",
+    size: { width: 240, height: 40 },
+    options: { panel: "#1F4F7A", pattern: "stripes", valance: "scalloped", lit: "backlit", cover: "glass", evil: "<script>", projection: 9999 },
+  });
+  const { sheet } = await (await call(store, req, {})).json();
+  assert.equal(sheet.category, "awning");
+  assert.equal(sheet.typeName, "Traditional slope");
+  assert.equal(sheet.options.panel, "#1f4f7a");
+  assert.equal(sheet.options.valance, "scalloped");
+  assert.equal(sheet.options.cover, "vinyl", "backlit awnings are vinyl; glass isn't allowed on this shape");
+  assert.equal(sheet.options.projection, 96, "projection is clamped to the shape's range");
+  assert.equal(sheet.options.evil, undefined);
+  assert.equal(sheet.lighting, "Backlit");
+  assert.equal(sheet.price.basis, "awning");
+  assert.equal(sheet.price.quantity, 20);
+  assert.equal(sheet.price.backlit, true);
+  assert.match(sheet.price.note, /estimate placeholder/i);
+  const plain = await (await call(store, createRequest({ ...baseSheet, typeId: "aw-traditional", size: { width: 240, height: 40 } }), {})).json();
+  assert.equal(plain.sheet.lighting, "Non-lit");
+  assert.ok(plain.sheet.price.low < sheet.price.low);
+  const sign = await (await call(store, createRequest(baseSheet), {})).json();
+  assert.equal(sign.sheet.options, null, "signs carry no options");
+  const legacy = await (await call(store, createRequest({ ...baseSheet, typeId: "awning" }), {})).json();
+  assert.equal(legacy.sheet.typeId, "aw-traditional", "the old single awning id maps onto the library");
+});
+
 test("no size means no price", async () => {
   const store = memoryStore();
   const { sheet } = await (await call(store, createRequest({ ...baseSheet, size: null }), {})).json();

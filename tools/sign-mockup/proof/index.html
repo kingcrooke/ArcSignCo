@@ -72,14 +72,15 @@
 
     <section class="pf-card" aria-labelledby="detailsTitle">
       <h2 id="detailsTitle">The sign</h2>
-      <dl class="pf-facts">
-        <div><dt>Type</dt><dd id="typeName"></dd></div>
+      <dl class="pf-facts" id="facts">
+        <div><dt id="typeLabel">Type</dt><dd id="typeName"></dd></div>
         <div><dt>Lighting</dt><dd id="typeLight"></dd></div>
         <div id="sizeRow"><dt>Approx. size</dt><dd id="sizeText"></dd></div>
       </dl>
       <div class="pf-price" id="priceBox" hidden>
         <span>Rough preliminary range</span>
         <strong id="priceRange"></strong>
+        <b class="pf-perfoot" id="pricePerFoot" hidden></b>
         <small id="priceNote"></small>
       </div>
       <p class="pf-notes" id="notes" hidden></p>

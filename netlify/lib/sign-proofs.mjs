@@ -2,13 +2,14 @@
 // Netlify runtime so tools/sign-proofs.test.mjs can run it against an in-memory store.
 //
 // Storage: one Netlify Blobs store, STORE_NAME, used only by this feature. Keys are namespaced
-//   v1/<deploy context>/<proof id>/sheet.json   project, type, size, price, comments, approval
+//   v1/<deploy context>/<proof id>/sheet.json   project, type, options, size, price, comments, approval
 //   v1/<deploy context>/<proof id>/day.jpg      day mockup
 //   v1/<deploy context>/<proof id>/night.jpg    night mockup
 //   v1/<deploy context>/<proof id>/art.jpg      flat artwork
 // so proofs made on deploy previews never mix with production ones and can be cleared by prefix.
 import { estimatePrice } from "../../tools/sign-mockup/js/pricing.js";
-import { getType, TYPE_IDS } from "../../tools/sign-mockup/js/sign-types.js";
+import { getType, isKnownType, cleanOptions, lightingOf } from "../../tools/sign-mockup/js/catalog.js";
+import { AWNING_LIGHTS } from "../../tools/sign-mockup/js/awning-types.js";
 
 export const STORE_NAME = "arc-sign-mockup-proofs";
 export const KEY_VERSION = "v1";
@@ -92,7 +93,7 @@ async function create(req, { store, ns, now, makeId }) {
   let meta;
   try { meta = JSON.parse(String(form.get("sheet") || "")); } catch { return fail(400, "Missing proof details."); }
   if (!meta || typeof meta !== "object") return fail(400, "Missing proof details.");
-  if (!TYPE_IDS.includes(meta.typeId)) return fail(400, "Unknown sign type.");
+  if (!isKnownType(meta.typeId)) return fail(400, "Unknown sign or awning type.");
 
   const files = {};
   const dims = {};
@@ -119,6 +120,8 @@ async function create(req, { store, ns, now, makeId }) {
     width: clean(meta.sizeText.width, 24), height: clean(meta.sizeText.height, 24), area: clean(meta.sizeText.area, 24),
   } : null;
   const signType = getType(meta.typeId);
+  // Awning options are rebuilt from the allowed values only; signs carry none.
+  const options = cleanOptions(signType, meta.options);
 
   const id = makeId();
   const sheet = {
@@ -131,12 +134,14 @@ async function create(req, { store, ns, now, makeId }) {
     notes: clean(meta.notes, t.notes),
     reference: clean(meta.reference, t.reference),
     typeId: signType.id,
+    category: signType.category,
     typeName: signType.name,
-    lighting: signType.lightingLabel,
+    lighting: options ? AWNING_LIGHTS[lightingOf(signType, options)] : signType.lightingLabel,
+    options,
     size,
     sizeText,
     // Priced on the server from the shared placeholder config, so a link can't carry a made-up number.
-    price: size ? estimatePrice(signType.id, size) : null,
+    price: size ? estimatePrice(signType.id, size, options) : null,
     images: dims,
     comments: [],
     approval: null,

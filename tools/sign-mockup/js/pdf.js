@@ -308,8 +308,9 @@ function approvalStamp(pg, approval, x, y, w) {
  * @param {string} [p.project]
  * @param {string} [p.preparedFor]
  * @param {string} [p.notes]
- * @param {{name: string, group?: string, lighting: string, summary?: string, parts?: string[], night?: string}} [p.type]
- * @param {{range: string, label: string, note: string, basis?: string}} [p.price]
+ * @param {{name: string, group?: string, lighting: string, summary?: string, parts?: string[], night?: string,
+ *          category?: "sign" | "awning", details?: Array<[string, string]>}} [p.type]  details: chosen options
+ * @param {{range: string, label: string, note: string, basis?: string, perFoot?: string}} [p.price]
  * @param {object} [p.night]  night composite, JPEG
  * @param {object} [p.diagram]  construction cross-section, JPEG
  * @param {{image: object, caption?: string}} [p.flat]  undistorted artwork, JPEG
@@ -320,6 +321,8 @@ function approvalStamp(pg, approval, x, y, w) {
 export function buildProofPdf(p) {
   const { logo, mockup, size, reference = "", project = "", preparedFor = "", notes = "", type, price, night, diagram, flat, approval, proofUrl, date = new Date() } = p;
   const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const awning = type?.category === "awning";
+  const noun = awning ? "awning" : "sign";
   const pages = [];
   let deferredNotes = "", linkPlaced = !proofUrl;
 
@@ -328,7 +331,7 @@ export function buildProofPdf(p) {
     const pg = new Page();
     pages.push(pg);
     header(pg, logo);
-    pg.text("Storefront sign mockup", M, 98, { size: 20, bold: true, color: C.navy });
+    pg.text(`Storefront ${noun} mockup`, M, 98, { size: 20, bold: true, color: C.navy });
     pg.text(`Prepared ${dateText}`, W - M, 98, { size: 10, color: C.muted, align: "right" });
     const sub = [project, preparedFor && `Prepared for ${preparedFor}`].filter(Boolean).join("  ·  ");
     if (sub) pg.text(wrapText(sub, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
@@ -341,9 +344,9 @@ export function buildProofPdf(p) {
     const cx = M + boxW + 20, cw = W - M - cx;
     const col = column(pg, cx, cw, top - 2, top + boxH);
     if (approval) col.gap(approvalStamp(pg, approval, cx, top - 4, cw) + 8);
-    col.label("Approx. sign size");
+    col.label(`Approx. ${noun} size`);
     if (size) {
-      for (const [name, value] of [["Width", size.width], ["Height", size.height], ["Area", size.area]]) {
+      for (const [name, value] of [["Width", size.width], [awning ? "Drop" : "Height", size.height], ["Area", size.area]]) {
         col.gap(name === "Area" ? 20 : 22);
         pg.text(value, cx, col.y, { size: name === "Area" ? 14 : 18, bold: true, color: C.navy });
         pg.text(name, W - M, col.y, { size: 9, color: C.muted, align: "right" });
@@ -355,15 +358,18 @@ export function buildProofPdf(p) {
     }
     col.gap(20);
     if (type) {
-      col.label("Sign type");
+      col.label(awning ? "Awning shape" : "Sign type");
       col.rows(type.name, { bold: true, color: C.navy });
       col.rows(type.lighting, { size: 9, color: C.muted });
+      const details = (type.details || []).filter(([k]) => k !== "Lighting");
+      if (details.length) col.rows(details.map(([k, v]) => `${k}: ${v}`).join(" · "), { size: 8, color: C.ink });
       col.gap(16);
     }
     if (price) {
       col.label("Preliminary range");
       col.rows(price.range, { size: 13, bold: true, color: C.navy });
       col.rows(price.label, { size: 8.5, color: C.goldInk, bold: true });
+      if (price.perFoot) col.rows(price.perFoot, { size: 8.5, color: C.navy, bold: true });
       col.rows(price.note, { size: 7.5, color: C.muted });
       col.gap(16);
     }
@@ -439,7 +445,7 @@ export function buildProofPdf(p) {
   pages.forEach((pg, i) => footer(pg, i + 1, pages.length));
 
   return serialize(pages, {
-    Title: `Storefront sign mockup${project ? ` – ${project}` : ""}`,
+    Title: `Storefront ${noun} mockup${project ? ` – ${project}` : ""}`,
     Author: CONTACT.name,
     Subject: DISCLAIMER,
     Creator: `${CONTACT.site} sign mockup tool`,

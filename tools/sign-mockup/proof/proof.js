@@ -1,9 +1,9 @@
-// Phone proof page for a sign mockup: shows the shared day/night views, the construction, the
+// Phone proof page for a sign or awning mockup: shows the shared day/night views, the construction, the
 // preliminary range, and lets the client comment, approve and download the PDF.
 // The proof id travels in the URL fragment, so it never reaches server logs or Referer headers.
 import { diagramSvg } from "../js/diagrams.js";
-import { getType, LIGHTING } from "../js/sign-types.js";
-import { formatRange } from "../js/pricing.js";
+import { getType, describe } from "../js/catalog.js";
+import { formatRange, formatPerFoot } from "../js/pricing.js";
 import { buildSignPdf } from "../js/proof-pdf.js";
 
 const API = "/api/sign-proofs";
@@ -58,9 +58,10 @@ function setMode(next) {
 }
 
 function mailtoHref() {
-  const subject = `Sign proof${sheet.project ? `: ${sheet.project}` : ""}`;
+  const noun = sheet.category === "awning" ? "awning" : "sign";
+  const subject = `${noun === "awning" ? "Awning" : "Sign"} proof${sheet.project ? `: ${sheet.project}` : ""}`;
   const lines = [
-    "Hi Arc,", "", `About this sign proof: ${location.href}`, "",
+    "Hi Arc,", "", `About this ${noun} proof: ${location.href}`, "",
     sheet.approval ? `Approved by ${sheet.approval.name} on ${when(sheet.approval.at)}.` : "", "",
   ];
   return `mailto:arc@arcsignco.com?cc=jc@arcsignco.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
@@ -97,26 +98,41 @@ function renderComments() {
 
 function render() {
   const type = getType(sheet.typeId);
-  document.title = `${sheet.project || "Sign mockup"} for approval | Arc Signage Co`;
-  $("title").textContent = sheet.project || "Storefront sign";
+  const info = describe(type, sheet.options, sheet.size);
+  const awning = info.category === "awning";
+  document.title = `${sheet.project || (awning ? "Awning mockup" : "Sign mockup")} for approval | Arc Signage Co`;
+  $("title").textContent = sheet.project || (awning ? "Storefront awning" : "Storefront sign");
+  $("detailsTitle").textContent = awning ? "The awning" : "The sign";
+  $("typeLabel").textContent = awning ? "Shape" : "Type";
+  $("shot").alt = `The ${awning ? "awning" : "sign"} mockup on the storefront photo`;
+  $("art").alt = awning ? "The awning lettering surface, flat" : "The sign artwork, flat";
   $("subtitle").textContent = [sheet.preparedFor && `Prepared for ${sheet.preparedFor}`, `Shared ${new Date(sheet.createdAt).toLocaleDateString("en-US", { dateStyle: "long" })}`].filter(Boolean).join(" · ");
 
-  $("typeName").textContent = type.name;
-  $("typeLight").textContent = type.lightingLabel;
+  $("typeName").textContent = info.name;
+  $("typeLight").textContent = info.lightingLabel;
   $("sizeRow").hidden = !sheet.sizeText;
-  if (sheet.sizeText) $("sizeText").textContent = `${sheet.sizeText.width} W × ${sheet.sizeText.height} H (${sheet.sizeText.area})`;
+  if (sheet.sizeText) $("sizeText").textContent = `${sheet.sizeText.width} W × ${sheet.sizeText.height} ${awning ? "drop" : "H"} (${sheet.sizeText.area})`;
+  for (const old of $("facts").querySelectorAll(".pf-opt")) old.remove();
+  $("facts").append(...info.details.filter(([k]) => k !== "Lighting").map(([k, v]) => {
+    const row = document.createElement("div");
+    row.className = "pf-opt";
+    row.append(Object.assign(document.createElement("dt"), { textContent: k }), Object.assign(document.createElement("dd"), { textContent: v }));
+    return row;
+  }));
   $("priceBox").hidden = !sheet.price;
   if (sheet.price) {
     $("priceRange").textContent = formatRange(sheet.price);
+    $("pricePerFoot").hidden = !sheet.price.perFoot;
+    $("pricePerFoot").textContent = formatPerFoot(sheet.price);
     $("priceNote").textContent = `${sheet.price.label}. ${sheet.price.note}`;
   }
   $("notes").hidden = !sheet.notes;
   $("notes").textContent = sheet.notes || "";
 
   $("diagram").innerHTML = diagramSvg(type);
-  $("buildSummary").textContent = type.summary;
-  $("buildParts").replaceChildren(...type.parts.map(t => Object.assign(document.createElement("li"), { textContent: t })));
-  $("buildNight").textContent = `At night: ${LIGHTING[type.lighting].night}`;
+  $("buildSummary").textContent = info.summary;
+  $("buildParts").replaceChildren(...info.parts.map(t => Object.assign(document.createElement("li"), { textContent: t })));
+  $("buildNight").textContent = `At night: ${info.night}`;
 
   if (sheet.images.art) {
     const art = $("art");
@@ -202,13 +218,15 @@ $("downloadPdf").addEventListener("click", async () => {
     const [day, night, flat] = await Promise.all(["day", "night", "art"].map(jpegFrom));
     const bytes = await buildSignPdf({
       typeId: sheet.typeId,
+      options: sheet.options,
+      sizeIn: sheet.size,
       day, night, flat,
       size: sheet.sizeText,
       reference: sheet.reference,
       project: sheet.project,
       preparedFor: sheet.preparedFor,
       notes: sheet.notes,
-      price: sheet.price ? { range: formatRange(sheet.price), label: sheet.price.label, note: sheet.price.note } : null,
+      price: sheet.price ? { range: formatRange(sheet.price), label: sheet.price.label, note: sheet.price.note, perFoot: formatPerFoot(sheet.price) } : null,
       approval: sheet.approval ? { name: sheet.approval.name, at: when(sheet.approval.at) } : null,
       proofUrl: location.href,
       date: new Date(sheet.createdAt),

@@ -2,7 +2,7 @@
 // hands them to the DOM-free writer in pdf.js. Used by the editor and by the phone proof page.
 import { buildProofPdf } from "./pdf.js";
 import { diagramSvg, DIAGRAM_SIZE } from "./diagrams.js";
-import { getType, LIGHTING } from "./sign-types.js";
+import { getType, describe } from "./catalog.js";
 import { faceArt } from "./scene.js";
 import { averageColor, makeCanvas } from "./art.js";
 
@@ -84,14 +84,17 @@ const asJpeg = async (img, q) => (img && img.bytes ? img : img ? jpegBytes(img, 
 /**
  * @param {object} p
  * @param {string} p.typeId
+ * @param {object} [p.options]  awning options (cover, pattern, valance, lettering, lighting…)
+ * @param {{width: number, height: number}} [p.sizeIn]  size in inches, for awning projection
  * @param {HTMLCanvasElement | {bytes, width, height}} p.day
  * @param {HTMLCanvasElement | {bytes, width, height}} [p.night]
  * @param {HTMLCanvasElement | {bytes, width, height}} [p.flat]
  * The rest is passed through to buildProofPdf (size, reference, project, preparedFor, notes,
  * price, approval, proofUrl, date).
  */
-export async function buildSignPdf({ typeId, day, night, flat, ...rest }) {
+export async function buildSignPdf({ typeId, options = null, sizeIn = null, day, night, flat, ...rest }) {
   const type = getType(typeId);
+  const info = describe(type, options, sizeIn);
   const [logo, mockup, nightJ, flatJ, diagram] = await Promise.all([
     logoJpeg(), asJpeg(day, 0.88), asJpeg(night, 0.88), asJpeg(flat, 0.9), svgToJpeg(diagramSvg(type)),
   ]);
@@ -103,11 +106,13 @@ export async function buildSignPdf({ typeId, day, night, flat, ...rest }) {
     diagram,
     flat: flatJ ? { image: flatJ } : null,
     type: {
-      name: type.name,
-      lighting: type.lightingLabel,
-      summary: type.summary,
-      parts: type.parts,
-      night: LIGHTING[type.lighting].night,
+      name: info.name,
+      category: info.category,
+      lighting: info.lightingLabel,
+      summary: info.summary,
+      parts: info.parts,
+      night: info.night,
+      details: info.details,
     },
   });
 }
