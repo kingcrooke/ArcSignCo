@@ -3,7 +3,8 @@
 Website for Arc Signage Co (legal name: Arc Signage Co LLC), live at https://arcsignco.com.
 
 Static HTML hosted on Netlify (site name `arcsign`). There is no framework and no build step:
-Netlify publishes the repository root as-is.
+Netlify publishes the repository root as-is. The one server piece is a Netlify Function for the sign
+mockup's approval links (`netlify/functions/`); `package.json` exists only for its dependency.
 
 ## Files
 
@@ -25,6 +26,14 @@ Netlify publishes the repository root as-is.
 | `tools/optimize-portfolio-images.mjs` | Regenerates `assets/portfolio/` from the cleaned portfolio masters (kept outside the repo) |
 | `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
 | `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
+| `tools/sign-mockup/` | Storefront sign and awning mockup tool, served at `/tools/sign-mockup/` (noindex, not in the sitemap or nav) |
+| `tools/sign-mockup/proof/` | Phone proof page for approval links, served at `/tools/sign-mockup/proof/#<id>` (noindex) |
+| `netlify/functions/sign-proofs.mjs`, `netlify/lib/sign-proofs.mjs` | Approval link API (`/api/sign-proofs`), stored in Netlify Blobs |
+| `package.json` | `@netlify/blobs` for the function, and `npm test` for the mockup checks |
+| `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, sign types, awning shapes and meshes, PDF output, and copy guardrails |
+| `tools/sign-mockup-pricing.test.mjs`, `tools/sign-proofs.test.mjs` | Unit tests: placeholder rates and the approval link API |
+| `docs/sign-mockup-approval-links.md` | How approval links work: API, Blobs namespacing, notifications |
+| `docs/awnings-research.md` | Awning shapes, covers, valances and lighting research behind the awning library (internal) |
 
 ## How changes ship
 
@@ -161,6 +170,71 @@ If it can't be backed up, soften or remove it.
   ```
 
 - HTML is always revalidated, so page edits appear as soon as a deploy finishes.
+
+## Sign mockup tool
+
+`/tools/sign-mockup/` lets a visitor upload a storefront photo, set the scale by drawing a line over
+something they measured, pick a sign type or an awning shape, pin it (typed text or uploaded artwork)
+to the wall with four corner handles, and see it built in perspective by day and at night. They can then
+download a three-page PDF or send a phone approval link.
+
+- **Categories**: each tab (Signs, Awnings, …) is one self-contained module in
+  `js/categories/<id>.js` that default-exports `defineCategory({...})`: its types, groups, options,
+  SVG construction cards, render rules, wording and placeholder rates. `js/categories/index.js` is
+  the **only** place tabs are listed. The engine (`app.js`, `scene.js`, `catalog.js`, `pricing.js`,
+  the PDF, proof page and server) never names a category; `js/catalog.js` reads everything through
+  the registry. Adding a tab is one module file plus one registry line:
+  follow `docs/ADDING-A-CATEGORY.md` step by step.
+- **Signs** (`categories/signs.js`, types in `categories/signs/types.js`): 17 types (channel letters,
+  non-lit letters, light boxes, blade signs, panels, LED neon, vinyl and paint). Each has a "how it's
+  built" cross-section drawn in code for this tool (`categories/signs/diagrams.js`): generic, typical
+  construction, not to scale. Signs use the shared construction kinds in `js/kinds.js`.
+- **Awnings** (`categories/awnings.js` plus `categories/awnings/`): 29 shapes (sloped, curved, domes
+  and cones, sign-face and backlit, canopies and marquees, retractable), based on
+  `docs/awnings-research.md`. Options: projection, cover, color, solid or striped fabric, valance
+  style, lettering on the valance or the face, open or closed sides, frame color, and backlit where
+  the shape allows it. The pinned corners are the wall area the awning covers (width and drop); the
+  projection comes out from the wall. `awnings/geometry.js` builds each shape as a 3D mesh,
+  `awnings/build.js` paints and lights it, and `awnings/diagrams.js` draws the side-profile card.
+  Only backlit awnings glow at night. Awnings are priced per linear foot of width.
+- **Coming soon**: Vinyl & Stickers, Construction Signs, Interior Wayfinding, ADA & Code Signs and
+  LED Displays are registered with `comingSoon()`. They show as dashed tabs; picking one opens the
+  library with example cards and a call/email line instead of types.
+- Use generic type and shape names only: no catalog, vendor or awning maker names anywhere on the
+  site, in PDFs or in code comments. `tools/check-sign-mockup.mjs` checks for this.
+- **Rendering**: `js/geometry.js` recovers a camera from the pinned corners, so depth (returns,
+  raceways, cabinets, standoffs, brackets, awning projection) is drawn in perspective.
+  `js/scene.js` asks the type's category to build its parts with the drawing helpers in `js/kit.js`
+  and the light table in `js/lighting.js`; `js/renderer.js` draws them with WebGL, or on the CPU
+  when WebGL is missing. `js/art.js` removes a flat background and makes the masks.
+- **Night view**: same pin, darker photo, light from the sign by lighting type (face-lit, halo,
+  internal, LED neon, gooseneck lamps). Non-lit types never glow but stay readable. This is a
+  simulation to show where the light goes, not a photometric render.
+- **PDF** (`js/pdf.js` writer, `js/proof-pdf.js` browser glue): page 1 is the day mockup with size, type and
+  the price note; page 2 is the night view and the construction drawing; page 3 is the flat,
+  undistorted artwork. Every page has the logo, phone, both emails and "Concept only – not a shop drawing".
+- **Preliminary estimate**: every price number (rows, minimums, illumination adders, extra lines,
+  rounding, the range rule, tax line and valid days) lives in `js/pricing-config.js`; a category
+  module only maps each type id to a row. The numbers are **placeholders** and `PLACEHOLDER = true`,
+  so no dollar amount shows anywhere (tool, proof page, PDF, server): they show "A price is prepared
+  after a site survey" and the full disclaimer. Put Arc's rates in, bump `RATES_VERSION` and set
+  `PLACEHOLDER = false` to show "Preliminary estimate" ranges once the scale is set.
+- **Approval links**: `netlify/functions/sign-proofs.mjs` stores proofs in the Netlify Blobs store
+  `arc-sign-mockup-proofs` under `v1/<deploy context>/<id>/`, so preview test proofs never mix with
+  production ones. Details: `docs/sign-mockup-approval-links.md`.
+- Nothing leaves the browser unless the visitor creates an approval link. Plain ES modules, no build
+  step and no runtime CDN.
+- iPhone HEIC photos: Safari decodes them natively. Other browsers load
+  `tools/sign-mockup/vendor/heic-to-1.6.5.min.js` (libheif, LGPL-3.0, about 0.8 MB gzipped) only when
+  a HEIC file is picked. To upgrade it, add a new versioned file (the vendor folder is cached for a year)
+  and update `HEIC_LIB` in `js/images.js`.
+- `netlify.toml` serves `/tools/sign-mockup/*` before the rule that 404s the rest of `/tools/`.
+  Keep that order. It also 404s `/netlify/*`, `/node_modules/*`, `/package.json` and
+  `/package-lock.json`, because the publish root is the repo root.
+- Sizes are estimates: they assume the reference line is on the same wall as the sign and the photo is
+  close to straight-on. The page and PDF say so; don't remove that wording.
+- After editing the tool, run `npm test` (or `node tools/check-sign-mockup.mjs` and the two
+  `node --test` files on their own; no install needed for those).
 
 ## Analytics
 

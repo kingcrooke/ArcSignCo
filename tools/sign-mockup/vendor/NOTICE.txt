@@ -1,0 +1,4 @@
+heic-to-1.6.5.min.js is heic-to 1.6.5 (https://github.com/hoppergee/heic-to), unmodified,
+copied from the npm package's dist/heic-to.min.js. It bundles libheif and libde265 compiled to
+WebAssembly. Licensed LGPL-3.0: see heic-to-LICENSE.txt. The sign mockup tool loads it only when
+the browser can't decode a HEIC photo itself.

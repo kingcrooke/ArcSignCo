@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Storefront Sign &amp; Awning Mockup Tool | Arc Signage Co</title>
+<meta name="description" content="Upload a storefront photo, set the scale from one known measurement, pick a sign type or awning shape and place it in perspective by day and night, then download a branded concept PDF or send a phone approval link.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b1d33">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/service-page.v4.css">
+<link rel="stylesheet" href="/tools/sign-mockup/sign-mockup.css">
+<link rel="modulepreload" href="/tools/sign-mockup/js/app.js">
+</head>
+<body class="sm-page">
+<a class="skip-link" href="#tool">Skip to the mockup tool</a>
+<header class="topbar">
+  <div class="wrap nav">
+    <a class="brand" href="/" aria-label="Arc Signage Co home">
+      <picture>
+        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-360.v2.webp 360w, /assets/img/logo-lockup-white-560.v2.webp 560w, /assets/img/logo-lockup-white-847.v2.webp 847w" sizes="(max-width: 720px) 168px, 265px">
+        <img class="brand-logo" src="/assets/img/logo-lockup-white-560.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-360.v2.png 360w, /assets/img/logo-lockup-white-560.v2.png 560w, /assets/img/logo-lockup-white-847.v2.png 847w" sizes="(max-width: 720px) 168px, 265px" width="847" height="174" alt="Arc Signage Co">
+      </picture>
+    </a>
+    <nav class="navlinks" aria-label="Primary navigation">
+      <div class="navmenu" id="nav-menu">
+        <a href="/#about">About</a>
+        <div class="nav-services-group">
+          <a href="/#services" class="nav-services-label">Services</a>
+          <div class="nav-services-sub" aria-label="Service pages">
+            <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
+            <a href="/ada-signs/">ADA &amp; tactile signs</a>
+            <a href="/channel-letters/">Channel letters</a>
+            <a href="/construction-signs/">Construction site signs</a>
+          </div>
+        </div>
+        <a href="/#work">Scopes</a>
+        <a href="/portfolio">Founder's prior work</a>
+        <a href="/#selector">Scope Finder</a>
+      </div>
+      <a href="tel:+13474502110" class="btn ghost nav-call" aria-label="Call or text (347) 450-2110"><span class="call-long">Call or text (347) 450-2110</span><span class="call-short">Call or text</span></a>
+      <a href="/#quote" class="btn gold nav-cta">Request a quote</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="page-hero sm-hero">
+    <div class="wrap">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><span aria-current="page">Sign mockup tool</span></li>
+        </ol>
+      </nav>
+      <div>
+        <span class="eyebrow">Planning tool | Storefront signs and awnings</span>
+        <h1>Storefront sign and awning mockup</h1>
+        <p class="answer">Upload a storefront photo, set the scale from one measurement, pick a sign or awning, and place it on the wall. You'll see a rough size, day and night, built the way it would be made. Download a PDF or send a phone approval link. Nothing is uploaded unless you create that link.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sm-tool" id="tool" aria-label="Sign mockup tool">
+    <div class="sm-grid">
+      <ol class="sm-steps" id="steps">
+        <li><button type="button" data-step="photo" aria-current="step"><b>1</b><span>Photo</span></button></li>
+        <li><button type="button" data-step="scale" disabled><b>2</b><span>Scale</span></button></li>
+        <li><button type="button" data-step="sign" disabled><b>3</b><span>Sign</span></button></li>
+        <li><button type="button" data-step="export" disabled><b>4</b><span>Download</span></button></li>
+      </ol>
+
+      <div class="sm-stage" id="stage">
+        <canvas id="view" tabindex="0" aria-label="Mockup canvas. Drag a handle to adjust it; arrow keys nudge the last handle you touched."></canvas>
+        <label class="sm-drop" id="drop" for="photoInput">
+          <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="5" y="10" width="38" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M5 31l10-9 8 7 6-5 14 11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="33" cy="19" r="3.5" fill="currentColor"/></svg>
+          <strong>Choose a storefront photo</strong>
+          <span class="sm-drop-desktop">or drop it here</span>
+          <span>JPEG, PNG, WebP or an iPhone photo</span>
+        </label>
+        <div class="sm-chip" id="chip" hidden></div>
+        <div class="sm-daynight" id="dayNight" role="radiogroup" aria-label="Lighting" hidden>
+          <button type="button" role="radio" aria-checked="true" data-mode="day">Day</button>
+          <button type="button" role="radio" aria-checked="false" data-mode="night">Night</button>
+        </div>
+        <p class="sm-hint" id="hint" hidden></p>
+        <div class="sm-zoom" id="zoomBar" hidden>
+          <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
+          <button type="button" id="zoomFit">Fit</button>
+          <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+        </div>
+        <div class="sm-busy" id="busy" hidden><span class="sm-spinner" aria-hidden="true"></span><span id="busyText">Working…</span></div>
+      </div>
+
+      <div class="sm-panel">
+        <section class="sm-card" data-panel="photo" aria-labelledby="p-photo">
+          <h2 id="p-photo"><b>1</b> Storefront photo</h2>
+          <p>Use a straight-on photo of the facade with the whole sign area in view. Shooting from across the street keeps distortion low.</p>
+          <div class="sm-actions">
+            <label class="btn gold sm-file" for="photoInput">Choose photo</label>
+            <input class="sm-visually-hidden" type="file" id="photoInput" accept="image/*,.heic,.heif">
+            <button type="button" class="btn white" id="trySample">Try the sample photo</button>
+          </div>
+          <p class="sm-meta" id="photoMeta"></p>
+          <div class="sm-actions">
+            <button type="button" class="btn navy" data-goto="scale" disabled id="toScale">Next: set the scale</button>
+          </div>
+        </section>
+
+        <section class="sm-card" data-panel="scale" aria-labelledby="p-scale" hidden>
+          <h2 id="p-scale"><b>2</b> Set the scale</h2>
+          <ol class="sm-howto">
+            <li>On the photo, drag a line across something you've measured on the same wall, close to where the sign goes: a door, a window, or the sign area above the storefront.</li>
+            <li>Enter that real length.</li>
+          </ol>
+          <fieldset class="sm-len">
+            <legend>Real length of the line</legend>
+            <label><input type="number" id="calFt" inputmode="decimal" min="0" step="any" placeholder="0"><span>ft</span></label>
+            <label><input type="number" id="calIn" inputmode="decimal" min="0" step="any" placeholder="0"><span>in</span></label>
+          </fieldset>
+          <label class="sm-field">What did you measure? <small>(optional, shown on the PDF)</small>
+            <input type="text" id="calLabel" maxlength="60" placeholder="Door width">
+          </label>
+          <p class="sm-out" id="scaleOut">Draw the line on the photo.</p>
+          <div class="sm-actions">
+            <button type="button" class="btn white" id="redrawCal">Redraw line</button>
+            <button type="button" class="btn navy" data-goto="sign" id="toSign">Next: place a sign or awning</button>
+          </div>
+        </section>
+
+        <section class="sm-card" data-panel="sign" aria-labelledby="p-sign" hidden>
+          <h2 id="p-sign"><b>3</b> <span>Choose and place the <span id="placeNoun">sign</span></span></h2>
+          <div class="sm-cattabs" id="category" role="radiogroup" aria-label="What to place"></div>
+          <div class="sm-type" id="typeCard">
+            <div class="sm-type-art" id="typeThumb" aria-hidden="true"></div>
+            <div class="sm-type-text">
+              <span class="sm-type-group" id="typeGroup"></span>
+              <strong id="typeName"></strong>
+              <span class="sm-badge" id="typeLight"></span>
+            </div>
+            <button type="button" class="btn white" id="openTypes" aria-haspopup="dialog">Change type</button>
+          </div>
+          <details class="sm-build" id="buildCard">
+            <summary>How it's built</summary>
+            <div class="sm-build-body">
+              <button type="button" class="sm-build-art" id="buildArt" aria-label="Enlarge the drawing"></button>
+              <p class="sm-build-zoom">Tap the drawing to enlarge it.</p>
+              <p id="buildSummary"></p>
+              <ul id="buildParts"></ul>
+              <p class="sm-build-night" id="buildNight"></p>
+              <p class="sm-build-foot">Typical construction and sizes, for discussion. Not to scale, and not a shop drawing. Final sizes and details come from the shop drawing after a site survey.</p>
+            </div>
+          </details>
+          <p class="sm-tip sm-pin" id="pinHint" hidden></p>
+          <div class="sm-seg" role="radiogroup" aria-label="Sign source">
+            <label><input type="radio" name="signMode" value="text" checked><span>Type text</span></label>
+            <label><input type="radio" name="signMode" value="file"><span>Upload artwork</span></label>
+          </div>
+          <div id="signText">
+            <label class="sm-field"><span id="textLabel">Sign text</span>
+              <input type="text" id="signTextInput" maxlength="40" value="Your Business">
+            </label>
+            <div class="sm-row">
+              <label class="sm-field">Style
+                <select id="signFont"></select>
+              </label>
+              <label class="sm-field sm-color">Letters <input type="color" id="signColor" value="#ffffff"></label>
+            </div>
+          </div>
+          <div id="signFile" hidden>
+            <div class="sm-actions">
+              <label class="btn white sm-file" for="signInput">Choose artwork</label>
+              <input class="sm-visually-hidden" type="file" id="signInput" accept="image/*,.svg,.heic,.heif">
+            </div>
+            <p class="sm-meta" id="signMeta">A PNG or SVG with a clear background looks best. On a plain background, the background comes off for letters.</p>
+          </div>
+          <div class="sm-opts" id="typeOptions"></div>
+          <ul class="sm-codes" id="typeWarn" hidden></ul>
+          <p class="sm-notice" id="typeNotice" hidden></p>
+          <p class="sm-tip" id="placeTip">Drag the four corner handles onto the wall so the sign lines up with it. Drag inside the sign to move it. Switch to <strong>Night</strong> on the photo to see it lit.</p>
+          <div class="sm-size" id="sizeOut" aria-live="polite"></div>
+          <fieldset class="sm-len sm-setw" id="setWidth">
+            <legend>Resize to a width</legend>
+            <label><input type="number" id="wFt" inputmode="decimal" min="0" step="any" placeholder="0"><span>ft</span></label>
+            <label><input type="number" id="wIn" inputmode="decimal" min="0" step="any" placeholder="0"><span>in</span></label>
+            <button type="button" class="btn white" id="applyWidth">Apply</button>
+          </fieldset>
+          <fieldset class="sm-len sm-setw" id="setDrop" hidden>
+            <legend>Set the drop (top of the frame to the bottom of the front)</legend>
+            <label><input type="number" id="dFt" inputmode="decimal" min="0" step="any" placeholder="0"><span>ft</span></label>
+            <label><input type="number" id="dIn" inputmode="decimal" min="0" step="any" placeholder="0"><span>in</span></label>
+            <button type="button" class="btn white" id="applyDrop">Apply</button>
+          </fieldset>
+          <div class="sm-checks">
+            <label><input type="checkbox" id="coverOld"> Cover the existing sign</label>
+          </div>
+          <div class="sm-cover" id="coverTools" hidden>
+            <p class="sm-tip">Drag the white dashed box and its square corners over the old sign. It's painted in the color of the wall around it.</p>
+            <div class="sm-actions">
+              <label class="sm-field sm-color">Cover color <input type="color" id="coverColor" value="#808080"></label>
+              <button type="button" class="btn white" id="coverMatch">Match the wall</button>
+            </div>
+          </div>
+          <label class="sm-field">Opacity <output id="opacityOut">100%</output>
+            <input type="range" id="opacity" min="30" max="100" value="100">
+          </label>
+          <div class="sm-actions">
+            <button type="button" class="btn white" id="resetSign">Reset corners</button>
+            <button type="button" class="btn navy" data-goto="export" id="toExport">Next: download</button>
+          </div>
+        </section>
+
+        <section class="sm-card" data-panel="export" aria-labelledby="p-export" hidden>
+          <h2 id="p-export"><b>4</b> Download</h2>
+          <label class="sm-field">Project or business name <small>(optional)</small>
+            <input type="text" id="project" maxlength="80">
+          </label>
+          <label class="sm-field">Prepared for <small>(optional)</small>
+            <input type="text" id="preparedFor" maxlength="80">
+          </label>
+          <label class="sm-field">Notes <small>(optional)</small>
+            <textarea id="notes" rows="3" maxlength="600" placeholder="Colors, materials, lighting, anything to discuss"></textarea>
+          </label>
+          <div class="sm-checks">
+            <label><input type="checkbox" id="showDims" checked> Show dimension lines on the image</label>
+          </div>
+          <div class="sm-price" id="priceOut" aria-live="polite"></div>
+          <div class="sm-actions sm-export">
+            <button type="button" class="btn gold lg" id="downloadPdf">Download PDF</button>
+            <button type="button" class="btn white" id="downloadPng">Download image</button>
+            <button type="button" class="btn white" id="sharePdf" hidden>Share PDF</button>
+          </div>
+          <p class="note">The PDF has the day view, the night view, how it's built, and the flat artwork. Nothing is made until Arc confirms the price.</p>
+          <p class="note sm-disclaimer" id="disclaimerNote">Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed.</p>
+          <div class="sm-approve" id="approveBox">
+            <h3>Phone approval link</h3>
+            <p>Send your client a link to a page made for phones. They can switch day and night, comment, approve the concept as a request for a formal estimate, and download the PDF.</p>
+            <button type="button" class="btn navy" id="createLink">Create approval link</button>
+            <p class="sm-fine">This uploads the day view, the night view, and the artwork to Arc's website so the page can show them. Anyone with the link can see it.</p>
+            <div class="sm-link" id="linkOut" hidden>
+              <label class="sm-field">Approval link
+                <input type="text" id="linkUrl" readonly>
+              </label>
+              <div class="sm-actions">
+                <button type="button" class="btn white" id="copyLink">Copy link</button>
+                <button type="button" class="btn white" id="shareLink" hidden>Share link</button>
+                <a class="btn white" id="openLink" href="#" target="_blank" rel="noopener">Open</a>
+              </div>
+            </div>
+          </div>
+          <p class="note">Want Arc to price it? Email the PDF and project address to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> or <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
+        </section>
+
+        <p class="sm-status" id="status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Tips</span>
+        <h2>Getting a closer estimate</h2>
+      </div>
+      <div class="card-grid">
+        <div class="info-card">
+          <h3>Shoot straight on</h3>
+          <p>Stand square to the facade, as far back as you can, with the whole sign area and the thing you measured in the frame. Angled shots make sizes less reliable.</p>
+        </div>
+        <div class="info-card">
+          <h3>Measure on the same wall</h3>
+          <p>Pick something flat and close to the sign location, like the sign area above the storefront, a door, or a window. A long reference gives a better scale than a short one.</p>
+        </div>
+        <div class="info-card">
+          <h3>Draw the line end to end</h3>
+          <p>Zoom in and drag the ends of the scale line exactly onto the edges you measured. The magnifier helps on a phone.</p>
+        </div>
+        <div class="info-card">
+          <h3>Treat sizes as a starting point</h3>
+          <p>The sizes here are estimates from a photo, not field measurements. Fabrication needs verified measurements and shop drawings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Next step</span>
+        <h2>Want Arc to price it?</h2>
+        <p>Email the PDF and project address to jc@arcsignco.com or arc@arcsignco.com, or call or text (347) 450-2110.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="btn gold lg" href="/#quote">Request a quote</a>
+        <a class="btn ghost lg" href="mailto:arc@arcsignco.com?subject=Sign%20mockup">Email arc@arcsignco.com</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog class="sm-types" id="typeDialog" aria-labelledby="typesTitle">
+  <div class="sm-types-head">
+    <h2 id="typesTitle">Choose a sign type</h2>
+    <button type="button" class="sm-x" id="closeTypes" aria-label="Close">&times;</button>
+  </div>
+  <div class="sm-cats" id="typeCats" role="tablist" aria-label="Category"></div>
+  <p class="sm-types-sub" id="typesSub"></p>
+  <div class="sm-types-body" id="typeList"></div>
+</dialog>
+
+<dialog class="sm-types sm-cardzoom" id="cardZoom" aria-labelledby="cardZoomTitle">
+  <div class="sm-types-head">
+    <h2 id="cardZoomTitle">How it's built</h2>
+    <button type="button" class="sm-x" id="closeCardZoom" aria-label="Close">&times;</button>
+  </div>
+  <div class="sm-cardzoom-art" id="cardZoomArt" tabindex="0" role="region" aria-label="Construction drawing"></div>
+  <p class="sm-cardzoom-foot">Typical construction and sizes, for discussion. Not to scale, and not a shop drawing. Final sizes and details come from the shop drawing after a site survey.</p>
+</dialog>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div>
+      <picture>
+        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-560.v2.webp 560w" sizes="134px">
+        <img src="/assets/img/logo-lockup-white-280.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="134px" width="847" height="174" loading="lazy" decoding="async" alt="Arc Signage Co">
+      </picture>
+      <p>Full-service signage for New York and the tri-state area: design, fabrication, permit coordination, ADA signage, and installation.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/arcsignco" target="_blank" rel="noopener" aria-label="Arc Signage Co on Instagram (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+        <a href="https://www.facebook.com/1201574029704014" target="_blank" rel="noopener" aria-label="Arc Signage Co on Facebook (opens in a new tab)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M13.5 22v-8.2h2.8l.4-3.2h-3.2V8.6c0-.9.3-1.6 1.6-1.6h1.7V4.1c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2h2.8V22h3.4z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="/#about">About</a>
+      <a href="/#services">Services</a>
+      <a href="/#work">Scopes</a>
+      <a href="/portfolio">Founder's prior work</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/#selector">Scope Finder</a>
+      <a href="/#quote">Contact</a>
+      <!-- TODO(GBP): put the confirmed Google Business Profile URL in href (same URL as the homepage footer and JSON-LD "sameAs"). Hidden until href is an https URL. -->
+      <a id="gbpLink" href="" rel="noopener" target="_blank" hidden>Google Business Profile</a>
+    </div>
+  </div>
+  <nav class="wrap footer-services" aria-label="Service pages">
+    <span>Services</span>
+    <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
+    <a href="/ada-signs/">ADA &amp; tactile signs</a>
+    <a href="/channel-letters/">Channel letters</a>
+    <a href="/construction-signs/">Construction site signs</a>
+  </nav>
+  <div class="wrap footer-meta">
+    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
+    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
+  </div>
+</footer>
+
+<noscript><p class="sm-noscript">The mockup tool needs JavaScript. You can still email facade photos to <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p></noscript>
+<script>
+const gbpLink = document.getElementById("gbpLink");
+if (/^https:\/\//.test(gbpLink.getAttribute("href") || "")) gbpLink.hidden = false;
+
+const navToggle = document.getElementById("navToggle");
+const navMenu = document.getElementById("nav-menu");
+function setMenu(open) {
+  navMenu.classList.toggle("open", open);
+  navToggle.setAttribute("aria-expanded", String(open));
+  navToggle.textContent = open ? "Close" : "Menu";
+}
+navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
+navMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape" && navMenu.classList.contains("open")) {
+    setMenu(false);
+    navToggle.focus();
+  }
+});
+</script>
+<script type="module" src="/tools/sign-mockup/js/app.js"></script>
+</body>
+</html>
