@@ -73,6 +73,7 @@ export default defineCategory({
   spillReach: 1.6,
 
   ui: {
+    tabLabel: "Awnings",
     textLabel: "Lettering",
     placeTip: "Drag the four corner handles onto the wall the awning covers. It's drawn coming out from the wall. Drag inside to move it. Switch to <strong>Night</strong> to see it after dark. Only backlit awnings glow.",
     heightLabel: "Drop",

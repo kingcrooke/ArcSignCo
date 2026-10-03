@@ -69,6 +69,11 @@ export function wayfindingDetails(type, opts) {
   return rows;
 }
 
+export function placeWidthIn(type, opts) {
+  const s = parseSize(sanitizeWayfindingOptions(type, opts).size);
+  return s?.width ?? 10;
+}
+
 export function wayfindingOptionFields(type, opts) {
   const o = sanitizeWayfindingOptions(type, opts);
   const fields = [

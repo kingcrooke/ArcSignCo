@@ -31,7 +31,7 @@ export function defaultConstructionOptions(type) {
   return {
     board: type.id === "constr-fence-wrap" ? "banner" : "acm",
     finish: "matte",
-    mount: type.render?.standoffs ? "standoff" : type.id === "constr-fence-wrap" ? "grommet" : "flush",
+    mount: type.render?.standoffs ? "standoff" : (type.id === "constr-fence-wrap" ? "grommet" : "flush"),
     panel: "#f4f6f8",
     size: sizes[0][0],
   };
@@ -64,6 +64,11 @@ export function constructionDetails(type, opts) {
     ["Finish", label(FINISH, o.finish)],
     ["Mounting", label(MOUNT, o.mount)],
   ];
+}
+
+export function placeWidthIn(type, opts) {
+  const s = parseSize(sanitizeConstructionOptions(type, opts).size);
+  return s?.width ?? 96;
 }
 
 export function constructionOptionFields(type, opts) {

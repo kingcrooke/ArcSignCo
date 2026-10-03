@@ -217,7 +217,10 @@ Defaults come from `noun`. Override any of these in `ui: { … }`:
 
 | `ui` key | Default | Example |
 | --- | --- | --- |
+| `tabLabel` | `label` | `"Vinyl"` (short pill in the step 3 tab bar; full `label` stays in aria-label) |
 | `textLabel` | `"<Noun> text"` | `"Board text"` |
+| `plaque` | `false` | `true` for interior plaques: first placement uses `placeWidthIn`, not the storefront sign band |
+| `placeWidthIn` | `null` | `(type, opts) => 9` inches wide when scale is set |
 | `placeTip` | Drag-the-corners tip using the noun | HTML is allowed (`<strong>`). |
 | `heightLabel` | `"Height"` | Awnings use `"Drop"`. |
 | `heightShort` | `"H"` | Shown in the size chip, e.g. "12' W × 3' H". |

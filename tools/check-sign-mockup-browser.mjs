@@ -63,6 +63,8 @@ async function run() {
 
     await page.evaluate(() => window.signMockup.setStep("sign"));
     await page.waitForTimeout(300);
+    await page.locator(".sm-cattabs-wrap").screenshot({ path: path.join(SCREENSHOTS, "tab-bar-desktop-1280.png") });
+    ok("desktop category tab bar screenshot");
 
     for (const catId of NEW_CATS) {
       const cat = CATEGORIES.find(c => c.id === catId);
@@ -106,7 +108,7 @@ async function run() {
     await page.waitForTimeout(400);
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
-        await page.locator("#category").screenshot({ path: path.join(SCREENSHOTS, "tab-bar-phone-390.png") });
+        await page.locator(".sm-cattabs-wrap").screenshot({ path: path.join(SCREENSHOTS, "tab-bar-phone-390.png") });
         break;
       } catch (e) {
         if (attempt === 2) throw e;

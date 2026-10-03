@@ -98,6 +98,7 @@ export default defineCategory({
     return type.aspect || kindAspect(type, art, opts);
   },
   ui: {
+    tabLabel: "Construction",
     textLabel: "Board text",
     placeTip: "Drag the four corner handles onto the fence, hoarding or wall. Drag inside to move the board. Switch to <strong>Night</strong> to see ambient light on the face.",
     flatLabel: "The construction sign artwork, flat",

@@ -2,7 +2,7 @@
 import { defineCategory } from "./define.js";
 import { wayfindingDiagram } from "./wayfinding/diagrams.js";
 import {
-  defaultWayfindingOptions, sanitizeWayfindingOptions, wayfindingOptionFields, wayfindingDetails, parseSize,
+  defaultWayfindingOptions, sanitizeWayfindingOptions, wayfindingOptionFields, wayfindingDetails, parseSize, placeWidthIn,
 } from "./wayfinding/options.js";
 import { kindAspect } from "../kinds.js";
 
@@ -97,6 +97,9 @@ export default defineCategory({
     return type.aspect || kindAspect(type, art, opts);
   },
   ui: {
+    tabLabel: "Wayfinding",
+    plaque: true,
+    placeWidthIn,
     textLabel: "Sign text",
     placeTip: "Drag the four corner handles onto the wall in the corridor or lobby. Drag inside to move the sign. Switch to <strong>Night</strong> for ambient light on the face.",
     flatLabel: "The wayfinding sign artwork, flat",

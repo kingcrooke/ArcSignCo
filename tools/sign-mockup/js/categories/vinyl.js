@@ -2,7 +2,7 @@
 import { defineCategory } from "./define.js";
 import { vinylDiagram } from "./vinyl/diagrams.js";
 import {
-  defaultVinylOptions, sanitizeVinylOptions, vinylOptionFields, vinylDetails, parseSize,
+  defaultVinylOptions, sanitizeVinylOptions, vinylOptionFields, vinylDetails, parseSize, placeWidthIn,
 } from "./vinyl/options.js";
 import { kindFaceArt, kindAspect } from "../kinds.js";
 
@@ -103,6 +103,7 @@ export default defineCategory({
     return type.aspect || kindAspect(type, art, opts);
   },
   ui: {
+    tabLabel: "Vinyl",
     textLabel: "Graphic text",
     placeTip: "Drag the four corner handles onto the glass or wall. Drag inside to move it. Vinyl has no depth; night view shows ambient light only.",
     flatLabel: "The vinyl artwork, flat",

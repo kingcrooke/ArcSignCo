@@ -781,10 +781,35 @@ function setDropScale(k) {
   state.quad = [a, b, down(b, c), down(a, d)];
 }
 
+function scaledWidthPx(widthIn) {
+  if (!widthIn || !state.calInches || !state.cal) return null;
+  const calPx = dist(state.cal.a, state.cal.b);
+  if (calPx < 1) return null;
+  return widthIn / (state.calInches / calPx);
+}
+
+function defaultPlaceWidthPx(photo) {
+  const cat = currentCat();
+  const placeIn = typeof cat.ui.placeWidthIn === "function"
+    ? cat.ui.placeWidthIn(currentType(), optionsFor())
+    : (cat.ui.plaque ? 10 : null);
+  const scaled = placeIn ? scaledWidthPx(placeIn) : null;
+  if (scaled) return scaled;
+  if (cat.ui.plaque) return photo.width * 0.06;
+  if (state.home?.w) return state.home.w;
+  return photo.width * 0.45;
+}
+
 function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
-  let w = state.home?.w ?? photo.width * 0.45;
-  let c = state.home ? { x: state.home.x, y: state.home.y } : { x: photo.width / 2, y: photo.height * 0.36 };
+  const cat = currentCat();
+  let w = defaultPlaceWidthPx(photo);
+  let c = (!cat.ui.plaque && state.home)
+    ? { x: state.home.x, y: state.home.y }
+    : { x: photo.width / 2, y: photo.height * 0.36 };
+  if (cat.ui.plaque && state.cal) {
+    c = { x: (state.cal.a.x + state.cal.b.x) / 2 + photo.width * 0.08, y: state.cal.a.y - photo.height * 0.06 };
+  }
   if (keepCenter && state.quad) {
     c = centroid(state.quad);
     w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
@@ -948,8 +973,13 @@ function setType(id) {
     // The artwork may have changed while the other category was shown.
     if (state.art && stash.aspect) fitQuadToArt(stash.aspect);
   } else if (state.art && !(from === to && categoryOf(next).ui.hangs && state.quadEdited)) {
-    // Switching between hanging shapes keeps a wall area the user has pinned.
-    fitQuadToArt(prev);
+    const nextCat = categoryOf(next);
+    if (nextCat.ui.plaque && !state.quadEdited && from !== to) {
+      placeSign(aspectFor(next, state.art, optionsFor(next)));
+    } else {
+      // Switching between hanging shapes keeps a wall area the user has pinned.
+      fitQuadToArt(prev);
+    }
   }
   renderTypeCard();
   updateUI();
@@ -972,7 +1002,10 @@ function buildCategoryBars() {
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.cat = cat.id;
-    b.textContent = cat.label;
+    const tab = cat.ui.tabLabel || cat.label;
+    b.textContent = tab;
+    b.setAttribute("aria-label", cat.label);
+    if (!soon) b.title = cat.label;
     if (soon && !bar.querySelector(".sm-cattabs-label")) {
       bar.append(Object.assign(document.createElement("span"), { className: "sm-cattabs-label", textContent: "Coming soon" }));
     }
@@ -989,7 +1022,8 @@ function buildCategoryBars() {
     t.setAttribute("aria-controls", "typeList");
     t.dataset.cat = cat.id;
     t.innerHTML = `<span></span>${soon ? SOON : ""}`;
-    t.firstChild.textContent = cat.label;
+    t.firstChild.textContent = cat.ui.tabLabel || cat.label;
+    t.setAttribute("aria-label", cat.label);
     if (soon) t.classList.add("is-soon");
     tabs.append(t);
   }

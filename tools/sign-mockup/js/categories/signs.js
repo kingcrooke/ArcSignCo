@@ -16,6 +16,7 @@ export default defineCategory({
   types: SIGN_TYPES,
   defaultType: DEFAULT_TYPE,
   diagram: diagramSvg,
+  ui: { tabLabel: "Signs" },
 
   // Each type's row in js/pricing-config.js, where every price number lives.
   pricing: {

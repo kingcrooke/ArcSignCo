@@ -2,7 +2,7 @@
 import { defineCategory } from "./define.js";
 import { adaDiagram } from "./ada/diagrams.js";
 import {
-  defaultAdaOptions, sanitizeAdaOptions, adaOptionFields, adaDetails, parseSize,
+  defaultAdaOptions, sanitizeAdaOptions, adaOptionFields, adaDetails, parseSize, placeWidthIn,
 } from "./ada/options.js";
 import { buildKind, kindFaceArt, kindAspect } from "../kinds.js";
 import { tactileFace } from "./ada/face.js";
@@ -93,6 +93,9 @@ export default defineCategory({
   },
   spillReach: 0.9,
   ui: {
+    tabLabel: "ADA",
+    plaque: true,
+    placeWidthIn,
     textLabel: "Sign text",
     placeTip: "Drag the four corner handles beside the door or on the wall. Tactile and Braille are shown for layout. Switch to <strong>Night</strong> to see lit exit faces.",
     flatLabel: "The sign artwork, flat",

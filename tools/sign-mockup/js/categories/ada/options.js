@@ -71,6 +71,11 @@ export function adaDetails(type, opts) {
   return rows;
 }
 
+export function placeWidthIn(type, opts) {
+  const s = parseSize(sanitizeAdaOptions(type, opts).size);
+  return s?.width ?? 9;
+}
+
 export function adaOptionFields(type, opts) {
   const o = sanitizeAdaOptions(type, opts);
   const fields = [

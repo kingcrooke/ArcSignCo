@@ -95,6 +95,7 @@ export default defineCategory({
   },
   spillReach: 1.4,
   ui: {
+    tabLabel: "LED",
     textLabel: "Display text",
     placeTip: "Drag the four corner handles onto the wall or window area. Switch to <strong>Night</strong> to see the LED glow and spill on the facade.",
     flatLabel: "The LED display artwork, flat",

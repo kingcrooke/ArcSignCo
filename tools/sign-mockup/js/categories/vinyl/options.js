@@ -72,6 +72,11 @@ export function vinylDetails(type, opts) {
   return rows;
 }
 
+export function placeWidthIn(type, opts) {
+  const s = parseSize(sanitizeVinylOptions(type, opts).size);
+  return s?.width ?? 48;
+}
+
 export function vinylOptionFields(type, opts) {
   const o = sanitizeVinylOptions(type, opts);
   const fields = [

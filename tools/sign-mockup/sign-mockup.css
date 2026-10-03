@@ -264,15 +264,29 @@
 .sm-seg input:checked + span { background: var(--white); color: var(--navy); box-shadow: 0 2px 8px rgba(11,29,51,.12); }
 .sm-seg input:focus-visible + span { outline: 3px solid var(--gold); }
 
-/* Category bar in step 3: the live categories as a segmented control, coming-soon ones as chips. */
-.sm-cattabs { display: flex; flex-wrap: wrap; gap: 6px; }
+/* Category bar in step 3: short labels on scrollable pills (full name in aria-label / title). */
+.sm-cattabs-wrap { position: relative; margin-bottom: 4px; }
+.sm-cattabs-wrap::after {
+  content: "";
+  position: absolute; right: 0; top: 1.4em; bottom: 0; width: 28px;
+  background: linear-gradient(90deg, transparent, var(--white));
+  pointer-events: none;
+}
+.sm-cattabs-hint {
+  margin: 0 0 6px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .04em;
+}
+.sm-cattabs {
+  display: flex; flex-wrap: nowrap; gap: 8px; overflow-x: auto; scroll-snap-type: x proximity;
+  padding-bottom: 6px; -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+}
 .sm-cattabs [role="radio"] {
-  flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: 10px;
-  background: var(--paper); color: var(--muted); font: inherit; font-size: 14px; font-weight: 900; cursor: pointer;
+  flex: 0 0 auto; min-height: 44px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px;
+  background: var(--paper); color: var(--muted); font: inherit; font-size: 13px; font-weight: 900; cursor: pointer;
+  white-space: nowrap; scroll-snap-align: start;
 }
 .sm-cattabs [role="radio"][aria-checked="true"] { background: var(--white); border-color: var(--navy); color: var(--navy); box-shadow: inset 0 0 0 1px var(--navy), 0 2px 8px rgba(11,29,51,.1); }
 .sm-cattabs [role="radio"]:hover { color: var(--navy); }
-.sm-cattabs .sm-cattabs-label { flex: 1 0 100%; margin-top: 4px; color: var(--muted); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.sm-cattabs .sm-cattabs-label { flex: 0 0 auto; margin: 0 4px 0 0; color: var(--muted); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
 .sm-cattabs .is-soon {
   display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 6px 0 11px; border: 1px dashed #c3ccd8; border-radius: 999px;
   background: transparent; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
