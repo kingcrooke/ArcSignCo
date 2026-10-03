@@ -231,6 +231,61 @@ export function awningFlat(type, art, opts, W, D) {
   return paintSurface(key, mesh.tex[key], o, letterSource(art), { scale: 1 });
 }
 
+// ---------- backlit light ----------
+
+const RAFTER_IN = 30; // frame rafters behind a backlit cover, typical spacing
+const lightMaps = new Map();
+/**
+ * How light from tubes inside the frame reaches a backlit cover w × h inches: brightest in the
+ * middle of each bay, falling off toward the edges, with soft dark bands where rafters block it.
+ */
+function backlitMap(w, h, rafters = true) {
+  const key = `${Math.round(w / 4)}x${Math.round(h / 4)}${rafters ? "r" : ""}`;
+  if (lightMaps.has(key)) return lightMaps.get(key);
+  const c = makeCanvas(160, 64);
+  const g = c.getContext("2d");
+  const img = g.createImageData(c.width, c.height), d = img.data;
+  const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+  const ribs = [];
+  const n = Math.max(1, Math.round(w / RAFTER_IN));
+  if (rafters && w > RAFTER_IN * 1.5) for (let i = 0; i <= n; i++) ribs.push((i / n) * w);
+  for (let y = 0; y < c.height; y++) {
+    const v = (y + 0.5) / c.height;
+    const ev = 0.68 + 0.32 * smooth(0, 0.3, v) * smooth(0, 0.3, 1 - v);
+    for (let x = 0; x < c.width; x++) {
+      const u = (x + 0.5) / c.width, xi = u * w;
+      const eu = 0.6 + 0.4 * smooth(0, 0.16, u) * smooth(0, 0.16, 1 - u);
+      let rib = 1;
+      for (const r of ribs) rib = Math.min(rib, 1 - 0.3 * Math.exp(-(((xi - r) / 1.6) ** 2)));
+      const k = Math.round(255 * eu * ev * rib), o = (y * c.width + x) * 4;
+      d[o] = d[o + 1] = d[o + 2] = k; d[o + 3] = 255;
+    }
+  }
+  g.putImageData(img, 0, 0);
+  if (lightMaps.size > 16) lightMaps.delete(lightMaps.keys().next().value);
+  lightMaps.set(key, c);
+  return c;
+}
+
+let washTex = null;
+/** Light thrown down from the bottom of a backlit awning: strong at the edge, fading with distance. */
+function WASH() {
+  if (washTex) return washTex;
+  washTex = makeCanvas(64, 64);
+  const g = washTex.getContext("2d");
+  const img = g.createImageData(64, 64), d = img.data;
+  for (let y = 0; y < 64; y++) {
+    const v = y / 63, fall = (1 - v) ** 2.2;
+    for (let x = 0; x < 64; x++) {
+      const u = (x + 0.5) / 64, t = Math.min(1, Math.min(u, 1 - u) / 0.24), side = t * t * (3 - 2 * t);
+      const k = Math.round(255 * fall * side), o = (y * 64 + x) * 4;
+      d[o] = d[o + 1] = d[o + 2] = k; d[o + 3] = 255;
+    }
+  }
+  g.putImageData(img, 0, 0);
+  return washTex;
+}
+
 // ---------- building the quads ----------
 
 /**
@@ -242,6 +297,8 @@ export function buildAwning(type, env, { layer, emit, spill, amb, softRect }) {
   const o = sanitizeAwningOptions(type, env.opts);
   const mesh = awningMesh(type, o, W, D);
   const lit = night && o.lit === "backlit";
+  // A marquee lights only its fascia, from LED modules behind the face: no rafters, no light thrown down.
+  const fascia = type.id === "aw-marquee";
   const glow = new Set(lit ? mesh.glow : []);
   const eye = cam?.eye || [W / 2, D * 0.5, Math.max(W, D) * 6];
   const depth = cam?.eye ? p => cam.depth(p[0], p[1], p[2]) : p => Math.hypot(p[0] - eye[0], p[1] - eye[1], p[2] - eye[2]);
@@ -287,9 +344,10 @@ export function buildAwning(type, env, { layer, emit, spill, amb, softRect }) {
     const sun = Math.max(0, dot(front ? f.n : f.n.map(v => -v), LIGHT));
     const isGlass = f.mat === "glass";
     if (glow.has(f.mat)) {
-      layer(tex, f.pts, { uv, tint, mul: front ? 1.02 : 0.92 });
-      layer(tex, f.pts, { uv, tint, mul: front ? 0.16 : 0.1, add: true });
-      emit.push({ tex, pts: f.pts, uv, tint, mul: front ? 0.8 : 0.5 });
+      const light = spec ? backlitMap(spec.w, spec.h, !fascia) : backlitMap(W, D, !fascia);
+      layer(tex, f.pts, { uv, tint, light, mul: front ? 1.08 : 0.92 });
+      layer(tex, f.pts, { uv, tint, light, mul: front ? 0.16 : 0.1, add: true });
+      emit.push({ tex, pts: f.pts, uv, tint, light, mul: front ? 0.8 : 0.5 });
     } else {
       const v = isGlass ? 0.92 + 0.12 * sun : front ? 0.6 + 0.48 * sun : 0.34 + 0.14 * sun;
       layer(tex, f.pts, { uv, tint, mul: amb(v) });
@@ -298,7 +356,13 @@ export function buildAwning(type, env, { layer, emit, spill, amb, softRect }) {
 
   if (lit) {
     const P = mesh.P, sr = softRect(W, P, Math.max(4, P * 0.4));
-    spill.push({ tex: sr.canvas, pts: [[-sr.padIn, D - sr.padIn, 0], [W + sr.padIn, D - sr.padIn, 0], [W + sr.padIn, D + P * 1.1 + sr.padIn, 0], [-sr.padIn, D + P * 1.1 + sr.padIn, 0]], tint: mix(panel, [1, 1, 1], 0.55), mul: 1.1, add: true });
+    const tone = mix(panel, [1, 1, 1], 0.55);
+    spill.push({ tex: sr.canvas, pts: [[-sr.padIn, D - sr.padIn, 0], [W + sr.padIn, D - sr.padIn, 0], [W + sr.padIn, D + P * 0.6 + sr.padIn, 0], [-sr.padIn, D + P * 0.6 + sr.padIn, 0]], tint: tone, mul: 0.7, add: true });
+    // Downward wash on the storefront below, reaching farther under a deeper awning.
+    if (!fascia) {
+      const reach = Math.min(96, Math.max(36, P * 1.8));
+      spill.push({ tex: WASH(), pts: [[-8, D - 2, 0], [W + 8, D - 2, 0], [W + 8, D + reach, 0], [-8, D + reach, 0]], tint: tone, mul: 1.15, add: true });
+    }
   }
   return mesh;
 }

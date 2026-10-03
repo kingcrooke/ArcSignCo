@@ -13,7 +13,7 @@
 //   kit.box / extrude / shadow / boxShadow / caps / cornerSpots   common construction helpers
 import { makeCanvas, maskOf, blur, hexToRgb, WHITE, DISK } from "./art.js";
 
-export const NIGHT_PHOTO = [0.2, 0.23, 0.31];
+export const NIGHT_PHOTO = [0.24, 0.26, 0.34];
 export const NIGHT_UNLIT = [0.44, 0.47, 0.56]; // non-lit products: still readable by street light
 export const NIGHT_DARK = [0.16, 0.18, 0.24]; // unlit parts of lit products
 export const WARM = "#fff1d6";
@@ -114,7 +114,7 @@ export function makeKit(env) {
     if (front) layer(T, rect(x0, y0, x1, y1, z1), { tint: color, mul: amb(0.9) });
   }
   /** Stack of mask slices from zb to zf: the returns of an extruded shape. */
-  function extrude(mask, zb, zf, color, { mulBack = 0.5, mulFront = 0.8, emitAt = 0 } = {}) {
+  function extrude(mask, zb, zf, color, { mulBack = 0.32, mulFront = 0.62, emitAt = 0 } = {}) {
     const n = env.sliceCount(zb, zf);
     for (let i = 0; i <= n; i++) {
       const t = n ? i / n : 1;
@@ -123,20 +123,29 @@ export function makeKit(env) {
       layer(mask, rect(0, 0, W, H, z), { tint: color, mul: emitAt ? [emitAt * m, emitAt * m, emitAt * m] : amb(m) });
     }
   }
-  /** Daytime shadow of a mask standing `height` inches off the wall. */
+  /**
+   * Daytime shadow of a mask standing `height` inches off the wall: a tight, dark contact shadow
+   * close under the edges plus a soft cast shadow thrown down by a high sun.
+   */
   function shadow(mask, z0, height, { strength = 0.5, x0 = 0, y0 = 0, x1 = W, y1 = H } = {}) {
     if (night || height <= 0) return;
     const mk = mask.width / (x1 - x0);
-    const b = blur(mask, Math.max(0.6, (0.3 + 0.22 * height) * mk));
-    const pad = b.pad / mk, dy = 0.2 + 0.45 * height, dx = 0.1 * height;
-    layer(b.canvas, rect(x0 - pad + dx, y0 - pad + dy, x1 + pad + dx, y1 + pad + dy, z0), { tint: [0, 0, 0], alpha: Math.min(0.62, strength + 0.03 * height) });
+    const soft = blur(mask, Math.max(0.6, (0.35 + 0.25 * height) * mk));
+    let pad = soft.pad / mk, dy = 0.3 + 0.6 * height, dx = 0.12 * height;
+    layer(soft.canvas, rect(x0 - pad + dx, y0 - pad + dy, x1 + pad + dx, y1 + pad + dy, z0), { tint: [0, 0, 0], alpha: Math.min(0.5, strength * 0.8 + 0.02 * height) });
+    const contact = blur(mask, Math.max(0.5, (0.12 + 0.05 * height) * mk));
+    pad = contact.pad / mk; dy = 0.12 + 0.12 * height; dx = 0.03 * height;
+    layer(contact.canvas, rect(x0 - pad + dx, y0 - pad + dy, x1 + pad + dx, y1 + pad + dy, z0), { tint: [0, 0, 0], alpha: Math.min(0.55, strength * 0.75) });
   }
   /** Daytime shadow of a rectangle standing `height` inches off the wall. */
   function boxShadow(x0, y0, x1, y1, height, strength = 0.45) {
     if (night || height <= 0) return;
-    const s = softRect(x1 - x0, y1 - y0, 0.35 + 0.3 * height);
-    const dy = 0.25 + 0.45 * height, dx = 0.1 * height;
-    layer(s.canvas, rect(x0 - s.padIn + dx, y0 - s.padIn + dy, x1 + s.padIn + dx, y1 + s.padIn + dy, 0), { tint: [0, 0, 0], alpha: strength });
+    const s = softRect(x1 - x0, y1 - y0, 0.4 + 0.32 * height);
+    let dy = 0.3 + 0.6 * height, dx = 0.12 * height;
+    layer(s.canvas, rect(x0 - s.padIn + dx, y0 - s.padIn + dy, x1 + s.padIn + dx, y1 + s.padIn + dy, 0), { tint: [0, 0, 0], alpha: strength * 0.85 });
+    const c = softRect(x1 - x0, y1 - y0, 0.25 + 0.06 * height);
+    dy = 0.12 + 0.12 * height; dx = 0.03 * height;
+    layer(c.canvas, rect(x0 - c.padIn + dx, y0 - c.padIn + dy, x1 + c.padIn + dx, y1 + c.padIn + dy, 0), { tint: [0, 0, 0], alpha: strength * 0.7 });
   }
   /** Round standoff caps at the given [x, y] points. */
   function caps(points, z, rIn = 0.5) {

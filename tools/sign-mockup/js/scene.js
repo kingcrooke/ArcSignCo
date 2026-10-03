@@ -43,6 +43,57 @@ function sampleWall(photo, quad) {
   return [0, 1, 2].map(k => mid.reduce((s, p) => s + p[k], 0) / mid.length / 255);
 }
 
+const EYE_LINE = 0.62;
+
+let windowsCache = { key: "", canvas: null };
+/**
+ * Night: the brightest areas of the storefront level (below the sign) read as warm interior light
+ * through the glass. Brightness is judged on a coarse grid against the rest of that level, so thin
+ * trim stays dark; upper floors, saturated surfaces like brick, and blue-ish areas are left out.
+ */
+function litWindows(photo, quad) {
+  const top = quad ? Math.max(...quad.map(p => p.y)) / photo.height : 0.35;
+  const key = `${photo.width}x${photo.height}:${Math.round(top * 40)}`;
+  if (windowsCache.key === key && windowsCache.photo === photo) return windowsCache.canvas;
+  const gw = 96, gh = Math.max(1, Math.round((gw * photo.height) / photo.width));
+  const grid = makeCanvas(gw, gh);
+  const gg = grid.getContext("2d", { willReadFrequently: true });
+  gg.imageSmoothingQuality = "high";
+  gg.drawImage(photo, 0, 0, gw, gh);
+  const img = gg.getImageData(0, 0, gw, gh), d = img.data;
+  const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 -2 * t); };
+  const y0 = Math.min(gh - 1, Math.round(top * gh));
+  const lums = [];
+  for (let y = y0; y < gh; y++) for (let x = 0; x < gw; x++) { const i = (y * gw + x) * 4; lums.push((0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2]) / 255); }
+  lums.sort((a, b) => a - b);
+  const ref = lums[Math.floor(lums.length * 0.55)] ?? 0.5;
+  for (let y = 0; y < gh; y++) {
+    const rowK = smooth(y0 - 0.5, y0 + 2.5, y);
+    for (let x = 0; x < gw; x++) {
+      const i = (y * gw + x) * 4;
+      const r = d[i] / 255, g = d[i + 1] / 255, b = d[i + 2] / 255;
+      const lum = 0.3 * r + 0.59 * g + 0.11 * b, mx = Math.max(r, g, b), sat = mx ? (mx - Math.min(r, g, b)) / mx : 0;
+      const w = rowK * smooth(ref - 0.22, ref + 0.02, lum) * (1 - smooth(0.45, 0.6, sat)) * (1 - smooth(0.02, 0.1, b - r)) * 0.75;
+      d[i] = 255 * w; d[i + 1] = 192 * w; d[i + 2] = 120 * w; d[i + 3] = 255;
+    }
+  }
+  gg.putImageData(img, 0, 0);
+  // Soften cell edges so the light follows areas, not grid squares.
+  const soft = makeCanvas(gw / 3, gh / 3);
+  soft.getContext("2d").drawImage(grid, 0, 0, soft.width, soft.height);
+  gg.globalAlpha = 0.6;
+  gg.drawImage(soft, 0, 0, gw, gh);
+  gg.globalAlpha = 1;
+  const ow = Math.min(1600, photo.width), out = makeCanvas(ow, ow * (photo.height / photo.width));
+  const og = out.getContext("2d");
+  og.imageSmoothingQuality = "high";
+  og.drawImage(photo, 0, 0, out.width, out.height);
+  og.globalCompositeOperation = "multiply";
+  og.drawImage(grid, 0, 0, out.width, out.height);
+  windowsCache = { key, photo, canvas: out };
+  return out;
+}
+
 function half(src) {
   const c = makeCanvas(Math.max(1, src.width / 2), Math.max(1, src.height / 2));
   const g = c.getContext("2d");
@@ -85,13 +136,17 @@ export function createScene() {
       ctx.globalCompositeOperation = "multiply";
       ctx.fillStyle = rgbCss(NIGHT_PHOTO);
       ctx.fillRect(clip.x, clip.y, clip.w, clip.h);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.drawImage(litWindows(photo, o.quad), photoBox.x, photoBox.y, photoBox.w, photoBox.h);
       ctx.globalCompositeOperation = "source-over";
     }
     if (!o.quad || !o.art || !o.type || !clip.w) { ctx.restore(); return; }
 
     const { quad, type } = o;
     const W = o.sizeIn.width, H = o.sizeIn.height;
-    const lens = { cx: photo.width / 2, cy: photo.height / 2, f: 0.85 * Math.max(photo.width, photo.height) };
+    // Storefront photos are taken from the sidewalk, so the eye line sits below the middle of the
+    // frame: signs above it show their undersides and returns, the way they do from the street.
+    const lens = { cx: photo.width / 2, cy: photo.height * EYE_LINE, f: 0.85 * Math.max(photo.width, photo.height) };
     const cam = makeCamera(quad, o.sizeIn, lens);
     const flat = squareToQuad(quad);
     const T = p => p && { x: view.x + p.x * view.s, y: view.y + p.y * view.s };

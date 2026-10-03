@@ -145,7 +145,8 @@ export function buildKind(type, env, kit) {
     } else {
       const sidesLit = !!r.sidesLit && lit;
       extrude(outer, zb, zf, retColor, sidesLit ? { mulBack: 0.45, mulFront: 0.85, emitAt: 1 } : {});
-      if (trimPx) layer(outer, rect(0, 0, W, H, zf), { tint: hexToRgb(opts.trim || r.trimColor || "#202226"), mul: amb(0.95) });
+      // The trim cap catches more light than the returns, so its rim reads as a separate edge.
+      if (trimPx) layer(outer, rect(0, 0, W, H, zf), { tint: mix(hexToRgb(opts.trim || r.trimColor || "#202226"), [1, 1, 1], 0.14), mul: amb(1.05) });
       const faceMul = lit && faceLit ? 1 : lit && halo ? [0.13, 0.13, 0.15] : amb(1);
       layer(L, rect(0, 0, W, H, zf + 0.02), { mul: faceMul });
       if (lit && faceLit) {
@@ -154,23 +155,26 @@ export function buildKind(type, env, kit) {
         if (sidesLit) emit.push({ tex: outer, pts: rect(0, 0, W, H, zf - r.depth / 2), tint: artColor, mul: 0.6 });
       }
     }
+    // Halo light only lands on the wall: it is spill, never emit, so no bloom spreads over the
+    // faces and the letters read as dark silhouettes against the wash.
     if (lit && halo) {
-      const near = blur(outer, Math.max(0.8, (0.35 * gap + 0.25) * mk));
-      const far = blur(outer, Math.max(1.5, (1.4 * gap + 1.2) * mk));
-      for (const [b, m] of [[near, 1.5], [far, 1.6]]) {
+      const near = blur(outer, Math.max(0.8, (0.3 * gap + 0.2) * mk));
+      const far = blur(outer, Math.max(1.5, (1.3 * gap + 1.1) * mk));
+      for (const [b, m] of [[near, 2.1], [far, 1.9]]) {
         const p = b.pad / mk;
         spill.push({ tex: b.canvas, pts: rect(-p, -p, W + p, H + p, 0), tint: light, mul: m, add: true });
       }
-      const p = far.pad / mk;
-      emit.push({ tex: far.canvas, pts: rect(-p, -p, W + p, H + p, 0), tint: light, mul: 0.35 });
     }
   } else if (kind === "cabinet") {
     const zb = r.gap || 0, zf = zb + r.depth, fr = r.frame || 0;
     const frameC = hexToRgb(opts.frame || r.frameColor || "#24262b");
     const lay = art.layout(opts.panel || "#0b1d33");
     boxShadow(0, 0, W, H, zf, 0.45);
-    box(0, W, 0, H, zb, zf, frameC, { top: 0.95, side: 0.66, bottom: 0.42 });
-    if (fr > 0) layer(WHITE(), rect(0, 0, W, H, zf), { tint: frameC, mul: amb(0.92) });
+    box(0, W, 0, H, zb, zf, frameC, { top: 0.95, side: 0.6, bottom: 0.36 });
+    if (fr > 0) {
+      // Retainer: the frame lip that holds the face, lit from above, with a shadow line where it meets the face.
+      layer(WHITE(), rect(0, 0, W, H, zf), { tint: frameC, mul: amb(0.92) });
+    }
     if (r.face === "routed") {
       const plate = opts.panel ? hexToRgb(opts.panel) : lay.bg;
       layer(WHITE(), rect(fr, fr, W - fr, H - fr, zf + 0.01), { tint: plate, mul: amb(0.95) });
@@ -191,6 +195,11 @@ export function buildKind(type, env, kit) {
         layer(lay.panel, face, { mul: 0.14, add: true });
         emit.push({ tex: lay.panel, pts: face, mul: 0.85 });
       }
+    }
+    if (fr > 0) {
+      const lip = mulc(mix(frameC, [1, 1, 1], 0.3), night ? NIGHT_DARK : [1, 1, 1]);
+      path({ pts: [[0.15, 0.15, zf + 0.03], [W - 0.15, 0.15, zf + 0.03]], width: 0.3, stroke: lip, alpha: 0.9 });
+      path({ pts: [[fr, fr, zf + 0.03], [W - fr, fr, zf + 0.03], [W - fr, H - fr, zf + 0.03], [fr, H - fr, zf + 0.03]], close: true, width: 0.25, stroke: [0, 0, 0], alpha: 0.4 });
     }
   } else if (kind === "blade") {
     const t = r.thick, side = opts.side === "right" ? 1 : -1;
