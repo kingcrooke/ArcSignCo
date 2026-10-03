@@ -27,7 +27,7 @@ const FORBIDDEN_ADDRESS_KEYS = ["streetAddress", "addressLocality", "postalCode"
 const BANNED = [
   /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i, /dob[- ]approved/i,
   /we (pull|file) (dob|the) permits?/i, /\bour license\b/i, /\bwe are (a )?licensed/i, /stamped by arc/i,
-  /opening ?hours/i, /\breviews?\b.*\bstars?\b/i, /years in business/i, /83 Post Ave/i,
+  /opening ?hours/i, /(?:\b\d+(\.\d+)?\s*-?\s*stars?\b|\b(five|5)\s+star(s)?\b).{0,60}\breviews?\b|\breviews?\b.{0,60}(?:\b\d+(\.\d+)?\s*-?\s*stars?\b|\b(five|5)\s+star(s)?\b)/i, /years in business/i, /83 Post Ave/i,
   /Apt\s*A/i, /one-person/i, /\bone person\b/i,
   /Verify before publishing/i, /Pending Sales Ops and copy editor review/i,
 ];
