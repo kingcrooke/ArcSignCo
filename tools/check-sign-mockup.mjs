@@ -1,5 +1,5 @@
-// Checks the sign mockup tool: geometry math, sign types and diagrams, PDF structure and content,
-// approval-link plumbing and copy guardrails.
+// Checks the sign mockup tool: geometry math, the category registry (every tab's types, cards,
+// options and rates), PDF structure and content, approval-link plumbing and copy guardrails.
 //
 //   node tools/check-sign-mockup.mjs
 //
@@ -11,13 +11,14 @@ import {
   squareToQuad, invert3, apply3, quadSizeInches, formatFeetInches, formatArea, rectQuad, scaleQuad, pointInQuad, toInches,
 } from "./sign-mockup/js/geometry.js";
 import { buildProofPdf, fromWinAnsi, toWinAnsi, wrapText, textWidth, CONTACT, DISCLAIMER } from "./sign-mockup/js/pdf.js";
-import { SIGN_TYPES, LIGHTING, GROUPS } from "./sign-mockup/js/sign-types.js";
-import { diagramSvg, hasDiagram } from "./sign-mockup/js/diagrams.js";
+import { SIGN_TYPES, LIGHTING, GROUPS } from "./sign-mockup/js/categories/signs/types.js";
+import { hasDiagram } from "./sign-mockup/js/categories/signs/diagrams.js";
 import {
   AWNING_TYPES, AWNING_GROUPS, COVERS, VALANCES, LETTERING, defaultAwningOptions, sanitizeAwningOptions, awningOptionKeys, projectionFor,
-} from "./sign-mockup/js/awning-types.js";
-import { awningMesh } from "./sign-mockup/js/awning-geometry.js";
-import { ALL_TYPES, CATEGORIES, getType, describe, litWith } from "./sign-mockup/js/catalog.js";
+} from "./sign-mockup/js/categories/awnings/types.js";
+import { awningMesh } from "./sign-mockup/js/categories/awnings/geometry.js";
+import { ALL_TYPES, CATEGORIES, READY, getType, describe, litWith, diagramSvg, optionFields, defaultOptions } from "./sign-mockup/js/catalog.js";
+import { validateCategory } from "./sign-mockup/js/categories/define.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const toolDir = path.join(root, "tools/sign-mockup");
@@ -53,6 +54,35 @@ check(fromWinAnsi(toWinAnsi(DISCLAIMER)) === DISCLAIMER, "disclaimer survives Wi
 check(near(textWidth("Hello", false, 10), 22.78, 0.01), "Helvetica widths");
 check(wrapText("one two three four five", false, 10, 40).length > 1, "wrapText wraps long text");
 
+// Category registry: every tab is a valid module; the placeholders place nothing.
+const ids = CATEGORIES.map(c => c.id);
+const PLANNED = ["vinyl", "construction", "wayfinding", "ada", "led"];
+check(ids[0] === "sign" && ids[1] === "awning" && PLANNED.every(id => ids.includes(id)), `registry has Signs, Awnings and the planned tabs (${ids.join(", ")})`);
+check(["sign", "awning"].every(id => READY.some(c => c.id === id)), "Signs and Awnings are live");
+check(new Set(ids).size === ids.length, "category ids are unique");
+for (const c of CATEGORIES) {
+  const problems = validateCategory(c);
+  check(!problems.length, `${c.id}: valid ${c.status} category${problems.length ? ` (${problems.join("; ")})` : ""}`);
+}
+const labelOf = id => CATEGORIES.find(c => c.id === id).label;
+check(PLANNED.map(labelOf).join("|") === "Vinyl & Stickers|Construction Signs|Interior Wayfinding|ADA & Code Signs|LED Displays", "planned tab labels");
+// While a planned tab is still a placeholder, it lists what it will cover.
+const examplesOf = id => { const c = CATEGORIES.find(x => x.id === id); return c.status === "soon" ? c.examples.map(e => e.name).join("|") : null; };
+const ex = { construction: examplesOf("construction"), vinyl: examplesOf("vinyl") };
+if (ex.construction !== null) check(/Site boards/.test(ex.construction) && /Project information panels/.test(ex.construction) && /parapet/i.test(ex.construction) && /Safety notices/.test(ex.construction), "construction placeholder lists site boards, project panels, shed parapet panels and safety notices");
+if (ex.vinyl !== null) check(/Window/.test(ex.vinyl) && /Glass/.test(ex.vinyl) && /Wall/.test(ex.vinyl) && /Floor/.test(ex.vinyl), "vinyl placeholder covers window, glass, wall and floor decals");
+for (const t of ALL_TYPES) {
+  const fields = optionFields(t, defaultOptions(t), { width: 144, height: 40 });
+  if (!fields.every(f => f.kind !== "select" || (f.choices.length && f.choices.some(([v]) => v === f.value)))) check(false, `${t.id}: every select field offers its current value`);
+}
+check(true, "option fields resolve for every type");
+// The engine never names a category: adding a tab only adds a module and a registry line.
+for (const f of ["js/app.js", "js/scene.js", "js/catalog.js", "js/pricing.js", "js/pdf.js", "js/proof-pdf.js", "proof/proof.js", "../../netlify/lib/sign-proofs.mjs"]) {
+  const body = fs.readFileSync(path.join(toolDir, f), "utf8");
+  const hits = [/isAwning/, /["']awning["']/, /["']aw-/, /categories\/(signs|awnings)/, /AWNING_/].filter(re => re.test(body)).map(String);
+  check(!hits.length, `${path.basename(f)}: category-agnostic${hits.length ? ` (${hits.join(", ")})` : ""}`);
+}
+
 // Sign types and their construction drawings
 check(SIGN_TYPES.length >= 12 && SIGN_TYPES.length <= 18, `${SIGN_TYPES.length} sign types (12–18)`);
 check(new Set(SIGN_TYPES.map(t => t.id)).size === SIGN_TYPES.length, "sign type ids are unique");
@@ -67,8 +97,8 @@ for (const t of SIGN_TYPES) {
 
 // Awning shapes: library, options, 3D mesh and side-profile cards
 check(AWNING_TYPES.length >= 20, `${AWNING_TYPES.length} awning shapes`);
-check(new Set(ALL_TYPES.map(t => t.id)).size === ALL_TYPES.length, "sign and awning ids are unique together");
-check(CATEGORIES.map(c => c.id).join() === "sign,awning" && CATEGORIES.every(c => getType(c.def).id === c.def), "two categories with valid defaults");
+check(new Set(ALL_TYPES.map(t => t.id)).size === ALL_TYPES.length, "type ids are unique across categories");
+check(READY.every(c => getType(c.defaultType).id === c.defaultType), "every live category has a valid default type");
 check(getType("awning").id === "aw-traditional", "legacy awning id maps to the traditional slope");
 check(AWNING_TYPES.every(t => AWNING_GROUPS.some(g => g.id === t.group) && t.summary && t.parts.length >= 3), "every awning shape has a group, summary and parts");
 check(AWNING_TYPES.every(t => t.covers.every(c => COVERS[c]) && t.valances.every(v => VALANCES[v]) && t.letter.every(l => LETTERING[l])), "awning covers, valances and lettering spots are known");
@@ -86,7 +116,7 @@ for (const t of AWNING_TYPES) {
   }
   const svg = diagramSvg(t);
   check(ok, `${t.id}: 3D mesh is finite for default and extreme options`);
-  check(hasDiagram(t) && /^<svg[^>]+viewBox="0 0 320 200"/.test(svg) && svg.endsWith("</svg>") && /aria-label="[^"]+how it.s built"/.test(svg), `${t.id}: side-profile card`);
+  check(/^<svg[^>]+viewBox="0 0 320 200"/.test(svg) && svg.endsWith("</svg>") && /aria-label="[^"]+how it.s built"/.test(svg), `${t.id}: side-profile card`);
 }
 const trad = getType("aw-traditional");
 const dirty = sanitizeAwningOptions(trad, { panel: "red", cover: "glass", valance: "<script>", projection: 500, lit: "backlit", extra: "x" });
@@ -153,10 +183,9 @@ for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Tradi
 }
 
 // Copy guardrails across the tool's own files (vendored libraries excluded).
-const own = [
-  "index.html", "sign-mockup.css", ...fs.readdirSync(path.join(toolDir, "js")).map(f => `js/${f}`),
-  ...fs.readdirSync(path.join(toolDir, "proof")).map(f => `proof/${f}`),
-];
+const walk = dir => fs.readdirSync(path.join(toolDir, dir), { withFileTypes: true })
+  .flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`) : [`${dir}/${d.name}`]));
+const own = ["index.html", "sign-mockup.css", ...walk("js"), ...walk("proof")];
 const BANNED = [
   /\bApt\b/i, /83 Post Ave/i, /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i,
   /dob[- ]approved/i, /\bour license/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
@@ -172,7 +201,7 @@ for (const f of own) {
   const hits = [...BANNED, ...VENDORS].filter(re => re.test(body)).map(String);
   check(!hits.length, `${f}: no banned wording or vendor names${hits.length ? ` (${hits.join(", ")})` : ""}`);
 }
-for (const f of ["netlify/functions/sign-proofs.mjs", "netlify/lib/sign-proofs.mjs", "README.md", "docs/sign-mockup-approval-links.md"]) {
+for (const f of ["netlify/functions/sign-proofs.mjs", "netlify/lib/sign-proofs.mjs", "README.md", "docs/sign-mockup-approval-links.md", "docs/ADDING-A-CATEGORY.md"]) {
   const p = path.join(root, f);
   const body = fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
   const hits = VENDORS.filter(re => re.test(body)).map(String);
@@ -187,8 +216,16 @@ check(proofHtml.includes("Concept only – not a shop drawing"), "proof page car
 check(/<form name="sign-proof-activity"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(proofHtml), "proof activity form is registered with Netlify Forms (honeypot on)");
 const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
 check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
-const priceFiles = own.filter(f => f !== "js/pricing-config.js" && f.endsWith(".js"));
-check(priceFiles.every(f => !/\b(low|high):\s*\d{2,}/.test(fs.readFileSync(path.join(toolDir, f), "utf8"))), "no rate numbers outside pricing-config.js");
+check(READY.every(c => c.pricing?.placeholder === true), "every live category's rates are marked placeholder");
+// Rates live only in a category module's pricing block (js/categories/<id>.js), never in the engine.
+const rateHome = f => /^js\/categories\/[a-z-]+\.js$/.test(f);
+const priceFiles = own.filter(f => f.endsWith(".js") && !rateHome(f));
+const strayRates = priceFiles.filter(f => /\b(low|high):\s*\d{2,}/.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
+check(!strayRates.length, `no rate numbers outside the category modules${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
+for (const f of own.filter(rateHome)) {
+  const body = fs.readFileSync(path.join(toolDir, f), "utf8");
+  if (/\b(low|high):\s*\d{2,}/.test(body)) check(/PLACEHOLDER/.test(body) && /placeholder: true/.test(body), `${f}: rates are labeled as placeholders`);
+}
 check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
 check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
 check(!fs.readFileSync(path.join(root, "sitemap.xml"), "utf8").includes("/tools/"), "sitemap does not list /tools/");
@@ -204,6 +241,26 @@ check(/getStore\(\{ name: STORE_NAME/.test(fn) && /"\/api\/sign-proofs"/.test(fn
 check(JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).dependencies["@netlify/blobs"], "package.json declares @netlify/blobs");
 check(!fs.existsSync(path.join(toolDir, "js/warp.js")), "old flat warp renderer removed");
 check(fs.existsSync(path.join(toolDir, "vendor/heic-to-1.6.5.min.js")) && fs.existsSync(path.join(toolDir, "vendor/heic-to-LICENSE.txt")), "HEIC decoder and its license are vendored");
+
+// The worked example in docs/ADDING-A-CATEGORY.md must stay a valid module: load it from the
+// categories folder (so its imports resolve) and validate it, then remove the temporary copy.
+const guide = fs.existsSync(path.join(root, "docs/ADDING-A-CATEGORY.md")) ? fs.readFileSync(path.join(root, "docs/ADDING-A-CATEGORY.md"), "utf8") : "";
+const example = (guide.match(/<!-- example:start -->\s*```js\n([\s\S]*?)```\s*<!-- example:end -->/) || [])[1];
+check(!!example, "ADDING-A-CATEGORY.md has the example module between the example markers");
+if (example) {
+  const tmp = path.join(toolDir, "js/categories", `.doc-example-${process.pid}.mjs`);
+  fs.writeFileSync(tmp, example);
+  try {
+    const mod = (await import(tmp)).default;
+    const problems = validateCategory(mod);
+    check(!problems.length, `the guide's example module is a valid category${problems.length ? ` (${problems.join("; ")})` : ""}`);
+    check(mod.types.every(t => mod.optionFields(t, mod.defaultOptions(t), { width: 96, height: 24 }).length >= 0) && mod.types.every(t => /^<svg/.test(mod.diagram(t))), "the guide's example draws its cards and option fields");
+  } catch (e) {
+    check(false, `the guide's example module loads (${e.message})`);
+  } finally {
+    fs.rmSync(tmp, { force: true });
+  }
+}
 
 console.log(failures ? `\n${failures} check(s) failed` : "\nAll checks passed");
 process.exit(failures ? 1 : 0);

@@ -1,11 +1,18 @@
 // Unit tests for the preliminary price range.  node --test tools/
 import test from "node:test";
 import assert from "node:assert/strict";
-import { RATES, PLACEHOLDER, RATES_LABEL, RATES_NOTE, AWNING_RATES, BACKLIT_ADDER, AWNING_NOTE } from "./sign-mockup/js/pricing-config.js";
-import { estimatePrice, formatRange, formatPerFoot } from "./sign-mockup/js/pricing.js";
-import { SIGN_TYPES } from "./sign-mockup/js/sign-types.js";
-import { AWNING_TYPES } from "./sign-mockup/js/awning-types.js";
-import { ALL_TYPES } from "./sign-mockup/js/catalog.js";
+import { PLACEHOLDER, RATES_LABEL, RATES_NOTE } from "./sign-mockup/js/pricing-config.js";
+import { estimatePrice, formatRange, formatPerFoot, rateFor } from "./sign-mockup/js/pricing.js";
+import { ALL_TYPES, READY, getCategory } from "./sign-mockup/js/catalog.js";
+import signs from "./sign-mockup/js/categories/signs.js";
+import awnings from "./sign-mockup/js/categories/awnings.js";
+
+const RATES = signs.pricing.rates;
+const AWNING_RATES = awnings.pricing.rates;
+const BACKLIT_ADDER = awnings.pricing.adder;
+const AWNING_NOTE = awnings.pricing.note;
+const SIGN_TYPES = signs.types;
+const AWNING_TYPES = awnings.types;
 
 const SIZES = [
   { width: 12, height: 6 },
@@ -23,8 +30,17 @@ test("every awning shape has a per-linear-foot rate and nothing else does", () =
   assert.deepEqual(Object.keys(AWNING_RATES).sort(), AWNING_TYPES.map(t => t.id).sort());
 });
 
+test("every live category prices every one of its types, and only those", () => {
+  for (const cat of READY) assert.deepEqual(Object.keys(cat.pricing.rates).sort(), cat.types.map(t => t.id).sort(), cat.id);
+  for (const t of ALL_TYPES) assert.ok(rateFor(t.id), t.id);
+  assert.equal(rateFor("not-a-type"), null);
+  assert.equal(estimatePrice("vinyl-window", { width: 48, height: 24 }), null, "coming-soon categories have nothing to price");
+  assert.equal(getCategory("vinyl").status, "soon");
+});
+
 test("rates are labeled as placeholders", () => {
   assert.equal(PLACEHOLDER, true);
+  for (const cat of READY) assert.equal(cat.pricing.placeholder, true, cat.id);
   assert.match(RATES_LABEL, /placeholder/i);
   assert.match(RATES_NOTE, /not a quote/i);
   assert.match(AWNING_NOTE, /estimate placeholder/i);
