@@ -258,6 +258,23 @@
 .sm-seg input:checked + span { background: var(--white); color: var(--navy); box-shadow: 0 2px 8px rgba(11,29,51,.12); }
 .sm-seg input:focus-visible + span { outline: 3px solid var(--gold); }
 
+/* Category bar in step 3: the live categories as a segmented control, coming-soon ones as chips. */
+.sm-cattabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.sm-cattabs [role="radio"] {
+  flex: 1 1 0; min-width: 0; min-height: 44px; padding: 0 10px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--paper); color: var(--muted); font: inherit; font-size: 14px; font-weight: 900; cursor: pointer;
+}
+.sm-cattabs [role="radio"][aria-checked="true"] { background: var(--white); border-color: var(--navy); color: var(--navy); box-shadow: inset 0 0 0 1px var(--navy), 0 2px 8px rgba(11,29,51,.1); }
+.sm-cattabs [role="radio"]:hover { color: var(--navy); }
+.sm-cattabs .sm-cattabs-label { flex: 1 0 100%; margin-top: 4px; color: var(--muted); font-size: 11px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.sm-cattabs .is-soon {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 6px 0 11px; border: 1px dashed #c3ccd8; border-radius: 999px;
+  background: transparent; color: var(--muted); font: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer;
+}
+.sm-cattabs .is-soon:hover { border-color: var(--gold); color: var(--navy); }
+.sm-cattabs button:focus-visible, .sm-cats button:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
+.sm-soon { display: inline-block; padding: 2px 7px; border-radius: 999px; background: #eef1f5; color: #5d6b80; font-size: 10px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; line-height: 1.4; }
+
 .sm-out { padding: 10px 12px; border-radius: 8px; background: var(--paper); color: var(--ink) !important; font-weight: 700; }
 .sm-out.warn { background: #fff8e8; border: 1px solid rgba(212,168,67,.55); }
 .sm-out.good { background: #edf7f0; border: 1px solid #b9dcc4; }
@@ -325,10 +342,12 @@
 .sm-pin { border-left: 4px solid var(--gold); }
 .sm-notice { padding: 10px 12px; border-radius: 8px; background: #fff8e8; border: 1px solid rgba(212,168,67,.55); color: var(--ink) !important; font-size: 13px !important; }
 
-.sm-opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+/* Type options: a label over a full-width control, two to a row. */
+.sm-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; align-items: start; }
 .sm-opts:empty { display: none; }
-.sm-opts .sm-color { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
-.sm-opts .sm-color input { margin: 0; }
+.sm-opts > div { min-width: 0; }
+.sm-opts .sm-field { min-width: 0; }
+.sm-opts .sm-color input { display: block; width: 100%; height: 44px; margin-top: 6px; }
 .sm-opts .sm-field select { margin-top: 6px; }
 .sm-opts .sm-wide { grid-column: 1 / -1; }
 .sm-auto { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 800; }
@@ -362,10 +381,12 @@
 .sm-types-head h2 { font-size: 19px; color: var(--white); }
 .sm-x { width: 44px; height: 44px; border: 0; border-radius: 8px; background: rgba(255,255,255,.1); color: var(--white); font-size: 26px; line-height: 1; cursor: pointer; }
 .sm-x:hover { background: rgba(255,255,255,.2); }
-.sm-cats { display: flex; gap: 6px; padding: 12px 18px 0; }
-.sm-cats button { min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: 14px; font-weight: 900; cursor: pointer; }
-.sm-cats button[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: var(--gold-2); }
-.sm-cats button:focus-visible { outline: 3px solid var(--gold); outline-offset: 1px; }
+.sm-cats { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 18px 0; }
+.sm-cats button { display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); color: var(--muted); font: inherit; font-size: 14px; font-weight: 900; cursor: pointer; white-space: nowrap; }
+.sm-cats button:hover { color: var(--navy); border-color: #c3ccd8; }
+.sm-cats button.is-soon { padding-right: 8px; border-style: dashed; background: var(--white); }
+.sm-cats button[aria-selected="true"] { background: var(--navy); border: 1px solid var(--navy); color: var(--gold-2); }
+.sm-cats button[aria-selected="true"] .sm-soon { background: rgba(255,255,255,.14); color: var(--white); }
 .sm-types-sub { padding: 12px 18px 0; color: var(--muted); font-size: 13px; }
 .sm-types-body { padding: 6px 18px 18px; }
 .sm-types-body h3 { margin: 16px 0 8px; color: var(--navy); font-size: 13px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
@@ -388,6 +409,16 @@
 .sm-tcard .sm-tc-art { border-radius: 5px; overflow: hidden; border: 1px solid var(--line); line-height: 0; }
 .sm-tcard strong { color: var(--navy); font-size: 14px; line-height: 1.25; }
 .sm-tcard span { color: var(--muted); font-size: 12px; }
+
+/* Coming-soon category: what it will cover, and how to get one now. */
+.sm-soon-lead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 14px 0 10px; color: var(--ink); font-size: 14px; font-weight: 700; }
+.sm-soon-lead .sm-soon { background: var(--gold); color: var(--navy); }
+.sm-tcard.is-soon { cursor: default; border-style: dashed; background: #fbfcfd; }
+.sm-tcard.is-soon:hover { border-color: var(--line); box-shadow: none; }
+.sm-tcard.is-soon .sm-tc-art { display: grid; place-items: center; aspect-ratio: 16 / 10; background: repeating-linear-gradient(135deg, #f3f5f8 0 10px, #eef1f5 10px 20px); color: #9aa5b5; }
+.sm-tcard.is-soon .sm-tc-art svg { width: 56px; height: 56px; }
+.sm-soon-cta { margin-top: 14px; padding: 12px 14px; border-radius: 8px; background: var(--paper); border: 1px solid var(--line); color: var(--ink); font-size: 14px; font-weight: 700; }
+.sm-soon-cta a { color: var(--navy); font-weight: 900; white-space: nowrap; }
 
 .sm-price { padding: 12px; border-radius: 8px; background: var(--navy); color: var(--white); display: grid; gap: 4px; }
 .sm-price:empty { display: none; }
@@ -441,6 +472,9 @@
   .sm-hint { bottom: 62px; font-size: 12px; }
   .sm-daynight button { min-width: 54px; padding: 0 10px; }
   .sm-types { width: 100%; max-width: 100%; height: 100%; max-height: 100%; border-radius: 0; }
+  .sm-cats { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; scrollbar-width: none; }
+  .sm-cats::-webkit-scrollbar { display: none; }
+  .sm-cats button { scroll-snap-align: start; }
   .sm-tgrid { grid-template-columns: 1fr 1fr; gap: 8px; }
   .sm-tcard strong { font-size: 13px; }
   footer { padding-bottom: 34px; }

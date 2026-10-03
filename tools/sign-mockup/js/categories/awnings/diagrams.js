@@ -1,8 +1,8 @@
 // "How it's built" cards for the awning shapes: a side profile (or front view where the shape
-// only reads from the front) showing the frame and the cover. Drawn into the Svg helper from
-// diagrams.js, which passes itself in, so there is no import cycle. Not to scale.
-import { roofProfile } from "./awning-geometry.js";
-import { projectionFor, defaultAwningOptions, COVERS } from "./awning-types.js";
+// only reads from the front) showing the frame and the cover. Drawn with the diagram kit. Not to scale.
+import { PALETTE, card } from "../../diagram-kit.js";
+import { roofProfile } from "./geometry.js";
+import { projectionFor, defaultAwningOptions, COVERS } from "./types.js";
 
 const PALE = { fabric: "#cfdcea", vinyl: "#d8e2ee", metal: "#c3c9d1", glass: "#e4f1fb", poly: "#eef2f4" };
 const FRAME_LABEL = {
@@ -252,7 +252,7 @@ function retractCard(s, type, C) {
   return "Side view";
 }
 
-export function drawAwning(s, type, C) {
+export function drawAwning(s, type, C = PALETTE) {
   switch (type.id) {
     case "aw-gable": return gableCard(s, type, C);
     case "aw-halfbarrel": case "aw-barrel": case "aw-entrance": return archCard(s, type, C);
@@ -262,3 +262,6 @@ export function drawAwning(s, type, C) {
     default: return profileCard(s, type, C);
   }
 }
+
+/** Returns the side-profile card SVG markup for an awning shape. */
+export const awningDiagram = type => card(type, s => drawAwning(s, type));

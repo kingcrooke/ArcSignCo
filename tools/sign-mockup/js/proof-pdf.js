@@ -1,9 +1,8 @@
 // Browser side of the proof PDF: turns canvases, the construction SVG and the logo into JPEGs and
 // hands them to the DOM-free writer in pdf.js. Used by the editor and by the phone proof page.
 import { buildProofPdf } from "./pdf.js";
-import { diagramSvg, DIAGRAM_SIZE } from "./diagrams.js";
-import { getType, describe } from "./catalog.js";
-import { faceArt } from "./scene.js";
+import { DIAGRAM_SIZE } from "./diagram-kit.js";
+import { getType, describe, diagramSvg, faceArt } from "./catalog.js";
 import { averageColor, makeCanvas } from "./art.js";
 
 export const LOGO_URL = "/assets/img/logo-lockup-white-847.v2.png";
@@ -84,8 +83,8 @@ const asJpeg = async (img, q) => (img && img.bytes ? img : img ? jpegBytes(img, 
 /**
  * @param {object} p
  * @param {string} p.typeId
- * @param {object} [p.options]  awning options (cover, pattern, valance, lettering, lighting…)
- * @param {{width: number, height: number}} [p.sizeIn]  size in inches, for awning projection
+ * @param {object} [p.options]  the type's cleaned options (catalog cleanOptions), if its category keeps any
+ * @param {{width: number, height: number}} [p.sizeIn]  size in inches (some categories use it, e.g. awning projection)
  * @param {HTMLCanvasElement | {bytes, width, height}} p.day
  * @param {HTMLCanvasElement | {bytes, width, height}} [p.night]
  * @param {HTMLCanvasElement | {bytes, width, height}} [p.flat]
@@ -108,6 +107,9 @@ export async function buildSignPdf({ typeId, options = null, sizeIn = null, day,
     type: {
       name: info.name,
       category: info.category,
+      noun: info.noun,
+      typeLabel: info.typeLabel,
+      heightLabel: info.heightLabel,
       lighting: info.lightingLabel,
       summary: info.summary,
       parts: info.parts,

@@ -3,12 +3,11 @@ import {
 } from "./geometry.js";
 import { loadImageFile, renderTextSign, FONTS } from "./images.js";
 import { makeArtwork } from "./art.js";
-import { createScene, aspectFor, defaultOptions } from "./scene.js";
-import { ALL_TYPES, GROUPS, CATEGORIES, getType, litWith, describe, isAwning, cleanOptions } from "./catalog.js";
+import { createScene } from "./scene.js";
 import {
-  sanitizeAwningOptions, awningOptionKeys, projectionFor, COVERS, PATTERNS, VALANCES, LETTERING, SIDES, AWNING_LIGHTS,
-} from "./awning-types.js";
-import { diagramSvg } from "./diagrams.js";
+  CATEGORIES, READY, DEFAULT_TYPE, getType, getCategory, categoryOf, litWith, describe, cleanOptions,
+  defaultOptions, optionFields, aspectFor, diagramSvg,
+} from "./catalog.js";
 import { estimatePrice, formatRange, formatPerFoot } from "./pricing.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
@@ -37,9 +36,9 @@ const state = {
   opacity: 1,
   selected: null,     // { kind: "cal" | "quad", index }
   touchedSign: false,
-  typeId: CATEGORIES[0].def,
+  typeId: DEFAULT_TYPE,
   typeOptions: {},    // per type id, so switching back keeps choices
-  lastType: Object.fromEntries(CATEGORIES.map(c => [c.id, c.def])),
+  lastType: Object.fromEntries(READY.map(c => [c.id, c.defaultType])),
   placed: {},         // per category: { quad, edited } while the other category is shown
   mode: "day",
   proof: null,        // { id, url } once an approval link exists for the current design
@@ -79,10 +78,13 @@ function sizeInfo() {
   return { ...s, w: formatFeetInches(s.width), h: formatFeetInches(s.height), area: formatArea(s.width, s.height) };
 }
 const currentType = () => getType(state.typeId);
-const categoryOf = type => (isAwning(type) ? "awning" : "sign");
-const noun = () => categoryOf(currentType());
+const currentCat = () => categoryOf(currentType());
 function optionsFor(type = currentType()) {
   return (state.typeOptions[type.id] ||= defaultOptions(type));
+}
+// Keeps only what the category allows (categories that store no options keep them as they are).
+function setOptionsFor(type, opts) {
+  state.typeOptions[type.id] = categoryOf(type).sanitizeOptions(type, opts) || opts;
 }
 // Size in inches the scene draws at: measured when the scale is set, assumed otherwise.
 function sceneSize() {
@@ -335,12 +337,10 @@ function updateChip(size) {
   const chip = $("chip");
   let html = "";
   if (state.sign && state.quad && (state.step === "sign" || state.step === "export")) {
-    const aw = noun() === "awning";
+    const cat = currentCat();
     html = size
-      ? aw
-        ? `≈ ${size.w} W × ${size.h} drop<small>estimate from your scale line</small>`
-        : `≈ ${size.w} W × ${size.h} H<small>≈ ${size.area} · estimate from your scale line</small>`
-      : `${aw ? "Awning" : "Sign"} placed<small>Set the scale in step 2 to see its size</small>`;
+      ? `≈ ${size.w} W × ${size.h} ${cat.ui.heightShort}<small>${cat.ui.hangs ? "" : `≈ ${size.area} · `}estimate from your scale line</small>`
+      : `${cat.Noun} placed<small>Set the scale in step 2 to see its size</small>`;
   } else if (state.step === "scale" && calibrated()) {
     html = `Scale set<small>${formatFeetInches(state.calInches)} reference line</small>`;
   }
@@ -625,7 +625,7 @@ function fitQuadToArt(prevAspect) {
   const sp = quadSpans(state.quad);
   const k = (sp.width * aspect) / Math.max(1, sp.height);
   const [a, b, c, d] = state.quad;
-  if (isAwning(currentType())) return setDropScale(k);
+  if (currentCat().ui.hangs) return setDropScale(k);
   const around = (p, q) => {
     const m = { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 };
     return [{ x: m.x + (p.x - m.x) * k, y: m.y + (p.y - m.y) * k }, { x: m.x + (q.x - m.x) * k, y: m.y + (q.y - m.y) * k }];
@@ -634,7 +634,7 @@ function fitQuadToArt(prevAspect) {
   state.quad = [a2, b2, c2, d2];
 }
 
-// Awnings hang from the wall line, so their height changes from the top edge down.
+// Products that hang from the wall line (awnings) change height from the top edge down.
 function setDropScale(k) {
   const [a, b, c, d] = state.quad;
   const down = (top, bottom) => ({ x: top.x + (bottom.x - top.x) * k, y: top.y + (bottom.y - top.y) * k });
@@ -691,69 +691,40 @@ function setSignMode(mode) {
   else if (state.fileSign) setSign(state.fileSign);
 }
 
-// ---------- sign types and awning shapes ----------
-const LIGHT_CHOICES = [
-  ["#fff1d6", "Warm white"], ["#eef5ff", "Cool white"], ["#ff4a3d", "Red"], ["#4aa3ff", "Blue"], ["#3ddc84", "Green"], ["#ffb02e", "Amber"],
-];
-const OPTION_UI = {
-  returns: { label: "Returns", kind: "color", auto: "Match artwork" },
-  trim: { label: "Trim cap", kind: "color" },
-  raceway: { label: "Raceway", kind: "color", auto: "Match wall" },
-  panel: { label: "Panel", kind: "color" },
-  frame: { label: "Cabinet", kind: "color" },
-  light: { label: "Light color", kind: "select", choices: LIGHT_CHOICES },
-  side: { label: "Wall is on the", kind: "select", choices: [["left", "Left"], ["right", "Right"]] },
-};
-const fascia = type => type.vr >= 12;
-const AWNING_UI = {
-  projection: { label: "Projection", kind: "range" },
-  cover: { label: "Cover", kind: "select", choices: t => t.covers.map(c => [c, COVERS[c].short]) },
-  lit: { label: "Lighting", kind: "select", choices: () => Object.entries(AWNING_LIGHTS) },
-  panel: { label: (t, o) => (o.cover === "metal" ? "Panel color" : "Fabric color"), kind: "color" },
-  pattern: { label: "Pattern", kind: "select", choices: () => Object.entries(PATTERNS) },
-  stripe: { label: "Stripe color", kind: "color" },
-  valance: { label: t => (fascia(t) ? "Fascia" : "Valance"), kind: "select", choices: t => t.valances.map(v => [v, VALANCES[v]]) },
-  letterOn: {
-    label: "Lettering", kind: "select",
-    choices: t => t.letter.map(v => [v, v === "valance" && fascia(t) ? "On the fascia" : LETTERING[v]]),
-  },
-  sides: { label: "Sides", kind: "select", choices: t => t.sides.map(v => [v, SIDES[v]]) },
-  frame: { label: "Frame", kind: "color" },
-};
-const optionLabel = (type, key) => (key === "panel" && type.render.kind === "cabinet" ? "Face" : OPTION_UI[key].label);
-const projectionText = inches => `${formatFeetInches(inches)} from the wall`;
-
+// ---------- types and their options ----------
+// The fields come from the type's category (optionFields); see the field format in categories/define.js.
+let fields = [];
 function renderTypeOptions() {
   const type = currentType(), box = $("typeOptions");
   box.textContent = "";
-  if (isAwning(type)) return renderAwningOptions(type, box);
-  const opts = optionsFor(type);
-  for (const key of type.options) {
-    const ui = OPTION_UI[key];
-    if (!ui) continue;
+  fields = optionFields(type, optionsFor(type), sceneSize());
+  for (const f of fields) {
     const label = document.createElement("label");
-    label.className = `sm-field${ui.kind === "color" ? " sm-color" : ""}`;
-    label.append(optionLabel(type, key));
+    label.className = `sm-field${f.kind === "color" ? " sm-color" : ""}${f.kind === "range" ? " sm-wide" : ""}`;
+    label.append(f.label);
     let input;
-    if (ui.kind === "color") {
-      input = document.createElement("input");
-      input.type = "color";
-      input.value = opts[key] || (key === "raceway" ? "#6b6f76" : key === "returns" ? "#202226" : "#24262b");
+    if (f.kind === "range") {
+      const out = document.createElement("output");
+      out.textContent = f.format ? f.format(f.value) : String(f.value);
+      label.append(out);
+      input = Object.assign(document.createElement("input"), { type: "range", min: f.min, max: f.max, step: f.step || 1, value: f.value });
+    } else if (f.kind === "color") {
+      input = Object.assign(document.createElement("input"), { type: "color", value: f.value || f.fallback || "#24262b" });
     } else {
       input = document.createElement("select");
-      for (const [v, t] of ui.choices) input.add(new Option(t, v));
-      input.value = opts[key];
+      for (const [v, t] of f.choices) input.add(new Option(t, v));
+      input.value = f.value;
     }
-    input.dataset.opt = key;
+    input.dataset.opt = f.key;
     label.append(input);
-    if (ui.auto) {
+    if (f.auto) {
       const wrap = document.createElement("span");
       wrap.className = "sm-auto";
       const cb = document.createElement("input");
       cb.type = "checkbox";
-      cb.checked = !opts[key];
-      cb.dataset.auto = key;
-      wrap.append(cb, ui.auto);
+      cb.checked = !f.value;
+      cb.dataset.auto = f.key;
+      wrap.append(cb, f.auto);
       const outer = document.createElement("div");
       outer.append(label, wrap);
       box.append(outer);
@@ -761,68 +732,41 @@ function renderTypeOptions() {
   }
 }
 
-function renderAwningOptions(type, box) {
-  const opts = (state.typeOptions[type.id] = sanitizeAwningOptions(type, optionsFor(type)));
-  for (const key of awningOptionKeys(type, opts)) {
-    const ui = AWNING_UI[key];
-    const label = document.createElement("label");
-    label.className = `sm-field${ui.kind === "color" ? " sm-color" : ""}${ui.kind === "range" ? " sm-wide" : ""}`;
-    label.append(typeof ui.label === "function" ? ui.label(type, opts) : ui.label);
-    let input;
-    if (ui.kind === "range") {
-      const size = sceneSize();
-      const out = document.createElement("output");
-      const p = projectionFor(type, opts, size.width, size.height);
-      out.textContent = projectionText(p);
-      label.append(out);
-      input = Object.assign(document.createElement("input"), { type: "range", min: type.d.min, max: type.d.max, step: 1, value: Math.round(p) });
-    } else if (ui.kind === "color") {
-      input = Object.assign(document.createElement("input"), { type: "color", value: opts[key] });
-    } else {
-      input = document.createElement("select");
-      for (const [v, t] of ui.choices(type)) input.add(new Option(t, v));
-      input.value = opts[key];
-    }
-    input.dataset.opt = key;
-    label.append(input);
-    box.append(label);
-  }
-}
-
 $("typeOptions").addEventListener("input", e => {
-  const t = e.target, type = currentType(), opts = optionsFor(type);
-  if (isAwning(type)) {
-    if (!t.dataset.opt) return;
-    opts[t.dataset.opt] = t.type === "range" ? Number(t.value) : t.value;
-    state.typeOptions[type.id] = sanitizeAwningOptions(type, opts);
-    if (t.type === "range") t.previousElementSibling.textContent = projectionText(Number(t.value));
-    // A select can change which other choices apply (cover, pattern, lighting).
-    if (t.tagName === "SELECT") renderTypeCard();
-  } else if (t.dataset.opt) {
-    opts[t.dataset.opt] = t.value;
-    const auto = $("typeOptions").querySelector(`[data-auto="${t.dataset.opt}"]`);
+  const t = e.target, type = currentType(), opts = { ...optionsFor(type) };
+  const key = t.dataset.opt || t.dataset.auto;
+  const f = fields.find(x => x.key === key);
+  if (!f) return;
+  if (t.dataset.auto) {
+    const input = $("typeOptions").querySelector(`[data-opt="${key}"]`);
+    opts[key] = t.checked ? "" : input.value;
+  } else {
+    opts[key] = f.kind === "range" ? Number(t.value) : t.value;
+    const auto = $("typeOptions").querySelector(`[data-auto="${key}"]`);
     if (auto) auto.checked = false;
-  } else if (t.dataset.auto) {
-    const input = $("typeOptions").querySelector(`[data-opt="${t.dataset.auto}"]`);
-    opts[t.dataset.auto] = t.checked ? "" : input.value;
+    if (f.kind === "range" && f.format) t.previousElementSibling.textContent = f.format(Number(t.value));
   }
+  setOptionsFor(type, opts);
+  // A change that alters which other choices apply re-draws the card and its fields.
+  if (f.refresh) renderTypeCard();
   updateUI();
   requestRender();
 });
 $("typeOptions").addEventListener("change", e => {
-  if (e.target.tagName !== "SELECT" || !isAwning(currentType())) e.target.dispatchEvent(new Event("input", { bubbles: true }));
+  const f = fields.find(x => x.key === e.target.dataset.opt);
+  if (!f?.refresh) e.target.dispatchEvent(new Event("input", { bubbles: true }));
 });
 
 const NIGHT_PREFIX = "At night: ";
 function renderTypeCard() {
-  const type = currentType(), aw = isAwning(type);
+  const type = currentType(), cat = currentCat();
   const info = describe(type, optionsFor(type), state.quad ? sceneSize() : null);
   $("typeThumb").innerHTML = diagramSvg(type);
   $("typeGroup").textContent = info.group;
   $("typeName").textContent = type.name;
   $("typeLight").textContent = info.lightingLabel;
   $("typeLight").classList.toggle("off", !litWith(type, optionsFor(type)));
-  $("openTypes").textContent = aw ? "Change shape" : "Change type";
+  $("openTypes").textContent = `Change ${cat.typeWord}`;
   $("buildArt").innerHTML = diagramSvg(type);
   $("buildSummary").textContent = info.summary;
   $("buildParts").replaceChildren(...info.parts.map(p => Object.assign(document.createElement("li"), { textContent: p })));
@@ -831,13 +775,17 @@ function renderTypeCard() {
   $("pinHint").textContent = type.pinHint || "";
   $("typeNotice").hidden = !type.notice;
   $("typeNotice").textContent = type.notice || "";
-  $("placeNoun").textContent = aw ? "awning" : "sign";
-  $("textLabel").textContent = aw ? "Lettering" : "Sign text";
-  $("setDrop").hidden = !aw;
-  $("placeTip").innerHTML = aw
-    ? "Drag the four corner handles onto the wall area the awning covers; it is drawn out from the wall in perspective. Drag inside to move it. Switch to <strong>Night</strong> to see it after dark: only backlit awnings glow."
-    : "Drag the four corner handles onto the wall so the sign follows its perspective. Drag inside the sign to move it. Switch to <strong>Night</strong> on the photo to see it lit.";
-  for (const r of document.querySelectorAll('input[name="category"]')) r.checked = r.value === categoryOf(type);
+  $("placeNoun").textContent = cat.noun;
+  $("textLabel").textContent = cat.ui.textLabel;
+  $("setDrop").hidden = !cat.ui.hangs;
+  $("placeTip").innerHTML = cat.ui.placeTip;
+  for (const b of $("category").querySelectorAll("[data-cat]")) {
+    if (b.getAttribute("role") === "radio") {
+      const on = b.dataset.cat === cat.id;
+      b.setAttribute("aria-checked", String(on));
+      b.tabIndex = on ? 0 : -1;
+    }
+  }
   renderTypeOptions();
 }
 
@@ -846,9 +794,10 @@ function setType(id) {
   const prev = state.art ? signAspect() : null;
   const next = getType(id);
   state.typeId = next.id;
-  state.lastType[categoryOf(next)] = next.id;
-  // A sign and an awning sit in different places, so each category keeps its own placement.
-  const from = categoryOf(prevType), to = categoryOf(next);
+  state.lastType[next.category] = next.id;
+  // Each category sits in its own place on the wall (a sign over the door, an awning over the
+  // window), so each keeps its own placement.
+  const from = prevType.category, to = next.category;
   const stash = from !== to && state.placed[to];
   if (from !== to && state.quad) state.placed[from] = { quad: state.quad.map(p => ({ ...p })), edited: state.quadEdited, aspect: prev };
   if (stash) {
@@ -856,23 +805,68 @@ function setType(id) {
     state.quadEdited = stash.edited;
     // The artwork may have changed while the other category was shown.
     if (state.art && stash.aspect) fitQuadToArt(stash.aspect);
-  } else if (state.art && !(from === "awning" && to === "awning" && state.quadEdited)) {
-    // Switching between awning shapes keeps a wall area the user has pinned.
+  } else if (state.art && !(from === to && categoryOf(next).ui.hangs && state.quadEdited)) {
+    // Switching between hanging shapes keeps a wall area the user has pinned.
     fitQuadToArt(prev);
   }
   renderTypeCard();
   updateUI();
   requestRender();
 }
-const setCategory = cat => setType(state.lastType[cat] || CATEGORIES.find(c => c.id === cat).def);
-document.querySelectorAll('input[name="category"]').forEach(r => r.addEventListener("change", () => setCategory(r.value)));
+function setCategory(id) {
+  const cat = getCategory(id);
+  if (cat.id !== id || cat.status !== "ready") return openTypes(id);
+  setType(state.lastType[cat.id] || cat.defaultType);
+}
 
-const LIBRARY_SUB = {
-  sign: "Each type is drawn the way it's built: depth, mounting and where the light comes from. The drawings are cross-sections, not to scale.",
-  awning: "Each shape is drawn from the side: the frame in dark lines, the cover in color, the wall on the left. Not to scale. Pick one, then set the projection, cover, pattern, valance and lettering.",
-};
-const cardNote = t => (!isAwning(t) ? t.lightingLabel : t.lighting === "backlit" ? "Backlit" : t.backlit ? "Non-lit · backlit option" : "Non-lit");
-let libraryCat = "sign";
+// Both category bars come from the registry; coming-soon tabs open their placeholder in the library.
+const SOON = '<span class="sm-soon">Soon</span>';
+function buildCategoryBars() {
+  const bar = $("category"), tabs = $("typeCats");
+  bar.textContent = "";
+  tabs.textContent = "";
+  for (const cat of CATEGORIES) {
+    const soon = cat.status !== "ready";
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.cat = cat.id;
+    b.textContent = cat.label;
+    if (soon && !bar.querySelector(".sm-cattabs-label")) {
+      bar.append(Object.assign(document.createElement("span"), { className: "sm-cattabs-label", textContent: "Coming soon" }));
+    }
+    if (soon) {
+      b.setAttribute("aria-haspopup", "dialog");
+      b.setAttribute("aria-label", `${cat.label}, coming soon`);
+      b.classList.add("is-soon");
+    } else b.setAttribute("role", "radio");
+    bar.append(b);
+    const t = document.createElement("button");
+    t.type = "button";
+    t.setAttribute("role", "tab");
+    t.id = `tab-${cat.id}`;
+    t.setAttribute("aria-controls", "typeList");
+    t.dataset.cat = cat.id;
+    t.innerHTML = `<span></span>${soon ? SOON : ""}`;
+    t.firstChild.textContent = cat.label;
+    if (soon) t.classList.add("is-soon");
+    tabs.append(t);
+  }
+}
+$("category").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]");
+  if (b) setCategory(b.dataset.cat);
+});
+$("category").addEventListener("keydown", e => {
+  if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key) || e.target.getAttribute("role") !== "radio") return;
+  e.preventDefault();
+  const i = READY.findIndex(c => c.id === currentCat().id);
+  const step = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : READY.length - 1;
+  setCategory(READY[(i + step) % READY.length].id);
+  $("category").querySelector(`[data-cat="${currentCat().id}"]`).focus();
+});
+
+const CONTACT_LINE = 'Need one now? Arc can mock it up for you: <a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>';
+let libraryCat = currentCat().id;
 
 function buildTypeList() {
   const list = $("typeList");
@@ -880,8 +874,24 @@ function buildTypeList() {
   for (const cat of CATEGORIES) {
     const panel = document.createElement("div");
     panel.dataset.catPanel = cat.id;
-    for (const g of GROUPS.filter(x => x.category === cat.id)) {
-      const types = ALL_TYPES.filter(t => t.group === g.id);
+    if (cat.status !== "ready") {
+      panel.className = "sm-soon-panel";
+      panel.innerHTML = `<p class="sm-soon-lead"><span class="sm-soon">Coming soon</span><span></span></p><div class="sm-tgrid"></div><p class="sm-soon-cta">${CONTACT_LINE}</p>`;
+      panel.querySelector(".sm-soon-lead span:last-child").textContent = `${cat.label} isn't in the mockup tool yet. It will cover:`;
+      const grid = panel.querySelector(".sm-tgrid");
+      for (const ex of cat.examples) {
+        const card = document.createElement("div");
+        card.className = "sm-tcard is-soon";
+        card.innerHTML = `<div class="sm-tc-art"><svg viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${cat.icon}</svg></div><strong></strong><span></span>`;
+        card.querySelector("strong").textContent = ex.name;
+        card.querySelector("span").textContent = ex.note;
+        grid.append(card);
+      }
+      list.append(panel);
+      continue;
+    }
+    for (const g of cat.groups) {
+      const types = cat.types.filter(t => t.group === g.id);
       if (!types.length) continue;
       const h = document.createElement("h3");
       h.textContent = g.label;
@@ -894,7 +904,7 @@ function buildTypeList() {
         b.dataset.type = t.id;
         b.innerHTML = `<div class="sm-tc-art">${diagramSvg(t)}</div><strong></strong><span></span>`;
         b.querySelector("strong").textContent = t.name;
-        b.querySelector("span").textContent = cardNote(t);
+        b.querySelector("span").textContent = cat.cardNote(t);
         grid.append(b);
       }
       panel.append(h, grid);
@@ -902,28 +912,35 @@ function buildTypeList() {
     list.append(panel);
   }
 }
-function showLibrary(cat) {
-  libraryCat = cat;
-  const c = CATEGORIES.find(x => x.id === cat);
+function showLibrary(id) {
+  const c = getCategory(id);
+  libraryCat = c.id;
   $("typesTitle").textContent = c.title;
-  $("typesSub").textContent = LIBRARY_SUB[cat];
-  for (const b of $("typeCats").querySelectorAll("[data-cat]")) b.setAttribute("aria-selected", String(b.dataset.cat === cat));
-  for (const p of $("typeList").querySelectorAll("[data-cat-panel]")) p.hidden = p.dataset.catPanel !== cat;
+  $("typesSub").textContent = c.intro;
+  for (const b of $("typeCats").querySelectorAll("[data-cat]")) {
+    const on = b.dataset.cat === c.id;
+    b.setAttribute("aria-selected", String(on));
+    b.tabIndex = on ? 0 : -1;
+  }
+  $("typeList").setAttribute("aria-labelledby", `tab-${c.id}`);
+  for (const p of $("typeList").querySelectorAll("[data-cat-panel]")) p.hidden = p.dataset.catPanel !== c.id;
+  $("typeCats").querySelector(`[data-cat="${c.id}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" });
 }
-function openTypes() {
-  showLibrary(noun());
+function openTypes(id = currentCat().id) {
+  showLibrary(typeof id === "string" ? id : currentCat().id);
   for (const b of $("typeList").querySelectorAll("[data-type]")) b.setAttribute("aria-pressed", String(b.dataset.type === state.typeId));
   const dlg = $("typeDialog");
   if (dlg.showModal) dlg.showModal();
   else dlg.setAttribute("open", "");
-  $("typeList").querySelector('[aria-pressed="true"]')?.focus();
+  const focus = $("typeList").querySelector(`[data-cat-panel="${libraryCat}"] [aria-pressed="true"]`) || $("typeCats").querySelector(`[data-cat="${libraryCat}"]`);
+  focus?.focus();
 }
 function closeTypes() {
   const dlg = $("typeDialog");
   if (dlg.close) dlg.close();
   else dlg.removeAttribute("open");
 }
-$("openTypes").addEventListener("click", openTypes);
+$("openTypes").addEventListener("click", () => openTypes());
 $("closeTypes").addEventListener("click", closeTypes);
 $("typeCats").addEventListener("click", e => {
   const b = e.target.closest("[data-cat]");
@@ -934,6 +951,7 @@ $("typeCats").addEventListener("keydown", e => {
   e.preventDefault();
   const i = CATEGORIES.findIndex(c => c.id === libraryCat);
   showLibrary(CATEGORIES[(i + (e.key === "ArrowRight" ? 1 : CATEGORIES.length - 1)) % CATEGORIES.length].id);
+  $("typeDialog").scrollTop = 0;
   $("typeCats").querySelector(`[data-cat="${libraryCat}"]`).focus();
 });
 $("typeDialog").addEventListener("click", e => {
@@ -1112,7 +1130,7 @@ $("downloadPng").addEventListener("click", () => runExport("Building image…", 
 }));
 $("sharePdf").addEventListener("click", () => runExport("Building PDF…", async () => {
   const file = await makePdf();
-  await navigator.share({ files: [file], title: `Storefront ${noun()} mockup` });
+  await navigator.share({ files: [file], title: `Storefront ${currentCat().noun} mockup` });
   setStatus("Shared.");
 }));
 try {
@@ -1208,7 +1226,7 @@ $("copyLink").addEventListener("click", async () => {
 $("shareLink").hidden = !navigator.share;
 $("shareLink").addEventListener("click", async () => {
   try {
-    await navigator.share({ title: `${noun() === "awning" ? "Awning" : "Sign"} mockup for approval`, url: $("linkUrl").value });
+    await navigator.share({ title: `${currentCat().Noun} mockup for approval`, url: $("linkUrl").value });
   } catch { /* dismissed */ }
 });
 ["project", "preparedFor", "notes", "calLabel"].forEach(id => $(id).addEventListener("input", renderProofLink));
@@ -1269,14 +1287,13 @@ function updateUI() {
   }
 
   const size = sizeInfo();
-  const aw = noun() === "awning";
-  const third = aw
-    ? `<div><span>Projection</span><strong>${formatFeetInches(projectionFor(currentType(), optionsFor(), size?.width || 0, size?.height || 0))}</strong></div>`
-    : `<div><span>Area</span><strong>${size?.area.replace(" sq ft", "")}</strong>sq ft</div>`;
+  const cat = currentCat();
+  const extra = size && cat.ui.sizeExtra(currentType(), optionsFor(), size);
+  const third = extra ? `<div><span>${escapeHtml(extra.label)}</span><strong>${escapeHtml(extra.value)}</strong>${extra.unit ? escapeHtml(extra.unit) : ""}</div>` : "";
   $("sizeOut").innerHTML = state.sign
     ? size
-      ? `<div><span>Width</span><strong>${size.w}</strong></div><div><span>${aw ? "Drop" : "Height"}</span><strong>${size.h}</strong></div>${third}<p>Approximate, from your scale line.</p>`
-      : `<p>Set the scale in step 2 to see the ${aw ? "awning" : "sign"}'s size.</p>`
+      ? `<div><span>Width</span><strong>${size.w}</strong></div><div><span>${cat.ui.heightLabel}</span><strong>${size.h}</strong></div>${third}<p>Approximate, from your scale line.</p>`
+      : `<p>Set the scale in step 2 to see the ${cat.noun}'s size.</p>`
     : "";
   $("setWidth").disabled = !size;
   $("setDrop").disabled = !size;
@@ -1315,6 +1332,7 @@ window.addEventListener("beforeunload", e => {
 });
 
 new ResizeObserver(resizeCanvas).observe(stage);
+buildCategoryBars();
 buildTypeList();
 renderTypeCard();
 resizeCanvas();
@@ -1325,7 +1343,7 @@ window.signMockup = {
   state, loadPhoto, loadSignFile, setStep, setType, setCategory, setMode, makePdf, composite, requestRender, designKey,
   setOptions(o) {
     const type = currentType();
-    state.typeOptions[type.id] = isAwning(type) ? sanitizeAwningOptions(type, { ...optionsFor(type), ...o }) : { ...optionsFor(type), ...o };
+    setOptionsFor(type, { ...optionsFor(type), ...o });
     renderTypeCard();
     updateUI();
     requestRender();

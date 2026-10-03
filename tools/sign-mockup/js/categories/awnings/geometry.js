@@ -8,7 +8,7 @@
 //
 // Textures are described, not drawn: { key: { w, h, letter } } in inches, where letter is the
 // [u0, v0, u1, v1] box the lettering is fitted into, when that surface carries it.
-import { projectionFor, sanitizeAwningOptions } from "./awning-types.js";
+import { projectionFor, sanitizeAwningOptions } from "./types.js";
 
 const HALF = Math.PI / 2;
 const OVERLAP = 0.14; // cells overlap their neighbors so anti-aliased seams don't show

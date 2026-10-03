@@ -309,7 +309,9 @@ function approvalStamp(pg, approval, x, y, w) {
  * @param {string} [p.preparedFor]
  * @param {string} [p.notes]
  * @param {{name: string, group?: string, lighting: string, summary?: string, parts?: string[], night?: string,
- *          category?: "sign" | "awning", details?: Array<[string, string]>}} [p.type]  details: chosen options
+ *          noun?: string, typeLabel?: string, heightLabel?: string, details?: Array<[string, string]>}} [p.type]
+ *   noun / typeLabel / heightLabel come from the type's category (describe() in catalog.js) and
+ *   default to "sign" / "Type" / "Height". details: the chosen options.
  * @param {{range: string, label: string, note: string, basis?: string, perFoot?: string}} [p.price]
  * @param {object} [p.night]  night composite, JPEG
  * @param {object} [p.diagram]  construction cross-section, JPEG
@@ -321,8 +323,9 @@ function approvalStamp(pg, approval, x, y, w) {
 export function buildProofPdf(p) {
   const { logo, mockup, size, reference = "", project = "", preparedFor = "", notes = "", type, price, night, diagram, flat, approval, proofUrl, date = new Date() } = p;
   const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
-  const awning = type?.category === "awning";
-  const noun = awning ? "awning" : "sign";
+  const noun = type?.noun || "sign";
+  const heightLabel = type?.heightLabel || "Height";
+  const typeWord = (type?.typeLabel || "Type").toLowerCase();
   const pages = [];
   let deferredNotes = "", linkPlaced = !proofUrl;
 
@@ -346,7 +349,7 @@ export function buildProofPdf(p) {
     if (approval) col.gap(approvalStamp(pg, approval, cx, top - 4, cw) + 8);
     col.label(`Approx. ${noun} size`);
     if (size) {
-      for (const [name, value] of [["Width", size.width], [awning ? "Drop" : "Height", size.height], ["Area", size.area]]) {
+      for (const [name, value] of [["Width", size.width], [heightLabel, size.height], ["Area", size.area]]) {
         col.gap(name === "Area" ? 20 : 22);
         pg.text(value, cx, col.y, { size: name === "Area" ? 14 : 18, bold: true, color: C.navy });
         pg.text(name, W - M, col.y, { size: 9, color: C.muted, align: "right" });
@@ -358,7 +361,7 @@ export function buildProofPdf(p) {
     }
     col.gap(20);
     if (type) {
-      col.label(awning ? "Awning shape" : "Sign type");
+      col.label(`${noun.charAt(0).toUpperCase()}${noun.slice(1)} ${typeWord}`);
       col.rows(type.name, { bold: true, color: C.navy });
       col.rows(type.lighting, { size: 9, color: C.muted });
       const details = (type.details || []).filter(([k]) => k !== "Lighting");

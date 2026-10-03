@@ -1,95 +1,7 @@
-// "How it's built" cross-sections, one per sign type and awning shape, as small self-contained SVG strings.
+// "How it's built" cross-sections for each sign type, as small self-contained SVG strings.
 // Pure string building (no DOM) so the editor, the proof page, the PDF and the Node check share them.
 // Not to scale: the drawings show the parts and where the light goes, not dimensions.
-
-import { drawAwning } from "./awning-diagrams.js";
-
-const C = {
-  ink: "#0b1d33",
-  muted: "#657287",
-  wall: "#d9dee6",
-  hatch: "#9aa5b5",
-  metal: "#4f5968",
-  metalLight: "#8b95a3",
-  acrylic: "#fff4d6",
-  acrylicEdge: "#c9a64a",
-  clear: "#e4f1fb",
-  clearEdge: "#7fa9c9",
-  led: "#d4a843",
-  ray: "#e8a317",
-  paint: "#b8432f",
-  fabric: "#1f4f7a",
-  glass: "#cfe6f5",
-};
-
-const W = 320, H = 200;
-const LX = 214; // label column
-
-function esc(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-class Svg {
-  constructor() { this.parts = []; this.labels = []; }
-  add(s) { this.parts.push(s); return this; }
-  rect(x, y, w, h, fill, stroke = "none", sw = 1, extra = "") {
-    return this.add(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"${extra}/>`);
-  }
-  line(x1, y1, x2, y2, stroke, sw = 1, extra = "") {
-    return this.add(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${stroke}" stroke-width="${sw}"${extra}/>`);
-  }
-  path(d, fill, stroke = "none", sw = 1, extra = "") {
-    return this.add(`<path d="${d}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"${extra}/>`);
-  }
-  circle(cx, cy, r, fill, stroke = "none", sw = 1) {
-    return this.add(`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`);
-  }
-  // Wall section on the left, hatched; face of the wall at x = 44.
-  wall(y0 = 12, y1 = 188) {
-    this.rect(14, y0, 30, y1 - y0, C.wall);
-    for (let y = y0 - 30; y < y1; y += 9) {
-      const a = Math.max(y, y0), b = Math.min(y + 30, y1);
-      this.line(14 + (a - y), a, 14 + (b - y), b, C.hatch, 1);
-    }
-    this.line(44, y0, 44, y1, C.ink, 1.6);
-    this.add(`<text x="29" y="${y1 + 9}" font-size="8" text-anchor="middle" fill="${C.muted}">WALL</text>`);
-    return this;
-  }
-  led(x, y, dir = 1) {
-    this.rect(x - 3, y - 4, 6, 8, C.led, C.ink, 0.6);
-    return this;
-  }
-  rays(x, y, dir, len = 22, spread = 0.5, n = 3) {
-    for (let i = 0; i < n; i++) {
-      const a = (i - (n - 1) / 2) * spread;
-      const ex = x + Math.cos(a) * len * dir, ey = y + Math.sin(a) * len;
-      this.line(x, y, ex, ey, C.ray, 1.2, ` stroke-dasharray="3 2" marker-end="url(#ah)"`);
-    }
-    return this;
-  }
-  stud(x0, x1, y) {
-    this.line(22, y, x1, y, C.metal, 2.2);
-    return this;
-  }
-  label(text, px, py, ty) {
-    this.labels.push({ text, px, py, ty });
-    return this;
-  }
-  toString(title, view = "Section") {
-    // Rows go to labels in the same top-to-bottom order as their points, so leaders don't cross.
-    const rows = this.labels.map(l => l.ty).sort((a, b) => a - b);
-    const ordered = [...this.labels].sort((a, b) => a.py - b.py || a.px - b.px).map((l, i) => ({ ...l, ty: rows[i] }));
-    const lab = ordered.map(({ text, px, py, ty }) =>
-      `<path d="M${px} ${py} L${LX - 6} ${ty}" fill="none" stroke="${C.muted}" stroke-width="0.8"/>` +
-      `<circle cx="${px}" cy="${py}" r="1.8" fill="${C.ink}"/>` +
-      `<text x="${LX}" y="${ty + 3}" font-size="9.5" fill="${C.ink}">${esc(text)}</text>`).join("");
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}: how it's built" font-family="Arial, Helvetica, sans-serif">` +
-      `<defs><marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="${C.ray}"/></marker></defs>` +
-      `<rect width="${W}" height="${H}" fill="#ffffff"/>` +
-      this.parts.join("") + lab +
-      `<text x="${W - 6}" y="${H - 6}" font-size="8" text-anchor="end" fill="${C.muted}">${esc(view)} · not to scale</text></svg>`;
-  }
-}
+import { PALETTE as C, card } from "../../diagram-kit.js";
 
 // One channel letter in section: back at bx, face at fx, returns top and bottom.
 function channel(s, { bx, fx, y0 = 44, y1 = 156, face = "acrylic", trim = false, back = "metal", returns = C.metal }) {
@@ -284,21 +196,6 @@ const DRAW = {
   },
 };
 
-const cache = new Map();
-
-const isAwningType = type => type.category === "awning";
-
-/** Returns the cross-section (or awning profile) SVG markup for a type. */
-export function diagramSvg(type) {
-  if (cache.has(type.id)) return cache.get(type.id);
-  const draw = isAwningType(type) ? s => drawAwning(s, type, C) : DRAW[type.id];
-  if (!draw) throw new Error(`No diagram for ${type.id}`);
-  const s = new Svg();
-  const view = draw(s) || "Section";
-  const out = s.toString(type.name, view);
-  cache.set(type.id, out);
-  return out;
-}
-
-export const DIAGRAM_SIZE = { width: W, height: H };
-export const hasDiagram = type => isAwningType(type) || typeof DRAW[type.id] === "function";
+/** Returns the cross-section SVG markup for a sign type. */
+export const diagramSvg = type => card(type, DRAW[type.id]);
+export const hasDiagram = type => typeof DRAW[type.id] === "function";

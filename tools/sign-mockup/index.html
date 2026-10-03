@@ -133,10 +133,7 @@
 
         <section class="sm-card" data-panel="sign" aria-labelledby="p-sign" hidden>
           <h2 id="p-sign"><b>3</b> <span>Choose and place the <span id="placeNoun">sign</span></span></h2>
-          <div class="sm-seg" id="category" role="radiogroup" aria-label="What to place">
-            <label><input type="radio" name="category" value="sign" checked><span>Signs</span></label>
-            <label><input type="radio" name="category" value="awning"><span>Awnings</span></label>
-          </div>
+          <div class="sm-cattabs" id="category" role="radiogroup" aria-label="What to place"></div>
           <div class="sm-type" id="typeCard">
             <div class="sm-type-art" id="typeThumb" aria-hidden="true"></div>
             <div class="sm-type-text">
@@ -295,11 +292,8 @@
     <h2 id="typesTitle">Choose a sign type</h2>
     <button type="button" class="sm-x" id="closeTypes" aria-label="Close">&times;</button>
   </div>
-  <div class="sm-cats" id="typeCats" role="tablist" aria-label="Category">
-    <button type="button" role="tab" data-cat="sign" aria-selected="true">Signs</button>
-    <button type="button" role="tab" data-cat="awning" aria-selected="false">Awnings</button>
-  </div>
-  <p class="sm-types-sub" id="typesSub">Each type is drawn the way it's built: depth, mounting and where the light comes from. The drawings are cross-sections, not to scale.</p>
+  <div class="sm-cats" id="typeCats" role="tablist" aria-label="Category"></div>
+  <p class="sm-types-sub" id="typesSub"></p>
   <div class="sm-types-body" id="typeList"></div>
 </dialog>
 

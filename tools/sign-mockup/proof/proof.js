@@ -1,8 +1,7 @@
-// Phone proof page for a sign or awning mockup: shows the shared day/night views, the construction, the
+// Phone proof page for a mockup (any category): shows the shared day/night views, the construction, the
 // preliminary range, and lets the client comment, approve and download the PDF.
 // The proof id travels in the URL fragment, so it never reaches server logs or Referer headers.
-import { diagramSvg } from "../js/diagrams.js";
-import { getType, describe } from "../js/catalog.js";
+import { getType, describe, diagramSvg, categoryOf } from "../js/catalog.js";
 import { formatRange, formatPerFoot } from "../js/pricing.js";
 import { buildSignPdf } from "../js/proof-pdf.js";
 
@@ -58,8 +57,8 @@ function setMode(next) {
 }
 
 function mailtoHref() {
-  const noun = sheet.category === "awning" ? "awning" : "sign";
-  const subject = `${noun === "awning" ? "Awning" : "Sign"} proof${sheet.project ? `: ${sheet.project}` : ""}`;
+  const { noun, Noun } = categoryOf(getType(sheet.typeId));
+  const subject = `${Noun} proof${sheet.project ? `: ${sheet.project}` : ""}`;
   const lines = [
     "Hi Arc,", "", `About this ${noun} proof: ${location.href}`, "",
     sheet.approval ? `Approved by ${sheet.approval.name} on ${when(sheet.approval.at)}.` : "", "",
@@ -99,20 +98,20 @@ function renderComments() {
 function render() {
   const type = getType(sheet.typeId);
   const info = describe(type, sheet.options, sheet.size);
-  const awning = info.category === "awning";
-  document.title = `${sheet.project || (awning ? "Awning mockup" : "Sign mockup")} for approval | Arc Signage Co`;
-  $("title").textContent = sheet.project || (awning ? "Storefront awning" : "Storefront sign");
-  $("eyebrow").textContent = awning ? "Awning mockup for approval" : "Sign mockup for approval";
-  $("detailsTitle").textContent = awning ? "The awning" : "The sign";
-  $("typeLabel").textContent = awning ? "Shape" : "Type";
-  $("shot").alt = `The ${awning ? "awning" : "sign"} mockup on the storefront photo`;
-  $("art").alt = awning ? "The awning lettering surface, flat" : "The sign artwork, flat";
+  const cat = categoryOf(type);
+  document.title = `${sheet.project || `${cat.Noun} mockup`} for approval | Arc Signage Co`;
+  $("title").textContent = sheet.project || `Storefront ${cat.noun}`;
+  $("eyebrow").textContent = `${cat.Noun} mockup for approval`;
+  $("detailsTitle").textContent = `The ${cat.noun}`;
+  $("typeLabel").textContent = cat.typeLabel;
+  $("shot").alt = `The ${cat.noun} mockup on the storefront photo`;
+  $("art").alt = cat.ui.flatLabel;
   $("subtitle").textContent = [sheet.preparedFor && `Prepared for ${sheet.preparedFor}`, `Shared ${new Date(sheet.createdAt).toLocaleDateString("en-US", { dateStyle: "long" })}`].filter(Boolean).join(" · ");
 
   $("typeName").textContent = info.name;
   $("typeLight").textContent = info.lightingLabel;
   $("sizeRow").hidden = !sheet.sizeText;
-  if (sheet.sizeText) $("sizeText").textContent = `${sheet.sizeText.width} W × ${sheet.sizeText.height} ${awning ? "drop" : "H"} (${sheet.sizeText.area})`;
+  if (sheet.sizeText) $("sizeText").textContent = `${sheet.sizeText.width} W × ${sheet.sizeText.height} ${cat.ui.heightShort} (${sheet.sizeText.area})`;
   for (const old of $("facts").querySelectorAll(".pf-opt")) old.remove();
   $("facts").append(...info.details.filter(([k]) => k !== "Lighting").map(([k, v]) => {
     const row = document.createElement("div");

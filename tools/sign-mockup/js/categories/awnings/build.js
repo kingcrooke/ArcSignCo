@@ -5,9 +5,9 @@
 // Faces are two-sided: where the camera sees the back of a face it is drawn as the inside of the
 // cover, in shade. Draw order: every back face, then the frame under the cover, then the front
 // faces and the exposed frame, each group far to near. At night only a backlit awning glows.
-import { awningMesh } from "./awning-geometry.js";
-import { sanitizeAwningOptions } from "./awning-types.js";
-import { makeCanvas, hexToRgb, mix, WHITE } from "./art.js";
+import { awningMesh } from "./geometry.js";
+import { sanitizeAwningOptions } from "./types.js";
+import { makeCanvas, hexToRgb, mix, WHITE } from "../../art.js";
 
 const SEAM_IN = 46; // fabric is sewn in widths about this wide
 const RIB_IN = 16; // standing-seam spacing

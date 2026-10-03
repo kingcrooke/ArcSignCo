@@ -1,5 +1,4 @@
-// Awning shape library. Pure data (no DOM): used by the editor, the renderer, the diagrams, the
-// PDF, the proof page, the pricing estimate, the approval-link server and the Node checks.
+// Awning shape library for the Awnings category (categories/awnings.js). Pure data (no DOM).
 // The research behind each shape is docs/awnings-research.md (section 12 maps ids to sections).
 //
 // Lengths are inches. Projection and valance heights are typical drawing values, not

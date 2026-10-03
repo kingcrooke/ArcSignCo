@@ -8,8 +8,7 @@
 //   v1/<deploy context>/<proof id>/art.jpg      flat artwork
 // so proofs made on deploy previews never mix with production ones and can be cleared by prefix.
 import { estimatePrice } from "../../tools/sign-mockup/js/pricing.js";
-import { getType, isKnownType, cleanOptions, lightingOf } from "../../tools/sign-mockup/js/catalog.js";
-import { AWNING_LIGHTS } from "../../tools/sign-mockup/js/awning-types.js";
+import { getType, isKnownType, cleanOptions, describe } from "../../tools/sign-mockup/js/catalog.js";
 
 export const STORE_NAME = "arc-sign-mockup-proofs";
 export const KEY_VERSION = "v1";
@@ -93,7 +92,7 @@ async function create(req, { store, ns, now, makeId }) {
   let meta;
   try { meta = JSON.parse(String(form.get("sheet") || "")); } catch { return fail(400, "Missing proof details."); }
   if (!meta || typeof meta !== "object") return fail(400, "Missing proof details.");
-  if (!isKnownType(meta.typeId)) return fail(400, "Unknown sign or awning type.");
+  if (!isKnownType(meta.typeId)) return fail(400, "Unknown product type.");
 
   const files = {};
   const dims = {};
@@ -120,7 +119,7 @@ async function create(req, { store, ns, now, makeId }) {
     width: clean(meta.sizeText.width, 24), height: clean(meta.sizeText.height, 24), area: clean(meta.sizeText.area, 24),
   } : null;
   const signType = getType(meta.typeId);
-  // Awning options are rebuilt from the allowed values only; signs carry none.
+  // Options are rebuilt from the values the category allows; categories that keep none store null.
   const options = cleanOptions(signType, meta.options);
 
   const id = makeId();
@@ -136,7 +135,7 @@ async function create(req, { store, ns, now, makeId }) {
     typeId: signType.id,
     category: signType.category,
     typeName: signType.name,
-    lighting: options ? AWNING_LIGHTS[lightingOf(signType, options)] : signType.lightingLabel,
+    lighting: describe(signType, options).lightingLabel,
     options,
     size,
     sizeText,

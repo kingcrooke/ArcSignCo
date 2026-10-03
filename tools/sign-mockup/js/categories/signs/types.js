@@ -1,21 +1,11 @@
-// Sign type library. Pure data (no DOM): used by the editor, the renderer, the PDF, the proof page,
-// the pricing estimate and tools/check-sign-mockup.mjs.
+// Sign type library for the Signs category (categories/signs.js). Pure data (no DOM).
 //
 // Dimensions are in inches and are typical values used to draw the picture, not specifications.
-// `render.kind` picks the construction the renderer builds; the remaining render fields tune it.
+// `render.kind` picks the construction kind (js/kinds.js); the remaining render fields tune it.
 
-export const LIGHTING = {
-  face: { label: "Face-lit", night: "The faces glow; returns stay dark." },
-  "face-sides": { label: "Face and sides lit", night: "Faces and sides glow; there is no trim cap to break the edge." },
-  halo: { label: "Halo-lit (reverse-lit)", night: "Light washes the wall behind the letters; the faces stay dark." },
-  "face-halo": { label: "Face + halo", night: "The faces glow and a halo washes the wall behind." },
-  neon: { label: "Exposed LED neon", night: "The neon line itself glows, with colored spill on the wall." },
-  internal: { label: "Internally lit", night: "The whole face glows from LEDs inside the cabinet." },
-  "internal-letters": { label: "Internally lit (copy only)", night: "Only the push-through copy glows; the metal face stays dark." },
-  external: { label: "External lights", night: "Gooseneck lamps wash the face from above." },
-  none: { label: "Non-lit", night: "No light of its own; it reads by street and storefront light." },
-  backlit: { label: "Backlit", night: "The translucent cover glows from LEDs inside the frame, and the graphics read through it." },
-};
+import { LIGHTING } from "../../lighting.js";
+
+export { LIGHTING };
 
 export const GROUPS = [
   { id: "channel", label: "Channel letters" },
