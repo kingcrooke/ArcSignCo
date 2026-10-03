@@ -216,7 +216,8 @@
 }
 .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 
-.sm-field { display: grid; gap: 6px; color: var(--navy); font-size: 13px; font-weight: 800; }
+.sm-field { display: block; color: var(--navy); font-size: 13px; font-weight: 800; }
+.sm-field > input, .sm-field > select, .sm-field > textarea { display: block; margin-top: 6px; }
 .sm-field small { color: var(--muted); font-weight: 700; }
 .sm-field output { color: var(--muted); font-weight: 700; margin-left: 4px; }
 .sm-field input[type="text"], .sm-field select, .sm-field textarea, .sm-len input {
@@ -284,7 +285,13 @@
     padding-top: 14px;
     gap: 12px;
   }
-  .sm-stage { position: relative; top: 0; height: clamp(320px, 62vh, 640px); height: clamp(320px, 62svh, 640px); }
+  /* Fit the stage to the photo's shape, leaving room for the size chip and zoom buttons. */
+  .sm-stage {
+    position: relative;
+    top: 0;
+    height: clamp(300px, calc((100vw - 20px) * var(--sm-ar, 1) + 110px), 70vh);
+    height: clamp(300px, calc((100vw - 20px) * var(--sm-ar, 1) + 110px), 70svh);
+  }
   .sm-drop-desktop { display: none; }
 }
 @media (max-width: 720px) {

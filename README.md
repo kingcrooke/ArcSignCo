@@ -25,6 +25,8 @@ Netlify publishes the repository root as-is.
 | `tools/optimize-portfolio-images.mjs` | Regenerates `assets/portfolio/` from the cleaned portfolio masters (kept outside the repo) |
 | `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
 | `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
+| `tools/sign-mockup/` | Storefront sign mockup tool, served at `/tools/sign-mockup/` (noindex, not in the sitemap or nav) |
+| `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, PDF output, and copy guardrails |
 
 ## How changes ship
 

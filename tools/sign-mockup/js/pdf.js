@@ -95,6 +95,13 @@ export function wrapText(text, bold, size, maxWidth) {
   return lines;
 }
 
+// Document info strings use PDFDocEncoding, not the font's WinAnsi, so write them as UTF-16BE.
+function pdfTextString(str) {
+  let hex = "FEFF";
+  for (let i = 0; i < str.length; i++) hex += str.charCodeAt(i).toString(16).padStart(4, "0").toUpperCase();
+  return `<${hex}>`;
+}
+
 const n = v => (Math.round(v * 100) / 100).toString();
 const rgb = c => c.map(n).join(" ");
 
@@ -169,7 +176,7 @@ function serialize({ content, images, links, info }) {
     obj(linkIds[i], `<< /Type /Annot /Subtype /Link /Rect [${r}] /Border [0 0 0] /A << /S /URI /URI ${pdfString(l.uri)} >> >>`);
   });
   const infoId = 7 + images.length + links.length;
-  obj(infoId, `<< ${Object.entries(info).map(([k, v]) => `/${k} ${pdfString(v)}`).join(" ")} >>`);
+  obj(infoId, `<< ${Object.entries(info).map(([k, v]) => `/${k} ${k === "CreationDate" ? pdfString(v) : pdfTextString(v)}`).join(" ")} >>`);
 
   const xref = length;
   let table = `xref\n0 ${infoId + 1}\n0000000000 65535 f \n`;
@@ -230,7 +237,7 @@ export function buildProofPdf({ logo, mockup, size, reference = "", project = ""
 
   const cx = M + boxW + 20, cw = W - M - cx;
   let y = top + 8;
-  const label = str => { pg.text(str.toUpperCase(), cx, y, { size: 8, bold: true, color: C.goldInk, spacing: 0.8 }); y += 6; };
+  const label = str => { pg.text(str.toUpperCase(), cx, y, { size: 8, bold: true, color: C.goldInk }); y += 6; };
   const rows = (str, opts = {}) => {
     const size = opts.size || 10;
     for (const ln of wrapText(str, !!opts.bold, size, cw)) {
@@ -253,8 +260,8 @@ export function buildProofPdf({ logo, mockup, size, reference = "", project = ""
     rows("Scale not set, so no sizes are shown. Draw a reference line on a known measurement to add them.", { size: 9.5, color: C.muted });
   }
   y += 22;
-  if (reference) { label("Scale reference"); rows(reference); y += 16; }
-  if (preparedFor) { label("Prepared for"); rows(preparedFor); y += 16; }
+  if (reference) { label("Scale reference"); rows(reference); y += 24; }
+  if (preparedFor) { label("Prepared for"); rows(preparedFor); y += 24; }
   if (notes) { label("Notes"); rows(notes, { size: 9.5 }); }
 
   pg.line(M, 562, W - M, 562, C.line, 0.75);

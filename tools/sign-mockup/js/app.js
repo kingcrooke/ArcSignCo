@@ -190,7 +190,7 @@ function drawCal(active) {
   if (angle < -Math.PI / 2 - 1e-3) angle += Math.PI;
   const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
   const off = { x: Math.sin(angle) * 18, y: -Math.cos(angle) * 18 };
-  if (dist(a, b) > 30) {
+  if (active && dist(a, b) > 30) {
     const label = state.calInches > 0 ? `${formatFeetInches(state.calInches)} reference` : "Enter length";
     pill(ctx, { x: mid.x + off.x, y: mid.y + off.y }, label, angle, 1, { bg: GOLD, fg: NAVY, border: NAVY });
   }
@@ -508,6 +508,7 @@ async function loadPhoto(file) {
     state.selected = null;
     $("drop").hidden = true;
     $("zoomBar").hidden = false;
+    stage.style.setProperty("--sm-ar", (c.height / c.width).toFixed(4));
     $("photoMeta").textContent = `${state.photo.name} · ${c.width} × ${c.height} px${heic ? " · converted from HEIC" : ""}`;
     fit();
     setStatus(heic ? "iPhone photo converted. Next, set the scale." : "Photo loaded. Next, set the scale.");
@@ -669,7 +670,7 @@ function composite(withDims) {
   out.height = photo.height;
   const octx = out.getContext("2d");
   octx.drawImage(photo, 0, 0);
-  const u = Math.max(1.2, photo.width / 900);
+  const u = Math.max(1.2, photo.width / 700);
   if (state.sign && state.quad) drawSign(octx, state.quad);
   const size = sizeInfo();
   if (withDims && size) drawDimensions(octx, state.quad, size.w, size.h, u);
@@ -782,6 +783,7 @@ function canGo(step) {
 
 function setStep(step) {
   if (!canGo(step)) return;
+  if (step !== state.step) setStatus("");
   state.step = step;
   if (step === "sign" && !state.sign) setSignMode(state.signMode);
   document.querySelectorAll("[data-panel]").forEach(p => { p.hidden = p.dataset.panel !== step; });
