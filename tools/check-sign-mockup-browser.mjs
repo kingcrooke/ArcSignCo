@@ -102,10 +102,32 @@ async function run() {
       await page.evaluate(() => {
         window.signMockup.setCategory("ada");
         window.signMockup.setType("ada-room");
+        window.signMockup.setStep("sign");
       });
       await page.click("#resetSign");
       await page.waitForTimeout(400);
-      await page.screenshot({ path: path.join(SCREENSHOTS, `tab-ada-day-${vw}.png`), fullPage: false });
+      const adaMetrics = await page.evaluate(() => {
+        const s = window.signMockup.sizeInfo();
+        return {
+          widthIn: s?.width ?? null,
+          heightIn: s?.height ?? null,
+          inside: window.signMockup.quadInsidePhoto(),
+        };
+      });
+      if (vw === 1280) {
+        if (adaMetrics.widthIn == null || adaMetrics.widthIn >= 24) {
+          fail(`ada-room default width readout not under 2 ft (${adaMetrics.widthIn} in)`);
+        } else ok(`ada-room width ${adaMetrics.widthIn}" (< 2 ft)`);
+        if (adaMetrics.heightIn == null || adaMetrics.heightIn >= 24) {
+          fail(`ada-room default height readout not under 2 ft (${adaMetrics.heightIn} in)`);
+        } else ok(`ada-room height ${adaMetrics.heightIn}" (< 2 ft)`);
+        if (!adaMetrics.inside) fail("ada-room default quad corners outside photo bounds");
+        else ok("ada-room quad fully inside canvas");
+      }
+      const grid = page.locator(".sm-grid");
+      await grid.evaluate(el => el.scrollIntoView({ block: "start", behavior: "instant" }));
+      await page.waitForTimeout(200);
+      await grid.screenshot({ path: path.join(SCREENSHOTS, `tab-ada-day-${vw}.png`) });
       ok(`tab bar and ADA mockup screenshots at ${vw}px`);
     }
 
