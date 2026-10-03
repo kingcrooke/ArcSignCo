@@ -810,7 +810,9 @@ function plaqueMountPoint(photo) {
   const margin = 8;
   const pierOk = pier.x > margin && pier.x < photo.width - margin
     && pier.y > margin && pier.y < photo.height - margin;
-  if (pierOk) return pier;
+  // A wide plaque centered on the pier would cover the door: it goes right of clearRight, or left of
+  // clearLeft when the wall right of the door is too narrow.
+  if (pierOk) return { ...pier, clearRight: doorRight + 6 / inPerPx, clearLeft: doorLeft - 6 / inPerPx };
   // Fallback: center of the wall strip beside the door, mid-door height.
   const beside = doorRight < photo.width * 0.55
     ? doorRight + (photo.width - doorRight) * 0.35
@@ -910,6 +912,11 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
     if (w > maxW) w = maxW;
   } else if (!preset && w * aspect > photo.height * 0.5) {
     w = (photo.height * 0.5) / aspect;
+  }
+  if (c.clearRight) {
+    const m = QUAD_CLAMP_MARGIN, right = Math.max(c.x, c.clearRight + w / 2), left = c.clearLeft - w / 2;
+    if (right + w / 2 <= photo.width - m) c = { x: right, y: c.y };
+    else if (left - w / 2 >= m) c = { x: left, y: c.y };
   }
   state.quad = rectQuad(c.x, c.y, w, w * aspect);
   clampQuadInsidePhoto(photo);

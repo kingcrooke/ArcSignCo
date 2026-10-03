@@ -142,6 +142,15 @@ async function run() {
       return cx > Math.min(cal.a.x, cal.b.x) && cx < Math.max(cal.a.x, cal.b.x) && cy < cal.a.y;
     });
     onDoor ? ok("vinyl-door-hours is placed on the door, above the door-width line") : fail("vinyl-door-hours is not placed on the door");
+    for (const type of placeTypes.filter(t => CATEGORIES.find(c => c.id === t.category).ui.plaque)) {
+      await page.evaluate(id => window.signMockup.setType(id), type.id);
+      const clear = await page.evaluate(() => {
+        const { quad, cal } = window.signMockup.state;
+        const xs = quad.map(p => p.x);
+        return Math.min(...xs) > Math.max(cal.a.x, cal.b.x) || Math.max(...xs) < Math.min(cal.a.x, cal.b.x);
+      });
+      clear ? ok(`${type.id} sits beside the door, not over it`) : fail(`${type.id} overlaps the door`);
+    }
 
     // A small photo of your own (about 18' × 12' at this scale): presets that fit are drawn at size,
     // and the 20' ones are shrunk to fit; nothing hangs off the photo.
