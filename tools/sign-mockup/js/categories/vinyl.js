@@ -104,6 +104,7 @@ export default defineCategory({
   },
   ui: {
     tabLabel: "Vinyl",
+    placeWidthIn,
     textLabel: "Graphic text",
     placeTip: "Drag the four corner handles onto the glass or wall. Drag inside to move it. Vinyl has no depth; night view shows ambient light only.",
     flatLabel: "The vinyl artwork, flat",

@@ -160,7 +160,7 @@ The canvas is 320 × 200. The `Svg` methods (in `js/diagram-kit.js`):
 - `s.wall()`: the hatched wall on the left, with the wall face at x = 44. Draw your parts from x = 44 to the right, staying left of x ≈ 200.
 - `s.rect(x, y, w, h, fill, stroke, strokeWidth)`, `s.line(x1, y1, x2, y2, stroke, width)`, `s.path(d, fill, stroke, width)` and `s.circle(cx, cy, r, fill, stroke, width)`. Each returns `s`, so calls chain.
 - `s.led(x, y)` draws an LED module and `s.rays(x, y, dir)` draws light rays (`dir` is 1 to the right, −1 to the left).
-- `s.label(text, px, py, rowY)`: a dot at (px, py) with a leader line to a label at row `rowY` in the right-hand column. Keep 3 to 6 labels with rows between 20 and 180, spaced at least 14 apart.
+- `s.label(text, px, py, rowY)`: a dot at (px, py) with a leader line to a label at row `rowY` in the right-hand column. Keep 3 to 6 labels with rows between 20 and 180, spaced at least 14 apart. The label column is only about 100 units wide (roughly 20 characters); `npm test` fails if a label runs past the card's edge.
 - `return "Section"` (or `"Front view"`, `"Side view"`) sets the caption in the corner.
 
 Colors come from `PALETTE`: `ink`, `muted`, `wall`, `metal`, `metalLight`, `acrylic`, `led`, `ray`, `paint`, `fabric`, `glass`, `clear`. Draw your own simple drawings. **Do not trace or copy a manufacturer's drawing, and don't name a manufacturer.**

@@ -833,33 +833,38 @@ function clampQuadInsidePhoto(photo) {
   if (!state.quad || !photo) return;
   const m = QUAD_CLAMP_MARGIN;
   let q = state.quad;
+  const maxW = photo.width - 2 * m, maxH = photo.height - 2 * m;
   for (let pass = 0; pass < 8; pass++) {
     const b = bounds(q);
+    // Shrink before shifting: a quad taller or wider than the photo can't be shifted inside.
+    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
+    if (bw > maxW || bh > maxH) {
+      q = scaleQuad(q, Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh)) * 0.98, centroid(q));
+      continue;
+    }
     let dx = 0, dy = 0;
     if (b.minX < m) dx = m - b.minX;
     else if (b.maxX > photo.width - m) dx = (photo.width - m) - b.maxX;
     if (b.minY < m) dy = m - b.minY;
     else if (b.maxY > photo.height - m) dy = (photo.height - m) - b.maxY;
-    if (dx || dy) {
-      q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
-      continue;
-    }
-    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
-    const maxW = photo.width - 2 * m, maxH = photo.height - 2 * m;
-    if (bw <= maxW && bh <= maxH) break;
-    const k = Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh), 1) * 0.98;
-    if (k >= 0.999) break;
-    q = scaleQuad(q, k, centroid(q));
+    if (!dx && !dy) break;
+    q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
   }
   state.quad = q;
 }
 
+// The type's typical width from its size preset, in photo pixels (null without a preset or a scale).
+function presetWidthPx() {
+  const cat = currentCat();
+  if (typeof cat.ui.placeWidthIn !== "function") return null;
+  return scaledWidthPx(cat.ui.placeWidthIn(currentType(), optionsFor()));
+}
+
 function defaultPlaceWidthPx(photo) {
   const cat = currentCat();
-  const placeIn = typeof cat.ui.placeWidthIn === "function"
-    ? cat.ui.placeWidthIn(currentType(), optionsFor())
-    : (cat.ui.plaque ? 10 : null);
-  const scaled = placeIn ? scaledWidthPx(placeIn) : null;
+  const preset = presetWidthPx();
+  if (preset) return preset;
+  const scaled = cat.ui.plaque ? scaledWidthPx(10) : null;
   if (scaled) return scaled;
   if (cat.ui.plaque) return photo.width * 0.06;
   if (state.home?.w) return state.home.w;
@@ -869,6 +874,7 @@ function defaultPlaceWidthPx(photo) {
 function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
   const cat = currentCat();
+  const preset = presetWidthPx();
   let w = defaultPlaceWidthPx(photo);
   let c = (!cat.ui.plaque && state.home)
     ? { x: state.home.x, y: state.home.y }
@@ -878,13 +884,16 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
     if (mount) c = mount;
   } else if (keepCenter && state.quad) {
     c = centroid(state.quad);
-    w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
-    if (w < photo.width * 0.04) w = photo.width * 0.45;
+    if (!preset) {
+      w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
+      if (w < photo.width * 0.04) w = photo.width * 0.45;
+    }
   }
-  if (cat.ui.plaque) {
+  // A size preset is drawn at its size; clampQuadInsidePhoto shrinks it only if it can't fit.
+  if (!preset && cat.ui.plaque) {
     const maxW = photo.width * 0.22;
     if (w > maxW) w = maxW;
-  } else if (w * aspect > photo.height * 0.5) {
+  } else if (!preset && w * aspect > photo.height * 0.5) {
     w = (photo.height * 0.5) / aspect;
   }
   state.quad = rectQuad(c.x, c.y, w, w * aspect);
@@ -985,7 +994,14 @@ $("typeOptions").addEventListener("input", e => {
     if (auto) auto.checked = false;
     if (f.kind === "range" && f.format) t.previousElementSibling.textContent = f.format(Number(t.value));
   }
+  const prevAspect = state.art ? signAspect() : null, prevPreset = presetWidthPx();
   setOptionsFor(type, opts);
+  // A new size preset re-sizes an unpinned quad; a pinned one keeps its width and follows the new shape.
+  if (state.art && state.quad) {
+    const preset = presetWidthPx();
+    if (preset && preset !== prevPreset && !state.quadEdited) placeSign(signAspect(), !currentCat().ui.plaque);
+    else fitQuadToArt(prevAspect);
+  }
   // A change that alters which other choices apply re-draws the card and its fields.
   if (f.refresh) renderTypeCard();
   updateUI();
@@ -1045,9 +1061,11 @@ function setType(id) {
     // The artwork may have changed while the other category was shown.
     if (state.art && stash.aspect) fitQuadToArt(stash.aspect);
   } else if (state.art && !(from === to && categoryOf(next).ui.hangs && state.quadEdited)) {
-    const nextCat = categoryOf(next);
-    if (nextCat.ui.plaque && !state.quadEdited && from !== to) {
-      placeSign(aspectFor(next, state.art, optionsFor(next)));
+    const nextCat = categoryOf(next), prevCat = categoryOf(prevType);
+    // An unpinned quad takes the new type's own size (its preset) rather than the last type's,
+    // and never carries a plaque's size into a storefront category or the other way round.
+    if (!state.quadEdited && (presetWidthPx() || (from !== to && (nextCat.ui.plaque || prevCat.ui.plaque)))) {
+      placeSign(aspectFor(next, state.art, optionsFor(next)), !nextCat.ui.plaque && !prevCat.ui.plaque);
     } else {
       // Switching between hanging shapes keeps a wall area the user has pinned.
       fitQuadToArt(prev);

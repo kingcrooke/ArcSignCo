@@ -2,7 +2,7 @@
 import { defineCategory } from "./define.js";
 import { constructionDiagram } from "./construction/diagrams.js";
 import {
-  defaultConstructionOptions, sanitizeConstructionOptions, constructionOptionFields, constructionDetails, parseSize,
+  defaultConstructionOptions, sanitizeConstructionOptions, constructionOptionFields, constructionDetails, parseSize, placeWidthIn,
 } from "./construction/options.js";
 import { kindAspect } from "../kinds.js";
 
@@ -99,6 +99,7 @@ export default defineCategory({
   },
   ui: {
     tabLabel: "Construction",
+    placeWidthIn,
     textLabel: "Board text",
     placeTip: "Drag the four corner handles onto the fence, hoarding or wall. Drag inside to move the board. Switch to <strong>Night</strong> to see ambient light on the face.",
     flatLabel: "The construction sign artwork, flat",

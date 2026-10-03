@@ -69,6 +69,11 @@ export function ledDetails(type, opts) {
   ];
 }
 
+export function placeWidthIn(type, opts) {
+  const s = parseSize(sanitizeLedOptions(type, opts).size);
+  return s?.width ?? 72;
+}
+
 export function ledOptionFields(type, opts) {
   const o = sanitizeLedOptions(type, opts);
   const fields = [
