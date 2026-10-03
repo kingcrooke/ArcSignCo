@@ -196,7 +196,7 @@ for (const { slug, file } of pages) {
       "wayfinding-signs": {
         title: "Interior Wayfinding NYC | Arc Signage Co",
         description: "Interior wayfinding signs for New York buildouts: lobby directories, floor IDs, room signs, and directional packages. Send plans or a schedule for a quote.",
-        h1: "Interior wayfinding and directory packages for New York buildouts",
+        h1: "Interior wayfinding and directory packages for New York buildings",
       },
       awnings: {
         title: "Storefront Awnings NYC | Arc Signage Co",
