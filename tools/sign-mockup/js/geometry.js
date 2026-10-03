@@ -1,4 +1,4 @@
-// Pure geometry helpers (no DOM), shared by the app, the warp renderer and tools/check-sign-mockup.mjs.
+// Pure geometry helpers (no DOM), shared by the app, the scene renderer and tools/check-sign-mockup.mjs.
 // Quads are always [topLeft, topRight, bottomRight, bottomLeft] in image pixels.
 
 export const dist = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);

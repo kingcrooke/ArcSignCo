@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Storefront Sign Mockup Tool | Arc Signage Co</title>
-<meta name="description" content="Upload a storefront photo, set the scale from one known measurement, place your sign in perspective, and download a branded concept PDF with approximate sizes.">
+<meta name="description" content="Upload a storefront photo, set the scale from one known measurement, pick a sign type and place it in perspective by day and night, then download a branded concept PDF or send a phone approval link.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0b1d33">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -60,7 +60,7 @@
       <div>
         <span class="eyebrow">Planning tool | Storefront signs</span>
         <h1>Storefront sign mockup</h1>
-        <p class="answer">Upload a photo of the storefront, set the scale from one thing you've measured, and place your sign on the facade to see its approximate size. Then download a branded PDF to share. Your photos stay on this device: the tool runs in your browser and doesn't upload anything.</p>
+        <p class="answer">Upload a photo of the storefront, set the scale from one thing you've measured, pick the kind of sign, and place it on the facade to see its approximate size, built the way it would be fabricated, by day and at night. Then download a branded PDF or send a phone approval link. The tool runs in your browser: nothing is uploaded unless you create an approval link.</p>
       </div>
     </div>
   </section>
@@ -83,6 +83,10 @@
           <span>JPEG, PNG, WebP or iPhone HEIC</span>
         </label>
         <div class="sm-chip" id="chip" hidden></div>
+        <div class="sm-daynight" id="dayNight" role="radiogroup" aria-label="Lighting" hidden>
+          <button type="button" role="radio" aria-checked="true" data-mode="day">Day</button>
+          <button type="button" role="radio" aria-checked="false" data-mode="night">Night</button>
+        </div>
         <p class="sm-hint" id="hint" hidden></p>
         <div class="sm-zoom" id="zoomBar" hidden>
           <button type="button" id="zoomOut" aria-label="Zoom out">&minus;</button>
@@ -128,7 +132,26 @@
         </section>
 
         <section class="sm-card" data-panel="sign" aria-labelledby="p-sign" hidden>
-          <h2 id="p-sign"><b>3</b> Place the sign</h2>
+          <h2 id="p-sign"><b>3</b> Choose and place the sign</h2>
+          <div class="sm-type" id="typeCard">
+            <div class="sm-type-art" id="typeThumb" aria-hidden="true"></div>
+            <div class="sm-type-text">
+              <span class="sm-type-group" id="typeGroup"></span>
+              <strong id="typeName"></strong>
+              <span class="sm-badge" id="typeLight"></span>
+            </div>
+            <button type="button" class="btn white" id="openTypes" aria-haspopup="dialog">Change type</button>
+          </div>
+          <details class="sm-build" id="buildCard">
+            <summary>How it's built</summary>
+            <div class="sm-build-body">
+              <div class="sm-build-art" id="buildArt"></div>
+              <p id="buildSummary"></p>
+              <ul id="buildParts"></ul>
+              <p class="sm-build-night" id="buildNight"></p>
+            </div>
+          </details>
+          <p class="sm-tip sm-pin" id="pinHint" hidden></p>
           <div class="sm-seg" role="radiogroup" aria-label="Sign source">
             <label><input type="radio" name="signMode" value="text" checked><span>Type text</span></label>
             <label><input type="radio" name="signMode" value="file"><span>Upload artwork</span></label>
@@ -142,11 +165,6 @@
                 <select id="signFont"></select>
               </label>
               <label class="sm-field sm-color">Letters <input type="color" id="signColor" value="#ffffff"></label>
-              <label class="sm-field sm-color">Panel <input type="color" id="signBg" value="#0b1d33"></label>
-            </div>
-            <div class="sm-checks">
-              <label><input type="checkbox" id="signTransparent"> Letters only (no panel)</label>
-              <label><input type="checkbox" id="signGlow"> Lit glow</label>
             </div>
           </div>
           <div id="signFile" hidden>
@@ -154,9 +172,11 @@
               <label class="btn white sm-file" for="signInput">Choose sign artwork</label>
               <input class="sm-visually-hidden" type="file" id="signInput" accept="image/*,.svg,.heic,.heif">
             </div>
-            <p class="sm-meta" id="signMeta">A PNG or SVG with a transparent background looks best. JPEG, WebP and HEIC also work.</p>
+            <p class="sm-meta" id="signMeta">A PNG or SVG with a transparent background looks best. On a plain background, the background is removed for letter types.</p>
           </div>
-          <p class="sm-tip">Drag the four corner handles onto the wall so the sign follows its perspective. Drag inside the sign to move it.</p>
+          <div class="sm-opts" id="typeOptions"></div>
+          <p class="sm-notice" id="typeNotice" hidden></p>
+          <p class="sm-tip">Drag the four corner handles onto the wall so the sign follows its perspective. Drag inside the sign to move it. Switch to <strong>Night</strong> on the photo to see it lit.</p>
           <div class="sm-size" id="sizeOut" aria-live="polite"></div>
           <fieldset class="sm-len sm-setw" id="setWidth">
             <legend>Resize to a width</legend>
@@ -187,12 +207,30 @@
           <div class="sm-checks">
             <label><input type="checkbox" id="showDims" checked> Show dimension lines on the image</label>
           </div>
+          <div class="sm-price" id="priceOut" aria-live="polite"></div>
           <div class="sm-actions sm-export">
             <button type="button" class="btn gold lg" id="downloadPdf">Download PDF</button>
             <button type="button" class="btn white" id="downloadPng">Download image</button>
             <button type="button" class="btn white" id="sharePdf" hidden>Share PDF</button>
           </div>
-          <p class="note">The PDF is marked <strong>“Concept only – not a shop drawing.”</strong> Sizes are estimates from one photo and one measurement. To get it quoted, email the PDF with your photos and the project address to <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p>
+          <p class="note">The PDF has the day view, the night view, how the sign is built and the flat artwork, marked <strong>“Concept only – not a shop drawing.”</strong> Sizes are estimates from one photo and one measurement.</p>
+          <div class="sm-approve" id="approveBox">
+            <h3>Phone approval link</h3>
+            <p>Send your client a link to a mobile proof page. They can switch day and night, comment, approve, and download the PDF.</p>
+            <button type="button" class="btn navy" id="createLink">Create approval link</button>
+            <p class="sm-fine">This uploads the day and night images and the flat artwork to Arc’s website so the page can show them. Anyone with the link can see the proof.</p>
+            <div class="sm-link" id="linkOut" hidden>
+              <label class="sm-field">Approval link
+                <input type="text" id="linkUrl" readonly>
+              </label>
+              <div class="sm-actions">
+                <button type="button" class="btn white" id="copyLink">Copy link</button>
+                <button type="button" class="btn white" id="shareLink" hidden>Share link</button>
+                <a class="btn white" id="openLink" href="#" target="_blank" rel="noopener">Open</a>
+              </div>
+            </div>
+          </div>
+          <p class="note">To get it quoted, email the PDF with your photos and the project address to <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p>
         </section>
 
         <p class="sm-status" id="status" role="status" aria-live="polite"></p>
@@ -241,6 +279,15 @@
     </div>
   </section>
 </main>
+
+<dialog class="sm-types" id="typeDialog" aria-labelledby="typesTitle">
+  <div class="sm-types-head">
+    <h2 id="typesTitle">Choose a sign type</h2>
+    <button type="button" class="sm-x" id="closeTypes" aria-label="Close">&times;</button>
+  </div>
+  <p class="sm-types-sub">Each type is drawn the way it's built: depth, mounting and where the light comes from. The drawings are cross-sections, not to scale.</p>
+  <div class="sm-types-body" id="typeList"></div>
+</dialog>
 
 <footer>
   <div class="wrap footer-grid">

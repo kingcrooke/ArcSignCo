@@ -1,15 +1,22 @@
 import {
-  dist, centroid, pointInQuad, rectQuad, scaleQuad, quadSizeInches, formatFeetInches, formatArea, toInches,
+  dist, centroid, pointInQuad, rectQuad, scaleQuad, quadSizeInches, quadSpans, formatFeetInches, formatArea, toInches,
 } from "./geometry.js";
-import { createWarper } from "./warp.js";
 import { loadImageFile, renderTextSign, FONTS } from "./images.js";
-import { buildProofPdf, DISCLAIMER } from "./pdf.js";
+import { makeArtwork } from "./art.js";
+import { createScene, aspectFor, defaultOptions } from "./scene.js";
+import { SIGN_TYPES, GROUPS, LIGHTING, DEFAULT_TYPE, getType, isLit } from "./sign-types.js";
+import { diagramSvg } from "./diagrams.js";
+import { estimatePrice, formatRange } from "./pricing.js";
+import { DISCLAIMER } from "./pdf.js";
+import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
 
 const $ = id => document.getElementById(id);
 const stage = $("stage"), canvas = $("view"), ctx = canvas.getContext("2d");
 const STEPS = ["photo", "scale", "sign", "export"];
 const NAVY = "#0b1d33", GOLD = "#d4a843", GOLD2 = "#f0d080";
-const LOGO_URL = "/assets/img/logo-lockup-white-847.v2.png";
+const API = "/api/sign-proofs";
+// Used for depth and lighting until the scale is set; sizes are only shown once it is.
+const ASSUMED_WIDTH_IN = 96;
 
 const state = {
   step: "photo",
@@ -18,7 +25,8 @@ const state = {
   fitted: true,
   cal: null,          // { a, b } in photo pixels
   calInches: 0,
-  sign: null,         // canvas with the artwork
+  sign: null,         // canvas with the artwork as supplied (or rendered text)
+  art: null,          // makeArtwork(sign)
   signMode: "text",
   fileSign: null,
   quad: null,         // [tl, tr, br, bl] in photo pixels
@@ -26,9 +34,14 @@ const state = {
   opacity: 1,
   selected: null,     // { kind: "cal" | "quad", index }
   touchedSign: false,
+  typeId: DEFAULT_TYPE,
+  typeOptions: {},    // per type id, so switching back keeps choices
+  mode: "day",
+  proof: null,        // { id, url } once an approval link exists for the current design
 };
 
-let warper = null;
+const scene = createScene();
+let artVersion = 0;
 let dpr = 1;
 let raf = 0;
 let drag = null;
@@ -41,6 +54,7 @@ const calibrated = () => pxPerInch() > 0;
 const toScreen = p => ({ x: state.view.x + p.x * state.view.s, y: state.view.y + p.y * state.view.s });
 const toImage = (x, y) => ({ x: (x - state.view.x) / state.view.s, y: (y - state.view.y) / state.view.s });
 const cssSize = () => ({ w: canvas.clientWidth, h: canvas.clientHeight });
+const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 function setStatus(text, error = false) {
   const el = $("status");
@@ -58,6 +72,32 @@ function sizeInfo() {
   if (!state.quad || !calibrated()) return null;
   const s = quadSizeInches(state.quad, pxPerInch());
   return { ...s, w: formatFeetInches(s.width), h: formatFeetInches(s.height), area: formatArea(s.width, s.height) };
+}
+const currentType = () => getType(state.typeId);
+function optionsFor(type = currentType()) {
+  return (state.typeOptions[type.id] ||= defaultOptions(type));
+}
+// Size in inches the scene draws at: measured when the scale is set, assumed otherwise.
+function sceneSize() {
+  const s = sizeInfo();
+  if (s) return { width: s.width, height: s.height };
+  const sp = quadSpans(state.quad);
+  return { width: ASSUMED_WIDTH_IN, height: ASSUMED_WIDTH_IN * (sp.height / Math.max(1, sp.width)) };
+}
+function drawScene(target, view, clip, { mode = state.mode, quality = "full" } = {}) {
+  scene.render(target, {
+    photo: state.photo.canvas,
+    view,
+    clip,
+    quad: state.art ? state.quad : null,
+    art: state.art,
+    type: currentType(),
+    options: optionsFor(),
+    mode,
+    quality,
+    sizeIn: state.quad ? sceneSize() : null,
+    opacity: state.opacity,
+  });
 }
 
 // ---------- view ----------
@@ -100,16 +140,12 @@ function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (!state.photo) return;
   const { s, x, y } = state.view;
-  const photo = state.photo.canvas;
+  const showSign = state.step === "sign" || state.step === "export";
+  drawScene(ctx, { s: s * dpr, x: x * dpr, y: y * dpr }, { w: canvas.width, h: canvas.height }, {
+    quality: drag || pinch ? "draft" : "full",
+    mode: showSign ? state.mode : "day",
+  });
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
-  ctx.drawImage(photo, x, y, photo.width * s, photo.height * s);
-
-  if (state.sign && state.quad) {
-    drawSign(ctx, state.quad.map(p => ({ x: (x + p.x * s) * dpr, y: (y + p.y * s) * dpr })));
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
   const sq = state.quad && state.quad.map(toScreen);
   const size = sizeInfo();
   if (sq && size && $("showDims").checked && (state.step === "sign" || state.step === "export")) {
@@ -119,14 +155,6 @@ function render() {
   if (sq && state.step === "sign") drawQuadHandles(sq);
   if (drag && drag.type === "point") drawLoupe();
   updateChip(size);
-}
-
-function drawSign(target, quadPx) {
-  if (!warper || !warper.ok) {
-    warper = createWarper({ forceCpu: !!warper });
-    warper.setSource(state.sign);
-  }
-  warper.draw(target, quadPx, state.opacity);
 }
 
 function handle(p, active, r = 9) {
@@ -559,22 +587,41 @@ $("redrawCal").addEventListener("click", () => {
 });
 
 // ---------- sign ----------
-function setSign(source) {
-  const prev = state.sign;
+const signAspect = () => aspectFor(currentType(), state.art, optionsFor());
+
+function setSign(source, { text = false } = {}) {
+  const prev = state.art ? signAspect() : null;
   state.sign = source;
-  if (!warper || !warper.ok) warper = createWarper({ forceCpu: !!warper });
-  warper.setSource(source);
-  const aspect = source.height / source.width;
-  if (!state.quad) placeSign(aspect);
-  else if (!state.quadEdited && prev) {
-    const c = centroid(state.quad), w = dist(state.quad[0], state.quad[1]);
-    state.quad = rectQuad(c.x, c.y, w, w * aspect);
-  }
+  state.art = makeArtwork(source, { text });
+  artVersion++;
+  fitQuadToArt(prev);
   updateUI();
   requestRender();
 }
 
-function placeSign(aspect = state.sign.height / state.sign.width, keepCenter = false) {
+// Keeps the quad's shape in step with the artwork and type. Untouched quads are re-placed;
+// pinned quads keep their width and perspective and only change height.
+function fitQuadToArt(prevAspect) {
+  const aspect = signAspect();
+  if (!state.quad) return placeSign(aspect);
+  if (prevAspect && Math.abs(aspect / prevAspect - 1) < 0.02) return;
+  if (!state.quadEdited) {
+    const c = centroid(state.quad), w = quadSpans(state.quad).width;
+    state.quad = rectQuad(c.x, c.y, w, w * aspect);
+    return;
+  }
+  const sp = quadSpans(state.quad);
+  const k = (sp.width * aspect) / Math.max(1, sp.height);
+  const [a, b, c, d] = state.quad;
+  const around = (p, q) => {
+    const m = { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 };
+    return [{ x: m.x + (p.x - m.x) * k, y: m.y + (p.y - m.y) * k }, { x: m.x + (q.x - m.x) * k, y: m.y + (q.y - m.y) * k }];
+  };
+  const [a2, d2] = around(a, d), [b2, c2] = around(b, c);
+  state.quad = [a2, b2, c2, d2];
+}
+
+function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
   let w = photo.width * 0.45;
   let c = { x: photo.width / 2, y: photo.height * 0.36 };
@@ -587,19 +634,13 @@ function placeSign(aspect = state.sign.height / state.sign.width, keepCenter = f
   state.quadEdited = false;
 }
 
+// Text becomes cut-out letters; the sign type supplies any panel, cabinet or fabric behind them.
 function textSignOptions() {
-  return {
-    text: $("signTextInput").value,
-    font: $("signFont").value,
-    color: $("signColor").value,
-    background: $("signBg").value,
-    transparent: $("signTransparent").checked,
-    glow: $("signGlow").checked,
-  };
+  return { text: $("signTextInput").value, font: $("signFont").value, color: $("signColor").value, transparent: true };
 }
 function updateTextSign() {
   if (state.signMode !== "text" || !state.photo) return;
-  setSign(renderTextSign(textSignOptions()));
+  setSign(renderTextSign(textSignOptions()), { text: true });
 }
 
 async function loadSignFile(file) {
@@ -630,9 +671,161 @@ function setSignMode(mode) {
   else if (state.fileSign) setSign(state.fileSign);
 }
 
+// ---------- sign types ----------
+const LIGHT_CHOICES = [
+  ["#fff1d6", "Warm white"], ["#eef5ff", "Cool white"], ["#ff4a3d", "Red"], ["#4aa3ff", "Blue"], ["#3ddc84", "Green"], ["#ffb02e", "Amber"],
+];
+const OPTION_UI = {
+  returns: { label: "Returns", kind: "color", auto: "Match artwork" },
+  trim: { label: "Trim cap", kind: "color" },
+  raceway: { label: "Raceway", kind: "color", auto: "Match wall" },
+  panel: { label: "Panel", kind: "color" },
+  frame: { label: "Cabinet", kind: "color" },
+  light: { label: "Light color", kind: "select", choices: LIGHT_CHOICES },
+  side: { label: "Wall is on the", kind: "select", choices: [["left", "Left"], ["right", "Right"]] },
+  fabric: { label: "Fabric", kind: "select", choices: [["solid", "Solid"], ["stripes", "Stripes"]] },
+  edge: { label: "Valance edge", kind: "select", choices: [["straight", "Straight"], ["scalloped", "Scalloped"]] },
+};
+const optionLabel = (type, key) => (key === "panel" && type.render.kind === "awning" ? "Fabric color" : key === "panel" && type.render.kind === "cabinet" ? "Face" : OPTION_UI[key].label);
+
+function renderTypeOptions() {
+  const type = currentType(), opts = optionsFor(type), box = $("typeOptions");
+  box.textContent = "";
+  for (const key of type.options) {
+    const ui = OPTION_UI[key];
+    if (!ui) continue;
+    const label = document.createElement("label");
+    label.className = `sm-field${ui.kind === "color" ? " sm-color" : ""}`;
+    label.append(optionLabel(type, key));
+    let input;
+    if (ui.kind === "color") {
+      input = document.createElement("input");
+      input.type = "color";
+      input.value = opts[key] || (key === "raceway" ? "#6b6f76" : key === "returns" ? "#202226" : "#24262b");
+    } else {
+      input = document.createElement("select");
+      for (const [v, t] of ui.choices) input.add(new Option(t, v));
+      input.value = opts[key];
+    }
+    input.dataset.opt = key;
+    label.append(input);
+    if (ui.auto) {
+      const wrap = document.createElement("span");
+      wrap.className = "sm-auto";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !opts[key];
+      cb.dataset.auto = key;
+      wrap.append(cb, ui.auto);
+      const outer = document.createElement("div");
+      outer.append(label, wrap);
+      box.append(outer);
+    } else box.append(label);
+  }
+}
+$("typeOptions").addEventListener("input", e => {
+  const t = e.target, opts = optionsFor();
+  if (t.dataset.opt) {
+    opts[t.dataset.opt] = t.value;
+    const auto = $("typeOptions").querySelector(`[data-auto="${t.dataset.opt}"]`);
+    if (auto) auto.checked = false;
+  } else if (t.dataset.auto) {
+    const input = $("typeOptions").querySelector(`[data-opt="${t.dataset.auto}"]`);
+    opts[t.dataset.auto] = t.checked ? "" : input.value;
+  }
+  updateUI();
+  requestRender();
+});
+$("typeOptions").addEventListener("change", e => e.target.dispatchEvent(new Event("input", { bubbles: true })));
+
+function renderTypeCard() {
+  const type = currentType();
+  const group = GROUPS.find(g => g.id === type.group);
+  $("typeThumb").innerHTML = diagramSvg(type);
+  $("typeGroup").textContent = group ? group.label : "";
+  $("typeName").textContent = type.name;
+  $("typeLight").textContent = type.lightingLabel;
+  $("typeLight").classList.toggle("off", !isLit(type));
+  $("buildArt").innerHTML = diagramSvg(type);
+  $("buildSummary").textContent = type.summary;
+  $("buildParts").replaceChildren(...type.parts.map(p => Object.assign(document.createElement("li"), { textContent: p })));
+  $("buildNight").textContent = `At night: ${LIGHTING[type.lighting].night}`;
+  $("pinHint").hidden = !type.pinHint;
+  $("pinHint").textContent = type.pinHint || "";
+  $("typeNotice").hidden = !type.notice;
+  $("typeNotice").textContent = type.notice || "";
+  renderTypeOptions();
+}
+
+function setType(id) {
+  const prev = state.art ? signAspect() : null;
+  state.typeId = getType(id).id;
+  if (state.art) fitQuadToArt(prev);
+  renderTypeCard();
+  updateUI();
+  requestRender();
+}
+
+function buildTypeList() {
+  const list = $("typeList");
+  list.textContent = "";
+  for (const g of GROUPS) {
+    const types = SIGN_TYPES.filter(t => t.group === g.id);
+    if (!types.length) continue;
+    const h = document.createElement("h3");
+    h.textContent = g.label;
+    const grid = document.createElement("div");
+    grid.className = "sm-tgrid";
+    for (const t of types) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "sm-tcard";
+      b.dataset.type = t.id;
+      b.innerHTML = `<div class="sm-tc-art">${diagramSvg(t)}</div><strong></strong><span></span>`;
+      b.querySelector("strong").textContent = t.name;
+      b.querySelector("span").textContent = t.lightingLabel;
+      grid.append(b);
+    }
+    list.append(h, grid);
+  }
+}
+function openTypes() {
+  for (const b of $("typeList").querySelectorAll("[data-type]")) b.setAttribute("aria-pressed", String(b.dataset.type === state.typeId));
+  const dlg = $("typeDialog");
+  if (dlg.showModal) dlg.showModal();
+  else dlg.setAttribute("open", "");
+  $("typeList").querySelector('[aria-pressed="true"]')?.focus();
+}
+function closeTypes() {
+  const dlg = $("typeDialog");
+  if (dlg.close) dlg.close();
+  else dlg.removeAttribute("open");
+}
+$("openTypes").addEventListener("click", openTypes);
+$("closeTypes").addEventListener("click", closeTypes);
+$("typeDialog").addEventListener("click", e => {
+  const b = e.target.closest("[data-type]");
+  if (b) { setType(b.dataset.type); closeTypes(); $("openTypes").focus(); return; }
+  if (e.target === $("typeDialog")) closeTypes();
+});
+
+function setMode(mode) {
+  state.mode = mode === "night" ? "night" : "day";
+  for (const b of $("dayNight").querySelectorAll("[data-mode]")) b.setAttribute("aria-checked", String(b.dataset.mode === state.mode));
+  requestRender();
+}
+$("dayNight").addEventListener("click", e => { const b = e.target.closest("[data-mode]"); if (b) setMode(b.dataset.mode); });
+$("dayNight").addEventListener("keydown", e => {
+  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+    e.preventDefault();
+    setMode(state.mode === "day" ? "night" : "day");
+    $("dayNight").querySelector(`[data-mode="${state.mode}"]`).focus();
+  }
+});
+
 for (const [key, f] of Object.entries(FONTS)) $("signFont").add(new Option(f.label, key));
 document.querySelectorAll('input[name="signMode"]').forEach(r => r.addEventListener("change", () => setSignMode(r.value)));
-["signTextInput", "signFont", "signColor", "signBg", "signTransparent", "signGlow"].forEach(id => {
+["signTextInput", "signFont", "signColor"].forEach(id => {
   $(id).addEventListener("input", updateTextSign);
   $(id).addEventListener("change", updateTextSign);
 });
@@ -640,11 +833,12 @@ $("signInput").addEventListener("change", e => { loadSignFile(e.target.files[0])
 $("opacity").addEventListener("input", e => {
   state.opacity = Number(e.target.value) / 100;
   $("opacityOut").textContent = `${e.target.value}%`;
+  renderProofLink();
   requestRender();
 });
 $("resetSign").addEventListener("click", () => {
   if (!state.sign) return;
-  placeSign(state.sign.height / state.sign.width, true);
+  placeSign(signAspect(), true);
   updateUI();
   requestRender();
 });
@@ -663,44 +857,42 @@ $("applyWidth").addEventListener("click", () => {
 $("showDims").addEventListener("change", requestRender);
 
 // ---------- export ----------
-function composite(withDims) {
+// The photo with the sign at photo resolution (or scaled down to maxSide), day or night.
+function composite({ mode = "day", dims = false, maxSide = 0 } = {}) {
   const photo = state.photo.canvas;
+  const k = maxSide ? Math.min(1, maxSide / Math.max(photo.width, photo.height)) : 1;
   const out = document.createElement("canvas");
-  out.width = photo.width;
-  out.height = photo.height;
+  out.width = Math.round(photo.width * k);
+  out.height = Math.round(photo.height * k);
   const octx = out.getContext("2d");
-  octx.drawImage(photo, 0, 0);
-  const u = Math.max(1.2, photo.width / 700);
-  if (state.sign && state.quad) drawSign(octx, state.quad);
+  drawScene(octx, { s: k, x: 0, y: 0 }, { w: out.width, h: out.height }, { mode });
+  const u = Math.max(1.2, out.width / 700);
   const size = sizeInfo();
-  if (withDims && size) drawDimensions(octx, state.quad, size.w, size.h, u);
-  const label = `${DISCLAIMER} · arcsignco.com`;
+  if (dims && size) drawDimensions(octx, state.quad.map(p => ({ x: p.x * k, y: p.y * k })), size.w, size.h, u);
+  const label = `${mode === "night" ? "Night preview · " : ""}${DISCLAIMER} · arcsignco.com`;
   octx.font = `800 ${12 * u}px Arial, Helvetica, sans-serif`;
   const tw = octx.measureText(label).width;
   pill(octx, { x: 12 * u + (tw + 14 * u) / 2, y: out.height - 22 * u }, label, 0, u, { fg: GOLD2 });
   return out;
 }
 
-const toBlob = (c, type, q) => new Promise((res, rej) => c.toBlob(b => (b ? res(b) : rej(new Error("export"))), type, q));
-async function jpegBytes(c, q = 0.9) {
-  return { bytes: new Uint8Array(await (await toBlob(c, "image/jpeg", q)).arrayBuffer()), width: c.width, height: c.height };
+function flatArt(maxSide = 0) {
+  const c = flatArtwork(currentType(), state.art, optionsFor(), sceneSize());
+  if (!maxSide || Math.max(c.width, c.height) <= maxSide) return c;
+  const k = maxSide / Math.max(c.width, c.height);
+  const out = document.createElement("canvas");
+  out.width = Math.round(c.width * k);
+  out.height = Math.round(c.height * k);
+  const g = out.getContext("2d");
+  g.imageSmoothingQuality = "high";
+  g.drawImage(c, 0, 0, out.width, out.height);
+  return out;
 }
 
-let logoCache = null;
-async function logoJpeg() {
-  if (logoCache) return logoCache;
-  const img = new Image();
-  img.src = LOGO_URL;
-  await img.decode();
-  const c = document.createElement("canvas");
-  c.width = img.naturalWidth;
-  c.height = img.naturalHeight;
-  const lctx = c.getContext("2d");
-  lctx.fillStyle = NAVY;
-  lctx.fillRect(0, 0, c.width, c.height);
-  lctx.drawImage(img, 0, 0);
-  logoCache = await jpegBytes(c, 0.95);
-  return logoCache;
+function priceInfo() {
+  const size = sizeInfo();
+  const p = size && estimatePrice(state.typeId, size);
+  return p ? { range: formatRange(p), label: p.label, note: p.note, unit: p.unit, quantity: p.quantity } : null;
 }
 
 function fileBase() {
@@ -710,18 +902,23 @@ function fileBase() {
   return `arc-sign-mockup-${slug}-${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
 }
 
+const referenceText = () => (calibrated() ? `${$("calLabel").value.trim() || "Reference line"} = ${formatFeetInches(state.calInches)}` : "");
+
 async function makePdf() {
   const size = sizeInfo();
-  const ref = calibrated() ? `${$("calLabel").value.trim() || "Reference line"} = ${formatFeetInches(state.calInches)}` : "";
-  const [logo, mockup] = await Promise.all([logoJpeg(), jpegBytes(composite($("showDims").checked), 0.88)]);
-  const bytes = buildProofPdf({
-    logo,
-    mockup,
+  const dims = $("showDims").checked;
+  const bytes = await buildSignPdf({
+    typeId: state.typeId,
+    day: composite({ dims }),
+    night: composite({ mode: "night", dims }),
+    flat: flatArt(2000),
     size: size ? { width: size.w, height: size.h, area: size.area } : null,
-    reference: ref,
+    reference: referenceText(),
     project: $("project").value.trim(),
     preparedFor: $("preparedFor").value.trim(),
     notes: $("notes").value.trim(),
+    price: priceInfo(),
+    proofUrl: state.proof && state.proof.key === designKey() ? state.proof.url : "",
   });
   return new File([bytes], `${fileBase()}.pdf`, { type: "application/pdf" });
 }
@@ -746,7 +943,7 @@ async function runExport(label, fn) {
     await fn();
   } catch (err) {
     console.error(err);
-    if (err?.name !== "AbortError") setStatus("Export failed. Try again, or try a smaller photo.", true);
+    if (err?.name !== "AbortError") setStatus(err?.userMessage || "Export failed. Try again, or try a smaller photo.", true);
   } finally {
     busy("");
     requestRender();
@@ -759,8 +956,8 @@ $("downloadPdf").addEventListener("click", () => runExport("Building PDF…", as
   setStatus(`Saved ${file.name}`);
 }));
 $("downloadPng").addEventListener("click", () => runExport("Building image…", async () => {
-  const blob = await toBlob(composite($("showDims").checked), "image/jpeg", 0.92);
-  const name = `${fileBase()}.jpg`;
+  const blob = await jpegBlob(composite({ mode: state.mode, dims: $("showDims").checked }), 0.92);
+  const name = `${fileBase()}${state.mode === "night" ? "-night" : ""}.jpg`;
   download(blob, name);
   setStatus(`Saved ${name}`);
 }));
@@ -773,6 +970,99 @@ try {
   const probe = new File([new Uint8Array(1)], "probe.pdf", { type: "application/pdf" });
   $("sharePdf").hidden = !(navigator.canShare && navigator.canShare({ files: [probe] }));
 } catch { /* sharing files unsupported */ }
+
+// ---------- approval link ----------
+// Anything that changes what the client would see; a link made for an older design is not offered.
+function designKey() {
+  const r = v => Math.round(v);
+  return JSON.stringify([
+    artVersion, state.typeId, optionsFor(), state.quad && state.quad.map(p => [r(p.x), r(p.y)]), state.calInches,
+    state.cal && [r(state.cal.a.x), r(state.cal.a.y), r(state.cal.b.x), r(state.cal.b.y)], state.opacity, $("showDims").checked,
+    $("project").value, $("preparedFor").value, $("notes").value, $("calLabel").value,
+  ]);
+}
+
+class UserError extends Error {
+  constructor(message) { super(message); this.userMessage = message; }
+}
+
+async function createProof() {
+  const dims = $("showDims").checked;
+  const day = composite({ dims, maxSide: 1600 });
+  const night = composite({ mode: "night", dims, maxSide: 1600 });
+  const art = flatArt(1400);
+  const [dayB, nightB, artB] = await Promise.all([jpegBlob(day, 0.84), jpegBlob(night, 0.84), jpegBlob(art, 0.88)]);
+  const size = sizeInfo();
+  const sheet = {
+    typeId: state.typeId,
+    project: $("project").value.trim(),
+    preparedFor: $("preparedFor").value.trim(),
+    notes: $("notes").value.trim(),
+    reference: referenceText(),
+    size: size ? { width: size.width, height: size.height } : null,
+    sizeText: size ? { width: size.w, height: size.h, area: size.area } : null,
+    images: {
+      day: { width: day.width, height: day.height },
+      night: { width: night.width, height: night.height },
+      art: { width: art.width, height: art.height },
+    },
+  };
+  const form = new FormData();
+  form.set("sheet", JSON.stringify(sheet));
+  form.set("day", dayB, "day.jpg");
+  form.set("night", nightB, "night.jpg");
+  form.set("art", artB, "art.jpg");
+  let res;
+  try {
+    res = await fetch(API, { method: "POST", body: form });
+  } catch {
+    throw new UserError("Couldn't reach the server. Check your connection and try again.");
+  }
+  const body = await res.json().catch(() => null);
+  if (!res.ok || !body?.id) {
+    throw new UserError(res.status === 404 || res.status === 405
+      ? "Approval links aren't available on this copy of the site."
+      : body?.error || "Couldn't create the link. Try again.");
+  }
+  const url = `${location.origin}/tools/sign-mockup/proof/#${body.id}`;
+  state.proof = { id: body.id, url, key: designKey() };
+}
+
+function renderProofLink() {
+  const fresh = state.proof && state.proof.key === designKey();
+  $("linkOut").hidden = !fresh;
+  $("createLink").textContent = state.proof && !fresh ? "Create a new link for this version" : "Create approval link";
+  if (fresh) {
+    $("linkUrl").value = state.proof.url;
+    $("openLink").href = state.proof.url;
+  }
+}
+
+$("createLink").addEventListener("click", () => runExport("Creating approval link…", async () => {
+  await createProof();
+  renderProofLink();
+  setStatus("Approval link ready. Send it to your client.");
+  $("linkUrl").focus();
+  $("linkUrl").select();
+}));
+$("copyLink").addEventListener("click", async () => {
+  const url = $("linkUrl").value;
+  try {
+    await navigator.clipboard.writeText(url);
+    setStatus("Link copied.");
+  } catch {
+    $("linkUrl").select();
+    setStatus("Press Ctrl+C (or ⌘C) to copy the selected link.");
+  }
+});
+$("shareLink").hidden = !navigator.share;
+$("shareLink").addEventListener("click", async () => {
+  try {
+    await navigator.share({ title: "Sign mockup for approval", url: $("linkUrl").value });
+  } catch { /* dismissed */ }
+});
+["project", "preparedFor", "notes", "calLabel"].forEach(id => $(id).addEventListener("input", renderProofLink));
+$("showDims").addEventListener("change", renderProofLink);
 
 // ---------- steps & panel state ----------
 function canGo(step) {
@@ -836,6 +1126,18 @@ function updateUI() {
     : "";
   $("setWidth").disabled = !size;
 
+  const price = $("priceOut");
+  const p = state.sign && priceInfo();
+  price.classList.toggle("muted", !p);
+  price.innerHTML = !state.sign
+    ? ""
+    : p
+      ? `<span>Rough preliminary range · ${escapeHtml(p.label)}</span><strong>${p.range}</strong><small>${escapeHtml(currentType().name)}, about ${p.quantity} ${p.unit}. ${escapeHtml(p.note)}</small>`
+      : `<span>Rough preliminary range</span><small>Set the scale in step 2 to see a placeholder range for this size and type.</small>`;
+
+  $("dayNight").hidden = !(state.photo && state.sign && (state.step === "sign" || state.step === "export"));
+  renderProofLink();
+
   const hint = hintText();
   $("hint").textContent = hint;
   $("hint").hidden = !hint;
@@ -858,8 +1160,13 @@ window.addEventListener("beforeunload", e => {
 });
 
 new ResizeObserver(resizeCanvas).observe(stage);
+buildTypeList();
+renderTypeCard();
 resizeCanvas();
 updateUI();
 
 // Lets automated checks drive the tool without simulating every gesture.
-window.signMockup = { state, loadPhoto, loadSignFile, setStep, makePdf, composite, requestRender, get warper() { return warper?.kind; } };
+window.signMockup = {
+  state, loadPhoto, loadSignFile, setStep, setType, setMode, makePdf, composite, requestRender, designKey,
+  get renderer() { return scene.kind; },
+};
