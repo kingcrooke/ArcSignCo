@@ -649,6 +649,7 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
   if (keepCenter && state.quad) {
     c = centroid(state.quad);
     w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
+    if (w < photo.width * 0.04) w = photo.width * 0.45;
   }
   if (w * aspect > photo.height * 0.5) w = (photo.height * 0.5) / aspect;
   state.quad = rectQuad(c.x, c.y, w, w * aspect);
@@ -1005,6 +1006,7 @@ $("applyWidth").addEventListener("click", () => {
     setStatus(size ? "Enter a width first." : "Set the scale in step 2 first.", true);
     return;
   }
+  if (target < 1) return setStatus("Enter a width of at least 1 inch.", true);
   state.quad = scaleQuad(state.quad, target / size.width);
   setStatus(`Resized to about ${formatFeetInches(target)} wide.`);
   updateUI();
@@ -1017,6 +1019,7 @@ $("applyDrop").addEventListener("click", () => {
     setStatus(size ? "Enter a drop first." : "Set the scale in step 2 first.", true);
     return;
   }
+  if (target < 1) return setStatus("Enter a drop of at least 1 inch.", true);
   setDropScale(target / size.height);
   state.quadEdited = true;
   setStatus(`Drop set to about ${formatFeetInches(target)}.`);
