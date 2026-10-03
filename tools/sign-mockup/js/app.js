@@ -4,9 +4,12 @@ import {
 import { loadImageFile, renderTextSign, FONTS } from "./images.js";
 import { makeArtwork } from "./art.js";
 import { createScene, aspectFor, defaultOptions } from "./scene.js";
-import { SIGN_TYPES, GROUPS, LIGHTING, DEFAULT_TYPE, getType, isLit } from "./sign-types.js";
+import { ALL_TYPES, GROUPS, CATEGORIES, getType, litWith, describe, isAwning, cleanOptions } from "./catalog.js";
+import {
+  sanitizeAwningOptions, awningOptionKeys, projectionFor, COVERS, PATTERNS, VALANCES, LETTERING, SIDES, AWNING_LIGHTS,
+} from "./awning-types.js";
 import { diagramSvg } from "./diagrams.js";
-import { estimatePrice, formatRange } from "./pricing.js";
+import { estimatePrice, formatRange, formatPerFoot } from "./pricing.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
 
@@ -34,8 +37,9 @@ const state = {
   opacity: 1,
   selected: null,     // { kind: "cal" | "quad", index }
   touchedSign: false,
-  typeId: DEFAULT_TYPE,
+  typeId: CATEGORIES[0].def,
   typeOptions: {},    // per type id, so switching back keeps choices
+  lastType: Object.fromEntries(CATEGORIES.map(c => [c.id, c.def])),
   mode: "day",
   proof: null,        // { id, url } once an approval link exists for the current design
 };
@@ -74,6 +78,8 @@ function sizeInfo() {
   return { ...s, w: formatFeetInches(s.width), h: formatFeetInches(s.height), area: formatArea(s.width, s.height) };
 }
 const currentType = () => getType(state.typeId);
+const categoryOf = type => (isAwning(type) ? "awning" : "sign");
+const noun = () => categoryOf(currentType());
 function optionsFor(type = currentType()) {
   return (state.typeOptions[type.id] ||= defaultOptions(type));
 }
@@ -81,6 +87,7 @@ function optionsFor(type = currentType()) {
 function sceneSize() {
   const s = sizeInfo();
   if (s) return { width: s.width, height: s.height };
+  if (!state.quad) return { width: ASSUMED_WIDTH_IN, height: ASSUMED_WIDTH_IN * currentType().aspect || 30 };
   const sp = quadSpans(state.quad);
   return { width: ASSUMED_WIDTH_IN, height: ASSUMED_WIDTH_IN * (sp.height / Math.max(1, sp.width)) };
 }
@@ -327,9 +334,12 @@ function updateChip(size) {
   const chip = $("chip");
   let html = "";
   if (state.sign && state.quad && (state.step === "sign" || state.step === "export")) {
+    const aw = noun() === "awning";
     html = size
-      ? `≈ ${size.w} W × ${size.h} H<small>≈ ${size.area} · estimate from your scale line</small>`
-      : `Sign placed<small>Set the scale in step 2 to see its size</small>`;
+      ? aw
+        ? `≈ ${size.w} W × ${size.h} drop<small>estimate from your scale line</small>`
+        : `≈ ${size.w} W × ${size.h} H<small>≈ ${size.area} · estimate from your scale line</small>`
+      : `${aw ? "Awning" : "Sign"} placed<small>Set the scale in step 2 to see its size</small>`;
   } else if (state.step === "scale" && calibrated()) {
     html = `Scale set<small>${formatFeetInches(state.calInches)} reference line</small>`;
   }
@@ -613,12 +623,20 @@ function fitQuadToArt(prevAspect) {
   const sp = quadSpans(state.quad);
   const k = (sp.width * aspect) / Math.max(1, sp.height);
   const [a, b, c, d] = state.quad;
+  if (isAwning(currentType())) return setDropScale(k);
   const around = (p, q) => {
     const m = { x: (p.x + q.x) / 2, y: (p.y + q.y) / 2 };
     return [{ x: m.x + (p.x - m.x) * k, y: m.y + (p.y - m.y) * k }, { x: m.x + (q.x - m.x) * k, y: m.y + (q.y - m.y) * k }];
   };
   const [a2, d2] = around(a, d), [b2, c2] = around(b, c);
   state.quad = [a2, b2, c2, d2];
+}
+
+// Awnings hang from the wall line, so their height changes from the top edge down.
+function setDropScale(k) {
+  const [a, b, c, d] = state.quad;
+  const down = (top, bottom) => ({ x: top.x + (bottom.x - top.x) * k, y: top.y + (bottom.y - top.y) * k });
+  state.quad = [a, b, down(b, c), down(a, d)];
 }
 
 function placeSign(aspect = signAspect(), keepCenter = false) {
@@ -671,7 +689,7 @@ function setSignMode(mode) {
   else if (state.fileSign) setSign(state.fileSign);
 }
 
-// ---------- sign types ----------
+// ---------- sign types and awning shapes ----------
 const LIGHT_CHOICES = [
   ["#fff1d6", "Warm white"], ["#eef5ff", "Cool white"], ["#ff4a3d", "Red"], ["#4aa3ff", "Blue"], ["#3ddc84", "Green"], ["#ffb02e", "Amber"],
 ];
@@ -683,14 +701,31 @@ const OPTION_UI = {
   frame: { label: "Cabinet", kind: "color" },
   light: { label: "Light color", kind: "select", choices: LIGHT_CHOICES },
   side: { label: "Wall is on the", kind: "select", choices: [["left", "Left"], ["right", "Right"]] },
-  fabric: { label: "Fabric", kind: "select", choices: [["solid", "Solid"], ["stripes", "Stripes"]] },
-  edge: { label: "Valance edge", kind: "select", choices: [["straight", "Straight"], ["scalloped", "Scalloped"]] },
 };
-const optionLabel = (type, key) => (key === "panel" && type.render.kind === "awning" ? "Fabric color" : key === "panel" && type.render.kind === "cabinet" ? "Face" : OPTION_UI[key].label);
+const fascia = type => type.vr >= 12;
+const AWNING_UI = {
+  projection: { label: "Projection", kind: "range" },
+  cover: { label: "Cover", kind: "select", choices: t => t.covers.map(c => [c, COVERS[c].short]) },
+  lit: { label: "Lighting", kind: "select", choices: () => Object.entries(AWNING_LIGHTS) },
+  panel: { label: (t, o) => (o.cover === "metal" ? "Panel color" : "Fabric color"), kind: "color" },
+  pattern: { label: "Pattern", kind: "select", choices: () => Object.entries(PATTERNS) },
+  stripe: { label: "Stripe color", kind: "color" },
+  valance: { label: t => (fascia(t) ? "Fascia" : "Valance"), kind: "select", choices: t => t.valances.map(v => [v, VALANCES[v]]) },
+  letterOn: {
+    label: "Lettering", kind: "select",
+    choices: t => t.letter.map(v => [v, v === "valance" && fascia(t) ? "On the fascia" : LETTERING[v]]),
+  },
+  sides: { label: "Sides", kind: "select", choices: t => t.sides.map(v => [v, SIDES[v]]) },
+  frame: { label: "Frame", kind: "color" },
+};
+const optionLabel = (type, key) => (key === "panel" && type.render.kind === "cabinet" ? "Face" : OPTION_UI[key].label);
+const projectionText = inches => `${formatFeetInches(inches)} from the wall`;
 
 function renderTypeOptions() {
-  const type = currentType(), opts = optionsFor(type), box = $("typeOptions");
+  const type = currentType(), box = $("typeOptions");
   box.textContent = "";
+  if (isAwning(type)) return renderAwningOptions(type, box);
+  const opts = optionsFor(type);
   for (const key of type.options) {
     const ui = OPTION_UI[key];
     if (!ui) continue;
@@ -723,9 +758,45 @@ function renderTypeOptions() {
     } else box.append(label);
   }
 }
+
+function renderAwningOptions(type, box) {
+  const opts = (state.typeOptions[type.id] = sanitizeAwningOptions(type, optionsFor(type)));
+  for (const key of awningOptionKeys(type, opts)) {
+    const ui = AWNING_UI[key];
+    const label = document.createElement("label");
+    label.className = `sm-field${ui.kind === "color" ? " sm-color" : ""}${ui.kind === "range" ? " sm-wide" : ""}`;
+    label.append(typeof ui.label === "function" ? ui.label(type, opts) : ui.label);
+    let input;
+    if (ui.kind === "range") {
+      const size = sceneSize();
+      const out = document.createElement("output");
+      const p = projectionFor(type, opts, size.width, size.height);
+      out.textContent = projectionText(p);
+      label.append(out);
+      input = Object.assign(document.createElement("input"), { type: "range", min: type.d.min, max: type.d.max, step: 1, value: Math.round(p) });
+    } else if (ui.kind === "color") {
+      input = Object.assign(document.createElement("input"), { type: "color", value: opts[key] });
+    } else {
+      input = document.createElement("select");
+      for (const [v, t] of ui.choices(type)) input.add(new Option(t, v));
+      input.value = opts[key];
+    }
+    input.dataset.opt = key;
+    label.append(input);
+    box.append(label);
+  }
+}
+
 $("typeOptions").addEventListener("input", e => {
-  const t = e.target, opts = optionsFor();
-  if (t.dataset.opt) {
+  const t = e.target, type = currentType(), opts = optionsFor(type);
+  if (isAwning(type)) {
+    if (!t.dataset.opt) return;
+    opts[t.dataset.opt] = t.type === "range" ? Number(t.value) : t.value;
+    state.typeOptions[type.id] = sanitizeAwningOptions(type, opts);
+    if (t.type === "range") t.previousElementSibling.textContent = projectionText(Number(t.value));
+    // A select can change which other choices apply (cover, pattern, lighting).
+    if (t.tagName === "SELECT") renderTypeCard();
+  } else if (t.dataset.opt) {
     opts[t.dataset.opt] = t.value;
     const auto = $("typeOptions").querySelector(`[data-auto="${t.dataset.opt}"]`);
     if (auto) auto.checked = false;
@@ -736,60 +807,99 @@ $("typeOptions").addEventListener("input", e => {
   updateUI();
   requestRender();
 });
-$("typeOptions").addEventListener("change", e => e.target.dispatchEvent(new Event("input", { bubbles: true })));
+$("typeOptions").addEventListener("change", e => {
+  if (e.target.tagName !== "SELECT" || !isAwning(currentType())) e.target.dispatchEvent(new Event("input", { bubbles: true }));
+});
 
+const NIGHT_PREFIX = "At night: ";
 function renderTypeCard() {
-  const type = currentType();
-  const group = GROUPS.find(g => g.id === type.group);
+  const type = currentType(), aw = isAwning(type);
+  const info = describe(type, optionsFor(type), state.quad ? sceneSize() : null);
   $("typeThumb").innerHTML = diagramSvg(type);
-  $("typeGroup").textContent = group ? group.label : "";
+  $("typeGroup").textContent = info.group;
   $("typeName").textContent = type.name;
-  $("typeLight").textContent = type.lightingLabel;
-  $("typeLight").classList.toggle("off", !isLit(type));
+  $("typeLight").textContent = info.lightingLabel;
+  $("typeLight").classList.toggle("off", !litWith(type, optionsFor(type)));
+  $("openTypes").textContent = aw ? "Change shape" : "Change type";
   $("buildArt").innerHTML = diagramSvg(type);
-  $("buildSummary").textContent = type.summary;
-  $("buildParts").replaceChildren(...type.parts.map(p => Object.assign(document.createElement("li"), { textContent: p })));
-  $("buildNight").textContent = `At night: ${LIGHTING[type.lighting].night}`;
+  $("buildSummary").textContent = info.summary;
+  $("buildParts").replaceChildren(...info.parts.map(p => Object.assign(document.createElement("li"), { textContent: p })));
+  $("buildNight").textContent = `${NIGHT_PREFIX}${info.night}`;
   $("pinHint").hidden = !type.pinHint;
   $("pinHint").textContent = type.pinHint || "";
   $("typeNotice").hidden = !type.notice;
   $("typeNotice").textContent = type.notice || "";
+  $("placeNoun").textContent = aw ? "awning" : "sign";
+  $("textLabel").textContent = aw ? "Lettering" : "Sign text";
+  $("setDrop").hidden = !aw;
+  $("placeTip").innerHTML = aw
+    ? "Drag the four corner handles onto the wall area the awning covers; it is drawn out from the wall in perspective. Drag inside to move it. Switch to <strong>Night</strong> to see it after dark: only backlit awnings glow."
+    : "Drag the four corner handles onto the wall so the sign follows its perspective. Drag inside the sign to move it. Switch to <strong>Night</strong> on the photo to see it lit.";
+  for (const r of document.querySelectorAll('input[name="category"]')) r.checked = r.value === categoryOf(type);
   renderTypeOptions();
 }
 
 function setType(id) {
+  const prevType = currentType();
   const prev = state.art ? signAspect() : null;
-  state.typeId = getType(id).id;
-  if (state.art) fitQuadToArt(prev);
+  const next = getType(id);
+  state.typeId = next.id;
+  state.lastType[categoryOf(next)] = next.id;
+  // Switching between awning shapes keeps a wall area the user has pinned.
+  const keep = isAwning(prevType) && isAwning(next) && state.quadEdited;
+  if (state.art && !keep) fitQuadToArt(prev);
   renderTypeCard();
   updateUI();
   requestRender();
 }
+const setCategory = cat => setType(state.lastType[cat] || CATEGORIES.find(c => c.id === cat).def);
+document.querySelectorAll('input[name="category"]').forEach(r => r.addEventListener("change", () => setCategory(r.value)));
+
+const LIBRARY_SUB = {
+  sign: "Each type is drawn the way it's built: depth, mounting and where the light comes from. The drawings are cross-sections, not to scale.",
+  awning: "Each shape is drawn from the side: the frame in dark lines, the cover in color, the wall on the left. Not to scale. Pick one, then set the projection, cover, pattern, valance and lettering.",
+};
+const cardNote = t => (!isAwning(t) ? t.lightingLabel : t.lighting === "backlit" ? "Backlit" : t.backlit ? "Non-lit · backlit option" : "Non-lit");
+let libraryCat = "sign";
 
 function buildTypeList() {
   const list = $("typeList");
   list.textContent = "";
-  for (const g of GROUPS) {
-    const types = SIGN_TYPES.filter(t => t.group === g.id);
-    if (!types.length) continue;
-    const h = document.createElement("h3");
-    h.textContent = g.label;
-    const grid = document.createElement("div");
-    grid.className = "sm-tgrid";
-    for (const t of types) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "sm-tcard";
-      b.dataset.type = t.id;
-      b.innerHTML = `<div class="sm-tc-art">${diagramSvg(t)}</div><strong></strong><span></span>`;
-      b.querySelector("strong").textContent = t.name;
-      b.querySelector("span").textContent = t.lightingLabel;
-      grid.append(b);
+  for (const cat of CATEGORIES) {
+    const panel = document.createElement("div");
+    panel.dataset.catPanel = cat.id;
+    for (const g of GROUPS.filter(x => x.category === cat.id)) {
+      const types = ALL_TYPES.filter(t => t.group === g.id);
+      if (!types.length) continue;
+      const h = document.createElement("h3");
+      h.textContent = g.label;
+      const grid = document.createElement("div");
+      grid.className = "sm-tgrid";
+      for (const t of types) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "sm-tcard";
+        b.dataset.type = t.id;
+        b.innerHTML = `<div class="sm-tc-art">${diagramSvg(t)}</div><strong></strong><span></span>`;
+        b.querySelector("strong").textContent = t.name;
+        b.querySelector("span").textContent = cardNote(t);
+        grid.append(b);
+      }
+      panel.append(h, grid);
     }
-    list.append(h, grid);
+    list.append(panel);
   }
 }
+function showLibrary(cat) {
+  libraryCat = cat;
+  const c = CATEGORIES.find(x => x.id === cat);
+  $("typesTitle").textContent = c.title;
+  $("typesSub").textContent = LIBRARY_SUB[cat];
+  for (const b of $("typeCats").querySelectorAll("[data-cat]")) b.setAttribute("aria-selected", String(b.dataset.cat === cat));
+  for (const p of $("typeList").querySelectorAll("[data-cat-panel]")) p.hidden = p.dataset.catPanel !== cat;
+}
 function openTypes() {
+  showLibrary(noun());
   for (const b of $("typeList").querySelectorAll("[data-type]")) b.setAttribute("aria-pressed", String(b.dataset.type === state.typeId));
   const dlg = $("typeDialog");
   if (dlg.showModal) dlg.showModal();
@@ -803,6 +913,17 @@ function closeTypes() {
 }
 $("openTypes").addEventListener("click", openTypes);
 $("closeTypes").addEventListener("click", closeTypes);
+$("typeCats").addEventListener("click", e => {
+  const b = e.target.closest("[data-cat]");
+  if (b) { showLibrary(b.dataset.cat); $("typeDialog").scrollTop = 0; }
+});
+$("typeCats").addEventListener("keydown", e => {
+  if (!["ArrowLeft", "ArrowRight"].includes(e.key)) return;
+  e.preventDefault();
+  const i = CATEGORIES.findIndex(c => c.id === libraryCat);
+  showLibrary(CATEGORIES[(i + (e.key === "ArrowRight" ? 1 : CATEGORIES.length - 1)) % CATEGORIES.length].id);
+  $("typeCats").querySelector(`[data-cat="${libraryCat}"]`).focus();
+});
 $("typeDialog").addEventListener("click", e => {
   const b = e.target.closest("[data-type]");
   if (b) { setType(b.dataset.type); closeTypes(); $("openTypes").focus(); return; }
@@ -854,6 +975,20 @@ $("applyWidth").addEventListener("click", () => {
   updateUI();
   requestRender();
 });
+$("applyDrop").addEventListener("click", () => {
+  const target = toInches($("dFt").value, $("dIn").value);
+  const size = sizeInfo();
+  if (!size || !target) {
+    setStatus(size ? "Enter a drop first." : "Set the scale in step 2 first.", true);
+    return;
+  }
+  setDropScale(target / size.height);
+  state.quadEdited = true;
+  setStatus(`Drop set to about ${formatFeetInches(target)}.`);
+  renderTypeOptions();
+  updateUI();
+  requestRender();
+});
 $("showDims").addEventListener("change", requestRender);
 
 // ---------- export ----------
@@ -891,8 +1026,8 @@ function flatArt(maxSide = 0) {
 
 function priceInfo() {
   const size = sizeInfo();
-  const p = size && estimatePrice(state.typeId, size);
-  return p ? { range: formatRange(p), label: p.label, note: p.note, unit: p.unit, quantity: p.quantity } : null;
+  const p = size && estimatePrice(state.typeId, size, optionsFor());
+  return p ? { range: formatRange(p), label: p.label, note: p.note, unit: p.unit, quantity: p.quantity, perFoot: formatPerFoot(p) } : null;
 }
 
 function fileBase() {
@@ -909,6 +1044,8 @@ async function makePdf() {
   const dims = $("showDims").checked;
   const bytes = await buildSignPdf({
     typeId: state.typeId,
+    options: cleanOptions(currentType(), optionsFor()),
+    sizeIn: size ? { width: size.width, height: size.height } : null,
     day: composite({ dims }),
     night: composite({ mode: "night", dims }),
     flat: flatArt(2000),
@@ -963,7 +1100,7 @@ $("downloadPng").addEventListener("click", () => runExport("Building image…", 
 }));
 $("sharePdf").addEventListener("click", () => runExport("Building PDF…", async () => {
   const file = await makePdf();
-  await navigator.share({ files: [file], title: "Storefront sign mockup" });
+  await navigator.share({ files: [file], title: `Storefront ${noun()} mockup` });
   setStatus("Shared.");
 }));
 try {
@@ -995,6 +1132,7 @@ async function createProof() {
   const size = sizeInfo();
   const sheet = {
     typeId: state.typeId,
+    options: cleanOptions(currentType(), optionsFor()),
     project: $("project").value.trim(),
     preparedFor: $("preparedFor").value.trim(),
     notes: $("notes").value.trim(),
@@ -1058,7 +1196,7 @@ $("copyLink").addEventListener("click", async () => {
 $("shareLink").hidden = !navigator.share;
 $("shareLink").addEventListener("click", async () => {
   try {
-    await navigator.share({ title: "Sign mockup for approval", url: $("linkUrl").value });
+    await navigator.share({ title: `${noun() === "awning" ? "Awning" : "Sign"} mockup for approval`, url: $("linkUrl").value });
   } catch { /* dismissed */ }
 });
 ["project", "preparedFor", "notes", "calLabel"].forEach(id => $(id).addEventListener("input", renderProofLink));
@@ -1119,12 +1257,17 @@ function updateUI() {
   }
 
   const size = sizeInfo();
+  const aw = noun() === "awning";
+  const third = aw
+    ? `<div><span>Projection</span><strong>${formatFeetInches(projectionFor(currentType(), optionsFor(), size?.width || 0, size?.height || 0))}</strong></div>`
+    : `<div><span>Area</span><strong>${size?.area.replace(" sq ft", "")}</strong>sq ft</div>`;
   $("sizeOut").innerHTML = state.sign
     ? size
-      ? `<div><span>Width</span><strong>${size.w}</strong></div><div><span>Height</span><strong>${size.h}</strong></div><div><span>Area</span><strong>${size.area.replace(" sq ft", "")}</strong>sq ft</div><p>Approximate, from your scale line.</p>`
-      : `<p>Set the scale in step 2 to see the sign's size.</p>`
+      ? `<div><span>Width</span><strong>${size.w}</strong></div><div><span>${aw ? "Drop" : "Height"}</span><strong>${size.h}</strong></div>${third}<p>Approximate, from your scale line.</p>`
+      : `<p>Set the scale in step 2 to see the ${aw ? "awning" : "sign"}'s size.</p>`
     : "";
   $("setWidth").disabled = !size;
+  $("setDrop").disabled = !size;
 
   const price = $("priceOut");
   const p = state.sign && priceInfo();
@@ -1132,7 +1275,7 @@ function updateUI() {
   price.innerHTML = !state.sign
     ? ""
     : p
-      ? `<span>Rough preliminary range · ${escapeHtml(p.label)}</span><strong>${p.range}</strong><small>${escapeHtml(currentType().name)}, about ${p.quantity} ${p.unit}. ${escapeHtml(p.note)}</small>`
+      ? `<span>Rough preliminary range · ${escapeHtml(p.label)}</span><strong>${p.range}</strong>${p.perFoot ? `<b class="sm-perfoot">${escapeHtml(p.perFoot)}</b>` : ""}<small>${escapeHtml(currentType().name)}, about ${p.quantity} ${p.unit}. ${escapeHtml(p.note)}</small>`
       : `<span>Rough preliminary range</span><small>Set the scale in step 2 to see a placeholder range for this size and type.</small>`;
 
   $("dayNight").hidden = !(state.photo && state.sign && (state.step === "sign" || state.step === "export"));
@@ -1167,6 +1310,13 @@ updateUI();
 
 // Lets automated checks drive the tool without simulating every gesture.
 window.signMockup = {
-  state, loadPhoto, loadSignFile, setStep, setType, setMode, makePdf, composite, requestRender, designKey,
+  state, loadPhoto, loadSignFile, setStep, setType, setCategory, setMode, makePdf, composite, requestRender, designKey,
+  setOptions(o) {
+    const type = currentType();
+    state.typeOptions[type.id] = isAwning(type) ? sanitizeAwningOptions(type, { ...optionsFor(type), ...o }) : { ...optionsFor(type), ...o };
+    renderTypeCard();
+    updateUI();
+    requestRender();
+  },
   get renderer() { return scene.kind; },
 };

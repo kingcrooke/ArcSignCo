@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Storefront Sign Mockup Tool | Arc Signage Co</title>
-<meta name="description" content="Upload a storefront photo, set the scale from one known measurement, pick a sign type and place it in perspective by day and night, then download a branded concept PDF or send a phone approval link.">
+<title>Storefront Sign &amp; Awning Mockup Tool | Arc Signage Co</title>
+<meta name="description" content="Upload a storefront photo, set the scale from one known measurement, pick a sign type or awning shape and place it in perspective by day and night, then download a branded concept PDF or send a phone approval link.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0b1d33">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -58,9 +58,9 @@
         </ol>
       </nav>
       <div>
-        <span class="eyebrow">Planning tool | Storefront signs</span>
-        <h1>Storefront sign mockup</h1>
-        <p class="answer">Upload a photo of the storefront, set the scale from one thing you've measured, pick the kind of sign, and place it on the facade to see its approximate size, built the way it would be fabricated, by day and at night. Then download a branded PDF or send a phone approval link. The tool runs in your browser: nothing is uploaded unless you create an approval link.</p>
+        <span class="eyebrow">Planning tool | Storefront signs and awnings</span>
+        <h1>Storefront sign and awning mockup</h1>
+        <p class="answer">Upload a photo of the storefront, set the scale from one thing you've measured, pick the kind of sign or awning, and place it on the facade to see its approximate size, built the way it would be fabricated, by day and at night. Then download a branded PDF or send a phone approval link. The tool runs in your browser: nothing is uploaded unless you create an approval link.</p>
       </div>
     </div>
   </section>
@@ -127,12 +127,16 @@
           <p class="sm-out" id="scaleOut">Draw the line on the photo.</p>
           <div class="sm-actions">
             <button type="button" class="btn white" id="redrawCal">Redraw line</button>
-            <button type="button" class="btn navy" data-goto="sign" id="toSign">Next: place the sign</button>
+            <button type="button" class="btn navy" data-goto="sign" id="toSign">Next: place a sign or awning</button>
           </div>
         </section>
 
         <section class="sm-card" data-panel="sign" aria-labelledby="p-sign" hidden>
-          <h2 id="p-sign"><b>3</b> Choose and place the sign</h2>
+          <h2 id="p-sign"><b>3</b> Choose and place the <span id="placeNoun">sign</span></h2>
+          <div class="sm-seg" id="category" role="radiogroup" aria-label="What to place">
+            <label><input type="radio" name="category" value="sign" checked><span>Signs</span></label>
+            <label><input type="radio" name="category" value="awning"><span>Awnings</span></label>
+          </div>
           <div class="sm-type" id="typeCard">
             <div class="sm-type-art" id="typeThumb" aria-hidden="true"></div>
             <div class="sm-type-text">
@@ -157,7 +161,7 @@
             <label><input type="radio" name="signMode" value="file"><span>Upload artwork</span></label>
           </div>
           <div id="signText">
-            <label class="sm-field">Sign text
+            <label class="sm-field"><span id="textLabel">Sign text</span>
               <input type="text" id="signTextInput" maxlength="40" value="Your Business">
             </label>
             <div class="sm-row">
@@ -176,13 +180,19 @@
           </div>
           <div class="sm-opts" id="typeOptions"></div>
           <p class="sm-notice" id="typeNotice" hidden></p>
-          <p class="sm-tip">Drag the four corner handles onto the wall so the sign follows its perspective. Drag inside the sign to move it. Switch to <strong>Night</strong> on the photo to see it lit.</p>
+          <p class="sm-tip" id="placeTip">Drag the four corner handles onto the wall so the sign follows its perspective. Drag inside the sign to move it. Switch to <strong>Night</strong> on the photo to see it lit.</p>
           <div class="sm-size" id="sizeOut" aria-live="polite"></div>
           <fieldset class="sm-len sm-setw" id="setWidth">
             <legend>Resize to a width</legend>
             <label><input type="number" id="wFt" inputmode="decimal" min="0" step="any" placeholder="0"><span>ft</span></label>
             <label><input type="number" id="wIn" inputmode="decimal" min="0" step="any" placeholder="0"><span>in</span></label>
             <button type="button" class="btn white" id="applyWidth">Apply</button>
+          </fieldset>
+          <fieldset class="sm-len sm-setw" id="setDrop" hidden>
+            <legend>Set the drop (top of the frame to the bottom of the front)</legend>
+            <label><input type="number" id="dFt" inputmode="decimal" min="0" step="any" placeholder="0"><span>ft</span></label>
+            <label><input type="number" id="dIn" inputmode="decimal" min="0" step="any" placeholder="0"><span>in</span></label>
+            <button type="button" class="btn white" id="applyDrop">Apply</button>
           </fieldset>
           <label class="sm-field">Opacity <output id="opacityOut">100%</output>
             <input type="range" id="opacity" min="30" max="100" value="100">
@@ -213,7 +223,7 @@
             <button type="button" class="btn white" id="downloadPng">Download image</button>
             <button type="button" class="btn white" id="sharePdf" hidden>Share PDF</button>
           </div>
-          <p class="note">The PDF has the day view, the night view, how the sign is built and the flat artwork, marked <strong>“Concept only – not a shop drawing.”</strong> Sizes are estimates from one photo and one measurement.</p>
+          <p class="note">The PDF has the day view, the night view, how it is built and the flat artwork, marked <strong>“Concept only – not a shop drawing.”</strong> Sizes are estimates from one photo and one measurement.</p>
           <div class="sm-approve" id="approveBox">
             <h3>Phone approval link</h3>
             <p>Send your client a link to a mobile proof page. They can switch day and night, comment, approve, and download the PDF.</p>
@@ -285,7 +295,11 @@
     <h2 id="typesTitle">Choose a sign type</h2>
     <button type="button" class="sm-x" id="closeTypes" aria-label="Close">&times;</button>
   </div>
-  <p class="sm-types-sub">Each type is drawn the way it's built: depth, mounting and where the light comes from. The drawings are cross-sections, not to scale.</p>
+  <div class="sm-cats" id="typeCats" role="tablist" aria-label="Category">
+    <button type="button" role="tab" data-cat="sign" aria-selected="true">Signs</button>
+    <button type="button" role="tab" data-cat="awning" aria-selected="false">Awnings</button>
+  </div>
+  <p class="sm-types-sub" id="typesSub">Each type is drawn the way it's built: depth, mounting and where the light comes from. The drawings are cross-sections, not to scale.</p>
   <div class="sm-types-body" id="typeList"></div>
 </dialog>
 
