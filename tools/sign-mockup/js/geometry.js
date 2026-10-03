@@ -119,6 +119,82 @@ export function formatArea(widthIn, heightIn) {
   return `${sq < 10 ? sq.toFixed(1) : Math.round(sq)} sq ft`;
 }
 
+const sub3 = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const len3 = a => Math.hypot(a[0], a[1], a[2]);
+const scale3 = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
+
+/**
+ * A pinhole camera recovered from the pinned quad, so parts that stand off the wall (returns,
+ * raceways, standoffs, brackets) can be drawn in the photo's perspective.
+ *
+ * The quad is the sign's footprint on its plane, in target pixels. Plane coordinates are inches:
+ * X across (0..widthIn), Y down (0..heightIn), Z out of the plane toward the camera.
+ * Z = 0 reproduces the quad exactly. The focal length is a guess for a phone camera (no EXIF),
+ * so depth is approximate; it is clamped so a badly pinned quad can't throw parts across the photo.
+ *
+ * @param {Array<{x:number,y:number}>} quad
+ * @param {{width:number, height:number}} sizeIn
+ * @param {{cx:number, cy:number, f:number}} lens  principal point and focal length, target pixels
+ */
+export function makeCamera(quad, sizeIn, lens) {
+  const Wd = sizeIn.width, Hd = sizeIn.height;
+  if (!(Wd > 0 && Hd > 0) || !isConvex(quad)) return null;
+  const M = squareToQuad(quad);
+  if (!M) return null;
+  const col = j => [M[j], M[3 + j], M[6 + j]];
+  const h1 = scale3(col(0), 1 / Wd), h2 = scale3(col(1), 1 / Hd), h3 = col(2);
+  const { cx, cy, f } = lens;
+  const kinv = v => [(v[0] - cx * v[2]) / f, (v[1] - cy * v[2]) / f, v[2]];
+  const a = kinv(h1), b = kinv(h2), c = kinv(h3);
+  let s = 2 / (len3(a) + len3(b));
+  const centerDepth = (Wd / 2) * a[2] + (Hd / 2) * b[2] + c[2];
+  if (centerDepth * s < 0) s = -s;
+  const r1 = scale3(a, s), r2 = scale3(b, s), t = scale3(c, s);
+  let r3 = cross3(r1, r2);
+  const n = len3(r3);
+  if (!n) return null;
+  r3 = scale3(r3, 1 / n);
+  const center = [r1[0] * Wd / 2 + r2[0] * Hd / 2 + t[0], r1[1] * Wd / 2 + r2[1] * Hd / 2 + t[1], r1[2] * Wd / 2 + r2[2] * Hd / 2 + t[2]];
+  if (dot3(r3, center) > 0) r3 = scale3(r3, -1);
+
+  const raw = (X, Y, Z) => {
+    const P = [X * r1[0] + Y * r2[0] + t[0] + Z * r3[0], X * r1[1] + Y * r2[1] + t[1] + Z * r3[1], X * r1[2] + Y * r2[2] + t[2] + Z * r3[2]];
+    if (P[2] <= 1e-6) return null;
+    return { x: (f * P[0]) / P[2] + cx, y: (f * P[1]) / P[2] + cy };
+  };
+
+  // Clamp: 6" of depth may move the sign's center by at most 12% of the quad's diagonal.
+  const diag = Math.hypot(quad[2].x - quad[0].x, quad[2].y - quad[0].y);
+  const p0 = raw(Wd / 2, Hd / 2, 0), p6 = raw(Wd / 2, Hd / 2, 6);
+  let zk = 1;
+  if (p0 && p6) {
+    const d = Math.hypot(p6.x - p0.x, p6.y - p0.y);
+    const limit = 0.12 * diag;
+    if (d > limit) zk = limit / d;
+  } else zk = 0;
+
+  const project = (X, Y, Z = 0) => (Z ? raw(X, Y, Z * zk) : apply3(M, X / Wd, Y / Hd));
+  return {
+    project,
+    width: Wd,
+    height: Hd,
+    zScale: zk,
+    // Unit normal pointing out of the plane, in camera space; z < 0 means it faces the camera.
+    normal: r3,
+    // Pixels per inch at the sign's center (geometric mean of the two axes).
+    pxPerInch: Math.sqrt((dist(quad[0], quad[1]) + dist(quad[3], quad[2])) / (2 * Wd) * (dist(quad[0], quad[3]) + dist(quad[1], quad[2])) / (2 * Hd)),
+    // Is the face of a plane-aligned patch with outward normal ±r1/±r2/±r3 visible?
+    facing(axis, sign = 1, X = Wd / 2, Y = Hd / 2, Z = 0) {
+      const v = axis === "x" ? r1 : axis === "y" ? r2 : r3;
+      const nrm = scale3(v, sign / len3(v));
+      const P = [X * r1[0] + Y * r2[0] + t[0] + Z * r3[0], X * r1[1] + Y * r2[1] + t[1] + Z * r3[1], X * r1[2] + Y * r2[2] + t[2] + Z * r3[2]];
+      return dot3(nrm, sub3([0, 0, 0], P)) > 0;
+    },
+  };
+}
+
 export function toInches(ft, inch) {
   const f = Number(ft) || 0, i = Number(inch) || 0;
   const total = f * 12 + i;
