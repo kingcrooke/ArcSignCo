@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sign mockup for approval | Arc Signage Co</title>
+<meta name="description" content="A storefront sign concept from Arc Signage Co, shared for review and approval.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#0b1d33">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/service-page.v4.css">
+<link rel="stylesheet" href="/tools/sign-mockup/proof/proof.css">
+<link rel="modulepreload" href="/tools/sign-mockup/proof/proof.js">
+</head>
+<body class="pf-page">
+<header class="pf-top">
+  <div class="pf-wrap pf-top-row">
+    <a class="pf-brand" href="/" aria-label="Arc Signage Co home">
+      <img src="/assets/img/logo-lockup-white-360.v2.png" srcset="/assets/img/logo-lockup-white-360.v2.png 360w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="150px" width="847" height="174" alt="Arc Signage Co">
+    </a>
+    <a class="btn gold pf-call" href="tel:+13474502110">Call (347) 450-2110</a>
+  </div>
+</header>
+
+<main id="main" class="pf-wrap pf-main">
+  <div class="pf-loading" id="loading"><span class="pf-spinner" aria-hidden="true"></span>Loading the proof…</div>
+
+  <div class="pf-missing" id="missing" hidden>
+    <h1>This link didn't open a proof</h1>
+    <p id="missingText">Check that the whole link was copied. If it still doesn't open, ask Arc for a new one.</p>
+    <p><a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></p>
+  </div>
+
+  <article id="proof" hidden>
+    <header class="pf-head">
+      <span class="pf-eyebrow">Sign mockup for approval</span>
+      <h1 id="title">Storefront sign</h1>
+      <p class="pf-sub" id="subtitle"></p>
+      <p class="pf-concept"><strong>Concept only – not a shop drawing.</strong> Sizes are estimates from a photo, and night lighting is simulated.</p>
+    </header>
+
+    <section class="pf-viewer" aria-label="Mockup">
+      <div class="pf-switch" role="radiogroup" aria-label="Lighting">
+        <button type="button" role="radio" aria-checked="true" data-mode="day">Day</button>
+        <button type="button" role="radio" aria-checked="false" data-mode="night">Night</button>
+      </div>
+      <a class="pf-shot" id="shotLink" href="#" target="_blank" rel="noopener">
+        <img id="shot" alt="The sign mockup on the storefront photo" decoding="async">
+      </a>
+      <p class="pf-cap" id="shotCap">Day view. Tap the image to open it full size.</p>
+    </section>
+
+    <section class="pf-card pf-approval" id="approvalCard" aria-labelledby="approvalTitle">
+      <h2 id="approvalTitle">Approve this concept</h2>
+      <div id="approvedBox" class="pf-approved" tabindex="-1" hidden>
+        <strong>Approved</strong>
+        <span id="approvedText"></span>
+      </div>
+      <form id="approveForm" novalidate>
+        <p>Approving tells Arc this is the direction you want. Arc confirms field measurements, materials, pricing and shop drawings with you before anything is made.</p>
+        <label class="pf-field">Your name
+          <input type="text" id="approveName" name="name" maxlength="80" autocomplete="name" required>
+        </label>
+        <label class="pf-check"><input type="checkbox" id="approveOk" required> I've reviewed the day and night views and understand this is a concept, not a shop drawing.</label>
+        <button type="submit" class="btn gold lg" id="approveBtn">Approve concept</button>
+        <p class="pf-error" id="approveError" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section class="pf-card" aria-labelledby="detailsTitle">
+      <h2 id="detailsTitle">The sign</h2>
+      <dl class="pf-facts">
+        <div><dt>Type</dt><dd id="typeName"></dd></div>
+        <div><dt>Lighting</dt><dd id="typeLight"></dd></div>
+        <div id="sizeRow"><dt>Approx. size</dt><dd id="sizeText"></dd></div>
+      </dl>
+      <div class="pf-price" id="priceBox" hidden>
+        <span>Rough preliminary range</span>
+        <strong id="priceRange"></strong>
+        <small id="priceNote"></small>
+      </div>
+      <p class="pf-notes" id="notes" hidden></p>
+    </section>
+
+    <section class="pf-card" aria-labelledby="buildTitle">
+      <h2 id="buildTitle">How it's built</h2>
+      <div class="pf-diagram" id="diagram"></div>
+      <p id="buildSummary"></p>
+      <ul class="pf-parts" id="buildParts"></ul>
+      <p class="pf-night" id="buildNight"></p>
+      <p class="pf-small">Typical construction for this type, drawn for discussion. Not to scale.</p>
+    </section>
+
+    <section class="pf-card" aria-labelledby="artTitle">
+      <h2 id="artTitle">Flat artwork</h2>
+      <img class="pf-art" id="art" alt="The sign artwork, flat" decoding="async" loading="lazy">
+      <p class="pf-small">The artwork as supplied, without perspective. Final artwork is redrawn for fabrication.</p>
+    </section>
+
+    <section class="pf-card" aria-labelledby="commentsTitle">
+      <h2 id="commentsTitle">Comments</h2>
+      <ol class="pf-comments" id="comments"></ol>
+      <p class="pf-small" id="noComments">No comments yet.</p>
+      <form id="commentForm" novalidate>
+        <label class="pf-field">Your name <small>(optional)</small>
+          <input type="text" id="commentName" name="name" maxlength="80" autocomplete="name">
+        </label>
+        <label class="pf-field">Comment
+          <textarea id="commentText" name="text" rows="3" maxlength="1000" required placeholder="Colors, size, lighting, anything to change"></textarea>
+        </label>
+        <button type="submit" class="btn navy" id="commentBtn">Post comment</button>
+        <p class="pf-error" id="commentError" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section class="pf-card pf-next" aria-labelledby="nextTitle">
+      <h2 id="nextTitle">Download or contact Arc</h2>
+      <div class="pf-actions">
+        <button type="button" class="btn gold lg" id="downloadPdf">Download PDF</button>
+        <a class="btn white" id="emailArc" href="mailto:arc@arcsignco.com">Email Arc about this proof</a>
+      </div>
+      <p class="pf-small" id="pdfStatus" role="status" aria-live="polite"></p>
+      <p class="pf-contact"><a href="tel:+13474502110">(347) 450-2110</a><a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a><a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></p>
+    </section>
+  </article>
+</main>
+
+<footer class="pf-foot">
+  <div class="pf-wrap">
+    <p><strong>Concept only – not a shop drawing.</strong> Sizes are approximate: they are estimated from one photo and one reference measurement, and the sign is placed by hand. Fabrication needs verified field measurements and shop drawings.</p>
+    <p>&copy; 2026 Arc Signage Co LLC — New York / Tri-State · <a href="https://arcsignco.com/">arcsignco.com</a></p>
+  </div>
+</footer>
+
+<!-- Lets Netlify Forms record approvals and comments so Arc gets notified. Submitted by proof.js. -->
+<form name="sign-proof-activity" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="sign-proof-activity">
+  <input name="bot-field">
+  <input name="event">
+  <input name="proof">
+  <input name="project">
+  <input name="name">
+  <textarea name="message"></textarea>
+</form>
+
+<noscript><p class="pf-wrap">This proof needs JavaScript. Call <a href="tel:+13474502110">(347) 450-2110</a> or email <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p></noscript>
+<script type="module" src="/tools/sign-mockup/proof/proof.js"></script>
+</body>
+</html>
