@@ -58,12 +58,15 @@ export function defineCategory(spec) {
     lightingOf,
   };
   cat.ui = {
+    tabLabel: spec.label,
     textLabel: `${capital(noun)} text`,
     placeTip: `Drag the four corner handles onto the wall so the ${noun} lines up with it. Drag inside the ${noun} to move it. Switch to <strong>Night</strong> on the photo to see it lit.`,
     heightLabel: "Height",
     heightShort: "H",
     flatLabel: `The ${noun} artwork, flat`,
     hangs: false,
+    plaque: false,
+    placeWidthIn: null,
     sizeExtra: (type, opts, size) => (size ? { label: "Area", value: formatArea(size.width, size.height).replace(" sq ft", ""), unit: "sq ft" } : null),
     ...spec.ui,
   };

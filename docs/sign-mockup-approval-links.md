@@ -67,7 +67,7 @@ no numbers, and the proof page shows the message even for older proofs saved wit
 type allows (`cleanOptions()` in `js/catalog.js`, which calls the category's `sanitizeOptions`).
 Categories without options (signs) store `options: null`. Awnings are priced from width and
 projection, with the backlit adder when backlit is chosen. Only categories marked ready accept proofs;
-coming-soon tabs have no types. Old links with the type id `awning` open as the traditional slope. The approval time comes from the server clock, not from the browser.
+Every live category tab has types the server can price from `pricing-config.js`. Old links with the type id `awning` open as the traditional slope. The approval time comes from the server clock, not from the browser.
 
 ## Storage and namespacing
 

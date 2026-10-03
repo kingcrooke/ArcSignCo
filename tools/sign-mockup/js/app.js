@@ -1,5 +1,5 @@
 import {
-  dist, centroid, pointInQuad, rectQuad, scaleQuad, quadSizeInches, quadSpans, formatFeetInches, formatArea, toInches,
+  dist, centroid, pointInQuad, rectQuad, scaleQuad, quadSizeInches, quadSpans, formatFeetInches, formatArea, toInches, bounds,
 } from "./geometry.js";
 import { loadImageFile, renderTextSign, loadSignFonts, FONTS } from "./images.js";
 import { makeArtwork } from "./art.js";
@@ -758,8 +758,13 @@ function fitQuadToArt(prevAspect) {
   if (!state.quad) return placeSign(aspect);
   if (prevAspect && Math.abs(aspect / prevAspect - 1) < 0.02) return;
   if (!state.quadEdited) {
+    if (currentCat().ui.plaque) {
+      placeSign(aspect);
+      return;
+    }
     const c = centroid(state.quad), w = quadSpans(state.quad).width;
     state.quad = rectQuad(c.x, c.y, w, w * aspect);
+    clampQuadInsidePhoto(state.photo.canvas);
     return;
   }
   const sp = quadSpans(state.quad);
@@ -781,17 +786,109 @@ function setDropScale(k) {
   state.quad = [a, b, down(b, c), down(a, d)];
 }
 
+function scaledWidthPx(widthIn) {
+  if (!widthIn || !state.calInches || !state.cal) return null;
+  const calPx = dist(state.cal.a, state.cal.b);
+  if (calPx < 1) return null;
+  return widthIn / (state.calInches / calPx);
+}
+
+/** Wall pier beside a scaled door opening, about 60 in above the sidewalk. */
+function plaqueMountPoint(photo) {
+  if (!state.cal || !state.calInches) return null;
+  const calPx = dist(state.cal.a, state.cal.b);
+  if (calPx < 1) return null;
+  const inPerPx = state.calInches / calPx;
+  const doorLeft = Math.min(state.cal.a.x, state.cal.b.x);
+  const doorRight = Math.max(state.cal.a.x, state.cal.b.x);
+  const doorY = (state.cal.a.y + state.cal.b.y) / 2;
+  const sidewalkY = Math.min(photo.height - 6, doorY + 10 / inPerPx);
+  const pier = {
+    x: doorRight + 14 / inPerPx,
+    y: sidewalkY - 60 / inPerPx,
+  };
+  const margin = 8;
+  const pierOk = pier.x > margin && pier.x < photo.width - margin
+    && pier.y > margin && pier.y < photo.height - margin;
+  if (pierOk) return pier;
+  // Fallback: center of the wall strip beside the door, mid-door height.
+  const beside = doorRight < photo.width * 0.55
+    ? doorRight + (photo.width - doorRight) * 0.35
+    : doorLeft - (doorLeft) * 0.35;
+  return {
+    x: Math.max(margin, Math.min(photo.width - margin, beside)),
+    y: Math.max(margin, Math.min(photo.height - margin, doorY)),
+  };
+}
+
+const QUAD_CLAMP_MARGIN = 3;
+
+function quadInsidePhoto(photo, quad = state.quad, margin = QUAD_CLAMP_MARGIN) {
+  if (!photo || !quad) return false;
+  return quad.every(p => p.x >= margin && p.x <= photo.width - margin && p.y >= margin && p.y <= photo.height - margin);
+}
+
+/** Shift (and slightly shrink if needed) so every corner stays inside the photo. */
+function clampQuadInsidePhoto(photo) {
+  if (!state.quad || !photo) return;
+  const m = QUAD_CLAMP_MARGIN;
+  let q = state.quad;
+  for (let pass = 0; pass < 8; pass++) {
+    const b = bounds(q);
+    let dx = 0, dy = 0;
+    if (b.minX < m) dx = m - b.minX;
+    else if (b.maxX > photo.width - m) dx = (photo.width - m) - b.maxX;
+    if (b.minY < m) dy = m - b.minY;
+    else if (b.maxY > photo.height - m) dy = (photo.height - m) - b.maxY;
+    if (dx || dy) {
+      q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
+      continue;
+    }
+    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
+    const maxW = photo.width - 2 * m, maxH = photo.height - 2 * m;
+    if (bw <= maxW && bh <= maxH) break;
+    const k = Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh), 1) * 0.98;
+    if (k >= 0.999) break;
+    q = scaleQuad(q, k, centroid(q));
+  }
+  state.quad = q;
+}
+
+function defaultPlaceWidthPx(photo) {
+  const cat = currentCat();
+  const placeIn = typeof cat.ui.placeWidthIn === "function"
+    ? cat.ui.placeWidthIn(currentType(), optionsFor())
+    : (cat.ui.plaque ? 10 : null);
+  const scaled = placeIn ? scaledWidthPx(placeIn) : null;
+  if (scaled) return scaled;
+  if (cat.ui.plaque) return photo.width * 0.06;
+  if (state.home?.w) return state.home.w;
+  return photo.width * 0.45;
+}
+
 function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
-  let w = state.home?.w ?? photo.width * 0.45;
-  let c = state.home ? { x: state.home.x, y: state.home.y } : { x: photo.width / 2, y: photo.height * 0.36 };
-  if (keepCenter && state.quad) {
+  const cat = currentCat();
+  let w = defaultPlaceWidthPx(photo);
+  let c = (!cat.ui.plaque && state.home)
+    ? { x: state.home.x, y: state.home.y }
+    : { x: photo.width / 2, y: photo.height * 0.36 };
+  if (cat.ui.plaque) {
+    const mount = plaqueMountPoint(photo);
+    if (mount) c = mount;
+  } else if (keepCenter && state.quad) {
     c = centroid(state.quad);
     w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
     if (w < photo.width * 0.04) w = photo.width * 0.45;
   }
-  if (w * aspect > photo.height * 0.5) w = (photo.height * 0.5) / aspect;
+  if (cat.ui.plaque) {
+    const maxW = photo.width * 0.22;
+    if (w > maxW) w = maxW;
+  } else if (w * aspect > photo.height * 0.5) {
+    w = (photo.height * 0.5) / aspect;
+  }
   state.quad = rectQuad(c.x, c.y, w, w * aspect);
+  clampQuadInsidePhoto(photo);
   state.quadEdited = false;
 }
 
@@ -948,8 +1045,13 @@ function setType(id) {
     // The artwork may have changed while the other category was shown.
     if (state.art && stash.aspect) fitQuadToArt(stash.aspect);
   } else if (state.art && !(from === to && categoryOf(next).ui.hangs && state.quadEdited)) {
-    // Switching between hanging shapes keeps a wall area the user has pinned.
-    fitQuadToArt(prev);
+    const nextCat = categoryOf(next);
+    if (nextCat.ui.plaque && !state.quadEdited && from !== to) {
+      placeSign(aspectFor(next, state.art, optionsFor(next)));
+    } else {
+      // Switching between hanging shapes keeps a wall area the user has pinned.
+      fitQuadToArt(prev);
+    }
   }
   renderTypeCard();
   updateUI();
@@ -972,7 +1074,10 @@ function buildCategoryBars() {
     const b = document.createElement("button");
     b.type = "button";
     b.dataset.cat = cat.id;
-    b.textContent = cat.label;
+    const tab = cat.ui.tabLabel || cat.label;
+    b.textContent = tab;
+    b.setAttribute("aria-label", cat.label);
+    if (!soon) b.title = cat.label;
     if (soon && !bar.querySelector(".sm-cattabs-label")) {
       bar.append(Object.assign(document.createElement("span"), { className: "sm-cattabs-label", textContent: "Coming soon" }));
     }
@@ -989,7 +1094,8 @@ function buildCategoryBars() {
     t.setAttribute("aria-controls", "typeList");
     t.dataset.cat = cat.id;
     t.innerHTML = `<span></span>${soon ? SOON : ""}`;
-    t.firstChild.textContent = cat.label;
+    t.firstChild.textContent = cat.ui.tabLabel || cat.label;
+    t.setAttribute("aria-label", cat.label);
     if (soon) t.classList.add("is-soon");
     tabs.append(t);
   }
@@ -1526,6 +1632,10 @@ updateUI();
 // Lets automated checks drive the tool without simulating every gesture.
 window.signMockup = {
   state, loadPhoto, loadSignFile, setStep, setType, setCategory, setMode, makePdf, composite, requestRender, designKey,
+  sizeInfo,
+  quadInsidePhoto() {
+    return state.photo?.canvas ? quadInsidePhoto(state.photo.canvas) : false;
+  },
   setOptions(o) {
     const type = currentType();
     setOptionsFor(type, { ...optionsFor(type), ...o });

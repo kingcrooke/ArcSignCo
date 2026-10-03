@@ -1,6 +1,6 @@
 # Adding a category to the sign mockup tool
 
-The mockup tool at `/tools/sign-mockup/` shows one tab per category: **Signs**, **Awnings**, and coming-soon tabs for **Vinyl & Stickers**, **Construction Signs**, **Interior Wayfinding**, **ADA & Code Signs** and **LED Displays**.
+The mockup tool at `/tools/sign-mockup/` shows one tab per category: **Signs**, **Awnings**, **Vinyl & Stickers**, **Construction Signs**, **Interior Wayfinding**, **ADA & Code Signs**, and **LED Displays**.
 
 A category is **one JavaScript module** plus **one line in the registry**. The engine (the editor, the 3D renderer, day/night lighting, the PDF, the phone approval page, the approval-link server, pricing and the checks) reads everything it needs from the module. It never names a category, so you do not edit engine files. `npm test` checks this and fails if an engine file mentions a category.
 
@@ -217,7 +217,10 @@ Defaults come from `noun`. Override any of these in `ui: { … }`:
 
 | `ui` key | Default | Example |
 | --- | --- | --- |
+| `tabLabel` | `label` | `"Vinyl"` (short pill in the step 3 tab bar; full `label` stays in aria-label) |
 | `textLabel` | `"<Noun> text"` | `"Board text"` |
+| `plaque` | `false` | `true` for interior plaques: first placement uses `placeWidthIn`, not the storefront sign band |
+| `placeWidthIn` | `null` | `(type, opts) => 9` inches wide when scale is set |
 | `placeTip` | Drag-the-corners tip using the noun | HTML is allowed (`<strong>`). |
 | `heightLabel` | `"Height"` | Awnings use `"Drop"`. |
 | `heightShort` | `"H"` | Shown in the size chip, e.g. "12' W × 3' H". |
