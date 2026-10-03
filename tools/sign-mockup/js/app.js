@@ -3,6 +3,7 @@ import {
 } from "./geometry.js";
 import { loadImageFile, renderTextSign, loadSignFonts, FONTS } from "./images.js";
 import { makeArtwork } from "./art.js";
+import { coverFromQuad, sampleAround, coveredPhoto, hexOf, rgbOf } from "./cover.js";
 import { createScene } from "./scene.js";
 import {
   CATEGORIES, READY, DEFAULT_TYPE, getType, getCategory, categoryOf, litWith, describe, cleanOptions,
@@ -38,7 +39,9 @@ const state = {
   quad: null,         // [tl, tr, br, bl] in photo pixels
   quadEdited: false,
   opacity: 1,
-  selected: null,     // { kind: "cal" | "quad", index }
+  selected: null,     // { kind: "cal" | "quad" | "cover", index }
+  cover: null,        // { quad, color:[r,g,b], auto } patch over an existing sign, or null
+  home: null,         // { x, y, w } where a new sign starts on this photo (the sample's sign band)
   touchedSign: false,
   typeId: DEFAULT_TYPE,
   typeOptions: {},    // per type id, so switching back keeps choices
@@ -100,7 +103,7 @@ function sceneSize() {
 }
 function drawScene(target, view, clip, { mode = state.mode, quality = "full" } = {}) {
   scene.render(target, {
-    photo: state.photo.canvas,
+    photo: coveredPhoto(state.photo.canvas, state.cover),
     view,
     clip,
     quad: state.art ? state.quad : null,
@@ -166,6 +169,7 @@ function render() {
     drawDimensions(ctx, sq, size.w, size.h, 1);
   }
   if (state.cal && (state.step === "scale" || state.step === "sign")) drawCal(state.step === "scale");
+  if (state.cover && state.step === "sign") drawCoverHandles(state.cover.quad.map(toScreen));
   if (sq && state.step === "sign") drawQuadHandles(sq);
   updateChip(size);
   placeChip(sq);
@@ -271,6 +275,30 @@ function drawQuadHandles(sq) {
   sq.forEach((p, i) => handle(p, state.selected?.kind === "quad" && state.selected.index === i));
 }
 
+function drawCoverHandles(cq) {
+  ctx.save();
+  ctx.beginPath();
+  cq.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+  ctx.closePath();
+  ctx.lineWidth = 3;
+  ctx.strokeStyle = "rgba(11,29,51,.6)";
+  ctx.stroke();
+  ctx.setLineDash([4, 4]);
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = "#fff";
+  ctx.stroke();
+  ctx.setLineDash([]);
+  cq.forEach((p, i) => {
+    const on = state.selected?.kind === "cover" && state.selected.index === i;
+    ctx.fillStyle = on ? GOLD2 : "#fff";
+    ctx.strokeStyle = NAVY;
+    ctx.lineWidth = 2;
+    ctx.fillRect(p.x - 6, p.y - 6, 12, 12);
+    ctx.strokeRect(p.x - 6, p.y - 6, 12, 12);
+  });
+  ctx.restore();
+}
+
 // Architectural-style dimension lines along the top and left edges. u scales strokes and text.
 function drawDimensions(target, q, wText, hText, u) {
   const c = centroid(q);
@@ -328,9 +356,10 @@ function drawLoupe() {
   ctx.clip();
   ctx.imageSmoothingEnabled = Ls < 3;
   ctx.drawImage(photo, p.x - R / Ls, p.y - R / Ls, (2 * R) / Ls, (2 * R) / Ls, c.x - R, c.y - R, 2 * R, 2 * R);
+  const ring = ref.kind === "cover" ? state.cover.quad : state.quad;
   const neighbors = ref.kind === "cal"
     ? [ref.index ? state.cal.a : state.cal.b]
-    : [state.quad[(ref.index + 1) % 4], state.quad[(ref.index + 3) % 4]];
+    : [ring[(ref.index + 1) % 4], ring[(ref.index + 3) % 4]];
   ctx.strokeStyle = GOLD2;
   ctx.lineWidth = 1.5;
   for (const n of neighbors) {
@@ -372,6 +401,7 @@ function updateChip(size) {
 function getPoint(ref) {
   if (!ref) return null;
   if (ref.kind === "cal") return state.cal ? (ref.index ? state.cal.b : state.cal.a) : null;
+  if (ref.kind === "cover") return state.cover ? state.cover.quad[ref.index] : null;
   return state.quad ? state.quad[ref.index] : null;
 }
 function setPoint(ref, p) {
@@ -379,6 +409,9 @@ function setPoint(ref, p) {
   if (ref.kind === "cal") {
     const q = { x: Math.min(photo.width, Math.max(0, p.x)), y: Math.min(photo.height, Math.max(0, p.y)) };
     state.cal[ref.index ? "b" : "a"] = q;
+  } else if (ref.kind === "cover") {
+    state.cover.quad[ref.index] = { x: Math.min(photo.width, Math.max(0, p.x)), y: Math.min(photo.height, Math.max(0, p.y)) };
+    resampleCover();
   } else {
     const q = {
       x: Math.min(photo.width * 1.5, Math.max(-photo.width * 0.5, p.x)),
@@ -403,7 +436,12 @@ function hitTest(x, y, touch) {
       if (d <= r && d < bestD) { best = i; bestD = d; }
     });
     if (best >= 0) return { type: "point", ref: { kind: "quad", index: best } };
+    if (state.cover) {
+      const i = state.cover.quad.findIndex(near);
+      if (i >= 0) return { type: "point", ref: { kind: "cover", index: i } };
+    }
     if (pointInQuad(state.quad.map(toScreen), { x, y })) return { type: "move" };
+    if (state.cover && pointInQuad(state.cover.quad.map(toScreen), { x, y })) return { type: "move", target: "cover" };
   }
   if (state.step === "scale" && !state.cal) return { type: "newcal" };
   return { type: "pan" };
@@ -447,13 +485,13 @@ canvas.addEventListener("pointerdown", e => {
     drag = { type: "point", ref: hit.ref, offset: { x: p.x - img.x, y: p.y - img.y } };
     stage.classList.add("dragging");
   } else if (hit.type === "move") {
-    drag = { type: "move", last: img };
+    drag = { type: "move", last: img, target: hit.target || "sign" };
     stage.classList.add("dragging");
   } else {
     drag = { type: "pan", last: pt };
     stage.classList.add("dragging");
   }
-  if (state.step === "sign" && !state.touchedSign && (hit.type === "move" || hit.ref?.kind === "quad")) {
+  if (state.step === "sign" && !state.touchedSign && ((hit.type === "move" && hit.target !== "cover") || hit.ref?.kind === "quad")) {
     state.touchedSign = true;
     showHint("");
   }
@@ -491,6 +529,11 @@ function applyDrag(pt) {
   if (drag.type === "point") {
     setPoint(drag.ref, { x: img.x + drag.offset.x, y: img.y + drag.offset.y });
     if (drag.ref.kind === "quad") state.touchedSign = true;
+  } else if (drag.type === "move" && drag.target === "cover") {
+    const dx = img.x - drag.last.x, dy = img.y - drag.last.y;
+    state.cover.quad = state.cover.quad.map(p => ({ x: p.x + dx, y: p.y + dy }));
+    drag.last = img;
+    resampleCover();
   } else if (drag.type === "move") {
     const dx = img.x - drag.last.x, dy = img.y - drag.last.y;
     state.quad = state.quad.map(p => ({ x: p.x + dx, y: p.y + dy }));
@@ -549,7 +592,7 @@ canvas.addEventListener("keydown", e => {
   const step = (e.shiftKey ? 10 : 1) / state.view.s;
   const ref = state.selected;
   const p = getPoint(ref);
-  const editable = p && ((ref.kind === "cal" && state.step === "scale") || (ref.kind === "quad" && state.step === "sign"));
+  const editable = p && ((ref.kind === "cal" && state.step === "scale") || (ref.kind !== "cal" && state.step === "sign"));
   if (editable) setPoint(ref, { x: p.x + dir[0] * step, y: p.y + dir[1] * step });
   else { state.view.x -= dir[0] * 20; state.view.y -= dir[1] * 20; state.fitted = false; }
   updateUI();
@@ -570,6 +613,8 @@ async function loadPhoto(file) {
     state.quadEdited = false;
     state.placed = {};
     state.selected = null;
+    state.home = null;
+    setCover(false);
     $("drop").hidden = true;
     $("zoomBar").hidden = false;
     stage.style.setProperty("--sm-ar", (c.height / c.width).toFixed(4));
@@ -588,6 +633,74 @@ async function loadPhoto(file) {
 }
 
 $("photoInput").addEventListener("change", e => { loadPhoto(e.target.files[0]); e.target.value = ""; });
+
+// The sample is an original, generated photo with a blank sign band, so it is free to use. Its
+// scale line is preset on the entry door frame, which reads as 3 ft wide.
+const SAMPLE = {
+  url: new URL("../img/sample-storefront.jpg", import.meta.url),
+  cal: [{ x: 752, y: 676 }, { x: 914, y: 676 }], inches: 36, label: "Door width",
+  band: { x: 565, y: 258, w: 480 },
+};
+$("trySample").addEventListener("click", async () => {
+  try {
+    busy("Opening the sample photo…");
+    const res = await fetch(SAMPLE.url);
+    if (!res.ok) throw new Error();
+    const file = new File([await res.blob()], "Sample storefront.jpg", { type: "image/jpeg" });
+    $("calFt").value = "3";
+    $("calIn").value = "";
+    $("calLabel").value = SAMPLE.label;
+    await loadPhoto(file);
+    if (!state.photo) return;
+    state.cal = { a: { ...SAMPLE.cal[0] }, b: { ...SAMPLE.cal[1] } };
+    state.calInches = SAMPLE.inches;
+    state.home = { ...SAMPLE.band };
+    if (state.art) placeSign();
+    setStatus("Sample photo loaded. Its scale line is already set across the door (3 ft).");
+    updateUI();
+    requestRender();
+  } catch {
+    busy("");
+    setStatus("The sample photo couldn't be opened. Check your connection and try again.", true);
+  }
+});
+
+// ---------- cover the existing sign ----------
+function resampleCover() {
+  if (state.cover?.auto) {
+    state.cover.color = sampleAround(state.photo.canvas, state.cover.quad);
+    $("coverColor").value = hexOf(state.cover.color);
+  }
+}
+function setCover(on) {
+  $("coverOld").checked = on;
+  $("coverTools").hidden = !on;
+  if (!on) {
+    state.cover = null;
+    if (state.selected?.kind === "cover") state.selected = null;
+  } else if (!state.cover && state.photo) {
+    const base = state.quad || rectQuad(state.photo.canvas.width / 2, state.photo.canvas.height * 0.3, state.photo.canvas.width * 0.4, state.photo.canvas.width * 0.08);
+    state.cover = { quad: coverFromQuad(base), color: [128, 128, 128], auto: true };
+    resampleCover();
+  }
+  renderProofLink();
+  requestRender();
+}
+$("coverOld").addEventListener("change", e => setCover(e.target.checked));
+$("coverColor").addEventListener("input", e => {
+  if (!state.cover) return;
+  state.cover.color = rgbOf(e.target.value);
+  state.cover.auto = false;
+  renderProofLink();
+  requestRender();
+});
+$("coverMatch").addEventListener("click", () => {
+  if (!state.cover) return;
+  state.cover.auto = true;
+  resampleCover();
+  renderProofLink();
+  requestRender();
+});
 stage.addEventListener("dragover", e => { e.preventDefault(); stage.classList.add("dropping"); });
 stage.addEventListener("dragleave", e => { if (!stage.contains(e.relatedTarget)) stage.classList.remove("dropping"); });
 stage.addEventListener("drop", e => {
@@ -670,8 +783,8 @@ function setDropScale(k) {
 
 function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
-  let w = photo.width * 0.45;
-  let c = { x: photo.width / 2, y: photo.height * 0.36 };
+  let w = state.home?.w ?? photo.width * 0.45;
+  let c = state.home ? { x: state.home.x, y: state.home.y } : { x: photo.width / 2, y: photo.height * 0.36 };
   if (keepCenter && state.quad) {
     c = centroid(state.quad);
     w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
@@ -1181,6 +1294,7 @@ function designKey() {
   return JSON.stringify([
     artVersion, state.typeId, optionsFor(), state.quad && state.quad.map(p => [r(p.x), r(p.y)]), state.calInches,
     state.cal && [r(state.cal.a.x), r(state.cal.a.y), r(state.cal.b.x), r(state.cal.b.y)], state.opacity, $("showDims").checked,
+    state.cover && [state.cover.color, state.cover.quad.map(p => [r(p.x), r(p.y)])],
     $("project").value, $("preparedFor").value, $("notes").value, $("calLabel").value,
   ]);
 }

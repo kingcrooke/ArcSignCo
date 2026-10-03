@@ -253,6 +253,9 @@
 .sm-checks { display: grid; gap: 2px; }
 .sm-checks label { display: flex; align-items: center; gap: 10px; min-height: 40px; color: var(--ink); font-size: 14px; font-weight: 700; cursor: pointer; }
 .sm-checks input { width: 20px; height: 20px; accent-color: var(--navy); }
+.sm-cover .sm-actions { align-items: flex-end; }
+.sm-cover .sm-actions .sm-field { margin: 0; }
+.sm-cover .sm-actions .btn { min-height: 44px; }
 
 .sm-seg { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; gap: 4px; border-radius: 10px; background: var(--paper); border: 1px solid var(--line); }
 .sm-seg label { position: relative; }

@@ -103,6 +103,7 @@
           <div class="sm-actions">
             <label class="btn gold sm-file" for="photoInput">Choose photo</label>
             <input class="sm-visually-hidden" type="file" id="photoInput" accept="image/*,.heic,.heif">
+            <button type="button" class="btn white" id="trySample">Try the sample photo</button>
           </div>
           <p class="sm-meta" id="photoMeta"></p>
           <div class="sm-actions">
@@ -193,6 +194,16 @@
             <label><input type="number" id="dIn" inputmode="decimal" min="0" step="any" placeholder="0"><span>in</span></label>
             <button type="button" class="btn white" id="applyDrop">Apply</button>
           </fieldset>
+          <div class="sm-checks">
+            <label><input type="checkbox" id="coverOld"> Cover the existing sign</label>
+          </div>
+          <div class="sm-cover" id="coverTools" hidden>
+            <p class="sm-tip">Drag the white dashed box and its square corners over the old sign. It's painted in the color of the wall around it.</p>
+            <div class="sm-actions">
+              <label class="sm-field sm-color">Cover color <input type="color" id="coverColor" value="#808080"></label>
+              <button type="button" class="btn white" id="coverMatch">Match the wall</button>
+            </div>
+          </div>
           <label class="sm-field">Opacity <output id="opacityOut">100%</output>
             <input type="range" id="opacity" min="30" max="100" value="100">
           </label>
