@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Storefront Sign Mockup | Arc Signage Co</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Browser-only storefront sign mockup tool for Arc Signage Co. Photos stay on your device.">
+<meta name="theme-color" content="#0b1d33">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/tools/sign-mockup/sign-mockup.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo-lockup-white-360.v2.png" width="360" height="74" alt="Arc Signage Co">
+  </a>
+  <h1>Sign mockup</h1>
+  <a class="back" href="/">Back to site</a>
+</header>
+<div class="app">
+  <aside class="panel" aria-label="Controls">
+    <section class="section">
+      <h2>1. Storefront photo</h2>
+      <p class="help">JPG or PNG. HEIC converts in your browser when supported. Nothing is uploaded to a server.</p>
+      <label class="btn outline file-btn">
+        <input type="file" id="photoInput" accept="image/jpeg,image/png,image/heic,image/heif,.heic,.heif">
+        Choose photo
+      </label>
+    </section>
+    <section class="section">
+      <h2>2. Scale calibration</h2>
+      <p class="help">Draw a line on a known dimension (door width, window, etc.), then enter its real size.</p>
+      <div class="btn-row">
+        <button type="button" class="btn outline" id="calibrateBtn" disabled>Draw calibration line</button>
+        <button type="button" class="btn outline" id="clearCalBtn" disabled>Clear line</button>
+      </div>
+      <div class="field">
+        <label for="lengthMode">Length units</label>
+        <select id="lengthMode">
+          <option value="ftin">Feet and inches</option>
+          <option value="in">Inches only</option>
+        </select>
+      </div>
+      <div id="ftInFields" class="length-row">
+        <div class="field">
+          <label for="calFeet">Feet</label>
+          <input type="number" id="calFeet" min="0" step="1" value="3">
+        </div>
+        <div class="field">
+          <label for="calInches">Inches</label>
+          <input type="number" id="calInches" min="0" max="11" step="0.25" value="0">
+        </div>
+      </div>
+      <div id="inOnlyField" class="field" hidden>
+        <label for="calInchesOnly">Real length (inches)</label>
+        <input type="number" id="calInchesOnly" min="0.1" step="0.125" value="36">
+      </div>
+      <button type="button" class="btn gold" id="applyCalBtn" disabled>Apply calibration</button>
+      <p class="status" id="calStatus">Upload a photo to calibrate.</p>
+    </section>
+    <section class="section">
+      <h2>3. Sign artwork</h2>
+      <p class="help">PNG with transparency works best. Drag the four corners on the photo to match the facade.</p>
+      <label class="btn outline file-btn">
+        <input type="file" id="signInput" accept="image/png,image/jpeg,image/svg+xml,.svg">
+        Choose sign image
+      </label>
+      <div class="field">
+        <label for="signOpacity">Sign opacity <span id="opacityVal">85%</span></label>
+        <input type="range" id="signOpacity" min="10" max="100" value="85">
+      </div>
+      <button type="button" class="btn outline" id="resetSignBtn" disabled>Reset sign placement</button>
+      <div class="dim-readout" id="dimReadout" hidden>
+        <span id="dimText">—</span>
+        <small>Approximate size from calibration plane; perspective and camera angle affect accuracy.</small>
+      </div>
+    </section>
+    <section class="section">
+      <h2>4. Export proof PDF</h2>
+      <div class="field">
+        <label for="projectName">Project or client name (optional)</label>
+        <input type="text" id="projectName" maxlength="120" placeholder="e.g. 123 Main St storefront">
+      </div>
+      <button type="button" class="btn navy" id="exportPdfBtn" disabled>Download PDF proof</button>
+    </section>
+    <p class="privacy-note">All processing happens in this tab. Images are not sent to Arc Signage Co unless you email them separately.</p>
+  </aside>
+  <div class="stage-wrap">
+    <div class="stage-toolbar">
+      <span>Zoom: <strong id="zoomLabel">100%</strong></span>
+      <button type="button" class="btn outline" id="zoomOutBtn" style="width:auto;min-height:32px;padding:4px 10px;">−</button>
+      <button type="button" class="btn outline" id="zoomInBtn" style="width:auto;min-height:32px;padding:4px 10px;">+</button>
+      <button type="button" class="btn outline" id="zoomFitBtn" style="width:auto;min-height:32px;padding:4px 10px;">Fit</button>
+      <span id="modeLabel">Pan &amp; zoom</span>
+    </div>
+    <div class="canvas-host" id="canvasHost">
+      <canvas id="viewCanvas"></canvas>
+      <div class="hint-overlay" id="hintOverlay">Upload a storefront photo to begin.</div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="/tools/sign-mockup/sign-mockup.js"></script>
+</body>
+</html>

@@ -35,6 +35,12 @@
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Robots-Tag = "noindex"
 
+[[headers]]
+  for = "/tools/sign-mockup/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex"
+
 # Versioned images (filenames carry .v1, .v2, ...): never overwrite a file here, add a new version.
 [[headers]]
   for = "/assets/*"
@@ -80,8 +86,9 @@
   status = 404
   force = true
 
+# Repo dev scripts (*.mjs) stay blocked; /tools/sign-mockup/ is a published browser tool.
 [[redirects]]
-  from = "/tools/*"
+  from = "/tools/*.mjs"
   to = "/404.html"
   status = 404
   force = true
