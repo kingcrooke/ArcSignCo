@@ -6,9 +6,9 @@ const DRAW = {
     s.rect(44, 30, 5, 140, "#f4f6f8", C.ink, 1);
     s.rect(49, 30, 2, 140, C.paint);
     s.circle(46.5, 50, 2, C.metal).circle(46.5, 150, 2, C.metal);
-    s.label("Aluminum composite board, about ¼\" thick", 47, 90, 40)
+    s.label("ACM board, ¼\" thick", 47, 90, 40)
       .label("Printed face, laminated", 50, 120, 90)
-      .label("Screwed through to fence or hoarding", 46.5, 150, 140);
+      .label("Screwed to the fence", 46.5, 150, 140);
     return "Section";
   },
   "constr-project-panel"(s) {
@@ -17,8 +17,8 @@ const DRAW = {
     s.rect(54, 40, 2, 120, C.paint);
     for (const y of [56, 144]) s.rect(44, y - 2, 10, 4, C.metalLight).circle(56, y, 2.6, C.metal);
     s.label("Standoff caps", 56, 56, 34)
-      .label("Printed panel, about 1\" off the wall", 52, 100, 92)
-      .label("Standoff barrels into anchors", 47, 144, 150);
+      .label("Panel 1\" off the wall", 52, 100, 92)
+      .label("Standoffs into anchors", 47, 144, 150);
     return "Section";
   },
   "constr-shed-parapet"(s) {
@@ -30,7 +30,7 @@ const DRAW = {
       .label("Sized to the shed run", 70, 75, 58)
       .label("Printed ACM or banner", 56, 95, 82)
       .label("Bolted to shed framing", 48, 70, 108)
-      .label("Weather-resistant laminate", 56, 110, 132);
+      .label("Weatherproof laminate", 56, 110, 132);
     return "Section";
   },
   "constr-fence-wrap"(s) {
@@ -38,7 +38,7 @@ const DRAW = {
     s.rect(44, 32, 6, 136, C.metalLight, C.ink, 0.6);
     for (let y = 36; y < 164; y += 6) s.line(44, y, 50, y, C.muted, 0.4);
     s.rect(50, 36, 2, 128, C.fabric);
-    s.label("Mesh or banner on fence", 52, 90, 34)
+    s.label("Mesh or banner", 52, 90, 34)
       .label("Grommets or zip ties", 48, 50, 58)
       .label("Wind slits as needed", 52, 110, 82)
       .label("Printed scrim or mesh", 52, 130, 108)
@@ -53,8 +53,8 @@ const DRAW = {
     s.path("M52.5 64 v10 M52.5 78 v6", "none", "#fff8e6", 1.5);
     s.label("Rigid safety sign", 54, 90, 34)
       .label("Aluminum or ACM", 52, 70, 58)
-      .label("Screws or straps to fence", 48, 130, 82)
-      .label("OSHA-style layouts typical", 54, 100, 108)
+      .label("Screwed or strapped", 48, 130, 82)
+      .label("Safety layouts typical", 54, 100, 108)
       .label("No lighting", 52, 140, 132);
     return "Section";
   },
@@ -65,9 +65,9 @@ const DRAW = {
     for (const y of [54, 146]) s.rect(44, y - 2, 10, 4, C.metalLight).circle(56, y, 2.6, C.metal);
     s.path("M58 60 h40 M58 72 h36 M58 84 h30", "none", C.muted, 0.8);
     s.label("Permit posting board", 56, 100, 34)
-      .label("Owner, architect, contractor lines", 70, 70, 58)
-      .label("Standoffs about 1\" off wall", 52, 120, 82)
-      .label("Wording confirmed with permit holder", 70, 90, 108)
+      .label("Owner, architect, GC", 70, 70, 58)
+      .label("Standoffs, 1\" off wall", 52, 120, 82)
+      .label("Permit holder wording", 70, 90, 108)
       .label("Laminated printed face", 56, 140, 140);
     return "Section";
   },

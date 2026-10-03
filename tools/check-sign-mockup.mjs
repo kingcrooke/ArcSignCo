@@ -92,6 +92,14 @@ for (const id of NEW_CATS) {
   }
 }
 check(NEW_CATS.every(id => !CATEGORIES.find(c => c.id === id).examples.length), "live categories are not placeholders");
+// "How it's built" labels start at x = 214 on a 320-wide card; anything past the edge is cut off.
+{
+  const unesc = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+  const clipped = ALL_TYPES.flatMap(t => [...diagramSvg(t).matchAll(/<text x="214" y="[\d.]+" font-size="([\d.]+)"[^>]*>([^<]*)<\/text>/g)]
+    .map(([, size, text]) => ({ id: t.id, text: unesc(text), right: 214 + textWidth(unesc(text), false, Number(size)) }))
+    .filter(l => l.right > 318));
+  check(!clipped.length, `diagram labels fit the card${clipped.length ? ` (${clipped.map(l => `${l.id}: "${l.text}"`).join("; ")})` : ""}`);
+}
 for (const t of ALL_TYPES) {
   const fields = optionFields(t, defaultOptions(t), { width: 144, height: 40 });
   if (!fields.every(f => f.kind !== "select" || (f.choices.length && f.choices.some(([v]) => v === f.value)))) check(false, `${t.id}: every select field offers its current value`);

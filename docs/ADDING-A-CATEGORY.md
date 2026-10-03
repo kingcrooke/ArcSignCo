@@ -226,6 +226,8 @@ Defaults come from `noun`. Override any of these in `ui: { … }`:
 | `heightShort` | `"H"` | Shown in the size chip, e.g. "12' W × 3' H". |
 | `flatLabel` | `"The <noun> artwork, flat"` | Alt text for the flat artwork image. |
 | `hangs` | `false` | `true` means it hangs from its top edge (awnings): resizing keeps the top edge and a "Set the drop" field appears. |
+| `placeWidthIn` | `null` | `(type, opts) => inches`: the typical width it is first placed at once the scale is set, usually from a size preset. Switching types or picking another preset re-sizes it until the user drags a corner. |
+| `plaque` | `false` | `true` places it beside the scaled door at about 60 in up (small wall plaques), never at the storefront sign band. |
 | `sizeExtra` | Area in sq ft | `(type, opts, size) => ({ label: "Panels", value: "3" })` |
 
 Other optional top-level fields are `typeWord` (`"type"`, or `"shape"` for awnings), `cardNote(type)` (the line under each library card), `aliases` (old id → new id) and `spillReach` (how far night light spreads, as a multiple of the height; default 0.7).
