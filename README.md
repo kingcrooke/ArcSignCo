@@ -238,9 +238,9 @@ download a three-page PDF or send a phone approval link.
 
 ## Analytics
 
-GA4, Search Console HTML verification, and Bing Webmaster meta tags are wired through
-`assets/js/measurement-config.js` and **off** until IDs are pasted there. Do not add real IDs until
-Jesus approves them.
+GA4 is wired through `assets/js/measurement-config.js` (**off** until `ga4Id` is pasted). Search
+Console and Bing HTML verification use commented meta placeholders in `index.html` (or optional root
+verification files). Do not add real tokens until Jesus approves them.
 
 See **`docs/ANALYTICS-AND-VERIFICATION.md`** for paste locations, events, verification steps, and
 `tools/check-analytics.mjs`.

@@ -109,9 +109,12 @@
 }
 </script>
 <!-- TODO(GBP): Arc has a Google Business Profile but the URL isn't confirmed yet. When Jesus supplies it, add it to "sameAs" above (after Instagram and Facebook) and put the same URL in the footer link's href (id="gbpLink"); the link stays hidden while its href is empty. Schema-only PostalAddress: see README "Location and address". -->
-<!-- ANALYTICS & verification: paste IDs in assets/js/measurement-config.js (see docs/ANALYTICS-AND-VERIFICATION.md). -->
+<!-- GSC: uncomment and replace PASTE_TOKEN with the Search Console HTML tag content (see docs/ANALYTICS-AND-VERIFICATION.md). -->
+<!-- GSC: <meta name="google-site-verification" content="PASTE_TOKEN"> -->
+<!-- Bing: uncomment and replace PASTE_TOKEN with the msvalidate.01 content from Bing Webmaster. -->
+<!-- Bing: <meta name="msvalidate.01" content="PASTE_TOKEN"> -->
+<!-- ANALYTICS: paste GA4 ID in assets/js/measurement-config.js (see docs/ANALYTICS-AND-VERIFICATION.md). -->
 <script src="/assets/js/measurement-config.js"></script>
-<script>window.__ARC_HEAD_OPTS__={verification:true};</script>
 <script src="/assets/js/measurement.js"></script>
 <style>
 :root {

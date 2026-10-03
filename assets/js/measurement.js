@@ -1,22 +1,5 @@
 (function () {
   var cfg = window.__ARC_MEASUREMENT__ || {};
-  var opts = window.__ARC_HEAD_OPTS__ || {};
-
-  if (opts.verification) {
-    if (cfg.googleSiteVerification) {
-      var g = document.createElement("meta");
-      g.name = "google-site-verification";
-      g.content = cfg.googleSiteVerification;
-      document.head.appendChild(g);
-    }
-    if (cfg.bingSiteVerification) {
-      var b = document.createElement("meta");
-      b.name = "msvalidate.01";
-      b.content = cfg.bingSiteVerification;
-      document.head.appendChild(b);
-    }
-  }
-
   var GA4_ID = cfg.ga4Id || "";
   if (!/^G-[A-Z0-9]+$/.test(GA4_ID)) return;
 
