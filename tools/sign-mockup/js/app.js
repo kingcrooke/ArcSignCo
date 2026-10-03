@@ -825,7 +825,7 @@ function buildCategoryBars() {
   const bar = $("category"), tabs = $("typeCats");
   bar.textContent = "";
   tabs.textContent = "";
-  for (const cat of CATEGORIES) {
+  for (const cat of [...READY, ...CATEGORIES.filter(c => !READY.includes(c))]) {
     const soon = cat.status !== "ready";
     const b = document.createElement("button");
     b.type = "button";
