@@ -1,4 +1,5 @@
-// Checks the sign mockup tool: geometry math, PDF structure and content, and copy guardrails.
+// Checks the sign mockup tool: geometry math, sign types and diagrams, PDF structure and content,
+// approval-link plumbing and copy guardrails.
 //
 //   node tools/check-sign-mockup.mjs
 //
@@ -10,6 +11,8 @@ import {
   squareToQuad, invert3, apply3, quadSizeInches, formatFeetInches, formatArea, rectQuad, scaleQuad, pointInQuad, toInches,
 } from "./sign-mockup/js/geometry.js";
 import { buildProofPdf, fromWinAnsi, toWinAnsi, wrapText, textWidth, CONTACT, DISCLAIMER } from "./sign-mockup/js/pdf.js";
+import { SIGN_TYPES, LIGHTING, GROUPS } from "./sign-mockup/js/sign-types.js";
+import { diagramSvg, hasDiagram } from "./sign-mockup/js/diagrams.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const toolDir = path.join(root, "tools/sign-mockup");
@@ -45,11 +48,31 @@ check(fromWinAnsi(toWinAnsi(DISCLAIMER)) === DISCLAIMER, "disclaimer survives Wi
 check(near(textWidth("Hello", false, 10), 22.78, 0.01), "Helvetica widths");
 check(wrapText("one two three four five", false, 10, 40).length > 1, "wrapText wraps long text");
 
+// Sign types and their construction drawings
+check(SIGN_TYPES.length >= 12 && SIGN_TYPES.length <= 18, `${SIGN_TYPES.length} sign types (12–18)`);
+check(new Set(SIGN_TYPES.map(t => t.id)).size === SIGN_TYPES.length, "sign type ids are unique");
+check(SIGN_TYPES.every(t => LIGHTING[t.lighting] && GROUPS.some(g => g.id === t.group)), "every type has a known lighting and group");
+check(SIGN_TYPES.every(t => t.parts.length >= 3 && t.summary), "every type lists its parts and a summary");
+const LIGHTINGS = ["face", "halo", "internal", "neon", "external", "none"];
+check(LIGHTINGS.every(l => SIGN_TYPES.some(t => t.lighting === l)), `lighting covered: ${LIGHTINGS.join(", ")}`);
+for (const t of SIGN_TYPES) {
+  const svg = hasDiagram(t.id) ? diagramSvg(t) : "";
+  check(/^<svg[^>]+viewBox="0 0 320 200"/.test(svg) && svg.endsWith("</svg>") && /aria-label="[^"]+how it.s built"/.test(svg), `${t.id}: construction diagram`);
+}
+
 // PDF build
 const fakeJpeg = (w, h) => ({ bytes: new Uint8Array([0xff, 0xd8, 0xff, 0xd9]), width: w, height: h });
+const halo = SIGN_TYPES.find(t => t.id === "halo");
 const pdf = buildProofPdf({
   logo: fakeJpeg(847, 174),
   mockup: fakeJpeg(1600, 1200),
+  night: fakeJpeg(1600, 1200),
+  diagram: fakeJpeg(1280, 800),
+  flat: { image: fakeJpeg(1200, 300) },
+  type: { name: halo.name, lighting: halo.lightingLabel, summary: halo.summary, parts: halo.parts, night: LIGHTING.halo.night },
+  price: { range: "$3,000 – $5,000", label: "Arc placeholder rates", note: "Rough preliminary range from placeholder rates, not a quote." },
+  approval: { name: "Sample Client", at: "Oct 3, 2026, 3:04 PM EDT" },
+  proofUrl: "https://example.test/tools/sign-mockup/proof/#0123",
   size: { width: `12' 4"`, height: `2' 6"`, area: "31 sq ft" },
   reference: `Door width = 3' 0"`,
   project: "Corner Bakery (sample)",
@@ -67,25 +90,54 @@ const strings = [...raw.matchAll(/\((?:\\.|[^\\)])*\)/g)].map(m =>
   m[0].slice(1, -1).replace(/\\([0-7]{3})/g, (_, o) => String.fromCharCode(parseInt(o, 8))).replace(/\\(.)/g, "$1"))
   .map(s => fromWinAnsi([...s].map(c => c.charCodeAt(0))));
 const text = strings.join("\n");
-for (const needle of [DISCLAIMER, CONTACT.phone, "jc@arcsignco.com", "arc@arcsignco.com", "arcsignco.com", `12' 4"`, `2' 6"`, `Door width = 3' 0"`]) {
+for (const needle of [DISCLAIMER, CONTACT.phone, "jc@arcsignco.com", "arc@arcsignco.com", "arcsignco.com", `12' 4"`, `2' 6"`, `Door width = 3' 0"`,
+  halo.name, "Night view and construction", "Flat artwork", "Arc placeholder rates", "APPROVED FOR NEXT STEPS", "Page 3 of 3"]) {
   check(text.includes(needle), `PDF text includes ${JSON.stringify(needle)}`);
 }
+check(/\/Type \/Pages \/Kids \[[^\]]+\] \/Count 3/.test(raw), "PDF has three pages");
+check((text.match(/Concept only – not a shop drawing/g) || []).length >= 6, "disclaimer in the banner and footer of every page");
+const onePage = Buffer.from(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), size: null })).toString("latin1");
+check(/\/Count 1 >>/.test(onePage), "PDF without night view or artwork stays one page");
 check(raw.includes("/URI (tel:+13474502110)") && raw.includes("/URI (mailto:jc@arcsignco.com)") && raw.includes("/URI (mailto:arc@arcsignco.com)"), "PDF has phone and email links");
 check(!/\bApt\b/i.test(text), "PDF has no \"Apt\"");
 
 // Copy guardrails across the tool's own files (vendored libraries excluded).
-const own = ["index.html", "sign-mockup.css", ...fs.readdirSync(path.join(toolDir, "js")).map(f => `js/${f}`)];
+const own = [
+  "index.html", "sign-mockup.css", ...fs.readdirSync(path.join(toolDir, "js")).map(f => `js/${f}`),
+  ...fs.readdirSync(path.join(toolDir, "proof")).map(f => `proof/${f}`),
+];
 const BANNED = [
   /\bApt\b/i, /83 Post Ave/i, /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i,
   /dob[- ]approved/i, /\bour license/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
 ];
+// Reference catalogs and awning makers are research only: their names never ship.
+const VENDORS = [
+  /cosun/i, /schlosser/i, /\bsloan\b/i, /principal sloan/i, /1800awnings/i, /awntech/i, /brustor/i, /sunbrella/i, /trivantage/i,
+  /strofix/i, /alutex/i, /mannlee/i, /hendee/i, /kreider/i, /glen raven/i, /recasens/i, /dickson/i, /sattler/i, /masa architectural/i,
+  /carroll architectural/i, /shade systems/i, /\bmapes\b/i,
+];
 for (const f of own) {
   const body = fs.readFileSync(path.join(toolDir, f), "utf8");
-  const hits = BANNED.filter(re => re.test(body)).map(String);
-  check(!hits.length, `${f}: no banned wording${hits.length ? ` (${hits.join(", ")})` : ""}`);
+  const hits = [...BANNED, ...VENDORS].filter(re => re.test(body)).map(String);
+  check(!hits.length, `${f}: no banned wording or vendor names${hits.length ? ` (${hits.join(", ")})` : ""}`);
+}
+for (const f of ["netlify/functions/sign-proofs.mjs", "netlify/lib/sign-proofs.mjs", "README.md", "docs/sign-mockup-approval-links.md"]) {
+  const p = path.join(root, f);
+  const body = fs.existsSync(p) ? fs.readFileSync(p, "utf8") : "";
+  const hits = VENDORS.filter(re => re.test(body)).map(String);
+  check(body && !hits.length, `${f}: present, no vendor names${hits.length ? ` (${hits.join(", ")})` : ""}`);
 }
 const html = fs.readFileSync(path.join(toolDir, "index.html"), "utf8");
 check(/<meta name="robots" content="noindex">/.test(html), "page is noindex");
+const proofHtml = fs.readFileSync(path.join(toolDir, "proof/index.html"), "utf8");
+check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof page is noindex");
+check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
+check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
+check(/<form name="sign-proof-activity"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(proofHtml), "proof activity form is registered with Netlify Forms (honeypot on)");
+const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
+check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
+const priceFiles = own.filter(f => f !== "js/pricing-config.js" && f.endsWith(".js"));
+check(priceFiles.every(f => !/\b(low|high):\s*\d{2,}/.test(fs.readFileSync(path.join(toolDir, f), "utf8"))), "no rate numbers outside pricing-config.js");
 check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
 check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
 check(!fs.readFileSync(path.join(root, "sitemap.xml"), "utf8").includes("/tools/"), "sitemap does not list /tools/");
@@ -93,6 +145,13 @@ check(!fs.readFileSync(path.join(root, "sitemap.xml"), "utf8").includes("/tools/
 const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
 const allow = toml.indexOf('from = "/tools/sign-mockup/*"'), block = toml.indexOf('from = "/tools/*"');
 check(allow > -1 && block > -1 && allow < block, "netlify.toml serves /tools/sign-mockup/ before blocking /tools/*");
+for (const from of ["/netlify/*", "/node_modules/*", "/package.json", "/package-lock.json"]) {
+  check(new RegExp(`from = "${from.replace(/[*/.]/g, "\\$&")}"\\s+to = "/404.html"\\s+status = 404`).test(toml), `netlify.toml blocks ${from}`);
+}
+const fn = fs.readFileSync(path.join(root, "netlify/functions/sign-proofs.mjs"), "utf8");
+check(/getStore\(\{ name: STORE_NAME/.test(fn) && /"\/api\/sign-proofs"/.test(fn), "approval function uses its own Blobs store at /api/sign-proofs");
+check(JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf8")).dependencies["@netlify/blobs"], "package.json declares @netlify/blobs");
+check(!fs.existsSync(path.join(toolDir, "js/warp.js")), "old flat warp renderer removed");
 check(fs.existsSync(path.join(toolDir, "vendor/heic-to-1.6.5.min.js")) && fs.existsSync(path.join(toolDir, "vendor/heic-to-LICENSE.txt")), "HEIC decoder and its license are vendored");
 
 console.log(failures ? `\n${failures} check(s) failed` : "\nAll checks passed");

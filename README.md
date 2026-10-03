@@ -3,7 +3,8 @@
 Website for Arc Signage Co (legal name: Arc Signage Co LLC), live at https://arcsignco.com.
 
 Static HTML hosted on Netlify (site name `arcsign`). There is no framework and no build step:
-Netlify publishes the repository root as-is.
+Netlify publishes the repository root as-is. The one server piece is a Netlify Function for the sign
+mockup's approval links (`netlify/functions/`); `package.json` exists only for its dependency.
 
 ## Files
 
@@ -26,7 +27,12 @@ Netlify publishes the repository root as-is.
 | `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
 | `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
 | `tools/sign-mockup/` | Storefront sign mockup tool, served at `/tools/sign-mockup/` (noindex, not in the sitemap or nav) |
-| `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, PDF output, and copy guardrails |
+| `tools/sign-mockup/proof/` | Phone proof page for approval links, served at `/tools/sign-mockup/proof/#<id>` (noindex) |
+| `netlify/functions/sign-proofs.mjs`, `netlify/lib/sign-proofs.mjs` | Approval link API (`/api/sign-proofs`), stored in Netlify Blobs |
+| `package.json` | `@netlify/blobs` for the function, and `npm test` for the mockup checks |
+| `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, sign types, PDF output, and copy guardrails |
+| `tools/sign-mockup-pricing.test.mjs`, `tools/sign-proofs.test.mjs` | Unit tests: placeholder rates and the approval link API |
+| `docs/sign-mockup-approval-links.md` | How approval links work: API, Blobs namespacing, notifications |
 
 ## How changes ship
 
@@ -167,22 +173,44 @@ If it can't be backed up, soften or remove it.
 ## Sign mockup tool
 
 `/tools/sign-mockup/` lets a visitor upload a storefront photo, set the scale by drawing a line over
-something they measured and typing its length, pin a sign (typed text or uploaded artwork) to the wall
-with four corner handles, and download a one-page PDF: Arc logo, phone, both emails, the mockup with
-approximate width / height / area, and "Concept only – not a shop drawing".
+something they measured, pick a sign type, pin the sign (typed text or uploaded artwork) to the wall
+with four corner handles, and see it built in perspective by day and at night. They can then
+download a three-page PDF or send a phone approval link.
 
-- Everything runs in the browser; nothing is uploaded. Plain ES modules in `tools/sign-mockup/js/`,
-  no build step and no runtime CDN.
+- **Sign types**: 18 types in `js/sign-types.js` (channel letters, non-lit letters, light boxes,
+  blade signs, panels, LED neon, vinyl, paint and a traditional awning). Each has a "how it's built"
+  cross-section drawn in code for this tool (`js/diagrams.js`): generic, typical construction, not to scale.
+  Use generic type and shape names only: no catalog, vendor or awning maker names anywhere on the
+  site, in PDFs or in code comments. `tools/check-sign-mockup.mjs` checks for this.
+- **Rendering**: `js/geometry.js` recovers a camera from the pinned corners, so depth (returns,
+  raceways, cabinets, standoffs, brackets, awning projection) is drawn in perspective.
+  `js/scene.js` builds each type's parts and lighting; `js/renderer.js` draws them with WebGL, or on
+  the CPU when WebGL is missing. `js/art.js` removes a flat background and makes the masks.
+- **Night view**: same pin, darker photo, light from the sign by lighting type (face-lit, halo,
+  internal, LED neon, gooseneck lamps). Non-lit types never glow but stay readable. This is a
+  simulation to show where the light goes, not a photometric render.
+- **PDF** (`js/pdf.js` writer, `js/proof-pdf.js` browser glue): page 1 is the day mockup with size, type and
+  the preliminary range; page 2 is the night view and the construction drawing; page 3 is the flat,
+  undistorted artwork. Every page has the logo, phone, both emails and "Concept only – not a shop drawing".
+- **Preliminary range**: `js/pricing-config.js` is the only file with rate numbers, and they are
+  **placeholders**. Replace them before showing a range to a client. The range only shows once the
+  scale is set.
+- **Approval links**: `netlify/functions/sign-proofs.mjs` stores proofs in the Netlify Blobs store
+  `arc-sign-mockup-proofs` under `v1/<deploy context>/<id>/`, so preview test proofs never mix with
+  production ones. Details: `docs/sign-mockup-approval-links.md`.
+- Nothing leaves the browser unless the visitor creates an approval link. Plain ES modules, no build
+  step and no runtime CDN.
 - iPhone HEIC photos: Safari decodes them natively. Other browsers load
   `tools/sign-mockup/vendor/heic-to-1.6.5.min.js` (libheif, LGPL-3.0, about 0.8 MB gzipped) only when
   a HEIC file is picked. To upgrade it, add a new versioned file (the vendor folder is cached for a year)
   and update `HEIC_LIB` in `js/images.js`.
-- The PDF is written by `js/pdf.js` (standard Helvetica fonts, JPEG images, clickable phone/email links).
 - `netlify.toml` serves `/tools/sign-mockup/*` before the rule that 404s the rest of `/tools/`.
-  Keep that order.
+  Keep that order. It also 404s `/netlify/*`, `/node_modules/*`, `/package.json` and
+  `/package-lock.json`, because the publish root is the repo root.
 - Sizes are estimates: they assume the reference line is on the same wall as the sign and the photo is
   close to straight-on. The page and PDF say so; don't remove that wording.
-- After editing the tool, run `node tools/check-sign-mockup.mjs` (no install needed).
+- After editing the tool, run `npm test` (or `node tools/check-sign-mockup.mjs` and the two
+  `node --test` files on their own; no install needed for those).
 
 ## Analytics
 
