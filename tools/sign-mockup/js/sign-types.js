@@ -14,6 +14,7 @@ export const LIGHTING = {
   "internal-letters": { label: "Internally lit (copy only)", night: "Only the push-through copy glows; the metal face stays dark." },
   external: { label: "External lights", night: "Gooseneck lamps wash the face from above." },
   none: { label: "Non-lit", night: "No light of its own; it reads by street and storefront light." },
+  backlit: { label: "Backlit", night: "The translucent cover glows from LEDs inside the frame, and the graphics read through it." },
 };
 
 export const GROUPS = [
@@ -22,7 +23,7 @@ export const GROUPS = [
   { id: "cabinet", label: "Light boxes" },
   { id: "blade", label: "Blade signs" },
   { id: "panel", label: "Panels" },
-  { id: "graphics", label: "Neon, graphics and awnings" },
+  { id: "graphics", label: "Neon and graphics" },
 ];
 
 const T = [
@@ -190,18 +191,6 @@ const T = [
     options: [],
   },
   {
-    id: "awning",
-    group: "graphics",
-    name: "Awning with valance lettering",
-    lighting: "none",
-    summary: "A traditional sloped awning: fabric stretched over a welded tube frame with closed sides, and the business name on the rigid valance along the front.",
-    pinHint: "Pin the wall area the awning covers: top corners where the frame meets the wall, bottom corners level with the bottom of the valance.",
-    notice: "NYC generally limits awning lettering to the business name and address, with letters up to 12\" tall and 12 sq ft in total; more copy makes it a sign. Verify before ordering.",
-    parts: ["Acrylic canvas or vinyl cover", "Welded square-tube frame", "Projects about 3'–4' from the wall", "Rigid valance, about 10\" tall, carries the lettering", "Closed side panels", "Brackets bolted to the wall"],
-    render: { kind: "awning", projection: 36, valance: 10 },
-    options: ["panel", "fabric", "edge"],
-  },
-  {
     id: "painted",
     group: "graphics",
     name: "Painted wall sign",
@@ -213,16 +202,6 @@ const T = [
   },
 ];
 
+// Awning shapes live in awning-types.js; catalog.js joins both and resolves ids.
 export const SIGN_TYPES = T.map(t => ({ ...t, lightingLabel: LIGHTING[t.lighting].label }));
-export const TYPE_IDS = SIGN_TYPES.map(t => t.id);
 export const DEFAULT_TYPE = "trimcap";
-
-export function getType(id) {
-  return SIGN_TYPES.find(t => t.id === id) || SIGN_TYPES.find(t => t.id === DEFAULT_TYPE);
-}
-
-// True when the type puts its own light on the scene at night.
-export const isLit = type => type.lighting !== "none";
-
-// Types whose artwork is cut-out shapes rather than a printed rectangle.
-export const usesLetterShapes = type => ["letters", "neon"].includes(type.render.kind) || type.render.face === "routed";

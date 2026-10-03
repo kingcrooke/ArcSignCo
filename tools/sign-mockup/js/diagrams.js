@@ -1,6 +1,8 @@
-// "How it's built" cross-sections, one per sign type, as small self-contained SVG strings.
+// "How it's built" cross-sections, one per sign type and awning shape, as small self-contained SVG strings.
 // Pure string building (no DOM) so the editor, the proof page, the PDF and the Node check share them.
 // Not to scale: the drawings show the parts and where the light goes, not dimensions.
+
+import { drawAwning } from "./awning-diagrams.js";
 
 const C = {
   ink: "#0b1d33",
@@ -274,22 +276,6 @@ const DRAW = {
     s.label("Storefront glass", 101, 30, 40).label("Vinyl film on the glass", 108, 70, 66)
       .label("Storefront frame", 108, 186, 92).label("No depth, no lighting", 108, 130, 118);
   },
-  awning(s) {
-    // Traditional slope with closed sides: roof from the wall down to the front bar, a rigid
-    // valance below it, and a bottom bar back to the wall.
-    s.wall();
-    s.path(`M44 40 L176 104 L176 140 L44 140 Z`, "#2f6390", C.ink, 1);
-    s.path(`M44 40 L176 104`, "none", C.fabric, 4);
-    s.line(48, 46, 172, 106, "#9cc3e4", 1, ` stroke-dasharray="4 3"`);
-    s.rect(176, 104, 7, 36, C.fabric, C.ink, 1);
-    s.rect(177.5, 114, 4, 16, "#ffffff");
-    s.line(44, 140, 176, 140, C.metal, 2.4);
-    s.rect(40, 34, 6, 12, C.metal);
-    s.rect(40, 134, 6, 12, C.metal);
-    s.label("Fabric cover", 110, 72, 34).label("Welded tube frame", 136, 88, 58).label("Rigid valance, lettering", 183, 122, 82)
-      .label("Closed side panel", 104, 118, 106).label("Bottom bar", 120, 140, 130).label("Wall brackets", 43, 40, 154);
-    return "Side view";
-  },
   painted(s) {
     s.wall();
     s.rect(44, 40, 3, 120, "#f1f2f4");
@@ -300,10 +286,12 @@ const DRAW = {
 
 const cache = new Map();
 
-/** Returns the cross-section SVG markup for a sign type. */
+const isAwningType = type => type.category === "awning";
+
+/** Returns the cross-section (or awning profile) SVG markup for a type. */
 export function diagramSvg(type) {
   if (cache.has(type.id)) return cache.get(type.id);
-  const draw = DRAW[type.id];
+  const draw = isAwningType(type) ? s => drawAwning(s, type, C) : DRAW[type.id];
   if (!draw) throw new Error(`No diagram for ${type.id}`);
   const s = new Svg();
   const view = draw(s) || "Section";
@@ -313,4 +301,4 @@ export function diagramSvg(type) {
 }
 
 export const DIAGRAM_SIZE = { width: W, height: H };
-export const hasDiagram = id => typeof DRAW[id] === "function";
+export const hasDiagram = type => isAwningType(type) || typeof DRAW[type.id] === "function";

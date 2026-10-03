@@ -11,7 +11,9 @@ import { createRenderer } from "./renderer.js";
 import {
   makeCanvas, maskOf, morph, ring, blur, tube, averageColor, hexToRgb, mix, alphaBounds, WHITE, DISK,
 } from "./art.js";
-import { isLit } from "./sign-types.js";
+import { litWith, lightingOf, isAwning } from "./catalog.js";
+import { defaultAwningOptions } from "./awning-types.js";
+import { buildAwning, awningFlat } from "./awning-scene.js";
 
 const NIGHT_PHOTO = [0.2, 0.23, 0.31];
 const NIGHT_UNLIT = [0.44, 0.47, 0.56]; // non-lit signs: still readable by street light
@@ -30,114 +32,44 @@ const LIGHT_FX = {
   internal: { spill: 0.35, bloom: 0.42 },
   "internal-letters": { spill: 0.3, bloom: 0.5 },
   external: { spill: 0, bloom: 0.55 },
+  backlit: { spill: 0.4, bloom: 0.55 },
   none: { spill: 0, bloom: 0 },
 };
 
 /** Default per-type options; the editor shows controls for the ones the type lists. */
 export function defaultOptions(type) {
+  if (isAwning(type)) return defaultAwningOptions(type);
   const r = type.render;
   return {
     returns: typeof r.returns === "string" && r.returns.startsWith("#") ? r.returns : "",
     trim: r.trimColor || "",
     raceway: "",
-    panel: type.id === "awning" ? "#7a1f1f" : "#0b1d33",
+    panel: "#0b1d33",
     frame: r.frameColor || "",
     light: WARM,
     side: "left",
-    fabric: "solid",
-    edge: "straight",
   };
 }
 
 /**
  * The flat artwork a type uses as its face: this sets the sign's aspect and is the fab source.
- * Awnings need the size, because the valance is a fixed height whatever the awning's width.
+ * Awnings need the size: the printed surface (valance, face or fascia) depends on it.
  */
 export function faceArt(type, art, options = {}, sizeIn = null) {
   const k = type.render.kind;
   if (k === "letters" || k === "neon") return art.letters;
   if (k === "flat") return art.cutout ? art.letters : art.source;
   if (k === "awning") {
-    const W = sizeIn?.width || 144, D = sizeIn?.height || 36;
-    return awningValance(art, options, W, awningDims(type, W, D).vr);
+    return awningFlat(type, art, options, sizeIn?.width || 144, sizeIn?.height || 40);
   }
   return art.layout(options.panel || "#0b1d33").panel;
 }
 
 /** Height/width the pinned quad should have for this type and artwork. */
 export function aspectFor(type, art, options) {
-  if (type.render.kind === "awning") return 0.3;
+  if (isAwning(type)) return type.aspect;
   const c = faceArt(type, art, options);
   return c.height / c.width;
-}
-
-const STRIPE_IN = 9; // stripe repeat across the fabric, inches
-const CREAM = "#efe8d6";
-
-// Projection and valance height for a pinned awning W wide with drop D (inches).
-function awningDims(type, W, D) {
-  const r = type.render;
-  return { p: Math.min(r.projection * 1.34, Math.max(r.projection * 0.67, D * 1.1)), vr: Math.min(r.valance, D * 0.45) };
-}
-
-// Fabric seen straight on: solid, or vertical stripes running down the slope.
-function fabricTexture(color, stripes, W) {
-  const key = `fabric${color}${stripes}${Math.round(W / STRIPE_IN)}`;
-  if (pools.has(key)) return pools.get(key);
-  const n = Math.max(2, Math.round(W / STRIPE_IN));
-  const c = makeCanvas(stripes ? Math.min(2048, n * 16) : 4, 4);
-  const g = c.getContext("2d");
-  g.fillStyle = color;
-  g.fillRect(0, 0, c.width, 4);
-  if (stripes) {
-    g.fillStyle = CREAM;
-    const w = c.width / n;
-    for (let i = 0; i < n; i += 2) g.fillRect((i + (n % 2 ? 0.5 : 0)) * w, 0, w, 4);
-  }
-  pools.set(key, c);
-  return c;
-}
-
-function awningValance(art, options, W, vr) {
-  const L = art.cutout ? art.letters : art.source;
-  const color = options.panel || "#7a1f1f", stripes = options.fabric === "stripes", scallop = options.edge === "scalloped";
-  const key = `valance${color}${stripes}${scallop}${Math.round(W)}x${Math.round(vr * 2)}`;
-  art.__valance ||= new Map();
-  const hit = art.__valance.get(key);
-  if (hit && hit.src === L) return hit.c;
-  const h = 200, w = Math.min(4096, Math.round((h * W) / vr));
-  const c = makeCanvas(w, h);
-  const g = c.getContext("2d");
-  const lobe = scallop ? h * 0.38 : 0;
-  g.fillStyle = color;
-  g.fillRect(0, 0, w, h - lobe);
-  if (scallop) {
-    const n = Math.max(2, Math.round(W / (vr * 1.25))), p = w / n;
-    g.beginPath();
-    for (let i = 0; i < n; i++) g.ellipse((i + 0.5) * p, h - lobe, p / 2, lobe, 0, 0, Math.PI);
-    g.fill();
-  }
-  // Striped awnings keep a solid valance so the lettering stays readable; only the scallops stripe.
-  if (stripes && scallop) {
-    g.save();
-    g.beginPath();
-    g.rect(0, h - lobe, w, lobe);
-    g.clip();
-    g.globalCompositeOperation = "source-atop";
-    g.drawImage(fabricTexture(color, true, W), 0, 0, w, h);
-    g.restore();
-  }
-  // Binding along the cut edge.
-  g.fillStyle = "rgba(0,0,0,.28)";
-  if (!scallop) g.fillRect(0, h - h * 0.07, w, h * 0.07);
-  // Lettering fills the band above the cut, centered, at most 68% of the band's height.
-  const band = h - lobe;
-  const k = Math.min((band * 0.68) / L.height, (w * 0.86) / L.width);
-  const lw = L.width * k, lh = L.height * k;
-  g.drawImage(L, (w - lw) / 2, (band - lh) / 2, lw, lh);
-  if (art.__valance.size > 8) art.__valance.delete(art.__valance.keys().next().value);
-  art.__valance.set(key, { src: L, c });
-  return c;
 }
 
 const softRects = new Map();
@@ -232,7 +164,8 @@ function standoffSpots(mask, W, H) {
 function build(type, env) {
   const { W, H, night, opts, art, cam } = env;
   const r = type.render;
-  const lit = isLit(type) && night;
+  const litType = litWith(type, opts);
+  const lit = litType && night;
   const ops = [], emit = [], spill = [];
   let batch = null;
   const layer = (tex, pts, o = {}) => {
@@ -243,7 +176,7 @@ function build(type, env) {
   };
   const path = o => { batch = null; ops.push({ kind: "path", ...o }); };
   // Ambient multiplier for unlit material at this time of day.
-  const amb = v => (night ? mulc(isLit(type) ? NIGHT_DARK : NIGHT_UNLIT, v) : [v, v, v]);
+  const amb = v => (night ? mulc(litType ? NIGHT_DARK : NIGHT_UNLIT, v) : [v, v, v]);
   const light = hexToRgb(opts.light || WARM);
   const facing = (axis, sign, X, Y, Z) => !!cam && cam.facing(axis, sign, X, Y, Z);
 
@@ -487,53 +420,9 @@ function build(type, env) {
     const b = layer(src, rect(0, 0, W, H, 0), { mul: amb(glass ? 0.98 : 1), alpha: glass ? 0.95 : 0.94 });
     if (!glass) b.paint = true;
   } else if (kind === "awning") {
-    buildAwning(type, env, { layer, path, amb, box, opts });
+    buildAwning(type, env, { layer, emit, spill, amb, softRect });
   }
-  return { ops, emit, spill, fx: LIGHT_FX[type.lighting] || LIGHT_FX.none };
-}
-
-// Traditional slope with closed sides. The pinned patch is the wall area it covers, top attachment line to the bottom bar (drop D).
-// The roof runs from the wall at Y=0 out to the front bar at projection P and Y=Dc; the rigid
-// valance hangs from Dc to D; the side panels are trapezoids; the underside is open.
-function buildAwning(type, env, { layer, path, amb, opts }) {
-  const { W, H: D, night, art, cam } = env;
-  const { p: P, vr } = awningDims(type, W, D);
-  const dc = D - vr;
-  const color = opts.panel || "#7a1f1f";
-  const fabric = hexToRgb(color);
-  const stripes = opts.fabric === "stripes";
-  const shade = v => mulc(fabric, night ? mulc(NIGHT_UNLIT, v) : [v, v, v]);
-  const steel = mulc(hexToRgb("#3a3d42"), night ? NIGHT_UNLIT : [1, 1, 1]);
-  if (!night) {
-    const s = softRect(W, P * 0.55, 4);
-    layer(s.canvas, rect(-s.padIn + 2, D - s.padIn, W + s.padIn + 2, D + P * 0.55 + s.padIn, 0), { tint: [0, 0, 0], alpha: 0.38 });
-  }
-  const sidePts = x => [[x, 0, 0], [x, dc, P], [x, D, P], [x, D, 0]];
-  const sides = [[0, -1], [W, 1]];
-  const sideVisible = ([x, s]) => !!cam && cam.facing("x", s, x, D / 2, P / 2);
-  for (const s of sides.filter(s => !sideVisible(s))) path({ pts: sidePts(s[0]), close: true, fill: shade(0.48) });
-  if (cam && cam.facing("y", 1, W / 2, D, P / 2)) {
-    // Open underside: the inside of the cover in shade, and the frame's projection bars.
-    layer(WHITE(), [[0, D, P], [W, D, P], [W, D, 0], [0, D, 0]], { tint: fabric, mul: amb(0.28) });
-    const bars = Math.max(2, Math.ceil(W / 60) + 1);
-    for (let i = 0; i < bars; i++) {
-      const x = (W * i) / (bars - 1);
-      path({ pts: [[x, D, 0.5], [x, D, P]], width: 0.75, stroke: steel, alpha: 0.8 });
-    }
-  }
-  const tex = fabricTexture(color, stripes, W);
-  layer(tex, [[0, 0, 0], [W, 0, 0], [W, dc, P], [0, dc, P]], { mul: night ? mulc(NIGHT_UNLIT, 1) : [1.06, 1.06, 1.06] });
-  if (!stripes) {
-    // Seams where the 46" fabric widths are sewn together.
-    const seams = Math.max(1, Math.round(W / 44));
-    for (let i = 1; i < seams; i++) {
-      const x = (W * i) / seams;
-      path({ pts: [[x, 0, 0], [x, dc, P]], width: 0.3, stroke: shade(0.78), alpha: 0.6 });
-    }
-  }
-  for (const s of sides.filter(sideVisible)) path({ pts: sidePts(s[0]), close: true, fill: shade(0.8) });
-  path({ pts: [[0, dc, P], [W, dc, P]], width: 0.8, stroke: shade(0.62) });
-  layer(awningValance(art, opts, W, vr), rect(0, dc, W, D, P + 0.05), { mul: amb(1) });
+  return { ops, emit, spill, fx: LIGHT_FX[lightingOf(type, opts)] || LIGHT_FX.none };
 }
 
 /** Average wall color around the quad (raceways are painted to match the wall). */
@@ -658,7 +547,7 @@ export function createScene() {
     const copy = c => { const k = makeCanvas(c.width, c.height); k.getContext("2d").drawImage(c, 0, 0); return k; };
 
     // Night: light that lands on the wall, multiplied into the photo.
-    const lit = night && isLit(type);
+    const lit = night && litWith(type, o.options);
     let emitCanvas = null, emitBox = null;
     if (lit && (plan.emit.length || plan.spill.length)) {
       const sp = Math.max(signBox0.h * 0.7, signBox0.w * 0.14);
