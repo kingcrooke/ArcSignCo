@@ -68,6 +68,18 @@
   [headers.values]
     X-Robots-Tag = "noindex"
 
+# Sign mockup tool: a working tool, not a landing page, so keep it out of search results.
+[[headers]]
+  for = "/tools/sign-mockup/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+# Vendored libraries carry their version in the filename: never overwrite one, add a new version.
+[[headers]]
+  for = "/tools/sign-mockup/vendor/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 [[headers]]
   for = "/llms.txt"
   [headers.values]
@@ -78,6 +90,14 @@
   from = "/README.md"
   to = "/404.html"
   status = 404
+  force = true
+
+# /tools/sign-mockup/ is the only published path under /tools/. This rule must stay above the
+# /tools/* block so the repo's build scripts in /tools/ keep returning 404.
+[[redirects]]
+  from = "/tools/sign-mockup/*"
+  to = "/tools/sign-mockup/:splat"
+  status = 200
   force = true
 
 [[redirects]]
