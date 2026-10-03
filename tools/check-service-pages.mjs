@@ -26,10 +26,12 @@ const FORBIDDEN_ADDRESS_KEYS = ["streetAddress", "addressLocality", "postalCode"
 // Claims the site must not make (case-insensitive, visible text only).
 const BANNED = [
   /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i, /dob[- ]approved/i,
-  /we (pull|file) (dob|the) permits?/i, /\bour license/i, /\bwe are (a )?licensed/i, /stamped by arc/i,
+  /we (pull|file) (dob|the) permits?/i, /\bour license\b/i, /\bwe are (a )?licensed/i, /stamped by arc/i,
   /opening ?hours/i, /\breviews?\b.*\bstars?\b/i, /years in business/i, /83 Post Ave/i,
   /Apt\s*A/i, /one-person/i, /\bone person\b/i,
+  /Verify before publishing/i, /Pending Sales Ops and copy editor review/i,
 ];
+const EDITOR_NOTE_SCAN = [/Verify before publishing/gi];
 const FORBIDDEN_LD_KEYS_SERVICE = ["address", "streetAddress", "openingHours", "openingHoursSpecification", "aggregateRating", "review"];
 
 const norm = s => s.replace(/\s+/g, " ").trim();
@@ -120,8 +122,12 @@ for (const { slug, file } of pages) {
   body.querySelectorAll("script, style").forEach(n => n.remove());
   const visible = norm(body.textContent);
   for (const re of BANNED) if (re.test(visible)) fail(label, `visible text matches banned claim ${re}`);
+  for (const re of EDITOR_NOTE_SCAN) if (re.test(html)) fail(label, `page HTML contains editor note ${re}`);
   if (/\d+\s+[A-Z][a-z]+ (Street|St\.|Avenue|Ave\.|Blvd|Road)/.test(visible)) fail(label, "visible text looks like it contains a street address");
   if (!visible.includes("arc@arcsignco.com") || !visible.includes("jc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
+  if (visible.includes("+13474502110")) fail(label, "visible text contains raw E.164 phone");
+  if (slug && !visible.includes("Hours: Mon–Fri 8 AM–6 PM")) fail(label, "missing contact-strip hours");
+  if (slug && !/Call or text \(347\) 450-2110/.test(visible)) fail(label, "nav/hero/mobile call wording missing");
 
   const faq = nodes.find(b => b["@type"] === "FAQPage");
   const items = [...document.querySelectorAll(".faq-item")].map(el => ({
@@ -143,6 +149,9 @@ for (const { slug, file } of pages) {
     else {
       if (service.url !== url) fail(label, `Service url is ${service.url}`);
       if (service.provider?.["@id"] !== BUSINESS_ID) fail(label, "Service provider @id does not point at the homepage business");
+      if ((slug === "wayfinding-signs" || slug === "awnings") && service.provider?.email !== "jc@arcsignco.com") {
+        fail(label, `Service provider email should be jc@arcsignco.com, got ${service.provider?.email}`);
+      }
       pass(label, `Service "${service.name}"`);
     }
     const crumbs = nodes.find(b => b["@type"] === "BreadcrumbList");
