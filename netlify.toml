@@ -1,6 +1,10 @@
 [build]
   publish = "."
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 # Header rules below never set the same header name on overlapping paths, because Netlify
 # combines values when several rules match one URL.
 
@@ -40,6 +44,16 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
     X-Robots-Tag = "noindex"
+
+[[redirects]]
+  from = "/api/sign-mockup/proof"
+  to = "/.netlify/functions/sign-mockup-proof"
+  status = 200
+
+[[redirects]]
+  from = "/api/sign-mockup/proof/*"
+  to = "/.netlify/functions/sign-mockup-proof"
+  status = 200
 
 # Versioned images (filenames carry .v1, .v2, ...): never overwrite a file here, add a new version.
 [[headers]]

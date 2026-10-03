@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sign concept approval | Arc Signage Co</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b1d33">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="stylesheet" href="/tools/sign-mockup/sign-mockup.css">
+<link rel="stylesheet" href="/tools/sign-mockup/proof/proof.css">
+</head>
+<body class="proof-page">
+<header class="topbar">
+  <a class="brand" href="/">
+    <img src="/assets/img/logo-lockup-white-360.v2.png" width="360" height="74" alt="Arc Signage Co">
+  </a>
+  <h1>Concept approval</h1>
+</header>
+<main class="proof-main" id="proofMain">
+  <p class="loading" id="loading">Loading proof…</p>
+  <div id="proofContent" hidden>
+    <section class="proof-card">
+      <h2 id="projectTitle">Sign concept</h2>
+      <p class="meta" id="metaLine">—</p>
+      <p class="status-pill" id="statusPill">Pending review</p>
+    </section>
+    <section class="proof-card">
+      <h3>Day view</h3>
+      <img id="imgDay" alt="Daytime storefront mockup" width="800" height="600">
+    </section>
+    <section class="proof-card">
+      <h3 id="nightHeading">Night view</h3>
+      <img id="imgNight" alt="Night storefront mockup" width="800" height="600">
+    </section>
+    <section class="proof-card">
+      <h3>Fabrication artwork</h3>
+      <p class="help">Undistorted file for production — not warped to the building photo.</p>
+      <img id="imgFab" alt="Undistorted sign artwork" width="800" height="400">
+    </section>
+    <section class="proof-card" id="estimateCard" hidden>
+      <h3>Preliminary estimate</h3>
+      <p class="estimate" id="estimateLine">—</p>
+      <p class="help" id="estimateNote">—</p>
+    </section>
+    <section class="proof-card">
+      <h3>Your feedback</h3>
+      <textarea id="commentInput" rows="3" maxlength="2000" placeholder="Questions or revision notes"></textarea>
+      <div class="btn-row">
+        <button type="button" class="btn outline" id="submitCommentBtn">Add comment</button>
+        <button type="button" class="btn gold" id="approveBtn">Approve concept</button>
+      </div>
+      <p class="status" id="actionStatus" hidden></p>
+      <ul class="comment-list" id="commentList"></ul>
+    </section>
+    <section class="proof-card">
+      <button type="button" class="btn navy" id="downloadPdfBtn">Download PDF summary</button>
+      <p class="disclaimer" id="disclaimer">Concept only – not a shop drawing.</p>
+      <p class="contact">
+        Arc Signage Co · <a href="tel:+13474502110">(347) 450-2110</a> ·
+        <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> ·
+        <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
+      </p>
+    </section>
+  </div>
+  <p class="error" id="errorBox" hidden></p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="/tools/sign-mockup/pricing-config.js"></script>
+<script src="/tools/sign-mockup/proof/proof.js"></script>
+</body>
+</html>

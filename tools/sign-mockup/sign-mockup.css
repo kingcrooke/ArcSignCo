@@ -216,6 +216,48 @@ input[type="range"] { width: 100%; }
   margin-top: auto;
   padding-top: 8px;
 }
+.toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.chip {
+  flex: 1;
+  min-height: 38px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--navy);
+  cursor: pointer;
+}
+.chip.active {
+  background: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
+.estimate-box {
+  font-size: 12px;
+  padding: 10px;
+  background: rgba(11, 29, 51, 0.06);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  margin-bottom: 10px;
+}
+.estimate-box strong {
+  display: block;
+  color: var(--navy);
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+.estimate-box small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+.share-link input {
+  font-size: 11px;
+}
 @media (max-width: 900px) {
   body { overflow: auto; }
   .app {

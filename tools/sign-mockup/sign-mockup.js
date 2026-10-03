@@ -5,6 +5,7 @@
   const canvas = $("viewCanvas");
   const ctx = canvas.getContext("2d", { alpha: false });
   const host = $("canvasHost");
+  const DISCLAIMER = "Concept only – not a shop drawing.";
 
   const state = {
     photo: null,
@@ -24,10 +25,12 @@
     drag: null,
     signOpacity: 0.85,
     dpr: 1,
+    timeOfDay: "day",
+    illumination: "none",
+    signType: "channelLetters",
   };
 
   const HANDLE_R = 14;
-  const SIGN_SUBDIV = 28;
 
   function setHint(text) {
     const el = $("hintOverlay");
@@ -70,20 +73,6 @@
     };
   }
 
-  function worldToScreen(wx, wy) {
-    return {
-      x: wx * state.scale + state.panX,
-      y: wy * state.scale + state.panY,
-    };
-  }
-
-  function pointerPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const cx = e.clientX ?? e.touches?.[0]?.clientX;
-    const cy = e.clientY ?? e.touches?.[0]?.clientY;
-    return { x: cx - rect.left, y: cy - rect.top };
-  }
-
   function dist(a, b) {
     return Math.hypot(a.x - b.x, a.y - b.y);
   }
@@ -100,72 +89,6 @@
       { x: cx + w / 2, y: cy + h / 2 },
       { x: cx - w / 2, y: cy + h / 2 },
     ];
-  }
-
-  function bilinearQuad(u, v, corners) {
-    const [tl, tr, br, bl] = corners;
-    const x =
-      (1 - u) * (1 - v) * tl.x +
-      u * (1 - v) * tr.x +
-      u * v * br.x +
-      (1 - u) * v * bl.x;
-    const y =
-      (1 - u) * (1 - v) * tl.y +
-      u * (1 - v) * tr.y +
-      u * v * br.y +
-      (1 - u) * v * bl.y;
-    return { x, y };
-  }
-
-  function drawImageTriangle(ctx, img, sx0, sy0, sx1, sy1, sx2, sy2, dx0, dy0, dx1, dy1, dx2, dy2) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(dx0, dy0);
-    ctx.lineTo(dx1, dy1);
-    ctx.lineTo(dx2, dy2);
-    ctx.closePath();
-    ctx.clip();
-    const denom = (sx0 * (sy1 - sy2) + sx1 * (sy2 - sy0) + sx2 * (sy0 - sy1));
-    if (Math.abs(denom) < 1e-6) {
-      ctx.restore();
-      return;
-    }
-    const m11 = (dx0 * (sy1 - sy2) + dx1 * (sy2 - sy0) + dx2 * (sy0 - sy1)) / denom;
-    const m12 = (dx0 * (sx2 - sx1) + dx1 * (sx0 - sx2) + dx2 * (sx1 - sx0)) / denom;
-    const m21 = (dy0 * (sy1 - sy2) + dy1 * (sy2 - sy0) + dy2 * (sy0 - sy1)) / denom;
-    const m22 = (dy0 * (sx2 - sx1) + dy1 * (sx0 - sx2) + dy2 * (sx1 - sx0)) / denom;
-    const dx = (dx0 * (sx1 * sy2 - sx2 * sy1) + dx1 * (sx2 * sy0 - sx0 * sy2) + dx2 * (sx0 * sy1 - sx1 * sy0)) / denom;
-    const dy = (dy0 * (sx1 * sy2 - sx2 * sy1) + dy1 * (sx2 * sy0 - sx0 * sy2) + dy2 * (sx0 * sy1 - sx1 * sy0)) / denom;
-    ctx.setTransform(m11, m21, m12, m22, dx, dy);
-    ctx.drawImage(img, 0, 0);
-    ctx.restore();
-  }
-
-  function drawWarpedSign(ctx, img, corners, opacity) {
-    const sw = img.width;
-    const sh = img.height;
-    const n = SIGN_SUBDIV;
-    ctx.save();
-    ctx.globalAlpha = opacity;
-    for (let i = 0; i < n; i++) {
-      for (let j = 0; j < n; j++) {
-        const u0 = i / n;
-        const u1 = (i + 1) / n;
-        const v0 = j / n;
-        const v1 = (j + 1) / n;
-        const p00 = bilinearQuad(u0, v0, corners);
-        const p10 = bilinearQuad(u1, v0, corners);
-        const p11 = bilinearQuad(u1, v1, corners);
-        const p01 = bilinearQuad(u0, v1, corners);
-        const sx0 = u0 * sw;
-        const sx1 = u1 * sw;
-        const sy0 = v0 * sh;
-        const sy1 = v1 * sh;
-        drawImageTriangle(ctx, img, sx0, sy0, sx1, sy0, sx1, sy1, p00.x, p00.y, p10.x, p10.y, p11.x, p11.y);
-        drawImageTriangle(ctx, img, sx0, sy0, sx1, sy1, sx0, sy1, p00.x, p00.y, p11.x, p11.y, p01.x, p01.y);
-      }
-    }
-    ctx.restore();
   }
 
   function edgeLen(a, b) {
@@ -185,29 +108,44 @@
     return `${inchStr} in`;
   }
 
-  function updateDimReadout() {
-    const box = $("dimReadout");
-    if (!state.ppi || !state.signCorners || !state.calApplied) {
-      box.hidden = true;
-      return;
-    }
-    const c = state.signCorners;
-    const topPx = edgeLen(c[0], c[1]);
-    const bottomPx = edgeLen(c[3], c[2]);
-    const leftPx = edgeLen(c[0], c[3]);
-    const rightPx = edgeLen(c[1], c[2]);
-    const widthIn = ((topPx + bottomPx) / 2) / state.ppi;
-    const heightIn = ((leftPx + rightPx) / 2) / state.ppi;
-    $("dimText").textContent = `Sign size ~ ${formatFtIn(widthIn)} wide x ${formatFtIn(heightIn)} tall`;
-    box.hidden = false;
-  }
-
   function getSignDimensionsInches() {
     if (!state.ppi || !state.signCorners) return null;
     const c = state.signCorners;
     const widthIn = ((edgeLen(c[0], c[1]) + edgeLen(c[3], c[2])) / 2) / state.ppi;
     const heightIn = ((edgeLen(c[0], c[3]) + edgeLen(c[1], c[2])) / 2) / state.ppi;
     return { widthIn, heightIn };
+  }
+
+  function updateDimReadout() {
+    const box = $("dimReadout");
+    if (!state.ppi || !state.signCorners || !state.calApplied) {
+      box.hidden = true;
+      updateEstimate();
+      return;
+    }
+    const dims = getSignDimensionsInches();
+    $("dimText").textContent = `Sign size ~ ${formatFtIn(dims.widthIn)} wide x ${formatFtIn(dims.heightIn)} tall`;
+    box.hidden = false;
+    updateEstimate();
+  }
+
+  function updateEstimate() {
+    const box = $("estimateBox");
+    const dims = getSignDimensionsInches();
+    if (!dims || !state.calApplied) {
+      box.hidden = true;
+      return;
+    }
+    const illum = state.timeOfDay === "night" ? state.illumination : "none";
+    const est = window.computeArcPreliminaryEstimate(state.signType, illum, dims.widthIn, dims.heightIn);
+    if (!est) {
+      box.hidden = true;
+      return;
+    }
+    const cfg = window.ARC_SIGN_MOCKUP_PRICING;
+    $("estimateText").textContent = `${est.label}: $${est.low.toLocaleString()} – $${est.high.toLocaleString()} ${cfg.currency}`;
+    $("estimateDisclaimer").textContent = `${est.detail}. ${cfg.estimateDisclaimer}`;
+    box.hidden = false;
   }
 
   function draw() {
@@ -223,47 +161,21 @@
     ctx.save();
     ctx.translate(state.panX, state.panY);
     ctx.scale(state.scale, state.scale);
-    ctx.drawImage(state.photo, 0, 0, state.photoW, state.photoH);
-
-    if (state.sign && state.signCorners) {
-      drawWarpedSign(ctx, state.sign, state.signCorners, state.signOpacity);
-    }
-
-    if (state.calLine) {
-      ctx.strokeStyle = "#d4a843";
-      ctx.lineWidth = 3 / state.scale;
-      ctx.lineCap = "round";
-      ctx.beginPath();
-      ctx.moveTo(state.calLine.a.x, state.calLine.a.y);
-      ctx.lineTo(state.calLine.b.x, state.calLine.b.y);
-      ctx.stroke();
-      ctx.fillStyle = "#0b1d33";
-      for (const p of [state.calLine.a, state.calLine.b]) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 5 / state.scale, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-
-    if (state.signCorners && state.sign) {
-      ctx.strokeStyle = "rgba(212, 168, 67, 0.9)";
-      ctx.lineWidth = 2 / state.scale;
-      ctx.beginPath();
-      ctx.moveTo(state.signCorners[0].x, state.signCorners[0].y);
-      for (let i = 1; i < 4; i++) ctx.lineTo(state.signCorners[i].x, state.signCorners[i].y);
-      ctx.closePath();
-      ctx.stroke();
-      for (const p of state.signCorners) {
-        ctx.fillStyle = "#ffffff";
-        ctx.strokeStyle = "#0b1d33";
-        ctx.lineWidth = 2 / state.scale;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, HANDLE_R / state.scale, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-      }
-    }
-
+    window.ArcSignRender.drawMockupScene(ctx, {
+      photo: state.photo,
+      photoW: state.photoW,
+      photoH: state.photoH,
+      sign: state.sign,
+      signCorners: state.signCorners,
+      signOpacity: state.signOpacity,
+      timeOfDay: state.timeOfDay,
+      illumination: state.illumination,
+      signType: state.signType,
+      calLine: state.calLine,
+      showHandles: !!(state.signCorners && state.sign),
+      handleRadius: HANDLE_R,
+      viewScale: state.scale,
+    });
     ctx.restore();
   }
 
@@ -285,6 +197,16 @@
       sign: "Drag corner handles to place the sign",
     };
     $("modeLabel").textContent = labels[mode] || "";
+  }
+
+  function setTimeOfDay(tod) {
+    state.timeOfDay = tod;
+    $("dayBtn").classList.toggle("active", tod === "day");
+    $("nightBtn").classList.toggle("active", tod === "night");
+    $("illumField").style.opacity = tod === "night" ? "1" : "0.55";
+    if (tod === "day") state.illumination = "none";
+    updateEstimate();
+    draw();
   }
 
   function readRealInches() {
@@ -309,9 +231,15 @@
     state.calApplied = true;
     $("calStatus").textContent = `Calibrated: ${state.ppi.toFixed(2)} px per inch along this line.`;
     $("calStatus").className = "status ok";
-    $("exportPdfBtn").disabled = !state.photo;
+    enableExports();
     updateDimReadout();
     setMode(state.sign ? "sign" : "pan");
+  }
+
+  function enableExports() {
+    const ok = !!state.photo;
+    $("exportPdfBtn").disabled = !ok;
+    $("shareProofBtn").disabled = !ok || !state.sign;
   }
 
   async function fileToImage(file) {
@@ -363,6 +291,7 @@
       $("calStatus").textContent = "Draw a calibration line, then apply.";
       $("calStatus").className = "status";
       setHint("Drag to pan. Use calibration before placing a sign for real-world size.");
+      enableExports();
       fitToView();
     } catch (err) {
       alert(err.message || "Could not open photo.");
@@ -389,7 +318,7 @@
       state.signH = img.naturalHeight;
       state.signCorners = defaultSignCorners();
       $("resetSignBtn").disabled = false;
-      $("exportPdfBtn").disabled = !state.photo;
+      enableExports();
       updateDimReadout();
       setMode("sign");
       setHint("Drag each corner handle to match the storefront plane.");
@@ -397,18 +326,6 @@
     } catch (err) {
       alert(err.message || "Could not open sign image.");
     }
-  }
-
-  function renderCompositeCanvas() {
-    const c = document.createElement("canvas");
-    c.width = state.photoW;
-    c.height = state.photoH;
-    const g = c.getContext("2d");
-    g.drawImage(state.photo, 0, 0);
-    if (state.sign && state.signCorners) {
-      drawWarpedSign(g, state.sign, state.signCorners, state.signOpacity);
-    }
-    return c;
   }
 
   async function loadLogoDataUrl() {
@@ -429,6 +346,38 @@
     }
   }
 
+  function signTypeLabel() {
+    return window.ARC_SIGN_MOCKUP_PRICING.signTypes[state.signType]?.label || state.signType;
+  }
+
+  function illuminationLabel() {
+    const key = state.timeOfDay === "night" ? state.illumination : "none";
+    return window.ARC_SIGN_MOCKUP_PRICING.illumination[key]?.label || "Non-illuminated";
+  }
+
+  function dataUrlFormat(dataUrl) {
+    return dataUrl && dataUrl.indexOf("image/png") >= 0 ? "PNG" : "JPEG";
+  }
+
+  function addImageFit(doc, imgData, x, y, maxW, maxH) {
+    const img = new Image();
+    const fmt = dataUrlFormat(imgData);
+    return new Promise((resolve) => {
+      img.onload = () => {
+        const aspect = img.width / img.height;
+        let drawW = maxW;
+        let drawH = drawW / aspect;
+        if (drawH > maxH) {
+          drawH = maxH;
+          drawW = drawH * aspect;
+        }
+        doc.addImage(imgData, fmt, x + (maxW - drawW) / 2, y, drawW, drawH);
+        resolve(drawH);
+      };
+      img.src = imgData;
+    });
+  }
+
   async function exportPdf() {
     if (!state.photo || !window.jspdf?.jsPDF) {
       alert("PDF library not loaded.");
@@ -447,31 +396,40 @@
     });
     const project = $("projectName").value.trim();
     const dims = getSignDimensionsInches();
+    const cfg = window.ARC_SIGN_MOCKUP_PRICING;
 
-    doc.setFillColor(11, 29, 51);
-    doc.rect(0, 0, pageW, 72, "F");
-    doc.addImage(logoData, "PNG", margin, 14, 140, 29);
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(11);
-    doc.text("Storefront sign concept proof", pageW - margin, 28, { align: "right" });
-    doc.text("arcsignco.com  ·  (347) 450-2110", pageW - margin, 44, { align: "right" });
-
-    const comp = renderCompositeCanvas();
-    const imgData = comp.toDataURL("image/jpeg", 0.92);
-    const maxImgW = pageW - margin * 2;
-    const maxImgH = pageH - 200;
-    const aspect = comp.width / comp.height;
-    let drawW = maxImgW;
-    let drawH = drawW / aspect;
-    if (drawH > maxImgH) {
-      drawH = maxImgH;
-      drawW = drawH * aspect;
+    function drawHeader() {
+      doc.setFillColor(11, 29, 51);
+      doc.rect(0, 0, pageW, 72, "F");
+      doc.addImage(logoData, "PNG", margin, 14, 140, 29);
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11);
+      doc.text("Storefront sign concept proof", pageW - margin, 28, { align: "right" });
+      doc.text(`${cfg.contact.site}  ·  ${cfg.contact.phone}`, pageW - margin, 44, { align: "right" });
+      doc.text(`${cfg.contact.emailPrimary}  ·  ${cfg.contact.emailStudio}`, pageW - margin, 58, { align: "right" });
     }
-    const imgX = margin + (maxImgW - drawW) / 2;
-    const imgY = 88;
-    doc.addImage(imgData, "JPEG", imgX, imgY, drawW, drawH);
 
-    let y = imgY + drawH + 22;
+    drawHeader();
+    const dayCanvas = window.ArcSignRender.renderCompositeCanvas(state, { timeOfDay: "day", illumination: "none" });
+    const dayData = dayCanvas.toDataURL("image/jpeg", 0.9);
+    const maxImgW = (pageW - margin * 2 - 12) / 2;
+    const maxImgH = pageH - 210;
+    const dayH = await addImageFit(doc, dayData, margin, 88, maxImgW, maxImgH);
+
+    const nightIllum = state.illumination === "none" ? "face" : state.illumination;
+    const nightCanvas = window.ArcSignRender.renderCompositeCanvas(state, {
+      timeOfDay: "night",
+      illumination: nightIllum,
+    });
+    const nightData = nightCanvas.toDataURL("image/jpeg", 0.9);
+    await addImageFit(doc, nightData, margin + maxImgW + 12, 88, maxImgW, maxImgH);
+
+    doc.setFontSize(9);
+    doc.setTextColor(101, 114, 135);
+    doc.text("Day view", margin, 82);
+    doc.text(`Night view (${illuminationLabel()})`, margin + maxImgW + 12, 82);
+
+    let y = 88 + Math.max(dayH, maxImgH) + 18;
     doc.setTextColor(23, 34, 51);
     doc.setFontSize(12);
     if (project) {
@@ -482,6 +440,8 @@
     }
     doc.text(`Date: ${dateStr}`, margin, y);
     y += 16;
+    doc.text(`Sign type: ${signTypeLabel()}`, margin, y);
+    y += 16;
     if (dims && state.calApplied) {
       doc.text(
         `Approximate sign size: ${formatFtIn(dims.widthIn)} wide x ${formatFtIn(dims.heightIn)} tall (from photo calibration)`,
@@ -489,19 +449,99 @@
         y
       );
       y += 16;
-    } else {
-      doc.text("Sign size: not calibrated — draw a scale line on the photo for approximate dimensions.", margin, y);
+    }
+    const est = dims && state.calApplied
+      ? window.computeArcPreliminaryEstimate(state.signType, state.timeOfDay === "night" ? state.illumination : "none", dims.widthIn, dims.heightIn)
+      : null;
+    if (est) {
+      doc.text(
+        `${est.label}: $${est.low.toLocaleString()} – $${est.high.toLocaleString()} ${cfg.currency}`,
+        margin,
+        y
+      );
       y += 16;
     }
 
     doc.setFontSize(10);
     doc.setTextColor(101, 114, 135);
-    const disclaimer =
-      "Concept only, not to scale for fabrication.";
-    const lines = doc.splitTextToSize(disclaimer, pageW - margin * 2);
-    doc.text(lines, margin, y + 8);
+    doc.text(DISCLAIMER, margin, y + 4);
+
+    if (state.sign) {
+      doc.addPage();
+      drawHeader();
+      doc.setTextColor(23, 34, 51);
+      doc.setFontSize(12);
+      doc.text("Fabrication artwork (undistorted — not warped to the photo)", margin, 88);
+      const fab = window.ArcSignRender.renderFabSourceCanvas(state.sign);
+      const fabData = fab.toDataURL("image/png");
+      await addImageFit(doc, fabData, margin, 100, pageW - margin * 2, pageH - 140);
+      doc.setFontSize(10);
+      doc.setTextColor(101, 114, 135);
+      doc.text(DISCLAIMER, margin, pageH - 36);
+    }
 
     doc.save(`arc-sign-mockup-${dateStr.replace(/\s+/g, "-")}.pdf`);
+  }
+
+  async function createShareProof() {
+    if (!state.photo || !state.sign) return;
+    $("shareProofBtn").disabled = true;
+    $("shareStatus").hidden = false;
+    $("shareStatus").textContent = "Uploading compressed preview for client review…";
+    $("shareStatus").className = "status";
+
+    const dims = getSignDimensionsInches();
+    const illum = state.timeOfDay === "night" ? state.illumination : "none";
+    const estimate = dims && state.calApplied
+      ? window.computeArcPreliminaryEstimate(state.signType, illum, dims.widthIn, dims.heightIn)
+      : null;
+
+    const dayCanvas = window.ArcSignRender.renderCompositeCanvas(state, { timeOfDay: "day", illumination: "none" });
+    const nightIllum = state.illumination === "none" ? "face" : state.illumination;
+    const nightCanvas = window.ArcSignRender.renderCompositeCanvas(state, {
+      timeOfDay: "night",
+      illumination: nightIllum,
+    });
+    const fabCanvas = window.ArcSignRender.renderFabSourceCanvas(state.sign);
+
+    const payload = {
+      projectName: $("projectName").value.trim(),
+      signType: state.signType,
+      signTypeLabel: signTypeLabel(),
+      illumination: illum,
+      illuminationLabel: window.ARC_SIGN_MOCKUP_PRICING.illumination[illum]?.label || "Non-illuminated",
+      dimensions: dims,
+      dimensionsText: dims
+        ? `${formatFtIn(dims.widthIn)} wide × ${formatFtIn(dims.heightIn)} tall`
+        : null,
+      estimate,
+      disclaimer: DISCLAIMER,
+      images: {
+        day: window.ArcSignRender.resizeCanvasToMax(dayCanvas, 1400),
+        night: window.ArcSignRender.resizeCanvasToMax(nightCanvas, 1400),
+        fab: window.ArcSignRender.resizeCanvasToMax(fabCanvas, 1200),
+      },
+    };
+
+    try {
+      const resp = await fetch("/api/sign-mockup/proof", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || "Could not create link.");
+      const fullUrl = new URL(data.proofUrl, window.location.origin).href;
+      $("shareLink").value = fullUrl;
+      $("shareLinkWrap").hidden = false;
+      $("shareStatus").textContent = "Link ready — send to your client for comment or approval.";
+      $("shareStatus").className = "status ok";
+    } catch (err) {
+      $("shareStatus").textContent = err.message || "Share failed.";
+      $("shareStatus").className = "status";
+    } finally {
+      $("shareProofBtn").disabled = false;
+    }
   }
 
   function onPointerDown(e) {
@@ -532,6 +572,13 @@
 
     state.drag = { type: "pan", pointerId: e.pointerId, last: sp };
     host.classList.add("panning");
+  }
+
+  function pointerPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const cx = e.clientX ?? e.touches?.[0]?.clientX;
+    const cy = e.clientY ?? e.touches?.[0]?.clientY;
+    return { x: cx - rect.left, y: cy - rect.top };
   }
 
   function onPointerMove(e) {
@@ -609,7 +656,38 @@
     draw();
   });
 
+  $("signType").addEventListener("change", () => {
+    state.signType = $("signType").value;
+    updateEstimate();
+    draw();
+  });
+
+  $("illumination").addEventListener("change", () => {
+    state.illumination = $("illumination").value;
+    if (state.timeOfDay === "night") updateEstimate();
+    draw();
+  });
+
+  $("dayBtn").addEventListener("click", () => setTimeOfDay("day"));
+  $("nightBtn").addEventListener("click", () => {
+    setTimeOfDay("night");
+    if (state.illumination === "none") {
+      state.illumination = "face";
+      $("illumination").value = "face";
+    }
+  });
+
   $("exportPdfBtn").addEventListener("click", () => exportPdf().catch((err) => alert(err.message || "PDF export failed.")));
+  $("shareProofBtn").addEventListener("click", () => createShareProof());
+  $("copyLinkBtn").addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText($("shareLink").value);
+      $("shareStatus").textContent = "Link copied.";
+      $("shareStatus").className = "status ok";
+    } catch {
+      $("shareLink").select();
+    }
+  });
 
   $("zoomInBtn").addEventListener("click", () => {
     state.scale *= 1.15;

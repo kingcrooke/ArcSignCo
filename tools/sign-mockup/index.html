@@ -79,14 +79,59 @@
       </div>
     </section>
     <section class="section">
-      <h2>4. Export proof PDF</h2>
+      <h2>4. Sign construction</h2>
+      <p class="help">Renders depth, raceway, standoffs, and halo for sales — fabrication still uses your flat artwork file.</p>
+      <div class="field">
+        <label for="signType">Sign type</label>
+        <select id="signType">
+          <option value="channelLetters">Channel letters</option>
+          <option value="lightbox">Lightbox / cabinet</option>
+          <option value="blade">Blade sign</option>
+          <option value="flatPanel">Flat panel</option>
+        </select>
+      </div>
+    </section>
+    <section class="section">
+      <h2>5. Day &amp; night view</h2>
+      <p class="help">Same pin — flip to night for illumination concepts and wall spill.</p>
+      <div class="toggle-row" role="group" aria-label="Time of day">
+        <button type="button" class="chip active" id="dayBtn" data-tod="day">Day</button>
+        <button type="button" class="chip" id="nightBtn" data-tod="night">Night</button>
+      </div>
+      <div class="field" id="illumField">
+        <label for="illumination">Illumination (night)</label>
+        <select id="illumination">
+          <option value="none">None</option>
+          <option value="face">Face-lit</option>
+          <option value="halo">Halo-lit</option>
+          <option value="internal">Internal / lightbox glow</option>
+          <option value="neon">Exposed neon / tube glow</option>
+        </select>
+      </div>
+    </section>
+    <section class="section">
+      <h2>6. Export &amp; share</h2>
+      <p class="estimate-box" id="estimateBox" hidden>
+        <strong id="estimateText">—</strong>
+        <small id="estimateDisclaimer">—</small>
+      </p>
+      <button type="button" class="btn gold" id="shareProofBtn" disabled>Create mobile approval link</button>
+      <p class="status" id="shareStatus" hidden></p>
+      <div class="field share-link" id="shareLinkWrap" hidden>
+        <label for="shareLink">Approval link</label>
+        <input type="text" id="shareLink" readonly>
+        <button type="button" class="btn outline" id="copyLinkBtn" style="margin-top:8px;">Copy link</button>
+      </div>
+    </section>
+    <section class="section">
+      <h2>7. PDF proof</h2>
       <div class="field">
         <label for="projectName">Project or client name (optional)</label>
         <input type="text" id="projectName" maxlength="120" placeholder="e.g. 123 Main St storefront">
       </div>
       <button type="button" class="btn navy" id="exportPdfBtn" disabled>Download PDF proof</button>
     </section>
-    <p class="privacy-note">All processing happens in this tab. Images are not sent to Arc Signage Co unless you email them separately.</p>
+    <p class="privacy-note">Photos and artwork stay on your device until you create an approval link or export a PDF. Approval links store compressed preview images on Netlify for client review.</p>
   </aside>
   <div class="stage-wrap">
     <div class="stage-toolbar">
@@ -104,6 +149,8 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+<script src="/tools/sign-mockup/pricing-config.js"></script>
+<script src="/tools/sign-mockup/sign-mockup-render.js"></script>
 <script src="/tools/sign-mockup/sign-mockup.js"></script>
 </body>
 </html>
