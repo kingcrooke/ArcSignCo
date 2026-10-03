@@ -211,9 +211,9 @@ const S = [
   },
   {
     id: "aw-marquee", group: "aw-canopy", name: "Marquee",
-    summary: "A heavy, permanent projecting canopy with a deep fascia for the name, supported from the building. The face can be lit from inside.",
+    summary: "A heavy, permanent projecting canopy with a metal cover and a deep fascia for the name, supported from the building. The fascia can be lit from inside; the roof deck and soffit stay dark.",
     frame: ["Steel or aluminum box frame", "Hanger rods or chains to the wall", "Deep fascia on three sides"],
-    d: { def: 72, min: 36, max: 120 }, aspect: 0.48, vr: 30, rods: true, lit: "backlit",
+    d: { def: 72, min: 36, max: 120 }, aspect: 0.48, vr: 30, rods: true, lit: "backlit", fasciaLit: true,
     covers: ["metal"], valances: [], letter: ["face"], sides: [], backlit: true,
   },
   {
@@ -280,10 +280,10 @@ function partsFor(s) {
 export const AWNING_TYPES = S.map(s => ({
   ...s,
   category: "awning",
-  lighting: s.lit || "none",
+  lighting: s.lit && s.fasciaLit ? "fascia" : s.lit || "none",
   parts: partsFor(s),
   pinHint: s.posts ? PIN_POSTS : s.rods ? PIN_RODS : PIN,
-  notice: "NYC generally limits awning lettering to the business name and address, letters up to 12\" tall and 12 sq ft in total, and treats lit or heavily lettered awnings as signs. Verify before ordering.",
+  notice: "If this awning will carry lettering or lighting, permit rules depend on the address. Permit requirements are confirmed after a site survey; approval is not guaranteed. This note is not a code determination.",
   render: { kind: "awning", shape: s.id },
 }));
 export const AWNING_IDS = AWNING_TYPES.map(t => t.id);
@@ -370,6 +370,37 @@ export function awningDetails(type, opts, W = 144, D = 36) {
   rows.push(["Lettering", o.letterOn === "valance" ? (type.valances.length === 1 ? "On the fascia" : "On the valance") : "On the face"]);
   if (type.sides.length) rows.push(["Sides", SIDES[o.sides]]);
   rows.push(["Projection", type.d.max ? `About ${ft(projectionFor(type, o, W, D))}` : "Same as the drop"]);
-  rows.push(["Lighting", AWNING_LIGHTS[o.lit]]);
+  rows.push(["Lighting", type.fasciaLit && o.lit === "backlit" ? "Lit fascia" : AWNING_LIGHTS[o.lit]]);
   return rows;
+}
+
+// NYC Building Code Chapter 32 and Zoning Resolution limits the mockup can check from its own
+// numbers. Shown as warnings, never blocks: the address, district and DOB's reading decide.
+const CANOPY_RULES = {
+  "aw-marquee": "NYC marquees: at least 10 ft above the sidewalk, no closer than 2 ft to the curb, fascia no more than 3 ft, and only on certain building uses. Signs on the fascia follow the zoning sign rules.",
+  "aw-entrance": "A sidewalk canopy is sized to the sidewalk, not to a fixed length: in NYC it runs to within 18–24 in of the curb, 4–10 ft wide and no wider than the entrance, and needs a yearly DOT permit.",
+  "aw-freestanding": "",
+};
+
+/**
+ * Code limits this awning, as drawn, may run into. Each is { text, over } where over: true means
+ * the drawing is past the limit. Projection is in inches.
+ */
+export function awningWarnings(type, opts, W = 144, D = 36) {
+  const o = sanitizeAwningOptions(type, opts);
+  const P = type.d.max ? projectionFor(type, o, W, D) : 0;
+  const out = [];
+  if (type.id in CANOPY_RULES) {
+    if (CANOPY_RULES[type.id]) out.push({ text: CANOPY_RULES[type.id], over: false });
+  } else if (type.id === "aw-louver") {
+    if (P > 30) out.push({ text: `Projects ${ft(P)}. If DOB treats this as a sun-control device, NYC allows 2' 6" (at least 8 ft up).`, over: true });
+  } else {
+    if (P > 96) out.push({ text: `Projects ${ft(P)}. NYC storefront awnings may project no more than 8 ft beyond the street line.`, over: true });
+    else if (P > 60) out.push({ text: `Projects ${ft(P)}. Over a single window or door, NYC allows 5 ft.`, over: true });
+    out.push({ text: `NYC storefront awnings: no part below 8 ft above the sidewalk (a flexible valance may hang to 7 ft)${type.group === "aw-retract" ? ", and the awning box or cover projects no more than 12 in" : ""}.`, over: false });
+  }
+  if (o.lit === "backlit" && o.letterOn) {
+    out.push({ text: "Lit lettering makes this a sign. In most commercial districts, including C7, a sign may project only 12 in (18 in if double-faced); C6-5 and C6-7 allow up to 8 ft.", over: false });
+  }
+  return out;
 }

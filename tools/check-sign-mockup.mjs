@@ -19,7 +19,7 @@ import {
   AWNING_TYPES, AWNING_GROUPS, COVERS, VALANCES, LETTERING, defaultAwningOptions, sanitizeAwningOptions, awningOptionKeys, projectionFor,
 } from "./sign-mockup/js/categories/awnings/types.js";
 import { awningMesh } from "./sign-mockup/js/categories/awnings/geometry.js";
-import { ALL_TYPES, CATEGORIES, READY, getType, describe, litWith, diagramSvg, optionFields, defaultOptions } from "./sign-mockup/js/catalog.js";
+import { ALL_TYPES, CATEGORIES, READY, getType, describe, litWith, diagramSvg, optionFields, defaultOptions, codeWarnings } from "./sign-mockup/js/catalog.js";
 import { validateCategory } from "./sign-mockup/js/categories/define.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -142,6 +142,18 @@ check(!litWith(trad, defaultAwningOptions(trad)) && litWith(trad, { lit: "backli
 check(awningOptionKeys(trad, defaultAwningOptions(trad)).includes("projection") && !awningOptionKeys(trad, defaultAwningOptions(trad)).includes("stripe")
   && awningOptionKeys(trad, { ...defaultAwningOptions(trad), pattern: "stripes" }).includes("stripe"), "stripe color is offered only for striped covers");
 check(projectionFor(getType("aw-dome"), {}, 144, 40) > 0, "automatic projection resolves");
+const warn = (id, o) => { const t = getType(id); return codeWarnings(t, { ...defaultAwningOptions(t), ...o }, { width: 240, height: 40 }); };
+check(!warn("aw-traditional", {}).some(w => w.over), "a default storefront awning raises no over-limit warning");
+check(warn("aw-retractable", { projection: 156 }).some(w => w.over && /8 ft beyond the street line/.test(w.text)), "a 13 ft lateral-arm warns past the 8 ft storefront limit");
+check(warn("aw-traditional", { projection: 72 }).some(w => w.over && /5 ft/.test(w.text)), "past 5 ft warns about window and door awnings");
+check(warn("aw-louver", { projection: 48 }).some(w => w.over && /2' 6"/.test(w.text)), "a deep louver warns about the 2' 6\" sun-control limit");
+check(warn("aw-entrance", {}).some(w => /18–24 in of the curb/.test(w.text)), "the entrance canopy is sized to the sidewalk");
+check(warn("aw-traditional", { lit: "backlit" }).some(w => /C7/.test(w.text) && /12 in \(18 in if double-faced\)/.test(w.text) && /C6-5 and C6-7/.test(w.text)), "lit lettering warns with the 12/18 in sign rule (C7 included)");
+const marquee = describe(getType("aw-marquee"), defaultAwningOptions(getType("aw-marquee")), { width: 240, height: 120 });
+check(marquee.lighting === "fascia" && !marquee.parts.some(p => /translucent backlit vinyl/.test(p)) && marquee.parts.some(p => /fascia/i.test(p)) && /roof deck and soffit stay dark/.test(marquee.night),
+  "a lit marquee is a metal cover with an internally lit fascia");
+check(getType("trimless").lighting === "face" && /no plastic trim cap/i.test(getType("trimless").summary), "trimless means no trim cap; only the face glows by default");
+check(getType("halo").name === "Halo-lit (reverse-lit) channel letters" && getType("halo").parts.includes("Open or clear backs"), "halo-lit naming and open or clear backs");
 const awInfo = describe(trad, { lit: "backlit" }, { width: 144, height: 40 });
 check(awInfo.category === "awning" && awInfo.lightingLabel === "Backlit" && awInfo.details.some(([k]) => k === "Projection"), "describe() reports awning lighting and details");
 

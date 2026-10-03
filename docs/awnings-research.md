@@ -364,8 +364,8 @@ Each entry gives: aliases, a one-line description, geometry (side profile, front
 - **What it is:** a heavy, permanent, flat (or shallow-sloped) projecting canopy with a deep fascia. It often carries signage, changeable letters and lights. Supported only from the building (rods or chains) in NYC `[S11]`.
 - **Side profile:** `M 0,0 L P,0 L P,F L 0,F Z`, with fascia `F ≤ 36 in` in NYC `[S11]`. An optional "crown" sign on top: in NYC, outside C6-5 and C6-7 districts, signs may rise no more than 48 in above and hang no more than 12 in below the marquee `[S9]`.
 - **Front elevation:** a fascia band W × F with sign copy. Optional bulb rows (chaser lights).
-- **NYC:** at least 10 ft above the sidewalk; no closer than 2 ft to the curb; only on certain occupancies (public buildings and schools, theaters, hotels, terminals, large department stores, supermarkets, multiple dwellings, office buildings, listed market areas) `[S11]`.
-- **Lit?** Usually yes.
+- **NYC:** at least 10 ft above the sidewalk; no closer than 2 ft to the curb; on buildings "of an essentially public nature, including but not limited to" public buildings and schools, theaters, hotels, terminals, large department stores, supermarkets, multiple dwellings, office buildings, and warehouses or markets in listed market areas (an open list) `[S11]`.
+- **Lit?** Usually yes: a **metal cover with an internally lit fascia** (and its side cheeks). The roof deck and soffit stay dark; the cover is not a translucent glowing skin. Signs on the fascia follow ZR §32-653(b), not the awning lettering allowance.
 
 ### 4.20 Entrance canopy (sidewalk canopy)
 
@@ -546,35 +546,40 @@ Sources are primary (NYC codes and agency pages) unless noted. Rules change, so 
 
 **7.1 Building Code, Chapter 32 (encroachments into the public right-of-way)**
 
-- **Storefront awnings (§3202.2.3.1):** may project **no more than 8 ft beyond the street line**. **No part may be less than 8 ft above the sidewalk**, except a **flexible valance**, which may be as low as **7 ft**. The **awning box or cover may project no more than 12 in** `[S10][S11]`. Chapter 32 was amended by Local Law 77 of 2023 (effective June 10, 2023) `[S10]`.
+- **Storefront awnings (§3202.2.3.1):** may project **no more than 8 ft beyond the street line**. **No part may be less than 8 ft above the sidewalk**, except a **flexible valance**, which may be as low as **7 ft**. The **awning box or cover may project no more than 12 in** `[S10][S11]`. Chapter 32 was amended by Local Law 77 of 2023 (effective June 11, 2023, per the codified note on §3202.2.3.1) `[S10]`.
 - **Awnings over windows or doors (§3202.2.3.2):** **no more than 5 ft** beyond the street line, with **no part below 8 ft** `[S11]`.
 - Awnings must be built per §3105 and be **supported entirely from the building** to use these allowances `[S11]`.
-- **Marquees (§3202.2.1.4):** building-supported only; **at least 10 ft** above the sidewalk; **no closer than 2 ft to the curb**; thickness and fascia **no more than 3 ft**; only on listed occupancies. The applicant also needs proof that DOT, Consumer Affairs and DEP haven't permitted conflicting under-sidewalk uses `[S11]`.
+- **Marquees (§3202.2.1.4):** building-supported only; **at least 10 ft** above the sidewalk; **no closer than 2 ft to the curb**; thickness and fascia **no more than 3 ft**; only on buildings "of an essentially public nature, including but not limited to" the occupancies the code names (public buildings, schools, theaters, hotels, terminals, large department stores, supermarkets, multiple dwellings and office buildings, plus warehouses or markets in listed market areas); the list is open, not closed. The applicant also needs proof that DOT, Consumer Affairs and DEP haven't permitted conflicting under-sidewalk uses `[S11]`.
 - **Related projections:** sun control devices no more than 2'6" (at least 8 ft high); light fixtures no more than 2 ft (at least 8 ft high); wall signs no more than 12 in; projecting signs no more than 10 ft (at least 10 ft high, no closer than 2 ft to the curb), with listed streets where permanent projecting signs are banned `[S11]`.
 - **Drainage:** water from a roof, awning, canopy or marquee (other than canvas or flexible material) must not flow over a public walking surface `[S11]`.
 
 **7.2 Zoning Resolution (signs on awnings)**
 
-- **ZR §32-653(a):** **non-illuminated** signs may go on awnings or canopies permitted by the Administrative Code, with **no more than 12 sq ft of surface area** and **letters no taller than 12 in**. Commercial copy is limited to the **name or address of the building or establishment** `[S9]`. The manufacturing-district equivalent is §42-542 `[S77]`.
-- **ZR §32-652:** in most commercial districts, signs may project across the street line at most **18 in (double- or multi-faceted)** or **12 in (all other signs)**. C6-5, C6-7 and C7 allow up to 8 ft (§32-651) `[S9][S78]`.
-- **DOB guidance:** awnings may project up to 8 ft, but they're limited to the business name and address in letters no taller than 12 in, totaling no more than 12 sq ft. **Awnings with text or images beyond those limits become signs** and are subject to all sign rules `[S8]`.
+- **ZR §32-653(a):** **non-illuminated** copy may go on an awning or canopy the Building Code already allows, with **no more than 12 sq ft of surface area** and **letters no taller than 12 in**. The copy is the **name or address of the building or of an establishment** in it, not a general "business name and address" package `[S9]`. The manufacturing-district equivalent is **§42-642(a)** (last amended June 6, 2024). Local Law 15 of 2026 still cites "§42-542 … or any provision amending, replacing or supplementing" it, but §42-642(a) is the current section `[S77]`.
+- **Residence districts** are tighter (§22-221): a dwelling nameplate is 1 sq ft, and a multiple-dwelling identification sign is one sign of up to 12 sq ft, with awning letters still capped at 12 in.
+- **Marquees are not in the awning allowance.** Signs on marquees follow **§32-653(b)**: outside C6-5 and C6-7 they may rise no more than 48 in above the marquee or hang more than 12 in below it.
+- **ZR §32-652:** in commercial districts other than C6-5 and C6-7, **including C7**, a sign may project across the street line at most **18 in (double- or multi-faced)** or **12 in (all other signs)**. Only **C6-5 and C6-7** allow up to 8 ft (§32-651). Manufacturing districts use the same 12/18 in default (§42-641), with narrow exceptions `[S9][S78]`.
+- **DOB guidance:** awnings may project up to 8 ft, and non-illuminated copy is limited to the name or address in letters no taller than 12 in, totaling no more than 12 sq ft. **Lit copy, or copy beyond those limits, makes the awning a sign**, subject to all sign rules `[S8]`.
 - **Practical effect (our reading; verify):** a fully lettered, logo-heavy or **backlit** awning projecting feet over the sidewalk is a sign. In most commercial districts a sign may project only 12–18 in, so that design usually can't be permitted as drawn. The mockup should warn when (a) the awning is lit and carries copy, (b) letter height is over 12 in, (c) copy area is over 12 sq ft, or (d) the copy goes beyond name and address (phone numbers, product lists, taglines).
 - Residential districts are much more restrictive for accessory signs `[S8]`.
 
 **7.3 Permits and enforcement**
 
-- **Awning permit:** a DOB Alteration Type 3 (ALT3) permit. General contractors may install awnings, and the awning must meet the zoning text limits `[S8]`.
-- **Signs:** a sign (SG) permit plus an ALT3 for the structure. An **electrical permit** for any wired sign, and an **annual illuminated sign permit** for signs that are illuminated and extend beyond the building line `[S8]`.
+- **Awning permit:** a DOB Alteration Type 3 (ALT3) permit. A general contractor may install an awning that stays inside the zoning text limits `[S8]`.
+- **Sign hanger:** once the awning (or anything else) is a sign, hoisting or installing it requires a **licensed sign hanger** under Administrative Code **§28-415.1**. The exceptions: signs that are both **no more than 75 sq ft** on one face **and no more than 25 lb**, ground-supported signs, directional signs, temporary construction signs, and work by City employees ([sign permits and sign hangers](https://www.nyc.gov/site/buildings/property-or-business-owner/sign-permit.page), [installing a business sign](https://www.nyc.gov/site/buildings/safety/installing-a-business-sign.page)).
+- **Signs:** a sign (SG) permit covers the copy. An alteration permit is also needed when the sign is on a structure rather than placed directly on the wall or facade, not for every wall sign. An **electrical permit** for any wired sign, and an **annual illuminated sign permit** for signs that are illuminated and extend beyond the building line `[S8]`.
 - **Local Law 15 of 2026:** DOB won't issue work-without-permit (and related) violations from Feb 9, 2019 through **Feb 8, 2028** for accessory signs that existed on or before **Feb 9, 2025**, unless there's an imminent hazard. This **doesn't make noncompliant signs lawful**. There's also a civil-penalty waiver for accessory signs up to 150 sq ft and 1,200 lb, and fee waivers and assistance through Aug 7, 2028 `[S79][S77]`. Earlier awning-specific grace periods date back to Local Law 44 of 2003 and Local Law 35 of 2004 `[S81][S82]`.
 
 **7.4 Landmarks (LPC), for landmarks and historic districts**
 
 - Storefront awnings must **project at an angle** (sloped), sized to the storefront. They can't be longer than the opening, edges align with the inside face of the piers, and the underside is open with **no "ceiling"**. The lowest framed part is at least 8 ft and the lowest unframed part (skirt) at least 7 ft above the sidewalk. The skirt is **unframed, no more than 12 in**. **Lettering goes on the skirt only**, sized to it. Covers are **matte canvas** (or similar texture) in a **solid color or vertical stripes** `[S12]`.
-- Install at the top of the storefront opening or at the transom (or just above it in limited cases). Don't obscure historic transoms or decorative features. Fixed or retractable both work; integral historic housings must be restored `[S12]`.
-- **Individual landmarks:** a fixed awning must be a **lean-to frame** (open sides, no perpendicular top-to-side bar), with a round side bar and a gray finish `[S12]`.
+- Install at the top of the storefront opening or at the transom (or just above it in limited cases). Don't obscure historic transoms or decorative features. Integral historic housings must be restored `[S12]`.
+- **Fixed vs retractable (63 RCNY §2-12(d)(3)):** a **new fixed storefront awning** must have a **straight slope and open sides**. A **retractable** awning may be straight or curved and may have side panels. So a fixed quarter-round, dome, convex, bullnose or closed-side traditional awning does not meet the staff criterion `[S12]`.
+- **Individual landmarks** (and certain restorative approvals) add the lean-to rules in §2-12(d)(3)(xii): no top-to-side bar perpendicular to the facade, a round side bar, an unframed skirt, and a **clear-coat or grey** frame `[S12]`.
+- Master plans and some districts add their own rules, so these are the general staff criteria, not the answer for every landmark address.
 - **Residential awnings:** address numbers no taller than 6 in over the entrance; no other lettering `[S12]`.
 - **Sidewalk canopies:** a **bowed profile** (or one relating to the opening if there's precedent); at least 8 ft high; open underside; matte canvas; round metal poles. Building or institution name and address in letters under 12 in, plus a logo of no more than **4 sq ft** on the street-facing end `[S12]`.
-- **Practical effect:** the waterfall, box, backlit, glossy vinyl and sign-box styles (4.7, 4.8, 4.9, 4.31) aren't staff-approvable at landmark addresses. The engine should flag them when the address is landmarked `[S12][S83]`.
+- **Practical effect:** at landmark addresses, fixed curved or closed-side shapes, and the waterfall, box, backlit, glossy vinyl and sign-box styles (4.7, 4.8, 4.9, 4.31), don't meet the staff criteria. The engine should flag them when the address is landmarked `[S12][S83]`.
 
 **7.5 DOT sidewalk canopy rules (34 RCNY §2-04, Street Works Manual §3.4)**
 

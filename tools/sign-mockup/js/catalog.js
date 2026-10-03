@@ -30,6 +30,8 @@ export const defaultOptions = type => categoryOf(type).defaultOptions(type);
 /** Only the options that matter for the type, cleaned; null when the category stores none. */
 export const cleanOptions = (type, opts) => categoryOf(type).sanitizeOptions(type, opts);
 export const optionFields = (type, opts, size) => categoryOf(type).optionFields(type, opts, size);
+/** Code limits the drawing may run into, as [{ text, over }]. */
+export const codeWarnings = (type, opts, size) => categoryOf(type).warnings(type, opts, size);
 export const diagramSvg = type => categoryOf(type).diagram(type);
 /** The flat artwork the type uses as its face (fab source; sets the aspect). */
 export const faceArt = (type, art, opts = {}, size = null) => categoryOf(type).faceArt(type, art, opts, size);

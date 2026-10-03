@@ -99,7 +99,7 @@ export function priceView(p, { date = new Date(), live = !PLACEHOLDER } = {}) {
   if (!live || !p || p.withheld || p.placeholder || !(p.low > 0) || !(p.high > p.low)) return { withheld: true, ...base };
   const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const lines = [`${p.rowLabel}, about ${p.quantity} ${p.unit}${p.projection ? `, ${p.projection} ft projection` : ""}`];
-  if (p.minApplied) lines.push(`Minimum job: ${formatMoney(p.minimum)}`);
+  lines.push(`Minimum job: ${formatMoney(p.minimum)}${p.minApplied ? " (applies at this size)" : ""}`);
   for (const a of p.adders || []) lines.push(`Includes ${a.label.charAt(0).toLowerCase()}${a.label.slice(1)}`);
   for (const e of p.extras || []) lines.push(`${e.label}: ${e.range ? `${formatMoney(e.range[0])} – ${formatMoney(e.range[1])}, not included` : e.confirm}`);
   return {

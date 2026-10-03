@@ -13,6 +13,6 @@ export default comingSoon({
     { name: "Glass decals and frosted film", note: "Etched-look film for doors and partitions, with clear cut-out logos." },
     { name: "Perforated window film", note: "Full-color graphics outside that you can still see through from inside." },
     { name: "Wall graphics", note: "Printed wall wraps, murals and feature walls, matte or gloss laminate." },
-    { name: "Floor decals", note: "Laminated, slip-resistant floor graphics for promotions and queue lines." },
+    { name: "Floor decals", note: "Laminated floor graphics for promotions and queue lines. Slip resistance is confirmed from the product spec for that job." },
   ],
 });

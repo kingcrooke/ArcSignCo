@@ -4,7 +4,7 @@
 import { defineCategory } from "./define.js";
 import {
   AWNING_TYPES, AWNING_GROUPS, DEFAULT_AWNING, COVERS, PATTERNS, VALANCES, LETTERING, SIDES, AWNING_LIGHTS, COVER_PART,
-  defaultAwningOptions, sanitizeAwningOptions, awningOptionKeys, awningDetails, projectionFor,
+  defaultAwningOptions, sanitizeAwningOptions, awningOptionKeys, awningDetails, awningWarnings, projectionFor,
 } from "./awnings/types.js";
 import { buildAwning, awningFlat } from "./awnings/build.js";
 import { awningDiagram } from "./awnings/diagrams.js";
@@ -19,7 +19,7 @@ const FIELDS = {
     value: Math.round(projectionFor(t, o, size.width, size.height)), format: v => `${formatFeetInches(v)} from the wall`,
   }),
   cover: t => ({ label: "Cover", kind: "select", choices: t.covers.map(c => [c, COVERS[c].short]) }),
-  lit: () => ({ label: "Lighting", kind: "select", choices: Object.entries(AWNING_LIGHTS) }),
+  lit: t => ({ label: "Lighting", kind: "select", choices: Object.entries(AWNING_LIGHTS).map(([k, v]) => [k, t.fasciaLit && k === "backlit" ? "Lit fascia" : v]) }),
   panel: (t, o) => ({ label: o.cover === "metal" ? "Panel color" : "Fabric color", kind: "color" }),
   pattern: () => ({ label: "Pattern", kind: "select", choices: Object.entries(PATTERNS) }),
   stripe: () => ({ label: "Stripe color", kind: "color" }),
@@ -29,7 +29,8 @@ const FIELDS = {
   frame: () => ({ label: "Frame", kind: "color" }),
 };
 
-const lightingOf = (type, opts) => (sanitizeAwningOptions(type, opts).lit === "backlit" ? "backlit" : "none");
+// A marquee lights only its fascia; every other shape that can be lit glows through the cover.
+const lightingOf = (type, opts) => (sanitizeAwningOptions(type, opts).lit === "backlit" ? (type.fasciaLit ? "fascia" : "backlit") : "none");
 
 export default defineCategory({
   id: "awning",
@@ -44,7 +45,7 @@ export default defineCategory({
   // Ids older approval links may still carry.
   aliases: { awning: "aw-traditional" },
   diagram: awningDiagram,
-  cardNote: t => (t.lighting === "backlit" ? "Backlit" : t.backlit ? "Non-lit · backlit option" : "Non-lit"),
+  cardNote: t => (t.lighting === "fascia" ? "Lit fascia" : t.lighting === "backlit" ? "Backlit" : t.backlit ? "Not lit, can be backlit" : "Non-lit"),
 
   defaultOptions: defaultAwningOptions,
   sanitizeOptions: sanitizeAwningOptions,
@@ -57,8 +58,11 @@ export default defineCategory({
   },
   lightingOf,
   details: (type, opts, size) => awningDetails(type, opts, size?.width || 144, size?.height || 36),
+  warnings: (type, opts, size) => awningWarnings(type, opts, size?.width || 144, size?.height || 36),
   parts(type, opts) {
-    if (lightingOf(type, opts) === "backlit") return [...type.parts.filter(p => !p.startsWith("Cover:")), "Cover: translucent backlit vinyl", "LED lighting inside the frame"];
+    const lighting = lightingOf(type, opts);
+    if (lighting === "fascia") return [...type.parts, "Fascia: translucent face lit from inside", "LED lighting inside the fascia; the roof deck and soffit stay dark"];
+    if (lighting === "backlit") return [...type.parts.filter(p => !p.startsWith("Cover:")), "Cover: translucent backlit vinyl", "LED lighting inside the frame"];
     const cover = COVER_PART[sanitizeAwningOptions(type, opts).cover];
     return type.parts.map(p => (p.startsWith("Cover:") || p.startsWith("Plate:") ? cover : p));
   },

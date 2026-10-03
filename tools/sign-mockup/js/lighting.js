@@ -16,9 +16,10 @@ export const LIGHTING = {
   "face-halo": { label: "Face + halo", night: "The faces glow and a halo washes the wall behind.", spill: 0.3, bloom: 0.5, floor: 0.32 },
   neon: { label: "Exposed LED neon", night: "The neon line itself glows, with colored spill on the wall.", spill: 0.95, bloom: 0.95 },
   internal: { label: "Internally lit", night: "The whole face glows from LEDs inside the cabinet.", spill: 0.35, bloom: 0.42 },
-  "internal-letters": { label: "Internally lit (copy only)", night: "Only the push-through copy glows; the metal face stays dark.", spill: 0.3, bloom: 0.5 },
+  "internal-letters": { label: "Internally lit (letters only)", night: "Only the push-through letters glow. The metal face stays dark.", spill: 0.3, bloom: 0.5 },
   external: { label: "External lights", night: "Gooseneck lamps wash the face from above.", spill: 0, bloom: 0.55 },
   backlit: { label: "Backlit", night: "The translucent cover glows from LEDs inside the frame, and the graphics read through it.", spill: 0.4, bloom: 0.55 },
+  fascia: { label: "Internally lit fascia", night: "Only the fascia and its side cheeks glow. The metal roof deck and soffit stay dark.", spill: 0.3, bloom: 0.45 },
   none: { label: "Non-lit", night: "No light of its own; it reads by street and storefront light.", spill: 0, bloom: 0 },
 };
 

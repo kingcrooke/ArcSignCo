@@ -339,7 +339,12 @@
 .sm-build-art { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; line-height: 0; }
 .sm-build ul { padding-left: 18px; display: grid; gap: 3px; color: var(--ink); font-size: 13px; }
 .sm-build-night { padding: 8px 10px; border-radius: 6px; background: #13253d; color: #dce6f2 !important; font-size: 13px !important; }
+.sm-build-foot { color: var(--muted) !important; font-size: 12px !important; font-style: italic; }
 .sm-pin { border-left: 4px solid var(--gold); }
+.sm-codes { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.sm-codes[hidden] { display: none; }
+.sm-codes li { padding: 8px 10px 8px 12px; border-left: 4px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); font-size: 12.5px; line-height: 1.45; }
+.sm-codes li.over { border-left-color: #b4471f; background: #fff1ea; color: #5c1f08; font-weight: 700; }
 .sm-notice { padding: 10px 12px; border-radius: 8px; background: #fff8e8; border: 1px solid rgba(212,168,67,.55); color: var(--ink) !important; font-size: 13px !important; }
 
 /* Type options: a label over a full-width control, two to a row. */

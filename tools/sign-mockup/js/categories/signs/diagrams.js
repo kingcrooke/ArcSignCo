@@ -31,13 +31,12 @@ const DRAW = {
     s.wall();
     s.stud(22, 56, 100);
     s.rect(52, 44, 4, 112, C.metal);
-    s.rect(52, 40, 100, 4, C.acrylic, C.acrylicEdge, 0.8);
-    s.rect(52, 156, 100, 4, C.acrylic, C.acrylicEdge, 0.8);
-    s.rect(148, 40, 6, 120, C.acrylic, C.acrylicEdge, 1);
+    s.rect(52, 40, 96, 4, C.metal);
+    s.rect(52, 156, 96, 4, C.metal);
+    s.rect(146, 40, 6, 120, C.acrylic, C.acrylicEdge, 1);
     s.led(60, 70); s.led(60, 100); s.led(60, 130);
     s.rays(64, 100, 1, 70, 0.32);
-    s.rays(64, 70, 1, 40, -0.9, 1); s.rays(64, 130, 1, 40, 0.9, 1);
-    s.label("Acrylic face, no trim", 152, 110, 34).label("Acrylic sides glow too", 110, 42, 58)
+    s.label("Acrylic face, no trim cap", 152, 110, 34).label("Dark aluminum return", 110, 42, 58)
       .label("LED modules", 60, 130, 84).label("Aluminum back", 54, 150, 110).label("Stud into wall", 36, 100, 136);
   },
   halo(s) {
@@ -122,7 +121,7 @@ const DRAW = {
     s.led(58, 100); s.led(58, 70); s.led(58, 130);
     s.rays(62, 100, 1, 56, 0.25);
     s.label("Push-through acrylic", 154, 90, 34).label("Routed aluminum face", 138, 40, 60).label("Aluminum cabinet", 96, 177, 86)
-      .label("LED modules", 58, 130, 112).label("Only the copy glows", 140, 120, 138);
+      .label("LED modules", 58, 130, 112).label("Only the letters glow", 140, 120, 138);
   },
   bladelit(s) {
     s.wall(12, 188);

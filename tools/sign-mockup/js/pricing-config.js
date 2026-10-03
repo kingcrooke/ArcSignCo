@@ -84,6 +84,7 @@ export const ADDERS = {
   "internal-lit": { label: "Internal LEDs and power supply", per: "sqft", base: 250, rate: 22, lighting: ["internal", "internal-letters"] },
   gooseneck: { label: "Gooseneck fixtures", per: "lf", base: 200, rate: 60, lighting: ["external"] },
   backlit: { label: "Backlighting inside the frame", per: "lf", base: 300, rate: 120, lighting: ["backlit"] },
+  "fascia-lit": { label: "Internally lit fascia", per: "lf", base: 400, rate: 90, lighting: ["fascia"] },
 };
 
 // Separate lines, never part of the main range. `range` lines carry their own [low, high];

@@ -73,7 +73,7 @@ test("create stores images and a server-priced sheet under v1/<context>/<id>/", 
   const { id, sheet } = await res.json();
   assert.match(id, /^[0-9a-f]{32}$/);
   for (const f of ["sheet.json", "day.jpg", "night.jpg", "art.jpg"]) assert.ok(store.data.has(`v1/deploy-preview/${id}/${f}`), f);
-  assert.equal(sheet.typeName, "Halo-lit (back-lit) channel letters");
+  assert.equal(sheet.typeName, "Halo-lit (reverse-lit) channel letters");
   // The client's numbers are ignored; while the rates are placeholders the server stores no numbers at all.
   assert.equal(sheet.price.withheld, true, "price comes from the config, not the client");
   assert.equal(sheet.price.placeholder, true);

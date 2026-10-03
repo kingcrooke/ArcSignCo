@@ -6,7 +6,7 @@ import { makeArtwork } from "./art.js";
 import { createScene } from "./scene.js";
 import {
   CATEGORIES, READY, DEFAULT_TYPE, getType, getCategory, categoryOf, litWith, describe, cleanOptions,
-  defaultOptions, optionFields, aspectFor, diagramSvg,
+  defaultOptions, optionFields, aspectFor, diagramSvg, codeWarnings,
 } from "./catalog.js";
 import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
 import { DISCLAIMER } from "./pdf.js";
@@ -867,7 +867,7 @@ $("category").addEventListener("keydown", e => {
   $("category").querySelector(`[data-cat="${currentCat().id}"]`).focus();
 });
 
-const CONTACT_LINE = 'Need one now? Arc can mock it up for you: <a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>';
+const CONTACT_LINE = 'Need one now? Call or text <a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>';
 let libraryCat = currentCat().id;
 
 function buildTypeList() {
@@ -1303,6 +1303,9 @@ function updateUI() {
       ? `<div><span>Width</span><strong>${size.w}</strong></div><div><span>${cat.ui.heightLabel}</span><strong>${size.h}</strong></div>${third}<p>Approximate, from your scale line.</p>`
       : `<p>Set the scale in step 2 to see the ${cat.noun}'s size.</p>`
     : "";
+  const warns = state.sign ? codeWarnings(currentType(), optionsFor(), sceneSize()) : [];
+  $("typeWarn").hidden = !warns.length;
+  $("typeWarn").replaceChildren(...warns.map(w => Object.assign(document.createElement("li"), { textContent: w.text, className: w.over ? "over" : "" })));
   $("setWidth").disabled = !size;
   $("setDrop").disabled = !size;
 

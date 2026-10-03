@@ -156,6 +156,7 @@ test("with real rates on, the view shows the range, the separate lines, tax and 
   assert.ok(v.lines.some(l => /^Lift or boom truck.*\$\d.*not included$/.test(l)));
   assert.ok(v.lines.some(l => /^Permit and filing fees: confirmed after site survey$/.test(l)));
   assert.ok(v.lines.some(l => /^Includes backlighting/.test(l)));
+  assert.ok(v.lines.some(l => /^Minimum job: \$\d/.test(l)), "the minimum is its own line");
   assert.equal(v.tax, TAX_NOTE);
   assert.equal(v.valid, "Preliminary estimate valid 30 days from October 3, 2026. Arc re-prices after that.");
   assert.equal(v.disclaimer, DISCLAIMER_FULL);

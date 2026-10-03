@@ -42,6 +42,8 @@ export function defineCategory(spec) {
     sanitizeOptions: () => null,
     optionFields: kindFields,
     details: () => [],
+    // Code limits the drawing may run into: [{ text, over }] (over: true when past the limit).
+    warnings: () => [],
     parts: type => type.parts || [],
     cardNote: type => LIGHTING[lightingOf(type, null)]?.label || "",
     build: buildKind,
