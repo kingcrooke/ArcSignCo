@@ -19,11 +19,13 @@ const NIGHT_DARK = [0.16, 0.18, 0.24]; // unlit parts of lit signs
 const WARM = "#fff1d6";
 const STEEL = "#2b2d31";
 
+// floor: share of the wall light added regardless of the wall's color, so a halo still reads on
+// a near-black fascia the way it does in person.
 const LIGHT_FX = {
   face: { spill: 0.32, bloom: 0.5 },
   "face-sides": { spill: 0.45, bloom: 0.6 },
-  halo: { spill: 0.12, bloom: 0.35 },
-  "face-halo": { spill: 0.3, bloom: 0.5 },
+  halo: { spill: 0.12, bloom: 0.35, floor: 0.42 },
+  "face-halo": { spill: 0.3, bloom: 0.5, floor: 0.32 },
   neon: { spill: 0.95, bloom: 0.95 },
   internal: { spill: 0.35, bloom: 0.42 },
   "internal-letters": { spill: 0.3, bloom: 0.5 },
@@ -688,7 +690,7 @@ export function createScene() {
         tg.drawImage(L, 0, 0);
         // Even a dark fascia reflects some light, so the spill never vanishes on black walls.
         tg.globalCompositeOperation = "lighter";
-        tg.globalAlpha = 0.16;
+        tg.globalAlpha = plan.fx.floor ?? 0.16;
         tg.drawImage(L, 0, 0);
         ctx.globalCompositeOperation = "lighter";
         ctx.drawImage(Tc, emitBox.x, emitBox.y, emitBox.w, emitBox.h);
