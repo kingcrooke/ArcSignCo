@@ -550,7 +550,7 @@ export function createScene() {
     const lit = night && litWith(type, o.options);
     let emitCanvas = null, emitBox = null;
     if (lit && (plan.emit.length || plan.spill.length)) {
-      const sp = Math.max(signBox0.h * 0.7, signBox0.w * 0.14);
+      const sp = Math.max(signBox0.h * (isAwning(type) ? 1.6 : 0.7), signBox0.w * 0.14);
       emitBox = intersect(grow(signBox0, sp), clip);
       if (emitBox) {
         const q = Math.min(o.quality === "draft" ? 0.3 : 0.5, 720 / Math.max(emitBox.w, emitBox.h));
@@ -571,6 +571,19 @@ export function createScene() {
             lg.drawImage(lv, 0, 0, L.width, L.height);
           }
           lg.globalAlpha = 1;
+        }
+        // Light fades out before the edge of its box instead of stopping at a hard line.
+        const f = Math.max(2, sp * q * 0.6);
+        lg.globalCompositeOperation = "source-over";
+        for (const [x0, y0, x1, y1, rx, ry, rw, rh] of [
+          [0, 0, 0, f, 0, 0, L.width, f], [0, L.height, 0, L.height - f, 0, L.height - f, L.width, f],
+          [0, 0, f, 0, 0, 0, f, L.height], [L.width, 0, L.width - f, 0, L.width - f, 0, f, L.height],
+        ]) {
+          const gr = lg.createLinearGradient(x0, y0, x1, y1);
+          gr.addColorStop(0, "rgba(0,0,0,1)");
+          gr.addColorStop(1, "rgba(0,0,0,0)");
+          lg.fillStyle = gr;
+          lg.fillRect(rx, ry, rw, rh);
         }
         const Tc = makeCanvas(L.width, L.height);
         const tg = Tc.getContext("2d");
