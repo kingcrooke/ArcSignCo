@@ -103,8 +103,16 @@ async function run() {
     ok("ADA tactile layout close-up");
 
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.waitForTimeout(200);
-    await page.locator("#category").screenshot({ path: path.join(SCREENSHOTS, "tab-bar-phone-390.png") });
+    await page.waitForTimeout(400);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        await page.locator("#category").screenshot({ path: path.join(SCREENSHOTS, "tab-bar-phone-390.png") });
+        break;
+      } catch (e) {
+        if (attempt === 2) throw e;
+        await page.waitForTimeout(500);
+      }
+    }
     ok("phone tab bar screenshot");
 
     if (!LOCAL) {
