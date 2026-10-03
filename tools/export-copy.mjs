@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const { JSDOM } = require("jsdom");
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs"];
+const SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "awnings"];
 const norm = s => s.replace(/\s+/g, " ").trim();
 
 function inline(node) {
@@ -66,7 +66,13 @@ function block(el, lines) {
       lines.push("");
     } else if (t === "figure") {
       const img = n.querySelector("img");
-      lines.push(`[Image, alt text: "${img.getAttribute("alt")}"]`, "", `Caption: ${norm(n.querySelector("figcaption").textContent)}`, "");
+      const caption = norm(n.querySelector("figcaption")?.textContent || "");
+      if (img) lines.push(`[Image, alt text: "${img.getAttribute("alt")}"]`, "", `Caption: ${caption}`, "");
+      else {
+        const svg = n.querySelector("svg");
+        const label = svg?.getAttribute("aria-label") || norm(svg?.querySelector("title")?.textContent || "diagram");
+        lines.push(`[Diagram: ${label}]`, "", `Caption: ${caption}`, "");
+      }
     } else if (cls.contains("contact-links")) {
       lines.push(...[...n.querySelectorAll("a")].flatMap(a => [`[Link: ${norm(a.textContent)}](${a.getAttribute("href")})`, ""]));
     } else if (cls.contains("hero-actions")) {

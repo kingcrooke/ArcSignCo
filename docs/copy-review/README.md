@@ -8,6 +8,8 @@
 | ADA & tactile signs | `/ada-signs/` | [ada-signs.md](ada-signs.md) |
 | Channel letters | `/channel-letters/` | [channel-letters.md](channel-letters.md) |
 | Construction site signs | `/construction-signs/` | [construction-signs.md](construction-signs.md) |
+| Interior wayfinding | `/wayfinding-signs/` | [wayfinding-signs.md](wayfinding-signs.md) |
+| Storefront awnings | `/awnings/` | [awnings.md](awnings.md) |
 
 The page files are generated from the HTML by `tools/export-copy.mjs`, so they match what is on the Deploy Preview word for word. To change wording, edit the HTML, then re-run:
 
@@ -27,7 +29,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - Every code or regulation reference was checked against the public source listed in each page's "Public sources" section (checked September 2026). Anything that couldn't be verified was left out.
 - No clients, projects, reviews, ratings, stats, years in business, hours, or street address.
 
-## Shared text on all four pages
+## Shared text on all six pages
 
 **Header** (same as the homepage): About · Services · Work · Scope Finder · Call (347) 450-2110 · Request a quote (links go to the homepage sections). On phones, the Call and Request a quote buttons move to a bottom bar that appears once the page's own quote buttons scroll out of view.
 
@@ -36,7 +38,7 @@ NODE_PATH=/tmp/sd-tools/node_modules node tools/check-service-pages.mjs
 - Tagline: "Full-service signage for New York and the tri-state area: design, fabrication, permit coordination, ADA signage, and installation." (Same as the homepage after the Sales Ops wording pass.)
 - Social icon links: "Arc Signage Co on Instagram (opens in a new tab)", "Arc Signage Co on Facebook (opens in a new tab)" (screen-reader labels)
 - Links: About · Services · Work · Scope Finder · Contact · Google Business Profile (hidden until the URL is confirmed)
-- Services: Sign permits & shop drawings · ADA & tactile signs · Channel letters · Construction site signs
+- Services: Sign permits & shop drawings · ADA & tactile signs · Channel letters · Construction site signs · Interior wayfinding · Storefront awnings
 - © 2026 Arc Signage Co LLC — New York / Tri-State · (347) 450-2110 · arc@arcsignco.com
 
 ## Homepage text added in this PR
