@@ -102,6 +102,7 @@ function render() {
   const awning = info.category === "awning";
   document.title = `${sheet.project || (awning ? "Awning mockup" : "Sign mockup")} for approval | Arc Signage Co`;
   $("title").textContent = sheet.project || (awning ? "Storefront awning" : "Storefront sign");
+  $("eyebrow").textContent = awning ? "Awning mockup for approval" : "Sign mockup for approval";
   $("detailsTitle").textContent = awning ? "The awning" : "The sign";
   $("typeLabel").textContent = awning ? "Shape" : "Type";
   $("shot").alt = `The ${awning ? "awning" : "sign"} mockup on the storefront photo`;
