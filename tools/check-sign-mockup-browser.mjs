@@ -135,6 +135,13 @@ async function run() {
       await checkPlacement(type, second, `after choosing ${second}`);
       await page.selectOption('#typeOptions [data-opt="size"]', first);
     }
+    await page.evaluate(() => window.signMockup.setType("vinyl-door-hours"));
+    const onDoor = await page.evaluate(() => {
+      const { quad, cal } = window.signMockup.state;
+      const cx = quad.reduce((s, p) => s + p.x, 0) / 4, cy = quad.reduce((s, p) => s + p.y, 0) / 4;
+      return cx > Math.min(cal.a.x, cal.b.x) && cx < Math.max(cal.a.x, cal.b.x) && cy < cal.a.y;
+    });
+    onDoor ? ok("vinyl-door-hours is placed on the door, above the door-width line") : fail("vinyl-door-hours is not placed on the door");
 
     // A small photo of your own (about 18' × 12' at this scale): presets that fit are drawn at size,
     // and the 20' ones are shrunk to fit; nothing hangs off the photo.

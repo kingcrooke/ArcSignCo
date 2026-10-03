@@ -821,6 +821,18 @@ function plaqueMountPoint(photo) {
   };
 }
 
+/**
+ * For door decals: centered on a scale line drawn across a door (labeled "door"), about 50 in up,
+ * where hours and door copy sit at eye level. Null when the reference isn't a door.
+ */
+function doorMountPoint(photo) {
+  if (!state.cal || !state.calInches || !/door/i.test($("calLabel").value)) return null;
+  const calPx = dist(state.cal.a, state.cal.b);
+  if (calPx < 1) return null;
+  const p = { x: (state.cal.a.x + state.cal.b.x) / 2, y: (state.cal.a.y + state.cal.b.y) / 2 - 50 * calPx / state.calInches };
+  return p.x > 0 && p.x < photo.width && p.y > 0 && p.y < photo.height ? p : null;
+}
+
 const QUAD_CLAMP_MARGIN = 3;
 
 function quadInsidePhoto(photo, quad = state.quad, margin = QUAD_CLAMP_MARGIN) {
@@ -879,7 +891,10 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
   let c = (!cat.ui.plaque && state.home)
     ? { x: state.home.x, y: state.home.y }
     : { x: photo.width / 2, y: photo.height * 0.36 };
-  if (cat.ui.plaque) {
+  const door = currentType().mount === "door" ? doorMountPoint(photo) : null;
+  if (door) {
+    c = door;
+  } else if (cat.ui.plaque) {
     const mount = plaqueMountPoint(photo);
     if (mount) c = mount;
   } else if (keepCenter && state.quad) {
@@ -1079,7 +1094,7 @@ function setType(id) {
     // An unpinned quad takes the new type's own size (its preset) rather than the last type's,
     // and never carries a plaque's size into a storefront category or the other way round.
     if (!state.quadEdited && (presetWidthPx() || (from !== to && (nextCat.ui.plaque || prevCat.ui.plaque)))) {
-      placeSign(aspectFor(next, state.art, optionsFor(next)), !nextCat.ui.plaque && !prevCat.ui.plaque);
+      placeSign(aspectFor(next, state.art, optionsFor(next)), !nextCat.ui.plaque && !prevCat.ui.plaque && prevType.mount !== "door");
     } else {
       // Switching between hanging shapes keeps a wall area the user has pinned.
       fitQuadToArt(prev);

@@ -87,6 +87,7 @@ export default defineCategory({
       summary: "Small cut or printed panels for business hours, suite numbers and door instructions.",
       parts: ["Cut or printed vinyl", "On glass or painted door", "Matte finish reduces glare", "No depth", "No lighting"],
       pinHint: "Pin the four corners on the door glass or panel.",
+      mount: "door",
       render: { kind: "flat", surface: "glass" },
       options: [],
       aspect: 1.35,
