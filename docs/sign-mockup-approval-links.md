@@ -41,7 +41,8 @@ keep showing what was sent.
 | `tools/sign-proofs.test.mjs` | Unit tests for the core with an in-memory store (`node --test ./tools/sign-proofs.test.mjs`). |
 | `tools/sign-mockup/proof/` | The proof page (`index.html`, `proof.js`, `proof.css`). |
 | `tools/sign-mockup/js/proof-pdf.js` | Builds the PDF in the browser; shared by the editor and the proof page. |
-| `tools/sign-mockup/js/pricing-config.js` | The **only** file with rate numbers. They are placeholders. |
+| `tools/sign-mockup/js/categories/<id>.js` | Each category's `pricing` block holds its rate numbers, the only rates in the code. They are placeholders. |
+| `tools/sign-mockup/js/catalog.js` | Reads types, options and wording from the category registry (`js/categories/index.js`); the server uses it to validate sheets. |
 | `package.json` | Declares `@netlify/blobs` (Netlify installs it at deploy). Needs Node 22.12+, set in `netlify.toml`. |
 
 ### API
@@ -59,11 +60,12 @@ Netlify's 6 MB request limit); comments ≤ 1000 characters, 200 per proof; name
 Every response has `X-Robots-Tag: noindex`.
 
 The server ignores any price the browser sends. It recomputes the range from the sign type and
-measured size with `estimatePrice()` and the shared `pricing-config.js`, so a link can't carry a
-made-up number. Awning sheets also carry an `options` object; the server keeps only the keys and
-values the shape allows (`sanitizeAwningOptions()` in `js/awning-types.js`) and prices awnings per
-linear foot of width, with the backlit adder when backlit is chosen. Sign sheets store
-`options: null`. Old links with the type id `awning` open as the traditional slope. The approval time comes from the server clock, not from the browser.
+measured size with `estimatePrice()` and the category's own rates, so a link can't carry a
+made-up number. Sheets may carry an `options` object; the server keeps only the keys and values the
+type allows (`cleanOptions()` in `js/catalog.js`, which calls the category's `sanitizeOptions`).
+Categories without options (signs) store `options: null`. Awnings are priced per linear foot of
+width, with the backlit adder when backlit is chosen. Only categories marked ready accept proofs;
+coming-soon tabs have no types. Old links with the type id `awning` open as the traditional slope. The approval time comes from the server clock, not from the browser.
 
 ## Storage and namespacing
 
@@ -124,7 +126,7 @@ aren't available on that copy of the site.
 
 ## Before showing a price to a client
 
-The rates in `tools/sign-mockup/js/pricing-config.js` are placeholders, marked as such in the file,
+The rates in each `tools/sign-mockup/js/categories/<id>.js` module are placeholders, marked as such in the file,
 on the page, on the proof page and in the PDF. Replace them with Arc's own rates, bump
 `RATES_VERSION`, and run `node --test ./tools/sign-mockup-pricing.test.mjs` (it checks that every
 type has a rate and that every low is below its high).

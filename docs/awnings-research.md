@@ -1,6 +1,6 @@
 # Awnings research: shapes, profiles, valances, fabrics, NYC rules
 
-Internal reference for the storefront sign mockup engine. Sections 1–10 are the research; section 11 fills gaps found while building the awning library, and section 12 maps every shape in the shipped library (`tools/sign-mockup/js/awning-types.js`) back to this file.
+Internal reference for the storefront sign mockup engine. Sections 1–10 are the research; section 11 fills gaps found while building the awning library, and section 12 maps every shape in the shipped library (`tools/sign-mockup/js/categories/awnings/types.js`) back to this file.
 
 **Usage rule.** This file is internal. Anything that ships on the site (UI labels, presets, thumbnails, copy) must use the generic shape names below. It must not use manufacturer or competitor names, product names, logos or images. Supplier and brand names appear only in the Sources section at the end. Where the body needs a material, it uses the generic term ("solution-dyed acrylic", "translucent backlit vinyl") instead of a trade name.
 

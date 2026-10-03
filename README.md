@@ -178,34 +178,45 @@ something they measured, pick a sign type or an awning shape, pin it (typed text
 to the wall with four corner handles, and see it built in perspective by day and at night. They can then
 download a three-page PDF or send a phone approval link.
 
-- **Sign types**: 17 types in `js/sign-types.js` (channel letters, non-lit letters, light boxes,
-  blade signs, panels, LED neon, vinyl and paint). Each has a "how it's built"
-  cross-section drawn in code for this tool (`js/diagrams.js`): generic, typical construction, not to scale.
-- **Awnings**: a second category with 29 shapes in `js/awning-types.js` (sloped, curved, domes and
-  cones, sign-face and backlit, canopies and marquees, retractable), based on
+- **Categories**: each tab (Signs, Awnings, …) is one self-contained module in
+  `js/categories/<id>.js` that default-exports `defineCategory({...})`: its types, groups, options,
+  SVG construction cards, render rules, wording and placeholder rates. `js/categories/index.js` is
+  the **only** place tabs are listed. The engine (`app.js`, `scene.js`, `catalog.js`, `pricing.js`,
+  the PDF, proof page and server) never names a category; `js/catalog.js` reads everything through
+  the registry. Adding a tab is one module file plus one registry line:
+  follow `docs/ADDING-A-CATEGORY.md` step by step.
+- **Signs** (`categories/signs.js`, types in `categories/signs/types.js`): 17 types (channel letters,
+  non-lit letters, light boxes, blade signs, panels, LED neon, vinyl and paint). Each has a "how it's
+  built" cross-section drawn in code for this tool (`categories/signs/diagrams.js`): generic, typical
+  construction, not to scale. Signs use the shared construction kinds in `js/kinds.js`.
+- **Awnings** (`categories/awnings.js` plus `categories/awnings/`): 29 shapes (sloped, curved, domes
+  and cones, sign-face and backlit, canopies and marquees, retractable), based on
   `docs/awnings-research.md`. Options: projection, cover, color, solid or striped fabric, valance
   style, lettering on the valance or the face, open or closed sides, frame color, and backlit where
   the shape allows it. The pinned corners are the wall area the awning covers (width and drop); the
-  projection comes out from the wall. `js/awning-geometry.js` builds each shape as a 3D mesh,
-  `js/awning-scene.js` paints and lights it, and `js/awning-diagrams.js` draws the side-profile card
-  (frame and cover). `js/catalog.js` joins signs and awnings for the editor, PDF, proof page and server.
-  Only backlit awnings glow at night. Awnings are priced per linear foot of width
-  (`AWNING_RATES` in `js/pricing-config.js`, placeholders like the sign rates).
-  Use generic type and shape names only: no catalog, vendor or awning maker names anywhere on the
+  projection comes out from the wall. `awnings/geometry.js` builds each shape as a 3D mesh,
+  `awnings/build.js` paints and lights it, and `awnings/diagrams.js` draws the side-profile card.
+  Only backlit awnings glow at night. Awnings are priced per linear foot of width.
+- **Coming soon**: Vinyl & Stickers, Construction Signs, Interior Wayfinding, ADA & Code Signs and
+  LED Displays are registered with `comingSoon()`. They show as dashed tabs; picking one opens the
+  library with example cards and a call/email line instead of types.
+- Use generic type and shape names only: no catalog, vendor or awning maker names anywhere on the
   site, in PDFs or in code comments. `tools/check-sign-mockup.mjs` checks for this.
 - **Rendering**: `js/geometry.js` recovers a camera from the pinned corners, so depth (returns,
   raceways, cabinets, standoffs, brackets, awning projection) is drawn in perspective.
-  `js/scene.js` builds each type's parts and lighting; `js/renderer.js` draws them with WebGL, or on
-  the CPU when WebGL is missing. `js/art.js` removes a flat background and makes the masks.
+  `js/scene.js` asks the type's category to build its parts with the drawing helpers in `js/kit.js`
+  and the light table in `js/lighting.js`; `js/renderer.js` draws them with WebGL, or on the CPU
+  when WebGL is missing. `js/art.js` removes a flat background and makes the masks.
 - **Night view**: same pin, darker photo, light from the sign by lighting type (face-lit, halo,
   internal, LED neon, gooseneck lamps). Non-lit types never glow but stay readable. This is a
   simulation to show where the light goes, not a photometric render.
 - **PDF** (`js/pdf.js` writer, `js/proof-pdf.js` browser glue): page 1 is the day mockup with size, type and
   the preliminary range; page 2 is the night view and the construction drawing; page 3 is the flat,
   undistorted artwork. Every page has the logo, phone, both emails and "Concept only – not a shop drawing".
-- **Preliminary range**: `js/pricing-config.js` is the only file with rate numbers, and they are
-  **placeholders**. Replace them before showing a range to a client. The range only shows once the
-  scale is set.
+- **Preliminary range**: rate numbers live only in each category module's `pricing` block
+  (`js/categories/<id>.js`), and they are **placeholders** (`placeholder: true`). Replace them before
+  showing a range to a client and bump `RATES_VERSION` in `js/pricing-config.js`. The range only
+  shows once the scale is set.
 - **Approval links**: `netlify/functions/sign-proofs.mjs` stores proofs in the Netlify Blobs store
   `arc-sign-mockup-proofs` under `v1/<deploy context>/<id>/`, so preview test proofs never mix with
   production ones. Details: `docs/sign-mockup-approval-links.md`.
