@@ -1041,7 +1041,19 @@ function renderTypeCard() {
       b.tabIndex = on ? 0 : -1;
     }
   }
+  revealCategoryTab();
   renderTypeOptions();
+}
+// Scrolls the tab row (not the page) so the selected tab is fully visible. The row snaps to tab
+// starts, so it scrolls to the first tab start that shows the whole tab clear of the edge fade.
+function revealCategoryTab() {
+  const bar = $("category"), on = bar.querySelector('[role="radio"][aria-checked="true"]');
+  if (!on || bar.scrollWidth <= bar.clientWidth) return;
+  const x = el => el.getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft;
+  const left = x(on), right = left + on.offsetWidth, view = bar.clientWidth - 28;
+  if (left >= bar.scrollLeft && right <= bar.scrollLeft + view) return;
+  const starts = [...bar.querySelectorAll('[role="radio"]')].map(x).filter(s => s <= left);
+  bar.scrollLeft = starts.find(s => right - s <= view) ?? left;
 }
 
 function setType(id) {
