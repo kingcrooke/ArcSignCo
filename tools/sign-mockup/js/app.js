@@ -167,8 +167,24 @@ function render() {
   }
   if (state.cal && (state.step === "scale" || state.step === "sign")) drawCal(state.step === "scale");
   if (sq && state.step === "sign") drawQuadHandles(sq);
-  if (drag && drag.type === "point") drawLoupe();
   updateChip(size);
+  placeChip(sq);
+  if (drag && drag.type === "point") drawLoupe();
+}
+
+// Keeps the size chip off the handles and dimension lines: if the sign (plus room for its
+// dimension pills) reaches the top-left corner, the chip drops to the bottom-left.
+function placeChip(sq) {
+  const chip = $("chip");
+  if (chip.hidden) return;
+  let low = false;
+  if (sq && (state.step === "sign" || state.step === "export")) {
+    const pad = 44, minX = Math.min(...sq.map(p => p.x)) - pad, minY = Math.min(...sq.map(p => p.y)) - pad;
+    const maxX = Math.max(...sq.map(p => p.x)) + pad, maxY = Math.max(...sq.map(p => p.y)) + pad;
+    const r = { x0: 12, y0: 12, x1: 12 + chip.offsetWidth, y1: 12 + chip.offsetHeight };
+    low = minX < r.x1 && maxX > r.x0 && minY < r.y1 && maxY > r.y0;
+  }
+  chip.classList.toggle("is-low", low);
 }
 
 function handle(p, active, r = 9) {
@@ -300,7 +316,7 @@ function drawLoupe() {
   const sp = toScreen(p);
   const left = sp.x > w / 2;
   const chip = $("chip");
-  const top = 12 + (left && !chip.hidden ? chip.offsetHeight + 8 : 0);
+  const top = 12 + (left && !chip.hidden && !chip.classList.contains("is-low") ? chip.offsetHeight + 8 : 0);
   const c = { x: left ? 12 + R : w - 12 - R, y: top + R };
   const Ls = Math.min(Math.max(state.view.s * 3, 0.5), 8);
   const photo = state.photo.canvas;
@@ -436,6 +452,10 @@ canvas.addEventListener("pointerdown", e => {
   } else {
     drag = { type: "pan", last: pt };
     stage.classList.add("dragging");
+  }
+  if (state.step === "sign" && !state.touchedSign && (hit.type === "move" || hit.ref?.kind === "quad")) {
+    state.touchedSign = true;
+    showHint("");
   }
   requestRender();
 });
@@ -1335,9 +1355,22 @@ function updateUI() {
   $("dayNight").hidden = !(state.photo && state.sign && (state.step === "sign" || state.step === "export"));
   renderProofLink();
 
-  const hint = hintText();
-  $("hint").textContent = hint;
-  $("hint").hidden = !hint;
+  showHint(hintText());
+}
+
+// The hint fades out (rather than vanishing) once the user has done what it asks.
+let hintTimer = 0;
+function showHint(text) {
+  const el = $("hint");
+  clearTimeout(hintTimer);
+  if (text) {
+    el.textContent = text;
+    el.hidden = false;
+    el.classList.remove("is-out");
+  } else if (!el.hidden) {
+    el.classList.add("is-out");
+    hintTimer = setTimeout(() => { el.hidden = true; }, 400);
+  }
 }
 
 document.querySelectorAll("[data-step]").forEach(b => b.addEventListener("click", () => setStep(b.dataset.step)));
