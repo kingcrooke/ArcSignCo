@@ -1065,8 +1065,10 @@ function setType(id) {
   // Each category sits in its own place on the wall (a sign over the door, an awning over the
   // window), so each keeps its own placement.
   const from = prevType.category, to = next.category;
-  const stash = from !== to && state.placed[to];
-  if (from !== to && state.quad) state.placed[from] = { quad: state.quad.map(p => ({ ...p })), edited: state.quadEdited, aspect: prev };
+  // An unpinned placement left for another type of that category is re-drawn at this type's preset size.
+  const kept = from !== to && state.placed[to];
+  const stash = kept && (kept.edited || kept.typeId === next.id || !presetWidthPx()) && kept;
+  if (from !== to && state.quad) state.placed[from] = { quad: state.quad.map(p => ({ ...p })), edited: state.quadEdited, aspect: prev, typeId: prevType.id };
   if (stash) {
     state.quad = stash.quad;
     state.quadEdited = stash.edited;

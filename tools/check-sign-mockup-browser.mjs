@@ -94,6 +94,84 @@ async function run() {
       }
     }
 
+    // Every type's default is drawn at its "Typical size" (within 1") and sits fully inside the photo:
+    // when picked in its tab, when arriving from another tab, and after picking another size.
+    await page.evaluate(() => window.signMockup.setMode("day"));
+    const placeTypes = NEW_CATS.flatMap(id => CATEGORIES.find(c => c.id === id).types);
+    const sizesOf = type => {
+      const cat = CATEGORIES.find(c => c.id === type.category);
+      return cat.optionFields(type, cat.defaultOptions(type), null).find(f => f.key === "size")?.choices.map(([v]) => v) || [];
+    };
+    const presetOf = size => { const m = String(size || "").match(/^(\d+)x(\d+)$/); return m ? { w: Number(m[1]), h: Number(m[2]) } : null; };
+    const checkPlacement = async (type, size, how) => {
+      const want = presetOf(size);
+      const got = await page.evaluate(() => {
+        const s = window.signMockup.sizeInfo();
+        return { w: s?.width ?? null, h: s?.height ?? null, inside: window.signMockup.quadInsidePhoto() };
+      });
+      const fits = want && got.w != null && Math.abs(got.w - want.w) <= 1 && Math.abs(got.h - want.h) <= 1;
+      const msg = `${type.id} ${how}: ${got.w?.toFixed(1)}" × ${got.h?.toFixed(1)}" (preset ${size}), ${got.inside ? "inside" : "OUTSIDE"} the photo`;
+      fits && got.inside ? ok(msg) : fail(msg);
+    };
+    const signsType = CATEGORIES.find(c => c.id === "sign").defaultType;
+    for (const type of placeTypes) {
+      await page.evaluate(id => window.signMockup.setCategory(id), type.category);
+      await page.evaluate(id => window.signMockup.setType(id), type.id);
+      await checkPlacement(type, sizesOf(type)[0], "picked in its tab");
+    }
+    for (const type of placeTypes) {
+      for (const from of ["ada-room", "led-ticker", signsType]) {
+        if (CATEGORIES.find(c => c.id === type.category).types.some(t => t.id === from)) continue;
+        await page.evaluate(id => window.signMockup.setType(id), from);
+        await page.evaluate(id => window.signMockup.setType(id), type.id);
+        await checkPlacement(type, sizesOf(type)[0], `after ${from}`);
+      }
+    }
+    for (const type of placeTypes) {
+      const [first, second] = sizesOf(type);
+      if (!second) continue;
+      await page.evaluate(id => window.signMockup.setType(id), type.id);
+      await page.selectOption('#typeOptions [data-opt="size"]', second);
+      await checkPlacement(type, second, `after choosing ${second}`);
+      await page.selectOption('#typeOptions [data-opt="size"]', first);
+    }
+
+    // A small photo of your own (about 18' × 12' at this scale): presets that fit are drawn at size,
+    // and the 20' ones are shrunk to fit; nothing hangs off the photo.
+    {
+      const own = await context.newPage();
+      await own.goto(`${BASE}/tools/sign-mockup/`, { waitUntil: "networkidle" });
+      await own.setInputFiles("#photoInput", path.join(root, "docs/qa/sample-photo.jpg"));
+      await own.waitForFunction(() => window.signMockup.state.photo);
+      await own.click("#toScale");
+      const pt = p => own.evaluate(({ x, y }) => {
+        const s = window.signMockup.state, r = document.getElementById("view").getBoundingClientRect();
+        return { x: r.left + s.view.x + x * s.view.s, y: r.top + s.view.y + y * s.view.s };
+      }, p);
+      const a = await pt({ x: 380, y: 470 }), b = await pt({ x: 530, y: 470 });
+      await own.mouse.move(a.x, a.y);
+      await own.mouse.down();
+      await own.mouse.move(b.x, b.y, { steps: 10 });
+      await own.mouse.up();
+      await own.fill("#calFt", "3");
+      await own.click("#toSign");
+      await own.waitForFunction(() => window.signMockup.state.calInches === 36);
+      for (const type of placeTypes) {
+        await own.evaluate(id => window.signMockup.setType(id), type.id);
+        const got = await own.evaluate(() => {
+          const { photo, cal, calInches } = window.signMockup.state, s = window.signMockup.sizeInfo();
+          const pxPerIn = Math.hypot(cal.b.x - cal.a.x, cal.b.y - cal.a.y) / calInches;
+          return { w: s?.width, h: s?.height, inside: window.signMockup.quadInsidePhoto(), photoW: (photo.canvas.width - 6) / pxPerIn, photoH: (photo.canvas.height - 6) / pxPerIn };
+        });
+        const want = presetOf(sizesOf(type)[0]);
+        const fitsPhoto = want.w <= got.photoW && want.h <= got.photoH;
+        const sized = fitsPhoto ? Math.abs(got.w - want.w) <= 1 && Math.abs(got.h - want.h) <= 1 : got.w >= got.photoW * 0.8 || got.h >= got.photoH * 0.8;
+        const msg = `${type.id} on your own photo: ${got.w?.toFixed(1)}" × ${got.h?.toFixed(1)}" (preset ${sizesOf(type)[0]}${fitsPhoto ? "" : ", shrunk to fit"}), ${got.inside ? "inside" : "OUTSIDE"} the photo`;
+        sized && got.inside ? ok(msg) : fail(msg);
+      }
+      await own.close();
+    }
+
     for (const vw of [1280, 1440]) {
       await page.setViewportSize({ width: vw, height: 900 });
       await page.waitForTimeout(250);
