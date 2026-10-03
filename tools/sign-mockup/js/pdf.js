@@ -251,13 +251,16 @@ function footer(pg, index, count) {
 
 // A column of labeled rows that stops at `bottom`.
 function column(pg, x, width, top, bottom) {
-  let y = top;
+  let y = top, full = false;
   const api = {
     get y() { return y; },
+    // Points left before the bottom of the column.
+    get room() { return full ? 0 : bottom - y; },
     gap(v) { y += v; return api; },
-    // The label's baseline sits 10pt below the current position.
+    // The label's baseline sits 10pt below the current position. Once one doesn't fit, the column
+    // takes nothing more, so a heading is never orphaned from its text.
     label(str) {
-      if (y + 24 > bottom) return api;
+      if (full || y + 30 > bottom) { full = true; return api; }
       pg.text(str.toUpperCase(), x, y + 10, { size: 8, bold: true, color: C.goldInk });
       y += 16;
       return api;
@@ -265,7 +268,7 @@ function column(pg, x, width, top, bottom) {
     rows(str, opts = {}) {
       const size = opts.size || 10;
       for (const ln of wrapText(str, !!opts.bold, size, opts.width || width)) {
-        if (y + size * 1.3 > bottom) break;
+        if (full || y + size * 1.3 > bottom) { full = true; break; }
         y += size * 1.3;
         pg.text(ln, opts.indent ? x + opts.indent : x, y, { size, color: C.ink, ...opts });
       }
@@ -285,11 +288,11 @@ function column(pg, x, width, top, bottom) {
 }
 
 function approvalStamp(pg, approval, x, y, w) {
-  const h = 40;
+  const h = 50;
   pg.rect(x, y, w, h, C.greenBg, C.green, 1);
   pg.text("APPROVED FOR NEXT STEPS", x + 10, y + 15, { size: 9, bold: true, color: C.green });
-  const who = [approval.name, approval.at].filter(Boolean).join("  ·  ");
-  pg.text(wrapText(who, false, 8.5, w - 20)[0], x + 10, y + 29, { size: 8.5, color: C.ink });
+  pg.text(wrapText(approval.name || "", true, 8.5, w - 20)[0], x + 10, y + 29, { size: 8.5, bold: true, color: C.ink });
+  pg.text(wrapText(approval.at || "", false, 8.5, w - 20)[0], x + 10, y + 41, { size: 8.5, color: C.ink });
   return h;
 }
 
@@ -318,6 +321,7 @@ export function buildProofPdf(p) {
   const { logo, mockup, size, reference = "", project = "", preparedFor = "", notes = "", type, price, night, diagram, flat, approval, proofUrl, date = new Date() } = p;
   const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const pages = [];
+  let deferredNotes = "", linkPlaced = !proofUrl;
 
   // Page 1: the day mockup with size, type and preliminary price.
   {
@@ -326,7 +330,8 @@ export function buildProofPdf(p) {
     header(pg, logo);
     pg.text("Storefront sign mockup", M, 98, { size: 20, bold: true, color: C.navy });
     pg.text(`Prepared ${dateText}`, W - M, 98, { size: 10, color: C.muted, align: "right" });
-    if (project) pg.text(wrapText(project, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
+    const sub = [project, preparedFor && `Prepared for ${preparedFor}`].filter(Boolean).join("  ·  ");
+    if (sub) pg.text(wrapText(sub, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
     banner(pg, 128, "For visual discussion only. Sizes are estimates from a photo.");
 
     const top = 170, boxW = 528, boxH = 382;
@@ -363,9 +368,10 @@ export function buildProofPdf(p) {
       col.gap(16);
     }
     if (reference) { col.label("Scale reference"); col.rows(reference); col.gap(16); }
-    if (preparedFor) { col.label("Prepared for"); col.rows(preparedFor); col.gap(16); }
-    if (notes) { col.label("Notes"); col.rows(notes, { size: 9.5 }); col.gap(16); }
-    if (proofUrl) { col.label("Approval link"); col.rows(proofUrl, { size: 7.5, color: C.muted, link: proofUrl }); }
+    const noteLines = notes ? wrapText(notes, false, 9.5, cw).length : 0;
+    if (notes && col.room >= 16 + noteLines * 12.35 + 4) { col.label("Notes"); col.rows(notes, { size: 9.5 }); col.gap(16); }
+    else if (notes) deferredNotes = notes;
+    if (proofUrl && col.room >= 40) { col.label("Approval link"); col.rows(proofUrl, { size: 7.5, color: C.muted, link: proofUrl }); linkPlaced = true; }
   }
 
   // Page 2: the night view from the same pin, and how the sign is built.
@@ -410,13 +416,24 @@ export function buildProofPdf(p) {
     pg.text("Flat artwork", M, 98, { size: 20, bold: true, color: C.navy });
     if (size) pg.text(`About ${size.width} W × ${size.height} H`, W - M, 98, { size: 11, bold: true, color: C.navy, align: "right" });
     banner(pg, 112, "Artwork as supplied, not perspective-corrected. Final art is redrawn for fabrication.");
-    const box = pg.fitImage(flat.image, M, 156, W - 2 * M, 350, { well: C.well });
+    const wellH = deferredNotes ? 280 : 340;
+    const box = pg.fitImage(flat.image, M, 156, W - 2 * M, wellH, { well: C.well });
     if (size) {
       pg.text(size.width, box.x + box.w / 2, box.y + box.h + 16, { size: 10, bold: true, color: C.navy, align: "center" });
       pg.line(box.x, box.y + box.h + 6, box.x + box.w, box.y + box.h + 6, C.gold, 1);
     }
-    const col = column(pg, M, W - 2 * M, 524, 556);
+    const col = column(pg, M, W - 2 * M, 156 + wellH + 6, 556);
     col.rows(flat.caption || "This is the undistorted artwork used for the mockup. Colors on screen and in print vary from finished materials.", { size: 9, color: C.muted });
+    if (deferredNotes) { col.gap(8); col.label("Notes"); col.rows(deferredNotes, { size: 9.5 }); deferredNotes = ""; }
+    if (!linkPlaced) { col.gap(8); col.rows(`Approval link: ${proofUrl}`, { size: 8, color: C.muted, link: proofUrl }); linkPlaced = true; }
+  }
+  if (deferredNotes) {
+    // No artwork page: the notes go on a page of their own rather than being cut off.
+    const pg = new Page();
+    pages.push(pg);
+    header(pg, logo);
+    pg.text("Notes", M, 98, { size: 20, bold: true, color: C.navy });
+    column(pg, M, W - 2 * M, 112, 552).rows(deferredNotes, { size: 10.5 });
   }
 
   pages.forEach((pg, i) => footer(pg, i + 1, pages.length));
