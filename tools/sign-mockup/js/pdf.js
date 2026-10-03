@@ -1,5 +1,6 @@
-// Minimal PDF 1.4 writer for the one-page mockup proof. No DOM: images arrive as JPEG bytes,
-// text uses the standard Helvetica fonts with WinAnsi encoding, so the file stays small and searchable.
+// Minimal PDF 1.4 writer for the mockup proof. No DOM: images arrive as JPEG bytes, text uses the
+// standard Helvetica fonts with WinAnsi encoding, so the file stays small and searchable.
+// Shared by the editor, the phone proof page and tools/check-sign-mockup.mjs.
 
 const W = 792, H = 612; // US Letter, landscape (points)
 const M = 36;
@@ -14,6 +15,10 @@ const COLORS = {
   line: [0.875, 0.898, 0.933],
   cream: [1, 0.973, 0.91],
   white: [1, 1, 1],
+  well: [0.96, 0.965, 0.973],
+  night: [0.075, 0.145, 0.239],
+  green: [0.11, 0.42, 0.25],
+  greenBg: [0.91, 0.965, 0.925],
 };
 
 export const CONTACT = {
@@ -106,7 +111,7 @@ const n = v => (Math.round(v * 100) / 100).toString();
 const rgb = c => c.map(n).join(" ");
 
 class Page {
-  constructor() { this.ops = []; this.links = []; }
+  constructor() { this.ops = []; this.links = []; this.images = new Map(); }
   rect(x, y, w, h, fill, stroke, lw = 1) {
     const yy = H - y - h;
     if (fill) this.ops.push(`${rgb(fill)} rg`);
@@ -126,8 +131,18 @@ class Page {
     if (link) this.links.push({ x: tx, y: y - size * 0.8, w, h: size * 1.1, uri: link });
     return w;
   }
-  image(name, x, y, w, h) {
-    this.ops.push(`q ${n(w)} 0 0 ${n(h)} ${n(x)} ${n(H - y - h)} cm /${name} Do Q`);
+  image(img, x, y, w, h) {
+    if (!this.images.has(img)) this.images.set(img, `Im${this.images.size + 1}`);
+    this.ops.push(`q ${n(w)} 0 0 ${n(h)} ${n(x)} ${n(H - y - h)} cm /${this.images.get(img)} Do Q`);
+  }
+  // Fits an image inside a box, centered; returns where it landed.
+  fitImage(img, x, y, w, h, { well = COLORS.well, border = COLORS.line } = {}) {
+    if (well) this.rect(x, y, w, h, well);
+    const k = Math.min(w / img.width, h / img.height);
+    const iw = img.width * k, ih = img.height * k, ix = x + (w - iw) / 2, iy = y + (h - ih) / 2;
+    this.image(img, ix, iy, iw, ih);
+    if (border) this.rect(ix, iy, iw, ih, null, border, 0.75);
+    return { x: ix, y: iy, w: iw, h: ih };
   }
 }
 
@@ -136,7 +151,7 @@ function pdfDate(d) {
   return `D:${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`;
 }
 
-function serialize({ content, images, links, info }) {
+function serialize(pages, info) {
   const enc = new TextEncoder();
   const chunks = [];
   let length = 0;
@@ -156,26 +171,36 @@ function serialize({ content, images, links, info }) {
   push("%PDF-1.4\n");
   push(new Uint8Array([0x25, 0xe2, 0xe3, 0xcf, 0xd3, 0x0a]));
 
-  const imageIds = images.map((_, i) => 7 + i);
-  const linkIds = links.map((_, i) => 7 + images.length + i);
-  const xobjects = images.map((im, i) => `/${im.name} ${imageIds[i]} 0 R`).join(" ");
-  const annots = linkIds.length ? ` /Annots [${linkIds.map(id => `${id} 0 R`).join(" ")}]` : "";
-  const contentBytes = enc.encode(content);
+  // 1 catalog, 2 page tree, 3–4 fonts, then shared images, then each page with its content and links.
+  let next = 5;
+  const imageIds = new Map();
+  for (const pg of pages) for (const img of pg.images.keys()) if (!imageIds.has(img)) imageIds.set(img, next++);
+  const layout = pages.map(pg => {
+    const page = next++, content = next++;
+    const links = pg.links.map(() => next++);
+    return { page, content, links };
+  });
+  const infoId = next++;
 
   obj(1, "<< /Type /Catalog /Pages 2 0 R >>");
-  obj(2, "<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
-  obj(3, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Contents 6 0 R /Resources << /Font << /F1 4 0 R /F2 5 0 R >> /XObject << ${xobjects} >> >>${annots} >>`);
-  obj(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
-  obj(5, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
-  obj(6, `<< /Length ${contentBytes.length} >>`, contentBytes);
-  images.forEach((im, i) => {
-    obj(imageIds[i], `<< /Type /XObject /Subtype /Image /Width ${im.width} /Height ${im.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.bytes.length} >>`, im.bytes);
+  obj(2, `<< /Type /Pages /Kids [${layout.map(l => `${l.page} 0 R`).join(" ")}] /Count ${pages.length} >>`);
+  obj(3, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+  obj(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>");
+  for (const [img, id] of imageIds) {
+    obj(id, `<< /Type /XObject /Subtype /Image /Width ${img.width} /Height ${img.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${img.bytes.length} >>`, img.bytes);
+  }
+  pages.forEach((pg, i) => {
+    const l = layout[i];
+    const xobjects = [...pg.images].map(([img, name]) => `/${name} ${imageIds.get(img)} 0 R`).join(" ");
+    const annots = l.links.length ? ` /Annots [${l.links.map(id => `${id} 0 R`).join(" ")}]` : "";
+    obj(l.page, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Contents ${l.content} 0 R /Resources << /Font << /F1 3 0 R /F2 4 0 R >> /XObject << ${xobjects} >> >>${annots} >>`);
+    const content = enc.encode(pg.ops.join("\n"));
+    obj(l.content, `<< /Length ${content.length} >>`, content);
+    pg.links.forEach((lk, j) => {
+      const r = [lk.x, H - lk.y - lk.h, lk.x + lk.w, H - lk.y].map(n).join(" ");
+      obj(l.links[j], `<< /Type /Annot /Subtype /Link /Rect [${r}] /Border [0 0 0] /A << /S /URI /URI ${pdfString(lk.uri)} >> >>`);
+    });
   });
-  links.forEach((l, i) => {
-    const r = [l.x, H - l.y - l.h, l.x + l.w, H - l.y].map(n).join(" ");
-    obj(linkIds[i], `<< /Type /Annot /Subtype /Link /Rect [${r}] /Border [0 0 0] /A << /S /URI /URI ${pdfString(l.uri)} >> >>`);
-  });
-  const infoId = 7 + images.length + links.length;
   obj(infoId, `<< ${Object.entries(info).map(([k, v]) => `/${k} ${k === "CreationDate" ? pdfString(v) : pdfTextString(v)}`).join(" ")} >>`);
 
   const xref = length;
@@ -190,97 +215,217 @@ function serialize({ content, images, links, info }) {
   return out;
 }
 
-/**
- * @param {object} p
- * @param {{bytes: Uint8Array, width: number, height: number}} p.logo  white logo on navy, JPEG
- * @param {{bytes: Uint8Array, width: number, height: number}} p.mockup  composite photo, JPEG
- * @param {{width: string, height: string, area: string} | null} p.size  formatted sizes, or null without a scale
- * @param {string} [p.reference]  e.g. `Door width = 3' 0"`
- * @param {string} [p.project]
- * @param {string} [p.preparedFor]
- * @param {string} [p.notes]
- * @param {Date} [p.date]
- */
-export function buildProofPdf({ logo, mockup, size, reference = "", project = "", preparedFor = "", notes = "", date = new Date() }) {
-  const pg = new Page();
-  const C = COLORS;
-  const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+const C = COLORS;
 
+function header(pg, logo) {
   pg.rect(0, 0, W, 66, C.navy);
   pg.rect(0, 66, W, 3, C.gold);
   const logoH = 30, logoW = (logo.width / logo.height) * logoH;
-  pg.image("Logo", M, 18, logoW, logoH);
+  pg.image(logo, M, 18, logoW, logoH);
   pg.text(CONTACT.phone, W - M, 26, { size: 12, bold: true, color: C.white, align: "right", link: CONTACT.phoneHref });
   const e2 = CONTACT.emails[1], e1 = CONTACT.emails[0];
   const e2w = pg.text(e2, W - M, 41, { size: 10, color: C.white, align: "right", link: `mailto:${e2}` });
   const sepW = pg.text("  ·  ", W - M - e2w, 41, { size: 10, color: C.gold2, align: "right" });
   pg.text(e1, W - M - e2w - sepW, 41, { size: 10, color: C.white, align: "right", link: `mailto:${e1}` });
   pg.text(`${CONTACT.site}  ·  ${CONTACT.area}`, W - M, 54, { size: 9, color: C.gold2, align: "right", link: `https://${CONTACT.site}/` });
+}
 
-  pg.text("Storefront sign mockup", M, 98, { size: 20, bold: true, color: C.navy });
-  pg.text(`Prepared ${dateText}`, W - M, 98, { size: 10, color: C.muted, align: "right" });
-  if (project) pg.text(wrapText(project, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
+function banner(pg, y, note) {
+  pg.rect(M, y, W - 2 * M, 28, C.cream, C.gold, 1.2);
+  pg.rect(M, y, 5, 28, C.gold);
+  const dw = pg.text(DISCLAIMER, M + 16, y + 18.5, { size: 13, bold: true, color: C.navy });
+  const room = W - 2 * M - (16 + dw + 14) - 8;
+  pg.text(wrapText(note, false, 9.5, room)[0], M + 16 + dw + 14, y + 18, { size: 9.5, color: C.ink });
+}
 
-  const bannerY = 128;
-  pg.rect(M, bannerY, W - 2 * M, 28, C.cream, C.gold, 1.2);
-  pg.rect(M, bannerY, 5, 28, C.gold);
-  const dw = pg.text(DISCLAIMER, M + 16, bannerY + 18.5, { size: 13, bold: true, color: C.navy });
-  pg.text("For visual discussion only. Sizes are estimates from a photo.", M + 16 + dw + 14, bannerY + 18, { size: 9.5, color: C.ink });
+const FINE = "Sizes are approximate: they are estimated from one photo and one reference measurement, and the sign artwork is placed by hand. Lighting is simulated. Fabrication needs verified field measurements and shop drawings.";
 
-  const top = 170, boxW = 528, boxH = 382;
-  const k = Math.min(boxW / mockup.width, boxH / mockup.height);
-  const iw = mockup.width * k, ih = mockup.height * k;
-  const ix = M + (boxW - iw) / 2, iy = top + (boxH - ih) / 2;
-  pg.rect(M, top, boxW, boxH, [0.96, 0.965, 0.973]);
-  pg.image("Mockup", ix, iy, iw, ih);
-  pg.rect(ix, iy, iw, ih, null, C.line, 0.75);
-
-  const cx = M + boxW + 20, cw = W - M - cx;
-  let y = top + 8;
-  const label = str => { pg.text(str.toUpperCase(), cx, y, { size: 8, bold: true, color: C.goldInk }); y += 6; };
-  const rows = (str, opts = {}) => {
-    const size = opts.size || 10;
-    for (const ln of wrapText(str, !!opts.bold, size, cw)) {
-      if (y + size > top + boxH) break;
-      y += size * 1.3;
-      pg.text(ln, cx, y, { size, color: C.ink, ...opts });
-    }
-  };
-
-  label("Approx. sign size");
-  if (size) {
-    for (const [name, value] of [["Width", size.width], ["Height", size.height], ["Area", size.area]]) {
-      y += 24;
-      pg.text(value, cx, y, { size: name === "Area" ? 15 : 20, bold: true, color: C.navy });
-      pg.text(name, W - M, y, { size: 9, color: C.muted, align: "right" });
-      y += 6;
-      pg.line(cx, y, W - M, y, C.line, 0.75);
-    }
-  } else {
-    rows("Scale not set, so no sizes are shown. Draw a reference line on a known measurement to add them.", { size: 9.5, color: C.muted });
-  }
-  y += 22;
-  if (reference) { label("Scale reference"); rows(reference); y += 24; }
-  if (preparedFor) { label("Prepared for"); rows(preparedFor); y += 24; }
-  if (notes) { label("Notes"); rows(notes, { size: 9.5 }); }
-
+function footer(pg, index, count) {
   pg.line(M, 562, W - M, 562, C.line, 0.75);
   pg.text(`${CONTACT.legal}  ·  ${CONTACT.area}  ·  ${CONTACT.site}`, M, 576, { size: 8.5, bold: true, color: C.navy });
-  pg.text(`${DISCLAIMER}.`, W - M, 576, { size: 8.5, bold: true, color: C.navy, align: "right" });
-  const fine = "Sizes are approximate: they are estimated from one photo and one reference measurement, and the sign artwork is placed by hand. Fabrication needs verified field measurements and shop drawings.";
+  const pw = count > 1 ? pg.text(`Page ${index} of ${count}`, W - M, 576, { size: 8.5, color: C.muted, align: "right" }) + 14 : 0;
+  pg.text(`${DISCLAIMER}.`, W - M - pw, 576, { size: 8.5, bold: true, color: C.navy, align: "right" });
   let fy = 589;
-  for (const ln of wrapText(fine, false, 7.5, W - 2 * M)) { pg.text(ln, M, fy, { size: 7.5, color: C.muted }); fy += 9; }
+  for (const ln of wrapText(FINE, false, 7.5, W - 2 * M)) { pg.text(ln, M, fy, { size: 7.5, color: C.muted }); fy += 9; }
+}
 
-  return serialize({
-    content: pg.ops.join("\n"),
-    images: [{ name: "Logo", ...logo }, { name: "Mockup", ...mockup }],
-    links: pg.links,
-    info: {
-      Title: `Storefront sign mockup${project ? ` – ${project}` : ""}`,
-      Author: CONTACT.name,
-      Subject: DISCLAIMER,
-      Creator: `${CONTACT.site} sign mockup tool`,
-      CreationDate: pdfDate(date),
+// A column of labeled rows that stops at `bottom`.
+function column(pg, x, width, top, bottom) {
+  let y = top;
+  const api = {
+    get y() { return y; },
+    gap(v) { y += v; return api; },
+    // The label's baseline sits 10pt below the current position.
+    label(str) {
+      if (y + 24 > bottom) return api;
+      pg.text(str.toUpperCase(), x, y + 10, { size: 8, bold: true, color: C.goldInk });
+      y += 16;
+      return api;
     },
+    rows(str, opts = {}) {
+      const size = opts.size || 10;
+      for (const ln of wrapText(str, !!opts.bold, size, opts.width || width)) {
+        if (y + size * 1.3 > bottom) break;
+        y += size * 1.3;
+        pg.text(ln, opts.indent ? x + opts.indent : x, y, { size, color: C.ink, ...opts });
+      }
+      return api;
+    },
+    bullets(items, opts = {}) {
+      const size = opts.size || 9.5;
+      for (const item of items) {
+        if (y + size * 1.3 > bottom) break;
+        pg.text("•", x, y + size * 1.3, { size, color: C.gold });
+        api.rows(item, { ...opts, size, indent: 10, width: width - 10 });
+      }
+      return api;
+    },
+  };
+  return api;
+}
+
+function approvalStamp(pg, approval, x, y, w) {
+  const h = 40;
+  pg.rect(x, y, w, h, C.greenBg, C.green, 1);
+  pg.text("APPROVED FOR NEXT STEPS", x + 10, y + 15, { size: 9, bold: true, color: C.green });
+  const who = [approval.name, approval.at].filter(Boolean).join("  ·  ");
+  pg.text(wrapText(who, false, 8.5, w - 20)[0], x + 10, y + 29, { size: 8.5, color: C.ink });
+  return h;
+}
+
+/**
+ * Builds the proof. Page 1 is always present; page 2 (night view + construction) and page 3
+ * (flat artwork) are added when their images are given.
+ *
+ * @param {object} p
+ * @param {{bytes: Uint8Array, width: number, height: number}} p.logo  white logo on navy, JPEG
+ * @param {{bytes: Uint8Array, width: number, height: number}} p.mockup  day composite, JPEG
+ * @param {{width: string, height: string, area: string} | null} p.size  formatted sizes, or null without a scale
+ * @param {string} [p.reference]  e.g. `Door width = 3' 0"`
+ * @param {string} [p.project]
+ * @param {string} [p.preparedFor]
+ * @param {string} [p.notes]
+ * @param {{name: string, group?: string, lighting: string, summary?: string, parts?: string[], night?: string}} [p.type]
+ * @param {{range: string, label: string, note: string, basis?: string}} [p.price]
+ * @param {object} [p.night]  night composite, JPEG
+ * @param {object} [p.diagram]  construction cross-section, JPEG
+ * @param {{image: object, caption?: string}} [p.flat]  undistorted artwork, JPEG
+ * @param {{name?: string, at: string}} [p.approval]  shown as a stamp when the client approved
+ * @param {string} [p.proofUrl]
+ * @param {Date} [p.date]
+ */
+export function buildProofPdf(p) {
+  const { logo, mockup, size, reference = "", project = "", preparedFor = "", notes = "", type, price, night, diagram, flat, approval, proofUrl, date = new Date() } = p;
+  const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const pages = [];
+
+  // Page 1: the day mockup with size, type and preliminary price.
+  {
+    const pg = new Page();
+    pages.push(pg);
+    header(pg, logo);
+    pg.text("Storefront sign mockup", M, 98, { size: 20, bold: true, color: C.navy });
+    pg.text(`Prepared ${dateText}`, W - M, 98, { size: 10, color: C.muted, align: "right" });
+    if (project) pg.text(wrapText(project, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
+    banner(pg, 128, "For visual discussion only. Sizes are estimates from a photo.");
+
+    const top = 170, boxW = 528, boxH = 382;
+    if (night || diagram || flat) pg.text("DAY VIEW", M, top - 4, { size: 7.5, bold: true, color: C.muted });
+    pg.fitImage(mockup, M, top, boxW, boxH);
+
+    const cx = M + boxW + 20, cw = W - M - cx;
+    const col = column(pg, cx, cw, top - 2, top + boxH);
+    if (approval) col.gap(approvalStamp(pg, approval, cx, top - 4, cw) + 8);
+    col.label("Approx. sign size");
+    if (size) {
+      for (const [name, value] of [["Width", size.width], ["Height", size.height], ["Area", size.area]]) {
+        col.gap(name === "Area" ? 20 : 22);
+        pg.text(value, cx, col.y, { size: name === "Area" ? 14 : 18, bold: true, color: C.navy });
+        pg.text(name, W - M, col.y, { size: 9, color: C.muted, align: "right" });
+        col.gap(6);
+        pg.line(cx, col.y, W - M, col.y, C.line, 0.75);
+      }
+    } else {
+      col.rows("Scale not set, so no sizes are shown. Draw a reference line on a known measurement to add them.", { size: 9.5, color: C.muted });
+    }
+    col.gap(20);
+    if (type) {
+      col.label("Sign type");
+      col.rows(type.name, { bold: true, color: C.navy });
+      col.rows(type.lighting, { size: 9, color: C.muted });
+      col.gap(16);
+    }
+    if (price) {
+      col.label("Preliminary range");
+      col.rows(price.range, { size: 13, bold: true, color: C.navy });
+      col.rows(price.label, { size: 8.5, color: C.goldInk, bold: true });
+      col.rows(price.note, { size: 7.5, color: C.muted });
+      col.gap(16);
+    }
+    if (reference) { col.label("Scale reference"); col.rows(reference); col.gap(16); }
+    if (preparedFor) { col.label("Prepared for"); col.rows(preparedFor); col.gap(16); }
+    if (notes) { col.label("Notes"); col.rows(notes, { size: 9.5 }); col.gap(16); }
+    if (proofUrl) { col.label("Approval link"); col.rows(proofUrl, { size: 7.5, color: C.muted, link: proofUrl }); }
+  }
+
+  // Page 2: the night view from the same pin, and how the sign is built.
+  if (night || diagram) {
+    const pg = new Page();
+    pages.push(pg);
+    header(pg, logo);
+    pg.text(night ? "Night view and construction" : "Construction", M, 98, { size: 20, bold: true, color: C.navy });
+    if (type) pg.text(type.name, W - M, 98, { size: 11, bold: true, color: C.navy, align: "right" });
+    banner(pg, 112, "Night lighting is simulated to show where the light goes, not its exact brightness.");
+
+    const top = 152, leftW = night ? 460 : 0;
+    if (night) {
+      pg.text("NIGHT VIEW, SAME PLACEMENT AS PAGE 1", M, top - 4, { size: 7.5, bold: true, color: C.muted });
+      pg.fitImage(night, M, top, leftW, 400, { well: C.night });
+    }
+    const cx = night ? M + leftW + 20 : M, cw = W - M - cx;
+    let y = top;
+    if (diagram) {
+      const dh = Math.min(cw * (diagram.height / diagram.width), 200);
+      pg.fitImage(diagram, cx, y, cw, dh, { well: C.white });
+      y += dh + 14;
+    }
+    const col = column(pg, cx, cw, y - 10, 552);
+    if (type) {
+      col.label("How it's built");
+      if (type.summary) col.rows(type.summary, { size: 9.5 });
+      col.gap(6);
+      if (type.parts?.length) col.bullets(type.parts, { size: 9 });
+      col.gap(10);
+      if (type.night) { col.label("At night"); col.rows(`${type.lighting}: ${type.night}`, { size: 9.5 }); }
+      col.gap(8);
+      col.rows("Typical construction shown for discussion. Not to scale.", { size: 8, color: C.muted });
+    }
+  }
+
+  // Page 3: the artwork flat, as a fabricator would start from it.
+  if (flat) {
+    const pg = new Page();
+    pages.push(pg);
+    header(pg, logo);
+    pg.text("Flat artwork", M, 98, { size: 20, bold: true, color: C.navy });
+    if (size) pg.text(`About ${size.width} W × ${size.height} H`, W - M, 98, { size: 11, bold: true, color: C.navy, align: "right" });
+    banner(pg, 112, "Artwork as supplied, not perspective-corrected. Final art is redrawn for fabrication.");
+    const box = pg.fitImage(flat.image, M, 156, W - 2 * M, 350, { well: C.well });
+    if (size) {
+      pg.text(size.width, box.x + box.w / 2, box.y + box.h + 16, { size: 10, bold: true, color: C.navy, align: "center" });
+      pg.line(box.x, box.y + box.h + 6, box.x + box.w, box.y + box.h + 6, C.gold, 1);
+    }
+    const col = column(pg, M, W - 2 * M, 524, 556);
+    col.rows(flat.caption || "This is the undistorted artwork used for the mockup. Colors on screen and in print vary from finished materials.", { size: 9, color: C.muted });
+  }
+
+  pages.forEach((pg, i) => footer(pg, i + 1, pages.length));
+
+  return serialize(pages, {
+    Title: `Storefront sign mockup${project ? ` – ${project}` : ""}`,
+    Author: CONTACT.name,
+    Subject: DISCLAIMER,
+    Creator: `${CONTACT.site} sign mockup tool`,
+    CreationDate: pdfDate(date),
   });
 }
