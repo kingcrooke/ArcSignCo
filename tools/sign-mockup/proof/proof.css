@@ -100,7 +100,7 @@
 .pf-foot { background: var(--navy); color: #c3cfde; padding: 18px 0 calc(18px + env(safe-area-inset-bottom)); font-size: 13px; }
 .pf-foot .pf-wrap { display: grid; gap: 8px; }
 .pf-foot strong { color: var(--white); }
-.pf-foot a { color: var(--gold-2); }
+.pf-foot a { color: var(--gold-2); text-decoration: underline; text-underline-offset: 2px; }
 
 @media (min-width: 640px) {
   .pf-main { padding-top: 28px; }

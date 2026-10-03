@@ -720,7 +720,7 @@ function renderTypeOptions() {
     input.dataset.opt = f.key;
     label.append(input);
     if (f.auto) {
-      const wrap = document.createElement("span");
+      const wrap = document.createElement("label");
       wrap.className = "sm-auto";
       const cb = document.createElement("input");
       cb.type = "checkbox";
