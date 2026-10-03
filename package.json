@@ -1,0 +1,15 @@
+{
+  "name": "arcsignco-site",
+  "private": true,
+  "description": "Arc Signage Co static site. Dependencies here are only for Netlify Functions (sign mockup approval links).",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "test": "node --test ./tools/sign-mockup-pricing.test.mjs ./tools/sign-proofs.test.mjs && node tools/check-sign-mockup.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.1.3"
+  }
+}
