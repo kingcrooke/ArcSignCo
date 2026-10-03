@@ -10,6 +10,7 @@ export default defineCategory({
   id: "vinyl",
   label: "Vinyl & Stickers",
   noun: "vinyl graphic",
+  titleNoun: "Vinyl graphic",
   title: "Choose a vinyl graphic",
   intro: "Cut and printed vinyl for windows, walls and doors. The drawings are sections, not to scale.",
   groups: [

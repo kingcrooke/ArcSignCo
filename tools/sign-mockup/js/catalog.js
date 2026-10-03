@@ -52,6 +52,7 @@ export function describe(type, opts, size = null) {
     categoryLabel: cat.label,
     noun: cat.noun,
     Noun: cat.Noun,
+    titleNoun: cat.titleNoun,
     typeLabel: cat.typeLabel,
     heightLabel: cat.ui.heightLabel,
     name: type.name,

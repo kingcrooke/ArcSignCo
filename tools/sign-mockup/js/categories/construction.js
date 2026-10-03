@@ -10,6 +10,7 @@ export default defineCategory({
   id: "construction",
   label: "Construction Signs",
   noun: "construction sign",
+  titleNoun: "Construction sign",
   title: "Choose a construction sign",
   intro: "Printed boards, parapet panels and safety notices for job sites. The drawings are sections, not to scale.",
   groups: [

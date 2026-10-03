@@ -12,6 +12,7 @@ export default defineCategory({
   id: "led",
   label: "LED Displays",
   noun: "LED display",
+  titleNoun: "LED display",
   title: "Choose an LED display",
   intro: "Programmable message centers, video boards and LED neon for storefronts. Switch to night view to see the glow.",
   groups: [

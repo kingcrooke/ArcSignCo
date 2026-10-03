@@ -32,6 +32,8 @@ export function defineCategory(spec) {
   const cat = {
     status: "ready",
     title: `Choose ${/^[aeiou]/i.test(noun) ? "an" : "a"} ${noun} ${typeWord}`,
+    // What the PDF, share sheet and proof page call the mockup ("<titleNoun> mockup").
+    titleNoun: `Storefront ${noun}`,
     intro: "",
     groups: [],
     types: [],
@@ -95,7 +97,7 @@ export function validateCategory(cat) {
   const bad = msg => out.push(`${cat?.id || "?"}: ${msg}`);
   if (!cat || typeof cat !== "object") return ["not a category object"];
   if (!/^[a-z][a-z0-9-]*$/.test(cat.id || "")) bad("id must be lowercase letters, digits or dashes");
-  for (const k of ["label", "noun", "title"]) if (!cat[k] || typeof cat[k] !== "string") bad(`${k} is missing`);
+  for (const k of ["label", "noun", "title", "titleNoun"]) if (!cat[k] || typeof cat[k] !== "string") bad(`${k} is missing`);
   if (!["ready", "soon"].includes(cat.status)) bad(`status must be "ready" or "soon"`);
   if (cat.status === "soon") {
     if (cat.types.length) bad("a coming-soon category has no types");

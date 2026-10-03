@@ -1428,7 +1428,7 @@ $("downloadPng").addEventListener("click", () => runExport("Building image…", 
 }));
 $("sharePdf").addEventListener("click", () => runExport("Building PDF…", async () => {
   const file = await makePdf();
-  await navigator.share({ files: [file], title: `Storefront ${currentCat().noun} mockup` });
+  await navigator.share({ files: [file], title: `${currentCat().titleNoun} mockup` });
   setStatus("Shared.");
 }));
 try {

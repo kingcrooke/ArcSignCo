@@ -100,7 +100,7 @@ function render() {
   const info = describe(type, sheet.options, sheet.size);
   const cat = categoryOf(type);
   document.title = `${sheet.project || `${cat.Noun} mockup`} for approval | Arc Signage Co`;
-  $("title").textContent = sheet.project || `Storefront ${cat.noun}`;
+  $("title").textContent = sheet.project || cat.titleNoun;
   $("eyebrow").textContent = `${cat.Noun} mockup for approval`;
   $("detailsTitle").textContent = `The ${cat.noun}`;
   $("typeLabel").textContent = cat.typeLabel;

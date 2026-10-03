@@ -13,6 +13,7 @@ export default defineCategory({
   id: "ada",
   label: "ADA & Code Signs",
   noun: "sign",
+  titleNoun: "ADA and code sign",
   title: "Choose a code-related sign",
   intro: "Tactile, Braille and life-safety sign layouts for architect and inspector review. Arc confirms final details before ordering.",
   groups: [

@@ -239,6 +239,23 @@ const awPdf = pdfStrings(buildProofPdf({
 for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "A price is prepared after a site survey", DISCLAIMER]) {
   check(awPdf.includes(needle), `awning PDF includes ${JSON.stringify(needle)}`);
 }
+// Interior and job-site tabs aren't storefront mockups.
+for (const [id, title] of [["wf-lobby", "Interior wayfinding sign mockup"], ["ada-room", "ADA and code sign mockup"], ["constr-site-board", "Construction sign mockup"],
+  ["vinyl-wall-mural", "Vinyl graphic mockup"], ["led-ticker", "LED display mockup"], ["halo", "Storefront sign mockup"]]) {
+  const info = describe(getType(id), null, null);
+  const t = pdfStrings(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), type: { ...info, lighting: info.lightingLabel } }));
+  check(t.includes(title) && (id === "halo" || !/Storefront/.test(t)), `${id} PDF is titled "${title}"`);
+}
+// A long project and client line wraps to two lines and ends in "…" rather than losing the client silently.
+const longSub = pdfStrings(buildProofPdf({
+  logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600),
+  project: "Riverside Medical Arts Building, ground-floor lobby and elevator wayfinding refresh, phase two",
+  preparedFor: "Northeast Property Management Group, attention Dolores Müller-Hernández, facilities director, with copies to the building engineer and the leasing office",
+})).split("\n");
+const subLines = longSub.filter(s => /Riverside|Northeast|Müller|…$/.test(s) && !/Page \d/.test(s));
+check(subLines.length === 2 && subLines[1].endsWith("…"), `long PDF subtitle wraps to two lines ending in "…" (${subLines.length} lines)`);
+const shortSub = pdfStrings(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), project: "Corner Deli", preparedFor: "Ana Müller" }));
+check(shortSub.includes("Corner Deli  ·  Prepared for Ana Müller"), "short PDF subtitle stays on one line, whole");
 
 // Copy guardrails across the tool's own files (vendored libraries excluded).
 const walk = dir => fs.readdirSync(path.join(toolDir, dir), { withFileTypes: true })
