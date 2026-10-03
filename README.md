@@ -164,6 +164,26 @@ If it can't be backed up, soften or remove it.
 
 - HTML is always revalidated, so page edits appear as soon as a deploy finishes.
 
+## Sign mockup tool
+
+`/tools/sign-mockup/` lets a visitor upload a storefront photo, set the scale by drawing a line over
+something they measured and typing its length, pin a sign (typed text or uploaded artwork) to the wall
+with four corner handles, and download a one-page PDF: Arc logo, phone, both emails, the mockup with
+approximate width / height / area, and "Concept only – not a shop drawing".
+
+- Everything runs in the browser; nothing is uploaded. Plain ES modules in `tools/sign-mockup/js/`,
+  no build step and no runtime CDN.
+- iPhone HEIC photos: Safari decodes them natively. Other browsers load
+  `tools/sign-mockup/vendor/heic-to-1.6.5.min.js` (libheif, LGPL-3.0, about 0.8 MB gzipped) only when
+  a HEIC file is picked. To upgrade it, add a new versioned file (the vendor folder is cached for a year)
+  and update `HEIC_LIB` in `js/images.js`.
+- The PDF is written by `js/pdf.js` (standard Helvetica fonts, JPEG images, clickable phone/email links).
+- `netlify.toml` serves `/tools/sign-mockup/*` before the rule that 404s the rest of `/tools/`.
+  Keep that order.
+- Sizes are estimates: they assume the reference line is on the same wall as the sign and the photo is
+  close to straight-on. The page and PDF say so; don't remove that wording.
+- After editing the tool, run `node tools/check-sign-mockup.mjs` (no install needed).
+
 ## Analytics
 
 Google Analytics 4 is wired in but **off**. Do not add a Measurement ID until Jesus approves it.
