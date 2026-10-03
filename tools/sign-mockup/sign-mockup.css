@@ -426,9 +426,12 @@
 .sm-price strong { font-size: 22px; font-variant-numeric: tabular-nums; }
 .sm-price small { color: #c3cfde; font-size: 12px; line-height: 1.4; }
 .sm-price .sm-perfoot { color: var(--gold-2); font-size: 13px; font-weight: 900; }
+.sm-price .sm-noprice { font-size: 15px; line-height: 1.4; font-variant-numeric: normal; }
+.sm-price .sm-plines { margin: 2px 0 0; padding-left: 18px; color: #dbe4ef; font-size: 12px; line-height: 1.45; }
 .sm-price.muted { background: var(--paper); color: var(--ink); }
 .sm-price.muted span { color: var(--gold-ink); }
 .sm-price.muted small { color: var(--muted); }
+.sm-price.muted .sm-noprice { color: var(--navy); }
 
 .sm-approve { display: grid; gap: 10px; padding: 14px; border-radius: 8px; border: 1px dashed #b9c5d6; background: #f8fafc; }
 .sm-approve h3 { color: var(--navy); font-size: 16px; }

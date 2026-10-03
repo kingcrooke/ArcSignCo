@@ -1,6 +1,11 @@
 // Minimal PDF 1.4 writer for the mockup proof. No DOM: images arrive as JPEG bytes, text uses the
 // standard Helvetica fonts with WinAnsi encoding, so the file stays small and searchable.
 // Shared by the editor, the phone proof page and tools/check-sign-mockup.mjs.
+//
+// Text: English and Spanish. The built-in Helvetica with WinAnsi covers every Spanish letter and
+// mark (á é í ó ú ñ ü ¿ ¡ and capitals) with no embedded font, so the file stays small. Other
+// Latin letters fold to their base letter (č → c, ł → l); other scripts and emoji are dropped.
+import { DISCLAIMER_FULL } from "./pricing-config.js";
 
 const W = 792, H = 612; // US Letter, landscape (points)
 const M = 36;
@@ -43,25 +48,48 @@ const WIN_ANSI = {
   "˜": 0x98, "™": 0x99, "š": 0x9a, "›": 0x9b, "œ": 0x9c, "ž": 0x9e, "Ÿ": 0x9f, "′": 0x27, "″": 0x22,
 };
 
-// Helvetica has no emoji, so they are dropped (with the space they leave) rather than printed as "?".
-const EMOJI = /\p{Extended_Pictographic}|\p{Emoji_Modifier}|\p{Regional_Indicator}|[\u200d\ufe0e\ufe0f\u20e3]/u;
+// Latin letters with no decomposition to a WinAnsi base letter.
+const FOLD = { "ł": "l", "Ł": "L", "đ": "d", "Đ": "D", "ħ": "h", "Ħ": "H", "ı": "i", "ŋ": "n", "Ŋ": "N", "ŧ": "t", "Ŧ": "T", "ſ": "s", "ĸ": "k" };
+const SPACES = /[\u2000-\u200a\u202f\u205f\u3000]/;
 
+const winAnsiCode = ch => {
+  const cp = ch.codePointAt(0);
+  if (ch === "\t" || SPACES.test(ch)) return 32;
+  if (WIN_ANSI[ch] !== undefined) return WIN_ANSI[ch];
+  return (cp >= 32 && cp <= 126) || (cp >= 0xa0 && cp <= 0xff) ? cp : null;
+};
+
+// The WinAnsi codes for one character: itself, its base letter (accents the font lacks are
+// stripped), or nothing when the font can't show it (another script, an emoji, a symbol).
+function encodeChar(ch) {
+  const code = winAnsiCode(ch);
+  if (code !== null) return [code];
+  if (FOLD[ch]) return [winAnsiCode(FOLD[ch])];
+  const base = ch.normalize("NFKD").replace(/\p{M}/gu, "");
+  if (base && base !== ch && /^\p{Script=Latin}|^[\x20-\x7e]/u.test(base)) {
+    const codes = [...base].map(winAnsiCode);
+    if (codes.every(c => c !== null)) return codes;
+  }
+  return null;
+}
+
+/** Text as WinAnsi codes. Characters Helvetica can't show are dropped with the space they leave. */
 export function toWinAnsi(str) {
   const out = [];
   let dropped = false;
-  for (const ch of String(str).normalize("NFC")) {
-    const cp = ch.codePointAt(0);
-    const code = ch === "\t" ? 32 : WIN_ANSI[ch] !== undefined ? WIN_ANSI[ch]
-      : (cp >= 32 && cp <= 126) || (cp >= 0xa0 && cp <= 0xff) ? cp : null;
-    if (code === null && EMOJI.test(ch)) { dropped = true; continue; }
-    if (dropped && code === 32 && (!out.length || out[out.length - 1] === 32)) continue;
+  for (const ch of String(str ?? "").normalize("NFC")) {
+    const codes = encodeChar(ch);
+    if (codes === null) { if (ch.codePointAt(0) >= 32) dropped = true; continue; }
+    if (dropped && codes[0] === 32 && (!out.length || out[out.length - 1] === 32)) continue;
     dropped = false;
-    if (code !== null) out.push(code);
-    else if (cp >= 32) out.push(0x3f);
+    out.push(...codes);
   }
-  while (dropped && out[out.length - 1] === 32) out.pop();
+  while (out[out.length - 1] === 32 && dropped) out.pop();
   return out;
 }
+
+/** The text as the PDF will show it (dropped characters gone, spaces tidied), trimmed. */
+export const pdfSafe = str => fromWinAnsi(toWinAnsi(str)).replace(/ {2,}/g, " ").trim();
 
 export function fromWinAnsi(codes) {
   const rev = Object.fromEntries(Object.entries(WIN_ANSI).filter(([, v]) => v >= 0x80).map(([k, v]) => [v, k]));
@@ -78,10 +106,22 @@ function pdfString(str) {
   return s + ")";
 }
 
-export function textWidth(str, bold, size) {
+// Latin-1 letters take their base letter's width (Helvetica's accented glyphs match it).
+const LATIN1_WIDTH = { 0xa1: [333, 333], 0xbf: [611, 611], 0xdf: [611, 611], 0xc6: [1000, 1000], 0xe6: [889, 889], 0xd8: [778, 778], 0xf8: [611, 611], 0xab: [556, 556], 0xbb: [556, 556], 0xb0: [400, 400] };
+function charWidth(c, bold) {
   const table = bold ? HELV_B : HELV;
+  if (c >= 32 && c <= 126) return table[c - 32];
+  if (LATIN1_WIDTH[c]) return LATIN1_WIDTH[c][bold ? 1 : 0];
+  if (c >= 0xc0 && c <= 0xff) {
+    const base = String.fromCharCode(c).normalize("NFD").charCodeAt(0);
+    if (base >= 32 && base <= 126) return table[base - 32];
+  }
+  return WIDE[c] || 556;
+}
+
+export function textWidth(str, bold, size) {
   let w = 0;
-  for (const c of toWinAnsi(str)) w += c >= 32 && c <= 126 ? table[c - 32] : WIDE[c] || 556;
+  for (const c of toWinAnsi(str)) w += charWidth(c, bold);
   return (w / 1000) * size;
 }
 
@@ -230,7 +270,7 @@ function header(pg, logo) {
   pg.rect(0, 66, W, 3, C.gold);
   const logoH = 30, logoW = (logo.width / logo.height) * logoH;
   pg.image(logo, M, 18, logoW, logoH);
-  pg.text(CONTACT.phone, W - M, 26, { size: 12, bold: true, color: C.white, align: "right", link: CONTACT.phoneHref });
+  pg.text(`Call or text ${CONTACT.phone}`, W - M, 26, { size: 12, bold: true, color: C.white, align: "right", link: CONTACT.phoneHref });
   const e2 = CONTACT.emails[1], e1 = CONTACT.emails[0];
   const e2w = pg.text(e2, W - M, 41, { size: 10, color: C.white, align: "right", link: `mailto:${e2}` });
   const sepW = pg.text("  ·  ", W - M - e2w, 41, { size: 10, color: C.gold2, align: "right" });
@@ -246,14 +286,18 @@ function banner(pg, y, note) {
   pg.text(wrapText(note, false, 9.5, room)[0], M + 16 + dw + 14, y + 18, { size: 9.5, color: C.ink });
 }
 
-const FINE = "Sizes are approximate: they are estimated from one photo and one reference measurement, and the sign artwork is placed by hand. Lighting is simulated. Fabrication needs verified field measurements and shop drawings.";
+export const FINE = `${DISCLAIMER_FULL} Sizes are estimated from one photo and one reference measurement, and the artwork is placed by hand. Lighting is simulated. Measurements are verified before anything is built.`;
+
+// Page content stays above this line; the footer and the full disclaimer sit below it.
+const CONTENT_BOTTOM = 530;
+const FOOT_TOP = 538;
 
 function footer(pg, index, count) {
-  pg.line(M, 562, W - M, 562, C.line, 0.75);
-  pg.text(`${CONTACT.legal}  ·  ${CONTACT.area}  ·  ${CONTACT.site}`, M, 576, { size: 8.5, bold: true, color: C.navy });
-  const pw = count > 1 ? pg.text(`Page ${index} of ${count}`, W - M, 576, { size: 8.5, color: C.muted, align: "right" }) + 14 : 0;
-  pg.text(`${DISCLAIMER}.`, W - M - pw, 576, { size: 8.5, bold: true, color: C.navy, align: "right" });
-  let fy = 589;
+  pg.line(M, FOOT_TOP, W - M, FOOT_TOP, C.line, 0.75);
+  pg.text(`${CONTACT.legal}  ·  ${CONTACT.area}  ·  ${CONTACT.site}`, M, FOOT_TOP + 13, { size: 8.5, bold: true, color: C.navy });
+  const pw = count > 1 ? pg.text(`Page ${index} of ${count}`, W - M, FOOT_TOP + 13, { size: 8.5, color: C.muted, align: "right" }) + 14 : 0;
+  pg.text(`${DISCLAIMER}.`, W - M - pw, FOOT_TOP + 13, { size: 8.5, bold: true, color: C.navy, align: "right" });
+  let fy = FOOT_TOP + 26;
   for (const ln of wrapText(FINE, false, 7.5, W - 2 * M)) { pg.text(ln, M, fy, { size: 7.5, color: C.muted }); fy += 9; }
 }
 
@@ -295,12 +339,23 @@ function column(pg, x, width, top, bottom) {
   return api;
 }
 
+export const STAMP_TITLE = "CONCEPT APPROVED — REQUEST A FORMAL ESTIMATE";
+export const STAMP_NOTE = "Not a contract, deposit, or payment authorization.";
+
 function approvalStamp(pg, approval, x, y, w) {
-  const h = 50;
+  const tw = w - 20;
+  const title = wrapText(STAMP_TITLE, true, 8.5, tw);
+  const note = wrapText(STAMP_NOTE, false, 7.5, tw);
+  const name = pdfSafe(approval.name) ? wrapText(pdfSafe(approval.name), true, 8.5, tw).slice(0, 2) : [];
+  const at = wrapText(approval.at || "", false, 8, tw).slice(0, 1);
+  const h = 8 + title.length * 10.5 + note.length * 9 + 3 + name.length * 11 + at.length * 10.5 + 4;
   pg.rect(x, y, w, h, C.greenBg, C.green, 1);
-  pg.text("APPROVED FOR NEXT STEPS", x + 10, y + 15, { size: 9, bold: true, color: C.green });
-  pg.text(wrapText(approval.name || "", true, 8.5, w - 20)[0], x + 10, y + 29, { size: 8.5, bold: true, color: C.ink });
-  pg.text(wrapText(approval.at || "", false, 8.5, w - 20)[0], x + 10, y + 41, { size: 8.5, color: C.ink });
+  let ty = y + 4;
+  for (const ln of title) pg.text(ln, x + 10, (ty += 10.5), { size: 8.5, bold: true, color: C.green });
+  for (const ln of note) pg.text(ln, x + 10, (ty += 9), { size: 7.5, color: C.green });
+  ty += 3;
+  for (const ln of name) pg.text(ln, x + 10, (ty += 11), { size: 8.5, bold: true, color: C.ink });
+  for (const ln of at) pg.text(ln, x + 10, (ty += 10.5), { size: 8, color: C.ink });
   return h;
 }
 
@@ -320,7 +375,9 @@ function approvalStamp(pg, approval, x, y, w) {
  *          noun?: string, typeLabel?: string, heightLabel?: string, details?: Array<[string, string]>}} [p.type]
  *   noun / typeLabel / heightLabel come from the type's category (describe() in catalog.js) and
  *   default to "sign" / "Type" / "Height". details: the chosen options.
- * @param {{range: string, label: string, note: string, basis?: string, perFoot?: string}} [p.price]
+ * @param {{withheld: boolean, label: string, range?: string, message?: string, perFoot?: string, lines?: string[],
+ *          tax?: string, valid?: string}} [p.price]  pricing.js priceView(); while the rates are placeholders
+ *   it carries only the message (no numbers). The full disclaimer is in every page footer.
  * @param {object} [p.night]  night composite, JPEG
  * @param {object} [p.diagram]  construction cross-section, JPEG
  * @param {{image: object, caption?: string}} [p.flat]  undistorted artwork, JPEG
@@ -329,13 +386,16 @@ function approvalStamp(pg, approval, x, y, w) {
  * @param {Date} [p.date]
  */
 export function buildProofPdf(p) {
-  const { logo, mockup, size, reference = "", project = "", preparedFor = "", notes = "", type, price, night, diagram, flat, approval, proofUrl, date = new Date() } = p;
+  const { logo, mockup, size, type, price, night, diagram, flat, approval, proofUrl, date = new Date() } = p;
+  const reference = pdfSafe(p.reference || ""), project = pdfSafe(p.project || ""), preparedFor = pdfSafe(p.preparedFor || "");
+  const notes = String(p.notes || "").split(/\r?\n/).map(pdfSafe).join("\n").trim();
   const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const noun = type?.noun || "sign";
   const heightLabel = type?.heightLabel || "Height";
   const typeWord = (type?.typeLabel || "Type").toLowerCase();
   const pages = [];
   let deferredNotes = "", linkPlaced = !proofUrl;
+  const deferred = [];
 
   // Page 1: the day mockup with size, type and preliminary price.
   {
@@ -348,7 +408,7 @@ export function buildProofPdf(p) {
     if (sub) pg.text(wrapText(sub, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
     banner(pg, 128, "For visual discussion only. Sizes are estimates from a photo.");
 
-    const top = 170, boxW = 528, boxH = 382;
+    const top = 170, boxW = 500, boxH = CONTENT_BOTTOM - 170;
     if (night || diagram || flat) pg.text("DAY VIEW", M, top - 4, { size: 7.5, bold: true, color: C.muted });
     pg.fitImage(mockup, M, top, boxW, boxH);
 
@@ -365,7 +425,7 @@ export function buildProofPdf(p) {
         pg.line(cx, col.y, W - M, col.y, C.line, 0.75);
       }
     } else {
-      col.rows("Scale not set, so no sizes are shown. Draw a reference line on a known measurement to add them.", { size: 9.5, color: C.muted });
+      col.rows("No scale yet, so there are no sizes. Draw a line on something you've measured to add them.", { size: 9.5, color: C.muted });
     }
     col.gap(20);
     if (type) {
@@ -377,11 +437,15 @@ export function buildProofPdf(p) {
       col.gap(16);
     }
     if (price) {
-      col.label("Preliminary range");
-      col.rows(price.range, { size: 13, bold: true, color: C.navy });
-      col.rows(price.label, { size: 8.5, color: C.goldInk, bold: true });
-      if (price.perFoot) col.rows(price.perFoot, { size: 8.5, color: C.navy, bold: true });
-      col.rows(price.note, { size: 7.5, color: C.muted });
+      col.label(price.label || "Price");
+      if (price.withheld) col.rows(price.message, { size: 9.5, bold: true, color: C.navy });
+      else {
+        col.rows(price.range, { size: 13, bold: true, color: C.navy });
+        if (price.perFoot) col.rows(price.perFoot, { size: 8.5, color: C.navy, bold: true });
+        if (price.valid) col.rows(price.valid, { size: 7.5, color: C.muted });
+        const detail = [...(price.lines || []), price.tax].filter(Boolean);
+        if (detail.length) deferred.push({ label: "What the estimate covers", items: detail });
+      }
       col.gap(16);
     }
     if (reference) { col.label("Scale reference"); col.rows(reference); col.gap(16); }
@@ -402,8 +466,8 @@ export function buildProofPdf(p) {
 
     const top = 152, leftW = night ? 460 : 0;
     if (night) {
-      pg.text("NIGHT VIEW, SAME PLACEMENT AS PAGE 1", M, top - 4, { size: 7.5, bold: true, color: C.muted });
-      pg.fitImage(night, M, top, leftW, 400, { well: C.night });
+      pg.text("NIGHT VIEW, SAME SPOT AS PAGE 1", M, top - 4, { size: 7.5, bold: true, color: C.muted });
+      pg.fitImage(night, M, top, leftW, CONTENT_BOTTOM - top, { well: C.night });
     }
     const cx = night ? M + leftW + 20 : M, cw = W - M - cx;
     let y = top;
@@ -412,7 +476,7 @@ export function buildProofPdf(p) {
       pg.fitImage(diagram, cx, y, cw, dh, { well: C.white });
       y += dh + 14;
     }
-    const col = column(pg, cx, cw, y - 10, 552);
+    const col = column(pg, cx, cw, y - 10, CONTENT_BOTTOM);
     if (type) {
       col.label("How it's built");
       if (type.summary) col.rows(type.summary, { size: 9.5 });
@@ -421,7 +485,7 @@ export function buildProofPdf(p) {
       col.gap(10);
       if (type.night) { col.label("At night"); col.rows(`${type.lighting}: ${type.night}`, { size: 9.5 }); }
       col.gap(8);
-      col.rows("Typical construction shown for discussion. Not to scale.", { size: 8, color: C.muted });
+      col.rows("Typical construction for discussion. Not to scale, and not a shop drawing.", { size: 8, color: C.muted });
     }
   }
 
@@ -433,24 +497,27 @@ export function buildProofPdf(p) {
     pg.text("Flat artwork", M, 98, { size: 20, bold: true, color: C.navy });
     if (size) pg.text(`About ${size.width} W × ${size.height} H`, W - M, 98, { size: 11, bold: true, color: C.navy, align: "right" });
     banner(pg, 112, "Artwork as supplied, not perspective-corrected. Final art is redrawn for fabrication.");
-    const wellH = deferredNotes ? 280 : 340;
+    const wellH = deferredNotes || deferred.length ? 250 : 320;
     const box = pg.fitImage(flat.image, M, 156, W - 2 * M, wellH, { well: C.well });
     if (size) {
       pg.text(size.width, box.x + box.w / 2, box.y + box.h + 16, { size: 10, bold: true, color: C.navy, align: "center" });
       pg.line(box.x, box.y + box.h + 6, box.x + box.w, box.y + box.h + 6, C.gold, 1);
     }
-    const col = column(pg, M, W - 2 * M, 156 + wellH + 6, 556);
-    col.rows(flat.caption || "This is the undistorted artwork used for the mockup. Colors on screen and in print vary from finished materials.", { size: 9, color: C.muted });
+    const col = column(pg, M, W - 2 * M, 156 + wellH + 6, CONTENT_BOTTOM);
+    col.rows(flat.caption || "This is the flat artwork used for the mockup. Colors on screen and in print vary from finished materials.", { size: 9, color: C.muted });
+    for (const d of deferred.splice(0)) { col.gap(8); col.label(d.label); col.rows(d.items.join(" · "), { size: 8.5 }); }
     if (deferredNotes) { col.gap(8); col.label("Notes"); col.rows(deferredNotes, { size: 9.5 }); deferredNotes = ""; }
     if (!linkPlaced) { col.gap(8); col.rows(`Approval link: ${proofUrl}`, { size: 8, color: C.muted, link: proofUrl }); linkPlaced = true; }
   }
-  if (deferredNotes) {
-    // No artwork page: the notes go on a page of their own rather than being cut off.
+  if (deferredNotes || deferred.length) {
+    // No artwork page: the notes and estimate lines go on a page of their own rather than being cut off.
     const pg = new Page();
     pages.push(pg);
     header(pg, logo);
-    pg.text("Notes", M, 98, { size: 20, bold: true, color: C.navy });
-    column(pg, M, W - 2 * M, 112, 552).rows(deferredNotes, { size: 10.5 });
+    pg.text(deferredNotes ? "Notes" : "Estimate details", M, 98, { size: 20, bold: true, color: C.navy });
+    const col = column(pg, M, W - 2 * M, 112, CONTENT_BOTTOM);
+    for (const d of deferred.splice(0)) { col.label(d.label); col.bullets(d.items, { size: 9.5 }); col.gap(10); }
+    if (deferredNotes) col.rows(deferredNotes, { size: 10.5 });
   }
 
   pages.forEach((pg, i) => footer(pg, i + 1, pages.length));

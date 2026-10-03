@@ -1,64 +1,116 @@
-// Preliminary price range from the calibrated size and the type. The placeholder rates live in
-// each category module's `pricing` block; labels and the version live in pricing-config.js.
-import { RATES_LABEL, RATES_NOTE, RATES_VERSION, PLACEHOLDER } from "./pricing-config.js";
-import { getType, isKnownType, categoryOf } from "./catalog.js";
+// Preliminary estimate from the calibrated size and the type. Every number lives in
+// pricing-config.js; a category module only maps each type id to a row there (pricing.row).
+// While PLACEHOLDER is true, estimatePrice() and priceView() carry no dollar amounts at all.
+import {
+  PLACEHOLDER, RATES_VERSION, RATES_LABEL, NO_PRICE_MESSAGE, DISCLAIMER_FULL, TAX_NOTE, VALID_DAYS, validNote,
+  ROUNDING, RANGE, ROWS, ADDERS, EXTRAS,
+} from "./pricing-config.js";
+import { getType, isKnownType, categoryOf, lightingOf } from "./catalog.js";
 
-const STEP = 50;
+const STEP = ROUNDING.step;
 const floorTo = v => Math.floor(v / STEP) * STEP;
 const ceilTo = v => Math.ceil(v / STEP) * STEP;
-const UNITS = { area: "sq ft", width: "linear ft of width" };
+const UNITS = { letters: "sq ft of letters", sqft: "sq ft", lf: "linear ft", projecting: "linear ft of width" };
 
-/** The rate a type is priced at, with its basis filled in, or null. */
-export function rateFor(typeId) {
+/** The config row a type is priced from, as { id, ...row }, or null. */
+export function rowFor(typeId) {
   if (!isKnownType(typeId)) return null;
   const type = getType(typeId);
-  const pricing = categoryOf(type).pricing;
-  const rate = pricing?.rates?.[type.id];
-  return rate ? { basis: pricing.basis || "width", ...rate } : null;
+  const id = categoryOf(type).pricing?.row?.[type.id];
+  return id && ROWS[id] ? { id, ...ROWS[id] } : null;
 }
 
 /**
+ * The full estimate with numbers, whatever PLACEHOLDER says (tests and Arc's own checks use it;
+ * nothing client-facing shows it while PLACEHOLDER is true).
  * @param {string} typeId
  * @param {{width: number, height: number}} sizeIn  calibrated size in inches
- * @param {object} [opts]  the type's options (a category adder can read them, e.g. awning backlighting)
- * @returns {{low: number, high: number, basis: string, quantity: number, unit: string,
- *            label: string, note: string, version: string, placeholder: boolean,
- *            perFoot?: [number, number], [adderKey]: boolean} | null}
- *   basis "area" is priced per square foot; any other basis per linear foot of width.
+ * @param {object} [opts]  the type's options (lighting and, for awnings, projection come from them)
  */
-export function estimatePrice(typeId, sizeIn, opts = null) {
+export function computeEstimate(typeId, sizeIn, opts = null) {
   const w = Number(sizeIn?.width), h = Number(sizeIn?.height);
   if (!(w > 0) || !(h > 0)) return null;
-  const rate = rateFor(typeId);
-  if (!rate) return null;
+  const row = rowFor(typeId);
+  if (!row) return null;
   const type = getType(typeId);
-  const pricing = categoryOf(type).pricing;
-  const adder = pricing.adder;
-  const added = !!adder && !!adder.applies(type, opts, rate);
-  const rLow = rate.low + (added ? adder.low : 0), rHigh = rate.high + (added ? adder.high : 0);
-  const quantity = rate.basis === "area" ? (w * h) / 144 : w / 12;
-  let low = Math.max(rate.min[0], quantity * rLow);
-  let high = Math.max(rate.min[1], quantity * rHigh);
-  low = Math.max(STEP, floorTo(low));
-  high = ceilTo(high);
-  if (high <= low) high = low + STEP;
-  const out = {
+  const inputs = categoryOf(type).priceInputs(type, opts, { width: w, height: h });
+  const widthFt = inputs.width / 12, areaFt = (inputs.width * inputs.height) / 144;
+  const projFt = (inputs.projection || 0) / 12;
+  const quantity = row.unit === "lf" || row.unit === "projecting" ? widthFt : areaFt;
+
+  const sized = row.base + row.rate * quantity + (row.unit === "projecting" ? (row.projRate || 0) * widthFt * projFt : 0);
+  const minimum = ceilTo(row.min);
+  const minApplied = sized < minimum;
+  const lighting = lightingOf(type, opts);
+  const adders = Object.entries(ADDERS)
+    .filter(([key, a]) => (row.adders || []).includes(key) || (a.lighting || []).includes(lighting))
+    .map(([key, a]) => ({ key, label: a.label, amount: a.base + a.rate * (a.per === "lf" ? widthFt : areaFt) }));
+  const total = Math.max(sized, minimum) + adders.reduce((s, a) => s + a.amount, 0);
+
+  const low = Math.max(minimum, floorTo(total));
+  const high = Math.max(low + STEP, ceilTo(low * RANGE.spread));
+  return {
     low,
     high,
-    basis: rate.basis,
+    row: row.id,
+    rowLabel: row.label,
+    unit: UNITS[row.unit],
     quantity: Math.round(quantity * 10) / 10,
-    unit: UNITS[rate.basis] || (rate.basis === pricing.basis && pricing.unit) || UNITS.width,
-    label: RATES_LABEL,
-    note: pricing.note || RATES_NOTE,
+    projection: row.unit === "projecting" ? Math.round(projFt * 10) / 10 : undefined,
+    minimum,
+    minApplied,
+    lighting,
+    adders: adders.map(a => ({ ...a, amount: Math.round(a.amount) })),
+    extras: EXTRAS.map(e => ({ ...e })),
+    perFoot: row.unit === "projecting" || row.unit === "lf" ? [Math.round(low / widthFt), Math.round(high / widthFt)] : undefined,
     version: RATES_VERSION,
-    placeholder: PLACEHOLDER && pricing.placeholder !== false,
   };
-  if (pricing.perFoot) out.perFoot = [rLow, rHigh];
-  if (adder) out[adder.key] = added;
-  return out;
 }
+
+/**
+ * What the server stores and the editor shows. While PLACEHOLDER is true: no numbers, only
+ * { withheld: true, message, disclaimer }.
+ */
+export function estimatePrice(typeId, sizeIn, opts = null) {
+  const est = computeEstimate(typeId, sizeIn, opts);
+  if (!est) return null;
+  const common = { label: RATES_LABEL, disclaimer: DISCLAIMER_FULL, version: RATES_VERSION, placeholder: PLACEHOLDER };
+  if (PLACEHOLDER) return { withheld: true, message: NO_PRICE_MESSAGE, ...common };
+  return { ...est, ...common, tax: TAX_NOTE, validDays: VALID_DAYS };
+}
+
+/** True once Arc's real rates are in and PLACEHOLDER is off: only then do numbers show anywhere. */
+export const PRICES_LIVE = !PLACEHOLDER;
 
 export const formatMoney = v => `$${Math.round(v).toLocaleString("en-US")}`;
 export const formatRange = p => (p ? `${formatMoney(p.low)} – ${formatMoney(p.high)}` : "");
-/** "$180–$320 per linear ft (estimate placeholder)" when the category shows a per-foot rate; else empty. */
-export const formatPerFoot = p => (p?.perFoot ? `${formatMoney(p.perFoot[0])}–${formatMoney(p.perFoot[1])} per linear ft (estimate placeholder)` : "");
+
+/**
+ * The text every surface shows for a stored or fresh estimate: the editor, the proof page and
+ * the PDF. Numbers only when real rates are on and the estimate has them; an older proof saved
+ * with placeholder numbers shows the message instead.
+ * @param {object|null} p  estimatePrice() output (or an older stored price)
+ * @param {{date?: Date, live?: boolean}} [o]
+ * @returns {{withheld: boolean, label: string, range: string, message: string, lines: string[],
+ *            perFoot: string, disclaimer: string, tax: string, valid: string}}
+ */
+export function priceView(p, { date = new Date(), live = !PLACEHOLDER } = {}) {
+  const base = { label: "Price", range: "", message: NO_PRICE_MESSAGE, lines: [], perFoot: "", disclaimer: DISCLAIMER_FULL, tax: "", valid: "" };
+  if (!live || !p || p.withheld || p.placeholder || !(p.low > 0) || !(p.high > p.low)) return { withheld: true, ...base };
+  const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const lines = [`${p.rowLabel}, about ${p.quantity} ${p.unit}${p.projection ? `, ${p.projection} ft projection` : ""}`];
+  if (p.minApplied) lines.push(`Minimum job: ${formatMoney(p.minimum)}`);
+  for (const a of p.adders || []) lines.push(`Includes ${a.label.charAt(0).toLowerCase()}${a.label.slice(1)}`);
+  for (const e of p.extras || []) lines.push(`${e.label}: ${e.range ? `${formatMoney(e.range[0])} – ${formatMoney(e.range[1])}, not included` : e.confirm}`);
+  return {
+    withheld: false,
+    ...base,
+    label: RATES_LABEL,
+    range: formatRange(p),
+    message: "",
+    lines,
+    perFoot: p.perFoot ? `About ${formatMoney(p.perFoot[0])}–${formatMoney(p.perFoot[1])} per linear ft` : "",
+    tax: TAX_NOTE,
+    valid: validNote(dateText),
+  };
+}

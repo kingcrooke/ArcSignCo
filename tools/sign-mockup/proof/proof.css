@@ -76,7 +76,9 @@
 .pf-price strong { font-size: 24px; font-variant-numeric: tabular-nums; }
 .pf-price small { color: #c3cfde; font-size: 12.5px; line-height: 1.45; }
 .pf-price .pf-perfoot { color: var(--gold-2); font-size: 13px; }
-.pf-price .pf-perfoot[hidden] { display: none; }
+.pf-price .pf-perfoot[hidden], .pf-price [hidden] { display: none; }
+.pf-price .pf-noprice { font-size: 16px; line-height: 1.4; font-variant-numeric: normal; }
+.pf-price .pf-plines { margin: 2px 0 0; padding-left: 18px; color: #dbe4ef; font-size: 12.5px; line-height: 1.45; }
 .pf-notes { padding: 10px 12px; border-radius: 8px; background: var(--paper); white-space: pre-line; }
 .pf-notes[hidden] { display: none; }
 

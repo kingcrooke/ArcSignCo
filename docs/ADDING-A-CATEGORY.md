@@ -103,12 +103,11 @@ export default defineCategory({
   ],
   diagram: type => card(type, DRAW[type.id]),
 
-  // PLACEHOLDER RATES. NOT ARC'S REAL PRICING. NOT A QUOTE.
+  // Each type's row in js/pricing-config.js, where every price number lives.
   pricing: {
-    placeholder: true,
-    rates: {
-      "site-board": { basis: "area", low: 14, high: 28, min: [350, 700] },
-      "project-panel": { basis: "area", low: 22, high: 40, min: [300, 600] },
+    row: {
+      "site-board": "panel-flat",
+      "project-panel": "panel-flat",
     },
   },
 });
@@ -249,7 +248,7 @@ This runs the unit tests and `tools/check-sign-mockup.mjs`, which validates ever
 
 - ids are unique
 - every type has a name, summary, 3+ parts, a known group, lighting and kind
-- every type has a 320 × 200 card and a placeholder rate (low < high)
+- every type has a 320 × 200 card and points at a row in `js/pricing-config.js`
 - the option fields work
 - no vendor names or banned claims appear in the files
 
@@ -266,7 +265,7 @@ Approval links need the Netlify function, so they only work on a deploy preview 
 
 ## 11. Rules that always apply
 
-- **Rates are placeholders.** Keep `placeholder: true` in `pricing` and the `PLACEHOLDER RATES` comment above it. Put rates only in the category module, never in engine files.
+- **Price numbers live only in `js/pricing-config.js`.** A category's `pricing` block is just `row: { typeId: "row-id" }`. If no row fits, add one to `ROWS` there (base, size rate, minimum, unit). While `PLACEHOLDER` is true no number is shown anywhere; the tool, proof page and PDF show "A price is prepared after a site survey" instead.
 - **No vendor or competitor names, logos, photos or copied text** anywhere in the tool. Reference catalogs are for research only. Write your own words and draw your own cards.
 - **No compliance claims.** Don't write "ADA compliant", "certified", "approved" or "guaranteed". Say what it is and that Arc confirms the details before ordering.
 - **Don't edit engine files** (`app.js`, `scene.js`, `catalog.js`, `pricing.js`, `pdf.js`, `proof-pdf.js`, `proof/`, `netlify/`). If something truly can't be expressed through the module, add an optional field to `defineCategory()` in `define.js` with a default that keeps every existing category unchanged, and document it here.

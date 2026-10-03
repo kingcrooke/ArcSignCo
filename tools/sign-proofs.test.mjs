@@ -74,8 +74,13 @@ test("create stores images and a server-priced sheet under v1/<context>/<id>/", 
   assert.match(id, /^[0-9a-f]{32}$/);
   for (const f of ["sheet.json", "day.jpg", "night.jpg", "art.jpg"]) assert.ok(store.data.has(`v1/deploy-preview/${id}/${f}`), f);
   assert.equal(sheet.typeName, "Halo-lit (back-lit) channel letters");
-  assert.ok(sheet.price.low > 1 && sheet.price.low < sheet.price.high, "price comes from the config, not the client");
+  // The client's numbers are ignored; while the rates are placeholders the server stores no numbers at all.
+  assert.equal(sheet.price.withheld, true, "price comes from the config, not the client");
   assert.equal(sheet.price.placeholder, true);
+  assert.equal(sheet.price.low, undefined);
+  assert.equal(sheet.price.high, undefined);
+  assert.doesNotMatch(JSON.stringify(sheet.price), /\$\d/);
+  assert.match(sheet.price.message, /price is prepared after a site survey/i);
   assert.equal(sheet.createdAt, "2026-10-03T15:04:05.000Z");
   assert.equal(sheet.ns, undefined);
 });
@@ -96,7 +101,7 @@ test("create rejects bad input", async () => {
   assert.equal((await call(store, post("/api/sign-proofs", {}), {})).status, 415);
 });
 
-test("awning proofs keep only allowed options and are priced per linear foot", async () => {
+test("awning proofs keep only allowed options and carry no price numbers", async () => {
   const store = memoryStore();
   const req = createRequest({
     ...baseSheet,
@@ -113,13 +118,11 @@ test("awning proofs keep only allowed options and are priced per linear foot", a
   assert.equal(sheet.options.projection, 96, "projection is clamped to the shape's range");
   assert.equal(sheet.options.evil, undefined);
   assert.equal(sheet.lighting, "Backlit");
-  assert.equal(sheet.price.basis, "awning");
-  assert.equal(sheet.price.quantity, 20);
-  assert.equal(sheet.price.backlit, true);
-  assert.match(sheet.price.note, /estimate placeholder/i);
+  assert.equal(sheet.price.withheld, true);
+  assert.equal(sheet.price.low, undefined);
   const plain = await (await call(store, createRequest({ ...baseSheet, typeId: "aw-traditional", size: { width: 240, height: 40 } }), {})).json();
   assert.equal(plain.sheet.lighting, "Non-lit");
-  assert.ok(plain.sheet.price.low < sheet.price.low);
+  assert.equal(plain.sheet.price.withheld, true);
   const sign = await (await call(store, createRequest(baseSheet), {})).json();
   assert.equal(sign.sheet.options, null, "signs carry no options");
   const legacy = await (await call(store, createRequest({ ...baseSheet, typeId: "awning" }), {})).json();

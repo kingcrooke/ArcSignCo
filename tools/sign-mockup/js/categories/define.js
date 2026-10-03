@@ -8,6 +8,7 @@
 import { LIGHTING } from "../lighting.js";
 import { buildKind, kindDefaults, kindFields, kindFaceArt, kindAspect, KINDS } from "../kinds.js";
 import { formatArea } from "../geometry.js";
+import { ROWS } from "../pricing-config.js";
 
 /**
  * An option field the editor shows (returned by optionFields):
@@ -47,6 +48,8 @@ export function defineCategory(spec) {
     faceArt: kindFaceArt,
     aspect: kindAspect,
     pricing: null,
+    // The sizes pricing reads, in inches. A category with a priced depth (awning projection) adds it.
+    priceInputs: (type, opts, size) => ({ width: size.width, height: size.height, projection: 0 }),
     ...spec,
     noun,
     typeWord,
@@ -114,9 +117,9 @@ export function validateCategory(cat) {
     let svg = "";
     try { svg = cat.diagram(t); } catch (e) { at(`diagram failed: ${e.message}`); }
     if (svg && !/^<svg[^>]+viewBox="0 0 320 200"/.test(svg)) at("diagram must be a 320 × 200 card from diagram-kit.js");
-    const r = cat.pricing?.rates?.[t.id];
-    if (!r) at("no placeholder rate in pricing.rates");
-    else if (!(r.low > 0 && r.low < r.high && r.min?.[0] > 0 && r.min[0] < r.min[1])) at("rate needs low < high and min: [low, high]");
+    const row = cat.pricing?.row?.[t.id];
+    if (!row) at("no pricing row in pricing.row");
+    else if (!ROWS[row]) at(`pricing row "${row}" is not in pricing-config.js ROWS`);
     const def = cat.defaultOptions(t);
     if (!def || typeof def !== "object") at("defaultOptions must return an object");
     else {
@@ -125,8 +128,8 @@ export function validateCategory(cat) {
     }
   }
   if (cat.pricing) {
-    if (cat.pricing.placeholder !== true) bad("pricing.placeholder must be true until Arc sets real rates");
-    for (const id of Object.keys(cat.pricing.rates || {})) if (!ids.includes(id)) bad(`pricing.rates has "${id}", which is not a type`);
+    for (const id of Object.keys(cat.pricing.row || {})) if (!ids.includes(id)) bad(`pricing.row has "${id}", which is not a type`);
+    if (Object.values(cat.pricing).some(v => typeof v === "number") || cat.pricing.rates) bad("pricing holds only the row map; numbers live in pricing-config.js");
   } else bad("pricing is missing");
   return out;
 }

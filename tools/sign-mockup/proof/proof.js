@@ -2,7 +2,7 @@
 // preliminary range, and lets the client comment, approve and download the PDF.
 // The proof id travels in the URL fragment, so it never reaches server logs or Referer headers.
 import { getType, describe, diagramSvg, categoryOf } from "../js/catalog.js";
-import { formatRange, formatPerFoot } from "../js/pricing.js";
+import { priceView } from "../js/pricing.js";
 import { buildSignPdf } from "../js/proof-pdf.js";
 
 const API = "/api/sign-proofs";
@@ -61,7 +61,7 @@ function mailtoHref() {
   const subject = `${Noun} proof${sheet.project ? `: ${sheet.project}` : ""}`;
   const lines = [
     "Hi Arc,", "", `About this ${noun} proof: ${location.href}`, "",
-    sheet.approval ? `Approved by ${sheet.approval.name} on ${when(sheet.approval.at)}.` : "", "",
+    sheet.approval ? `Concept approval, a request for a formal estimate (not a contract): ${sheet.approval.name}, ${when(sheet.approval.at)}.` : "", "",
   ];
   return `mailto:arc@arcsignco.com?cc=jc@arcsignco.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
 }
@@ -71,7 +71,7 @@ function renderApproval() {
   $("approvedBox").hidden = !a;
   $("approveForm").hidden = !!a;
   $("approvalTitle").textContent = a ? "Concept approved" : "Approve this concept";
-  if (a) $("approvedText").textContent = `by ${a.name} on ${when(a.at)}`;
+  if (a) $("approvedText").textContent = `Concept approved by ${a.name} on ${when(a.at)}. This asks Arc for a formal estimate. It is not a contract.`;
   $("emailArc").href = mailtoHref();
 }
 
@@ -119,13 +119,17 @@ function render() {
     row.append(Object.assign(document.createElement("dt"), { textContent: k }), Object.assign(document.createElement("dd"), { textContent: v }));
     return row;
   }));
-  $("priceBox").hidden = !sheet.price;
-  if (sheet.price) {
-    $("priceRange").textContent = formatRange(sheet.price);
-    $("pricePerFoot").hidden = !sheet.price.perFoot;
-    $("pricePerFoot").textContent = formatPerFoot(sheet.price);
-    $("priceNote").textContent = `${sheet.price.label}. ${sheet.price.note}`;
-  }
+  const price = priceView(sheet.price, { date: new Date(sheet.createdAt) });
+  $("priceLabel").textContent = price.label;
+  $("priceRange").textContent = price.withheld ? price.message : price.range;
+  $("priceRange").classList.toggle("pf-noprice", price.withheld);
+  $("pricePerFoot").hidden = !price.perFoot;
+  $("pricePerFoot").textContent = price.perFoot;
+  $("priceLines").hidden = !price.lines.length;
+  $("priceLines").replaceChildren(...price.lines.map(t => Object.assign(document.createElement("li"), { textContent: t })));
+  $("priceValid").hidden = price.withheld;
+  $("priceValid").textContent = price.withheld ? "" : `${price.tax} ${price.valid}`;
+  $("priceNote").textContent = price.disclaimer;
   $("notes").hidden = !sheet.notes;
   $("notes").textContent = sheet.notes || "";
 
@@ -173,7 +177,7 @@ $("approveForm").addEventListener("submit", async e => {
   try {
     sheet = await api("/approve", { name });
     renderApproval();
-    notifyArc("approved", name, `Approved on ${when(sheet.approval.at)}`);
+    notifyArc("approved", name, `Concept approved on ${when(sheet.approval.at)} (request for a formal estimate)`);
     $("approvedBox").focus?.();
   } catch (err) {
     if (err.status === 409) { sheet = await api("").catch(() => sheet); renderApproval(); }
@@ -226,7 +230,7 @@ $("downloadPdf").addEventListener("click", async () => {
       project: sheet.project,
       preparedFor: sheet.preparedFor,
       notes: sheet.notes,
-      price: sheet.price ? { range: formatRange(sheet.price), label: sheet.price.label, note: sheet.price.note, perFoot: formatPerFoot(sheet.price) } : null,
+      price: priceView(sheet.price, { date: new Date(sheet.createdAt) }),
       approval: sheet.approval ? { name: sheet.approval.name, at: when(sheet.approval.at) } : null,
       proofUrl: location.href,
       date: new Date(sheet.createdAt),

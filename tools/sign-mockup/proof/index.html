@@ -21,7 +21,7 @@
     <a class="pf-brand" href="/" aria-label="Arc Signage Co home">
       <img src="/assets/img/logo-lockup-white-360.v2.png" srcset="/assets/img/logo-lockup-white-360.v2.png 360w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="150px" width="847" height="174" alt="Arc Signage Co">
     </a>
-    <a class="btn gold pf-call" href="tel:+13474502110">Call (347) 450-2110</a>
+    <a class="btn gold pf-call" href="tel:+13474502110">Call or text (347) 450-2110</a>
   </div>
 </header>
 
@@ -29,7 +29,7 @@
   <div class="pf-loading" id="loading"><span class="pf-spinner" aria-hidden="true"></span>Loading the proof…</div>
 
   <div class="pf-missing" id="missing" hidden>
-    <h1>This link didn't open a proof</h1>
+    <h1>This link didn't open</h1>
     <p id="missingText">Check that the whole link was copied. If it still doesn't open, ask Arc for a new one.</p>
     <p><a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></p>
   </div>
@@ -56,15 +56,15 @@
     <section class="pf-card pf-approval" id="approvalCard" aria-labelledby="approvalTitle">
       <h2 id="approvalTitle">Approve this concept</h2>
       <div id="approvedBox" class="pf-approved" tabindex="-1" hidden>
-        <strong>Approved</strong>
+        <strong>Concept approved</strong>
         <span id="approvedText"></span>
       </div>
       <form id="approveForm" novalidate>
-        <p>Approving tells Arc this is the direction you want. Arc confirms field measurements, materials, pricing and shop drawings with you before anything is made.</p>
+        <p>Approving this concept asks Arc to prepare a formal estimate. It is not a contract, a deposit, or a payment authorization. Nothing is ordered or installed until you accept a written estimate.</p>
         <label class="pf-field">Your name
           <input type="text" id="approveName" name="name" maxlength="80" autocomplete="name" required>
         </label>
-        <label class="pf-check"><input type="checkbox" id="approveOk" required> I've reviewed the day and night views and understand this is a concept, not a shop drawing.</label>
+        <label class="pf-check"><input type="checkbox" id="approveOk" required> I have reviewed the day and night views. This is a concept approval and a request for a formal estimate. It is not a shop drawing, a contract, or a payment.</label>
         <button type="submit" class="btn gold lg" id="approveBtn">Approve concept</button>
         <p class="pf-error" id="approveError" role="alert" hidden></p>
       </form>
@@ -77,11 +77,13 @@
         <div><dt>Lighting</dt><dd id="typeLight"></dd></div>
         <div id="sizeRow"><dt>Approx. size</dt><dd id="sizeText"></dd></div>
       </dl>
-      <div class="pf-price" id="priceBox" hidden>
-        <span>Rough preliminary range</span>
+      <div class="pf-price" id="priceBox">
+        <span id="priceLabel">Price</span>
         <strong id="priceRange"></strong>
         <b class="pf-perfoot" id="pricePerFoot" hidden></b>
-        <small id="priceNote"></small>
+        <ul class="pf-plines" id="priceLines" hidden></ul>
+        <small id="priceValid" hidden></small>
+        <small id="priceNote">Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed.</small>
       </div>
       <p class="pf-notes" id="notes" hidden></p>
     </section>
@@ -92,13 +94,13 @@
       <p id="buildSummary"></p>
       <ul class="pf-parts" id="buildParts"></ul>
       <p class="pf-night" id="buildNight"></p>
-      <p class="pf-small">Typical construction for this type, drawn for discussion. Not to scale.</p>
+      <p class="pf-small">Typical construction for discussion. Not to scale, and not a shop drawing.</p>
     </section>
 
     <section class="pf-card" aria-labelledby="artTitle">
       <h2 id="artTitle">Flat artwork</h2>
-      <img class="pf-art" id="art" alt="The sign artwork, flat" decoding="async" loading="lazy">
-      <p class="pf-small">The artwork as supplied, without perspective. Final artwork is redrawn for fabrication.</p>
+      <img class="pf-art" id="art" alt="The sign artwork, shown flat" decoding="async" loading="lazy">
+      <p class="pf-small">The artwork as supplied, shown flat. Final artwork is redrawn for fabrication.</p>
     </section>
 
     <section class="pf-card" aria-labelledby="commentsTitle">
@@ -124,14 +126,14 @@
         <a class="btn white" id="emailArc" href="mailto:arc@arcsignco.com">Email Arc about this proof</a>
       </div>
       <p class="pf-small" id="pdfStatus" role="status" aria-live="polite"></p>
-      <p class="pf-contact"><a href="tel:+13474502110">(347) 450-2110</a><a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a><a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></p>
+      <p class="pf-contact"><a href="tel:+13474502110">Call or text (347) 450-2110</a><a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a><a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></p>
     </section>
   </article>
 </main>
 
 <footer class="pf-foot">
   <div class="pf-wrap">
-    <p><strong>Concept only – not a shop drawing.</strong> Sizes are approximate: they are estimated from one photo and one reference measurement, and the sign is placed by hand. Fabrication needs verified field measurements and shop drawings.</p>
+    <p><strong>Concept only – not a shop drawing.</strong> Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed. Sizes are estimated from one photo and one reference measurement, and the artwork is placed by hand. Measurements are verified before anything is built.</p>
     <p>&copy; 2026 Arc Signage Co LLC — New York / Tri-State · <a href="https://arcsignco.com/">arcsignco.com</a></p>
   </div>
 </footer>
@@ -147,7 +149,7 @@
   <textarea name="message"></textarea>
 </form>
 
-<noscript><p class="pf-wrap">This proof needs JavaScript. Call <a href="tel:+13474502110">(347) 450-2110</a> or email <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p></noscript>
+<noscript><p class="pf-wrap">This proof needs JavaScript. Call or text <a href="tel:+13474502110">(347) 450-2110</a> or email <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p></noscript>
 <script type="module" src="/tools/sign-mockup/proof/proof.js"></script>
 </body>
 </html>

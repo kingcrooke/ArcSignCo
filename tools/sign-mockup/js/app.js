@@ -8,7 +8,7 @@ import {
   CATEGORIES, READY, DEFAULT_TYPE, getType, getCategory, categoryOf, litWith, describe, cleanOptions,
   defaultOptions, optionFields, aspectFor, diagramSvg,
 } from "./catalog.js";
-import { estimatePrice, formatRange, formatPerFoot } from "./pricing.js";
+import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
 
@@ -1062,10 +1062,10 @@ function flatArt(maxSide = 0) {
   return out;
 }
 
+// What the price box, the PDF and the proof show: no numbers while the rates are placeholders.
 function priceInfo() {
   const size = sizeInfo();
-  const p = size && estimatePrice(state.typeId, size, optionsFor());
-  return p ? { range: formatRange(p), label: p.label, note: p.note, unit: p.unit, quantity: p.quantity, perFoot: formatPerFoot(p) } : null;
+  return priceView(size ? estimatePrice(state.typeId, size, optionsFor()) : null);
 }
 
 function fileBase() {
@@ -1308,12 +1308,15 @@ function updateUI() {
 
   const price = $("priceOut");
   const p = state.sign && priceInfo();
-  price.classList.toggle("muted", !p);
-  price.innerHTML = !state.sign
+  const needsScale = PRICES_LIVE && !sizeInfo();
+  price.classList.toggle("muted", !p || p.withheld);
+  price.innerHTML = !p
     ? ""
-    : p
-      ? `<span>Rough preliminary range · ${escapeHtml(p.label)}</span><strong>${p.range}</strong>${p.perFoot ? `<b class="sm-perfoot">${escapeHtml(p.perFoot)}</b>` : ""}<small>${escapeHtml(currentType().name)}, about ${p.quantity} ${p.unit}. ${escapeHtml(p.note)}</small>`
-      : `<span>Rough preliminary range</span><small>Set the scale in step 2 to see a placeholder range for this size and type.</small>`;
+    : needsScale
+      ? `<span>${escapeHtml(p.label)}</span><small>Set the scale in step 2 to see a preliminary estimate for this size and type.</small>`
+      : p.withheld
+        ? `<span>${escapeHtml(p.label)}</span><strong class="sm-noprice">${escapeHtml(p.message)}</strong><small>${escapeHtml(p.disclaimer)}</small>`
+        : `<span>${escapeHtml(p.label)}</span><strong>${escapeHtml(p.range)}</strong>${p.perFoot ? `<b class="sm-perfoot">${escapeHtml(p.perFoot)}</b>` : ""}<ul class="sm-plines">${p.lines.map(l => `<li>${escapeHtml(l)}</li>`).join("")}</ul><small>${escapeHtml(p.tax)} ${escapeHtml(p.valid)}</small><small>${escapeHtml(p.disclaimer)}</small>`;
 
   $("dayNight").hidden = !(state.photo && state.sign && (state.step === "sign" || state.step === "export"));
   renderProofLink();

@@ -10,7 +10,9 @@ import { fileURLToPath } from "node:url";
 import {
   squareToQuad, invert3, apply3, quadSizeInches, formatFeetInches, formatArea, rectQuad, scaleQuad, pointInQuad, toInches,
 } from "./sign-mockup/js/geometry.js";
-import { buildProofPdf, fromWinAnsi, toWinAnsi, wrapText, textWidth, CONTACT, DISCLAIMER } from "./sign-mockup/js/pdf.js";
+import { buildProofPdf, fromWinAnsi, toWinAnsi, pdfSafe, wrapText, textWidth, CONTACT, DISCLAIMER, FINE, STAMP_TITLE, STAMP_NOTE } from "./sign-mockup/js/pdf.js";
+import { DISCLAIMER_FULL, NO_PRICE_MESSAGE } from "./sign-mockup/js/pricing-config.js";
+import { priceView, estimatePrice, computeEstimate } from "./sign-mockup/js/pricing.js";
 import { SIGN_TYPES, LIGHTING, GROUPS } from "./sign-mockup/js/categories/signs/types.js";
 import { hasDiagram } from "./sign-mockup/js/categories/signs/diagrams.js";
 import {
@@ -55,7 +57,17 @@ for (const [input, want] of [["Old Town 🍎 Grocery", "Old Town Grocery"], ["�
   const got = fromWinAnsi(toWinAnsi(input));
   check(got === want, `PDF text drops emoji cleanly: ${JSON.stringify(input)} -> ${JSON.stringify(got)}`);
 }
+// English and Spanish print as typed; other Latin letters fold to their base; other scripts drop out.
+for (const [input, want] of [
+  ["Panadería Núñez — ¿Abierto? ¡Sí!", "Panadería Núñez — ¿Abierto? ¡Sí!"], ["ÁÉÍÓÚÑÜ áéíóúñü ¿¡", "ÁÉÍÓÚÑÜ áéíóúñü ¿¡"],
+  ["Łódź Čapek", "Lódz Capek"], ["寿司 Sushi Bar", "Sushi Bar"], ["Пекарня Bakery", "Bakery"], ["مخبز", ""], ["Café → Bar", "Café Bar"],
+]) {
+  const got = pdfSafe(input);
+  check(got === want, `PDF text: ${JSON.stringify(input)} -> ${JSON.stringify(got)}`);
+}
+check(!toWinAnsi("寿司 Пекарня مخبز ☃").includes(0x3f), "PDF text never prints ? for a character it can't show");
 check(near(textWidth("Hello", false, 10), 22.78, 0.01), "Helvetica widths");
+check(near(textWidth("Í", false, 10), textWidth("I", false, 10)) && near(textWidth("Ñ", true, 10), textWidth("N", true, 10)), "accented capitals use their base letter's width");
 check(wrapText("one two three four five", false, 10, 40).length > 1, "wrapText wraps long text");
 
 // Category registry: every tab is a valid module; the placeholders place nothing.
@@ -143,14 +155,14 @@ const pdf = buildProofPdf({
   diagram: fakeJpeg(1280, 800),
   flat: { image: fakeJpeg(1200, 300) },
   type: { name: halo.name, lighting: halo.lightingLabel, summary: halo.summary, parts: halo.parts, night: LIGHTING.halo.night },
-  price: { range: "$3,000 – $5,000", label: "Arc placeholder rates", note: "Rough preliminary range from placeholder rates, not a quote." },
-  approval: { name: "Sample Client", at: "Oct 3, 2026, 3:04 PM EDT" },
+  price: priceView(estimatePrice("halo", { width: 148, height: 30 })),
+  approval: { name: "José Muñoz Ibáñez", at: "Oct 3, 2026, 3:04 PM EDT" },
   proofUrl: "https://example.test/tools/sign-mockup/proof/#0123",
   size: { width: `12' 4"`, height: `2' 6"`, area: "31 sq ft" },
   reference: `Door width = 3' 0"`,
-  project: "Corner Bakery (sample)",
+  project: "Panadería Núñez (sample) 寿司",
   preparedFor: "Sample client",
-  notes: "Halo-lit letters, matte black returns.",
+  notes: "Halo-lit letters, matte black returns. ¿Letras más grandes? ¡Sí!",
   date: new Date(2026, 9, 3),
 });
 const raw = Buffer.from(pdf).toString("latin1");
@@ -163,12 +175,29 @@ const strings = [...raw.matchAll(/\((?:\\.|[^\\)])*\)/g)].map(m =>
   m[0].slice(1, -1).replace(/\\([0-7]{3})/g, (_, o) => String.fromCharCode(parseInt(o, 8))).replace(/\\(.)/g, "$1"))
   .map(s => fromWinAnsi([...s].map(c => c.charCodeAt(0))));
 const text = strings.join("\n");
-for (const needle of [DISCLAIMER, CONTACT.phone, "jc@arcsignco.com", "arc@arcsignco.com", "arcsignco.com", `12' 4"`, `2' 6"`, `Door width = 3' 0"`,
-  halo.name, "Night view and construction", "Flat artwork", "Arc placeholder rates", "APPROVED FOR NEXT STEPS", "Page 3 of 3"]) {
-  check(text.includes(needle), `PDF text includes ${JSON.stringify(needle)}`);
+const flowing = strings.join(" ");
+for (const needle of [DISCLAIMER, `Call or text ${CONTACT.phone}`, "jc@arcsignco.com", "arc@arcsignco.com", "arcsignco.com", `12' 4"`, `2' 6"`, `Door width = 3' 0"`,
+  halo.name, "Night view and construction", "Flat artwork", "NIGHT VIEW, SAME SPOT AS PAGE 1", STAMP_TITLE, STAMP_NOTE, "José Muñoz Ibáñez",
+  "Panadería Núñez (sample)", "¿Letras más grandes? ¡Sí!", "Page 3 of 3"]) {
+  check(flowing.includes(needle), `PDF text includes ${JSON.stringify(needle)}`);
 }
+check(flowing.includes(NO_PRICE_MESSAGE), "PDF shows the no-price message while the rates are placeholders");
+check(!/\$\s?\d/.test(text), "PDF shows no dollar amounts while the rates are placeholders");
+check(!text.includes("寿司") && !text.includes("?)"), "PDF drops text it can't show instead of printing ?");
+check((flowing.match(new RegExp(DISCLAIMER_FULL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g")) || []).length === 3, "full disclaimer in the footer of every page");
+check(FINE.includes("the artwork is placed by hand") && !FINE.includes("sign artwork"), "PDF fine print says \"the artwork\"");
+// The footer and fine print stay on the page and below the content.
+const lowest = Math.min(...[...raw.matchAll(/ ([\d.]+) Td \(/g)].map(m => Number(m[1])));
+check(lowest > 12, `PDF text stays inside the page (lowest baseline ${lowest} pt)`);
 check(/\/Type \/Pages \/Kids \[[^\]]+\] \/Count 3/.test(raw), "PDF has three pages");
-check((text.match(/Concept only – not a shop drawing/g) || []).length >= 6, "disclaimer in the banner and footer of every page");
+check((text.match(/Concept only – not a shop drawing/g) || []).length >= 6, "short disclaimer in the banner and footer of every page");
+const livePdf = Buffer.from(buildProofPdf({
+  logo: fakeJpeg(847, 174), mockup: fakeJpeg(1600, 1200), night: fakeJpeg(1600, 1200), diagram: fakeJpeg(1280, 800), flat: { image: fakeJpeg(1200, 300) },
+  type: { name: halo.name, lighting: halo.lightingLabel }, size: { width: `12' 4"`, height: `2' 6"`, area: "31 sq ft" },
+  price: priceView(computeEstimate("halo", { width: 148, height: 30 }), { live: true, date: new Date(2026, 9, 3) }),
+})).toString("latin1");
+check(/Preliminary estimate valid 30 days from October 3, 2026/.test(livePdf) && /Sales tax extra where it applies/.test(livePdf) && /confirmed after site survey/.test(livePdf),
+  "with real rates on, the PDF carries the range lines, tax and valid-days note");
 const onePage = Buffer.from(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), size: null })).toString("latin1");
 check(/\/Count 1 >>/.test(onePage), "PDF without night view or artwork stays one page");
 check(raw.includes("/URI (tel:+13474502110)") && raw.includes("/URI (mailto:jc@arcsignco.com)") && raw.includes("/URI (mailto:arc@arcsignco.com)"), "PDF has phone and email links");
@@ -179,10 +208,10 @@ const pdfStrings = bytes => [...Buffer.from(bytes).toString("latin1").matchAll(/
 const awPdf = pdfStrings(buildProofPdf({
   logo: fakeJpeg(847, 174), mockup: fakeJpeg(1600, 1200), night: fakeJpeg(1600, 1200), diagram: fakeJpeg(1280, 800),
   type: { ...awInfo, lighting: awInfo.lightingLabel },
-  price: { range: "$2,000 – $3,000", label: "Arc placeholder rates", note: "Estimate placeholder", perFoot: "$150–$250 per linear ft (estimate placeholder)" },
+  price: priceView(estimatePrice("aw-traditional", { width: 144, height: 40 })),
   size: { width: `12' 0"`, height: `3' 4"`, area: "40 sq ft" },
 }));
-for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "per linear ft (estimate", DISCLAIMER]) {
+for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "A price is prepared after a site survey", DISCLAIMER]) {
   check(awPdf.includes(needle), `awning PDF includes ${JSON.stringify(needle)}`);
 }
 
@@ -217,19 +246,17 @@ const proofHtml = fs.readFileSync(path.join(toolDir, "proof/index.html"), "utf8"
 check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof page is noindex");
 check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
 check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
+check((proofHtml.split(DISCLAIMER_FULL).length - 1) === 2, "proof page carries the full disclaimer in the price box and the footer");
+check(html.includes(DISCLAIMER_FULL), "the tool's step 4 carries the full disclaimer");
+check(!/Approved by/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof email doesn't say \"Approved by\"");
 check(/<form name="sign-proof-activity"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(proofHtml), "proof activity form is registered with Netlify Forms (honeypot on)");
 const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
 check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
-check(READY.every(c => c.pricing?.placeholder === true), "every live category's rates are marked placeholder");
-// Rates live only in a category module's pricing block (js/categories/<id>.js), never in the engine.
-const rateHome = f => /^js\/categories\/[a-z-]+\.js$/.test(f);
-const priceFiles = own.filter(f => f.endsWith(".js") && !rateHome(f));
-const strayRates = priceFiles.filter(f => /\b(low|high):\s*\d{2,}/.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
-check(!strayRates.length, `no rate numbers outside the category modules${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
-for (const f of own.filter(rateHome)) {
-  const body = fs.readFileSync(path.join(toolDir, f), "utf8");
-  if (/\b(low|high):\s*\d{2,}/.test(body)) check(/PLACEHOLDER/.test(body) && /placeholder: true/.test(body), `${f}: rates are labeled as placeholders`);
-}
+check(READY.every(c => c.pricing && Object.keys(c.pricing).join() === "row"), "every live category only maps its types to config rows");
+// Price numbers live only in js/pricing-config.js.
+const PRICE_NUM = /\b(base|rate|projRate|low|high):\s*\d{2,}|\brange:\s*\[\s*\d{2,}/;
+const strayRates = own.filter(f => f.endsWith(".js") && f !== "js/pricing-config.js" && PRICE_NUM.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
+check(!strayRates.length, `no price numbers outside pricing-config.js${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
 check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
 check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
 check(!fs.readFileSync(path.join(root, "sitemap.xml"), "utf8").includes("/tools/"), "sitemap does not list /tools/");

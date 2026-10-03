@@ -211,12 +211,14 @@ download a three-page PDF or send a phone approval link.
   internal, LED neon, gooseneck lamps). Non-lit types never glow but stay readable. This is a
   simulation to show where the light goes, not a photometric render.
 - **PDF** (`js/pdf.js` writer, `js/proof-pdf.js` browser glue): page 1 is the day mockup with size, type and
-  the preliminary range; page 2 is the night view and the construction drawing; page 3 is the flat,
+  the price note; page 2 is the night view and the construction drawing; page 3 is the flat,
   undistorted artwork. Every page has the logo, phone, both emails and "Concept only – not a shop drawing".
-- **Preliminary range**: rate numbers live only in each category module's `pricing` block
-  (`js/categories/<id>.js`), and they are **placeholders** (`placeholder: true`). Replace them before
-  showing a range to a client and bump `RATES_VERSION` in `js/pricing-config.js`. The range only
-  shows once the scale is set.
+- **Preliminary estimate**: every price number (rows, minimums, illumination adders, extra lines,
+  rounding, the range rule, tax line and valid days) lives in `js/pricing-config.js`; a category
+  module only maps each type id to a row. The numbers are **placeholders** and `PLACEHOLDER = true`,
+  so no dollar amount shows anywhere (tool, proof page, PDF, server): they show "A price is prepared
+  after a site survey" and the full disclaimer. Put Arc's rates in, bump `RATES_VERSION` and set
+  `PLACEHOLDER = false` to show "Preliminary estimate" ranges once the scale is set.
 - **Approval links**: `netlify/functions/sign-proofs.mjs` stores proofs in the Netlify Blobs store
   `arc-sign-mockup-proofs` under `v1/<deploy context>/<id>/`, so preview test proofs never mix with
   production ones. Details: `docs/sign-mockup-approval-links.md`.
