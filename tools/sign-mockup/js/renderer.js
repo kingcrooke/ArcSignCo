@@ -8,11 +8,13 @@
 //   const frame = r.end();                   // canvas to draw at (x, y, w, h)
 //
 // tint: [r,g,b] 0..1 replaces the texture color (alpha kept); mul: [r,g,b] multiplies it;
-// light: a second texture sampled at the same uv and multiplied in; add: additive blending.
+// light: a second texture sampled at the same uv and multiplied in; add: additive blending;
+// uv: [u0, v0, u1, v1] sub-rectangle of the texture mapped onto the quad (default the whole of it).
 import { squareToQuad, invert3, bounds, signedArea } from "./geometry.js";
 
 const MAX_TEX = 2048;
 const MAX_CACHED = 48;
+const FULL_UV = [0, 0, 1, 1];
 
 const VERT = `
 attribute vec2 aPos;
@@ -37,6 +39,7 @@ uniform vec4 uTint;
 uniform vec3 uMul;
 uniform float uAlpha;
 uniform float uUseLight;
+uniform vec4 uUV;
 varying vec2 vPos;
 void main() {
   vec3 q = uInv * vec3(vPos, 1.0);
@@ -46,7 +49,7 @@ void main() {
                 min(dot(uEdge[2].xy, vPos) + uEdge[2].z, dot(uEdge[3].xy, vPos) + uEdge[3].z));
   float cover = clamp(d + 0.5, 0.0, 1.0);
   if (cover <= 0.0) discard;
-  vec2 st = clamp(uv, 0.0, 1.0);
+  vec2 st = uUV.xy + clamp(uv, 0.0, 1.0) * (uUV.zw - uUV.xy);
   vec4 c = texture2D(uTex, st);
   vec3 rgb = mix(c.rgb, uTint.rgb * c.a, uTint.a) * uMul;
   if (uUseLight > 0.5) rgb *= texture2D(uLight, st).rgb;
@@ -99,7 +102,7 @@ function glRenderer() {
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
   gl.useProgram(prog);
   const U = {};
-  for (const n of ["uSize", "uInv", "uEdge", "uTex", "uLight", "uTint", "uMul", "uAlpha", "uUseLight"]) U[n] = gl.getUniformLocation(prog, n);
+  for (const n of ["uSize", "uInv", "uEdge", "uTex", "uLight", "uTint", "uMul", "uAlpha", "uUseLight", "uUV"]) U[n] = gl.getUniformLocation(prog, n);
   gl.uniform1i(U.uTex, 0);
   gl.uniform1i(U.uLight, 1);
   const aPos = gl.getAttribLocation(prog, "aPos");
@@ -160,7 +163,7 @@ function glRenderer() {
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform2f(U.uSize, canvas.width, canvas.height);
     },
-    quad(src, pts, { tint = null, mul = 1, alpha = 1, add = false, light = null } = {}) {
+    quad(src, pts, { tint = null, mul = 1, alpha = 1, add = false, light = null, uv = null } = {}) {
       if (!frame || lost || !src || !src.width) return;
       const q = pts.map(p => ({ x: (p.x - frame.x) * frame.k, y: (p.y - frame.y) * frame.k }));
       if (q.some(p => !Number.isFinite(p.x) || !Number.isFinite(p.y))) return;
@@ -184,6 +187,7 @@ function glRenderer() {
       gl.uniform3f(U.uMul, ...vec3(mul));
       gl.uniform1f(U.uAlpha, alpha);
       gl.uniform1f(U.uUseLight, light ? 1 : 0);
+      gl.uniform4fv(U.uUV, uv || FULL_UV);
       if (add) gl.blendFunc(gl.ONE, gl.ONE);
       else gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -243,8 +247,9 @@ function cpuRenderer() {
       frame = { ...box, k, W: Math.max(1, Math.round(box.w * k)), H: Math.max(1, Math.round(box.h * k)) };
       buf = new Float32Array(frame.W * frame.H * 4);
     },
-    quad(src, pts, { tint = null, mul = 1, alpha = 1, add = false, light = null } = {}) {
+    quad(src, pts, { tint = null, mul = 1, alpha = 1, add = false, light = null, uv = null } = {}) {
       if (!frame || !src || !src.width) return;
+      const [su0, sv0, su1, sv1] = uv || FULL_UV;
       const q = pts.map(p => ({ x: (p.x - frame.x) * frame.k, y: (p.y - frame.y) * frame.k }));
       const H = squareToQuad(q), inv = H && invert3(H);
       if (!inv) return;
@@ -264,8 +269,8 @@ function cpuRenderer() {
           if (cover <= 0) continue;
           const w = inv[6] * X + inv[7] * Y + inv[8];
           if (w <= 0) continue;
-          const u = Math.min(1, Math.max(0, (inv[0] * X + inv[1] * Y + inv[2]) / w));
-          const v = Math.min(1, Math.max(0, (inv[3] * X + inv[4] * Y + inv[5]) / w));
+          const u = su0 + Math.min(1, Math.max(0, (inv[0] * X + inv[1] * Y + inv[2]) / w)) * (su1 - su0);
+          const v = sv0 + Math.min(1, Math.max(0, (inv[3] * X + inv[4] * Y + inv[5]) / w)) * (sv1 - sv0);
           const c = bilinear(s, u, v);
           const a = c[3];
           if (a <= 0) continue;

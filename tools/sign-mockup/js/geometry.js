@@ -176,8 +176,20 @@ export function makeCamera(quad, sizeIn, lens) {
   } else zk = 0;
 
   const project = (X, Y, Z = 0) => (Z ? raw(X, Y, Z * zk) : apply3(M, X / Wd, Y / Hd));
+  // Camera position in plane coordinates (Z already divided by the clamp), so a face with plane
+  // normal n at point c faces the camera when dot(n, eye - c) > 0. Exact, since the plane-to-camera
+  // map is affine.
+  const A = [r1[0], r2[0], r3[0] * zk, r1[1], r2[1], r3[1] * zk, r1[2], r2[2], r3[2] * zk];
+  const Ai = invert3(A);
+  const eye = Ai ? [0, 1, 2].map(i => -(Ai[i * 3] * t[0] + Ai[i * 3 + 1] * t[1] + Ai[i * 3 + 2] * t[2])) : null;
   return {
     project,
+    eye,
+    // Distance from the camera, for sorting parts back to front.
+    depth(X, Y, Z = 0) {
+      const z = Z * zk;
+      return Math.hypot(X * r1[0] + Y * r2[0] + t[0] + z * r3[0], X * r1[1] + Y * r2[1] + t[1] + z * r3[1], X * r1[2] + Y * r2[2] + t[2] + z * r3[2]);
+    },
     width: Wd,
     height: Hd,
     zScale: zk,
