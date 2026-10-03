@@ -13,6 +13,11 @@ import {
 import { buildProofPdf, fromWinAnsi, toWinAnsi, wrapText, textWidth, CONTACT, DISCLAIMER } from "./sign-mockup/js/pdf.js";
 import { SIGN_TYPES, LIGHTING, GROUPS } from "./sign-mockup/js/sign-types.js";
 import { diagramSvg, hasDiagram } from "./sign-mockup/js/diagrams.js";
+import {
+  AWNING_TYPES, AWNING_GROUPS, COVERS, VALANCES, LETTERING, defaultAwningOptions, sanitizeAwningOptions, awningOptionKeys, projectionFor,
+} from "./sign-mockup/js/awning-types.js";
+import { awningMesh } from "./sign-mockup/js/awning-geometry.js";
+import { ALL_TYPES, CATEGORIES, getType, describe, litWith } from "./sign-mockup/js/catalog.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const toolDir = path.join(root, "tools/sign-mockup");
@@ -56,9 +61,43 @@ check(SIGN_TYPES.every(t => t.parts.length >= 3 && t.summary), "every type lists
 const LIGHTINGS = ["face", "halo", "internal", "neon", "external", "none"];
 check(LIGHTINGS.every(l => SIGN_TYPES.some(t => t.lighting === l)), `lighting covered: ${LIGHTINGS.join(", ")}`);
 for (const t of SIGN_TYPES) {
-  const svg = hasDiagram(t.id) ? diagramSvg(t) : "";
+  const svg = hasDiagram(t) ? diagramSvg(t) : "";
   check(/^<svg[^>]+viewBox="0 0 320 200"/.test(svg) && svg.endsWith("</svg>") && /aria-label="[^"]+how it.s built"/.test(svg), `${t.id}: construction diagram`);
 }
+
+// Awning shapes: library, options, 3D mesh and side-profile cards
+check(AWNING_TYPES.length >= 20, `${AWNING_TYPES.length} awning shapes`);
+check(new Set(ALL_TYPES.map(t => t.id)).size === ALL_TYPES.length, "sign and awning ids are unique together");
+check(CATEGORIES.map(c => c.id).join() === "sign,awning" && CATEGORIES.every(c => getType(c.def).id === c.def), "two categories with valid defaults");
+check(getType("awning").id === "aw-traditional", "legacy awning id maps to the traditional slope");
+check(AWNING_TYPES.every(t => AWNING_GROUPS.some(g => g.id === t.group) && t.summary && t.parts.length >= 3), "every awning shape has a group, summary and parts");
+check(AWNING_TYPES.every(t => t.covers.every(c => COVERS[c]) && t.valances.every(v => VALANCES[v]) && t.letter.every(l => LETTERING[l])), "awning covers, valances and lettering spots are known");
+check(AWNING_GROUPS.every(g => AWNING_TYPES.some(t => t.group === g.id)), "every awning group has shapes");
+check(AWNING_TYPES.some(t => t.backlit) && AWNING_TYPES.some(t => !t.backlit), "some shapes can be backlit, some can't");
+const finite = a => a.every(Number.isFinite);
+for (const t of AWNING_TYPES) {
+  const def = defaultAwningOptions(t);
+  const variants = [def, { ...def, sides: "open", valance: "none", pattern: "stripes", lit: "backlit", projection: 999 }];
+  let ok = true;
+  for (const o of variants) for (const [W, D] of [[144, 40], [60, 30], [360, 72]]) {
+    const m = awningMesh(t, o, W, D);
+    ok &&= m.faces.length > 0 && m.faces.every(f => f.pts.length === 4 && f.pts.every(finite) && finite(f.n) && (!f.tex || m.tex[f.tex]))
+      && m.tubes.every(tb => finite(tb.a) && finite(tb.b));
+  }
+  const svg = diagramSvg(t);
+  check(ok, `${t.id}: 3D mesh is finite for default and extreme options`);
+  check(hasDiagram(t) && /^<svg[^>]+viewBox="0 0 320 200"/.test(svg) && svg.endsWith("</svg>") && /aria-label="[^"]+how it.s built"/.test(svg), `${t.id}: side-profile card`);
+}
+const trad = getType("aw-traditional");
+const dirty = sanitizeAwningOptions(trad, { panel: "red", cover: "glass", valance: "<script>", projection: 500, lit: "backlit", extra: "x" });
+check(dirty.panel === defaultAwningOptions(trad).panel && dirty.cover === "vinyl" && dirty.valance === "straight" && dirty.projection === 96 && !("extra" in dirty),
+  "sanitize keeps only allowed awning options (backlit forces vinyl, projection clamped)");
+check(!litWith(trad, defaultAwningOptions(trad)) && litWith(trad, { lit: "backlit" }), "awnings glow at night only when backlit");
+check(awningOptionKeys(trad, defaultAwningOptions(trad)).includes("projection") && !awningOptionKeys(trad, defaultAwningOptions(trad)).includes("stripe")
+  && awningOptionKeys(trad, { ...defaultAwningOptions(trad), pattern: "stripes" }).includes("stripe"), "stripe color is offered only for striped covers");
+check(projectionFor(getType("aw-dome"), {}, 144, 40) > 0, "automatic projection resolves");
+const awInfo = describe(trad, { lit: "backlit" }, { width: 144, height: 40 });
+check(awInfo.category === "awning" && awInfo.lightingLabel === "Backlit" && awInfo.details.some(([k]) => k === "Projection"), "describe() reports awning lighting and details");
 
 // PDF build
 const fakeJpeg = (w, h) => ({ bytes: new Uint8Array([0xff, 0xd8, 0xff, 0xd9]), width: w, height: h });
@@ -100,6 +139,18 @@ const onePage = Buffer.from(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fa
 check(/\/Count 1 >>/.test(onePage), "PDF without night view or artwork stays one page");
 check(raw.includes("/URI (tel:+13474502110)") && raw.includes("/URI (mailto:jc@arcsignco.com)") && raw.includes("/URI (mailto:arc@arcsignco.com)"), "PDF has phone and email links");
 check(!/\bApt\b/i.test(text), "PDF has no \"Apt\"");
+const pdfStrings = bytes => [...Buffer.from(bytes).toString("latin1").matchAll(/\((?:\\.|[^\\)])*\)/g)].map(m =>
+  fromWinAnsi([...m[0].slice(1, -1).replace(/\\([0-7]{3})/g, (_, o) => String.fromCharCode(parseInt(o, 8))).replace(/\\(.)/g, "$1")].map(c => c.charCodeAt(0))))
+  .join("\n");
+const awPdf = pdfStrings(buildProofPdf({
+  logo: fakeJpeg(847, 174), mockup: fakeJpeg(1600, 1200), night: fakeJpeg(1600, 1200), diagram: fakeJpeg(1280, 800),
+  type: { ...awInfo, lighting: awInfo.lightingLabel },
+  price: { range: "$2,000 – $3,000", label: "Arc placeholder rates", note: "Estimate placeholder", perFoot: "$150–$250 per linear ft (estimate placeholder)" },
+  size: { width: `12' 0"`, height: `3' 4"`, area: "40 sq ft" },
+}));
+for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "per linear ft (estimate", DISCLAIMER]) {
+  check(awPdf.includes(needle), `awning PDF includes ${JSON.stringify(needle)}`);
+}
 
 // Copy guardrails across the tool's own files (vendored libraries excluded).
 const own = [
