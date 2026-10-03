@@ -11,7 +11,7 @@ mockup's approval links (`netlify/functions/`); `package.json` exists only for i
 | Path | Purpose |
 |---|---|
 | `index.html` | The homepage (styles and scripts are inline) |
-| `sign-permits-shop-drawings/`, `ada-signs/`, `channel-letters/`, `construction-signs/` | Service pages, each an `index.html` served at `/<slug>/` |
+| `sign-permits-shop-drawings/`, `ada-signs/`, `channel-letters/`, `construction-signs/`, `wayfinding-signs/`, `awnings/` | Service pages, each an `index.html` served at `/<slug>/` |
 | `assets/css/service-page.v3.css` | Shared stylesheet for the service pages (versioned like `assets/img/`) |
 | `docs/copy-review/` | Plain-text copy of each service page for copy review (not published as a page) |
 | `thank-you.html` | Quote form success page, served at `/thank-you` (noindex) |
@@ -109,10 +109,13 @@ If it can't be backed up, soften or remove it.
 - Code and regulation references are cited in a "Public sources" list on each page. Re-check them
   whenever the page is edited.
 - The header and footer are copied into each page (there is no build step). A change to the
-  homepage header or footer needs the same change in the four service pages and `portfolio.html`.
+  homepage header or footer needs the same change in the six service pages, `portfolio.html`, and `404.html`.
+  `tools/sign-mockup/index.html` keeps its own copy of the header.
 - `assets/css/service-page.v3.css` is cached for a year. To change it, copy it to `.v4.css` and
   update the `<link>` in each service page. (`v1` was only ever on a Deploy Preview. `v2` is kept
   because production served it; v3 only moves the Menu breakpoint from 720px to 880px.)
+  The live service pages link `service-page.v4.css`. `/wayfinding-signs/` and `/awnings/` also link
+  `service-diagrams.v1.css` for the planning diagrams.
 - The service pages use the same header (Call + Request a quote), phone bottom bar, v2 logo, GBP
   footer slot, and GA4 hook as the homepage. The phone bar watches the hero buttons, the "What to
   send" section, and the closing CTA band, and shows only when none of them is on screen.

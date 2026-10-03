@@ -86,6 +86,10 @@ Depending on the job, the architect, owner, landlord, GC, and any licensed appli
 
 If the building is an individual landmark or in a historic district, you need an LPC permit before installing or replacing signs, awnings, or related lighting. LPC applications are filed through Portico, LPC's online permit portal. You can check a building's status on LPC's Discover NYC Landmarks map. LPC's Permit Guidebook has separate chapters for signage and awnings that list what a complete application needs.
 
+[Storefront awnings: layout, recover, and sign text](/awnings/)
+
+[Interior wayfinding and directory packages](/wayfinding-signs/)
+
 ### Landlord sign criteria
 
 Many leases and buildings set their own sign rules, such as sign band size, allowed materials, lighting, and attachment methods. Arc asks for those criteria at quote and designs to them.
@@ -123,6 +127,8 @@ _Label: Quote_
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
 Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
+
+[Link: jc@arcsignco.com](mailto:jc@arcsignco.com)
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
@@ -178,6 +184,8 @@ _Label: Related services_
 - [ADA & tactile signs](/ada-signs/): Room, restroom, stair, and exit signs with tactile text and Braille
 - [Channel letters](/channel-letters/): Front-lit, halo-lit, and reverse letters for storefronts
 - [Construction site signs](/construction-signs/): Project information panels, jobsite, and temporary signs
+- [Interior wayfinding](/wayfinding-signs/): Lobby directories, floor IDs, room signs, and directional packages
+- [Storefront awnings](/awnings/): Layout, recover, sign text, and shop drawings
 
 _Label: Request a quote_
 

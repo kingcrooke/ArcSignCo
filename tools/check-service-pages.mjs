@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 const { JSDOM } = require("jsdom");
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-export const SERVICE_SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs"];
+export const SERVICE_SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "awnings"];
 const pages = [{ slug: "", file: "index.html" }, ...SERVICE_SLUGS.map(slug => ({ slug, file: `${slug}/index.html` }))];
 
 const BUSINESS_ID = "https://arcsignco.com/#business";
@@ -171,7 +171,45 @@ for (const { slug, file } of pages) {
     const extLinks = [...document.querySelectorAll('a[target="_blank"]')];
     if (extLinks.some(a => !(a.rel || "").includes("noopener"))) fail(label, 'a target="_blank" link lacks rel="noopener"');
   }
+
+  if (slug === "wayfinding-signs" || slug === "awnings") {
+    if (/awning permit nyc/i.test(visible) || /awning permit nyc/i.test(html)) {
+      fail(label, 'page targets the keyword "awning permit NYC"');
+    } else pass(label, 'does not target "awning permit NYC"');
+    const hrefs = new Set([...document.querySelectorAll("a")].map(a => a.getAttribute("href")));
+    const required = slug === "awnings"
+      ? ["/sign-permits-shop-drawings/", "/channel-letters/", "/ada-signs/", "/wayfinding-signs/", "/construction-signs/", "/#quote", "/tools/sign-mockup/"]
+      : ["/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/awnings/", "/construction-signs/", "/#quote"];
+    const missing = required.filter(href => !hrefs.has(href));
+    if (missing.length) fail(label, `missing internal links: ${missing.join(", ")}`);
+    else pass(label, "required internal links are present");
+    const expected = {
+      "wayfinding-signs": {
+        title: "Interior Wayfinding NYC | Arc Signage Co",
+        description: "Interior wayfinding signs for New York buildouts: lobby directories, floor IDs, room signs, and directional packages. Send plans or a schedule for a quote.",
+        h1: "Interior wayfinding and directory packages for New York buildouts",
+      },
+      awnings: {
+        title: "Storefront Awnings NYC | Arc Signage Co",
+        description: "Storefront awnings for New York: layout, recover, sign text, shop drawings, and permit coordination. Send photos, dimensions, or drawings for a quote.",
+        h1: "Storefront awnings, recover, and sign layouts for New York",
+      },
+    }[slug];
+    if (title !== expected.title) fail(label, `title is not the approved tag: ${title}`);
+    if (desc !== expected.description) fail(label, `meta description is not the approved text: ${desc}`);
+    const h1 = norm(document.querySelector("h1")?.textContent || "");
+    if (h1 !== expected.h1) fail(label, `h1 is not the approved heading: ${h1}`);
+    else pass(label, "title, meta description, and h1 match the brief");
+  }
 }
+
+if (sitemap.includes("sign-mockup/proof")) fail("sitemap", "proof pages are listed");
+else pass("sitemap", "proof pages are not listed");
+const homeNav = fs.readFileSync(path.join(root, "index.html"), "utf8");
+for (const href of ["/wayfinding-signs/", "/awnings/"]) {
+  if (!homeNav.includes(`href="${href}"`)) fail("/", `homepage missing link to ${href}`);
+}
+pass("/", "homepage links to both new service pages");
 
 console.log(failures ? `\n${failures} check(s) failed` : "\nAll checks passed");
 process.exit(failures ? 1 : 0);
