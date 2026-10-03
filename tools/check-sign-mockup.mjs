@@ -253,7 +253,8 @@ for (const f of ["netlify/functions/sign-proofs.mjs", "netlify/lib/sign-proofs.m
   check(body && !hits.length, `${f}: present, no vendor names${hits.length ? ` (${hits.join(", ")})` : ""}`);
 }
 const html = fs.readFileSync(path.join(toolDir, "index.html"), "utf8");
-check(/<meta name="robots" content="noindex">/.test(html), "page is noindex");
+check(!/<meta name="robots" content="noindex/.test(html), "tool page is indexable (no noindex meta)");
+check(/<link rel="canonical" href="https:\/\/arcsignco\.com\/tools\/sign-mockup\/">/.test(html), "tool page has canonical URL");
 const proofHtml = fs.readFileSync(path.join(toolDir, "proof/index.html"), "utf8");
 check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof page is noindex");
 check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
@@ -271,9 +272,11 @@ const strayRates = own.filter(f => f.endsWith(".js") && f !== "js/pricing-config
 check(!strayRates.length, `no price numbers outside pricing-config.js${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
 check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
 check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
-check(!fs.readFileSync(path.join(root, "sitemap.xml"), "utf8").includes("/tools/"), "sitemap does not list /tools/");
-
+const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
+check(sitemap.includes("<loc>https://arcsignco.com/tools/sign-mockup/</loc>"), "sitemap lists the sign mockup tool");
+check(!sitemap.includes("/tools/sign-mockup/proof"), "sitemap does not list proof pages");
+check(!toml.includes('for = "/tools/sign-mockup/*"\n  [headers.values]\n    X-Robots-Tag = "noindex"'), "netlify.toml does not noindex the whole mockup tool");
 const allow = toml.indexOf('from = "/tools/sign-mockup/*"'), block = toml.indexOf('from = "/tools/*"');
 check(allow > -1 && block > -1 && allow < block, "netlify.toml serves /tools/sign-mockup/ before blocking /tools/*");
 for (const from of ["/netlify/*", "/node_modules/*", "/package.json", "/package-lock.json"]) {

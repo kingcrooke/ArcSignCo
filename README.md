@@ -26,7 +26,7 @@ mockup's approval links (`netlify/functions/`); `package.json` exists only for i
 | `tools/optimize-portfolio-images.mjs` | Regenerates `assets/portfolio/` from the cleaned portfolio masters (kept outside the repo) |
 | `tools/check-service-pages.mjs` | Checks JSON-LD, FAQ/schema text match, canonicals, sitemap, and banned claims |
 | `tools/export-copy.mjs` | Regenerates `docs/copy-review/<slug>.md` from the service pages |
-| `tools/sign-mockup/` | Storefront sign and awning mockup tool, served at `/tools/sign-mockup/` (noindex, not in the sitemap or nav) |
+| `tools/sign-mockup/` | Storefront sign and awning mockup tool, served at `/tools/sign-mockup/` (in the sitemap and site nav; proof links stay noindex) |
 | `tools/sign-mockup/proof/` | Phone proof page for approval links, served at `/tools/sign-mockup/proof/#<id>` (noindex) |
 | `netlify/functions/sign-proofs.mjs`, `netlify/lib/sign-proofs.mjs` | Approval link API (`/api/sign-proofs`), stored in Netlify Blobs |
 | `package.json` | `@netlify/blobs` for the function, and `npm test` for the mockup checks |
