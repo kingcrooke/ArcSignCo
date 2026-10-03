@@ -40,6 +40,7 @@ const state = {
   typeId: CATEGORIES[0].def,
   typeOptions: {},    // per type id, so switching back keeps choices
   lastType: Object.fromEntries(CATEGORIES.map(c => [c.id, c.def])),
+  placed: {},         // per category: { quad, edited } while the other category is shown
   mode: "day",
   proof: null,        // { id, url } once an approval link exists for the current design
 };
@@ -543,6 +544,7 @@ async function loadPhoto(file) {
     state.calInches = toInches($("calFt").value, $("calIn").value);
     state.quad = null;
     state.quadEdited = false;
+    state.placed = {};
     state.selected = null;
     $("drop").hidden = true;
     $("zoomBar").hidden = false;
@@ -845,9 +847,19 @@ function setType(id) {
   const next = getType(id);
   state.typeId = next.id;
   state.lastType[categoryOf(next)] = next.id;
-  // Switching between awning shapes keeps a wall area the user has pinned.
-  const keep = isAwning(prevType) && isAwning(next) && state.quadEdited;
-  if (state.art && !keep) fitQuadToArt(prev);
+  // A sign and an awning sit in different places, so each category keeps its own placement.
+  const from = categoryOf(prevType), to = categoryOf(next);
+  const stash = from !== to && state.placed[to];
+  if (from !== to && state.quad) state.placed[from] = { quad: state.quad.map(p => ({ ...p })), edited: state.quadEdited, aspect: prev };
+  if (stash) {
+    state.quad = stash.quad;
+    state.quadEdited = stash.edited;
+    // The artwork may have changed while the other category was shown.
+    if (state.art && stash.aspect) fitQuadToArt(stash.aspect);
+  } else if (state.art && !(from === "awning" && to === "awning" && state.quadEdited)) {
+    // Switching between awning shapes keeps a wall area the user has pinned.
+    fitQuadToArt(prev);
+  }
   renderTypeCard();
   updateUI();
   requestRender();
