@@ -51,6 +51,10 @@ check(pointInQuad(quad, { x: 300, y: 200 }) && !pointInQuad(quad, { x: 50, y: 50
 
 // PDF text helpers
 check(fromWinAnsi(toWinAnsi(DISCLAIMER)) === DISCLAIMER, "disclaimer survives WinAnsi encoding (en dash kept)");
+for (const [input, want] of [["Old Town 🍎 Grocery", "Old Town Grocery"], ["🍕 PIZZA ☕ 🇺🇸", "PIZZA"], ["Café 👍🏽 — Joe’s", "Café — Joe’s"], ["Dana 👨‍👩‍👧", "Dana"], ["Acme™ © ®", "Acme™ © ®"], ["Line\tTab", "Line Tab"]]) {
+  const got = fromWinAnsi(toWinAnsi(input));
+  check(got === want, `PDF text drops emoji cleanly: ${JSON.stringify(input)} -> ${JSON.stringify(got)}`);
+}
 check(near(textWidth("Hello", false, 10), 22.78, 0.01), "Helvetica widths");
 check(wrapText("one two three four five", false, 10, 40).length > 1, "wrapText wraps long text");
 

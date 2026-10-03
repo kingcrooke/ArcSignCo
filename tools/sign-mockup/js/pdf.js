@@ -43,15 +43,23 @@ const WIN_ANSI = {
   "˜": 0x98, "™": 0x99, "š": 0x9a, "›": 0x9b, "œ": 0x9c, "ž": 0x9e, "Ÿ": 0x9f, "′": 0x27, "″": 0x22,
 };
 
+// Helvetica has no emoji, so they are dropped (with the space they leave) rather than printed as "?".
+const EMOJI = /\p{Extended_Pictographic}|\p{Emoji_Modifier}|\p{Regional_Indicator}|[\u200d\ufe0e\ufe0f\u20e3]/u;
+
 export function toWinAnsi(str) {
   const out = [];
+  let dropped = false;
   for (const ch of String(str).normalize("NFC")) {
     const cp = ch.codePointAt(0);
-    if (ch === "\t") out.push(32);
-    else if (WIN_ANSI[ch] !== undefined) out.push(WIN_ANSI[ch]);
-    else if ((cp >= 32 && cp <= 126) || (cp >= 0xa0 && cp <= 0xff)) out.push(cp);
+    const code = ch === "\t" ? 32 : WIN_ANSI[ch] !== undefined ? WIN_ANSI[ch]
+      : (cp >= 32 && cp <= 126) || (cp >= 0xa0 && cp <= 0xff) ? cp : null;
+    if (code === null && EMOJI.test(ch)) { dropped = true; continue; }
+    if (dropped && code === 32 && (!out.length || out[out.length - 1] === 32)) continue;
+    dropped = false;
+    if (code !== null) out.push(code);
     else if (cp >= 32) out.push(0x3f);
   }
+  while (dropped && out[out.length - 1] === 32) out.pop();
   return out;
 }
 
