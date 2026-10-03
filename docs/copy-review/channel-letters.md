@@ -124,6 +124,8 @@ Email your files to arc@arcsignco.com with the project address in the subject li
 
 Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
+[Link: jc@arcsignco.com](mailto:jc@arcsignco.com)
+
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
 [Link: (347) 450-2110](tel:+13474502110)
@@ -177,6 +179,8 @@ _Label: Related services_
 - [Sign permits & shop drawings](/sign-permits-shop-drawings/): Shop drawings, schedules, and permit coordination
 - [ADA & tactile signs](/ada-signs/): Room, restroom, stair, and exit signs with tactile text and Braille
 - [Construction site signs](/construction-signs/): Project information panels, jobsite, and temporary signs
+- [Interior wayfinding](/wayfinding-signs/): Lobby directories, floor IDs, room signs, and directional packages
+- [Storefront awnings](/awnings/): Layout, recover, sign text, and shop drawings
 
 _Label: Request a quote_
 

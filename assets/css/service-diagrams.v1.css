@@ -1,0 +1,27 @@
+/* Diagrams for the wayfinding and awnings service pages. Versioned: do not overwrite. */
+.diagram { width: 100%; height: auto; display: block; border-radius: 6px; }
+.info-card .diagram { margin-bottom: 12px; }
+.shape-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.section.has-band { padding-bottom: 0; }
+.process-band { background: #0b1d33; color: #fff; margin-top: 36px; padding: 36px 0 48px; }
+.process-band .eyebrow { color: #f0d080; }
+.split.spaced { margin-top: 22px; }
+.dark .lead a, .process + .lead a {
+  color: #f0d080;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.process + .lead { margin-top: 22px; }
+.cta-band a:not(.btn) {
+  color: #f0d080;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.process-band .process { list-style: none; }
+
+@media (max-width: 1040px) {
+  .shape-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .shape-grid { grid-template-columns: 1fr; }
+}
