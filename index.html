@@ -137,7 +137,7 @@
   --paper: #f5f6f8;
   --cream: #fbfaf6;
   --ink: #172233;
-  --muted: #657287;
+  --muted: #4b5563;
   --line: #dfe5ee;
   --white: #ffffff;
   --green: #1f7a4d;
@@ -159,8 +159,14 @@
 }
 .skip-link:focus { left: 0; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-  outline: 3px solid var(--gold);
+  outline: 3px solid var(--navy);
   outline-offset: 2px;
+}
+.topbar a:focus-visible, .topbar button:focus-visible,
+.hero a:focus-visible, .hero button:focus-visible,
+footer a:focus-visible, footer button:focus-visible,
+.mobile-cta a:focus-visible, .mobile-cta button:focus-visible {
+  outline-color: var(--gold);
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -1049,7 +1055,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
         <a href="#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/">Free Sign Preview</a>
       </div>
-      <a href="tel:+13474502110" class="btn ghost nav-call" aria-label="Call (347) 450-2110"><span class="call-long">Call (347) 450-2110</span><span class="call-short">Call</span></a>
+      <a href="tel:+13474502110" class="btn ghost nav-call" aria-label="Call or text (347) 450-2110"><span class="call-long">Call or text (347) 450-2110</span><span class="call-short">Call</span></a>
       <a href="#quote" class="btn gold nav-cta">Request a quote</a>
       <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
     </nav>
@@ -1066,7 +1072,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
         <div class="hero-actions" id="heroActions">
           <a class="btn gold lg" href="#quote">Request a quote</a>
           <a class="btn outline lg" href="/tools/sign-mockup/">Free Sign Preview</a>
-          <a class="btn ghost lg" href="tel:+13474502110">Call (347) 450-2110</a>
+          <a class="btn ghost lg" href="tel:+13474502110">Call or text (347) 450-2110</a>
         </div>
         <p class="hero-more"><a href="#selector">Not sure what you need? Try the Scope Finder</a></p>
         <div class="hero-proof" aria-label="Arc Signage proof points">
@@ -1105,7 +1111,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       </div>
       <div class="trust-cta" id="trustCta">
         <a class="btn gold" href="#quote">Request a quote</a>
-        <a class="btn outline" href="tel:+13474502110">Call (347) 450-2110</a>
+        <a class="btn outline" href="tel:+13474502110">Call or text (347) 450-2110</a>
       </div>
     </div>
   </section>
@@ -1308,6 +1314,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <p>Email drawings, photos, or a sign schedule to arc@arcsignco.com with the project address in the subject line. Add your deadline and whether you're the GC. For a storefront sign, lit letters included, photos with measurements are enough to quote. Other larger or permit jobs need drawings or a sign schedule. No files yet? Use the form and Arc will tell you what's needed. Jesus replies from jc@arcsignco.com.</p>
           <div class="contact-list">
             <div><strong>Phone</strong><span><a href="tel:+13474502110" style="color:inherit;">(347) 450-2110</a> (call or text)</span></div>
+            <div><strong>Hours</strong><span>Mon–Fri 8 AM–6 PM</span></div>
             <div><strong>Email</strong><span><a href="mailto:jc@arcsignco.com" style="color:inherit;text-decoration:underline;">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com" style="color:inherit;text-decoration:underline;">arc@arcsignco.com</a></span></div>
             <div><strong>Service area</strong><span>New York / Tri-State: all five boroughs, plus all of New Jersey and Connecticut</span></div>
             <div><strong>Urgent projects</strong><span>Put URGENT in the subject line for active jobsite requests.</span></div>
@@ -1404,7 +1411,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
 
 <div class="mobile-cta" id="mobileCta">
   <a class="btn gold" href="#quote">Request a quote</a>
-  <a class="btn ghost" href="tel:+13474502110">Call (347) 450-2110</a>
+  <a class="btn ghost" href="tel:+13474502110">Call or text (347) 450-2110</a>
 </div>
 
 <script>

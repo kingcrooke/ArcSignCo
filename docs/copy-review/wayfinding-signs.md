@@ -1,6 +1,6 @@
 # Copy review: /wayfinding-signs/
 
-**Status: draft.** Pending Sales Ops and copy editor review, and Jesus's OK. The URL slug is also a proposal pending Jesus's approval.
+**Status: Live (merged in PR #19); revisions in this PR.**
 
 Generated from `wayfinding-signs/index.html` by `tools/export-copy.mjs`. This is every piece of visible text on the page, in order (the shared header and footer are listed once in `README.md` of this folder). To change wording, edit the HTML page and re-run the script. FAQ text is also in the page's `FAQPage` JSON-LD and must stay word-for-word identical; `tools/check-service-pages.mjs` verifies that.
 
