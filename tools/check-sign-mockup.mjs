@@ -271,7 +271,8 @@ const PRICE_NUM = /\b(base|rate|projRate|low|high):\s*\d{2,}|\brange:\s*\[\s*\d{
 const strayRates = own.filter(f => f.endsWith(".js") && f !== "js/pricing-config.js" && PRICE_NUM.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
 check(!strayRates.length, `no price numbers outside pricing-config.js${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
 check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
-check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
+check(html.includes("/assets/js/measurement-config.js") && html.includes("/assets/js/measurement.js"), "tool page loads shared measurement scripts");
+check(!/googletagmanager\.com\/gtag\/js/.test(html), "tool page has no inline gtag loader");
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
 check(sitemap.includes("<loc>https://arcsignco.com/tools/sign-mockup/</loc>"), "sitemap lists the sign mockup tool");
