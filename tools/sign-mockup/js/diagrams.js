@@ -275,15 +275,19 @@ const DRAW = {
       .label("Storefront frame", 108, 186, 92).label("No depth, no lighting", 108, 130, 118);
   },
   awning(s) {
+    // Traditional slope with closed sides: roof from the wall down to the front bar, a rigid
+    // valance below it, and a bottom bar back to the wall.
     s.wall();
-    s.rect(44, 34, 8, 12, C.metal);
-    s.path(`M48 40 L196 104 L196 138 L188 138 L188 110 L48 50 Z`, C.fabric, C.ink, 1);
-    s.line(52, 46, 190, 106, "#7aa6cf", 1, ` stroke-dasharray="4 3"`);
-    s.line(52, 120, 188, 112, C.metal, 2);
-    s.rect(44, 114, 8, 12, C.metal);
-    s.rect(197, 112, 4, 22, "#ffffff");
-    s.label("Fabric cover", 120, 74, 34).label("Welded frame", 130, 90, 58).label("Valance with lettering", 199, 124, 82)
-      .label("Support arm", 120, 116, 106).label("Wall brackets", 48, 40, 130).label("Projects ~3'", 160, 98, 154);
+    s.path(`M44 40 L176 104 L176 140 L44 140 Z`, "#2f6390", C.ink, 1);
+    s.path(`M44 40 L176 104`, "none", C.fabric, 4);
+    s.line(48, 46, 172, 106, "#9cc3e4", 1, ` stroke-dasharray="4 3"`);
+    s.rect(176, 104, 7, 36, C.fabric, C.ink, 1);
+    s.rect(177.5, 114, 4, 16, "#ffffff");
+    s.line(44, 140, 176, 140, C.metal, 2.4);
+    s.rect(40, 34, 6, 12, C.metal);
+    s.rect(40, 134, 6, 12, C.metal);
+    s.label("Fabric cover", 110, 72, 34).label("Welded tube frame", 136, 88, 58).label("Rigid valance, lettering", 183, 122, 82)
+      .label("Closed side panel", 104, 118, 106).label("Bottom bar", 120, 140, 130).label("Wall brackets", 43, 40, 154);
     return "Side view";
   },
   painted(s) {
