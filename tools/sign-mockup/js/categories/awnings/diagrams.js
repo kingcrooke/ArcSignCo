@@ -1,6 +1,6 @@
 // "How it's built" cards for the awning shapes: a side profile (or front view where the shape
 // only reads from the front) showing the frame and the cover. Drawn with the diagram kit. Not to scale.
-import { PALETTE, card } from "../../diagram-kit.js";
+import { PALETTE, card, inches, feet } from "../../diagram-kit.js";
 import { roofProfile } from "./geometry.js";
 import { projectionFor, defaultAwningOptions, COVERS } from "./types.js";
 
@@ -264,4 +264,11 @@ export function drawAwning(s, type, C = PALETTE) {
 }
 
 /** Returns the side-profile card SVG markup for an awning shape. */
-export const awningDiagram = type => card(type, s => drawAwning(s, type));
+function typical(type) {
+  const parts = [];
+  if (type.d?.max > 0) parts.push(`projects ${feet(type.d.min)}–${feet(type.d.max)}`);
+  if (type.vr) parts.push(`${inches(type.vr)} ${type.valances.length ? "valance" : "front"}`);
+  return parts.join(", ");
+}
+
+export const awningDiagram = type => card(type, s => drawAwning(s, type), typical(type));

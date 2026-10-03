@@ -1086,6 +1086,19 @@ function closeTypes() {
   if (dlg.close) dlg.close();
   else dlg.removeAttribute("open");
 }
+// The construction card, enlarged.
+$("buildArt").addEventListener("click", () => {
+  const type = currentType(), dlg = $("cardZoom");
+  $("cardZoomTitle").textContent = `How it's built: ${type.name}`;
+  $("cardZoomArt").innerHTML = diagramSvg(type);
+  if (dlg.showModal) dlg.showModal();
+  else dlg.setAttribute("open", "");
+  $("closeCardZoom").focus();
+});
+const closeCardZoom = () => { const dlg = $("cardZoom"); if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); };
+$("closeCardZoom").addEventListener("click", closeCardZoom);
+$("cardZoom").addEventListener("click", e => { if (e.target === $("cardZoom") || e.target.closest("#cardZoomArt")) closeCardZoom(); });
+
 $("openTypes").addEventListener("click", () => openTypes());
 $("closeTypes").addEventListener("click", closeTypes);
 $("typeCats").addEventListener("click", e => {

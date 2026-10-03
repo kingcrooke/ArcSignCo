@@ -9,7 +9,8 @@
 //   s.label("Aluminum face", px, py, rowY);     // leader from (px, py) to a label row at rowY
 //   return "Section";                           // the view name shown bottom right
 //
-// card(type, draw) runs draw(s) and caches the markup by type id.
+// card(type, draw, typical) runs draw(s) and caches the markup by type id. typical is a short line
+// of typical dimensions ("5\" deep, ½\" off the wall") shown bottom left, or empty.
 export const PALETTE = {
   ink: "#0b1d33",
   muted: "#657287",
@@ -83,32 +84,48 @@ export class Svg {
     this.labels.push({ text, px, py, ty });
     return this;
   }
-  toString(title, view = "Section") {
-    // Rows go to labels in the same top-to-bottom order as their points, so leaders don't cross.
+  toString(title, view = "Section", typical = "") {
+    // Rows go to labels in the same top-to-bottom order as their points. Each leader runs level from
+    // its point to a shared knee right of the drawing, then angles to its row: level runs sit at
+    // different heights and the angled runs keep their order, so no two leaders cross.
     const rows = this.labels.map(l => l.ty).sort((a, b) => a - b);
     const ordered = [...this.labels].sort((a, b) => a.py - b.py || a.px - b.px).map((l, i) => ({ ...l, ty: rows[i] }));
+    const knee = Math.min(LX - 16, Math.max(0, ...ordered.map(l => l.px)) + 6);
     const lab = ordered.map(({ text, px, py, ty }) =>
-      `<path d="M${px} ${py} L${LX - 6} ${ty}" fill="none" stroke="${C.muted}" stroke-width="0.8"/>` +
+      `<path d="M${px} ${py} H${Math.max(px, knee)} L${LX - 6} ${ty}" fill="none" stroke="${C.muted}" stroke-width="0.8"/>` +
       `<circle cx="${px}" cy="${py}" r="1.8" fill="${PALETTE.ink}"/>` +
       `<text x="${LX}" y="${ty + 3}" font-size="9.5" fill="${PALETTE.ink}">${esc(text)}</text>`).join("");
     return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}: how it's built" font-family="Arial, Helvetica, sans-serif">` +
       `<defs><marker id="ah" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="${PALETTE.ray}"/></marker></defs>` +
       `<rect width="${W}" height="${H}" fill="#ffffff"/>` +
       this.parts.join("") + lab +
+      (typical ? `<text x="52" y="${H - 6}" font-size="8" font-weight="bold" fill="${PALETTE.ink}">Typical: ${esc(typical)}</text>` : "") +
       `<text x="${W - 6}" y="${H - 6}" font-size="8" text-anchor="end" fill="${PALETTE.muted}">${esc(view)} · not to scale</text></svg>`;
   }
 }
 
 
+const FRACTIONS = { 0.125: "⅛", 0.25: "¼", 0.375: "⅜", 0.5: "½", 0.625: "⅝", 0.75: "¾", 0.875: "⅞" };
+/** Inches as shop drawings write them: 0.5 → ½", 1.75 → 1¾", 6 → 6". */
+export function inches(v) {
+  const whole = Math.floor(v + 1e-6), frac = Math.round((v - whole) * 8) / 8;
+  return `${whole || !FRACTIONS[frac] ? whole : ""}${FRACTIONS[frac] || ""}"`;
+}
+/** Feet for longer runs: 18 → 1½', 96 → 8'. */
+export function feet(v) {
+  const f = v / 12, whole = Math.floor(f + 1e-6), frac = Math.round((f - whole) * 4) / 4;
+  return `${whole || !FRACTIONS[frac] ? whole : ""}${FRACTIONS[frac] || ""}'`;
+}
+
 const cache = new Map();
 
 /** Builds (once per type id) the card markup from draw(s); throws if the type has no drawing. */
-export function card(type, draw) {
+export function card(type, draw, typical = "") {
   if (cache.has(type.id)) return cache.get(type.id);
   if (typeof draw !== "function") throw new Error(`No diagram for ${type.id}`);
   const s = new Svg();
   const view = draw(s) || "Section";
-  const out = s.toString(type.name, view);
+  const out = s.toString(type.name, view, typical);
   cache.set(type.id, out);
   return out;
 }

@@ -1,7 +1,7 @@
 // "How it's built" cross-sections for each sign type, as small self-contained SVG strings.
 // Pure string building (no DOM) so the editor, the proof page, the PDF and the Node check share them.
 // Not to scale: the drawings show the parts and where the light goes, not dimensions.
-import { PALETTE as C, card } from "../../diagram-kit.js";
+import { PALETTE as C, card, inches } from "../../diagram-kit.js";
 
 // One channel letter in section: back at bx, face at fx, returns top and bottom.
 function channel(s, { bx, fx, y0 = 44, y1 = 156, face = "acrylic", trim = false, back = "metal", returns = C.metal }) {
@@ -196,5 +196,20 @@ const DRAW = {
 };
 
 /** Returns the cross-section SVG markup for a sign type. */
-export const diagramSvg = type => card(type, DRAW[type.id]);
+// Typical sizes for the card's footer, read from the same render values the mockup uses.
+function typical(type) {
+  const r = type.render || {};
+  switch (r.kind) {
+    case "letters":
+      if (r.raceway) return `${inches(r.depth)} deep on a ${inches(r.raceway.height)} raceway`;
+      return r.gap >= 1 ? `${inches(r.depth)} deep, ${inches(r.gap)} off the wall` : `${inches(r.depth)} deep`;
+    case "cabinet": return `${inches(r.depth)} deep cabinet`;
+    case "blade": return r.lit ? `${inches(r.thick)} thick, ${inches(r.arm)} off the wall` : `${inches(r.thick)} panel on a bracket`;
+    case "panel": return r.lamps ? `${inches(r.thick)} panel, arm lamps above` : `${inches(r.thick)} panel, ${inches(r.gap)} standoffs`;
+    case "neon": return `${inches(r.tube)} neon on a ${inches(r.thick)} backer`;
+    default: return "";
+  }
+}
+
+export const diagramSvg = type => card(type, DRAW[type.id], typical(type));
 export const hasDiagram = type => typeof DRAW[type.id] === "function";

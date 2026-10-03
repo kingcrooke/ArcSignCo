@@ -342,7 +342,14 @@
 .sm-build { border: 1px solid var(--line); border-radius: 8px; background: var(--white); }
 .sm-build summary { padding: 11px 12px; color: var(--navy); font-size: 14px; font-weight: 900; cursor: pointer; }
 .sm-build-body { display: grid; gap: 10px; padding: 0 12px 12px; }
-.sm-build-art { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; line-height: 0; }
+.sm-build-art { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; line-height: 0; background: var(--white); cursor: zoom-in; }
+.sm-build-art:hover { border-color: var(--gold); }
+.sm-build-art:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.sm-build-zoom { margin-top: -4px; color: var(--muted) !important; font-size: 12px !important; }
+.sm-cardzoom { width: min(1100px, calc(100% - 32px)); }
+.sm-cardzoom-art { padding: 16px 18px 6px; line-height: 0; }
+.sm-cardzoom-art svg { width: 100%; height: auto; display: block; }
+.sm-cardzoom-foot { padding: 0 18px 18px; color: var(--muted); font-size: 13px; font-style: italic; }
 .sm-build ul { padding-left: 18px; display: grid; gap: 3px; color: var(--ink); font-size: 13px; }
 .sm-build-night { padding: 8px 10px; border-radius: 6px; background: #13253d; color: #dce6f2 !important; font-size: 13px !important; }
 .sm-build-foot { color: var(--muted) !important; font-size: 12px !important; font-style: italic; }
@@ -476,6 +483,8 @@
   .sm-drop-desktop { display: none; }
 }
 @media (max-width: 720px) {
+  .sm-cardzoom-art { overflow-x: auto; }
+  .sm-cardzoom-art svg { min-width: 680px; }
   .sm-grid { width: calc(100% - 20px); }
   .sm-hero .wrap { padding: 10px 0 24px; }
   .sm-hero .answer { font-size: 15px; }

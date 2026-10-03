@@ -147,11 +147,12 @@
           <details class="sm-build" id="buildCard">
             <summary>How it's built</summary>
             <div class="sm-build-body">
-              <div class="sm-build-art" id="buildArt"></div>
+              <button type="button" class="sm-build-art" id="buildArt" aria-label="Enlarge the drawing"></button>
+              <p class="sm-build-zoom">Tap the drawing to enlarge it.</p>
               <p id="buildSummary"></p>
               <ul id="buildParts"></ul>
               <p class="sm-build-night" id="buildNight"></p>
-              <p class="sm-build-foot">Typical construction for discussion. Not to scale, and not a shop drawing.</p>
+              <p class="sm-build-foot">Typical construction and sizes, for discussion. Not to scale, and not a shop drawing. Final sizes and details come from the shop drawing after a site survey.</p>
             </div>
           </details>
           <p class="sm-tip sm-pin" id="pinHint" hidden></p>
@@ -309,6 +310,15 @@
   <div class="sm-cats" id="typeCats" role="tablist" aria-label="Category"></div>
   <p class="sm-types-sub" id="typesSub"></p>
   <div class="sm-types-body" id="typeList"></div>
+</dialog>
+
+<dialog class="sm-types sm-cardzoom" id="cardZoom" aria-labelledby="cardZoomTitle">
+  <div class="sm-types-head">
+    <h2 id="cardZoomTitle">How it's built</h2>
+    <button type="button" class="sm-x" id="closeCardZoom" aria-label="Close">&times;</button>
+  </div>
+  <div class="sm-cardzoom-art" id="cardZoomArt"></div>
+  <p class="sm-cardzoom-foot">Typical construction and sizes, for discussion. Not to scale, and not a shop drawing. Final sizes and details come from the shop drawing after a site survey.</p>
 </dialog>
 
 <footer>

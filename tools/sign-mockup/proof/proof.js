@@ -134,6 +134,9 @@ function render() {
   $("notes").textContent = sheet.notes || "";
 
   $("diagram").innerHTML = diagramSvg(type);
+  const zoom = on => { $("diagram").classList.toggle("is-zoomed", on); $("diagram").setAttribute("aria-expanded", String(on)); };
+  $("diagram").addEventListener("click", () => zoom(!$("diagram").classList.contains("is-zoomed")));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") zoom(false); });
   $("buildSummary").textContent = info.summary;
   $("buildParts").replaceChildren(...info.parts.map(t => Object.assign(document.createElement("li"), { textContent: t })));
   $("buildNight").textContent = `At night: ${info.night}`;
