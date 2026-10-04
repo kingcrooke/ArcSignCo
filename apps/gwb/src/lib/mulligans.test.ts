@@ -8,9 +8,13 @@ import {
   mulliganLedgerEntries,
   mulliganStatusForRoster,
   mulliganStatusThroughWeek,
+  mulligansDeferralNote,
   mulligansUsedThroughWeek,
   MULLIGAN_LEDGER_ENTRIES,
 } from './mulligans'
+import league from '../test/fixtures/league.json'
+import state from '../test/fixtures/state-nfl.json'
+import type { NflState, SleeperLeague } from './types'
 
 describe('mulligans', () => {
   it('lists all six confirmed uses in ledger order', () => {
@@ -35,8 +39,8 @@ describe('mulligans', () => {
     const danny = mulliganForRoster(1)!
     const mauricio = mulliganForRoster(2)!
     const matt = mulliganForRoster(12)!
-    expect(formatMulliganLedgerLine(narking)).toContain('+7.30')
-    expect(formatMulliganLedgerLine(narking)).toContain('129.40')
+    expect(formatMulliganLedgerLine(narking)).toContain('+5.30')
+    expect(formatMulliganLedgerLine(narking)).toContain('131.40')
     expect(formatMulliganLedgerLine(danny)).toContain('Hadi')
     expect(formatMulliganLedgerLine(mauricio)).toContain(
       'Won anyway; the swap actually cost 0.9.',
@@ -44,7 +48,8 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).toContain('Manny (Mnny)')
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).not.toContain('………')
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
-    expect(narking.netImpact).toBe(7.3)
+    expect(narking.netImpactOverride).toBe(5.3)
+    expect(mulliganLabel(mulliganStatusForRoster(3))).toContain('+5.30')
   })
 
   it('shows Jesus week 4 swap with pending Evans until live points arrive', () => {
@@ -77,5 +82,16 @@ describe('mulligans', () => {
     expect(mulliganStatusThroughWeek(3, 4)).toBe(4)
     expect(mulliganStatusThroughWeek(4, 4)).toBe(4)
     expect(mulliganStatusThroughWeek(3, 2)).toBe(3)
+  })
+
+  it('uses live mulligan deferral copy when ledger week is in progress', () => {
+    const liveLeague = {
+      ...(league as SleeperLeague),
+      settings: { ...league.settings, leg: 4, last_scored_leg: 3 },
+    }
+    const liveState = { ...(state as NflState), week: 4, display_week: 4 }
+    expect(
+      mulligansDeferralNote(4, liveLeague, liveState, 3),
+    ).toBe('Week 4 in progress. Mulligan status live through Week 4.')
   })
 })

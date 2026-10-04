@@ -1,4 +1,6 @@
 import ledgerJson from '../content/mulligan-ledger.json'
+import type { NflState, SleeperLeague } from './types'
+import { isWeekLive, lastCompletedWeek } from './weeks'
 
 /** One mulligan per manager per season (league rule). */
 export interface MulliganStatus {
@@ -27,6 +29,8 @@ export interface MulliganLedgerEntry {
   out: MulliganPlayerSwap
   in: MulliganPlayerSwap
   netImpact: number
+  /** When IN was already starting, net ≠ IN − OUT; use this for all displayed nets. */
+  netImpactOverride?: number
   netImpactPending?: boolean
   scoreWith: number
   scoreWithout: number
@@ -131,10 +135,13 @@ export function resolveMulliganNetImpact(
   entry: MulliganLedgerEntry,
   ctx?: MulliganLiveContext,
 ): number | null {
-  if (!entry.netImpactPending && !entry.in.pointsPending) return entry.netImpact
-  const inPts = resolveInSwapPoints(entry.in, ctx)
-  if (inPts === null) return null
-  return inPts - entry.out.points
+  if (entry.netImpactPending || entry.in.pointsPending) {
+    const inPts = resolveInSwapPoints(entry.in, ctx)
+    if (inPts === null) return null
+    return inPts - entry.out.points
+  }
+  if (entry.netImpactOverride !== undefined) return entry.netImpactOverride
+  return entry.netImpact
 }
 
 function formatSwapPoints(
@@ -212,6 +219,24 @@ export function mulliganStatusThroughWeek(
     standingsThroughWeek,
     Math.min(selectedWeek, ledgerWeek),
   )
+}
+
+export function mulligansDeferralNote(
+  selectedWeek: number,
+  league: SleeperLeague,
+  nflState: NflState,
+  standingsThroughWeek: number,
+): string | null {
+  if (!isWeekLive(selectedWeek, league, nflState)) return null
+  const mulliganThrough = mulliganStatusThroughWeek(
+    standingsThroughWeek,
+    selectedWeek,
+  )
+  const scoredThrough = lastCompletedWeek(league, nflState)
+  if (mulliganThrough > scoredThrough) {
+    return `Week ${selectedWeek} in progress. Mulligan status live through Week ${mulliganThrough}.`
+  }
+  return `Week ${selectedWeek} in progress, mulligan status through Week ${mulliganThrough}.`
 }
 
 export function formatMulliganLedgerLine(
