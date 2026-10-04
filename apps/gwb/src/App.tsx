@@ -1,20 +1,24 @@
 import { useState } from 'react'
 import { GraphicsPanel } from './components/GraphicsPanel'
 import { PowerPanel } from './components/PowerPanel'
+import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { RecapsPanel } from './components/RecapsPanel'
+import { MulligansPanel } from './components/MulligansPanel'
+import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
 import { StandingsPanel } from './components/StandingsPanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
 import { weekHasMatchups } from './lib/recaps'
 import { useLeagueData } from './hooks/useLeagueData'
 
-type Tab = 'standings' | 'power' | 'recaps' | 'graphics'
+type Tab = 'standings' | 'power' | 'recaps' | 'ig' | 'gallery'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
   { id: 'power', label: 'Power' },
   { id: 'recaps', label: 'Recaps' },
-  { id: 'graphics', label: 'IG' },
+  { id: 'ig', label: 'IG' },
+  { id: 'gallery', label: 'Graphics' },
 ]
 
 export default function App() {
@@ -27,7 +31,11 @@ export default function App() {
   )
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-3xl flex-col px-4 pb-8 pt-6">
+    <div
+      className={`mx-auto flex min-h-dvh flex-col px-4 pb-8 pt-6 ${
+        tab === 'gallery' ? 'max-w-6xl' : 'max-w-3xl'
+      }`}
+    >
       <header className="mb-6">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]">
           Command Center
@@ -106,6 +114,7 @@ export default function App() {
                 Tiebreak: win%, then points for, then points against.
               </p>
               <StandingsPanel rows={data.standings} />
+              <MulligansPanel rows={data.standings} />
             </section>
           )}
           {tab === 'power' && (
@@ -120,24 +129,38 @@ export default function App() {
             </section>
           )}
           {tab === 'recaps' && (
-            <section>
-              <h2 className="mb-3 text-lg font-semibold">
-                Week {data.selectedWeek} recaps
-                {data.isSelectedWeekLive ? ' (live scores)' : ''}
-              </h2>
-              <RecapsPanel
-                recaps={data.recaps}
-                week={data.selectedWeek}
-                hasScores={weekHasMatchups(
-                  data.matchupsByWeek.get(data.selectedWeek),
-                )}
-              />
+            <section className="space-y-8">
+              <div>
+                <h2 className="mb-3 text-lg font-semibold">Commissioner&apos;s recaps</h2>
+                <CommissionerRecapsPanel />
+              </div>
+              <div>
+                <h2 className="mb-3 text-lg font-semibold">
+                  Week {data.selectedWeek} matchup recaps
+                  {data.isSelectedWeekLive ? ' (live scores)' : ''}
+                </h2>
+                <RecapsPanel
+                  recaps={data.recaps}
+                  week={data.selectedWeek}
+                  hasScores={weekHasMatchups(
+                    data.matchupsByWeek.get(data.selectedWeek),
+                  )}
+                />
+              </div>
             </section>
           )}
-          {tab === 'graphics' && (
+          {tab === 'ig' && (
             <section>
               <h2 className="mb-3 text-lg font-semibold">Instagram graphics</h2>
               <GraphicsPanel data={data} />
+            </section>
+          )}
+          {tab === 'gallery' && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold">
+                Week {data.selectedWeek} graphics
+              </h2>
+              <WeekGraphicsPanel week={data.selectedWeek} />
             </section>
           )}
         </>

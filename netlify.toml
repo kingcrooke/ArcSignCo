@@ -108,6 +108,11 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+[[headers]]
+  for = "/gwb-fe006a16/slides/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
 # Vendored libraries carry their version in the filename: never overwrite one, add a new version.
 [[headers]]
   for = "/tools/sign-mockup/vendor/*"
