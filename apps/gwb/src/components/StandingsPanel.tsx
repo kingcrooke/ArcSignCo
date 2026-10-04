@@ -1,9 +1,21 @@
 import { recordLabel } from '../lib/standings'
 import type { StandingRow } from '../lib/types'
 
-export function StandingsPanel({ rows }: { rows: StandingRow[] }) {
+export function StandingsPanel({
+  rows,
+  deferralNote,
+}: {
+  rows: StandingRow[]
+  deferralNote?: string | null
+}) {
   return (
-    <div className="overflow-x-auto rounded-xl border border-[var(--gwb-border)]">
+    <div className="space-y-3">
+      {deferralNote && (
+        <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
+          {deferralNote}
+        </p>
+      )}
+      <div className="overflow-x-auto rounded-xl border border-[var(--gwb-border)]">
       <table className="w-full min-w-[520px] text-left text-sm">
         <thead className="bg-[var(--gwb-surface)] text-[var(--gwb-muted)] uppercase text-xs tracking-wider">
           <tr>
@@ -36,6 +48,7 @@ export function StandingsPanel({ rows }: { rows: StandingRow[] }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }

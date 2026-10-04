@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import {
   formatMulliganLedgerLine,
+  mulliganEntriesForWeek,
   mulliganForRoster,
   mulliganLabel,
   mulliganLedgerEntries,
   mulliganStatusForRoster,
+  mulligansUsedThroughWeek,
   MULLIGAN_LEDGER_ENTRIES,
 } from './mulligans'
 
@@ -41,5 +43,15 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).not.toContain('………')
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toContain('+7.3')
+  })
+
+  it('respects throughWeek for status and week filters for results', () => {
+    expect(mulligansUsedThroughWeek(1)).toBe(1)
+    expect(mulligansUsedThroughWeek(2)).toBe(3)
+    expect(mulligansUsedThroughWeek(3)).toBe(5)
+    expect(mulliganStatusForRoster(9, 1).used).toBe(false)
+    expect(mulliganStatusForRoster(9, 2).used).toBe(true)
+    expect(mulliganEntriesForWeek(2)).toHaveLength(2)
+    expect(mulliganEntriesForWeek(4)).toHaveLength(0)
   })
 })

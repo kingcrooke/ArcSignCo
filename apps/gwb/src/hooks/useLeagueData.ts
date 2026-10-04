@@ -10,12 +10,15 @@ import {
   fetchRosters,
   fetchUsers,
 } from '../lib/sleeperApi'
-import { computeStandings } from '../lib/standings'
+import { computeStandings, computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import {
   currentNflWeek,
   isWeekLive,
   lastCompletedWeek,
+  cumulativeDeferralNote,
+  standingsDeferralNote,
+  standingsThroughWeek,
   weekStatusLabel,
 } from '../lib/weeks'
 import type {
@@ -36,7 +39,10 @@ export interface LeagueData {
   league: SleeperLeague
   nflState: NflState
   rosters: SleeperRoster[]
+  /** Cumulative standings for the selected (or deferred) week — Standings tab. */
   standings: StandingRow[]
+  /** Full-season Sleeper roster standings — IG graphics & recaps (unchanged). */
+  seasonStandings: StandingRow[]
   power: PowerRankingRow[]
   recaps: MatchupRecap[]
   matchupsByWeek: Map<number, SleeperMatchup[]>
@@ -50,6 +56,9 @@ export interface LeagueData {
   isSelectedWeekLive: boolean
   weekLabel: string
   graphicsWeek: number
+  standingsThroughWeek: number
+  standingsDeferralNote: string | null
+  mulligansDeferralNote: string | null
 }
 
 export function useLeagueData(): {
@@ -68,6 +77,7 @@ export function useLeagueData(): {
     players: PlayersMap
     teams: Map<number, TeamInfo>
     standings: StandingRow[]
+    seasonStandings: StandingRow[]
     starterSlots: number
   } | null>(null)
   const [selectedWeek, setSelectedWeek] = useState(1)
@@ -89,6 +99,7 @@ export function useLeagueData(): {
       const matchupsByWeek = await fetchAllMatchupsThroughWeek(through)
       const teams = buildTeamMap(users, rosters)
       const standings = computeStandings(rosters, teams)
+      const seasonStandings = standings
       const starterSlots =
         league.roster_positions?.filter((p) => p !== 'BN' && !p.startsWith('IR'))
           .length ?? 10
@@ -102,6 +113,7 @@ export function useLeagueData(): {
         players,
         teams,
         standings,
+        seasonStandings,
         starterSlots,
       })
       setState('ready')
@@ -117,13 +129,39 @@ export function useLeagueData(): {
 
   const data = useMemo((): LeagueData | null => {
     if (!base) return null
-    const { rosters, matchupsByWeek, teams, players, standings, starterSlots, league, nflState } =
-      base
+    const {
+      rosters,
+      matchupsByWeek,
+      teams,
+      players,
+      seasonStandings,
+      starterSlots,
+      league,
+      nflState,
+    } = base
     const completedWeek = lastCompletedWeek(league, nflState)
+    const throughForCumulative = standingsThroughWeek(
+      selectedWeek,
+      league,
+      nflState,
+    )
     const analysisWeek = isWeekLive(selectedWeek, league, nflState)
       ? completedWeek
       : selectedWeek
     const graphicsWeek = analysisWeek
+
+    const standings = computeStandingsThroughWeek(
+      matchupsByWeek,
+      teams,
+      throughForCumulative,
+    )
+    const deferNote = standingsDeferralNote(selectedWeek, league, nflState)
+    const mulliganDeferNote = cumulativeDeferralNote(
+      selectedWeek,
+      league,
+      nflState,
+      'mulligan status',
+    )
 
     const weeksThrough = new Map<number, SleeperMatchup[]>()
     for (const [w, m] of matchupsByWeek) {
@@ -152,7 +190,7 @@ export function useLeagueData(): {
     const weekMatchups = matchupsByWeek.get(selectedWeek)
     const recaps =
       weekMatchups && weekHasMatchups(weekMatchups)
-        ? buildWeekRecaps(weekMatchups, teams, players, standings)
+        ? buildWeekRecaps(weekMatchups, teams, players, seasonStandings)
         : []
 
     const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
@@ -163,6 +201,7 @@ export function useLeagueData(): {
       nflState,
       rosters,
       standings,
+      seasonStandings,
       power,
       recaps,
       matchupsByWeek,
@@ -176,6 +215,9 @@ export function useLeagueData(): {
       isSelectedWeekLive,
       weekLabel,
       graphicsWeek,
+      standingsThroughWeek: throughForCumulative,
+      standingsDeferralNote: deferNote,
+      mulligansDeferralNote: mulliganDeferNote,
     }
   }, [base, selectedWeek, load])
 

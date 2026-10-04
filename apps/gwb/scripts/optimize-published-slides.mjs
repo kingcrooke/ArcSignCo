@@ -20,9 +20,13 @@ const RESULTS_BASENAMES = [1, 2, 3].flatMap((w) =>
   [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
 )
 
+const REPORT_WEEKS = [1, 2, 3, 4]
+
 const SLIDE_BASENAMES = [
-  ...Array.from({ length: 16 }, (_, i) =>
-    `w4-slide-${String(i + 1).padStart(2, '0')}`,
+  ...REPORT_WEEKS.flatMap((w) =>
+    Array.from({ length: 16 }, (_, i) =>
+      `w${w}-slide-${String(i + 1).padStart(2, '0')}`,
+    ),
   ),
   'vs-m1-narking-steven',
   'vs-m2-kayser-frankie',
@@ -120,6 +124,21 @@ async function processOne(inputPath, basename) {
 
 async function main() {
   const cliSources = process.argv.slice(2).filter((a) => !a.startsWith('-'))
+  const weeksArg = process.argv.find((a) => a.startsWith('--weeks='))
+  const weeks = weeksArg
+    ? weeksArg
+        .slice('--weeks='.length)
+        .split(',')
+        .map((s) => Number(s.trim()))
+        .filter((n) => n > 0)
+    : null
+  const basenames = weeks?.length
+    ? weeks.flatMap((w) =>
+        Array.from({ length: 16 }, (_, i) =>
+          `w${w}-slide-${String(i + 1).padStart(2, '0')}`,
+        ),
+      )
+    : SLIDE_BASENAMES
   const searchDirs = [
     path.join(__dirname, '../../../docs/gwb-remade-slides'),
     path.join(__dirname, '../../../docs/gwb-results-cards'),
@@ -130,7 +149,7 @@ async function main() {
 
   await mkdir(OUT_DIR, { recursive: true })
 
-  for (const basename of SLIDE_BASENAMES) {
+  for (const basename of basenames) {
     const explicit = cliSources.find((p) => path.basename(p).includes(basename))
     const input =
       explicit ?? (await findSourceForBasename(basename, searchDirs))
