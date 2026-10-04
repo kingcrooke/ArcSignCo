@@ -14,10 +14,35 @@
 //
 // The artwork object (art.js makeArtwork) supplies: letters (cut-out copy), source (as supplied),
 // cutout (true when the copy has a transparent ground), color, layout(panelColor) -> { panel, copy, bg }.
-import { maskOf, morph, ring, blur, tube, hexToRgb, mix, alphaBounds, makeCanvas, WHITE, DISK } from "./art.js";
+import {
+  maskOf, morph, ring, blur, tube, hexToRgb, mix, alphaBounds, makeCanvas,
+  fitFace, layoutMargin, pixelFace, frostFilm, WHITE, DISK,
+} from "./art.js";
 import { rect, mulc, lampPools, SPOT, NIGHT_DARK, NIGHT_UNLIT, WARM, STEEL } from "./kit.js";
 
 export const KINDS = ["letters", "cabinet", "blade", "panel", "neon", "flat"];
+
+// Faces are built at the quad's own aspect so the copy keeps its proportions however the corners are
+// dragged: only the perspective changes its shape. render.pad (fraction of the shorter side) sets the
+// margin; without it the margin matches layout(panel), so an undragged face looks the same as before.
+function faceFor(art, r, W, H, panel) {
+  const aspect = H / W;
+  if (!art.cutout) {
+    const lay = art.layout(panel);
+    return {
+      panel: fitFace(lay.panel, aspect, { cover: true }),
+      copy: fitFace(lay.copy, aspect, { cover: true }),
+      bg: lay.bg,
+    };
+  }
+  const L = art.letters;
+  const fit = r.pad != null ? { pad: r.pad } : { margin: layoutMargin(L) };
+  return {
+    panel: fitFace(L, aspect, { ...fit, bg: panel }),
+    copy: fitFace(L, aspect, fit),
+    bg: hexToRgb(panel),
+  };
+}
 
 /** Default options for a kind-based type; the editor shows the ones listed in type.options. */
 export function kindDefaults(type) {
@@ -57,10 +82,28 @@ export function kindFields(type, opts) {
 
 /** The flat artwork a kind uses as its face: this sets the aspect and is the fab source. */
 export function kindFaceArt(type, art, options = {}) {
-  const k = type.render.kind;
+  const r = type.render, k = r.kind;
+  const panel = options.panel || "#0b1d33";
+  const aspect = type.aspect || (art.letters.height / Math.max(1, art.letters.width));
   if (k === "letters" || k === "neon") return art.letters;
-  if (k === "flat") return art.cutout ? art.letters : art.source;
-  return art.layout(options.panel || "#0b1d33").panel;
+  if (k === "flat") {
+    if (!art.cutout) return fitFace(art.source, aspect, r.fill === "cover" ? { cover: true } : {});
+    if (r.frost) {
+      const fitted = fitFace(art.letters, aspect, { pad: r.pad ?? 0.1 });
+      return frostFilm(fitted, options.frost || "etched");
+    }
+    return fitFace(art.letters, aspect, { pad: r.pad ?? 0.1 });
+  }
+  if (r.face === "pixels") {
+    const fw = 1, fh = aspect;
+    const rows = Math.max(12, Math.min(48, Math.round(fh * 24)));
+    const cols = Math.max(12, Math.min(128, Math.round(rows * (fw / fh))));
+    const content = art.cutout
+      ? fitFace(art.letters, fh / fw, { pad: 0.1 })
+      : faceFor(art, r, fw, fh, panel).panel;
+    return pixelFace(content, cols, rows, { color: hexToRgb(options.light || "#ffffff"), cutout: art.cutout });
+  }
+  return faceFor(art, r, 1, aspect, panel).panel;
 }
 
 /** Height / width the pinned quad should have for this type and artwork. */
@@ -168,7 +211,8 @@ export function buildKind(type, env, kit) {
   } else if (kind === "cabinet") {
     const zb = r.gap || 0, zf = zb + r.depth, fr = r.frame || 0;
     const frameC = hexToRgb(opts.frame || r.frameColor || "#24262b");
-    const lay = art.layout(opts.panel || "#0b1d33");
+    const panelColor = opts.panel || "#0b1d33";
+    const lay = faceFor(art, r, W - 2 * fr, H - 2 * fr, panelColor);
     boxShadow(0, 0, W, H, zf, 0.45);
     box(0, W, 0, H, zb, zf, frameC, { top: 0.95, side: 0.6, bottom: 0.36 });
     if (fr > 0) {
@@ -188,6 +232,16 @@ export function buildKind(type, env, kit) {
         emit.push({ tex: C, pts: rect(fr, fr, W - fr, H - fr, zf + push), mul: 1 });
         emit.push({ tex: CM, pts: rect(fr, fr, W - fr, H - fr, zf + push / 2), tint: [1, 1, 1], mul: 0.5 });
       }
+    } else if (r.face === "pixels") {
+      const face = rect(fr, fr, W - fr, H - fr, zf + 0.01);
+      const fw = W - 2 * fr, fh = H - 2 * fr;
+      const rows = Math.max(12, Math.min(72, Math.round(fh / (r.pitch || 0.75))));
+      const cols = Math.max(12, Math.min(256, Math.round(rows * (fw / fh))));
+      const content = art.cutout ? fitFace(art.letters, fh / fw, { pad: 0.1 }) : lay.panel;
+      const P = pixelFace(content, cols, rows, { color: light, cutout: art.cutout });
+      layer(P, face, { mul: 1, alpha: r.mesh ? 0.92 : 1 });
+      layer(P, face, { mul: 0.1, add: true });
+      if (lit) emit.push({ tex: P, pts: face, mul: 0.95 });
     } else {
       const face = rect(fr, fr, W - fr, H - fr, zf + 0.01);
       layer(lay.panel, face, { mul: lit ? 1 : amb(0.98) });
@@ -205,7 +259,8 @@ export function buildKind(type, env, kit) {
     const t = r.thick, side = opts.side === "right" ? 1 : -1;
     const wallX = side < 0 ? -r.arm : W + r.arm, edgeX = side < 0 ? 0 : W, zc = -t / 2;
     const steel = hexToRgb(STEEL);
-    const lay = art.layout(opts.panel || "#0b1d33");
+    const fr0 = r.lit ? Math.min(1.25, W * 0.04) : 0;
+    const lay = faceFor(art, r, W - 2 * fr0, H - 2 * fr0, opts.panel || "#0b1d33");
     const frameC = hexToRgb(opts.frame || r.frameColor || "#24262b");
     const plateTop = r.bracket ? -8 : -3, plateBot = r.bracket ? H * 0.6 : H + 3;
     const steelNow = mulc(steel, night ? NIGHT_UNLIT : [1, 1, 1]);
@@ -245,7 +300,7 @@ export function buildKind(type, env, kit) {
     }
   } else if (kind === "panel") {
     const zb = r.gap, zf = zb + r.thick;
-    const lay = art.layout(opts.panel || "#0b1d33");
+    const lay = faceFor(art, r, W, H, opts.panel || "#0b1d33");
     boxShadow(0, 0, W, H, zf, r.lamps ? 0.36 : 0.4);
     box(0, W, 0, H, zb, zf, hexToRgb("#c4c7cc"), { side: 0.75 });
     const lampsOn = r.lamps && night;
@@ -301,9 +356,18 @@ export function buildKind(type, env, kit) {
       layer(g.canvas, rect(-p, -p, W + p, H + p, zf + 0.25), { tint: color, mul: 0.8, add: true });
     }
   } else if (kind === "flat") {
-    const src = art.cutout ? art.letters : art.source;
-    const glass = r.surface === "glass";
-    const b = layer(src, rect(0, 0, W, H, 0), { mul: amb(glass ? 0.98 : 1), alpha: glass ? 0.95 : 0.94 });
-    if (!glass) b.paint = true;
+    const glass = r.surface === "glass", aspect = H / W, pad = r.pad ?? 0.1;
+    const full = r.fill === "cover";
+    let src;
+    if (!art.cutout) src = fitFace(art.source, aspect, full ? { cover: true } : { pad: 0 });
+    else if (full && !r.frost) src = fitFace(art.letters, aspect, { pad, bg: opts.panel || "#ffffff" });
+    else src = fitFace(art.letters, aspect, { pad });
+    if (r.frost) {
+      const film = frostFilm(src, opts.frost || "etched");
+      layer(film, rect(0, 0, W, H, 0), { tint: [0.94, 0.96, 0.97], mul: amb(1), alpha: 0.72 });
+    } else {
+      const b = layer(src, rect(0, 0, W, H, 0), { mul: amb(glass ? 0.98 : 1), alpha: 0.95 });
+      if (!glass) b.paint = true;
+    }
   }
 }

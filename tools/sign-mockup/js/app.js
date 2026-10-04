@@ -13,6 +13,7 @@ import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
 import { mountEstimateForm } from "./estimate-form.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
+import { anchorCenter, STOREFRONT_WIDTH_IN, usesFasciaBand } from "./place-anchors.js";
 
 const $ = id => document.getElementById(id);
 const stage = $("stage"), canvas = $("view"), ctx = canvas.getContext("2d");
@@ -392,7 +393,7 @@ function updateChip(size) {
     const cat = currentCat();
     html = size
       ? `≈ ${size.w} W × ${size.h} ${cat.ui.heightShort}<small>${cat.ui.hangs ? "" : `≈ ${size.area} · `}estimate from your scale line</small>`
-      : `${cat.Noun} placed<small>Set the scale in step 2 to see its size</small>`;
+      : `${cat.Noun} placed<small>${presetWidthPx() && !calibrated() ? "Draw a scale line for true size" : "Set the scale in step 2 to see its size"}</small>`;
   } else if (state.step === "scale" && calibrated()) {
     html = `Scale set<small>${formatFeetInches(state.calInches)} reference line</small>`;
   }
@@ -874,7 +875,12 @@ function clampQuadInsidePhoto(photo) {
 function presetWidthPx() {
   const cat = currentCat();
   if (typeof cat.ui.placeWidthIn !== "function") return null;
-  return scaledWidthPx(cat.ui.placeWidthIn(currentType(), optionsFor()));
+  const widthIn = cat.ui.placeWidthIn(currentType(), optionsFor());
+  const scaled = scaledWidthPx(widthIn);
+  if (scaled) return scaled;
+  const photo = state.photo?.canvas;
+  if (!state.calInches && photo && widthIn) return photo.width * (widthIn / STOREFRONT_WIDTH_IN);
+  return null;
 }
 
 function defaultPlaceWidthPx(photo) {
@@ -902,6 +908,15 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
   } else if (cat.ui.plaque) {
     const mount = plaqueMountPoint(photo);
     if (mount) c = mount;
+  } else if (!state.calInches) {
+    c = anchorCenter(photo, currentType(), {
+      home: state.home,
+      door: doorMountPoint(photo),
+      plaque: plaqueMountPoint(photo),
+    });
+    if (state.home && usesFasciaBand(currentType())) {
+      c = { x: state.home.x, y: state.home.y };
+    }
   } else if (keepCenter && state.quad) {
     c = centroid(state.quad);
     if (!preset) {

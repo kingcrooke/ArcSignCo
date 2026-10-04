@@ -3,6 +3,7 @@ import { formatFeetInches } from "../../geometry.js";
 export const CABINET = [["black", "Black aluminum"], ["silver", "Silver aluminum"], ["custom", "Custom paint"]];
 export const BRIGHT = [["indoor", "Indoor brightness"], ["window", "High-brightness window"], ["outdoor", "Outdoor rated"]];
 export const MOUNT = [["wall", "Wall-mounted cabinet"], ["hung", "Hung behind glass"], ["pole", "Pole or monument"]];
+export const LED_MESSAGE = [["#ffffff", "White"], ["#ffb02e", "Amber"]];
 
 export const SIZE_CHOICES = {
   "led-message-center": [["96x48", "8' × 4'"], ["72x36", "6' × 3'"], ["48x24", "4' × 2'"]],
@@ -31,10 +32,9 @@ export function defaultLedOptions(type) {
     cabinet: "black",
     bright: type.id === "led-window" ? "window" : "indoor",
     mount: type.id === "led-window" ? "hung" : "wall",
-    // A running screen reads as a lit blue field in daylight, not a black slab.
-    panel: "#1d4e89",
+    panel: "#0b1d33",
     frame: "#24262b",
-    light: "#eef5ff",
+    light: type.id === "led-open-neon" ? "#eef5ff" : "#ffffff",
     size: sizes[0][0],
   };
 }
@@ -52,7 +52,9 @@ export function sanitizeLedOptions(type, raw) {
     mount: MOUNT.some(([v]) => v === mount) ? mount : d.mount,
     panel: /^#[0-9a-f]{6}$/i.test(raw?.panel || "") ? raw.panel : d.panel,
     frame: /^#[0-9a-f]{6}$/i.test(raw?.frame || "") ? raw.frame : d.frame,
-    light: /^#[0-9a-f]{6}$/i.test(raw?.light || "") ? raw.light : d.light,
+    light: type.id === "led-open-neon"
+      ? (/^#[0-9a-f]{6}$/i.test(raw?.light || "") ? raw.light : d.light)
+      : (LED_MESSAGE.some(([v]) => v === raw?.light) ? raw.light : d.light),
     size: allowed.has(raw?.size) ? raw.size : d.size,
   };
 }
@@ -81,11 +83,12 @@ export function ledOptionFields(type, opts) {
     { key: "size", label: "Typical size", kind: "select", value: o.size, choices: SIZE_CHOICES[type.id] || [] },
     { key: "cabinet", label: "Cabinet finish", kind: "select", value: o.cabinet, choices: CABINET },
     { key: "bright", label: "Brightness", kind: "select", value: o.bright, choices: BRIGHT },
-    { key: "panel", label: "Face / tile color", kind: "color", value: o.panel },
     { key: "frame", label: "Frame color", kind: "color", value: o.frame },
   ];
-  if (type.lighting === "internal" || type.lighting === "neon") {
+  if (type.id === "led-open-neon") {
     fields.push({ key: "light", label: "Light color", kind: "color", value: o.light });
+  } else if (type.lighting === "internal") {
+    fields.push({ key: "light", label: "Message color", kind: "select", value: o.light, choices: LED_MESSAGE });
   }
   if (type.id !== "led-window" && type.id !== "led-open-neon") {
     fields.push({ key: "mount", label: "Mounting", kind: "select", value: o.mount, choices: MOUNT });
