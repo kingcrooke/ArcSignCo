@@ -178,6 +178,5 @@ export const QUOTE_ENGINE_PATHS = [
   "/api/quote-engine/calculate",
   "/api/quote-engine/rate-card",
   "/api/quote-engine/proposal/:id",
-  "/api/quote-engine/proposal/:id.pdf",
   "/api/quote-engine/health",
 ];
