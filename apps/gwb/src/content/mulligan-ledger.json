@@ -1,6 +1,6 @@
 {
   "throughWeek": 3,
-  "weekNote": "Week 4 in progress — none confirmed yet.",
+  "weekNote": "Week 4: none so far.",
   "entries": [
     {
       "id": "w1-mauricio",
@@ -17,7 +17,7 @@
       "opponentLabel": "Jesus",
       "won": true,
       "flipped": false,
-      "visibility": "pending"
+      "footnote": "Won anyway; the swap actually cost 0.9."
     },
     {
       "id": "w2-manny",
@@ -33,8 +33,7 @@
       "opponentScore": 138.89,
       "opponentLabel": "Jamil",
       "won": true,
-      "flipped": false,
-      "visibility": "pending"
+      "flipped": false
     },
     {
       "id": "w2-matt",
@@ -48,10 +47,10 @@
       "scoreWith": 130.52,
       "scoreWithout": 125.42,
       "opponentScore": 134.93,
-      "opponentLabel": "Steven (hairychest)",
+      "opponentLabel": "Steven",
       "won": false,
       "flipped": false,
-      "visibility": "pending"
+      "footnote": "The first failed mulligan."
     },
     {
       "id": "w3-narking",
@@ -67,8 +66,7 @@
       "opponentScore": 167.66,
       "opponentLabel": "Darkseid Jackson",
       "won": false,
-      "flipped": false,
-      "visibility": "published"
+      "flipped": false
     },
     {
       "id": "w3-danny",
@@ -85,8 +83,7 @@
       "opponentScore": 131.97,
       "opponentLabel": "Hadi",
       "won": false,
-      "flipped": false,
-      "visibility": "published"
+      "flipped": false
     }
   ]
 }

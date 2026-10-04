@@ -25,16 +25,28 @@ async function main() {
   await page.goto(BASE, { waitUntil: 'networkidle', timeout: 120_000 })
   await page.waitForSelector('#mulligans-section', { timeout: 120_000 })
   const text = await page.locator('#mulligans-section').innerText()
-  const mustNot = ['Mauricio', 'Caleb Williams', 'Malachi Fields', 'Hady', '+7.3']
+  const mustNot = ['Hady', '+7.3', 'pending', 'staged', 'Week 4 swap']
   for (const token of mustNot) {
-    if (text.includes(token)) {
-      throw new Error(`Hidden/forbidden token visible in mulligan section: ${token}`)
+    if (text.toLowerCase().includes(token.toLowerCase())) {
+      throw new Error(`Forbidden token visible in mulligan section: ${token}`)
     }
   }
-  for (const token of ['NarkingR', 'Santagua', '+5.3', 'Hadi']) {
+  for (const token of [
+    'Mauricio',
+    'Manny',
+    'Malachi Fields',
+    'NarkingR',
+    'Santagua',
+    '+5.3',
+    'Hadi',
+    '5 used',
+  ]) {
     if (!text.includes(token)) {
-      throw new Error(`Expected published token missing: ${token}`)
+      throw new Error(`Expected token missing: ${token}`)
     }
+  }
+  if ((text.match(/Used —/g) || []).length !== 5) {
+    throw new Error('Expected exactly 5 Used rows in manager table')
   }
 
   for (const w of [1280, 390]) {

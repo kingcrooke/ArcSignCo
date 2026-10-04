@@ -1,16 +1,16 @@
 import {
   formatMulliganLedgerLine,
-  mulliganForRoster,
   mulliganLabel,
+  mulliganLedgerEntries,
+  mulliganStatusForRoster,
   MULLIGAN_LEDGER_META,
-  publishedMulliganEntries,
 } from '../lib/mulligans'
 import type { StandingRow } from '../lib/types'
 
 const MANAGER_COUNT = 12
 
 export function MulligansPanel({ rows }: { rows: StandingRow[] }) {
-  const published = publishedMulliganEntries()
+  const ledger = mulliganLedgerEntries()
   const sorted = [...rows].sort((a, b) => a.teamName.localeCompare(b.teamName))
 
   return (
@@ -19,18 +19,17 @@ export function MulligansPanel({ rows }: { rows: StandingRow[] }) {
         Mulligans
       </h3>
       <p className="mb-3 text-xs text-[var(--gwb-muted)]">
-        One per manager per season.{' '}
-        {published.length} published use{published.length === 1 ? '' : 's'} /{' '}
-        {MANAGER_COUNT} managers through Week {MULLIGAN_LEDGER_META.throughWeek}.{' '}
-        {MULLIGAN_LEDGER_META.weekNote} None flipped a result.
+        One per manager per season. {ledger.length} used / {MANAGER_COUNT} managers
+        through Week {MULLIGAN_LEDGER_META.throughWeek}. {MULLIGAN_LEDGER_META.weekNote}{' '}
+        None flipped a result.
       </p>
 
       <div className="mb-4">
         <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-muted)]">
-          2026 mulligan ledger (published)
+          2026 mulligan ledger
         </h4>
         <ul className="space-y-2">
-          {published.map((entry) => (
+          {ledger.map((entry) => (
             <li
               key={entry.id}
               className="rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm leading-snug text-[var(--gwb-text)]"
@@ -51,7 +50,7 @@ export function MulligansPanel({ rows }: { rows: StandingRow[] }) {
           </thead>
           <tbody>
             {sorted.map((r) => {
-              const m = mulliganForRoster(r.rosterId)
+              const m = mulliganStatusForRoster(r.rosterId)
               return (
                 <tr
                   key={r.rosterId}
@@ -76,12 +75,6 @@ export function MulligansPanel({ rows }: { rows: StandingRow[] }) {
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-xs text-[var(--gwb-muted)]">
-        Per-manager status reflects published ledger entries only (2 shown). Full
-        audit through Week 3 counts five league-wide uses (one each for five
-        managers); three additional uses are staged as pending in site data and
-        are not listed above.
-      </p>
     </div>
   )
 }

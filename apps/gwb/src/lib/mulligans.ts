@@ -7,8 +7,6 @@ export interface MulliganStatus {
   usedDetail?: string
 }
 
-export type MulliganVisibility = 'published' | 'pending'
-
 export interface MulliganPlayerSwap {
   name: string
   position: string
@@ -32,7 +30,7 @@ export interface MulliganLedgerEntry {
   opponentLabel: string
   won: boolean
   flipped: boolean
-  visibility: MulliganVisibility
+  footnote?: string
 }
 
 interface MulliganLedgerFile {
@@ -50,24 +48,18 @@ export const MULLIGAN_LEDGER_META = {
   weekNote: ledgerData.weekNote,
 }
 
-export function publishedMulliganEntries(): MulliganLedgerEntry[] {
-  return MULLIGAN_LEDGER_ENTRIES.filter((e) => e.visibility === 'published').sort(
+export function mulliganLedgerEntries(): MulliganLedgerEntry[] {
+  return [...MULLIGAN_LEDGER_ENTRIES].sort(
     (a, b) => a.week - b.week || a.rosterId - b.rosterId,
   )
 }
 
-export function pendingMulliganEntries(): MulliganLedgerEntry[] {
-  return MULLIGAN_LEDGER_ENTRIES.filter((e) => e.visibility === 'pending')
+export function mulliganForRoster(rosterId: number): MulliganLedgerEntry | undefined {
+  return MULLIGAN_LEDGER_ENTRIES.find((e) => e.rosterId === rosterId)
 }
 
-export function publishedMulliganForRoster(
-  rosterId: number,
-): MulliganLedgerEntry | undefined {
-  return publishedMulliganEntries().find((e) => e.rosterId === rosterId)
-}
-
-export function mulliganForRoster(rosterId: number): MulliganStatus {
-  const entry = publishedMulliganForRoster(rosterId)
+export function mulliganStatusForRoster(rosterId: number): MulliganStatus {
+  const entry = mulliganForRoster(rosterId)
   if (!entry) {
     return { rosterId, used: false }
   }
@@ -101,18 +93,17 @@ export function formatMulliganLedgerLine(entry: MulliganLedgerEntry): string {
     ? `${entry.manager} / ${entry.managerShort}`
     : entry.manager
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
-  const matchup = entry.won
-    ? `${formatScore(entry.scoreWith)}–${formatScore(entry.opponentScore)}`
-    : `${formatScore(entry.opponentScore)}–${formatScore(entry.scoreWith)}`
+  const matchup = `${formatScore(entry.scoreWith)}–${formatScore(entry.opponentScore)}`
   const resultVerb = entry.won ? 'Won' : 'Lost'
   const vsWord = entry.won ? 'vs' : 'to'
   const flip = entry.flipped ? 'Flipped result' : 'No flip'
+  const tail = entry.footnote ? ` · ${entry.footnote}` : ''
   return (
     `W${entry.week} · ${manager} (${entry.team}) · ` +
     `OUT ${entry.out.name} ${entry.out.position} ${formatScore(entry.out.points)}${outNote} → ` +
     `IN ${entry.in.name} ${entry.in.position} ${formatScore(entry.in.points)} · ` +
     `Net ${formatSignedImpact(entry.netImpact)} · ` +
     `${resultVerb} ${matchup} ${vsWord} ${entry.opponentLabel} ` +
-    `(would've been ${formatScore(entry.scoreWithout)} without it) · ${flip}`
+    `(would've been ${formatScore(entry.scoreWithout)} without it) · ${flip}${tail}`
   )
 }
