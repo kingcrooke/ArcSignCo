@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 export type AppTab =
   | 'standings'
+  | 'live'
   | 'gallery'
   | 'recaps'
   | 'mulligans'
@@ -10,6 +11,7 @@ export type AppTab =
 
 const TAB_SET = new Set<AppTab>([
   'standings',
+  'live',
   'gallery',
   'recaps',
   'mulligans',

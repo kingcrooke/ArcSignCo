@@ -64,6 +64,7 @@ export interface LeagueData {
   waiverBoard: WaiverBoard
   waiverLoadError: string | null
   waiverDeferralNote: string | null
+  updateWeekMatchups: (week: number, rows: SleeperMatchup[]) => void
 }
 
 export function useLeagueData(): {
@@ -88,6 +89,15 @@ export function useLeagueData(): {
     waiverLoadError: string | null
   } | null>(null)
   const [selectedWeek, setSelectedWeek] = useState(1)
+
+  const updateWeekMatchups = useCallback((week: number, rows: SleeperMatchup[]) => {
+    setBase((prev) => {
+      if (!prev) return prev
+      const matchupsByWeek = new Map(prev.matchupsByWeek)
+      matchupsByWeek.set(week, rows)
+      return { ...prev, matchupsByWeek }
+    })
+  }, [])
 
   const load = useCallback(async () => {
     setState('loading')
@@ -240,8 +250,9 @@ export function useLeagueData(): {
       waiverBoard,
       waiverLoadError,
       waiverDeferralNote,
+      updateWeekMatchups,
     }
-  }, [base, selectedWeek, load, players, playersLoading, ensurePlayers])
+  }, [base, selectedWeek, load, players, playersLoading, ensurePlayers, updateWeekMatchups])
 
   return { state, error, data, refresh: load }
 }

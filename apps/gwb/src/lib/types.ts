@@ -1,6 +1,7 @@
 export interface SleeperUser {
   user_id: string
   display_name: string
+  avatar?: string
   metadata?: {
     team_name?: string
     avatar?: string
@@ -99,6 +100,7 @@ export interface TeamInfo {
   userId: string
   displayName: string
   teamName: string
+  avatarUrl: string | null
 }
 
 export interface StandingRow {

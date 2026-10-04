@@ -1,3 +1,4 @@
+import { sleeperAvatarUrl } from './sleeperAvatar'
 import type { SleeperRoster, SleeperUser, TeamInfo } from './types'
 
 /** True when team_name is empty or only punctuation / whitespace. */
@@ -29,6 +30,9 @@ export function buildTeamMap(
       userId: r.owner_id ?? '',
       displayName: user?.display_name?.trim() ?? `Roster ${r.roster_id}`,
       teamName: getTeamName(user, r.roster_id),
+      avatarUrl: sleeperAvatarUrl(
+        user?.metadata?.avatar ?? user?.avatar ?? null,
+      ),
     })
   }
   return map
