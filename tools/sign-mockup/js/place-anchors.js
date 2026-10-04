@@ -36,6 +36,7 @@ export const PLACE_ANCHOR = {
   "ada-restroom": "plaque",
   "ada-stair": "plaque",
   "ada-exit": "plaque",
+  "ada-exit-tactile": "plaque",
   "led-message-center": FASCIA,
   "led-video-board": FASCIA,
   "led-window": WINDOW_GLASS_LOWER,

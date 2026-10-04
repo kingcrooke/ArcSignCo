@@ -39,6 +39,18 @@ const DRAW = {
       .label("Layout preview only", 54, 130, 140);
     return "Section";
   },
+  "ada-exit-tactile"(s) {
+    s.wall();
+    s.rect(50, 52, 3, 76, "#f4f6f8", C.ink, 1);
+    s.rect(53, 58, 1.5, 18, C.metalLight);
+    for (let i = 0; i < 6; i++) for (let j = 0; j < 2; j++) if ((i + j) % 2) s.circle(58 + i * 4, 100 + j * 5, 0.9, C.ink);
+    s.label("Tactile EXIT", 55, 70, 34)
+      .label("Grade 2 Braille", 62, 102, 58)
+      .label("Not illuminated", 55, 85, 82)
+      .label("BC 1013.4", 56, 73, 108)
+      .label("Layout preview only", 55, 120, 140);
+    return "Section";
+  },
   "ada-exit"(s) {
     s.wall();
     s.rect(48, 48, 5, 84, C.metal, C.ink, 0.8);
@@ -46,10 +58,10 @@ const DRAW = {
     s.led(56, 70); s.led(56, 100);
     s.rays(60, 85, 1, 50, 0.35);
     s.label("Illuminated exit face", 55, 85, 34)
-      .label("Aluminum cabinet", 50, 90, 58)
-      .label("LED modules inside", 56, 100, 82)
-      .label("Battery backup optional", 56, 70, 108)
-      .label("Electrical coordination", 55, 120, 140);
+      .label("UL 924 listed cabinet", 50, 90, 58)
+      .label("Red letters, always on", 56, 100, 82)
+      .label("90-min backup power", 56, 70, 108)
+      .label("Licensed electrician", 55, 120, 140);
     return "Section";
   },
 };

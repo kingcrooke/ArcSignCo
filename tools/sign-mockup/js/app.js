@@ -805,7 +805,7 @@ function scaledWidthPx(widthIn) {
   return widthIn / (state.calInches / calPx);
 }
 
-/** Wall pier beside a scaled door opening, about 60 in above the sidewalk. */
+/** Wall pier beside a scaled door opening; tactile baseline ~48–60 in AFF (center ~52 in for typical plaque). */
 function plaqueMountPoint(photo) {
   if (!state.cal || !state.calInches) return null;
   const calPx = dist(state.cal.a, state.cal.b);
@@ -817,7 +817,7 @@ function plaqueMountPoint(photo) {
   const sidewalkY = Math.min(photo.height - 6, doorY + 10 / inPerPx);
   const pier = {
     x: doorRight + 14 / inPerPx,
-    y: sidewalkY - 60 / inPerPx,
+    y: sidewalkY - 52 / inPerPx,
   };
   const margin = 8;
   const pierOk = pier.x > margin && pier.x < photo.width - margin

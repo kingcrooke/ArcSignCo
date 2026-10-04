@@ -1,4 +1,5 @@
 // node --test ./tools/sign-proofs.test.mjs
+import "./pricing-test-bootstrap.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { handleSignProofs, STORE_NAME, contextSlug, newProofId } from "../netlify/lib/sign-proofs.mjs";
