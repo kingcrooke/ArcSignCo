@@ -2,7 +2,12 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import type { GraphicsSectionKind } from '../lib/weekGraphics'
 
 const STORAGE_KEY = 'gwb-sound'
-const BASE = `${import.meta.env.BASE_URL}audio`
+
+/** `/gwb-fe006a16/audio/<file>` — BASE_URL may or may not end with a slash. */
+export function audioSrc(file: string, base = import.meta.env.BASE_URL): string {
+  const root = base.endsWith('/') ? base : `${base}/`
+  return `${root}audio/${file.replace(/^\//, '')}`
+}
 
 type TabSound =
   | 'standings'
@@ -13,19 +18,22 @@ type TabSound =
   | 'waiver'
 
 const TAB_LOOPS: Record<TabSound, string> = {
-  standings: `${BASE}impact-loop.mp3`,
-  gallery: `${BASE}impact-loop.mp3`,
-  recaps: `${BASE}impact-loop.mp3`,
-  mulligans: `${BASE}monkeys-loop.mp3`,
-  frankie: `${BASE}sneaky-loop.mp3`,
-  waiver: `${BASE}volatile-loop.mp3`,
+  standings: audioSrc('impact-loop.mp3'),
+  gallery: audioSrc('impact-loop.mp3'),
+  recaps: audioSrc('impact-loop.mp3'),
+  mulligans: audioSrc('monkeys-loop.mp3'),
+  frankie: audioSrc('sneaky-loop.mp3'),
+  waiver: audioSrc('volatile-loop.mp3'),
 }
 
 const DECK_LOOPS: Record<GraphicsSectionKind, string> = {
-  matchups: `${BASE}sneaky-loop.mp3`,
-  results: `${BASE}impact-loop.mp3`,
-  report: `${BASE}volatile-loop.mp3`,
+  matchups: audioSrc('sneaky-loop.mp3'),
+  results: audioSrc('impact-loop.mp3'),
+  report: audioSrc('volatile-loop.mp3'),
 }
+
+const CLICK_SRC = audioSrc('click.mp3')
+const BUZZER_SRC = audioSrc('buzzer.mp3')
 
 /** Sound is on unless the user explicitly muted (`gwb-sound=off`). */
 function readMuted(): boolean {
@@ -36,6 +44,11 @@ function readMuted(): boolean {
   }
 }
 
+function srcMatches(audio: HTMLAudioElement, src: string): boolean {
+  const file = src.slice(src.lastIndexOf('/') + 1)
+  return audio.src.endsWith(`/${file}`) || audio.src.endsWith(file)
+}
+
 export function useSound() {
   const [armed, setArmed] = useState(() => !readMuted())
   const [unlocked, setUnlocked] = useState(false)
@@ -43,6 +56,10 @@ export function useSound() {
   const bedRef = useRef<HTMLAudioElement | null>(null)
   const stingerRef = useRef<HTMLAudioElement | null>(null)
   const pendingSrcRef = useRef(TAB_LOOPS.standings)
+  const armedRef = useRef(armed)
+  const unlockedRef = useRef(unlocked)
+  armedRef.current = armed
+  unlockedRef.current = unlocked
 
   const ensureAudio = useCallback(() => {
     if (!bedRef.current) {
@@ -69,37 +86,45 @@ export function useSound() {
     setPlaying(false)
   }, [])
 
-  const tryPlayBed = useCallback(async () => {
-    if (!armed) return false
+  /**
+   * Start the bed in the current turn. `play()` is called here, not after an
+   * await, so a user-gesture caller keeps the activation.
+   */
+  const playBedNow = useCallback(() => {
+    if (!armedRef.current) return
     const { bed } = ensureAudio()
     const src = pendingSrcRef.current
-    const file = src.split('/').pop() ?? src
-    if (!bed.src || !bed.src.endsWith(file)) {
-      bed.src = src
-    }
-    try {
-      await bed.play()
-      setUnlocked(true)
-      setPlaying(true)
-      return true
-    } catch {
-      return false
-    }
-  }, [armed, ensureAudio])
+    if (!srcMatches(bed, src)) bed.src = src
+    const attempt = bed.play()
+    void attempt.then(
+      () => {
+        unlockedRef.current = true
+        setUnlocked(true)
+        setPlaying(true)
+      },
+      () => {
+        if (!bedRef.current || bedRef.current.paused) {
+          unlockedRef.current = false
+          setUnlocked(false)
+        }
+      },
+    )
+  }, [ensureAudio])
 
   const playLoop = useCallback(
     (src: string) => {
-      if (!armed) return
+      if (!armedRef.current) return
       pendingSrcRef.current = src
-      if (!unlocked) return
-      void tryPlayBed()
+      if (!unlockedRef.current) return
+      playBedNow()
     },
-    [armed, unlocked, tryPlayBed],
+    [playBedNow],
   )
 
   const unlock = useCallback(() => {
-    const next = !armed
+    const next = !armedRef.current
     setArmed(next)
+    armedRef.current = next
     try {
       if (next) {
         localStorage.removeItem(STORAGE_KEY)
@@ -110,19 +135,18 @@ export function useSound() {
       /* ignore */
     }
     if (next) {
-      ensureAudio()
-      void tryPlayBed()
+      playBedNow()
     } else {
+      unlockedRef.current = false
       setUnlocked(false)
       stopAll()
     }
-  }, [armed, ensureAudio, stopAll, tryPlayBed])
+  }, [playBedNow, stopAll])
 
   const onUserGesture = useCallback(() => {
-    if (!armed || unlocked) return
-    ensureAudio()
-    void tryPlayBed()
-  }, [armed, unlocked, ensureAudio, tryPlayBed])
+    if (!armedRef.current || unlockedRef.current) return
+    playBedNow()
+  }, [playBedNow])
 
   const setTabBed = useCallback(
     (tab: TabSound) => {
@@ -142,43 +166,64 @@ export function useSound() {
     [playLoop, setTabBed],
   )
 
+  const playStinger = useCallback(
+    (src: string) => {
+      if (!armedRef.current || !unlockedRef.current) return
+      const { stinger } = ensureAudio()
+      stinger.src = src
+      const attempt = stinger.play()
+      void attempt.catch(() => {})
+    },
+    [ensureAudio],
+  )
+
   const playClick = useCallback(() => {
-    if (!armed || !unlocked) return
-    const { stinger } = ensureAudio()
-    stinger.src = `${BASE}click.mp3`
-    void stinger.play().catch(() => {})
-  }, [armed, unlocked, ensureAudio])
+    playStinger(CLICK_SRC)
+  }, [playStinger])
 
   const playBuzzer = useCallback(() => {
-    if (!armed || !unlocked) return
-    const { stinger } = ensureAudio()
-    stinger.src = `${BASE}buzzer.mp3`
-    void stinger.play().catch(() => {})
-  }, [armed, unlocked, ensureAudio])
+    playStinger(BUZZER_SRC)
+  }, [playStinger])
 
   useEffect(() => {
     if (!armed) {
       stopAll()
+      unlockedRef.current = false
       setUnlocked(false)
     }
   }, [armed, stopAll])
 
   useEffect(() => {
-    if (!armed) return
+    if (!armedRef.current) return
     ensureAudio()
     pendingSrcRef.current = TAB_LOOPS.standings
     const bed = bedRef.current
-    if (bed && !bed.src) {
-      bed.src = TAB_LOOPS.standings
-    }
-    void tryPlayBed()
+    if (bed && !bed.src) bed.src = TAB_LOOPS.standings
+    playBedNow()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps -- once on mount
 
   useEffect(() => {
     if (!armed || unlocked) return
 
     const onGesture = () => {
-      onUserGesture()
+      if (!armedRef.current || unlockedRef.current) return
+      const { bed } = ensureAudio()
+      const src = pendingSrcRef.current
+      if (!srcMatches(bed, src)) bed.src = src
+      const attempt = bed.play()
+      void attempt.then(
+        () => {
+          unlockedRef.current = true
+          setUnlocked(true)
+          setPlaying(true)
+        },
+        () => {
+          if (!bedRef.current || bedRef.current.paused) {
+            unlockedRef.current = false
+            setUnlocked(false)
+          }
+        },
+      )
     }
 
     const opts: AddEventListenerOptions = { capture: true, passive: true }
@@ -193,7 +238,7 @@ export function useSound() {
       window.removeEventListener('touchstart', onGesture, opts)
       window.removeEventListener('click', onGesture, opts)
     }
-  }, [armed, unlocked, onUserGesture])
+  }, [armed, unlocked, ensureAudio])
 
   const showTapHint = armed && !playing
 
