@@ -19,11 +19,6 @@ export const HELD_BACK_SLIDES: { id: string; reason: string }[] = [
       'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',
   },
   {
-    id: 'w4-slide-10',
-    reason:
-      'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',
-  },
-  {
     id: 'w4-slide-14',
     reason:
       'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',

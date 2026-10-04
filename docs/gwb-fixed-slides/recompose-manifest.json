@@ -1,0 +1,42 @@
+[
+  {
+    "id": "vs-m3-hadi-manny",
+    "path": "/workspace/docs/gwb-fixed-slides/vs-m3-hadi-manny.png",
+    "ssim_band": 84.61
+  },
+  {
+    "id": "w4-slide-10",
+    "path": "/workspace/docs/gwb-fixed-slides/w4-slide-10.png",
+    "ssim_band": 93.62
+  },
+  {
+    "id": "w4-slide-06",
+    "path": "/workspace/docs/gwb-fixed-slides/w4-slide-06.png",
+    "ssim_band": 90.17
+  },
+  {
+    "id": "w4-slide-14",
+    "path": "/workspace/docs/gwb-fixed-slides/w4-slide-14.png",
+    "ssim_band": 91.74
+  },
+  {
+    "id": "w4-slide-16",
+    "path": "/workspace/docs/gwb-fixed-slides/w4-slide-16.png",
+    "ssim_band": 86.43
+  },
+  {
+    "id": "results-w1-m2",
+    "path": "/workspace/docs/gwb-results-cards/results-w1-m2.png",
+    "ssim_band": 87.03
+  },
+  {
+    "id": "results-w2-m1",
+    "path": "/workspace/docs/gwb-results-cards/results-w2-m1.png",
+    "ssim_band": 86.83
+  },
+  {
+    "id": "results-w3-m2",
+    "path": "/workspace/docs/gwb-results-cards/results-w3-m2.png",
+    "ssim_band": 86.96
+  }
+]
