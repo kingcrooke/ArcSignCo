@@ -23,7 +23,7 @@ test('loads real GWB league data and core sections', async ({ page }) => {
 
   await page.getByRole('button', { name: /Zone$/ }).click()
   await expect(page.locator('#frankie-zone-section')).toBeVisible()
-  await expect(page.getByText(/THE .* ZONE/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: /THE .* ZONE/ })).toBeVisible()
 
   await page.getByRole('button', { name: 'Waiver Wire Champion' }).click()
   await expect(page.locator('#waiver-wire-panel')).toBeVisible()
