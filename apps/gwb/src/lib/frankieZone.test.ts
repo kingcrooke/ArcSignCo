@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { computeStandingsThroughWeek } from './standings'
 import { buildTeamMap } from './teams'
-import { computeStandings } from './standings'
 import {
   buildEscapeLog,
   buildScheduleByWeek,
@@ -24,29 +24,62 @@ function load<T>(name: string): T {
   return JSON.parse(readFileSync(join(fixtures, name), 'utf-8')) as T
 }
 
+function matchupsThroughWeek(maxWeek: number): Map<number, SleeperMatchup[]> {
+  const map = new Map<number, SleeperMatchup[]>()
+  for (let w = 1; w <= maxWeek; w++) {
+    map.set(w, load<SleeperMatchup[]>(`matchups-${w}.json`))
+  }
+  return map
+}
+
 describe('frankieZone', () => {
   const users = load<SleeperUser[]>('users.json')
   const rosters = load<SleeperRoster[]>('rosters.json')
-  const matchupsW3 = load<SleeperMatchup[]>('matchups-3.json')
   const teams = buildTeamMap(users, rosters)
-  const matchupsByWeek = new Map([[3, matchupsW3]])
-  const standings = computeStandings(rosters, teams)
-  const schedule = buildScheduleByWeek(matchupsByWeek)
 
-  it('lists winless residents at week 3', () => {
-    const view = computeFrankieZoneView({
+  function viewAtWeek(week: number) {
+    const matchupsByWeek = matchupsThroughWeek(week)
+    const standings = computeStandingsThroughWeek(matchupsByWeek, teams, week)
+    const scheduleByWeek = buildScheduleByWeek(matchupsByWeek)
+    return computeFrankieZoneView({
       standings,
       teams,
       matchupsByWeek,
-      scheduleByWeek: schedule,
-      throughWeek: 3,
-      nflWeek: 4,
-      weekInProgress: true,
+      scheduleByWeek,
+      throughWeek: week,
+      selectedWeek: week,
+      weekInProgress: false,
     })
+  }
+
+  it('week 1 census: six teams at 0-1 in the zone', () => {
+    const view = viewAtWeek(1)
+    expect(view.residents).toHaveLength(6)
+    expect(view.censusLine).toContain('AFTER WEEK 1')
+    expect(view.escapes).toHaveLength(0)
+  })
+
+  it('week 2 census: three winless teams remain', () => {
+    const view = viewAtWeek(2)
+    expect(view.residents).toHaveLength(3)
+    const names = view.residents.map((r) => r.displayName)
+    expect(names).toEqual(
+      expect.arrayContaining(['Santagua', 'kingCrooke', 'GetThePapers2x']),
+    )
+    expect(view.escapes.length).toBeGreaterThan(0)
+    expect(view.escapes.every((e) => e.week <= 2)).toBe(true)
+  })
+
+  it('week 3 census: Frankie and Santagua only', () => {
+    const view = viewAtWeek(3)
     expect(view.residents).toHaveLength(2)
-    expect(view.residents.map((r) => r.teamName)).toContain('Turn Your Head And Goff')
+    expect(view.residents.map((r) => r.displayName).sort()).toEqual([
+      'GetThePapers2x',
+      'Santagua',
+    ])
     expect(view.zoneName).toBe('Frankie')
     expect(view.heroTitle).toBe(zoneHeroTitle('Frankie'))
+    expect(view.residents.every((r) => r.losses === 3)).toBe(true)
   })
 
   it('formats census and rename meter', () => {
@@ -64,12 +97,15 @@ describe('frankieZone', () => {
       { roster_id: 5, matchup_id: 4, points: 0, starters: [], starters_points: [], players_points: {} },
     ]
     const sched = buildScheduleByWeek(new Map([[4, week4]]))
-    const hits = findZoneCollisions(new Set([1, 11]), sched, teams, 4, 4)
+    const hits = findZoneCollisions(new Set([1, 11]), sched, teams, 4, 3)
     expect(hits).toHaveLength(1)
     expect(hits[0].week).toBe(4)
+    expect(hits[0].weeksUntil).toBe(1)
   })
 
   it('resolves renamed zone when a team hits 0-8', () => {
+    const matchupsByWeek = matchupsThroughWeek(3)
+    const standings = computeStandingsThroughWeek(matchupsByWeek, teams, 3)
     const fakeStandings = standings.map((r) =>
       r.rosterId === 11 ? { ...r, wins: 0, losses: 8 } : r,
     )

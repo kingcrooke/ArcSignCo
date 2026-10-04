@@ -24,9 +24,10 @@ type Props = {
   standings: StandingRow[]
   teams: Map<number, TeamInfo>
   matchupsByWeek: Map<number, SleeperMatchup[]>
+  selectedWeek: number
   throughWeek: number
-  nflWeek: number
   weekInProgress: boolean
+  deferralNote: string | null
   onOpenRecap: (week: number, recapId: string) => void
 }
 
@@ -109,9 +110,10 @@ export function FrankieZonePanel({
   standings,
   teams,
   matchupsByWeek,
+  selectedWeek,
   throughWeek,
-  nflWeek,
   weekInProgress,
+  deferralNote,
   onOpenRecap,
 }: Props) {
   const [scheduleByWeek, setScheduleByWeek] = useState(() =>
@@ -182,7 +184,7 @@ export function FrankieZonePanel({
         matchupsByWeek,
         scheduleByWeek,
         throughWeek,
-        nflWeek,
+        selectedWeek,
         weekInProgress,
       }),
     [
@@ -191,7 +193,7 @@ export function FrankieZonePanel({
       matchupsByWeek,
       scheduleByWeek,
       throughWeek,
-      nflWeek,
+      selectedWeek,
       weekInProgress,
     ],
   )
@@ -209,6 +211,11 @@ export function FrankieZonePanel({
 
   return (
     <div id="frankie-zone-section" className="space-y-8">
+      {deferralNote && (
+        <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
+          {deferralNote}
+        </p>
+      )}
       <header className="text-center">
         <h2 className="font-['Anton'] text-4xl uppercase leading-tight text-[var(--gwb-accent)] sm:text-5xl">
           {view.heroTitle}
@@ -216,9 +223,6 @@ export function FrankieZonePanel({
         <p className="mt-2 font-['Bebas Neue'] text-lg tracking-[0.12em] text-[var(--gwb-text)] sm:text-xl">
           {view.censusLine}
         </p>
-        {view.weekInProgressNote && (
-          <p className="mt-2 text-sm text-teal-300/90">{view.weekInProgressNote}</p>
-        )}
       </header>
 
       {view.isEmpty ? (

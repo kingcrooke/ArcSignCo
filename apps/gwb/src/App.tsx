@@ -13,7 +13,7 @@ import {
   zoneTabLabel,
 } from './lib/frankieZone'
 import { weekHasMatchups } from './lib/recaps'
-import { currentNflWeek, isWeekLive, lastCompletedWeek } from './lib/weeks'
+import { cumulativeDeferralNote, lastCompletedWeek } from './lib/weeks'
 import { computeStandingsThroughWeek } from './lib/standings'
 import { useLeagueData } from './hooks/useLeagueData'
 
@@ -53,12 +53,8 @@ export default function App() {
       matchupsByWeek: data.matchupsByWeek,
       scheduleByWeek: buildScheduleByWeek(data.matchupsByWeek),
       throughWeek: through,
-      nflWeek: currentNflWeek(data.nflState),
-      weekInProgress: isWeekLive(
-        data.nflState.week,
-        data.league,
-        data.nflState,
-      ),
+      selectedWeek: through,
+      weekInProgress: false,
     })
     return view.tabLabel
   }, [data])
@@ -220,20 +216,24 @@ export default function App() {
           )}
           {tab === 'frankie' && (
             <section>
+              <h2 className="mb-3 text-lg font-semibold">
+                Frankie Zone
+                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                  through Week {data.standingsThroughWeek}
+                </span>
+              </h2>
               <FrankieZonePanel
-                standings={computeStandingsThroughWeek(
-                  data.matchupsByWeek,
-                  data.teams,
-                  lastCompletedWeek(data.league, data.nflState),
-                )}
+                standings={data.standings}
                 teams={data.teams}
                 matchupsByWeek={data.matchupsByWeek}
-                throughWeek={lastCompletedWeek(data.league, data.nflState)}
-                nflWeek={currentNflWeek(data.nflState)}
-                weekInProgress={isWeekLive(
-                  data.nflState.week,
+                selectedWeek={data.selectedWeek}
+                throughWeek={data.standingsThroughWeek}
+                weekInProgress={data.isSelectedWeekLive}
+                deferralNote={cumulativeDeferralNote(
+                  data.selectedWeek,
                   data.league,
                   data.nflState,
+                  'Frankie Zone',
                 )}
                 onOpenRecap={openRecapFromZone}
               />

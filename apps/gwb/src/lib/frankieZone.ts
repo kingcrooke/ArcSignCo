@@ -362,8 +362,9 @@ export function computeFrankieZoneView(input: {
   teams: Map<number, TeamInfo>
   matchupsByWeek: Map<number, SleeperMatchup[]>
   scheduleByWeek: Map<number, Map<number, number>>
+  /** Cumulative stats through this week (may trail selectedWeek when live). */
   throughWeek: number
-  nflWeek: number
+  selectedWeek: number
   weekInProgress: boolean
 }): FrankieZoneView {
   const {
@@ -372,7 +373,7 @@ export function computeFrankieZoneView(input: {
     matchupsByWeek,
     scheduleByWeek,
     throughWeek,
-    nflWeek,
+    selectedWeek,
     weekInProgress,
   } = input
 
@@ -387,7 +388,7 @@ export function computeFrankieZoneView(input: {
     .sort((a, b) => b.losses - a.losses || a.pointsFor - b.pointsFor)
 
   const standingsByRoster = new Map(standings.map((r) => [r.rosterId, r]))
-  const nextFromWeek = weekInProgress ? nflWeek : throughWeek + 1
+  const nextFromWeek = throughWeek + 1
   const residentIds = new Set(residents.map((r) => r.rosterId))
 
   const residentViews: ZoneResident[] = residents.map((row) => ({
@@ -413,7 +414,7 @@ export function computeFrankieZoneView(input: {
     scheduleByWeek,
     teams,
     nextFromWeek,
-    nflWeek,
+    throughWeek,
   )
 
   return {
@@ -424,11 +425,9 @@ export function computeFrankieZoneView(input: {
       residents.length,
       throughWeek,
       weekInProgress,
-      nflWeek,
+      selectedWeek,
     ),
-    weekInProgressNote: weekInProgress
-      ? `Scores through Week ${throughWeek}; Week ${nflWeek} still in progress.`
-      : null,
+    weekInProgressNote: null,
     residents: residentViews,
     escapes,
     collisions,
