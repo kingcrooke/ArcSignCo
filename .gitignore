@@ -16,6 +16,3 @@
 # Local tooling
 node_modules/
 .netlify/
-arc_pricing_inputs*.json
-arc_pricing_inputs*.md
-**/uploads/arc_pricing*
