@@ -11,6 +11,10 @@ import {
   fetchUsers,
 } from '../lib/sleeperApi'
 import { computeWaiverBoard } from '../lib/waiverWire'
+import {
+  mulliganStatusThroughWeek as ledgerMulliganStatusThroughWeek,
+  mulligansDeferralNote as ledgerMulligansDeferralNote,
+} from '../lib/mulligans'
 import { computeStandings, computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import {
@@ -59,6 +63,7 @@ export interface LeagueData {
   isSelectedWeekLive: boolean
   weekLabel: string
   standingsThroughWeek: number
+  mulliganStatusThroughWeek: number
   standingsDeferralNote: string | null
   mulligansDeferralNote: string | null
   waiverBoard: WaiverBoard
@@ -186,11 +191,11 @@ export function useLeagueData(): {
       throughForCumulative,
     )
     const deferNote = standingsDeferralNote(selectedWeek, league, nflState)
-    const mulliganDeferNote = cumulativeDeferralNote(
+    const mulliganDeferNote = ledgerMulligansDeferralNote(
       selectedWeek,
       league,
       nflState,
-      'mulligan status',
+      throughForCumulative,
     )
 
     const weekMatchups = matchupsByWeek.get(selectedWeek)
@@ -209,6 +214,10 @@ export function useLeagueData(): {
         : []
 
     const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
+    const mulliganThrough = ledgerMulliganStatusThroughWeek(
+      throughForCumulative,
+      selectedWeek,
+    )
     const weekLabel = weekStatusLabel(selectedWeek, league, nflState)
     const waiverBoard = computeWaiverBoard({
       transactions,
@@ -245,6 +254,7 @@ export function useLeagueData(): {
       isSelectedWeekLive,
       weekLabel,
       standingsThroughWeek: throughForCumulative,
+      mulliganStatusThroughWeek: mulliganThrough,
       standingsDeferralNote: deferNote,
       mulligansDeferralNote: mulliganDeferNote,
       waiverBoard,

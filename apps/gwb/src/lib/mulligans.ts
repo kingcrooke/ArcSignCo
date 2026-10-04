@@ -1,4 +1,6 @@
 import ledgerJson from '../content/mulligan-ledger.json'
+import type { NflState, SleeperLeague } from './types'
+import { isWeekLive, lastCompletedWeek } from './weeks'
 
 /** One mulligan per manager per season (league rule). */
 export interface MulliganStatus {
@@ -12,6 +14,9 @@ export interface MulliganPlayerSwap {
   position: string
   points: number
   note?: string
+  team?: string
+  pointsPending?: boolean
+  sleeperPlayerId?: string
 }
 
 export interface MulliganLedgerEntry {
@@ -24,13 +29,21 @@ export interface MulliganLedgerEntry {
   out: MulliganPlayerSwap
   in: MulliganPlayerSwap
   netImpact: number
+  /** When IN was already starting, net ≠ IN − OUT; use this for all displayed nets. */
+  netImpactOverride?: number
+  netImpactPending?: boolean
   scoreWith: number
   scoreWithout: number
   opponentScore: number
   opponentLabel: string
   won: boolean
   flipped: boolean
+  resultPending?: boolean
   footnote?: string
+}
+
+export interface MulliganLiveContext {
+  playerPoints?: Record<string, number>
 }
 
 interface MulliganLedgerFile {
@@ -82,6 +95,14 @@ export function mulliganStatusForRoster(
   }
 }
 
+export function mulliganLiveContextForEntry(
+  entry: MulliganLedgerEntry,
+  playerPoints?: Record<string, number>,
+): MulliganLiveContext | undefined {
+  if (!entry.in.pointsPending || !playerPoints) return undefined
+  return { playerPoints }
+}
+
 export function mulliganEntriesForWeek(week: number): MulliganLedgerEntry[] {
   return MULLIGAN_LEDGER_ENTRIES.filter((e) => e.week === week).sort(
     (a, b) => a.rosterId - b.rosterId,
@@ -98,14 +119,73 @@ export function mulligansFlippedThroughWeek(throughWeek: number): number {
   ).length
 }
 
-export function formatMulliganReceipt(entry: MulliganLedgerEntry): string {
+export function resolveInSwapPoints(
+  swap: MulliganPlayerSwap,
+  ctx?: MulliganLiveContext,
+): number | null {
+  if (!swap.pointsPending) return swap.points
+  const id = swap.sleeperPlayerId
+  if (ctx?.playerPoints && id && id in ctx.playerPoints) {
+    return ctx.playerPoints[id]
+  }
+  return null
+}
+
+export function resolveMulliganNetImpact(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): number | null {
+  if (entry.netImpactPending || entry.in.pointsPending) {
+    const inPts = resolveInSwapPoints(entry.in, ctx)
+    if (inPts === null) return null
+    return inPts - entry.out.points
+  }
+  if (entry.netImpactOverride !== undefined) return entry.netImpactOverride
+  return entry.netImpact
+}
+
+function formatSwapPoints(
+  swap: MulliganPlayerSwap,
+  ctx?: MulliganLiveContext,
+): string {
+  if (swap.pointsPending) {
+    const live = resolveInSwapPoints(swap, ctx)
+    if (live !== null) return `${formatScore(live)} (live)`
+    return 'pending'
+  }
+  return formatScore(swap.points)
+}
+
+function formatNetImpact(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): string {
+  const net = resolveMulliganNetImpact(entry, ctx)
+  if (net === null) return 'pending'
+  return formatSignedImpact(net)
+}
+
+function resolveScoreWith(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): number {
+  const net = resolveMulliganNetImpact(entry, ctx)
+  if (net === null) return entry.scoreWith
+  return entry.scoreWithout + net
+}
+
+export function formatMulliganReceipt(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): string {
   const manager = entry.managerShort ?? entry.manager
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
-  const result = entry.won ? 'W' : 'L'
+  const result = entry.resultPending ? 'TBD' : entry.won ? 'W' : 'L'
+  const scoreWith = resolveScoreWith(entry, ctx)
   return (
     `${manager} · OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote} → ` +
-    `IN ${entry.in.name} ${formatScore(entry.in.points)} · ` +
-    `Net ${formatSignedImpact(entry.netImpact)} · ${result} ${formatScore(entry.scoreWith)}–${formatScore(entry.opponentScore)}`
+    `IN ${entry.in.name} ${formatSwapPoints(entry.in, ctx)} · ` +
+    `Net ${formatNetImpact(entry, ctx)} · ${result} ${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`
   )
 }
 
@@ -123,25 +203,67 @@ function formatSignedImpact(n: number): string {
   return `${sign}${formatScore(Math.abs(n))}`
 }
 
-function formatSwapSummary(entry: MulliganLedgerEntry): string {
-  return `${entry.out.name} → ${entry.in.name} (${formatSignedImpact(entry.netImpact)})`
+function formatSwapSummary(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): string {
+  return `${entry.out.name} → ${entry.in.name} (${formatNetImpact(entry, ctx)})`
 }
 
-export function formatMulliganLedgerLine(entry: MulliganLedgerEntry): string {
+export function mulliganStatusThroughWeek(
+  standingsThroughWeek: number,
+  selectedWeek: number,
+): number {
+  const ledgerWeek = MULLIGAN_LEDGER_META.throughWeek
+  return Math.max(
+    standingsThroughWeek,
+    Math.min(selectedWeek, ledgerWeek),
+  )
+}
+
+export function mulligansDeferralNote(
+  selectedWeek: number,
+  league: SleeperLeague,
+  nflState: NflState,
+  standingsThroughWeek: number,
+): string | null {
+  if (!isWeekLive(selectedWeek, league, nflState)) return null
+  const mulliganThrough = mulliganStatusThroughWeek(
+    standingsThroughWeek,
+    selectedWeek,
+  )
+  const scoredThrough = lastCompletedWeek(league, nflState)
+  if (mulliganThrough > scoredThrough) {
+    return `Week ${selectedWeek} in progress. Mulligan status live through Week ${mulliganThrough}.`
+  }
+  return `Week ${selectedWeek} in progress, mulligan status through Week ${mulliganThrough}.`
+}
+
+export function formatMulliganLedgerLine(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): string {
   const manager = entry.managerShort
     ? `${entry.manager} / ${entry.managerShort}`
     : entry.manager
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
-  const matchup = `${formatScore(entry.scoreWith)}–${formatScore(entry.opponentScore)}`
-  const resultVerb = entry.won ? 'Won' : 'Lost'
-  const vsWord = entry.won ? 'vs' : 'to'
+  const scoreWith = resolveScoreWith(entry, ctx)
+  const matchup = `${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`
+  const resultVerb = entry.resultPending
+    ? 'Result TBD'
+    : entry.won
+      ? 'Won'
+      : 'Lost'
+  const vsWord = entry.resultPending || entry.won ? 'vs' : 'to'
   const flip = entry.flipped ? 'Flipped result' : 'No flip'
   const tail = entry.footnote ? ` · ${entry.footnote}` : ''
+  const outTeam = entry.out.team ? ` ${entry.out.team}` : ''
+  const inTeam = entry.in.team ? ` ${entry.in.team}` : ''
   return (
     `W${entry.week} · ${manager} (${entry.team}) · ` +
-    `OUT ${entry.out.name} ${entry.out.position} ${formatScore(entry.out.points)}${outNote} → ` +
-    `IN ${entry.in.name} ${entry.in.position} ${formatScore(entry.in.points)} · ` +
-    `Net ${formatSignedImpact(entry.netImpact)} · ` +
+    `OUT ${entry.out.name} ${entry.out.position}${outTeam} ${formatScore(entry.out.points)}${outNote} → ` +
+    `IN ${entry.in.name} ${entry.in.position}${inTeam} ${formatSwapPoints(entry.in, ctx)} · ` +
+    `Net ${formatNetImpact(entry, ctx)} · ` +
     `${resultVerb} ${matchup} ${vsWord} ${entry.opponentLabel} ` +
     `(would've been ${formatScore(entry.scoreWithout)} without it) · ${flip}${tail}`
   )

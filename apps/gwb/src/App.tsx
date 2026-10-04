@@ -340,8 +340,9 @@ export default function App() {
               <MulligansPanel
                 rows={data.standings}
                 selectedWeek={data.selectedWeek}
-                statusThroughWeek={data.standingsThroughWeek}
+                statusThroughWeek={data.mulliganStatusThroughWeek}
                 deferralNote={data.mulligansDeferralNote}
+                weekMatchups={data.matchupsByWeek.get(data.selectedWeek)}
                 onNegativeMulliganOpen={() => sound.playBuzzer()}
               />
             </section>
