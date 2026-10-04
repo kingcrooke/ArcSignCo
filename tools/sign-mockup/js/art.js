@@ -307,6 +307,125 @@ export function tube(mask, r) {
   });
 }
 
+const faceMemo = new WeakMap();
+function cachedFace(src, key, make) {
+  let m = faceMemo.get(src);
+  if (!m || m.ver !== (src.__smVer || 0)) faceMemo.set(src, (m = { ver: src.__smVer || 0, map: new Map() }));
+  if (m.map.has(key)) {
+    const hit = m.map.get(key);
+    m.map.delete(key);
+    m.map.set(key, hit);
+    return hit;
+  }
+  const out = make();
+  m.map.set(key, out);
+  if (m.map.size > 6) m.map.delete(m.map.keys().next().value);
+  return out;
+}
+// 1% steps: dragging a corner doesn't build a new face every frame, and the copy never visibly stretches.
+const quantize = aspect => Math.exp(Math.round(Math.log(aspect) * 100) / 100);
+const FACE_MAX = 2048, FACE_MIN = 1024;
+
+/**
+ * The artwork laid onto a face of the given aspect (height / width) without stretching it.
+ *   contain (default): the copy is scaled to fit and centered. pad is the margin on every side as a
+ *     fraction of the face's shorter side; margin (source pixels per side) is used instead when given.
+ *   cover: the artwork fills the face and the overflow is cropped (photos, full-pane prints).
+ * bg fills the face first ("#hex"); without it the rest of the face stays clear.
+ */
+export function fitFace(src, aspect, { pad = 0.1, margin = null, bg = null, cover = false } = {}) {
+  const a = quantize(aspect);
+  return cachedFace(src, `fit${a}|${pad}|${margin}|${bg}|${cover}`, () => {
+    const sw = src.width, sh = src.height;
+    let fw, fh;
+    if (cover) {
+      if (sh / sw > a) { fw = sw; fh = sw * a; } else { fh = sh; fw = sh / a; }
+    } else if (margin != null) {
+      const cw = sw + 2 * margin, ch = sh + 2 * margin;
+      if (ch / cw > a) { fh = ch; fw = ch / a; } else { fw = cw; fh = cw * a; }
+    } else {
+      const m = 2 * pad * Math.min(1, a);
+      fw = Math.max(sw / Math.max(0.05, 1 - m), sh / Math.max(0.05, a - m));
+      fh = fw * a;
+    }
+    const k = Math.min(FACE_MAX, Math.max(FACE_MIN, Math.max(fw, fh))) / Math.max(fw, fh);
+    const c = makeCanvas(fw * k, fh * k);
+    const g = ctx2d(c);
+    if (bg) { g.fillStyle = bg; g.fillRect(0, 0, c.width, c.height); }
+    g.imageSmoothingQuality = "high";
+    const dw = sw * k * (c.width / (fw * k)), dh = sh * k * (c.height / (fh * k));
+    g.drawImage(src, (c.width - dw) / 2, (c.height - dh) / 2, dw, dh);
+    return c;
+  });
+}
+
+/** The margin layout(panel) puts around the copy, in source pixels: fitFace's margin for printed faces. */
+export const layoutMargin = L => Math.round(Math.max(L.height * 0.32, L.width * 0.04));
+
+/**
+ * An LED pixel face: black modules with the message drawn as lit pixels (day and night).
+ * Cut-out copy lights in `color`; opaque artwork keeps its own colors (a video frame).
+ */
+export function pixelFace(content, cols, rows, { color = [1, 1, 1], cutout = true } = {}) {
+  return cachedFace(content, `px${cols}x${rows}|${color.join(",")}|${cutout}`, () => {
+    const s = makeCanvas(cols, rows);
+    const sg = ctx2d(s, true);
+    sg.imageSmoothingQuality = "high";
+    sg.drawImage(content, 0, 0, cols, rows);
+    const d = sg.getImageData(0, 0, cols, rows).data;
+    const cell = Math.max(4, Math.min(12, Math.floor(FACE_MAX / Math.max(cols, rows))));
+    const c = makeCanvas(cols * cell, rows * cell);
+    const g = ctx2d(c);
+    g.fillStyle = "#050505";
+    g.fillRect(0, 0, c.width, c.height);
+    const r = cell * 0.36;
+    const css = v => Math.round(Math.min(1, Math.max(0, v)) * 255);
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        const i = (y * cols + x) * 4;
+        const cov = d[i + 3] / 255;
+        const on = Math.min(1, Math.max(0, (cov - 0.2) / 0.45));
+        let rgb;
+        if (cutout) rgb = color.map(v => 0.11 + (v - 0.11) * on);
+        else {
+          const src = [d[i] / 255, d[i + 1] / 255, d[i + 2] / 255];
+          rgb = src.map(v => 0.11 + (v - 0.11) * Math.max(on, 0));
+        }
+        g.fillStyle = `rgb(${css(rgb[0])},${css(rgb[1])},${css(rgb[2])})`;
+        g.beginPath();
+        g.arc((x + 0.5) * cell, (y + 0.5) * cell, r, 0, Math.PI * 2);
+        g.fill();
+      }
+    }
+    return c;
+  });
+}
+
+/**
+ * Frosted film: an even white sheet with the copy cut out clear. style "dot" screens the film into
+ * dots; "etched" and "band" are a solid sheet (the quad is the band).
+ */
+export function frostFilm(fitted, style = "etched") {
+  return cachedFace(fitted, `frost${style}`, () => {
+    const c = makeCanvas(fitted.width, fitted.height);
+    const g = ctx2d(c);
+    g.fillStyle = "#fff";
+    if (style === "dot") {
+      const step = Math.max(6, Math.round(Math.max(c.width, c.height) / 140)), dotR = step * 0.34;
+      for (let y = step / 2; y < c.height; y += step) {
+        for (let x = step / 2; x < c.width; x += step) {
+          g.beginPath();
+          g.arc(x, y, dotR, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+    } else g.fillRect(0, 0, c.width, c.height);
+    g.globalCompositeOperation = "destination-out";
+    g.drawImage(fitted, 0, 0);
+    return c;
+  });
+}
+
 /**
  * The artwork as a sign maker would use it. Built once per source; each getter is cached.
  *   letters  cut-out copy (background removed when possible), cropped tight
