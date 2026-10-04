@@ -265,9 +265,9 @@ const BANNED = [
   /\bApt\b/i, /83 Post Ave/i, /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i,
   /dob[- ]approved/i, /\bour license\b/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
   // Arc team wording rules: nothing reads like a contract, deposit or go-ahead; ADA is "for architect
-  // and inspector review", never compliant; no slip-resistance claims.
+  // and inspector review", never compliant; no slip-resistance claims; the only phone is the 347 line.
   /\bcontracts?\b/i, /\bdeposits?\b/i, /go[- ]ahead/i, /payment authori[sz]ation/i, /\bcompliant\b/i, /\bcompliance\b/i,
-  /slip[- ]?resist/i, /\b(non|anti)[- ]?slip\b/i,
+  /slip[- ]?resist/i, /\b(non|anti)[- ]?slip\b/i, /\(917\)|\b917[ .-]\d{3}[ .-]?\d{4}\b|\+1[ -]?917/,
 ];
 // Reference catalogs and awning makers are research only: their names never ship.
 const VENDORS = [
@@ -294,8 +294,14 @@ check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof
 check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
 check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
 check(/id="approveBtn">Concept approved, request a formal estimate</.test(proofHtml), "the approve button reads \"Concept approved, request a formal estimate\"");
+check(html.includes("Upload a storefront photo, see your sign in 2 minutes. Free, no account."), "step 1 opens with the Arc intro line");
 check(/<strong>Concept approved, request a formal estimate<\/strong>/.test(proofHtml), "the approval confirmation reads \"Concept approved, request a formal estimate\"");
 check(STAMP_TITLE === "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE", "the PDF approval stamp reads \"Concept approved, request a formal estimate\"");
+for (const f of own) {
+  const body = fs.readFileSync(path.join(toolDir, f), "utf8");
+  const bare = [...body.matchAll(/\(347\) 450-2110/g)].filter(m => !/(call or text\s*(<a [^>]*>)?|phone: ")$/i.test(body.slice(Math.max(0, m.index - 80), m.index)));
+  check(!bare.length, `${f}: every phone line reads "Call or text (347) 450-2110"${bare.length ? ` (${bare.length} bare)` : ""}`);
+}
 check((proofHtml.split(DISCLAIMER_FULL).length - 1) === 2, "proof page carries the full disclaimer in the price box and the footer");
 check(html.includes(DISCLAIMER_FULL), "the tool's step 4 carries the full disclaimer");
 check(!/Approved by/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof email doesn't say \"Approved by\"");
