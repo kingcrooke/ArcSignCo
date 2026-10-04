@@ -8,6 +8,7 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  external_node_modules = ["playwright", "playwright-core"]
 
 # Header rules below never set the same header name on overlapping paths, because Netlify
 # combines values when several rules match one URL.
@@ -81,6 +82,22 @@
   for = "/tools/sign-mockup/proof/*"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
+
+# Hidden Quote Engine admin (URL-only; not linked from the public site).
+[[headers]]
+  for = "/ops-qel16cb/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/ops-qel16cb/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/ops-qel16cb/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # Hidden GWB league dashboard (URL-only; not linked from the public site).
 [[headers]]

@@ -1,0 +1,197 @@
+import assert from "node:assert/strict";
+import { test, beforeEach } from "node:test";
+import { resetMockSheet, mockSheetRows, appendLeadRow } from "../netlify/lib/google-sheets.mjs";
+import { normalizeLead, isQuoteEngineForm, leadToSheetRow } from "../netlify/lib/quote-leads.mjs";
+import { computeQuote, formatMoney } from "../netlify/lib/quote-compute.mjs";
+import { buildProposalHtml, buildProposalPdfBytes, assertClientCopySanitized } from "../netlify/lib/proposal.mjs";
+import { handleQuoteEngine } from "../netlify/lib/quote-engine-api.mjs";
+import { clearTestRateCard } from "../netlify/lib/rate-card-store.mjs";
+
+beforeEach(() => {
+  resetMockSheet();
+  clearTestRateCard();
+  delete process.env.QUOTE_ENGINE_SHEET_ID;
+  delete process.env.QUOTE_ENGINE_GOOGLE_CREDENTIALS;
+  delete process.env.QUOTE_ENGINE_PASSWORD;
+  delete process.env.QUOTE_ENGINE_WEBHOOK_SECRET;
+});
+
+test("recognizes quote engine forms", () => {
+  assert.equal(isQuoteEngineForm("quote-request"), true);
+  assert.equal(isQuoteEngineForm("sign-estimate-request"), true);
+  assert.equal(isQuoteEngineForm("sign-proof-activity"), false);
+});
+
+test("normalizes quote-request with scope-finder", () => {
+  const lead = normalizeLead({
+    number: 42,
+    form_name: "quote-request",
+    data: {
+      name: "Alex GC",
+      email: "alex@gc.com",
+      type: "Channel letters",
+      "project-address": "100 Broadway",
+      borough: "Manhattan",
+      "scope-finder": "Exterior Signage Package",
+      message: "Need bid by Friday",
+    },
+  });
+  assert.equal(lead.id, "quote-request-42");
+  assert.match(lead.scopeSummary, /Exterior Signage Package/);
+  assert.equal(lead.calculatorInput.boroughZone, "manhattan");
+});
+
+test("computeQuote uses placeholder card and job minimums", async () => {
+  const quote = await computeQuote({
+    signType: "Channel letters",
+    quantity: 1,
+    sizeW: 12,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "2nd floor or higher",
+    permitsRequested: true,
+    allowFilingExpediting: true,
+    allowElectrical: true,
+    boroughZone: "brooklyn",
+  });
+  assert.ok(quote.low >= 40);
+  assert.ok(quote.lines.length >= 3);
+  assert.equal(quote.placeholder, true);
+  assert.ok(quote.tbdCount >= 1);
+});
+
+test("ground floor height band does not add scaffold line", async () => {
+  const q = await computeQuote({
+    signType: "Channel letters",
+    sizeW: 14,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "Ground floor, under 12 ft",
+    boroughZone: "brooklyn",
+  });
+  assert.equal(q.lines.some(l => l.key === "access_scaffold"), false);
+});
+
+test("12–25 ft height band adds access scaffold line", async () => {
+  const q = await computeQuote({
+    signType: "Channel letters",
+    sizeW: 14,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "12–25 ft",
+    boroughZone: "brooklyn",
+  });
+  assert.ok(q.lines.some(l => l.key === "access_scaffold"));
+});
+
+test("appendLeadRow falls back to mock sheet without credentials", async () => {
+  const lead = normalizeLead({ number: 1, form_name: "quote-request", data: { name: "Test" } });
+  const row = leadToSheetRow(lead);
+  const result = await appendLeadRow(row);
+  assert.equal(result.mode, "mock");
+  assert.equal(mockSheetRows.length, 1);
+  assert.equal(mockSheetRows[0][0], lead.id);
+});
+
+test("proposal html is client-safe copy without TBD flags", async () => {
+  const lead = { name: "Client", company: "Sample Co", address: "1 Main St, Brooklyn", scopeSummary: "Channel letters" };
+  const quote = await computeQuote({
+    signType: "Channel letters",
+    sizeW: 10,
+    sizeH: 2,
+    sizeUnit: "ft",
+    lit: "Lit",
+    boroughZone: "brooklyn",
+  });
+  const html = buildProposalHtml({ lead, quote });
+  assert.match(html, /\(347\) 450-2110/);
+  assert.match(html, /jc@arcsignco\.com/);
+  assert.match(html, /Monday–Friday, 8:00 AM–6:00 PM/);
+  assert.doesNotMatch(html, /\bvendor\b/i);
+  assert.doesNotMatch(html, /TBD — Jesus/i);
+  assert.ok(html.includes(formatMoney(quote.low)));
+  assert.ok(html.includes("Sales tax: to be determined"));
+  assertClientCopySanitized(html, "proposal HTML");
+});
+
+test("proposal pdf matches HTML and has no template leakage", async () => {
+  const prevNetlify = process.env.NETLIFY;
+  const prevPdf = process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT;
+  delete process.env.NETLIFY;
+  process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT = "1";
+  const lead = {
+    company: "Harbor Retail LLC",
+    name: "Jordan Lee",
+    address: "245 Atlantic Ave, Brooklyn, NY",
+    scopeSummary: "Exterior storefront channel letters",
+  };
+  const quote = await computeQuote({
+    signType: "Channel letters",
+    sizeW: 14,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "Ground floor, under 12 ft",
+    boroughZone: "brooklyn",
+    permitsRequested: true,
+  });
+  const bytes = await buildProposalPdfBytes({ lead, quote });
+  assert.ok(bytes.length > 8000, `PDF too small (${bytes.length} bytes)`);
+  assertClientCopySanitized(Buffer.from(bytes).toString("latin1"), "proposal PDF", { skipRawMarkdownChecks: true });
+  assert.equal(quote.clientLines.some(l => /Site survey and travel/i.test(l.label)), false);
+  process.env.NETLIFY = prevNetlify;
+  if (prevPdf === undefined) delete process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT;
+  else process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT = prevPdf;
+});
+
+test("calculate API requires password", async () => {
+  process.env.QUOTE_ENGINE_PASSWORD = "test-ops-pass";
+  const deny = await handleQuoteEngine(
+    new Request("http://localhost/api/quote-engine/calculate", { method: "POST", body: "{}" }),
+    {},
+  );
+  assert.equal(deny.status, 401);
+  const ok = await handleQuoteEngine(
+    new Request("http://localhost/api/quote-engine/calculate", {
+      method: "POST",
+      headers: { Authorization: "Bearer test-ops-pass", "Content-Type": "application/json" },
+      body: JSON.stringify({
+        input: { signType: "Awning", sizeW: 8, sizeH: 3, sizeUnit: "ft", lit: "Non-lit", boroughZone: "queens" },
+      }),
+    }),
+    {},
+  );
+  assert.equal(ok.status, 200);
+  const json = await ok.json();
+  assert.ok(json.quote.low > 0);
+});
+
+test("rate card API validates JSON", async () => {
+  process.env.QUOTE_ENGINE_PASSWORD = "test-ops-pass";
+  const bad = await handleQuoteEngine(
+    new Request("http://localhost/api/quote-engine/rate-card", {
+      method: "POST",
+      headers: { Authorization: "Bearer test-ops-pass", "Content-Type": "application/json" },
+      body: JSON.stringify({ meta: {} }),
+    }),
+    {},
+  );
+  assert.equal(bad.status, 400);
+});
+
+test("webhook skips unknown forms", async () => {
+  const res = await handleQuoteEngine(
+    new Request("http://localhost/api/quote-engine/webhook", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ form_name: "other", data: {} }),
+    }),
+    {},
+  );
+  assert.equal(res.status, 200);
+  const json = await res.json();
+  assert.equal(json.skipped, true);
+});
