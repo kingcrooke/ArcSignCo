@@ -102,21 +102,16 @@
       "in": {
         "name": "Mike Evans",
         "position": "WR",
-        "points": 0,
-        "team": "SF",
-        "pointsPending": true,
-        "sleeperPlayerId": "2216"
+        "points": 12.6,
+        "team": "SF"
       },
-      "netImpact": 0,
-      "netImpactPending": true,
-      "scoreWith": 107.21,
-      "scoreWithout": 109.21,
-      "opponentScore": 110.31,
-      "opponentLabel": "Danny",
+      "netImpact": 10.6,
+      "scoreWith": 121.27,
+      "scoreWithout": 110.67,
+      "opponentScore": 163.91,
+      "opponentLabel": "Lambs2Slaughter",
       "won": false,
-      "flipped": false,
-      "resultPending": true,
-      "footnote": "Chase ruled out at 5.7 mid-game; swapped lowest WR Washington. Trailing 109.21–110.31 at the chip; result TBD."
+      "flipped": false
     }
   ]
 }

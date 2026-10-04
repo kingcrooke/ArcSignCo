@@ -52,17 +52,16 @@ describe('mulligans', () => {
     expect(mulliganLabel(mulliganStatusForRoster(3))).toContain('+5.30')
   })
 
-  it('shows Jesus week 4 swap with pending Evans until live points arrive', () => {
+  it('shows Jesus week 4 swap with final Evans points and loss vs Lambs2Slaughter', () => {
     const jesus = mulliganForRoster(8)!
     expect(jesus.week).toBe(4)
-    expect(formatMulliganReceipt(jesus)).toContain('pending')
-    expect(formatMulliganReceipt(jesus)).toContain('TBD')
-    expect(formatMulliganReceipt(jesus, { playerPoints: { '2216': 6.4 } })).toContain(
-      '6.40 (live)',
-    )
-    expect(formatMulliganReceipt(jesus, { playerPoints: { '2216': 6.4 } })).toContain(
-      '+4.40',
-    )
+    expect(formatMulliganReceipt(jesus)).toContain('12.60')
+    expect(formatMulliganReceipt(jesus)).toContain('+10.60')
+    expect(formatMulliganReceipt(jesus)).toContain('L 121.27–163.91')
+    expect(formatMulliganReceipt(jesus)).not.toContain('pending')
+    expect(formatMulliganReceipt(jesus)).not.toContain('live')
+    expect(formatMulliganLedgerLine(jesus)).toContain('Lambs2Slaughter')
+    expect(formatMulliganLedgerLine(jesus)).toContain('Lost')
   })
 
   it('respects throughWeek for status and week filters for results', () => {
