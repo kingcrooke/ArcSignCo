@@ -126,6 +126,7 @@ async function copyFixedMasters() {
   const { copyFile } = await import('node:fs/promises')
   const fixedDir = new URL('../../../docs/gwb-fixed-slides/', import.meta.url)
   const names = [
+    'w4-slide-06.png',
     'w4-slide-10.png',
     'w4-slide-14.png',
     'w4-slide-16.png',

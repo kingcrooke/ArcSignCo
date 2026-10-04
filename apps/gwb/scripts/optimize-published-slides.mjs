@@ -19,7 +19,7 @@ const WEBP_QUALITY = 80
 const SLIDE_BASENAMES = [
   ...Array.from({ length: 16 }, (_, i) =>
     `w4-slide-${String(i + 1).padStart(2, '0')}`,
-  ).filter((b) => b !== 'w4-slide-06'),
+  ),
   'vs-m1-narking-steven',
   'vs-m2-kayser-frankie',
   'vs-m3-hadi-manny',

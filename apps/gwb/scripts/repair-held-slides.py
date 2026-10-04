@@ -1,262 +1,392 @@
 #!/usr/bin/env python3
-"""Repair held-back GWB slide PNGs (text-only edits)."""
+"""High-fidelity text repairs for held-back GWB slide PNGs."""
 from __future__ import annotations
 
 import json
-import shutil
+import re
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
+import cv2
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
 
 GWB = Path(__file__).resolve().parents[1]
 ROOT = GWB.parents[1]
+FONT_DIR = GWB / "public/fonts"
 FONTS = {
-    "anton": GWB / "public/fonts/Anton-Regular.ttf",
-    "bebas": GWB / "public/fonts/BebasNeue-Regular.ttf",
-    "inter": GWB / "public/fonts/Inter-Variable.ttf",
+    "anton": FONT_DIR / "Anton-Regular.ttf",
+    "bebas": FONT_DIR / "BebasNeue-Regular.ttf",
+    "inter": FONT_DIR / "Inter-Regular.ttf",
+    "inter-semibold": FONT_DIR / "Inter-SemiBold.ttf",
 }
 UPLOADS = Path("/home/ubuntu/.cursor/projects/workspace/uploads")
 OUT_DOCS = ROOT / "docs/gwb-fixed-slides"
-OUT_PUBLIC = GWB / "public/slides-sources"
 
 
-@dataclass
-class TextFix:
-    left: int
-    top: int
-    width: int
-    height: int
-    old: str
-    new: str
-    font: str
-    fill: str
-    weight: int = 400
-    align: str = "left"  # left | right | center
+@dataclass(frozen=True)
+class FontSpec:
+    family: str
+    size: int
+    fill: tuple[int, int, int]
 
 
-def parse_color(hex_color: str) -> tuple[int, int, int]:
-    h = hex_color.lstrip("#")
-    return tuple(int(h[i : i + 2], 16) for i in (0, 2, 4))
+def load_rgb(path: Path) -> Image.Image:
+    return Image.open(path).convert("RGB")
 
 
-def font_for(name: str, size: int, weight: int = 400) -> ImageFont.FreeTypeFont:
-    path = FONTS[name]
-    try:
-        return ImageFont.truetype(str(path), size=size, index=0)
-    except TypeError:
-        return ImageFont.truetype(str(path), size=size)
-
-
-def fit_font(
-    text: str, font_name: str, target_h: int, weight: int = 400, max_size: int = 200
-) -> ImageFont.FreeTypeFont:
-    for size in range(min(target_h + 8, max_size), 8, -1):
-        font = font_for(font_name, size, weight)
-        bbox = ImageDraw.Draw(Image.new("RGB", (1, 1))).textbbox((0, 0), text, font=font)
-        h = bbox[3] - bbox[1]
-        if h <= target_h + 1:
-            return font
-    return font_for(font_name, 12, weight)
-
-
-def sample_patch_color(img: Image.Image, box: tuple[int, int, int, int]) -> tuple[int, int, int]:
+def inpaint_text_in_box(img: Image.Image, box: tuple[int, int, int, int]) -> None:
+    """Inpaint only bright glyph pixels inside a box (preserves background art)."""
     x0, y0, x1, y1 = box
-    pad = 4
-    samples = []
-    w, h = img.size
-    strips = [
-        (max(0, x0 - 24 - pad), y0, max(0, x0 - pad), y1),
-        (min(w, x1 + pad), y0, min(w, x1 + 24 + pad), y1),
-        (x0, max(0, y0 - 16), x1, max(0, y0 - 2)),
-    ]
-    arr = np.array(img.convert("RGB"))
-    for sx0, sy0, sx1, sy1 in strips:
-        if sx1 <= sx0 or sy1 <= sy0:
-            continue
-        patch = arr[sy0:sy1, sx0:sx1]
-        if patch.size:
-            samples.append(patch.reshape(-1, 3))
-    if not samples:
-        patch = arr[y0:y1, x0:x1]
-        return tuple(int(x) for x in np.median(patch.reshape(-1, 3), axis=0))
-    all_px = np.vstack(samples)
-    return tuple(int(x) for x in np.median(all_px, axis=0))
-
-
-def inpaint_box(
-    img: Image.Image, box: tuple[int, int, int, int], expand: int = 6, solid: bool = False
-) -> None:
-    x0, y0, x1, y1 = box
-    x0 = max(0, x0 - expand)
-    y0 = max(0, y0 - expand)
-    x1 = min(img.width, x1 + expand)
-    y1 = min(img.height, y1 + expand)
-    color = sample_patch_color(img, (x0, y0, x1, y1))
-    draw = ImageDraw.Draw(img)
-    draw.rectangle((x0, y0, x1, y1), fill=color)
-    if solid:
+    x0, y0 = max(0, x0), max(0, y0)
+    x1, y1 = min(img.width, x1), min(img.height, y1)
+    if x1 <= x0 or y1 <= y0:
         return
-    region = img.crop((x0, y0, x1, y1))
-    blurred = region.filter(ImageFilter.GaussianBlur(radius=1.2))
-    img.paste(blurred, (x0, y0))
+    arr = np.array(img)
+    patch = arr[y0:y1, x0:x1]
+    lum = patch.max(axis=2)
+    mask_local = (lum > lum.mean() + 18) | (lum > 175)
+    if mask_local.sum() < 12:
+        return
+    full_mask = np.zeros(arr.shape[:2], np.uint8)
+    full_mask[y0:y1, x0:x1] = (mask_local.astype(np.uint8) * 255)
+    full_mask = cv2.dilate(full_mask, np.ones((5, 5), np.uint8), iterations=1)
+    bgr = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
+    cleaned = cv2.inpaint(bgr, full_mask, 4, cv2.INPAINT_TELEA)
+    img.paste(Image.fromarray(cv2.cvtColor(cleaned, cv2.COLOR_BGR2RGB)))
 
 
-def draw_text_in_box(
-    img: Image.Image,
+def inpaint_region(img: Image.Image, box: tuple[int, int, int, int]) -> None:
+    x0, y0, x1, y1 = box
+    x0, y0 = max(0, x0), max(0, y0)
+    x1, y1 = min(img.width, x1), min(img.height, y1)
+    if x1 <= x0 or y1 <= y0:
+        return
+    arr = np.array(img)
+    bgr = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
+    mask = np.zeros(bgr.shape[:2], np.uint8)
+    cv2.rectangle(mask, (x0, y0), (x1 - 1, y1 - 1), 255, -1)
+    cleaned = cv2.inpaint(bgr, mask, 5, cv2.INPAINT_NS)
+    img.paste(Image.fromarray(cv2.cvtColor(cleaned, cv2.COLOR_BGR2RGB)))
+
+
+def inpaint_gold_text_on_crop(crop: Image.Image) -> Image.Image:
+    arr = np.array(crop)
+    gold = (arr[:, :, 0] > 190) & (arr[:, :, 1] > 115) & (arr[:, :, 2] < 145)
+    if gold.sum() < 20:
+        return crop
+    bgr = cv2.cvtColor(arr, cv2.COLOR_RGB2BGR)
+    mask = np.zeros(arr.shape[:2], np.uint8)
+    mask[gold] = 255
+    mask = cv2.dilate(mask, np.ones((3, 3), np.uint8), iterations=1)
+    cleaned = cv2.inpaint(bgr, mask, 3, cv2.INPAINT_NS)
+    return Image.fromarray(cv2.cvtColor(cleaned, cv2.COLOR_BGR2RGB))
+
+
+def sample_text_color(
+    img: Image.Image, box: tuple[int, int, int, int]
+) -> tuple[int, int, int]:
+    arr = np.array(img.crop(box))
+    lum = arr.max(axis=2)
+    mask = lum > lum.mean() + 12
+    if mask.sum() < 8:
+        return tuple(int(x) for x in arr.reshape(-1, 3).mean(axis=0))
+    return tuple(int(x) for x in arr[mask].mean(axis=0))
+
+
+def font(spec: FontSpec) -> ImageFont.FreeTypeFont:
+    return ImageFont.truetype(str(FONTS[spec.family]), spec.size)
+
+
+def text_size(text: str, spec: FontSpec) -> tuple[int, int]:
+    d = ImageDraw.Draw(Image.new("RGB", (4, 4)))
+    b = d.textbbox((0, 0), text, font=font(spec))
+    return b[2] - b[0], b[3] - b[1]
+
+
+def fit_size(
+    family: str,
     text: str,
+    target_h: int,
+    min_s: int = 12,
+    max_s: int = 120,
+) -> int:
+    best = min_s
+    for size in range(min_s, max_s + 1):
+        spec = FontSpec(family, size, (255, 255, 255))
+        h = text_size(text, spec)[1]
+        if h <= target_h:
+            best = size
+        else:
+            break
+    return best
+
+
+def draw_text(
+    img: Image.Image,
+    xy: tuple[int, int],
+    text: str,
+    spec: FontSpec,
+    anchor: str = "ls",
+) -> None:
+    d = ImageDraw.Draw(img)
+    d.text(xy, text, font=font(spec), fill=spec.fill, anchor=anchor)
+
+
+def replace_word_in_box(
+    img: Image.Image,
     box: tuple[int, int, int, int],
-    font_name: str,
-    fill: str,
-    weight: int = 400,
-    align: str = "left",
+    new_word: str,
+    family: str,
+    fill: tuple[int, int, int],
 ) -> None:
     x0, y0, x1, y1 = box
     target_h = y1 - y0
-    font = fit_font(text, font_name, target_h, weight=weight)
-    draw = ImageDraw.Draw(img)
-    bbox = draw.textbbox((0, 0), text, font=font)
-    tw = bbox[2] - bbox[0]
-    th = bbox[3] - bbox[1]
-    ty = y0 + (target_h - th) // 2 - bbox[1]
-    if align == "left":
-        tx = x0
-    elif align == "right":
-        tx = x1 - tw
-    else:
-        tx = x0 + ((x1 - x0) - tw) // 2
-    draw.text((tx, ty), text, font=font, fill=parse_color(fill))
+    target_w = x1 - x0
+    inpaint_text_in_box(img, box)
+    size = fit_size(family, new_word, target_h=target_h - 2, min_s=12, max_s=120)
+    for candidate in range(size, 11, -1):
+        spec = FontSpec(family, candidate, fill)
+        tw, th = text_size(new_word, spec)
+        if tw <= target_w + 6 and th <= target_h + 2:
+            size = candidate
+            break
+    draw_text(img, (x0, y0), new_word, FontSpec(family, size, fill), anchor="ls")
 
 
-def apply_fixes(img: Image.Image, fixes: list[TextFix], solid_patches: set[int] | None = None) -> None:
-    solid_patches = solid_patches or set()
-    for i, fix in enumerate(fixes):
-        box = (fix.left, fix.top, fix.left + fix.width, fix.top + fix.height)
-        inpaint_box(img, box, solid=i in solid_patches)
-        draw_text_in_box(
-            img,
-            fix.new,
-            box,
-            fix.font,
-            fix.fill,
-            weight=fix.weight,
-            align=fix.align,
-        )
+def replace_last_glyph(
+    img: Image.Image,
+    box: tuple[int, int, int, int],
+    family: str,
+    fill: tuple[int, int, int],
+    old_word: str,
+    new_last: str,
+) -> None:
+    """HADY→HADI / Hady→Hadi by swapping only the last glyph."""
+    x0, y0, x1, y1 = box
+    w, h = x1 - x0, y1 - y0
+    size = fit_size(family, old_word, target_h=h - 2, min_s=12, max_s=120)
+    spec = FontSpec(family, size, fill)
+    prefix = old_word[:-1]
+    prefix_w = text_size(prefix, spec)[0] if prefix else 0
+    last_old_w = text_size(old_word[-1], spec)[0]
+    last_new_w = text_size(new_last, spec)[0]
+    last_x0 = x0 + prefix_w
+    last_x1 = min(x1, last_x0 + max(last_old_w, last_new_w) + 6)
+    inpaint_text_in_box(img, (last_x0, y0, last_x1, y1))
+    draw_text(
+        img,
+        (last_x0 + max(0, (last_old_w - last_new_w) // 2), y0),
+        new_last,
+        spec,
+        anchor="ls",
+    )
 
 
-def shift_region_up(img: Image.Image, region: tuple[int, int, int, int], dy: int) -> None:
-    x0, y0, x1, y1 = region
-    block = img.crop((x0, y0, x1, y1)).copy()
-    inpaint_box(img, (x0, y0, x1, y1), expand=2)
-    img.paste(block, (x0, y0 - dy))
+def repair_vs_matchup_layout(img: Image.Image, poll_y: int) -> None:
+    """vs-m3 card — change HADY→HADI without re-typesetting MANNY."""
+    white = sample_text_color(img, (353, 147, 574, 219))
+    gold = sample_text_color(img, (73, 241, 169, 264))
+    replace_last_glyph(img, (73, 147, 231, 219), "anton", white, "HADY", "I")
+    replace_last_glyph(img, (73, 241, 169, 264), "bebas", gold, "HADY", "I")
+    badge_gold = sample_text_color(img, (86, 320, 162, 351))
+    replace_last_glyph(img, (86, 320, 162, 351), "bebas", badge_gold, "HADY", "I")
+    poll_white = sample_text_color(img, (833, poll_y, 921, poll_y + 32))
+    replace_last_glyph(
+        img,
+        (833, poll_y, 921, poll_y + 31),
+        "bebas",
+        poll_white,
+        "Hady",
+        "i",
+    )
 
 
 def repair_w4_slide_10(src: Path, dest: Path) -> None:
-    img = Image.open(src).convert("RGB")
-    fixes = [
-        TextFix(72, 170, 121, 56, "HADY", "HADI", "anton", "#f4f7fb"),
-        TextFix(107, 319, 103, 25, "HADY", "HADI", "bebas", "#f4f7fb", weight=600),
-        TextFix(833, 684, 87, 31, "Hady", "Hadi", "inter", "#f4f7fb", weight=600, align="right"),
-    ]
-    apply_fixes(img, fixes)
+    img = load_rgb(src)
+    white = sample_text_color(img, (285, 170, 454, 226))
+    replace_last_glyph(img, (72, 170, 193, 226), "anton", white, "HADY", "I")
+    ref_color = sample_text_color(img, (107, 505, 246, 530))
+    replace_last_glyph(img, (107, 319, 210, 344), "bebas", ref_color, "HADY", "I")
+    poll_white = sample_text_color(img, (833, 684, 920, 715))
+    replace_last_glyph(img, (833, 684, 920, 715), "bebas", poll_white, "Hady", "i")
     img.save(dest, optimize=True)
 
 
 def repair_w4_slide_14(src: Path, dest: Path) -> None:
-    img = Image.open(src).convert("RGB")
-    fixes = [
-        TextFix(905, 948, 74, 29, "Hady", "Hadi", "inter", "#8fa3b8", weight=500, align="right"),
-    ]
-    apply_fixes(img, fixes)
+    img = load_rgb(src)
+    gray = sample_text_color(img, (856, 878, 979, 901))
+    replace_last_glyph(img, (905, 948, 979, 977), "inter-semibold", gray, "Hady", "i")
     img.save(dest, optimize=True)
 
 
-def redraw_card_badge(img: Image.Image, box: tuple[int, int, int, int], label: str) -> None:
-    x0, y0, x1, y1 = box
-    draw = ImageDraw.Draw(img)
-    draw.rounded_rectangle((x0, y0, x1, y1), radius=10, fill=(12, 12, 14))
-    draw_text_in_box(
-        img,
-        label,
-        (x0 + 4, y0 + 2, x1 - 4, y1 - 2),
-        "bebas",
-        "#e8b923",
-        weight=600,
-        align="center",
-    )
+def repair_w4_slide_06(src: Path, dest: Path) -> None:
+    img = load_rgb(src)
+    fill = sample_text_color(img, (188, 562, 280, 600))
+    replace_last_glyph(img, (74, 562, 172, 600), "inter-semibold", fill, "Hady", "i")
+    img.save(dest, optimize=True)
 
 
 def repair_vs_m3(src: Path, dest: Path) -> None:
-    img = Image.open(src).convert("RGB")
-    fixes = [
-        TextFix(73, 147, 158, 72, "HADY", "HADI", "anton", "#f4f7fb"),
-        TextFix(73, 241, 96, 23, "HADY", "HADI", "bebas", "#e8b923"),
-        TextFix(833, 1112, 88, 31, "Hady", "Hadi", "inter", "#f4f7fb", weight=600, align="right"),
-    ]
-    apply_fixes(img, fixes)
-    redraw_card_badge(img, (84, 314, 246, 354), "HADI 2-1")
+    img = load_rgb(src)
+    repair_vs_matchup_layout(img, poll_y=1113)
     img.save(dest, optimize=True)
 
 
-def repair_w4_slide_16(src: Path, dest: Path) -> None:
-    img = Image.open(src).convert("RGB")
-    fixes = [
-        TextFix(322, 579, 74, 29, "Hady", "Hadi", "inter", "#f4f7fb", weight=500),
+def tesseract_word_boxes(path: Path, min_y: int, max_y: int) -> list[tuple[int, int, int, int]]:
+    out = Path("/tmp/repair-tsv")
+    subprocess.run(
+        ["tesseract", str(path), str(out.with_suffix("")), "tsv"],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    boxes: list[tuple[int, int, int, int]] = []
+    lines = out.with_suffix(".tsv").read_text().splitlines()
+    header = lines[0].split("\t")
+    for line in lines[1:]:
+        parts = line.split("\t")
+        if len(parts) < 12:
+            continue
+        row = dict(zip(header, parts))
+        if not row.get("text", "").strip():
+            continue
+        top = int(row["top"])
+        if top < min_y or top > max_y:
+            continue
+        left, width, height = int(row["left"]), int(row["width"]), int(row["height"])
+        pad = 4
+        boxes.append(
+            (
+                left - pad,
+                top - pad,
+                left + width + pad,
+                top + height + pad,
+            )
+        )
+    return boxes
+
+
+def extend_background_band(
+    img: Image.Image, dest_y0: int, dest_y1: int, src_y0: int, src_y1: int
+) -> None:
+    strip = img.crop((0, src_y0, img.width, src_y1))
+    h = src_y1 - src_y0
+    y = dest_y0
+    while y < dest_y1:
+        img.paste(strip, (0, y))
+        y += h
+
+
+def restore_w4_footer(img: Image.Image, ref: Image.Image, page_label: str) -> None:
+    footer_color = sample_text_color(ref, (72, 1261, 360, 1297))
+    page_color = sample_text_color(ref, (925, 1266, 1009, 1289))
+    inpaint_text_in_box(img, (60, 1248, 380, 1302))
+    inpaint_text_in_box(img, (900, 1258, 1018, 1298))
+    footer_size = fit_size("inter", "gwb_fantasy_football", target_h=34, min_s=24, max_s=34)
+    draw_text(
+        img,
+        (72, 1297),
+        "gwb_fantasy_football",
+        FontSpec("inter", footer_size, footer_color),
+        anchor="ls",
+    )
+    page_size = fit_size("inter", page_label, target_h=23, min_s=20, max_s=26)
+    draw_text(
+        img,
+        (1008, 1332),
+        page_label,
+        FontSpec("inter", page_size, page_color),
+        anchor="rs",
+    )
+
+
+def repair_w4_slide_16(src: Path, footer_ref: Path, dest: Path) -> None:
+    img = load_rgb(src)
+    ref_footer = load_rgb(footer_ref)
+
+    pick_color = sample_text_color(img, (428, 579, 486, 602))
+    replace_last_glyph(img, (322, 579, 396, 608), "inter-semibold", pick_color, "Hady", "i")
+
+    for box in tesseract_word_boxes(src, 828, 1295):
+        inpaint_text_in_box(img, box)
+
+    extend_background_band(img, 836, 1260, 996, 1036)
+
+    body_color = sample_text_color(img, (72, 779, 400, 831))
+    if sum(body_color) < 120:
+        body_color = (245, 245, 245)
+    heading_color = sample_text_color(img, (72, 713, 260, 743))
+    if sum(heading_color) < 120:
+        heading_color = (236, 108, 108)
+    heading_size = fit_size("inter-semibold", "God help us all:", target_h=26, min_s=24, max_s=32)
+    draw_text(
+        img,
+        (72, 848),
+        "God help us all:",
+        FontSpec("inter-semibold", heading_size, heading_color),
+        anchor="ls",
+    )
+
+    lines = [
+        "Steven is the final boss. Kayser refuses",
+        "the Bottom 6. Jamil robbed the wire.",
+        "Week 4 hasn't started and we're already",
+        "fighting. GWB is exactly where it needs",
+        "to be.",
     ]
-    apply_fixes(img, fixes)
-    # Closing paragraph — shift up so "to be." clears the footer handle
-    shift_region_up(img, (56, 1094, 1024, 1290), dy=88)
-    original = Image.open(src).convert("RGB")
-    img.paste(original.crop((0, 1306, 1080, 1350)), (0, 1306))
+    body_size = fit_size("inter-semibold", lines[0], target_h=28, min_s=28, max_s=36)
+    spec = FontSpec("inter-semibold", body_size, body_color)
+    line_h = int(body_size * 1.38)
+    y = 888
+    for line in lines:
+        draw_text(img, (72, y), line, spec, anchor="ls")
+        y += line_h
+
+    footer_top = 1260
+    if y + 40 > footer_top:
+        raise SystemExit(f"slide 16 body too low: last line y={y}, need 40px above {footer_top}")
+
+    restore_w4_footer(img, ref_footer, "16/16")
     img.save(dest, optimize=True)
 
 
 def verify_no_hady(path: Path) -> None:
-    import subprocess
-
     out = subprocess.check_output(
-        ["tesseract", str(path), "stdout"],
-        stderr=subprocess.DEVNULL,
-        text=True,
+        ["tesseract", str(path), "stdout"], stderr=subprocess.DEVNULL, text=True
     )
-    if "hady" in out.lower():
+    if re.search(r"\bHady\b", out, re.IGNORECASE):
         raise SystemExit(f"Hady still present in {path}")
 
 
 def main() -> None:
-    jobs = [
-        (
-            UPLOADS / "w4-slide-10_4524.png",
-            OUT_DOCS / "w4-slide-10.png",
-            repair_w4_slide_10,
-        ),
-        (
-            UPLOADS / "w4-slide-14_8b5b.png",
-            OUT_DOCS / "w4-slide-14.png",
-            repair_w4_slide_14,
-        ),
+    OUT_DOCS.mkdir(parents=True, exist_ok=True)
+    footer_ref = UPLOADS / "w4-slide-15_9529.png"
+    jobs: list[tuple[Path, Path, object]] = [
+        (UPLOADS / "w4-slide-06_804c.png", OUT_DOCS / "w4-slide-06.png", repair_w4_slide_06),
+        (UPLOADS / "w4-slide-10_4524.png", OUT_DOCS / "w4-slide-10.png", repair_w4_slide_10),
+        (UPLOADS / "w4-slide-14_8b5b.png", OUT_DOCS / "w4-slide-14.png", repair_w4_slide_14),
         (
             UPLOADS / "vs-m3-hady-manny_11af.png",
             OUT_DOCS / "vs-m3-hadi-manny.png",
             repair_vs_m3,
         ),
-        (
-            UPLOADS / "HELD-w4-slide-16-footer-overlap_c4d2.png",
-            OUT_DOCS / "w4-slide-16.png",
-            repair_w4_slide_16,
-        ),
     ]
-    OUT_DOCS.mkdir(parents=True, exist_ok=True)
-    OUT_PUBLIC.mkdir(parents=True, exist_ok=True)
-    manifest = []
-    for src, doc_out, fn in jobs:
-        if not src.exists():
-            raise SystemExit(f"Missing source {src}")
-        fn(src, doc_out)
-        verify_no_hady(doc_out)
-        manifest.append({"source": src.name, "output": doc_out.name})
-        print("OK", doc_out.name)
+    repair_w4_slide_16(
+        UPLOADS / "HELD-w4-slide-16-footer-overlap_c4d2.png",
+        footer_ref,
+        OUT_DOCS / "w4-slide-16.png",
+    )
+    verify_no_hady(OUT_DOCS / "w4-slide-16.png")
+    print("OK w4-slide-16.png")
+
+    manifest = [{"source": "HELD-w4-slide-16-footer-overlap", "output": "w4-slide-16.png"}]
+    for src, dest, fn in jobs:
+        fn(src, dest)
+        verify_no_hady(dest)
+        manifest.append({"source": src.name, "output": dest.name})
+        print("OK", dest.name)
 
     (OUT_DOCS / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
 
