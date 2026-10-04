@@ -16,6 +16,10 @@ export type SlideGroup = {
 export const HELD_BACK_SLIDES: { id: string; reason: string }[] = [
   { id: 'w4-slide-16', reason: 'Footer overlap with gwb_fantasy_football' },
   {
+    id: 'w4-slide-06',
+    reason: 'Needs Hadi spelling fix (Hady baked into artwork)',
+  },
+  {
     id: 'w4-slide-10',
     reason: 'Needs Hadi spelling fix (Hady baked into artwork)',
   },
@@ -59,7 +63,6 @@ export const SLIDE_GROUPS: SlideGroup[] = [
       w4('w4-slide-03', 'Slide 3'),
       w4('w4-slide-04', 'Slide 4'),
       w4('w4-slide-05', 'Slide 5'),
-      w4('w4-slide-06', 'Slide 6'),
       w4('w4-slide-07', 'Slide 7'),
       w4('w4-slide-08', 'Slide 8'),
       w4('w4-slide-09', 'Slide 9'),

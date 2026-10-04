@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type TouchEvent } from 'react'
+import { useCallback, useEffect, useRef, useState, type TouchEvent } from 'react'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
 
@@ -13,7 +13,9 @@ const SWIPE_THRESHOLD_PX = 48
 
 export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null)
+  const imgRef = useRef<HTMLImageElement>(null)
   const touchStartX = useRef<number | null>(null)
+  const [imageReady, setImageReady] = useState(false)
   const slide = slides[index]
 
   const goPrev = useCallback(() => {
@@ -32,6 +34,10 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
       document.body.style.overflow = prevOverflow
     }
   }, [])
+
+  useEffect(() => {
+    setImageReady(false)
+  }, [slide?.basename])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -63,6 +69,17 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
     if (delta > SWIPE_THRESHOLD_PX) goPrev()
     else if (delta < -SWIPE_THRESHOLD_PX) goNext()
   }
+
+  const markReady = useCallback(async () => {
+    const img = imgRef.current
+    if (!img) return
+    try {
+      if (typeof img.decode === 'function') await img.decode()
+    } catch {
+      /* decode can fail on some browsers; onload still fired */
+    }
+    if (img.naturalWidth > 0) setImageReady(true)
+  }, [])
 
   if (!slide) return null
 
@@ -98,10 +115,10 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
         </button>
       </div>
 
-      <div className="relative flex min-h-0 flex-1 items-center justify-center px-2 pb-4 sm:px-8">
+      <div className="relative flex min-h-0 flex-1 items-center justify-center px-14 pb-4 pt-2 sm:px-20">
         <button
           type="button"
-          className="absolute left-1 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/25 bg-black/50 p-3 text-white hover:bg-black/70 disabled:opacity-30 sm:left-4"
+          className="absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/25 bg-black/50 p-3 text-white hover:bg-black/70 disabled:opacity-30 sm:left-4"
           onClick={goPrev}
           disabled={index === 0}
           aria-label="Previous slide"
@@ -109,21 +126,45 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
           <span aria-hidden="true">‹</span>
         </button>
 
-        <picture className="max-h-[min(78dvh,900px)] max-w-[min(100%,720px)]">
-          <source srcSet={webp} type="image/webp" />
+        <div className="relative z-10 flex max-h-[min(78dvh,900px)] w-full max-w-[min(100%,720px)] items-center justify-center">
+          {!imageReady && (
+            <div
+              className="absolute inset-0 flex items-center justify-center text-sm text-white/50"
+              aria-hidden="true"
+            >
+              Loading slide…
+            </div>
+          )}
           <img
+            ref={imgRef}
+            key={slide.basename}
             src={jpg}
+            srcSet={`${webp} 1080w`}
+            sizes="(max-width: 720px) 100vw, 720px"
             alt={slide.title}
             width={slide.width}
             height={slide.height}
-            className="max-h-[min(78dvh,900px)] w-auto max-w-full object-contain"
+            decoding="async"
+            fetchPriority="high"
+            className={`block max-h-[min(78dvh,900px)] w-auto max-w-full object-contain transition-opacity duration-150 ${
+              imageReady ? 'opacity-100' : 'opacity-0'
+            }`}
             draggable={false}
+            onLoad={() => {
+              void markReady()
+            }}
+            onError={(e) => {
+              const img = e.currentTarget
+              if (img.src.endsWith('.jpg')) return
+              img.removeAttribute('srcset')
+              img.src = jpg
+            }}
           />
-        </picture>
+        </div>
 
         <button
           type="button"
-          className="absolute right-1 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/25 bg-black/50 p-3 text-white hover:bg-black/70 disabled:opacity-30 sm:right-4"
+          className="absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/25 bg-black/50 p-3 text-white hover:bg-black/70 disabled:opacity-30 sm:right-4"
           onClick={goNext}
           disabled={index === slides.length - 1}
           aria-label="Next slide"

@@ -7,18 +7,23 @@ import {
 } from '../lib/publishedSlides'
 import { SlideLightbox } from './SlideLightbox'
 
+const THUMB_WIDTH = 540
+const THUMB_HEIGHT = 675
+
 function SlideThumb({
   slide,
   index,
+  globalIndex,
   onOpen,
 }: {
   slide: PublishedSlide
   index: number
+  globalIndex: number
   onOpen: (globalIndex: number) => void
 }) {
-  const globalIndex = ALL_PUBLISHED_SLIDES.findIndex((s) => s.id === slide.id)
   const webp = slideAssetUrl(slide.basename, 'thumb', 'webp')
   const jpg = slideAssetUrl(slide.basename, 'thumb', 'jpg')
+  const eager = globalIndex < 8
 
   return (
     <button
@@ -27,18 +32,17 @@ function SlideThumb({
       onClick={() => onOpen(globalIndex)}
       aria-label={`Open ${slide.title}, slide ${index + 1}`}
     >
-      <picture>
-        <source srcSet={webp} type="image/webp" />
-        <img
-          src={jpg}
-          alt=""
-          width={slide.width}
-          height={slide.height}
-          loading="lazy"
-          decoding="async"
-          className="aspect-[4/5] w-full object-cover transition group-hover:opacity-95"
-        />
-      </picture>
+      <img
+        src={jpg}
+        srcSet={`${webp} ${THUMB_WIDTH}w`}
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        alt=""
+        width={THUMB_WIDTH}
+        height={THUMB_HEIGHT}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+        className="aspect-[4/5] w-full bg-[#0d1319] object-cover transition group-hover:opacity-95"
+      />
       <span className="sr-only">{slide.title}</span>
     </button>
   )
@@ -71,11 +75,21 @@ export function SlidesPanel() {
             className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-5"
             role="list"
           >
-            {group.slides.map((slide, i) => (
-              <li key={slide.id}>
-                <SlideThumb slide={slide} index={i} onOpen={open} />
-              </li>
-            ))}
+            {group.slides.map((slide, i) => {
+              const globalIndex = ALL_PUBLISHED_SLIDES.findIndex(
+                (s) => s.id === slide.id,
+              )
+              return (
+                <li key={slide.id}>
+                  <SlideThumb
+                    slide={slide}
+                    index={i}
+                    globalIndex={globalIndex}
+                    onOpen={open}
+                  />
+                </li>
+              )
+            })}
           </ul>
         </section>
       ))}
