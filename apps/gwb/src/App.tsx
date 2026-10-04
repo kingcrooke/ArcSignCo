@@ -132,7 +132,7 @@ export default function App() {
             <section className="space-y-8">
               <div>
                 <h2 className="mb-3 text-lg font-semibold">Commissioner&apos;s recaps</h2>
-                <CommissionerRecapsPanel />
+                <CommissionerRecapsPanel week={data.selectedWeek} />
               </div>
               <div>
                 <h2 className="mb-3 text-lg font-semibold">

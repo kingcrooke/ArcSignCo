@@ -35,6 +35,38 @@ const ID_TO_NAME = new Map([
 const RECON_NOTE =
   /^\*\[Reconstructed from notes[\s\S]*?\]\*\s*$/m
 
+const LABEL_ORDER = {
+  Waivers: 20,
+  Predictions: 30,
+  Thursday: 40,
+  Saturday: 50,
+  Sunday: 60,
+  'Monday Morning': 70,
+  'Monday Night': 80,
+  Final: 90,
+  Correction: 100,
+}
+
+function inferLabel(title) {
+  const t = title.toUpperCase()
+  if (t.includes('CORRECTION') || t.includes('AI CORRECTION')) return 'Correction'
+  if (t.includes('FINAL REPORT')) return 'Final'
+  if (/\bWEEK\s*1\b/.test(t) && t.includes('RECAP')) return 'Final'
+  if (t.includes('MULLIGAN WATCH')) return 'Monday Night'
+  if (t.includes('MONDAY NIGHT REPORT')) return 'Monday Night'
+  if (t.includes('MONDAY MORNING')) return 'Monday Morning'
+  if (t.includes('SUNDAY MORNING') || t.includes('SUNDAY CHECK')) return 'Sunday'
+  if (t.includes('SATURDAY NIGHT') || t.includes('SATURDAY')) return 'Saturday'
+  if (t.includes('FRIDAY MORNING') || t.includes('THURSDAY') || t.includes('FRIDAY')) {
+    return 'Thursday'
+  }
+  if (t.includes('WAIVER') || t.includes('POST-WAIVER')) return 'Waivers'
+  if (t.includes('PREDICTION') || t.includes('CRYSTAL BALL') || t.includes('CHECKPOINT')) {
+    return 'Predictions'
+  }
+  return 'Final'
+}
+
 function inferWeek(title, index) {
   const t = title.toUpperCase()
   if (/\bWEEK\s*4\b/.test(t) || t.includes('WEEK 4')) return 4
@@ -92,11 +124,17 @@ function parseRecaps(md) {
     const body = chunk.slice(nl + 1).replace(/^---\s*$/m, '').trim()
     const reconstructed = RECON_NOTE.test(body)
     const index = recaps.length + 1
+    const week = inferWeek(titleLine, index)
+    const label = inferLabel(titleLine)
     recaps.push({
       id: `recap-${index}`,
       index,
       title: titleLine,
-      week: inferWeek(titleLine, index),
+      week,
+      label,
+      postedAt: `${2026}-${String(8 + week).padStart(2, '0')}-${String(
+        Math.min(28, index + week * 2),
+      ).padStart(2, '0')}`,
       reconstructed,
       bodyMarkdown: cleanBody(body, { reconstructed }),
     })
