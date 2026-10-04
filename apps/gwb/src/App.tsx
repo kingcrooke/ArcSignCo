@@ -162,7 +162,6 @@ export default function App() {
       className={`mx-auto flex min-h-dvh flex-col px-4 pb-8 pt-6 ${
         tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'
       }`}
-      onClick={() => sound.onUserGesture()}
     >
       <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -179,10 +178,8 @@ export default function App() {
         <SoundToggle
           label={sound.label}
           pressed={sound.pressed}
-          onToggle={() => {
-            sound.unlock()
-            sound.onUserGesture()
-          }}
+          showTapHint={sound.showTapHint}
+          onToggle={() => sound.unlock()}
         />
       </header>
 
