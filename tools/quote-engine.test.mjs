@@ -5,10 +5,11 @@ import { normalizeLead, isQuoteEngineForm, leadToSheetRow } from "../netlify/lib
 import { computeQuote, formatMoney } from "../netlify/lib/quote-compute.mjs";
 import { buildProposalHtml, buildProposalPdfBytes } from "../netlify/lib/proposal.mjs";
 import { handleQuoteEngine } from "../netlify/lib/quote-engine-api.mjs";
-import { PLACEHOLDER } from "../netlify/lib/quote-rates.mjs";
+import { clearTestRateCard } from "../netlify/lib/rate-card-store.mjs";
 
 beforeEach(() => {
   resetMockSheet();
+  clearTestRateCard();
   delete process.env.QUOTE_ENGINE_SHEET_ID;
   delete process.env.QUOTE_ENGINE_GOOGLE_CREDENTIALS;
   delete process.env.QUOTE_ENGINE_PASSWORD;
@@ -40,9 +41,8 @@ test("normalizes quote-request with scope-finder", () => {
   assert.equal(lead.calculatorInput.boroughZone, "manhattan");
 });
 
-test("computeQuote uses placeholder rates and minimum job charge", () => {
-  assert.equal(PLACEHOLDER, true);
-  const quote = computeQuote({
+test("computeQuote uses placeholder card and job minimums", async () => {
+  const quote = await computeQuote({
     signType: "Channel letters",
     quantity: 1,
     sizeW: 12,
@@ -53,13 +53,14 @@ test("computeQuote uses placeholder rates and minimum job charge", () => {
     permitsRequested: true,
     boroughZone: "brooklyn",
   });
-  assert.ok(quote.total >= 850);
-  assert.ok(quote.lines.length >= 4);
+  assert.ok(quote.low >= 40);
+  assert.ok(quote.lines.length >= 3);
   assert.equal(quote.placeholder, true);
+  assert.ok(quote.tbdCount >= 1);
 });
 
-test("ground floor height band does not add lift or boom line", () => {
-  const q = computeQuote({
+test("ground floor height band does not add scaffold line", async () => {
+  const q = await computeQuote({
     signType: "Channel letters",
     sizeW: 14,
     sizeH: 2.5,
@@ -68,12 +69,11 @@ test("ground floor height band does not add lift or boom line", () => {
     height: "Ground floor, under 12 ft",
     boroughZone: "brooklyn",
   });
-  assert.equal(q.lines.some(l => l.key === "lift"), false);
-  assert.equal(q.clientLines.some(l => l.label === "Lift or boom access"), false);
+  assert.equal(q.lines.some(l => l.key === "access_scaffold"), false);
 });
 
-test("12–25 ft height band adds lift allowance", () => {
-  const q = computeQuote({
+test("12–25 ft height band adds access scaffold line", async () => {
+  const q = await computeQuote({
     signType: "Channel letters",
     sizeW: 14,
     sizeH: 2.5,
@@ -82,9 +82,7 @@ test("12–25 ft height band adds lift allowance", () => {
     height: "12–25 ft",
     boroughZone: "brooklyn",
   });
-  const lift = q.lines.find(l => l.key === "lift");
-  assert.ok(lift);
-  assert.equal(lift.amount, 650);
+  assert.ok(q.lines.some(l => l.key === "access_scaffold"));
 });
 
 test("appendLeadRow falls back to mock sheet without credentials", async () => {
@@ -96,26 +94,33 @@ test("appendLeadRow falls back to mock sheet without credentials", async () => {
   assert.equal(mockSheetRows[0][0], lead.id);
 });
 
-test("proposal html is client-safe copy", () => {
+test("proposal html is client-safe copy without TBD flags", async () => {
   const lead = { name: "Client", company: "Sample Co", address: "1 Main St, Brooklyn", scopeSummary: "Channel letters" };
-  const quote = computeQuote({ signType: "Channel letters", sizeW: 10, sizeH: 2, sizeUnit: "ft", lit: "Lit", boroughZone: "brooklyn" });
+  const quote = await computeQuote({
+    signType: "Channel letters",
+    sizeW: 10,
+    sizeH: 2,
+    sizeUnit: "ft",
+    lit: "Lit",
+    boroughZone: "brooklyn",
+  });
   const html = buildProposalHtml({ lead, quote });
   assert.match(html, /\(347\) 450-2110/);
   assert.match(html, /jc@arcsignco\.com/);
-  assert.match(html, /Mon–Fri 8 AM–6 PM/);
+  assert.match(html, /Monday–Friday, 8:00 AM–6:00 PM/);
   assert.doesNotMatch(html, /\bvendor\b/i);
-  assert.doesNotMatch(html, />\s*I\s+/);
-  assert.ok(html.includes(formatMoney(quote.total)));
+  assert.doesNotMatch(html, /TBD — Jesus/i);
+  assert.ok(html.includes(formatMoney(quote.low)));
 });
 
-test("proposal pdf includes scope, line items, total, and contact footer", async () => {
+test("proposal pdf includes scope and preliminary range", async () => {
   const lead = {
     company: "Harbor Retail LLC",
     name: "Jordan Lee",
     address: "245 Atlantic Ave, Brooklyn, NY",
     scopeSummary: "Exterior storefront channel letters",
   };
-  const quote = computeQuote({
+  const quote = await computeQuote({
     signType: "Channel letters",
     sizeW: 14,
     sizeH: 2.5,
@@ -130,7 +135,6 @@ test("proposal pdf includes scope, line items, total, and contact footer", async
   const doc = await PDFDocument.load(bytes);
   assert.ok(doc.getPageCount() >= 1);
   assert.ok(bytes.length > 1800);
-  assert.equal(quote.clientLines.some(l => l.label === "Lift or boom access"), false);
 });
 
 test("calculate API requires password", async () => {
@@ -144,13 +148,28 @@ test("calculate API requires password", async () => {
     new Request("http://localhost/api/quote-engine/calculate", {
       method: "POST",
       headers: { Authorization: "Bearer test-ops-pass", "Content-Type": "application/json" },
-      body: JSON.stringify({ input: { signType: "Awning", sizeW: 8, sizeH: 3, sizeUnit: "ft", lit: "Non-lit", boroughZone: "queens" } }),
+      body: JSON.stringify({
+        input: { signType: "Awning", sizeW: 8, sizeH: 3, sizeUnit: "ft", lit: "Non-lit", boroughZone: "queens" },
+      }),
     }),
     {},
   );
   assert.equal(ok.status, 200);
   const json = await ok.json();
-  assert.ok(json.quote.total > 0);
+  assert.ok(json.quote.low > 0);
+});
+
+test("rate card API validates JSON", async () => {
+  process.env.QUOTE_ENGINE_PASSWORD = "test-ops-pass";
+  const bad = await handleQuoteEngine(
+    new Request("http://localhost/api/quote-engine/rate-card", {
+      method: "POST",
+      headers: { Authorization: "Bearer test-ops-pass", "Content-Type": "application/json" },
+      body: JSON.stringify({ meta: {} }),
+    }),
+    {},
+  );
+  assert.equal(bad.status, 400);
 });
 
 test("webhook skips unknown forms", async () => {

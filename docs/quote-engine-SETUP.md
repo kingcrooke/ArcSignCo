@@ -87,10 +87,18 @@ Proposal copy is client-facing: no vendor or sub costs; **(347) 450-2110**, **jc
 
 ---
 
-## Step 5 — Real rates (later, Construction PM)
+## Step 5 — Import the Construction PM rate card (required for real math)
 
-1. Edit **`netlify/lib/quote-rates.mjs`**, replace placeholder numbers, set **`PLACEHOLDER = false`**, bump **`RATES_VERSION`**.
-2. Merge via PR.
+Real rates **must not** live in GitHub (public repo). The repo ships only a **placeholder** card with fake numbers.
+
+1. After deploy, open **`/ops-qel16cb/`** and sign in.
+2. In **Rate card**, choose the PM file **`arc_pricing_inputs.json`** (schema matches the placeholder).
+3. Click **Upload to Blobs**. Netlify stores it in the **`arc-quote-engine-rate-card`** Blobs store (site-scoped, not in git).
+4. Repeat on **Production** after you trust a preview import. Each environment has its own Blobs.
+
+Until import, the calculator uses the placeholder card and shows **PLACEHOLDER RATES** in admin.
+
+Internal **TBD — Jesus to confirm** flags appear in admin and the calculator only — never on client proposals or estimates.
 
 ---
 
@@ -100,6 +108,7 @@ Proposal copy is client-facing: no vendor or sub costs; **(347) 450-2110**, **jc
 - [ ] Sheet + **`LeadLog`** headers
 - [ ] **`QUOTE_ENGINE_SHEET_APP_URL`** (recommended) *or* service account pair
 - [ ] Webhooks on **`quote-request`** and **`sign-estimate-request`**
+- [ ] **Rate card imported** via admin (Blobs)
 - [ ] Admin tested on Deploy Preview
 
 ---
@@ -111,6 +120,7 @@ Proposal copy is client-facing: no vendor or sub costs; **(347) 450-2110**, **jc
 | Unauthorized | Password env on this deploy; hard refresh. |
 | Empty lead list | Webhook URL; form names; submit a test lead. |
 | Sheet not updating | Apps Script deployed as Web app; tab **`LeadLog`**; function logs in Netlify. |
-| PLACEHOLDER in calculator | Expected until PM rates land. |
+| PLACEHOLDER in calculator | Import rate card JSON in admin (Step 5). |
+| Import failed | Deploy must run on Netlify (Blobs); check function logs. |
 
-Never commit secrets. Variable names are also in the root **`README.md`**.
+Never commit secrets or the PM **`arc_pricing_inputs.json`**. Variable names are also in the root **`README.md`**.

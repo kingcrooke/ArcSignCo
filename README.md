@@ -281,4 +281,4 @@ Quote Engine lite (private ops — see `docs/quote-engine-SETUP.md`):
 | `QUOTE_ENGINE_GOOGLE_CREDENTIALS` | **Alternative:** Service account JSON for Sheets API |
 | `QUOTE_ENGINE_WEBHOOK_SECRET` | Optional shared secret header on form webhooks |
 
-Set values in the Netlify UI only; never commit secrets.
+Rate card JSON is imported in **`/ops-qel16cb/`** (stored in Netlify Blobs — not in git). See Step 5 in `docs/quote-engine-SETUP.md`.

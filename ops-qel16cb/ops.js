@@ -1,4 +1,5 @@
 const TOKEN_KEY = "arcQuoteEngineToken";
+const TBD_LABEL = "TBD — Jesus to confirm";
 
 function token() {
   return sessionStorage.getItem(TOKEN_KEY) || "";
@@ -27,17 +28,22 @@ const gatePass = document.getElementById("gatePass");
 const gateErr = document.getElementById("gateErr");
 const leadList = document.getElementById("leadList");
 const storageMode = document.getElementById("storageMode");
+const rateCardStatusEl = document.getElementById("rateCardStatus");
 const calcForm = document.getElementById("calcForm");
 const quoteOut = document.getElementById("quoteOut");
 
 let leads = [];
 let active = null;
 let lastQuote = null;
+let rateCardMeta = null;
 
 function showGate(msg) {
   gate.hidden = false;
   app.hidden = true;
-  if (msg) { gateErr.hidden = false; gateErr.textContent = msg; }
+  if (msg) {
+    gateErr.hidden = false;
+    gateErr.textContent = msg;
+  }
 }
 
 function showApp() {
@@ -74,6 +80,10 @@ function esc(s) {
   return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;");
 }
 
+function money(n) {
+  return `$${Math.round(n).toLocaleString("en-US")}`;
+}
+
 function fillCalcFromLead(lead) {
   const i = lead.calculatorInput || {};
   calcForm.signType.value = i.signType || lead.projectType || "";
@@ -84,6 +94,7 @@ function fillCalcFromLead(lead) {
   calcForm.lit.value = i.lit || "Not sure";
   calcForm.height.value = i.height || "";
   calcForm.permitsRequested.checked = Boolean(i.permitsRequested);
+  document.getElementById("fSurveyConfirmed").checked = Boolean(i.surveyConfirmed);
   document.getElementById("fStatus").value = lead.status || "New";
   document.getElementById("fValue").value = lead.quotedValue || "";
   document.getElementById("fNext").value = lead.nextStep || "";
@@ -105,6 +116,16 @@ async function loadLeads() {
   if (!active && leads[0]) selectLead(leads[0].id);
 }
 
+async function loadRateCardStatus() {
+  try {
+    rateCardMeta = await api("/api/quote-engine/rate-card");
+    const src = rateCardMeta.placeholder ? "placeholder fallback" : rateCardMeta.source || "imported";
+    rateCardStatusEl.textContent = `Rate card: ${rateCardMeta.name || rateCardMeta.version || "unknown"} (${src}) · ${rateCardMeta.signTypeCount ?? "?"} sign types`;
+  } catch {
+    rateCardStatusEl.textContent = "Rate card: status unavailable";
+  }
+}
+
 function calcInputFromForm() {
   const fd = new FormData(calcForm);
   return {
@@ -120,25 +141,60 @@ function calcInputFromForm() {
   };
 }
 
+function lineAmount(l, preliminary) {
+  if (l.quoteRequired) return '<span class="quote-required">Quote required</span>';
+  if (preliminary) return `${money(l.low)} – ${money(l.high)}`;
+  const mid = roundLineMid(l.low, l.high);
+  return money(mid);
+}
+
+function roundLineMid(low, high) {
+  const n = (low + high) / 2;
+  const base = Math.floor(n / 10) * 10;
+  const rem = n - base;
+  return rem >= 5 ? base + 10 : base;
+}
+
 function renderQuote(q) {
+  const preliminary = q.preliminary !== false;
+  const banner = q.tbdBanner
+    ? `<div class="tbd-banner" role="status">${esc(q.tbdBanner)}</div>`
+    : "";
   const rows = (q.lines || [])
-    .map(l => `<tr><td>${esc(l.label)}</td><td>$${Math.round(l.amount).toLocaleString("en-US")}</td></tr>`)
+    .map(l => {
+      const tbd = l.tbd ? `<span class="tbd-badge">${esc(TBD_LABEL)}</span>` : "";
+      return `<tr><td>${esc(l.label)}${tbd}</td><td>${lineAmount(l, preliminary)}</td></tr>`;
+    })
     .join("");
-  quoteOut.innerHTML = `<p><strong>${esc(q.label)}</strong> · ${esc(q.version)}${q.placeholder ? " · PLACEHOLDER RATES" : ""}</p>
-    <table>${rows}</table>
-    <p><strong>Total:</strong> $${Math.round(q.total).toLocaleString("en-US")}</p>`;
+  const meta = [
+    q.rangeLabel || "Preliminary",
+    q.version ? `v ${q.version}` : "",
+    q.placeholder ? "PLACEHOLDER RATES" : q.source === "blob" ? "Imported card" : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+  const totalLine = preliminary
+    ? `<p><strong>${esc(q.rangeLabel || "Preliminary")} range:</strong> ${money(q.low)} – ${money(q.high)}</p>`
+    : `<p><strong>Total:</strong> ${money(q.total)}</p>`;
+  quoteOut.innerHTML = `${banner}<p><strong>${esc(meta)}</strong></p>
+    <table><tbody>${rows}</tbody></table>
+    ${totalLine}
+    ${q.quoteRequiredAny ? '<p class="quote-required">Some lines need a custom quote before this total is final.</p>' : ""}`;
   quoteOut.hidden = false;
 }
 
 calcForm.addEventListener("submit", async e => {
   e.preventDefault();
+  const surveyConfirmed = document.getElementById("fSurveyConfirmed").checked;
   const { quote } = await api("/api/quote-engine/calculate", {
     method: "POST",
-    body: JSON.stringify({ input: calcInputFromForm() }),
+    body: JSON.stringify({ input: calcInputFromForm(), surveyConfirmed }),
   });
   lastQuote = quote;
   renderQuote(quote);
-  if (active && quote?.total) document.getElementById("fValue").value = `$${Math.round(quote.total).toLocaleString("en-US")}`;
+  const fValue = document.getElementById("fValue");
+  if (quote.preliminary) fValue.value = `${money(quote.low)} – ${money(quote.high)}`;
+  else if (quote.total) fValue.value = money(quote.total);
 });
 
 document.getElementById("saveLead").addEventListener("click", async () => {
@@ -158,15 +214,45 @@ document.getElementById("saveLead").addEventListener("click", async () => {
 
 document.getElementById("genProposal").addEventListener("click", () => {
   const id = active?.id || "sample-demo-lead";
+  const surveyConfirmed = document.getElementById("fSurveyConfirmed").checked;
   let url = `/api/quote-engine/proposal/${encodeURIComponent(id)}?token=${encodeURIComponent(token())}`;
-  if (lastQuote?.total) url += `&total=${encodeURIComponent(lastQuote.total)}`;
+  if (surveyConfirmed) url += "&surveyConfirmed=1";
   window.open(url, "_blank", "noopener");
 });
 
+document.getElementById("importRateCard").addEventListener("click", async () => {
+  const fileInput = document.getElementById("rateCardFile");
+  const errEl = document.getElementById("importErr");
+  const okEl = document.getElementById("importOk");
+  errEl.hidden = true;
+  okEl.hidden = true;
+  const file = fileInput.files?.[0];
+  if (!file) {
+    errEl.textContent = "Choose a JSON file first.";
+    errEl.hidden = false;
+    return;
+  }
+  try {
+    const text = await file.text();
+    const card = JSON.parse(text);
+    const result = await api("/api/quote-engine/rate-card", { method: "POST", body: JSON.stringify(card) });
+    okEl.textContent = `Imported ${result.name || result.version} (${result.signTypeCount} sign types).`;
+    okEl.hidden = false;
+    fileInput.value = "";
+    await loadRateCardStatus();
+  } catch (err) {
+    errEl.textContent = err.message || "Import failed";
+    errEl.hidden = false;
+  }
+});
+
 async function boot() {
-  if (!token()) { showGate(); return; }
+  if (!token()) {
+    showGate();
+    return;
+  }
   showApp();
-  await loadLeads();
+  await Promise.all([loadLeads(), loadRateCardStatus()]);
 }
 
 if (token()) boot().catch(() => showGate("Session expired. Enter the password again."));

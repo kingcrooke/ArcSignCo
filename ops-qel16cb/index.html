@@ -25,8 +25,19 @@
         <h1>Leads</h1>
       </div>
       <p class="meta" id="storageMode"></p>
+      <p class="meta" id="rateCardStatus"></p>
     </header>
     <main class="layout">
+      <section class="panel" aria-labelledby="rateCardTitle">
+        <h2 id="rateCardTitle">Rate card</h2>
+        <p class="hint">Import the Construction PM JSON once per environment. Values stay in Netlify Blobs — never in the public repo.</p>
+        <label class="field">Import rate card (JSON)
+          <input type="file" id="rateCardFile" accept="application/json,.json">
+        </label>
+        <p class="err" id="importErr" hidden></p>
+        <p class="ok" id="importOk" hidden></p>
+        <button type="button" class="btn ghost" id="importRateCard">Upload to Blobs</button>
+      </section>
       <section class="panel" aria-labelledby="leadListTitle">
         <h2 id="leadListTitle">Lead log</h2>
         <ul id="leadList" class="lead-list"></ul>
@@ -53,6 +64,7 @@
             </select>
           </label>
           <label class="check"><input type="checkbox" name="permitsRequested"> Permits likely</label>
+          <label class="check"><input type="checkbox" name="surveyConfirmed" id="fSurveyConfirmed"> Survey done, sizes confirmed (single total)</label>
           <button type="submit" class="btn gold">Calculate</button>
         </form>
         <div id="quoteOut" class="quote-out" hidden></div>

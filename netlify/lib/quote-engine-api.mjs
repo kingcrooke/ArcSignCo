@@ -3,6 +3,8 @@ import { computeQuote } from "./quote-compute.mjs";
 import { buildProposalHtml, buildProposalPdfBytes } from "./proposal.mjs";
 import { ingestFormPayload, listLeadsMerged, getLeadBlob, updateLeadStatus } from "./quote-engine-store.mjs";
 import { json, unauthorized, verifyOpsAuth, verifyWebhook, ROBOTS } from "./quote-engine-auth.mjs";
+import { validateRateCard } from "./rate-card-validate.mjs";
+import { rateCardStatus, saveRateCard } from "./rate-card-store.mjs";
 
 function requireAuth(req) {
   const auth = verifyOpsAuth(req);
@@ -61,13 +63,42 @@ export async function handleQuoteEngine(req, context) {
     return json({ lead });
   }
 
+  if (path === "/api/quote-engine/rate-card" && req.method === "GET") {
+    const deny = requireAuth(req);
+    if (deny) return deny;
+    const status = await rateCardStatus();
+    return json(status);
+  }
+
+  if (path === "/api/quote-engine/rate-card" && req.method === "POST") {
+    const deny = requireAuth(req);
+    if (deny) return deny;
+    let body;
+    try {
+      body = await req.json();
+    } catch {
+      return json({ error: "Invalid JSON" }, 400);
+    }
+    const card = body.rateCard || body;
+    const v = validateRateCard(card);
+    if (!v.ok) return json({ error: v.error }, 400);
+    try {
+      await saveRateCard(card);
+    } catch (err) {
+      console.error("rate-card save", err);
+      return json({ error: "Could not save rate card (Blobs unavailable in this environment?)" }, 500);
+    }
+    const status = await rateCardStatus();
+    return json({ ok: true, ...status });
+  }
+
   if (path === "/api/quote-engine/calculate" && req.method === "POST") {
     const deny = requireAuth(req);
     if (deny) return deny;
     const body = await req.json();
     const input = body.input || body.calculatorInput || {};
-    const overrides = body.overrides || {};
-    const quote = computeQuote(input, overrides);
+    const surveyConfirmed = Boolean(body.surveyConfirmed);
+    const quote = await computeQuote(input, { surveyConfirmed });
     return json({ quote });
   }
 
@@ -97,9 +128,12 @@ export async function handleQuoteEngine(req, context) {
         permitsRequested: true,
       },
     };
+    const surveyConfirmed = url.searchParams.get("surveyConfirmed") === "1";
+    let quote = await computeQuote(lead.calculatorInput || {}, { surveyConfirmed });
     const quoteParam = url.searchParams.get("total");
-    let quote = computeQuote(lead.calculatorInput || {});
-    if (quoteParam) quote = { ...quote, total: Number(quoteParam) || quote.total };
+    if (quoteParam && surveyConfirmed) {
+      quote = { ...quote, total: Number(quoteParam) || quote.total };
+    }
     if (asPdf) {
       const bytes = await buildProposalPdfBytes({ lead, quote });
       return new Response(bytes, {
@@ -129,6 +163,7 @@ export const QUOTE_ENGINE_PATHS = [
   "/api/quote-engine/leads",
   "/api/quote-engine/leads/:id",
   "/api/quote-engine/calculate",
+  "/api/quote-engine/rate-card",
   "/api/quote-engine/proposal/:id",
   "/api/quote-engine/proposal/:id.pdf",
   "/api/quote-engine/health",

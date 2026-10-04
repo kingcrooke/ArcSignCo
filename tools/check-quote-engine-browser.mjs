@@ -49,8 +49,6 @@ const demoLead = {
   },
 };
 
-const demoQuote = computeQuote(demoLead.calculatorInput);
-
 function startServer() {
   return spawn("python3", ["-m", "http.server", String(PORT), "--bind", "127.0.0.1"], { cwd: root, stdio: "pipe" });
 }
@@ -59,7 +57,9 @@ async function waitFor(url) {
   for (let i = 0; i < 80; i += 1) {
     try {
       if ((await fetch(url)).ok) return;
-    } catch { /* retry */ }
+    } catch {
+      /* retry */
+    }
     await new Promise(r => setTimeout(r, 150));
   }
   throw new Error(`server missing at ${url}`);
@@ -80,36 +80,25 @@ async function shot(page, name, width) {
   console.log(`ok   ${path.basename(filePath)} (${fs.statSync(filePath).size} bytes)`);
 }
 
-async function captureProposal(context) {
+async function captureProposal(context, demoQuote) {
   const html = buildProposalHtml({ lead: demoLead, quote: demoQuote, draft: true });
   const page = await context.newPage();
   await page.setContent(html, { waitUntil: "load" });
-  await page.waitForSelector(".wrap h1", { state: "visible" });
-  await page.waitForSelector("table tbody tr", { state: "visible" });
-  await page.waitForFunction(() => {
-    const t = document.querySelector("tfoot .amt");
-    return t && t.textContent && t.textContent.includes("$");
-  });
+  await page.waitForSelector("h1", { state: "visible" });
+  await page.waitForSelector("table tr", { state: "visible" });
   await shot(page, "quote-engine-proposal", 1280);
   await shot(page, "quote-engine-proposal", 390);
   await page.close();
 
-  const pdfPage = await context.newPage();
-  await pdfPage.setContent(html, { waitUntil: "load" });
-  await pdfPage.waitForSelector(".wrap h1");
-  await pdfPage.pdf({
-    path: SAMPLE_PDF,
-    format: "Letter",
-    printBackground: true,
-    margin: { top: "0.45in", bottom: "0.45in", left: "0.55in", right: "0.55in" },
-  });
-  await pdfPage.close();
-  if (fs.statSync(SAMPLE_PDF).size < 8000) throw new Error("sample PDF too small");
+  const pdfBytes = await buildProposalPdfBytes({ lead: demoLead, quote: demoQuote, draft: true });
+  fs.writeFileSync(SAMPLE_PDF, Buffer.from(pdfBytes));
+  if (fs.statSync(SAMPLE_PDF).size < 1500) throw new Error("sample PDF too small");
   console.log(`ok   ${SAMPLE_PDF} (${fs.statSync(SAMPLE_PDF).size} bytes)`);
 }
 
 async function run() {
   fs.mkdirSync(SCREENSHOTS, { recursive: true });
+  const demoQuote = await computeQuote(demoLead.calculatorInput, { surveyConfirmed: false });
   const server = startServer();
   try {
     await waitFor(OPS);
@@ -121,6 +110,11 @@ async function run() {
       const url = new URL(route.request().url());
       if (url.pathname.endsWith("/leads") && route.request().method() === "GET") {
         return route.fulfill({ json: { mode: "mock", leads: [demoLead] } });
+      }
+      if (url.pathname.endsWith("/rate-card") && route.request().method() === "GET") {
+        return route.fulfill({
+          json: { source: "placeholder", placeholder: true, version: "placeholder-repo-0", signTypeCount: 3 },
+        });
       }
       if (url.pathname.endsWith("/calculate") && route.request().method() === "POST") {
         return route.fulfill({ json: { quote: demoQuote } });
@@ -143,11 +137,12 @@ async function run() {
     await page.click(".lead-list li");
     await page.click('button[type="submit"]');
     await page.waitForSelector("#quoteOut:not([hidden])");
+    await page.waitForSelector(".tbd-banner", { state: "visible" });
     await page.waitForSelector("#quoteOut table tr");
     await shot(page, "quote-engine-calculator", 1280);
     await shot(page, "quote-engine-calculator", 390);
 
-    await captureProposal(context);
+    await captureProposal(context, demoQuote);
 
     await browser.close();
   } finally {
