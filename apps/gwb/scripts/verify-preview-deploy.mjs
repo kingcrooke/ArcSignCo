@@ -21,7 +21,16 @@ async function verifyBundle() {
   const jsUrl = `${ORIGIN}${BASE_PATH}${jsMatch[0]}`
   const js = await (await fetch(jsUrl)).text()
   if (!js.includes('Mulligan')) throw new Error('Bundle missing Mulligan')
-  if (/Instagram/i.test(js)) throw new Error('Bundle still contains Instagram')
+  const igTabMarkers = [
+    'Instagram graphics',
+    'Download standings PNG',
+    '{id:"ig"',
+    "id:'ig'",
+    'label:"IG"',
+  ]
+  for (const marker of igTabMarkers) {
+    if (js.includes(marker)) throw new Error(`Bundle still contains IG UI marker: ${marker}`)
+  }
   console.log('bundle ok', jsMatch[0])
   return jsMatch[0]
 }

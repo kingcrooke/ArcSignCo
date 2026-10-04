@@ -38,6 +38,14 @@ npm run test:e2e      # Playwright against production build + live Sleeper API
 
 Optional: run `npm run preview` locally to verify the production bundle.
 
+To refresh the live static path at `/gwb-fe006a16/` (Netlify publishes repo root with no GWB build step):
+
+```bash
+cd apps/gwb && npm run publish-static
+```
+
+Commit the updated `gwb-fe006a16/` folder with your PR.
+
 ## Data notes
 
 - NFL player names are loaded once from `/players/nfl`, trimmed to needed fields, and cached in `localStorage` for seven days.
