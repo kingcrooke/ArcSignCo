@@ -8,6 +8,7 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  external_node_modules = ["playwright", "playwright-core"]
 
 # Header rules below never set the same header name on overlapping paths, because Netlify
 # combines values when several rules match one URL.

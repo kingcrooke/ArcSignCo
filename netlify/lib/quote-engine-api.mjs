@@ -1,6 +1,6 @@
 import { isQuoteEngineForm } from "./quote-leads.mjs";
 import { computeQuote } from "./quote-compute.mjs";
-import { buildProposalHtml, buildProposalPdfBytes } from "./proposal.mjs";
+import { buildProposalHtml } from "./proposal.mjs";
 import { ingestFormPayload, listLeadsMerged, getLeadBlob, updateLeadStatus } from "./quote-engine-store.mjs";
 import { json, unauthorized, verifyOpsAuth, verifyWebhook, ROBOTS } from "./quote-engine-auth.mjs";
 import { validateRateCard } from "./rate-card-validate.mjs";
@@ -136,6 +136,7 @@ export async function handleQuoteEngine(req, context) {
       quote = { ...quote, total: Number(quoteParam) || quote.total };
     }
     if (asPdf) {
+      const { buildProposalPdfBytes } = await import("./proposal-pdf.mjs");
       const bytes = await buildProposalPdfBytes({ lead, quote, draft: true });
       if (bytes) {
         return new Response(bytes, {
