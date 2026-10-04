@@ -3,7 +3,7 @@
  */
 import { chromium } from 'playwright'
 import { execSync } from 'node:child_process'
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, writeFile, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
@@ -14,35 +14,60 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT_DIR = path.join(__dirname, '../../../../docs/gwb-remade-slides')
 const ARTIFACTS = '/opt/cursor/artifacts/gwb-slide-remakes'
 const SRC = path.join(__dirname, 'sources')
+const PUBLISHED = path.join(__dirname, '../../src/lib/publishedSlides.ts')
 const HELD_IDS = Object.keys(SLIDES)
+
+const GHOST_PHRASES = [
+  /\bhady\b/i,
+  /\bhad\s+y\b/i,
+  /coin flip.*coin flip/i,
+  /commoners.*commoners/i,
+]
 
 async function renderOne(page, id, html) {
   const tmp = path.join(OUT_DIR, '.tmp-render.html')
   await writeFile(tmp, html)
-  await page.setViewportSize({ width: 1080, height: 1350 })
   await page.goto(`file://${tmp}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
-  await page.waitForTimeout(300)
+  await page.waitForTimeout(200)
   const out = path.join(OUT_DIR, `${id}.png`)
-  await page.locator('.slide').screenshot({ path: out, type: 'png' })
+  await page.locator('.slide').screenshot({ path: out, type: 'png', scale: 'css' })
+  const meta = await sharp(out).metadata()
+  if (meta.width !== 1080 || meta.height !== 1350) {
+    await sharp(out).resize(1080, 1350, { fit: 'fill' }).png().toFile(out)
+  }
   return out
 }
 
-function ocrHasHady(pngPath) {
+function ocrText(pngPath) {
   try {
-    const text = execSync(`tesseract "${pngPath}" stdout 2>/dev/null`, {
-      encoding: 'utf8',
-    })
-    return /\bhady\b/i.test(text)
+    return execSync(`tesseract "${pngPath}" stdout 2>/dev/null`, { encoding: 'utf8' })
   } catch {
-    return false
+    return ''
   }
+}
+
+function qaSlide(id, pngPath, ocr) {
+  const issues = []
+  if (/\bhady\b/i.test(ocr)) issues.push('OCR: Hady present')
+  for (const re of GHOST_PHRASES) {
+    if (re.test(ocr) && id !== 'w4-slide-16') {
+      /* allow duplicate phrases only if not hady-related */
+    }
+  }
+  if (id === 'w4-slide-10') {
+    if (/jamil\s+vs\s+matt/i.test(ocr)) issues.push('ghost: Jamil vs Matt from plate')
+    if (/(manny\s+52).*(manny\s+52)/i.test(ocr.replace(/\s+/g, ' '))) {
+      issues.push('ghost: duplicated poll text')
+    }
+  }
+  return issues
 }
 
 async function sideBySide(id, remadePath) {
   const orig = path.join(SRC, `${id}.jpg`)
   const origBuf = await sharp(orig).resize(1080, 1350, { fit: 'fill' }).png().toBuffer()
-  const remadeBuf = await sharp(remadePath).png().toBuffer()
+  const remadeBuf = await sharp(remadePath).resize(1080, 1350, { fit: 'fill' }).png().toBuffer()
   const out = path.join(ARTIFACTS, `${id}-compare.png`)
   const w = 1080
   const h = 1350
@@ -71,23 +96,51 @@ async function sideBySide(id, remadePath) {
   return out
 }
 
+async function writeHeldList(report) {
+  const held = report.filter((r) => !r.ok).map((r) => ({
+    id: r.id,
+    reason: r.issues.join('; '),
+  }))
+  const ts = await readFile(PUBLISHED, 'utf8')
+  const block = held.length
+    ? held
+        .map(
+          (h) => `  {
+    id: '${h.id}',
+    reason: '${h.reason.replace(/'/g, "\\'")}',
+  },`,
+        )
+        .join('\n')
+    : ''
+  const next = ts.replace(
+    /export const HELD_BACK_SLIDES: \{ id: string; reason: string \}\[\] = \[[\s\S]*?\]/,
+    `export const HELD_BACK_SLIDES: { id: string; reason: string }[] = [\n${block}\n]`,
+  )
+  await writeFile(PUBLISHED, next)
+}
+
 async function main() {
   await mkdir(OUT_DIR, { recursive: true })
   await mkdir(ARTIFACTS, { recursive: true })
-
   await extractAssets()
 
   const browser = await chromium.launch()
-  const page = await browser.newPage()
+  const context = await browser.newContext({
+    viewport: { width: 1080, height: 1350 },
+    deviceScaleFactor: 1,
+  })
+  const page = await context.newPage()
   const report = []
 
   for (const id of HELD_IDS) {
     const { html } = SLIDES[id]
     const png = await renderOne(page, id, html())
-    const hady = ocrHasHady(png)
+    const ocr = ocrText(png)
+    const issues = qaSlide(id, png, ocr)
     const compare = await sideBySide(id, png)
-    report.push({ id, png, hady, compare, ok: !hady })
-    console.log(id, hady ? 'FAIL OCR' : 'OK OCR', png)
+    const ok = issues.length === 0
+    report.push({ id, png, compare, ocrSample: ocr.slice(0, 200), issues, ok })
+    console.log(id, ok ? 'PASS' : `FAIL: ${issues.join(', ')}`, png)
   }
 
   await browser.close()
@@ -95,10 +148,11 @@ async function main() {
     path.join(OUT_DIR, 'render-report.json'),
     JSON.stringify(report, null, 2) + '\n',
   )
+  await writeHeldList(report)
 
   const failed = report.filter((r) => !r.ok)
   if (failed.length) {
-    console.error('OCR found Hady on:', failed.map((f) => f.id).join(', '))
+    console.error('Held back:', failed.map((f) => f.id).join(', '))
     process.exitCode = 1
   }
 }

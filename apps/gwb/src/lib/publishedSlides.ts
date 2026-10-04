@@ -7,7 +7,9 @@ export type PublishedSlide = {
 }
 
 /** Slides withheld from the gallery (fresh-render QA failures). */
-export const HELD_BACK_SLIDES: { id: string; reason: string }[] = []
+export const HELD_BACK_SLIDES: { id: string; reason: string }[] = [
+
+]
 
 const base = import.meta.env.BASE_URL
 

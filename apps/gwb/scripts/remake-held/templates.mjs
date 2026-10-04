@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { COLORS, fileUrl, wrapHtml } from './shared-css.mjs'
+import { COLORS, MARGIN, fileUrl, wrapHtml } from './shared-css.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ASSETS = path.join(__dirname, 'assets')
@@ -8,31 +8,34 @@ const SRC = path.join(__dirname, 'sources')
 
 const cssVs = `
 .slide { background: #000; }
-.header { padding: 48px 72px 0; }
-.kicker-row { display:flex; gap: 12px; align-items: baseline; }
-.hero { margin-top: 24px; display:flex; align-items: baseline; gap: 20px; font-size: 72px; line-height: 1.15; color: ${COLORS.white}; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; }
+.hero { margin-top: 22px; display: flex; align-items: baseline; gap: 22px; font-size: 72px; line-height: 1.18; color: ${COLORS.white}; }
 .hero .vs { font-size: 72px; }
-.records { margin-top: 16px; font-size: 24px; color: ${COLORS.gold}; display: flex; gap: 28px; align-items: center; }
-.cards-wrap { position: relative; margin: 32px 72px 0; height: 700px; }
-.cards { display: flex; justify-content: center; gap: 28px; }
-.card { position: relative; width: 436px; height: 652px; border-radius: 16px; overflow: hidden; }
-.card img { width: 100%; height: 100%; object-fit: cover; display:block; }
-.badge { position: absolute; top: 12px; padding: 8px 18px; border-radius: 999px; background: ${COLORS.gold}; color: #111;
-  font-size: 22px; line-height: 1; z-index: 2; }
-.badge.left { left: 12px; }
-.badge.right { right: 12px; }
-.vs-badge { position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); width: 92px; height: 92px;
-  border-radius: 50%; background: ${COLORS.gold}; display: flex; align-items: center; justify-content: center;
-  font-size: 38px; color: #111; z-index: 5; box-shadow: 0 6px 24px rgba(0,0,0,0.55); }
-.sneaky { text-align: center; margin-top: 24px; font-size: 30px; color: ${COLORS.gold}; letter-spacing: 0.04em; }
-.poll { margin: 20px 72px 0; }
-.poll-labels { display: flex; justify-content: space-between; font-size: 30px; margin-bottom: 10px; }
+.records { margin-top: 18px; font-size: 26px; color: ${COLORS.gold}; display: flex; gap: 30px; align-items: center; }
+.card { position: absolute; top: 276px; width: 420px; height: 700px; border-radius: 18px; overflow: hidden; }
+.card.left { left: ${MARGIN}px; }
+.card.right { left: 588px; }
+.card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.badge { position: absolute; top: 14px; padding: 10px 20px; border-radius: 999px; background: ${COLORS.gold}; color: #111;
+  font-size: 24px; line-height: 1; z-index: 3; }
+.badge.left { left: 14px; }
+.badge.right { right: 14px; }
+.vs-wrap { position: absolute; left: 498px; top: 602px; width: 96px; height: 96px; z-index: 12; }
+.vs-mask { position: absolute; inset: 0; background: #000; border-radius: 50%; }
+.vs-badge {
+  position: absolute; inset: 4px; border-radius: 50%;
+  background: ${COLORS.gold}; color: #111;
+  display: flex; align-items: center; justify-content: center; font-size: 38px;
+}
+.sneaky { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1048px; text-align: center; font-size: 34px; color: ${COLORS.gold}; }
+.poll { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1108px; }
+.poll-labels { display: flex; justify-content: space-between; font-size: 32px; margin-bottom: 10px; }
 .poll-labels .l { color: ${COLORS.gold}; }
 .poll-labels .r { color: ${COLORS.white}; }
-.poll-bar { display: flex; height: 36px; border-radius: 1px; overflow: hidden; }
+.poll-bar { display: flex; height: 34px; overflow: hidden; }
 .poll-bar .a { width: 52%; background: ${COLORS.gold}; }
 .poll-bar .b { width: 48%; background: ${COLORS.pollDark}; }
-.detail { text-align: center; margin-top: 16px; font-size: 22px; color: ${COLORS.muted}; }
+.detail { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1228px; text-align: center; font-size: 24px; color: ${COLORS.muted}; }
 `
 
 export function vsM3HadiManny() {
@@ -40,19 +43,15 @@ export function vsM3HadiManny() {
   const right = fileUrl(path.join(ASSETS, 'vs-m3-right-card.png'))
   return wrapHtml(
     `<div class="slide">
-  <div class="header">
+  <div class="hdr">
     <div class="kicker bebas">GWB &nbsp;•&nbsp; WEEK 4</div>
     <div class="kicker-line"></div>
     <h1 class="hero anton"><span>HADI</span><span class="vs">vs</span><span>MANNY</span></h1>
     <div class="records bebas"><span>HADI (2-1)</span><span>vs</span><span>MANNY (2-1)</span></div>
   </div>
-  <div class="cards-wrap">
-    <div class="cards">
-      <div class="card"><img src="${left}" alt="" /><span class="badge left bebas">HADI 2-1</span></div>
-      <div class="card"><img src="${right}" alt="" /><span class="badge right bebas">MANNY 2-1</span></div>
-    </div>
-    <div class="vs-badge bebas">VS</div>
-  </div>
+  <div class="card left"><img src="${left}" alt="" /><span class="badge left bebas">HADI 2-1</span></div>
+  <div class="vs-wrap"><div class="vs-mask"></div><div class="vs-badge bebas">VS</div></div>
+  <div class="card right"><img src="${right}" alt="" /><span class="badge right bebas">MANNY 2-1</span></div>
   <div class="sneaky bebas">SNEAKY GAME OF THE WEEK</div>
   <div class="poll">
     <div class="poll-labels bebas"><span class="l">Manny 52%</span><span class="r">Hadi 48%</span></div>
@@ -66,76 +65,91 @@ export function vsM3HadiManny() {
 }
 
 const cssW4Matchup = `
-.slide { background: ${COLORS.bg}; position:relative; }
-.bg-art { position:absolute; left:0; right:0; top:180px; height:900px; background-size:cover; background-position:center;
-  opacity:0.22; filter: blur(3px) brightness(0.6); }
-.content { position: relative; z-index: 1; padding: 48px 72px; }
-.title { margin-top: 24px; font-size: 58px; line-height: 1.15; color: ${COLORS.white}; }
-.info-card { margin-top: 28px; background: #121820; border-left: 4px solid ${COLORS.white};
-  padding: 28px 32px; max-width: 936px; }
-.info-card h3 { font-size: 28px; margin-bottom: 8px; }
-.info-card p { font-size: 22px; color: ${COLORS.muted}; line-height: 1.45; margin-top: 6px; }
-.info-card + .info-card { margin-top: 18px; }
-.poll { margin-top: 32px; max-width: 936px; }
-.poll-labels { display: flex; justify-content: space-between; font-size: 28px; margin-bottom: 8px; }
+.slide { position: relative; }
+.bg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.32; }
+.scrim { position: absolute; inset: 0; background: rgba(8, 12, 18, 0.78); }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 2; }
+.title { margin-top: 22px; font-size: 58px; line-height: 1.12; color: ${COLORS.white}; }
+.info-card {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; z-index: 2;
+  background: rgba(18, 24, 32, 0.96); border-left: 4px solid ${COLORS.white};
+  padding: 26px 30px;
+}
+.info-card h3 { font-size: 30px; margin-bottom: 10px; }
+.info-card p { font-size: 24px; color: ${COLORS.muted}; line-height: 1.45; margin-top: 8px; }
+.card-a { top: 268px; }
+.card-b { top: 458px; }
+.poll { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 678px; z-index: 2; }
+.poll-labels { display: flex; justify-content: space-between; font-size: 30px; margin-bottom: 10px; }
 .poll-bar { display: flex; height: 34px; }
-.poll-bar .a { background: #d4882a; width:52%; }
-.poll-bar .b { background: ${COLORS.pollDark}; width:48%; }
-.orange { color: #d4882a; font-size: 26px; line-height: 1.5; margin-top: 24px; max-width: 936px; }
+.poll-bar .a { background: ${COLORS.orange}; width: 52%; }
+.poll-bar .b { background: ${COLORS.pollDark}; width: 48%; }
+.orange {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 748px; z-index: 2;
+  color: ${COLORS.orange}; font-size: 28px; line-height: 1.48;
+}
 `
 
 export function w4Slide10() {
-  const bg = fileUrl(path.join(ASSETS, 'w4-10-bg.png'))
+  const bg = fileUrl(path.join(ASSETS, 'w4-10-plate.jpg'))
   return wrapHtml(
-    `<div class="slide">
-  <div class="bg-art" style="background-image:url('${bg}')"></div>
-  <div class="content">
+    `<div class="slide" style="background:${COLORS.bg}">
+  <div class="bg" style="background-image:url('${bg}')"></div>
+  <div class="scrim"></div>
+  <div class="hdr">
     <div class="kicker bebas">GWB | WEEK 4 | MATCHUP 3</div>
     <div class="kicker-line"></div>
     <h1 class="title anton">HADI vs MANNY</h1>
-    <div class="info-card inter-semibold">
-      <h3 class="bebas" style="color:${COLORS.white}">HADI (2-1)</h3>
-      <p>"El Campeon de la Liga"</p>
-      <p>Kyler, JSN, Bowers, Pickens, Skattebo.</p>
-      <p>Quietly getting healthier.</p>
-    </div>
-    <div class="info-card inter-semibold">
-      <h3 class="bebas" style="color:${COLORS.white}">MANNY (2-1)</h3>
-      <p>"The Corporation"</p>
-      <p>Mahomes (QB3), Cook, Davante, Kelce, Tet.</p>
-      <p>Huge QB edge. Shaky flex depth.</p>
-    </div>
-    <div class="poll">
-      <div class="poll-labels bebas"><span style="color:#d4882a">Manny 52%</span><span>Hadi 48%</span></div>
-      <div class="poll-bar"><div class="a"></div><div class="b"></div></div>
-    </div>
-    <p class="orange inter-semibold">Sneaky Game of the Week. Coin flip.<br/>Winner to 3-1. Loser joins the commoners.</p>
-    <div class="footer inter"><span>gwb_fantasy_football</span><span>10/16</span></div>
   </div>
+  <div class="info-card card-a inter-semibold">
+    <h3 class="bebas" style="color:${COLORS.white}">HADI (2-1)</h3>
+    <p>"El Campeon de la Liga"</p>
+    <p>Kyler, JSN, Bowers, Pickens, Skattebo.</p>
+    <p>Quietly getting healthier.</p>
+  </div>
+  <div class="info-card card-b inter-semibold">
+    <h3 class="bebas" style="color:${COLORS.white}">MANNY (2-1)</h3>
+    <p>"The Corporation"</p>
+    <p>Mahomes (QB3), Cook, Davante, Kelce, Tet.</p>
+    <p>Huge QB edge. Shaky flex depth.</p>
+  </div>
+  <div class="poll">
+    <div class="poll-labels bebas"><span style="color:${COLORS.orange}">Manny 52%</span><span>Hadi 48%</span></div>
+    <div class="poll-bar"><div class="a"></div><div class="b"></div></div>
+  </div>
+  <div class="orange inter-semibold">
+    Sneaky Game of the Week. Coin flip.<br/>
+    Winner to 3-1. Loser joins the commoners.
+  </div>
+  <div class="footer inter"><span>gwb_fantasy_football</span><span>10/16</span></div>
 </div>`,
     cssW4Matchup,
   )
 }
 
 const cssW4TextBg = `
-.slide { background: ${COLORS.bg}; position:relative; }
-.hero-art { position:absolute; right:0; top:0; width: 58%; height: 100%; object-fit: cover; object-position: center top; }
-.text-panel { position:relative; z-index:2; width: 58%; min-height: 100%; background: ${COLORS.bg}; padding: 48px 56px 48px 72px; }
-.hero { font-size: 72px; line-height: 1.12; margin-top: 28px; }
-.hero .y { color: ${COLORS.gold}; }
-.body { margin-top: 36px; font-size: 28px; line-height: 1.42; color: #c8d4e0; font-weight: 600; }
+.slide { position: relative; }
+.bg { position: absolute; inset: 0; background-size: cover; background-position: center right; }
+.shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, ${COLORS.bg} 0%, ${COLORS.bg} 56%, rgba(10,15,20,0.35) 72%, transparent 88%);
+}
+.text { position: absolute; left: ${MARGIN}px; top: 48px; width: 580px; z-index: 2; }
+.hero { font-size: 72px; line-height: 1.12; margin-top: 22px; }
+.body { margin-top: 34px; font-size: 28px; line-height: 1.42; color: #c8d4e0; font-weight: 600; }
 .body p { margin-bottom: 10px; }
 `
 
 export function w4Slide06() {
-  const hero = fileUrl(path.join(ASSETS, 'w4-06-hero.png'))
+  const bg = fileUrl(path.join(SRC, 'w4-slide-06.jpg'))
   return wrapHtml(
     `<div class="slide">
-  <img class="hero-art" src="${hero}" alt="" />
-  <div class="text-panel">
+  <div class="bg" style="background-image:url('${bg}')"></div>
+  <div class="shade"></div>
+  <div class="text">
     <div class="kicker bebas">GWB | WEEK 4 | EL CAMPEON</div>
     <div class="kicker-line"></div>
-    <h1 class="hero anton"><span style="color:${COLORS.white}">BOWERS</span><br/><span class="y">IS BACK</span></h1>
+    <h1 class="hero anton"><span style="color:${COLORS.white}">BOWERS</span><br/><span style="color:${COLORS.gold}">IS BACK</span></h1>
     <div class="body inter-semibold">
       <p>Brock Bowers returned from the knee</p>
       <p>procedure and immediately went:</p>
@@ -149,30 +163,36 @@ export function w4Slide06() {
       <p>El Campeon quietly getting healthier.</p>
       <p>Nobody say anything.</p>
     </div>
-    <div class="footer inter"><span>gwb_fantasy_football</span><span>6/16</span></div>
   </div>
+  <div class="footer inter"><span>gwb_fantasy_football</span><span>6/16</span></div>
 </div>`,
     cssW4TextBg,
   )
 }
 
 const cssW4List = `
-.slide { background: ${COLORS.bg}; position:relative; }
-.bg-strip { position:absolute; left:0; right:0; height: 280px; background-size:cover; background-position:center top; opacity:0.35; }
-.bg-strip.bottom { top:auto; bottom:0; height: 220px; background-position:center bottom; }
-.content { position:relative; z-index:1; padding: 48px 72px; }
-.title-band { margin-top: 12px; }
-.center-title { font-size: 64px; color: ${COLORS.gold}; line-height: 1.2; }
-.list { margin: 24px auto 0; max-width: 840px; background: #121820; padding: 20px 24px; }
-.row { display:flex; gap: 16px; font-size: 28px; font-weight: 600; color: #b8c4d0; padding: 14px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.slide { position: relative; }
+.bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.scrim { position: absolute; inset: 0; background: rgba(8, 12, 18, 0.55); }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 2; }
+.center-title { margin-top: 22px; font-size: 64px; color: ${COLORS.gold}; line-height: 1.15; }
+.list {
+  position: absolute; left: 120px; right: 120px; top: 248px; z-index: 2;
+  background: rgba(18, 24, 32, 0.96); padding: 22px 26px;
+}
+.row { display: flex; gap: 18px; font-size: 28px; font-weight: 600; color: #b8c4d0; padding: 14px 8px; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .row:last-child { border-bottom: none; }
-.row .n { color: ${COLORS.gold}; min-width: 36px; }
+.row .n { color: ${COLORS.gold}; min-width: 40px; }
 .row .p { color: ${COLORS.white}; flex: 1; }
-.note { margin-top: 36px; font-size: 26px; color: #9aa8b8; line-height: 1.45; font-weight: 600; max-width: 720px; }
+.note {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1038px; z-index: 2;
+  font-size: 26px; color: #9aa8b8; line-height: 1.45; font-weight: 600;
+  background: rgba(10, 15, 20, 0.92); padding: 8px 0;
+}
 `
 
 export function w4Slide14() {
-  const bg = fileUrl(path.join(ASSETS, 'w4-14-bg.png'))
+  const bg = fileUrl(path.join(ASSETS, 'w4-14-plate.jpg'))
   const rows = [
     ['1', 'Josh Allen', 'Matt'],
     ['2', 'Lamar', 'Crooke'],
@@ -193,68 +213,81 @@ export function w4Slide14() {
     .join('')
   return wrapHtml(
     `<div class="slide">
-  <div class="bg-strip bottom" style="background-image:url('${bg}')"></div>
-  <div class="content">
+  <div class="bg" style="background-image:url('${bg}')"></div>
+  <div class="scrim"></div>
+  <div class="hdr">
     <div class="kicker bebas">GWB | WEEK 4 | QB HEAT CHECK</div>
     <div class="kicker-line"></div>
-    <div class="title-band"><h1 class="center-title anton">QB HEAT CHECK</h1></div>
-    <div class="list">${rowsHtml}</div>
-    <div class="note inter-semibold">
-      <p>Darnold isn't top-tier this week...</p>
-      <p>after 47.89 GWB points, I'm not telling</p>
-      <p>that man what to do.</p>
-    </div>
-    <div class="footer inter"><span>gwb_fantasy_football</span><span>14/16</span></div>
+    <h1 class="center-title anton">QB HEAT CHECK</h1>
   </div>
+  <div class="list">${rowsHtml}</div>
+  <div class="note inter-semibold">
+    <p>Darnold isn't top-tier this week...</p>
+    <p>after 47.89 GWB points, I'm not telling</p>
+    <p>that man what to do.</p>
+  </div>
+  <div class="footer inter"><span>gwb_fantasy_football</span><span>14/16</span></div>
 </div>`,
     cssW4List,
   )
 }
 
 const cssW4Picks = `
-.slide { background: ${COLORS.bg}; position:relative; }
-.top-band { padding: 48px 72px 0; border-bottom: 1px solid rgba(143,163,184,0.2); padding-bottom: 20px; margin-bottom: 8px; }
-.body-panel { padding: 8px 72px 40px; position:relative; z-index:1; }
-.picks-title { font-size: 64px; margin-top: 4px; color: ${COLORS.white}; }
-.pick-row { margin-top: 14px; background: #161e28; padding: 14px 18px; font-size: 28px; font-weight: 600; }
+.slide { position: relative; background: ${COLORS.bg}; }
+.bull { position: absolute; top: 0; left: 0; width: 1080px; height: 340px; object-fit: cover; object-position: center top; }
+.bull-fade { position: absolute; top: 220px; left: 0; right: 0; height: 160px; background: linear-gradient(180deg, transparent 0%, ${COLORS.bg} 88%); z-index: 1; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 3; }
+.picks-title { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 368px; font-size: 64px; color: ${COLORS.white}; z-index: 2; }
+.pick-row {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; z-index: 2;
+  background: rgba(22, 30, 42, 0.97); padding: 16px 20px; font-size: 28px; font-weight: 600;
+}
 .pick-row .g { color: ${COLORS.gold}; }
-.coral { color: ${COLORS.coral}; font-size: 26px; line-height: 1.45; margin-top: 28px; font-weight: 600; max-width: 900px; }
-.closing { margin-top: 20px; font-size: 28px; line-height: 1.42; color: #e8e8e8; font-weight: 600; max-width: 900px; }
+.r1 { top: 468px; } .r2 { top: 532px; } .r3 { top: 596px; } .r4 { top: 660px; } .r5 { top: 724px; } .r6 { top: 788px; }
+.coral {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 868px; z-index: 2;
+  color: ${COLORS.coral}; font-size: 26px; line-height: 1.45; font-weight: 600;
+}
+.closing {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1008px; z-index: 2;
+  font-size: 28px; line-height: 1.38; color: #e8e8e8; font-weight: 600;
+}
 `
 
 export function w4Slide16() {
+  const bull = fileUrl(path.join(ASSETS, 'w4-16-bull.png'))
   const picks = [
-    '<span class="g">Crooke</span> over Danny',
-    '<span class="g">Eric</span> over Mauricio - barely',
-    '<span class="g">Steven</span> over Narking',
-    '<span class="g">Kayser</span> over Frankie',
-    '<span class="g">Manny</span> over Hadi - coin flip',
-    '<span class="g">Matt</span> over Jamil - coin flip',
+    ['r1', '<span class="g">Crooke</span> over Danny'],
+    ['r2', '<span class="g">Eric</span> over Mauricio - barely'],
+    ['r3', '<span class="g">Steven</span> over Narking'],
+    ['r4', '<span class="g">Kayser</span> over Frankie'],
+    ['r5', '<span class="g">Manny</span> over Hadi - coin flip'],
+    ['r6', '<span class="g">Matt</span> over Jamil - coin flip'],
   ]
   return wrapHtml(
     `<div class="slide">
-  <div class="top-band">
+  <img class="bull" src="${bull}" alt="" />
+  <div class="bull-fade"></div>
+  <div class="hdr">
     <div class="kicker bebas">GWB | WEEK 4 | CROOKE'S PICKS</div>
     <div class="kicker-line"></div>
   </div>
-  <div class="body-panel">
-    <h1 class="picks-title anton">THE PICKS</h1>
-    ${picks.map((p) => `<div class="pick-row inter-semibold">${p}</div>`).join('')}
-    <div class="coral inter-semibold">
-      <p>Upset watch: Narking over Steven.</p>
-      <p>Purdy dropped 50.3, Kittle 26.2, Jeanty due for TD regression.</p>
-      <p>If it happens...</p>
-      <p style="margin-top:12px">God help us all:</p>
-    </div>
-    <div class="closing inter-semibold">
-      <p>Steven is the final boss. Kayser refuses</p>
-      <p>the Bottom 6. Jamil robbed the wire.</p>
-      <p>Week 4 hasn't started and we're already</p>
-      <p>fighting. GWB is exactly where it needs</p>
-      <p>to be.</p>
-    </div>
-    <div class="footer inter"><span>gwb_fantasy_football</span><span>16/16</span></div>
+  <h1 class="picks-title anton">THE PICKS</h1>
+  ${picks.map(([cls, html]) => `<div class="pick-row inter-semibold ${cls}">${html}</div>`).join('')}
+  <div class="coral inter-semibold">
+    <p>Upset watch: Narking over Steven.</p>
+    <p>Purdy dropped 50.3, Kittle 26.2, Jeanty due for TD regression.</p>
+    <p>If it happens...</p>
+    <p style="margin-top:12px">God help us all:</p>
   </div>
+  <div class="closing inter-semibold">
+    <p>Steven is the final boss. Kayser refuses</p>
+    <p>the Bottom 6. Jamil robbed the wire.</p>
+    <p>Week 4 hasn't started and we're already</p>
+    <p>fighting. GWB is exactly where it needs</p>
+    <p>to be.</p>
+  </div>
+  <div class="footer inter"><span>gwb_fantasy_football</span><span>16/16</span></div>
 </div>`,
     cssW4Picks,
   )
@@ -262,30 +295,39 @@ export function w4Slide16() {
 
 const cssResult = `
 .slide { background: #080c10; }
-.header { padding: 48px 72px 0; text-align: center; }
-.final { font-size: 56px; line-height: 1.2; margin-top: 24px; }
-.scoreline { margin-top: 12px; font-size: 32px; color: ${COLORS.gold}; letter-spacing: 0.04em; }
-.cards { position: relative; height: 720px; margin-top: 12px; }
-.winner { position:absolute; left: 56px; top: 0; width: 500px; height: 640px; border-radius: 16px; overflow:hidden;
-  box-shadow: 0 0 40px rgba(232,185,35,0.22); z-index: 2; border: 3px solid rgba(232,185,35,0.45); }
-.loser { position:absolute; right: 56px; top: 56px; width: 440px; height: 560px; border-radius: 16px; overflow:hidden;
-  z-index: 1; border: 2px solid #3a4454; }
-.winner img, .loser img { width:100%; height:100%; object-fit: cover; }
-.medal { position:absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 76px; height: 76px; border-radius:50%;
-  background: ${COLORS.gold}; color:#111; font-family:'Bebas Neue'; font-size: 42px; display:flex; align-items:center; justify-content:center; z-index:4; }
-.tag { position:absolute; padding: 8px 16px; border-radius: 999px; font-family:'Bebas Neue'; font-size: 22px; z-index:3; }
-.tag.wt { top: 14px; left: 14px; background: ${COLORS.gold}; color:#111; }
-.tag.lt { top: 14px; left: 14px; background: #2a3340; color: ${COLORS.white}; }
-.tag.wb { bottom: 14px; right: 14px; background: ${COLORS.gold}; color:#111; }
-.tag.lb { bottom: 14px; right: 14px; background: #3a4454; color: ${COLORS.white}; }
-.mid { text-align:center; padding: 0 72px; margin-top: 4px; }
-.mid h2 { font-size: 36px; color: ${COLORS.gold}; }
-.scores { display:flex; justify-content:space-between; margin-top: 12px; font-size: 26px; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; text-align: center; }
+.final { font-size: 62px; line-height: 1.18; margin-top: 22px; }
+.scoreline { margin-top: 14px; font-size: 36px; color: ${COLORS.gold}; letter-spacing: 0.04em; }
+.cards { position: absolute; left: 0; right: 0; top: 252px; height: 740px; }
+.winner {
+  position: absolute; left: 40px; top: 8px; width: 560px; height: 692px; border-radius: 16px;
+  border: 3px solid rgba(232,185,35,0.5); box-shadow: 0 0 36px rgba(232,185,35,0.2); z-index: 2; background: #111;
+}
+.loser {
+  position: absolute; right: 40px; top: 64px; width: 500px; height: 608px; border-radius: 16px;
+  border: 2px solid #3a4454; z-index: 1; background: #111;
+}
+.card-art { position: absolute; left: 0; right: 0; top: 0; bottom: 58px; overflow: hidden; border-radius: 14px 14px 0 0; }
+.card-art img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.medal {
+  position: absolute; left: 502px; top: 368px; width: 76px; height: 76px; border-radius: 50%;
+  background: ${COLORS.gold}; color: #111; font-size: 44px; z-index: 5;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 0 4px #080c10;
+}
+.tag { position: absolute; padding: 8px 18px; border-radius: 999px; font-family: 'Bebas Neue'; font-size: 24px; z-index: 4; }
+.tag.wt { top: 16px; left: 16px; background: ${COLORS.gold}; color: #111; }
+.tag.lt { top: 16px; left: 16px; background: #2a3340; color: ${COLORS.white}; }
+.tag.wb { bottom: 16px; right: 16px; background: ${COLORS.gold}; color: #111; }
+.tag.lb { bottom: 16px; right: 16px; background: #3a4454; color: ${COLORS.white}; }
+.mid { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 998px; text-align: center; }
+.mid h2 { font-size: 38px; color: ${COLORS.gold}; }
+.scores { display: flex; justify-content: space-between; margin-top: 14px; font-size: 28px; }
 .scores .g { color: ${COLORS.gold}; }
-.bar { margin: 12px 72px 0; height: 28px; display:flex; border-radius: 2px; overflow:hidden; }
+.bar { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1092px; height: 30px; display: flex; overflow: hidden; border-radius: 2px; }
 .bar .w { background: ${COLORS.gold}; }
 .bar .l { background: #2d343c; }
-.caption { text-align:center; margin-top: 16px; font-size: 22px; color: ${COLORS.muted}; }
+.caption { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1138px; text-align: center; font-size: 24px; color: ${COLORS.muted}; }
 `
 
 function resultSlide(cfg) {
@@ -293,7 +335,7 @@ function resultSlide(cfg) {
   const lImg = fileUrl(path.join(ASSETS, cfg.loserImg))
   return wrapHtml(
     `<div class="slide">
-  <div class="header">
+  <div class="hdr">
     <div class="kicker bebas">GWB &nbsp;•&nbsp; WEEK ${cfg.week}</div>
     <div class="kicker-line"></div>
     <h1 class="final anton">${cfg.finalLine}</h1>
@@ -301,13 +343,13 @@ function resultSlide(cfg) {
   </div>
   <div class="cards">
     <div class="winner">
-      <img src="${wImg}" alt="" />
+      <div class="card-art"><img src="${wImg}" alt="" /></div>
       <span class="tag wt">${cfg.winnerBadge}</span>
       <span class="tag wb">WINNER</span>
     </div>
     <div class="medal bebas">W</div>
     <div class="loser">
-      <img src="${lImg}" alt="" />
+      <div class="card-art"><img src="${lImg}" alt="" /></div>
       <span class="tag lt">${cfg.loserBadge}</span>
       <span class="tag lb">LOSER</span>
     </div>
