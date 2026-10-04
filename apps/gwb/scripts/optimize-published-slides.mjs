@@ -121,6 +121,7 @@ async function processOne(inputPath, basename) {
 async function main() {
   const cliSources = process.argv.slice(2).filter((a) => !a.startsWith('-'))
   const searchDirs = [
+    path.join(__dirname, '../../../docs/gwb-remade-slides'),
     path.join(__dirname, '../../../docs/gwb-results-cards'),
     path.join(__dirname, '../../../docs/gwb-fixed-slides'),
     path.join(__dirname, 'slide-sources'),
