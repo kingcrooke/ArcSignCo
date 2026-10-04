@@ -122,8 +122,26 @@ async function verifyMobileScroll(page) {
   console.log('mobile scroll ok', loaded)
 }
 
+async function copyFixedMasters() {
+  const { copyFile } = await import('node:fs/promises')
+  const fixedDir = new URL('../../../docs/gwb-fixed-slides/', import.meta.url)
+  const names = [
+    'w4-slide-10.png',
+    'w4-slide-14.png',
+    'w4-slide-16.png',
+    'vs-m3-hadi-manny.png',
+  ]
+  for (const name of names) {
+    const src = new URL(name, fixedDir)
+    const dest = join(OUT, `gwb-fixed-${name}`)
+    await copyFile(src, dest)
+    console.log('fixed master', dest)
+  }
+}
+
 async function main() {
   await mkdir(OUT, { recursive: true })
+  await copyFixedMasters()
   const browser = await chromium.launch()
   const page = await browser.newPage()
   await verifyMobileScroll(page)

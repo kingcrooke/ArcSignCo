@@ -17,12 +17,12 @@ const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
 const SLIDE_BASENAMES = [
-  ...Array.from({ length: 15 }, (_, i) =>
+  ...Array.from({ length: 16 }, (_, i) =>
     `w4-slide-${String(i + 1).padStart(2, '0')}`,
-  ),
+  ).filter((b) => b !== 'w4-slide-06'),
   'vs-m1-narking-steven',
   'vs-m2-kayser-frankie',
-  // vs-m3-hadi-manny held back until artwork says Hadi
+  'vs-m3-hadi-manny',
   'vs-m4-jamil-matt',
   'vs-m5-mauricio-eric',
   'vs-m6-danny-crooke',
@@ -116,6 +116,7 @@ async function processOne(inputPath, basename) {
 async function main() {
   const cliSources = process.argv.slice(2).filter((a) => !a.startsWith('-'))
   const searchDirs = [
+    path.join(__dirname, '../../../docs/gwb-fixed-slides'),
     path.join(__dirname, 'slide-sources'),
     '/home/ubuntu/.cursor/projects/workspace/uploads',
   ]
