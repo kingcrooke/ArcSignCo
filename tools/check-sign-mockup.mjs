@@ -236,7 +236,7 @@ const awPdf = pdfStrings(buildProofPdf({
   price: priceView(estimatePrice("aw-traditional", { width: 144, height: 40 })),
   size: { width: `12' 0"`, height: `3' 4"`, area: "40 sq ft" },
 }));
-for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "A price is prepared after a site survey", DISCLAIMER]) {
+for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "Pricing comes in a formal written estimate", DISCLAIMER]) {
   check(awPdf.includes(needle), `awning PDF includes ${JSON.stringify(needle)}`);
 }
 // Interior and job-site tabs aren't storefront mockups.
@@ -263,7 +263,11 @@ const walk = dir => fs.readdirSync(path.join(toolDir, dir), { withFileTypes: tru
 const own = ["index.html", "sign-mockup.css", ...walk("js"), ...walk("proof")];
 const BANNED = [
   /\bApt\b/i, /83 Post Ave/i, /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i,
-  /dob[- ]approved/i, /\bour license/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
+  /dob[- ]approved/i, /\bour license\b/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
+  // Arc team wording rules: nothing reads like a contract, deposit or go-ahead; ADA is "for architect
+  // and inspector review", never compliant; no slip-resistance claims.
+  /\bcontracts?\b/i, /\bdeposits?\b/i, /go[- ]ahead/i, /payment authori[sz]ation/i, /\bcompliant\b/i, /\bcompliance\b/i,
+  /slip[- ]?resist/i, /\b(non|anti)[- ]?slip\b/i,
 ];
 // Reference catalogs and awning makers are research only: their names never ship.
 const VENDORS = [
@@ -289,6 +293,9 @@ const proofHtml = fs.readFileSync(path.join(toolDir, "proof/index.html"), "utf8"
 check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof page is noindex");
 check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
 check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
+check(/id="approveBtn">Concept approved, request a formal estimate</.test(proofHtml), "the approve button reads \"Concept approved, request a formal estimate\"");
+check(/<strong>Concept approved, request a formal estimate<\/strong>/.test(proofHtml), "the approval confirmation reads \"Concept approved, request a formal estimate\"");
+check(STAMP_TITLE === "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE", "the PDF approval stamp reads \"Concept approved, request a formal estimate\"");
 check((proofHtml.split(DISCLAIMER_FULL).length - 1) === 2, "proof page carries the full disclaimer in the price box and the footer");
 check(html.includes(DISCLAIMER_FULL), "the tool's step 4 carries the full disclaimer");
 check(!/Approved by/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof email doesn't say \"Approved by\"");

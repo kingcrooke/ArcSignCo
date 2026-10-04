@@ -350,8 +350,8 @@ function column(pg, x, width, top, bottom) {
   return api;
 }
 
-export const STAMP_TITLE = "CONCEPT APPROVED — REQUEST A FORMAL ESTIMATE";
-export const STAMP_NOTE = "Not a contract, deposit, or payment authorization.";
+export const STAMP_TITLE = "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE";
+export const STAMP_NOTE = "Pricing, size and permits are confirmed in a formal written estimate.";
 
 function approvalStamp(pg, approval, x, y, w) {
   const tw = w - 20;

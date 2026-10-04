@@ -1,4 +1,4 @@
-// The category contract. Every tab in the mockup tool (Signs, Awnings, and anything added later)
+// The category interface. Every tab in the mockup tool (Signs, Awnings, and anything added later)
 // is one module that default-exports defineCategory({...}); categories/index.js lists them.
 // The engine (editor, renderer, PDF, proof page, approval-link server, pricing, checks) only talks
 // to a category through the fields below, so a new tab never touches engine code.

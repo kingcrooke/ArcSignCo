@@ -66,7 +66,7 @@ export function ledDetails(type, opts) {
     ["Cabinet", label(CABINET, o.cabinet)],
     ["Brightness", label(BRIGHT, o.bright)],
     ["Mounting", label(MOUNT, o.mount)],
-    ["Electrical", "Coordination required for power and data"],
+    ["Electrical", "Power and data confirmed during survey"],
   ];
 }
 

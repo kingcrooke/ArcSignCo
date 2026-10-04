@@ -283,7 +283,7 @@ export const AWNING_TYPES = S.map(s => ({
   lighting: s.lit && s.fasciaLit ? "fascia" : s.lit || "none",
   parts: partsFor(s),
   pinHint: s.posts ? PIN_POSTS : s.rods ? PIN_RODS : PIN,
-  notice: "If this awning will carry lettering or lighting, permit rules depend on the address. Permit requirements are confirmed after a site survey; approval is not guaranteed. This note is not a code determination.",
+  notice: "Awning size, lettering and lighting may be limited by local rules, which depend on the address. Permit requirements are confirmed during survey; approval is not guaranteed.",
   render: { kind: "awning", shape: s.id },
 }));
 export const AWNING_IDS = AWNING_TYPES.map(t => t.id);
@@ -377,8 +377,8 @@ export function awningDetails(type, opts, W = 144, D = 36) {
 // NYC Building Code Chapter 32 and Zoning Resolution limits the mockup can check from its own
 // numbers. Shown as warnings, never blocks: the address, district and DOB's reading decide.
 const CANOPY_RULES = {
-  "aw-marquee": "NYC marquees: at least 10 ft above the sidewalk, no closer than 2 ft to the curb, fascia no more than 3 ft, and only on certain building uses. Signs on the fascia follow the zoning sign rules.",
-  "aw-entrance": "A sidewalk canopy is sized to the sidewalk, not to a fixed length: in NYC it runs to within 18–24 in of the curb, 4–10 ft wide and no wider than the entrance, and needs a yearly DOT permit.",
+  "aw-marquee": "Marquee size may be limited by local rules. In NYC: at least 10 ft above the sidewalk, no closer than 2 ft to the curb, fascia no more than 3 ft, and only on certain building uses. Lettering on the fascia may also be limited.",
+  "aw-entrance": "A sidewalk canopy is sized to the sidewalk, and its size may be limited by local rules: in NYC it typically runs to within 18–24 in of the curb, 4–10 ft wide and no wider than the entrance, and may require a yearly DOT permit.",
   "aw-freestanding": "",
 };
 
@@ -393,14 +393,14 @@ export function awningWarnings(type, opts, W = 144, D = 36) {
   if (type.id in CANOPY_RULES) {
     if (CANOPY_RULES[type.id]) out.push({ text: CANOPY_RULES[type.id], over: false });
   } else if (type.id === "aw-louver") {
-    if (P > 30) out.push({ text: `Projects ${ft(P)}. If DOB treats this as a sun-control device, NYC allows 2' 6" (at least 8 ft up).`, over: true });
+    if (P > 30) out.push({ text: `Projects ${ft(P)}. Projection may be limited by local rules: if treated as a sun-control device, NYC allows 2' 6" (at least 8 ft up).`, over: true });
   } else {
-    if (P > 96) out.push({ text: `Projects ${ft(P)}. NYC storefront awnings may project no more than 8 ft beyond the street line.`, over: true });
-    else if (P > 60) out.push({ text: `Projects ${ft(P)}. Over a single window or door, NYC allows 5 ft.`, over: true });
-    out.push({ text: `NYC storefront awnings: no part below 8 ft above the sidewalk (a flexible valance may hang to 7 ft)${type.group === "aw-retract" ? ", and the awning box or cover projects no more than 12 in" : ""}.`, over: false });
+    if (P > 96) out.push({ text: `Projects ${ft(P)}. Projection may be limited by local rules: in NYC, storefront awnings generally project no more than 8 ft beyond the street line.`, over: true });
+    else if (P > 60) out.push({ text: `Projects ${ft(P)}. Projection may be limited by local rules: over a single window or door, NYC generally allows 5 ft.`, over: true });
+    out.push({ text: `Clearance may be limited by local rules. In NYC, no part of a storefront awning may hang below 8 ft above the sidewalk (a flexible valance may hang to 7 ft)${type.group === "aw-retract" ? ", and the awning box or cover projects no more than 12 in" : ""}.`, over: false });
   }
   if (o.lit === "backlit" && o.letterOn) {
-    out.push({ text: "Lit lettering makes this a sign. In most commercial districts, including C7, a sign may project only 12 in (18 in if double-faced); C6-5 and C6-7 allow up to 8 ft.", over: false });
+    out.push({ text: "Lit lettering may be limited by local rules, since it can make the awning a sign. In most NYC commercial districts, including C7, a sign may project only 12 in (18 in if double-faced); C6-5 and C6-7 allow up to 8 ft.", over: false });
   }
   return out;
 }

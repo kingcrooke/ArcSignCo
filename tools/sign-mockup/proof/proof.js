@@ -61,7 +61,7 @@ function mailtoHref() {
   const subject = `${Noun} proof${sheet.project ? `: ${sheet.project}` : ""}`;
   const lines = [
     "Hi Arc,", "", `About this ${noun} proof: ${location.href}`, "",
-    sheet.approval ? `Concept approval, a request for a formal estimate (not a contract): ${sheet.approval.name}, ${when(sheet.approval.at)}.` : "", "",
+    sheet.approval ? `Concept approved, request a formal estimate: ${sheet.approval.name}, ${when(sheet.approval.at)}.` : "", "",
   ];
   return `mailto:arc@arcsignco.com?cc=jc@arcsignco.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
 }
@@ -70,8 +70,8 @@ function renderApproval() {
   const a = sheet.approval;
   $("approvedBox").hidden = !a;
   $("approveForm").hidden = !!a;
-  $("approvalTitle").textContent = a ? "Concept approved" : "Approve this concept";
-  if (a) $("approvedText").textContent = `Concept approved by ${a.name} on ${when(a.at)}. This asks Arc for a formal estimate. It is not a contract.`;
+  $("approvalTitle").textContent = a ? "Concept approved" : "Review this concept";
+  if (a) $("approvedText").textContent = `${a.name} approved the concept on ${when(a.at)} and asked Arc for a formal written estimate.`;
   $("emailArc").href = mailtoHref();
 }
 
@@ -180,7 +180,7 @@ $("approveForm").addEventListener("submit", async e => {
   try {
     sheet = await api("/approve", { name });
     renderApproval();
-    notifyArc("approved", name, `Concept approved on ${when(sheet.approval.at)} (request for a formal estimate)`);
+    notifyArc("approved", name, `Concept approved, request a formal estimate (${when(sheet.approval.at)})`);
     $("approvedBox").focus?.();
   } catch (err) {
     if (err.status === 409) { sheet = await api("").catch(() => sheet); renderApproval(); }

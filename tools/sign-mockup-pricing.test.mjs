@@ -64,7 +64,7 @@ test("while the rates are placeholders, nothing client-facing carries a number",
   assert.equal(PRICES_LIVE, false);
   assert.equal(RATES_LABEL, "Preliminary estimate");
   assert.equal(RATES_NOTE, DISCLAIMER_FULL);
-  assert.equal(NO_PRICE_MESSAGE, "A price is prepared after a site survey. This is a concept only. It is not a quote or a contract.");
+  assert.equal(NO_PRICE_MESSAGE, "Pricing comes in a formal written estimate after a site survey. This preview is a concept only.");
   for (const t of ALL_TYPES) {
     const p = estimatePrice(t.id, { width: 144, height: 30 }, { lit: "backlit" });
     assert.equal(p.withheld, true, t.id);
@@ -84,8 +84,8 @@ test("while the rates are placeholders, nothing client-facing carries a number",
   assert.equal(priceView(null).message, NO_PRICE_MESSAGE);
 });
 
-test("the full disclaimer is the one Sales Ops approved", () => {
-  assert.equal(DISCLAIMER_FULL, "Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed.");
+test("the full disclaimer is the one the Arc team approved", () => {
+  assert.equal(DISCLAIMER_FULL, "Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through our licensed partners.");
 });
 
 test("an estimate is base plus size rate, with the minimum rounded up and adders after it", () => {

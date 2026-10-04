@@ -18,8 +18,8 @@ The proof page (`tools/sign-mockup/proof/`) is built for phones. The client can:
 - read the sign type or awning shape, approximate size and how it's built (the same drawing as the
   picker); for awnings, also the chosen cover, pattern, valance, lettering spot, sides, projection and
   lighting
-- see the price note: while the rates are placeholders, "A price is prepared after a site survey" and
-  no numbers; once Arc's rates are in, a preliminary estimate range if the scale was set
+- see the price note: while the rates are placeholders, "Pricing comes in a formal written estimate after a
+  site survey" and no numbers; once Arc's rates are in, a preliminary estimate range if the scale was set
 - post comments
 - approve with their name; the server records the time
 - download the PDF (the same three pages as the editor, plus an approval stamp once approved)

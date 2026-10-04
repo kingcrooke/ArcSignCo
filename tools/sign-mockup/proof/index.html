@@ -54,18 +54,18 @@
     </section>
 
     <section class="pf-card pf-approval" id="approvalCard" aria-labelledby="approvalTitle">
-      <h2 id="approvalTitle">Approve this concept</h2>
+      <h2 id="approvalTitle">Review this concept</h2>
       <div id="approvedBox" class="pf-approved" tabindex="-1" hidden>
-        <strong>Concept approved</strong>
+        <strong>Concept approved, request a formal estimate</strong>
         <span id="approvedText"></span>
       </div>
       <form id="approveForm" novalidate>
-        <p>Approving this concept asks Arc to prepare a formal estimate. It is not a contract, a deposit, or a payment authorization. Nothing is ordered or installed until you accept a written estimate.</p>
+        <p>Approving this concept asks Arc to prepare a formal written estimate. Nothing is ordered, scheduled or installed from this page.</p>
         <label class="pf-field">Your name
           <input type="text" id="approveName" name="name" maxlength="80" autocomplete="name" required>
         </label>
-        <label class="pf-check"><input type="checkbox" id="approveOk" required> I have reviewed the day and night views. This is a concept approval and a request for a formal estimate. It is not a shop drawing, a contract, or a payment.</label>
-        <button type="submit" class="btn gold lg" id="approveBtn">Approve concept</button>
+        <label class="pf-check"><input type="checkbox" id="approveOk" required> I have reviewed the day and night views. I am approving the concept and asking Arc for a formal estimate.</label>
+        <button type="submit" class="btn gold lg" id="approveBtn">Concept approved, request a formal estimate</button>
         <p class="pf-error" id="approveError" role="alert" hidden></p>
       </form>
     </section>
@@ -83,9 +83,9 @@
         <b class="pf-perfoot" id="pricePerFoot" hidden></b>
         <ul class="pf-plines" id="priceLines" hidden></ul>
         <small id="priceValid" hidden></small>
-        <small id="priceNote">Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed.</small>
+        <small id="priceNote">Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through our licensed partners.</small>
       </div>
-      <p class="pf-small">Nothing is made until Arc confirms the price.</p>
+      <p class="pf-small">Pricing comes in a formal written estimate after a site survey.</p>
       <p class="pf-notes" id="notes" hidden></p>
     </section>
 
@@ -134,7 +134,7 @@
 
 <footer class="pf-foot">
   <div class="pf-wrap">
-    <p><strong>Concept only – not a shop drawing.</strong> Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed. Sizes are estimated from one photo and one reference measurement, and the artwork is placed by hand. Measurements are verified before anything is built.</p>
+    <p>Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through our licensed partners. Sizes are estimated from one photo and one reference measurement, and the artwork is placed by hand. Measurements are verified before anything is built.</p>
     <p>&copy; 2026 Arc Signage Co LLC — New York / Tri-State · <a href="https://arcsignco.com/">arcsignco.com</a></p>
   </div>
 </footer>

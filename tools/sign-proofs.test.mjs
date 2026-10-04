@@ -80,7 +80,7 @@ test("create stores images and a server-priced sheet under v1/<context>/<id>/", 
   assert.equal(sheet.price.low, undefined);
   assert.equal(sheet.price.high, undefined);
   assert.doesNotMatch(JSON.stringify(sheet.price), /\$\d/);
-  assert.match(sheet.price.message, /price is prepared after a site survey/i);
+  assert.match(sheet.price.message, /formal written estimate after a site survey/i);
   assert.equal(sheet.createdAt, "2026-10-03T15:04:05.000Z");
   assert.equal(sheet.ns, undefined);
 });

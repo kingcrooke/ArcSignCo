@@ -6,7 +6,7 @@ import {
 } from "./led/options.js";
 import { kindAspect } from "../kinds.js";
 
-const ELECTRICAL_NOTICE = "Electrical coordination is required for power, data and any battery backup. Arc confirms feeds and mounting during the site survey.";
+const ELECTRICAL_NOTICE = "Power, data and any battery backup may require electrical coordination. Arc confirms feeds and mounting during the site survey.";
 
 export default defineCategory({
   id: "led",
