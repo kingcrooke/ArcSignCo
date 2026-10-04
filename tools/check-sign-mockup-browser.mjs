@@ -297,6 +297,104 @@ async function run() {
       await dl.close();
     }
 
+    // Request a formal estimate: prefilled from the mockup, power only when lit, files spread over
+    // photo_1…, and in test mode the submission is built but never sent.
+    {
+      const ep = await context.newPage();
+      const sent = [];
+      await ep.route(`${BASE}/`, route => {
+        if (route.request().method() !== "POST") return route.continue();
+        sent.push(route.request().url());
+        return route.abort();
+      });
+      await ep.goto(`${BASE}/tools/sign-mockup/?tab=sign&type=halo&src=qa-check&test=1`, { waitUntil: "networkidle" });
+      await ep.click("#trySample");
+      await ep.waitForFunction(() => window.signMockup.state.photo && window.signMockup.state.calInches > 0, { timeout: 30000 });
+      await ep.evaluate(() => window.signMockup.setStep("sign"));
+      await ep.waitForFunction(() => window.signMockup.sizeInfo(), { timeout: 15000 });
+      await ep.click("#estimateCta").catch(() => {});
+      await ep.evaluate(() => window.signMockup.estimate.prefill());
+      const f = "#estimateForm .ef-form";
+      const val = n => ep.$eval(`${f} [name="${n}"]`, el => el.value);
+      const pre = {
+        tab: await val("tab"), type: await val("type"), src: await val("src"), signType: await val("sign_type"),
+        w: await val("size_w"), h: await val("size_h"), unit: await val("size_unit"),
+        lit: await ep.$eval(f, form => form.querySelector('[name="lit"]:checked')?.value),
+        want: await ep.evaluate(() => window.signMockup.sizeInfo().width),
+        open: await ep.$eval(`${f} .ef-more`, d => d.open),
+        firstOptional: await ep.$eval(`${f} .ef-more-body > *`, el => el.className),
+      };
+      pre.tab === "sign" && pre.type === "halo" && pre.src === "qa-check" && pre.signType === "Channel letters" && pre.lit === "Lit"
+        ? ok("estimate form prefills tab, type, src, sign type and lighting from the mockup")
+        : fail(`estimate prefill: ${JSON.stringify(pre)}`);
+      pre.unit === "ft" && Math.abs(Number(pre.w) * 12 - pre.want) <= 6 && Number(pre.h) > 0
+        ? ok(`estimate size prefills from the mockup width (${pre.w} × ${pre.h} ${pre.unit})`)
+        : fail(`estimate size prefill: ${JSON.stringify(pre)}`);
+      !pre.open && pre.firstOptional === "ef-photos" ? ok("\"Help us price it faster\" starts collapsed, photos first") : fail(`optional section: ${JSON.stringify(pre)}`);
+
+      const powerShown = () => ep.$eval(`${f} [data-power]`, el => !el.hidden);
+      await ep.click(`${f} summary`);
+      const litPower = await powerShown();
+      await ep.check(`${f} [name="lit"][value="Non-lit"]`);
+      const unlitPower = await powerShown();
+      await ep.check(`${f} [name="lit"][value="Lit"]`);
+      litPower && !unlitPower && await powerShown() ? ok("power question shows only when Lit is picked") : fail(`power question: lit ${litPower}, non-lit ${unlitPower}`);
+      const tenantHint = await ep.$eval(`${f} [name="role"][value="Tenant"]`, r => r.closest("label").textContent.includes("Tenants need landlord approval."));
+      tenantHint ? ok("tenant choice carries the landlord-approval hint") : fail("tenant hint missing");
+
+      // Validation: an empty submit names the first missing field and sends nothing.
+      await ep.click(`${f} .ef-submit`);
+      const firstErr = await ep.$eval(`${f} .ef-error`, el => el.hidden ? "" : el.textContent);
+      /^Name:/.test(firstErr) ? ok(`empty submit is refused at the first field (${firstErr.slice(0, 50)})`) : fail(`empty submit: "${firstErr}"`);
+
+      await ep.fill(`${f} [name="name"]`, "QA Tester");
+      await ep.fill(`${f} [name="email"]`, "qa@example.com");
+      await ep.fill(`${f} [name="phone"]`, "555 010 0000");
+      await ep.fill(`${f} [name="street"]`, "123 Test St");
+      await ep.fill(`${f} [name="city"]`, "Brooklyn");
+      await ep.fill(`${f} [name="zip"]`, "11201");
+      await ep.check(`${f} [name="role"][value="Tenant"]`);
+      await ep.check(`${f} [name="job"][value="New sign"]`);
+      await ep.check(`${f} [data-service][value="Fabrication"]`);
+      await ep.check(`${f} [data-service][value="Permits / DOB filing"]`);
+      await ep.fill(`${f} [name="target_date"]`, new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10));
+      await ep.fill(`${f} [name="business"]`, "QA Bakery");
+      await ep.check(`${f} [name="landmark"][value="Yes"]`);
+      await ep.selectOption(`${f} [name="height"]`, "2nd floor or higher");
+      await ep.check(`${f} [name="power"][value="Yes"]`);
+      await ep.selectOption(`${f} [name="budget"]`, "$3–10k");
+      const jpg = fs.readFileSync(path.join(root, "docs/qa/sample-photo.jpg"));
+      await ep.setInputFiles(`${f} [data-photos]`, [
+        { name: "wide.jpg", mimeType: "image/jpeg", buffer: jpg },
+        { name: "close.jpg", mimeType: "image/jpeg", buffer: jpg },
+        { name: "plan.pdf", mimeType: "application/pdf", buffer: Buffer.from("%PDF-1.4\n%%EOF\n") },
+        { name: "anim.gif", mimeType: "image/gif", buffer: Buffer.from("GIF89a") },
+        { name: "huge.jpg", mimeType: "image/jpeg", buffer: Buffer.alloc(11 * 1024 * 1024, 0xff) },
+      ]);
+      const listed = await ep.$$eval(`${f} [data-photo-list] li`, li => li.length);
+      const skipNote = await ep.$eval(`${f} .ef-error`, el => el.textContent);
+      listed === 3 && /JPG, PNG, HEIC or PDF/.test(skipNote) && /over 10 MB/.test(skipNote)
+        ? ok("photo picker keeps JPG/PDF, skips other types and files over 10 MB")
+        : fail(`photo picker: ${listed} listed, note "${skipNote}"`);
+      await ep.setInputFiles(`${f} [name="artwork"]`, { name: "logo.svg", mimeType: "image/svg+xml", buffer: Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"/>') });
+      await ep.click(`${f} .ef-submit`);
+      await ep.waitForSelector("#estimateForm .ef-done:not([hidden])", { timeout: 15000 });
+      const out = await ep.evaluate(() => window.__estimateTest?.fields);
+      const done = await ep.$eval("#estimateForm .ef-done", el => el.textContent.replace(/\s+/g, " ").trim());
+      out && out["form-name"] === "sign-estimate-request" && out.subject === "[Sign Preview] QA Bakery / Brooklyn / Channel letters / source=qa-check"
+        ? ok(`estimate subject: ${out.subject}`) : fail(`estimate subject: ${out?.subject}`);
+      out?.flags === "FLAGS: Lit · Permits requested · Landmark = Yes · Height 2nd floor+" ? ok(`estimate flags: ${out.flags}`) : fail(`estimate flags: ${out?.flags}`);
+      out && out.services === "Fabrication, Permits / DOB filing" && out.role === "Tenant" && out.power === "Yes" && out.budget === "$3–10k" && out.tab === "sign" && out.type === "halo" && out.src === "qa-check"
+        ? ok("estimate submission carries every field, the services list and the hidden tab/type/src")
+        : fail(`estimate fields: ${JSON.stringify(out)}`);
+      out && out.photo_1?.name === "wide.jpg" && out.photo_2?.name === "close.jpg" && out.photo_3?.name === "plan.pdf" && !out.photo_4 && out.artwork?.name === "logo.svg"
+        ? ok("photos go out as photo_1…photo_3 and the logo as artwork")
+        : fail(`estimate files: ${JSON.stringify(out && Object.fromEntries(Object.entries(out).filter(([k]) => /photo|artwork/.test(k))))}`);
+      done.startsWith("Concept approved, request a formal estimate") ? ok(`estimate confirmation: ${done}`) : fail(`estimate confirmation: ${done}`);
+      sent.length === 0 ? ok("test mode: the estimate form posted nothing") : fail(`test mode: the estimate form posted ${sent.length} time(s)`);
+      await ep.close();
+    }
+
     // Proof page against a mocked API: the approval wording, no notification from an automated
     // browser or a test proof, and a real notification carries tab, type and src.
     {
@@ -331,13 +429,22 @@ async function run() {
         await pg.waitForSelector("#approvedBox:not([hidden])");
         await pg.waitForTimeout(300);
         const box = (await pg.textContent("#approvedBox")).replace(/\s+/g, " ");
+        const est = await pg.evaluate(() => {
+          const card = document.getElementById("estimateCard"), f = card.querySelector(".ef-form");
+          const v = n => f?.elements.namedItem(n)?.value;
+          return { shown: !card.hidden, signType: v("sign_type"), src: v("src"), proof: v("proof"), name: v("name"), type: v("type") };
+        });
         await pg.close();
-        return { btn, box, posts };
+        return { btn, box, posts, est };
       };
       const auto = await proofCase({ test: false, webdriver: true });
       auto.btn === "Concept approved, request a formal estimate" && auto.box.includes("Concept approved, request a formal estimate")
         ? ok("proof approve button and confirmation read \"Concept approved, request a formal estimate\"")
         : fail(`proof approval wording: ${JSON.stringify({ btn: auto.btn, box: auto.box })}`);
+      const e = auto.est;
+      e.shown && e.signType === "Window vinyl / graphics" && e.src === "gbp" && e.type === "vinyl-door-hours" && /\/proof\/#/.test(e.proof) && e.name === "QA Tester"
+        ? ok("after approval the proof page shows the estimate form, prefilled from the proof")
+        : fail(`proof estimate form: ${JSON.stringify(e)}`);
       auto.posts.length === 0 ? ok("automated browser: approving sends no notification") : fail(`automated browser sent ${auto.posts.length} notification(s)`);
       const flagged = await proofCase({ test: true, webdriver: false });
       flagged.posts.length === 0 ? ok("test proof: approving sends no notification") : fail(`test proof sent ${flagged.posts.length} notification(s)`);

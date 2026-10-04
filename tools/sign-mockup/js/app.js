@@ -10,6 +10,7 @@ import {
   defaultOptions, optionFields, aspectFor, diagramSvg, codeWarnings, isKnownType, cleanSource,
 } from "./catalog.js";
 import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
+import { mountEstimateForm } from "./estimate-form.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
 
@@ -1688,6 +1689,19 @@ resizeCanvas();
 updateUI();
 openDeepLink(new URLSearchParams(location.search));
 
+const estimate = mountEstimateForm($("estimateForm"), {
+  context: () => {
+    const size = sizeInfo();
+    return {
+      typeId: state.typeId, src: state.src, test: state.test,
+      proof: state.proof && state.proof.key === designKey() ? state.proof.url : "",
+      widthIn: size?.width, heightIn: size?.height, lit: litWith(currentType(), optionsFor()),
+    };
+  },
+});
+$("estimateCta").addEventListener("click", () => estimate.prefill());
+new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) estimate.prefill(); }).observe($("estimate"));
+
 // /tools/sign-mockup/?tab=<category>&type=<type id>&src=<tag>: opens that tab and type. Unknown
 // or coming-soon values fall back to the default tab rather than failing.
 function openDeepLink(q) {
@@ -1703,6 +1717,7 @@ function openDeepLink(q) {
 window.signMockup = {
   state, loadPhoto, loadSignFile, setStep, setType, setCategory, setMode, makePdf, composite, requestRender, designKey,
   sizeInfo,
+  get estimate() { return estimate; },
   quadInsidePhoto() {
     return state.photo?.canvas ? quadInsidePhoto(state.photo.canvas) : false;
   },

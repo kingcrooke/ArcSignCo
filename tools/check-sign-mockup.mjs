@@ -308,6 +308,30 @@ check(!/Approved by/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), 
 check(/<form name="sign-proof-activity"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(proofHtml), "proof activity form is registered with Netlify Forms (honeypot on)");
 check(["tab", "type", "src"].every(n => new RegExp(`<form name="sign-proof-activity"[\\s\\S]*<input name="${n}">[\\s\\S]*</form>`).test(proofHtml)), "proof activity form registers the tab, type and src fields");
 check(/function notifyArc\([^)]*\) \{\n  if \(isTestRun\(sheet\)\) return;/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof page never notifies Arc from a test run");
+// "Request a formal estimate" form: the Netlify registration copy lists exactly the module's fields.
+{
+  const ef = await import("./sign-mockup/js/estimate-form.js");
+  const reg = html.match(/<form name="sign-estimate-request"[^>]*>([\s\S]*?)<\/form>/);
+  check(reg && /data-netlify="true"/.test(reg[0]) && /netlify-honeypot="bot-field"/.test(reg[0]) && /enctype="multipart\/form-data"/.test(reg[0]), "estimate form is registered with Netlify Forms (multipart, honeypot on)");
+  const regNames = reg ? [...reg[1].matchAll(/name="([^"]+)"/g)].map(m => m[1]).filter(n => n !== "form-name") : [];
+  check(regNames.join() === ef.FIELD_NAMES.join(), `estimate form registration lists the module's ${ef.FIELD_NAMES.length} fields in order`);
+  check(ef.FILE_FIELDS.every(n => new RegExp(`<input type="file" name="${n}">`).test(reg?.[1] || "")), "estimate form registers photo_1…photo_10 and artwork as file fields");
+  check(ef.FIELD_NAMES[0] === "flags" && ["tab", "type", "src", "proof", "bot-field", "subject"].every(n => ef.FIELD_NAMES.includes(n)), "estimate form keeps the hidden tab/type/src/proof fields and the honeypot, with flags first");
+  check(ef.subjectFor({ business: "Corner Deli", name: "Ana", city: "Brooklyn", sign_type: "Channel letters", src: "GBP" }) === "[Sign Preview] Corner Deli / Brooklyn / Channel letters / source=gbp", "estimate subject: business, borough, sign type, source");
+  check(ef.subjectFor({ name: "Ana Ruiz", city: "Queens", sign_type: "Awning", src: "" }) === "[Sign Preview] Ana Ruiz / Queens / Awning / source=direct", "estimate subject falls back to the name and source=direct");
+  check(ef.flagsFor({ lit: "Lit", services: ["Installation", "Permits / DOB filing"], landmark: "Yes", height: "2nd floor or higher" }).join() === "Lit,Permits requested,Landmark = Yes,Height 2nd floor+", "estimate flags: lit, permits, landmark, height");
+  check(ef.flagsFor({ lit: "Non-lit", services: ["Permit-only for an existing sign"], landmark: "Not sure", height: "12–25 ft" }).join() === "Permits requested", "permit-only counts as permits requested; nothing else flags");
+  check(ef.flagsFor({ lit: "Not sure", services: ["Design"], landmark: "No" }).length === 0, "no flags when none apply");
+  const st = [["halo", "Channel letters"], ["lightbox", "Lightbox / cabinet"], ["bladelit", "Blade / projecting"], ["panel", "Storefront / fascia"], ["vinyl-door-hours", "Window vinyl / graphics"],
+    ["vinyl-wall-mural", "Mural / painted"], ["aw-traditional", "Awning"], ["wf-lobby", "ADA / interior wayfinding"], ["ada-room", "ADA / interior wayfinding"], ["led-ticker", "Other"], ["constr-site-board", "Other"]];
+  const wrong = st.filter(([id, want]) => ef.signTypeFor(id) !== want);
+  check(!wrong.length && READY.flatMap(c => c.types).every(t => ef.SIGN_TYPES.includes(ef.signTypeFor(t.id))), `every mockup type prefills a listed sign type${wrong.length ? ` (${wrong.map(w => w[0]).join(", ")})` : ""}`);
+  const sz = ef.sizeFields(144, 30), small = ef.sizeFields(18, 12);
+  check(sz.w === "12" && sz.h === "2.5" && sz.unit === "ft" && small.w === "18" && small.unit === "in" && ef.sizeFields(0, 0) === null, "size prefill: feet to the half foot from 3 ft, inches below");
+  check(ef.MAX_PHOTOS === 10 && ef.MAX_FILE_BYTES === 10 * 1024 * 1024 && ef.MAX_UPLOAD_BYTES < 8 * 1024 * 1024, "photos: up to 10, 10 MB each, sent under Netlify's 8 MB request limit");
+  const efSrc = fs.readFileSync(path.join(toolDir, "js/estimate-form.js"), "utf8");
+  check(/if \(isTestRun\(context\(\)\)\) \{/.test(efSrc), "the estimate form never sends from a test run");
+}
 const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
 check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
 check(READY.every(c => c.pricing && Object.keys(c.pricing).join() === "row"), "every live category only maps its types to config rows");

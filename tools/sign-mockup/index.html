@@ -50,6 +50,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/service-page.v4.css">
 <link rel="stylesheet" href="/tools/sign-mockup/sign-mockup.css">
+<link rel="stylesheet" href="/tools/sign-mockup/estimate-form.css">
 <link rel="modulepreload" href="/tools/sign-mockup/js/app.js">
 </head>
 <body class="sm-page">
@@ -297,11 +298,23 @@
               </div>
             </div>
           </div>
+          <a class="btn gold lg sm-estimate-cta" id="estimateCta" href="#estimate">Request a formal estimate</a>
           <p class="note">Want Arc to price it? Email the PDF and project address to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> or <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
         </section>
 
         <p class="sm-status" id="status" role="status" aria-live="polite"></p>
       </div>
+    </div>
+  </section>
+
+  <section class="section sm-estimate" id="estimate" aria-labelledby="estimateTitle">
+    <div class="wrap sm-estimate-wrap">
+      <div class="section-head">
+        <span class="eyebrow">Free, no obligation</span>
+        <h2 id="estimateTitle">Request a formal estimate</h2>
+        <p>Tell Arc about the job. The sign type, size and lighting are filled in from your mockup; change anything that's off.</p>
+      </div>
+      <div id="estimateForm"></div>
     </div>
   </section>
 
@@ -455,6 +468,54 @@ document.addEventListener("keydown", event => {
   }
 });
 </script>
+<!-- Registers the "Request a formal estimate" form with Netlify Forms. The visible form is built by
+     js/estimate-form.js from the same field list and submitted with fetch. -->
+<form name="sign-estimate-request" method="POST" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="sign-estimate-request">
+  <input name="flags">
+  <input name="subject">
+  <input name="tab">
+  <input name="type">
+  <input name="src">
+  <input name="proof">
+  <input name="bot-field">
+  <input name="name">
+  <input name="email">
+  <input name="phone">
+  <input name="street">
+  <input name="city">
+  <input name="zip">
+  <input name="role">
+  <input name="sign_type">
+  <input name="sign_count">
+  <input name="size_w">
+  <input name="size_h">
+  <input name="size_unit">
+  <input name="size_not_sure">
+  <input name="lit">
+  <input name="job">
+  <input name="services">
+  <input name="target_date">
+  <input type="file" name="photo_1">
+  <input type="file" name="photo_2">
+  <input type="file" name="photo_3">
+  <input type="file" name="photo_4">
+  <input type="file" name="photo_5">
+  <input type="file" name="photo_6">
+  <input type="file" name="photo_7">
+  <input type="file" name="photo_8">
+  <input type="file" name="photo_9">
+  <input type="file" name="photo_10">
+  <input name="business">
+  <input name="contact_pref">
+  <input name="landmark">
+  <input name="surface">
+  <input name="height">
+  <input name="power">
+  <input name="budget">
+  <input type="file" name="artwork">
+  <textarea name="notes"></textarea>
+</form>
 <script type="module" src="/tools/sign-mockup/js/app.js"></script>
 </body>
 </html>

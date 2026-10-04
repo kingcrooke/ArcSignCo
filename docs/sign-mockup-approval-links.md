@@ -114,6 +114,43 @@ email for each, add a form notification for `sign-proof-activity` in Netlify und
 configuration > Notifications (same place as `quote-request`). The proof is saved whether or not
 the form post lands; the form is only the alert.
 
+## Request a formal estimate (lead form)
+
+`js/estimate-form.js` builds the form from one field list and mounts it in two places: a full-width
+section under the tool (`#estimate`, also linked from step 4) and a card on the proof page once the
+concept is approved. Netlify Forms registers it through the hidden static copy
+`<form name="sign-estimate-request">` at the end of `tools/sign-mockup/index.html`;
+`tools/check-sign-mockup.mjs` checks that the copy lists exactly the module's fields, in order.
+
+- Required: name, email, phone, street, borough/city, ZIP, role (tenants see "Tenants need landlord
+  approval."), sign type, number of signs, size W × H with ft/in or "Not sure", lit / non-lit / not
+  sure, new or replacing, services, target date. Sign type, size and lighting are filled in from the
+  mockup (or the proof) until the user changes them.
+- Optional, in the collapsed "Help us price it faster" section: photos (first), business name,
+  call/text preference, landmark (default Not sure), mounting surface, mounting height, power (only
+  when Lit is picked), budget range, artwork/logo file, notes.
+- Hidden: `tab`, `type`, `src`, `proof` (the approval link when there is one), plus `flags` and
+  `subject`. Honeypot `bot-field`.
+- Files: Netlify Forms allows one file per field and 8 MB per submission. Photos are picked
+  together (up to 10, JPG/PNG/HEIC/PDF, 10 MB each), sent as `photo_1`…`photo_10`, and large or HEIC
+  images are re-saved as JPEGs (2000 px, then 1400 px) so everything stays under about 7.5 MB. If it
+  still doesn't fit, the form asks for fewer photos or an email to arc@arcsignco.com.
+
+### Email to arc@
+
+Netlify's built-in form notification does this without a function:
+
+- Subject: the hidden `subject` field, set on submit to
+  `[Sign Preview] {business or name} / {borough} / {sign type} / source={src}` (`source=direct`
+  when there is no `src`). Netlify uses a field named `subject` as the notification subject.
+- Flags: `flags` is the first field, e.g. `FLAGS: Lit · Permits requested · Landmark = Yes ·
+  Height 2nd floor+`, or `No flags`.
+- Every other field follows, and uploaded files appear as links.
+
+One dashboard step: in Netlify, Project configuration > Notifications > Emails and webhooks > Form
+submission notifications > Add notification > Email notification, form `sign-estimate-request`,
+email `arc@arcsignco.com`.
+
 ## Deep links and source tags
 
 `/tools/sign-mockup/?tab=<category>&type=<type id>&src=<tag>` opens that tab and type, for example
@@ -130,6 +167,8 @@ Automated checks must never email Arc or store proofs on the live site:
   `X-Sign-Mockup-Test: 1` header). The server refuses test proofs on the `production` context.
 - The proof page sends no `sign-proof-activity` notification for a test proof, with `?test=1` in its
   URL, or in an automated browser (`navigator.webdriver`).
+- The estimate form builds its submission but never sends it in the same cases (`?test=1`, a test
+  proof, or an automated browser).
 - `tools/check-sign-mockup-browser.mjs` loads the tool with `?test=1` and refuses to run against
   arcsignco.com.
 

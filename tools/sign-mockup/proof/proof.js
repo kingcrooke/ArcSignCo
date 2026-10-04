@@ -1,7 +1,8 @@
 // Phone proof page for a mockup (any category): shows the shared day/night views, the construction, the
 // preliminary range, and lets the client comment, approve and download the PDF.
 // The proof id travels in the URL fragment, so it never reaches server logs or Referer headers.
-import { getType, describe, diagramSvg, categoryOf } from "../js/catalog.js";
+import { getType, describe, diagramSvg, categoryOf, litWith } from "../js/catalog.js";
+import { mountEstimateForm } from "../js/estimate-form.js";
 import { priceView } from "../js/pricing.js";
 import { buildSignPdf } from "../js/proof-pdf.js";
 
@@ -79,7 +80,18 @@ function renderApproval() {
   $("approvalTitle").textContent = a ? "Concept approved" : "Review this concept";
   if (a) $("approvedText").textContent = `${a.name} approved the concept on ${when(a.at)} and asked Arc for a formal written estimate.`;
   $("emailArc").href = mailtoHref();
+  $("estimateCard").hidden = !a;
+  if (a) {
+    estimate ||= mountEstimateForm($("estimateForm"), {
+      context: () => ({
+        typeId: sheet.typeId, src: sheet.src, test: sheet.test, proof: location.href, name: sheet.approval?.name,
+        widthIn: sheet.size?.width, heightIn: sheet.size?.height, lit: litWith(getType(sheet.typeId), sheet.options),
+      }),
+    });
+    estimate.prefill();
+  }
 }
+let estimate = null;
 
 function renderComments() {
   const list = $("comments");
