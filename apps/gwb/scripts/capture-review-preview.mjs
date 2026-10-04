@@ -40,6 +40,10 @@ async function main() {
   console.log('bundle:', bundle)
   console.log('audio requests before tap:', audioBefore.length)
 
+  for (const w of [1280, 390]) {
+    await shot(page, 'preview-sound-toggle', w)
+  }
+
   for (const tab of TABS) {
     if (tab.id === 'frankie') {
       await page.getByLabel('NFL Week').selectOption('3')
@@ -57,12 +61,6 @@ async function main() {
     for (const w of [1280, 390]) {
       await shot(page, `preview-${tab.id}`, w)
     }
-  }
-
-  await page.getByRole('button', { name: /Sound/ }).click()
-  await page.waitForTimeout(500)
-  for (const w of [1280, 390]) {
-    await shot(page, 'preview-sound-toggle', w)
   }
 
   // Deep link
