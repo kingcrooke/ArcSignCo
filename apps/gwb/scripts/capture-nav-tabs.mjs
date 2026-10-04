@@ -7,7 +7,7 @@ const PREVIEW =
   process.env.PREVIEW_URL ||
   'https://deploy-preview-30--arcsign.netlify.app/gwb-fe006a16/'
 
-const TAB_LABELS = ['Standings', 'Mulligans', 'Power', 'Recaps', 'Graphics']
+const TAB_LABELS = ['Standings', 'Graphics', 'Recaps', 'Mulligans']
 
 async function waitForApp(page) {
   await page.goto(PREVIEW, { waitUntil: 'domcontentloaded', timeout: 180_000 })
