@@ -404,7 +404,7 @@ export const SLIDES = {
         winnerImg: 'results-w3-m2-winner.png',
         loserImg: 'results-w3-m2-loser.png',
         winnerBadge: 'HADI 2-1',
-        loserBadge: 'DANNY 1-2',
+        loserBadge: 'DANNY 0-3',
         winner: 'HADI',
         loser: 'DANNY',
         wScore: '132.0',
