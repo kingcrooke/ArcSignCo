@@ -43,7 +43,7 @@
 .ef-x { padding-bottom: 12px; color: var(--muted); font-weight: 800; }
 .ef-unit, .ef-unsure { grid-column: span 1; }
 .ef-unsure { justify-self: start; }
-@media (min-width: 640px) { .ef-size { grid-template-columns: minmax(90px, 140px) auto minmax(90px, 140px) 90px auto; } }
+@media (min-width: 640px) { .ef-size { grid-template-columns: minmax(90px, 140px) auto minmax(90px, 140px) 90px auto; justify-content: start; } }
 
 .ef-more { border: 1px solid var(--line); border-radius: 10px; background: #fbfcfe; }
 .ef-more > summary {
