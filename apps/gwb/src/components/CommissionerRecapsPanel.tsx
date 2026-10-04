@@ -1,12 +1,14 @@
 import { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import recapsData from '../content/commissioner-recaps.json'
+import { formatPostedDay } from '../lib/datetime'
 import {
   commissionerRecapChipLabel,
   commissionerRecapExcerpt,
   filterCommissionerRecapsByWeek,
   type CommissionerRecap,
 } from '../lib/recaps'
+import { PredictionScoreboard } from './PredictionScoreboard'
 
 const RECAPS = recapsData.recaps as CommissionerRecap[]
 
@@ -22,6 +24,7 @@ export function CommissionerRecapsPanel({ week }: { week: number }) {
         {recapsData.label} — timeline for NFL Week {week}. Tap a post to read
         the full recap.
       </p>
+      <PredictionScoreboard week={week} />
       {items.length === 0 ? (
         <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-sm text-[var(--gwb-muted)]">
           No commissioner recaps for Week {week} yet.
@@ -59,12 +62,17 @@ export function CommissionerRecapsPanel({ week }: { week: number }) {
                     </span>
                     <span className="font-medium leading-snug">{r.title}</span>
                     <span className="text-sm leading-relaxed text-[var(--gwb-muted)] line-clamp-3">
-                      {commissionerRecapExcerpt(r.bodyMarkdown)}
+                      {commissionerRecapExcerpt(r.bodyMarkdown, 3, r.title)}
                     </span>
                   </span>
                 </summary>
                 <div className="commissioner-recap-prose border-t border-[var(--gwb-border)] px-4 py-4 text-sm leading-relaxed text-[var(--gwb-text)]">
                   <ReactMarkdown>{r.bodyMarkdown}</ReactMarkdown>
+                  {r.id === 'recap-8' && (
+                    <p className="mt-3 text-xs text-[var(--gwb-muted)]">
+                      Final score made the mulligan unnecessary. See Mulligans.
+                    </p>
+                  )}
                 </div>
               </details>
             </li>
@@ -73,14 +81,4 @@ export function CommissionerRecapsPanel({ week }: { week: number }) {
       )}
     </div>
   )
-}
-
-function formatPostedDay(iso: string): string {
-  const d = new Date(iso)
-  if (Number.isNaN(d.getTime())) return iso
-  return d.toLocaleDateString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-  })
 }

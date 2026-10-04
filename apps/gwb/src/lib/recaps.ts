@@ -1,3 +1,5 @@
+import { biggestBenchMiss } from './benchMiss'
+import { parsePostedAt } from './datetime'
 import type {
   MatchupRecap,
   PlayersMap,
@@ -28,31 +30,6 @@ function topStarter(
   return best
 }
 
-function biggestBenchMiss(
-  m: SleeperMatchup,
-  players: PlayersMap,
-): { name: string; points: number; starterPoints: number } | null {
-  const starterSet = new Set(m.starters)
-  let best: { name: string; points: number; starterPoints: number } | null =
-    null
-  const starterPts = m.starters_points.filter((p) => p != null)
-  if (!starterPts.length) return null
-  const minStarter = Math.min(...starterPts)
-  for (const [pid, pts] of Object.entries(m.players_points ?? {})) {
-    if (starterSet.has(pid)) continue
-    if (pts <= minStarter) continue
-    const gap = pts - minStarter
-    if (!best || gap > best.points - best.starterPoints) {
-      best = {
-        name: playerPlainName(pid, players),
-        points: pts,
-        starterPoints: minStarter,
-      }
-    }
-  }
-  return best
-}
-
 function preWeekRank(
   rosterId: number,
   standings: StandingRow[],
@@ -74,15 +51,21 @@ function buildScorerLines(
   const wTeam = aWins ? teamAName : teamBName
   const lTop = aWins ? topB : topA
   const lTeam = aWins ? teamBName : teamAName
-  if (wTop) lines.push(`${wTop.name} ${wTop.points.toFixed(1)} · ${wTeam}`)
-  if (lTop) lines.push(`${lTop.name} ${lTop.points.toFixed(1)} · ${lTeam}`)
+  if (wTop) lines.push(`${wTeam}: ${wTop.name} ${wTop.points.toFixed(1)}`)
+  if (lTop) lines.push(`${lTeam}: ${lTop.name} ${lTop.points.toFixed(1)}`)
   return lines
 }
 
 function buildStarsLine(lines: string[]): string | undefined {
   if (!lines.length) return undefined
-  if (lines.length === 1) return `Top scorer: ${lines[0]}`
-  return `Top scorers: ${lines.join(' · ')}`
+  if (lines.length === 1) return `Top scorer — ${lines[0]}`
+  return `Top scorers — ${lines.join(' · ')}`
+}
+
+function displayMargin(aPts: number, bPts: number): string {
+  const a = Math.round(aPts * 10) / 10
+  const b = Math.round(bPts * 10) / 10
+  return Math.abs(a - b).toFixed(1)
 }
 
 function buildNarrative(
@@ -91,20 +74,31 @@ function buildNarrative(
   aPts: number,
   bPts: number,
   tags: string[],
+  isLive: boolean,
 ): string {
-  const winner = aPts >= bPts ? aName : bName
-  const loser = aPts >= bPts ? bName : aName
-  const margin = Math.abs(aPts - bPts).toFixed(1)
+  const leader = aPts >= bPts ? aName : bName
+  const trailer = aPts >= bPts ? bName : aName
+  const margin = displayMargin(aPts, bPts)
+  if (isLive) {
+    return `${leader} is leading ${trailer} by ${margin} points.`
+  }
   const tagLine = tags.length ? ` ${tags.join(' · ')}.` : ''
-  return `${winner} topped ${loser} by ${margin} points.${tagLine}`
+  return `${leader} topped ${trailer} by ${margin} points.${tagLine}`
+}
+
+export interface BuildWeekRecapsOptions {
+  rosterPositions: string[]
+  preWeekStandings: StandingRow[]
+  isWeekFinal: boolean
 }
 
 export function buildWeekRecaps(
   matchups: SleeperMatchup[],
   teams: Map<number, TeamInfo>,
   players: PlayersMap,
-  standings: StandingRow[],
+  options: BuildWeekRecapsOptions,
 ): MatchupRecap[] {
+  const { rosterPositions, preWeekStandings, isWeekFinal } = options
   const byMatch = new Map<number, SleeperMatchup[]>()
   for (const m of matchups) {
     const list = byMatch.get(m.matchup_id) ?? []
@@ -121,12 +115,14 @@ export function buildWeekRecaps(
     const margin = Math.abs(a.points - b.points)
     const winnerRosterId = a.points >= b.points ? a.roster_id : b.roster_id
     const tags: string[] = []
-    if (margin >= BLOWOUT_MARGIN) tags.push('Blowout')
-    const rankA = preWeekRank(a.roster_id, standings)
-    const rankB = preWeekRank(b.roster_id, standings)
-    const winnerRank = a.points >= b.points ? rankA : rankB
-    const loserRank = a.points >= b.points ? rankB : rankA
-    if (winnerRank - loserRank >= UPSET_RANK_GAP) tags.push('Upset')
+    if (isWeekFinal && margin >= BLOWOUT_MARGIN) tags.push('Blowout')
+    if (isWeekFinal) {
+      const rankA = preWeekRank(a.roster_id, preWeekStandings)
+      const rankB = preWeekRank(b.roster_id, preWeekStandings)
+      const winnerRank = a.points >= b.points ? rankA : rankB
+      const loserRank = a.points >= b.points ? rankB : rankA
+      if (winnerRank - loserRank >= UPSET_RANK_GAP) tags.push('Upset')
+    }
 
     const topA = topStarter(a, players)
     const topB = topStarter(b, players)
@@ -146,14 +142,14 @@ export function buildWeekRecaps(
         teamName: teamA?.teamName ?? `Team ${a.roster_id}`,
         points: a.points,
         topScorer: topA,
-        benchMiss: biggestBenchMiss(a, players),
+        benchMiss: biggestBenchMiss(a, rosterPositions, players),
       },
       teamB: {
         rosterId: b.roster_id,
         teamName: teamB?.teamName ?? `Team ${b.roster_id}`,
         points: b.points,
         topScorer: topB,
-        benchMiss: biggestBenchMiss(b, players),
+        benchMiss: biggestBenchMiss(b, rosterPositions, players),
       },
       margin,
       winnerRosterId,
@@ -164,6 +160,7 @@ export function buildWeekRecaps(
         a.points,
         b.points,
         tags,
+        !isWeekFinal,
       ),
       scorerLines,
       starsLine: buildStarsLine(scorerLines),
@@ -280,12 +277,12 @@ export function compareCommissionerRecaps(
   a: CommissionerRecap,
   b: CommissionerRecap,
 ): number {
+  const timeA = parsePostedAt(a.postedAt)
+  const timeB = parsePostedAt(b.postedAt)
+  if (timeA !== timeB) return timeA - timeB
   const orderA = COMMISSIONER_LABEL_ORDER[a.label] ?? 50
   const orderB = COMMISSIONER_LABEL_ORDER[b.label] ?? 50
   if (orderA !== orderB) return orderA - orderB
-  const timeA = Date.parse(a.postedAt)
-  const timeB = Date.parse(b.postedAt)
-  if (timeA !== timeB) return timeA - timeB
   return a.index - b.index
 }
 
@@ -302,20 +299,24 @@ export function filterCommissionerRecapsByWeek(
   return sortCommissionerRecaps(recaps.filter((r) => r.week === week))
 }
 
+function normalizeExcerptLine(line: string): string {
+  return line
+    .replace(/^#+\s*/, '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .trim()
+}
+
 /** Plain-text preview for collapsed recap cards (no markdown). */
 export function commissionerRecapExcerpt(
   bodyMarkdown: string,
   maxLines = 3,
+  title?: string,
 ): string {
+  const titleNorm = title ? normalizeExcerptLine(title).toLowerCase() : ''
   const lines = bodyMarkdown
     .split('\n')
-    .map((line) =>
-      line
-        .replace(/^#+\s*/, '')
-        .replace(/\*\*([^*]+)\*\*/g, '$1')
-        .replace(/\*([^*]+)\*/g, '$1')
-        .trim(),
-    )
+    .map(normalizeExcerptLine)
     .filter(
       (line) =>
         line.length > 0 &&
@@ -323,5 +324,7 @@ export function commissionerRecapExcerpt(
         !line.startsWith('---') &&
         !/^🦬+$/.test(line),
     )
-  return lines.slice(0, maxLines).join(' ')
+  const filtered =
+    titleNorm && lines[0]?.toLowerCase() === titleNorm ? lines.slice(1) : lines
+  return filtered.slice(0, maxLines).join(' ')
 }

@@ -1,0 +1,46 @@
+{
+  "weeks": [
+    {
+      "week": 2,
+      "label": "Crystal ball",
+      "picks": [
+        {
+          "matchup": "Matt vs Steven",
+          "pick": "Matt",
+          "actualWinner": "Steven",
+          "correct": false
+        },
+        {
+          "matchup": "Crooke vs Hadi",
+          "pick": "Crooke",
+          "actualWinner": "Hadi",
+          "correct": false
+        },
+        {
+          "matchup": "Mauricio vs Narking",
+          "pick": "Mauricio",
+          "actualWinner": "Narking",
+          "correct": false
+        },
+        {
+          "matchup": "Kayser vs Danny",
+          "pick": "Kayser",
+          "actualWinner": "Kayser",
+          "correct": true
+        },
+        {
+          "matchup": "Frankie vs Eric",
+          "pick": "Frankie",
+          "actualWinner": "Eric",
+          "correct": false
+        },
+        {
+          "matchup": "Jamil vs Manny",
+          "pick": "Jamil",
+          "actualWinner": "Manny",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

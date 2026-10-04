@@ -1,5 +1,6 @@
 import type { PublishedSlide } from './publishedSlides'
 import { HELD_BACK_SLIDES } from './publishedSlides'
+import { slideHeadline } from './slideHeadlines'
 
 export type GraphicsSectionKind = 'matchups' | 'results' | 'report'
 
@@ -60,13 +61,22 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
 
 const SLIDE_SIZE = { width: 1080, height: 1350 }
 
+function titled(id: string, fallback: string): PublishedSlide {
+  return {
+    id,
+    title: slideHeadline(id, fallback),
+    basename: id,
+    ...SLIDE_SIZE,
+  }
+}
+
 function w4(id: string, title: string): PublishedSlide {
-  return { id, title, basename: id, ...SLIDE_SIZE }
+  return titled(id, title)
 }
 
 function reportSlide(week: 1 | 2 | 3, index: number, title: string): PublishedSlide {
   const id = `w${week}-slide-${String(index).padStart(2, '0')}`
-  return { id, title, basename: id, ...SLIDE_SIZE }
+  return titled(id, title)
 }
 
 function finalReportDeck(week: 1 | 2 | 3, titles: string[]): PublishedSlide[] {
@@ -131,11 +141,11 @@ const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
 ])
 
 function vs(id: string, title: string): PublishedSlide {
-  return { id, title, basename: id, ...SLIDE_SIZE }
+  return titled(id, title)
 }
 
 function result(id: string, title: string): PublishedSlide {
-  return { id, title, basename: id, ...SLIDE_SIZE }
+  return titled(id, title)
 }
 
 const WEEK_4_REPORT: PublishedSlide[] = [

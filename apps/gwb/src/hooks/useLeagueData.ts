@@ -4,8 +4,8 @@ import { buildWeekRecaps, weekHasMatchups } from '../lib/recaps'
 import {
   fetchAllMatchupsThroughWeek,
   fetchLeague,
-  fetchMatchups,
   fetchNflState,
+  fetchMatchups,
   fetchRosters,
   fetchUsers,
 } from '../lib/sleeperApi'
@@ -13,6 +13,7 @@ import { computeStandings, computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import {
   currentNflWeek,
+  isWeekComplete,
   isWeekLive,
   lastCompletedWeek,
   cumulativeDeferralNote,
@@ -39,11 +40,13 @@ export interface LeagueData {
   rosters: SleeperRoster[]
   /** Cumulative standings for the selected (or deferred) week — Standings tab. */
   standings: StandingRow[]
-  /** Full-season Sleeper roster standings — IG graphics & recaps (unchanged). */
+  /** Full-season Sleeper roster standings — legacy label for recaps context. */
   seasonStandings: StandingRow[]
   recaps: MatchupRecap[]
   matchupsByWeek: Map<number, SleeperMatchup[]>
-  players: PlayersMap
+  players: PlayersMap | null
+  playersLoading: boolean
+  ensurePlayers: () => void
   teams: Map<number, TeamInfo>
   selectedWeek: number
   setSelectedWeek: (w: number) => void
@@ -64,12 +67,13 @@ export function useLeagueData(): {
 } {
   const [state, setState] = useState<LoadState>('idle')
   const [error, setError] = useState<string | null>(null)
+  const [players, setPlayers] = useState<PlayersMap | null>(null)
+  const [playersLoading, setPlayersLoading] = useState(false)
   const [base, setBase] = useState<{
     league: SleeperLeague
     nflState: NflState
     rosters: SleeperRoster[]
     matchupsByWeek: Map<number, SleeperMatchup[]>
-    players: PlayersMap
     teams: Map<number, TeamInfo>
     standings: StandingRow[]
     seasonStandings: StandingRow[]
@@ -80,12 +84,11 @@ export function useLeagueData(): {
     setState('loading')
     setError(null)
     try {
-      const [nflState, league, users, rosters, players] = await Promise.all([
+      const [nflState, league, users, rosters] = await Promise.all([
         fetchNflState(),
         fetchLeague(),
         fetchUsers(),
         fetchRosters(),
-        loadPlayersMap(),
       ])
       const nflWeek = currentNflWeek(nflState)
       const completed = lastCompletedWeek(league, nflState)
@@ -101,7 +104,6 @@ export function useLeagueData(): {
         nflState,
         rosters,
         matchupsByWeek,
-        players,
         teams,
         standings,
         seasonStandings,
@@ -117,13 +119,21 @@ export function useLeagueData(): {
     load()
   }, [load])
 
+  const ensurePlayers = useCallback(() => {
+    if (players || playersLoading) return
+    setPlayersLoading(true)
+    loadPlayersMap()
+      .then((map) => setPlayers(map))
+      .catch(() => setPlayers({}))
+      .finally(() => setPlayersLoading(false))
+  }, [players, playersLoading])
+
   const data = useMemo((): LeagueData | null => {
     if (!base) return null
     const {
       rosters,
       matchupsByWeek,
       teams,
-      players,
       seasonStandings,
       league,
       nflState,
@@ -148,9 +158,18 @@ export function useLeagueData(): {
     )
 
     const weekMatchups = matchupsByWeek.get(selectedWeek)
+    const preWeekStandings = computeStandingsThroughWeek(
+      matchupsByWeek,
+      teams,
+      Math.max(0, selectedWeek - 1),
+    )
     const recaps =
-      weekMatchups && weekHasMatchups(weekMatchups)
-        ? buildWeekRecaps(weekMatchups, teams, players, seasonStandings)
+      weekMatchups && weekHasMatchups(weekMatchups) && players
+        ? buildWeekRecaps(weekMatchups, teams, players, {
+            rosterPositions: league.roster_positions,
+            preWeekStandings,
+            isWeekFinal: isWeekComplete(selectedWeek, league, nflState),
+          })
         : []
 
     const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
@@ -165,6 +184,8 @@ export function useLeagueData(): {
       recaps,
       matchupsByWeek,
       players,
+      playersLoading,
+      ensurePlayers,
       teams,
       selectedWeek,
       setSelectedWeek,
@@ -176,7 +197,7 @@ export function useLeagueData(): {
       standingsDeferralNote: deferNote,
       mulligansDeferralNote: mulliganDeferNote,
     }
-  }, [base, selectedWeek, load])
+  }, [base, selectedWeek, load, players, playersLoading, ensurePlayers])
 
   return { state, error, data, refresh: load }
 }
