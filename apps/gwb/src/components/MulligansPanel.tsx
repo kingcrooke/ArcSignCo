@@ -1,29 +1,40 @@
 import {
   formatMulliganLedgerLine,
+  formatMulliganReceipt,
   mulliganEntriesForWeek,
   mulliganLabel,
   mulliganStatusForRoster,
+  mulligansFlippedThroughWeek,
   mulligansUsedThroughWeek,
   MULLIGAN_LEDGER_META,
 } from '../lib/mulligans'
+import { managerNickname } from '../lib/nicknames'
+import type { MulliganLedgerEntry } from '../lib/mulligans'
 import type { StandingRow } from '../lib/types'
-
-const MANAGER_COUNT = 12
+import { MulliganChipRack } from './MulliganChipRack'
 
 export function MulligansPanel({
   rows,
   selectedWeek,
   statusThroughWeek,
   deferralNote,
+  onNegativeMulliganOpen,
 }: {
   rows: StandingRow[]
   selectedWeek: number
   statusThroughWeek: number
   deferralNote: string | null
+  onNegativeMulliganOpen?: () => void
 }) {
   const weekResults = mulliganEntriesForWeek(selectedWeek)
   const usedThrough = mulligansUsedThroughWeek(statusThroughWeek)
+  const flipped = mulligansFlippedThroughWeek(statusThroughWeek)
   const sorted = [...rows].sort((a, b) => a.teamName.localeCompare(b.teamName))
+
+  const flipLine =
+    flipped === 0
+      ? `${flipped} of ${usedThrough} flipped a result.`
+      : `${flipped} of ${usedThrough} flipped a result.`
 
   return (
     <div id="mulligans-section" className="space-y-6">
@@ -37,13 +48,13 @@ export function MulligansPanel({
         <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]">
           Mulligan status
         </h3>
-        <p className="mb-3 text-xs text-[var(--gwb-muted)]">
-          One per manager per season. {usedThrough} used / {MANAGER_COUNT} managers
-          through Week {statusThroughWeek}.{' '}
-          {statusThroughWeek >= MULLIGAN_LEDGER_META.throughWeek
-            ? MULLIGAN_LEDGER_META.weekNote
-            : ''}{' '}
-          None flipped a result.
+        <MulliganChipRack used={usedThrough} />
+        <p className="mb-3 mt-2 text-xs text-[var(--gwb-muted)]">
+          One per manager per season through Week {statusThroughWeek}. {flipLine}
+          {statusThroughWeek >= MULLIGAN_LEDGER_META.throughWeek &&
+          MULLIGAN_LEDGER_META.weekNote
+            ? ` ${MULLIGAN_LEDGER_META.weekNote}`
+            : ''}
         </p>
 
         <div className="overflow-x-auto rounded-xl border border-[var(--gwb-border)]">
@@ -65,7 +76,7 @@ export function MulligansPanel({
                     <td className="px-3 py-2.5">
                       <div className="font-medium">{r.teamName}</div>
                       <div className="text-xs text-[var(--gwb-muted)]">
-                        {r.displayName}
+                        {managerNickname(r.rosterId, r.displayName)}
                       </div>
                     </td>
                     <td
@@ -92,18 +103,40 @@ export function MulligansPanel({
             No mulligans used in Week {selectedWeek}.
           </p>
         ) : (
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {weekResults.map((entry) => (
-              <li
+              <MulliganReceiptRow
                 key={entry.id}
-                className="rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm leading-snug text-[var(--gwb-text)]"
-              >
-                {formatMulliganLedgerLine(entry)}
-              </li>
+                entry={entry}
+                onOpen={onNegativeMulliganOpen}
+              />
             ))}
           </ul>
         )}
       </div>
     </div>
+  )
+}
+
+function MulliganReceiptRow({
+  entry,
+  onOpen,
+}: {
+  entry: MulliganLedgerEntry
+  onOpen?: () => void
+}) {
+  const negative = entry.netImpact < 0
+  return (
+    <li
+      className="rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm"
+      onClick={() => {
+        if (negative) onOpen?.()
+      }}
+    >
+      <p className="font-medium text-[var(--gwb-text)]">{formatMulliganReceipt(entry)}</p>
+      <p className="mt-1 text-xs leading-snug text-[var(--gwb-muted)]">
+        {formatMulliganLedgerLine(entry)}
+      </p>
+    </li>
   )
 }

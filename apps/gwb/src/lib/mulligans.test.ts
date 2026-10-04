@@ -28,13 +28,13 @@ describe('mulligans', () => {
     expect(mulliganLabel(mulliganStatusForRoster(8))).toBe('Available')
   })
 
-  it('uses Hadi, +5.3, Mauricio note, and Matt failed tag', () => {
+  it('uses Hadi, +7.3, Mauricio note, and Matt failed tag', () => {
     const narking = mulliganForRoster(3)!
     const danny = mulliganForRoster(1)!
     const mauricio = mulliganForRoster(2)!
     const matt = mulliganForRoster(12)!
-    expect(formatMulliganLedgerLine(narking)).toContain('+5.3')
-    expect(formatMulliganLedgerLine(narking)).not.toContain('+7.3')
+    expect(formatMulliganLedgerLine(narking)).toContain('+7.30')
+    expect(formatMulliganLedgerLine(narking)).toContain('129.40')
     expect(formatMulliganLedgerLine(danny)).toContain('Hadi')
     expect(formatMulliganLedgerLine(mauricio)).toContain(
       'Won anyway; the swap actually cost 0.9.',
@@ -42,7 +42,7 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).toContain('Manny (Mnny)')
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).not.toContain('………')
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
-    expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toContain('+7.3')
+    expect(narking.netImpact).toBe(7.3)
   })
 
   it('respects throughWeek for status and week filters for results', () => {

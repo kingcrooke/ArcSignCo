@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { managerNickname } from '../lib/nicknames'
 import { playerLabel } from '../lib/playersCache'
 import type { ManagerWaiverRow, WaiverBoard, WaiverMove } from '../lib/waiverWire'
 import { HIT_LINE, MIN_ROSTERED_PICKUPS } from '../lib/waiverWire'
@@ -23,21 +24,40 @@ function hitLabel(row: ManagerWaiverRow): string {
   return `${row.hitHits}/${row.hitWeeks}`
 }
 
+function nicknameRow(row: ManagerWaiverRow): ManagerWaiverRow {
+  return {
+    ...row,
+    displayName: managerNickname(row.rosterId, row.displayName),
+    teamName: `${row.teamName} · @${row.displayName}`,
+  }
+}
+
+function nicknameBoard(board: WaiverBoard): WaiverBoard {
+  return {
+    ...board,
+    managers: board.managers.map(nicknameRow),
+    weeklyRanking: board.weeklyRanking.map(nicknameRow),
+    champion: board.champion ? nicknameRow(board.champion) : null,
+    cellar: board.cellar ? nicknameRow(board.cellar) : null,
+  }
+}
+
 function managerName(board: WaiverBoard, rosterId: number): string {
   return board.managers.find((m) => m.rosterId === rosterId)?.displayName ?? `Roster ${rosterId}`
 }
 
 export function WaiverPanel({
-  board,
+  board: sourceBoard,
   players,
   deferralNote,
   loadError,
 }: {
   board: WaiverBoard
-  players: PlayersMap
+  players: PlayersMap | null
   deferralNote: string | null
   loadError: string | null
 }) {
+  const board = useMemo(() => nicknameBoard(sourceBoard), [sourceBoard])
   const [managerId, setManagerId] = useState<number | 'all'>('all')
   const [status, setStatus] = useState<'all' | 'complete' | 'failed'>('all')
   const [kind, setKind] = useState<'all' | 'waiver' | 'free_agent'>('all')
@@ -53,7 +73,7 @@ export function WaiverPanel({
     })
   }, [allWeeks, board.moves, board.selectedWeek, kind, managerId, status])
 
-  const name = (id: string) => playerLabel(id, players)
+  const name = (id: string) => playerLabel(id, players ?? {})
 
   return (
     <div id="waiver-wire-panel" className="space-y-8">
@@ -61,6 +81,9 @@ export function WaiverPanel({
         <p className="rounded-lg border border-red-900/50 bg-red-950/30 px-3 py-2 text-sm text-red-200">
           Waiver moves didn’t load. {loadError}
         </p>
+      )}
+      {players == null && (
+        <p className="text-sm text-[var(--gwb-muted)]">Loading player names…</p>
       )}
       {deferralNote && (
         <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">

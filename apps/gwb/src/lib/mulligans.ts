@@ -92,6 +92,23 @@ export function mulligansUsedThroughWeek(throughWeek: number): number {
   return MULLIGAN_LEDGER_ENTRIES.filter((e) => e.week <= throughWeek).length
 }
 
+export function mulligansFlippedThroughWeek(throughWeek: number): number {
+  return MULLIGAN_LEDGER_ENTRIES.filter(
+    (e) => e.week <= throughWeek && e.flipped,
+  ).length
+}
+
+export function formatMulliganReceipt(entry: MulliganLedgerEntry): string {
+  const manager = entry.managerShort ?? entry.manager
+  const outNote = entry.out.note ? ` (${entry.out.note})` : ''
+  const result = entry.won ? 'W' : 'L'
+  return (
+    `${manager} · OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote} → ` +
+    `IN ${entry.in.name} ${formatScore(entry.in.points)} · ` +
+    `Net ${formatSignedImpact(entry.netImpact)} · ${result} ${formatScore(entry.scoreWith)}–${formatScore(entry.opponentScore)}`
+  )
+}
+
 export function mulliganLabel(status: MulliganStatus): string {
   if (!status.used) return 'Available'
   return status.usedDetail ? `Used — ${status.usedDetail}` : 'Used'

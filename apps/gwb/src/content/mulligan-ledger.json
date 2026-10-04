@@ -1,6 +1,6 @@
 {
   "throughWeek": 3,
-  "weekNote": "Week 4: none so far.",
+  "weekNote": "",
   "entries": [
     {
       "id": "w1-mauricio",
@@ -60,9 +60,9 @@
       "team": "Put em down Jeanty",
       "out": { "name": "De'Von Achane", "position": "RB", "points": 1.7, "note": "knee" },
       "in": { "name": "Travis Etienne", "position": "RB", "points": 9.0 },
-      "netImpact": 5.3,
+      "netImpact": 7.3,
       "scoreWith": 136.7,
-      "scoreWithout": 131.4,
+      "scoreWithout": 129.4,
       "opponentScore": 167.66,
       "opponentLabel": "Darkseid Jackson",
       "won": false,

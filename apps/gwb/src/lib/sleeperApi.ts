@@ -64,8 +64,11 @@ export async function fetchAllMatchupsThroughWeek(
   leagueId = LEAGUE_ID,
 ): Promise<Map<number, SleeperMatchup[]>> {
   const map = new Map<number, SleeperMatchup[]>()
-  for (let w = 1; w <= throughWeek; w++) {
-    const rows = await fetchMatchups(w, leagueId)
+  const weeks = Array.from({ length: throughWeek }, (_, i) => i + 1)
+  const results = await Promise.all(
+    weeks.map((w) => fetchMatchups(w, leagueId).then((rows) => ({ w, rows }))),
+  )
+  for (const { w, rows } of results) {
     if (!rows?.length) continue
     const hasScores = rows.some((m) => m.points > 0 || m.starters?.length)
     if (hasScores) map.set(w, rows)

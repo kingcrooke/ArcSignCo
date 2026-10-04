@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState, type TouchEvent } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+  type TouchEvent,
+} from 'react'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
 
@@ -7,11 +14,20 @@ type Props = {
   index: number
   onClose: () => void
   onIndexChange: (index: number) => void
+  returnFocusRef?: RefObject<HTMLElement | null>
 }
 
 const SWIPE_THRESHOLD_PX = 48
+const FOCUSABLE =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
-export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) {
+export function SlideLightbox({
+  slides,
+  index,
+  onClose,
+  onIndexChange,
+  returnFocusRef,
+}: Props) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   const touchStartX = useRef<number | null>(null)
@@ -32,8 +48,9 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
     dialogRef.current?.focus()
     return () => {
       document.body.style.overflow = prevOverflow
+      returnFocusRef?.current?.focus()
     }
-  }, [])
+  }, [returnFocusRef])
 
   useEffect(() => {
     setImageReady(false)
@@ -50,6 +67,20 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
       } else if (e.key === 'ArrowRight') {
         e.preventDefault()
         goNext()
+      } else if (e.key === 'Tab' && dialogRef.current) {
+        const nodes = [
+          ...dialogRef.current.querySelectorAll<HTMLElement>(FOCUSABLE),
+        ].filter((el) => !el.hasAttribute('disabled'))
+        if (!nodes.length) return
+        const first = nodes[0]
+        const last = nodes[nodes.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
       }
     }
     window.addEventListener('keydown', onKey)
@@ -100,14 +131,19 @@ export function SlideLightbox({ slides, index, onClose, onIndexChange }: Props) 
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <p className="truncate text-sm text-white/80">
-          {index + 1} / {slides.length}
-          <span className="hidden sm:inline"> · {slide.title}</span>
+      <div className="flex shrink-0 flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6">
+        <p className="text-sm text-white/80">
+          <span className="block sm:inline">
+            {index + 1} / {slides.length}
+          </span>
+          <span className="mt-0.5 block truncate sm:mt-0 sm:inline">
+            <span className="hidden sm:inline"> · </span>
+            {slide.title}
+          </span>
         </p>
         <button
           type="button"
-          className="rounded-lg border border-white/20 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
+          className="self-end rounded-lg border border-white/20 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)] sm:self-auto"
           onClick={onClose}
           aria-label="Close slide viewer"
         >

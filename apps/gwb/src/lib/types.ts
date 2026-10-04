@@ -132,5 +132,5 @@ export interface TeamSideRecap {
   teamName: string
   points: number
   topScorer: { name: string; points: number } | null
-  benchMiss: { name: string; points: number; starterPoints: number } | null
+  benchMiss: { name: string; gain: number; message: string } | null
 }

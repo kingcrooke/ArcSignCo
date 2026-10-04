@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   getWeekGraphicsSections,
   getWeekGraphicsSlides,
 } from '../lib/weekGraphics'
+import type { GraphicsSectionKind } from '../lib/weekGraphics'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
 import { SlideLightbox } from './SlideLightbox'
@@ -15,17 +16,20 @@ function GraphicThumb({
   indexInWeek,
   onOpen,
   eager,
+  buttonRef,
 }: {
   slide: PublishedSlide
   indexInWeek: number
   onOpen: (indexInWeek: number) => void
   eager: boolean
+  buttonRef?: React.RefObject<HTMLButtonElement | null>
 }) {
   const webp = slideAssetUrl(slide.basename, 'thumb', 'webp')
   const jpg = slideAssetUrl(slide.basename, 'thumb', 'jpg')
 
   return (
     <button
+      ref={buttonRef}
       type="button"
       className="group block w-full overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] text-left transition hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
       onClick={() => onOpen(indexInWeek)}
@@ -49,10 +53,21 @@ function GraphicThumb({
   )
 }
 
-export function WeekGraphicsPanel({ week }: { week: number }) {
+export function WeekGraphicsPanel({
+  week,
+  initialSlideId,
+  onSlideUrlChange,
+  onDeckKindChange,
+}: {
+  week: number
+  initialSlideId?: string | null
+  onSlideUrlChange?: (slideId: string | null) => void
+  onDeckKindChange?: (kind: GraphicsSectionKind | null) => void
+}) {
   const sections = useMemo(() => getWeekGraphicsSections(week), [week])
   const weekSlides = useMemo(() => getWeekGraphicsSlides(week), [week])
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const openButtonRef = useRef<HTMLButtonElement | null>(null)
 
   const indexById = useMemo(() => {
     const map = new Map<string, number>()
@@ -61,10 +76,36 @@ export function WeekGraphicsPanel({ week }: { week: number }) {
   }, [weekSlides])
 
   const open = useCallback(
-    (indexInWeek: number) => setLightboxIndex(indexInWeek),
-    [],
+    (indexInWeek: number) => {
+      setLightboxIndex(indexInWeek)
+      const slide = weekSlides[indexInWeek]
+      onSlideUrlChange?.(slide?.id ?? null)
+      const section = sections.find((s) => s.slides.some((x) => x.id === slide?.id))
+      onDeckKindChange?.(section?.kind ?? null)
+    },
+    [weekSlides, onSlideUrlChange, onDeckKindChange, sections],
   )
-  const close = useCallback(() => setLightboxIndex(null), [])
+
+  const close = useCallback(() => {
+    setLightboxIndex(null)
+    onSlideUrlChange?.(null)
+    onDeckKindChange?.(null)
+  }, [onSlideUrlChange, onDeckKindChange])
+
+  useEffect(() => {
+    if (!initialSlideId) return
+    const idx = indexById.get(initialSlideId)
+    if (idx != null) open(idx)
+  }, [initialSlideId, indexById, open])
+
+  const copySlideLink = (slide: PublishedSlide) => {
+    const params = new URLSearchParams(window.location.search)
+    params.set('week', String(week))
+    params.set('tab', 'gallery')
+    params.set('slide', slide.id)
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`
+    void navigator.clipboard?.writeText(url)
+  }
 
   if (!sections.length) {
     return (
@@ -78,7 +119,7 @@ export function WeekGraphicsPanel({ week }: { week: number }) {
     <div className="space-y-6">
       <p className="text-sm text-[var(--gwb-muted)]">
         Week {week} graphics. Tap a card for full size; swipe or use arrows in the
-        viewer to move through this week only.
+        viewer. Use &quot;Copy link&quot; on a card to deep-link this slide.
       </p>
 
       <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
@@ -101,14 +142,23 @@ export function WeekGraphicsPanel({ week }: { week: number }) {
             >
               {section.slides.map((slide, i) => {
                 const indexInWeek = indexById.get(slide.id) ?? 0
+                const isDeepLinkTarget = initialSlideId === slide.id
                 return (
-                  <li key={slide.id}>
+                  <li key={slide.id} className="space-y-1">
                     <GraphicThumb
                       slide={slide}
                       indexInWeek={indexInWeek}
                       onOpen={open}
                       eager={i < 4 && section.kind === sections[0]?.kind}
+                      buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                     />
+                    <button
+                      type="button"
+                      className="w-full text-xs text-[var(--gwb-accent)] underline"
+                      onClick={() => copySlideLink(slide)}
+                    >
+                      Copy link
+                    </button>
                   </li>
                 )
               })}
@@ -122,7 +172,16 @@ export function WeekGraphicsPanel({ week }: { week: number }) {
           slides={weekSlides}
           index={lightboxIndex}
           onClose={close}
-          onIndexChange={setLightboxIndex}
+          onIndexChange={(idx) => {
+            setLightboxIndex(idx)
+            const slide = weekSlides[idx]
+            onSlideUrlChange?.(slide?.id ?? null)
+            const section = sections.find((s) =>
+              s.slides.some((x) => x.id === slide?.id),
+            )
+            onDeckKindChange?.(section?.kind ?? null)
+          }}
+          returnFocusRef={openButtonRef}
         />
       )}
     </div>
