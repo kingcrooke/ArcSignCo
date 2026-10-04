@@ -11,6 +11,11 @@ test('loads real GWB league data and core sections', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'IG', exact: true })).toHaveCount(0)
   await expect(page.getByRole('button', { name: 'Power', exact: true })).toHaveCount(0)
 
+  await page.getByRole('button', { name: 'Live' }).click()
+  await expect(page.locator('#live-scoreboard-panel')).toBeVisible({
+    timeout: 90_000,
+  })
+
   await page.getByRole('button', { name: 'Graphics' }).click()
   await expect(page.getByRole('heading', { name: /Week \d+ graphics/i })).toBeVisible()
 

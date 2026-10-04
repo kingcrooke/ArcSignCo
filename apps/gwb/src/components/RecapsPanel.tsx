@@ -1,7 +1,6 @@
 import { allPlayLine } from '../lib/allPlay'
 import { buildWeekReceipt } from '../lib/receiptOfWeek'
 import type { MatchupRecap, SleeperMatchup } from '../lib/types'
-import { LiveScoresStrip } from './LiveScoresStrip'
 import { ReceiptOfWeek } from './ReceiptOfWeek'
 
 export function RecapsPanel({
@@ -10,7 +9,6 @@ export function RecapsPanel({
   hasScores,
   isLive,
   weekMatchups,
-  teams,
   playersLoading,
 }: {
   recaps: MatchupRecap[]
@@ -18,7 +16,6 @@ export function RecapsPanel({
   hasScores: boolean
   isLive: boolean
   weekMatchups?: SleeperMatchup[]
-  teams: Map<number, import('../lib/types').TeamInfo>
   playersLoading?: boolean
 }) {
   if (!hasScores) {
@@ -42,13 +39,11 @@ export function RecapsPanel({
 
   return (
     <div className="space-y-4">
-      {isLive && weekMatchups && (
-        <LiveScoresStrip matchups={weekMatchups} teams={teams} />
-      )}
       {receipt && !isLive && <ReceiptOfWeek receipt={receipt} />}
       {!recaps.length && isLive && (
         <p className="text-sm text-[var(--gwb-muted)]">
-          Live scores above — full recap cards appear when the week is final.
+          Live matchup lineups are on the Live tab — full recap cards appear when
+          the week is final.
         </p>
       )}
       {!isLive &&

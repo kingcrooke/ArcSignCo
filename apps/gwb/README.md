@@ -48,5 +48,5 @@ Commit the updated `gwb-fe006a16/` folder with your PR.
 
 ## Data notes
 
-- NFL player names are loaded once from `/players/nfl`, trimmed to needed fields, and cached in `localStorage` for seven days.
+- NFL player names are loaded once from `/players/nfl`, trimmed to needed fields, and cached in `localStorage` for 24 hours.
 - Matchups are fetched per week through the current scored leg; empty or future weeks show a friendly empty state.

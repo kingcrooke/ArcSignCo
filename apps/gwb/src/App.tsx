@@ -8,6 +8,7 @@ import { MulligansPanel } from './components/MulligansPanel'
 import { SoundToggle } from './components/SoundToggle'
 import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
 import { StandingsPanel } from './components/StandingsPanel'
+import { LiveScoreboardPanel } from './components/LiveScoreboardPanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
 import {
@@ -28,6 +29,7 @@ import { type AppTab } from './hooks/useUrlState'
 
 const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
+  { id: 'live', label: 'Live' },
   { id: 'gallery', label: 'Graphics' },
   { id: 'recaps', label: 'Recaps' },
   { id: 'mulligans', label: 'Mulligans' },
@@ -37,6 +39,7 @@ const BASE_TABS: { id: AppTab; label: string }[] = [
 
 const TAB_IDS: AppTab[] = [
   'standings',
+  'live',
   'gallery',
   'recaps',
   'mulligans',
@@ -127,7 +130,7 @@ export default function App() {
   }, [data?.selectedWeek, tab, slideParam, data])
 
   useEffect(() => {
-    if (tab === 'recaps' || tab === 'waiver') data?.ensurePlayers()
+    if (tab === 'recaps' || tab === 'waiver' || tab === 'live') data?.ensurePlayers()
   }, [tab, data])
 
   useEffect(() => {
@@ -246,6 +249,30 @@ export default function App() {
             })}
           </nav>
 
+          {tab === 'live' && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold">
+                Week {data.selectedWeek} scoreboard
+                {data.isSelectedWeekLive && (
+                  <span className="ml-2 text-sm font-normal text-amber-300">
+                    LIVE
+                  </span>
+                )}
+              </h2>
+              <LiveScoreboardPanel
+                week={data.selectedWeek}
+                league={data.league}
+                nflState={data.nflState}
+                teams={data.teams}
+                players={data.players}
+                playersLoading={data.playersLoading}
+                ensurePlayers={data.ensurePlayers}
+                initialMatchups={data.matchupsByWeek.get(data.selectedWeek)}
+                onMatchupsUpdated={data.updateWeekMatchups}
+                isActive={tab === 'live'}
+              />
+            </section>
+          )}
           {tab === 'standings' && (
             <section>
               <h2 className="mb-3 text-lg font-semibold">
@@ -302,7 +329,6 @@ export default function App() {
                   )}
                   isLive={data.isSelectedWeekLive}
                   weekMatchups={data.matchupsByWeek.get(data.selectedWeek)}
-                  teams={data.teams}
                   playersLoading={data.playersLoading}
                 />
               </div>
