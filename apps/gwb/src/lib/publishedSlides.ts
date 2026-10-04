@@ -9,9 +9,34 @@ export type PublishedSlide = {
 /** Slides withheld from the gallery (see PR). */
 export const HELD_BACK_SLIDES: { id: string; reason: string }[] = [
   {
+    id: 'vs-m3-hadi-manny',
+    reason:
+      'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',
+  },
+  {
+    id: 'w4-slide-06',
+    reason:
+      'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',
+  },
+  {
+    id: 'w4-slide-10',
+    reason:
+      'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',
+  },
+  {
+    id: 'w4-slide-14',
+    reason:
+      'Hady→Hadi repair visible at 100% (glyph swap); held until full-line re-typeset passes QA.',
+  },
+  {
     id: 'w4-slide-16',
     reason:
-      'Closing paragraph re-typeset and footer band still differ from untouched W4 slides at 100% zoom (body weight + bottom art).',
+      'Hady→Hadi + closing/footer re-layout not yet indistinguishable from untouched W4 slides.',
+  },
+  {
+    id: 'results-w1-m2',
+    reason:
+      'FINAL headline Hady→Hadi glyph repair visible at 100% (needs full line re-typeset).',
   },
   {
     id: 'results-w2-m1',
