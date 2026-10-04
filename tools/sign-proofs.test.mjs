@@ -39,11 +39,11 @@ const fixedNow = () => new Date("2026-10-03T15:04:05.000Z");
 let seq = 0;
 const makeId = () => (++seq).toString(16).padStart(32, "0");
 
-function createRequest(sheet, images = { day: JPEG, night: JPEG, art: JPEG }) {
+function createRequest(sheet, images = { day: JPEG, night: JPEG, art: JPEG }, headers = {}) {
   const form = new FormData();
   form.set("sheet", JSON.stringify(sheet));
   for (const [k, v] of Object.entries(images)) form.set(k, new Blob([v], { type: "image/jpeg" }), `${k}.jpg`);
-  return new Request("https://example.test/api/sign-proofs", { method: "POST", body: form });
+  return new Request("https://example.test/api/sign-proofs", { method: "POST", body: form, headers });
 }
 const baseSheet = {
   typeId: "halo",
@@ -80,7 +80,7 @@ test("create stores images and a server-priced sheet under v1/<context>/<id>/", 
   assert.equal(sheet.price.low, undefined);
   assert.equal(sheet.price.high, undefined);
   assert.doesNotMatch(JSON.stringify(sheet.price), /\$\d/);
-  assert.match(sheet.price.message, /price is prepared after a site survey/i);
+  assert.match(sheet.price.message, /formal written estimate after a site survey/i);
   assert.equal(sheet.createdAt, "2026-10-03T15:04:05.000Z");
   assert.equal(sheet.ns, undefined);
 });
@@ -90,6 +90,29 @@ test("proofs from one deploy context are not visible from another", async () => 
   const { id } = await (await call(store, createRequest(baseSheet), {}, "deploy-preview")).json();
   assert.equal((await call(store, get(`/api/sign-proofs/${id}`), { id }, "deploy-preview")).status, 200);
   assert.equal((await call(store, get(`/api/sign-proofs/${id}`), { id }, "production")).status, 404);
+});
+
+test("the deep link's source tag is stored, cleaned, with the tab and type", async () => {
+  const store = memoryStore();
+  const { sheet } = await (await call(store, createRequest({ ...baseSheet, typeId: "vinyl-door-hours", src: "Instagram Bio<script>" }), {})).json();
+  assert.equal(sheet.src, "instagrambioscript");
+  assert.equal(sheet.category, "vinyl");
+  assert.equal(sheet.typeId, "vinyl-door-hours");
+  assert.equal(sheet.test, undefined);
+  const plain = await (await call(store, createRequest(baseSheet), {})).json();
+  assert.equal(plain.sheet.src, "");
+});
+
+test("test proofs are refused on production and marked as tests elsewhere", async () => {
+  const store = memoryStore();
+  const before = store.data.size;
+  assert.equal((await call(store, createRequest({ ...baseSheet, test: true }), {}, "production")).status, 403);
+  assert.equal((await call(store, createRequest(baseSheet, undefined, { "X-Sign-Mockup-Test": "1" }), {}, "production")).status, 403);
+  assert.equal(store.data.size, before, "nothing stored");
+  const res = await call(store, createRequest(baseSheet, undefined, { "X-Sign-Mockup-Test": "1" }), {}, "deploy-preview");
+  assert.equal(res.status, 201);
+  assert.equal((await res.json()).sheet.test, true);
+  assert.equal((await call(store, createRequest(baseSheet), {}, "production")).status, 201, "real proofs still work on production");
 });
 
 test("create rejects bad input", async () => {

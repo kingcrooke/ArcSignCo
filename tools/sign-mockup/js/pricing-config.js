@@ -29,8 +29,8 @@ export const PLACEHOLDER = true;
 export const RATES_VERSION = "placeholder-2026-10-03b";
 export const RATES_LABEL = "Preliminary estimate";
 
-export const NO_PRICE_MESSAGE = "A price is prepared after a site survey. This is a concept only. It is not a quote or a contract.";
-export const DISCLAIMER_FULL = "Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed.";
+export const NO_PRICE_MESSAGE = "Pricing comes in a formal written estimate after a site survey. This preview is a concept only.";
+export const DISCLAIMER_FULL = "Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through our licensed partners.";
 export const RATES_NOTE = DISCLAIMER_FULL;
 export const TAX_NOTE = "Sales tax extra where it applies (NYC combined rate on the final invoice).";
 export const VALID_DAYS = 30;

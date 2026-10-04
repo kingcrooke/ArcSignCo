@@ -219,8 +219,8 @@ download a three-page PDF or send a phone approval link.
 - **Preliminary estimate**: every price number (rows, minimums, illumination adders, extra lines,
   rounding, the range rule, tax line and valid days) lives in `js/pricing-config.js`; a category
   module only maps each type id to a row. The numbers are **placeholders** and `PLACEHOLDER = true`,
-  so no dollar amount shows anywhere (tool, proof page, PDF, server): they show "A price is prepared
-  after a site survey" and the full disclaimer. Put Arc's rates in, bump `RATES_VERSION` and set
+  so no dollar amount shows anywhere (tool, proof page, PDF, server): they show "Pricing comes in a
+  formal written estimate after a site survey" and the full disclaimer. Put Arc's rates in, bump `RATES_VERSION` and set
   `PLACEHOLDER = false` to show "Preliminary estimate" ranges once the scale is set.
 - **Approval links**: `netlify/functions/sign-proofs.mjs` stores proofs in the Netlify Blobs store
   `arc-sign-mockup-proofs` under `v1/<deploy context>/<id>/`, so preview test proofs never mix with

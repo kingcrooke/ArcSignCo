@@ -2,16 +2,17 @@
 import { defineCategory } from "./define.js";
 import { ledDiagram } from "./led/diagrams.js";
 import {
-  defaultLedOptions, sanitizeLedOptions, ledOptionFields, ledDetails, parseSize,
+  defaultLedOptions, sanitizeLedOptions, ledOptionFields, ledDetails, parseSize, placeWidthIn,
 } from "./led/options.js";
 import { kindAspect } from "../kinds.js";
 
-const ELECTRICAL_NOTICE = "Electrical coordination is required for power, data and any battery backup. Arc confirms feeds and mounting during the site survey.";
+const ELECTRICAL_NOTICE = "Power, data and any battery backup may require electrical coordination. Arc confirms feeds and mounting during the site survey.";
 
 export default defineCategory({
   id: "led",
   label: "LED Displays",
   noun: "LED display",
+  titleNoun: "LED display",
   title: "Choose an LED display",
   intro: "Programmable message centers, video boards and LED neon for storefronts. Switch to night view to see the glow.",
   groups: [
@@ -28,7 +29,7 @@ export default defineCategory({
       summary: "A programmable full-color cabinet for scrolling messages, logos and promotions.",
       notice: ELECTRICAL_NOTICE,
       parts: ["Aluminum cabinet", "LED tile modules", "Power and data supply", "Wall or monument mount", "Internally lit face"],
-      render: { kind: "cabinet", depth: 6, gap: 0, frame: 1.25, frameColor: "#24262b", face: "panel" },
+      render: { kind: "cabinet", depth: 6, gap: 0, frame: 1.25, frameColor: "#24262b", face: "pixels", pitch: 1 },
       options: ["panel", "frame", "light"],
       aspect: 0.5,
     },
@@ -40,7 +41,7 @@ export default defineCategory({
       summary: "A high-brightness video wall cabinet for outdoor or storefront viewing distances.",
       notice: ELECTRICAL_NOTICE,
       parts: ["Ventilated aluminum cabinet", "Outdoor-rated LED tiles", "Mounting frame to structure", "Power distribution", "Internally lit face"],
-      render: { kind: "cabinet", depth: 8, gap: 0, frame: 1.5, frameColor: "#1b1c1f", face: "panel" },
+      render: { kind: "cabinet", depth: 8, gap: 0, frame: 1.5, frameColor: "#1b1c1f", face: "pixels", pitch: 1.25 },
       options: ["panel", "frame", "light"],
       aspect: 0.58,
     },
@@ -53,7 +54,7 @@ export default defineCategory({
       notice: ELECTRICAL_NOTICE,
       pinHint: "Pin the four corners on the glass opening behind the display.",
       parts: ["Transparent LED mesh or panel", "Hung behind glass", "High-brightness modules", "Low-profile power feed", "Internally lit face"],
-      render: { kind: "cabinet", depth: 3, gap: 1, frame: 0.5, frameColor: "#24262b", face: "panel" },
+      render: { kind: "cabinet", depth: 3, gap: 1, frame: 0.5, frameColor: "#24262b", face: "pixels", pitch: 0.6, mesh: true },
       options: ["panel", "frame", "light"],
       aspect: 1.2,
     },
@@ -77,7 +78,7 @@ export default defineCategory({
       summary: "A narrow scrolling message strip over a door or window.",
       notice: ELECTRICAL_NOTICE,
       parts: ["Aluminum extrusion", "Single-line LED modules", "Power supply in line", "Surface mount", "Internally lit face"],
-      render: { kind: "cabinet", depth: 4, gap: 0, frame: 0.75, frameColor: "#24262b", face: "panel" },
+      render: { kind: "cabinet", depth: 4, gap: 0, frame: 0.75, frameColor: "#24262b", face: "pixels", pitch: 0.5 },
       options: ["panel", "frame", "light"],
       aspect: 0.14,
     },
@@ -96,6 +97,7 @@ export default defineCategory({
   spillReach: 1.4,
   ui: {
     tabLabel: "LED",
+    placeWidthIn,
     textLabel: "Display text",
     placeTip: "Drag the four corner handles onto the wall or window area. Switch to <strong>Night</strong> to see the LED glow and spill on the facade.",
     flatLabel: "The LED display artwork, flat",

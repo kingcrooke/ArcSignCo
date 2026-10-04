@@ -7,12 +7,13 @@ import {
 import { buildKind, kindFaceArt, kindAspect } from "../kinds.js";
 import { tactileFace } from "./ada/face.js";
 
-const LAYOUT_NOTICE = "Layout preview only. Tactile copy and Grade 2 Braille spacing are confirmed in shop drawings before fabrication. This tool does not determine ADA or code compliance.";
+const LAYOUT_NOTICE = "Layout preview prepared for architect and inspector review. Tactile copy and Grade 2 Braille spacing are confirmed in shop drawings before fabrication, and code requirements are confirmed during survey.";
 
 export default defineCategory({
   id: "ada",
   label: "ADA & Code Signs",
   noun: "sign",
+  titleNoun: "ADA and code sign",
   title: "Choose a code-related sign",
   intro: "Tactile, Braille and life-safety sign layouts for architect and inspector review. Arc confirms final details before ordering.",
   groups: [
@@ -64,8 +65,8 @@ export default defineCategory({
       group: "life",
       name: "Exit / egress sign",
       lighting: "internal",
-      summary: "An internally lit exit cabinet. Electrical coordination and backup power are confirmed for the project.",
-      notice: `${LAYOUT_NOTICE} Electrical coordination is required for illuminated exits.`,
+      summary: "An internally lit exit cabinet. Electrical coordination and backup power may be required and are confirmed during survey.",
+      notice: `${LAYOUT_NOTICE} Illuminated exits may require electrical coordination.`,
       parts: ["Aluminum cabinet", "Translucent red or green face", "LED modules inside", "Battery backup optional", "Wiring to the line"],
       render: { kind: "cabinet", depth: 4, gap: 0, frame: 0.75, frameColor: "#24262b", face: "panel" },
       options: ["panel", "frame"],

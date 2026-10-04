@@ -8,10 +8,10 @@ const DRAW = {
     s.led(56, 70); s.led(56, 100); s.led(56, 130);
     s.rays(62, 95, 1, 60, 0.4);
     s.label("LED message cabinet", 56, 95, 34)
-      .label("Programmable full-color modules", 70, 75, 58)
+      .label("Full-color LED modules", 70, 75, 58)
       .label("Aluminum cabinet", 51, 90, 82)
       .label("Power and data feed", 56, 120, 108)
-      .label("Electrical coordination required", 56, 140, 140);
+      .label("Electrical coordination", 56, 140, 140);
     return "Section";
   },
   "led-video-board"(s) {
@@ -22,10 +22,10 @@ const DRAW = {
     s.led(58, 80); s.led(58, 110);
     s.rays(64, 95, 1, 70, 0.45);
     s.label("Video board cabinet", 58, 95, 34)
-      .label("High-brightness LED tiles", 70, 70, 58)
+      .label("Bright LED tiles", 70, 70, 58)
       .label("Ventilated depth", 50, 100, 82)
-      .label("Mounting frame to structure", 48, 130, 108)
-      .label("Electrical coordination required", 58, 145, 140);
+      .label("Frame to structure", 48, 130, 108)
+      .label("Electrical coordination", 58, 145, 140);
     return "Section";
   },
   "led-window"(s) {
@@ -38,7 +38,7 @@ const DRAW = {
       .label("See-through LED mesh", 62, 70, 58)
       .label("Hung behind glass", 48, 60, 82)
       .label("Brightness for daylight", 62, 110, 108)
-      .label("Electrical coordination required", 50, 130, 140);
+      .label("Electrical coordination", 50, 130, 140);
     return "Section";
   },
   "led-open-neon"(s) {
@@ -47,8 +47,8 @@ const DRAW = {
     s.path("M52 78 q20-18 40 0 t20 0", "none", "#ff4a8a", 2.2);
     s.rays(72, 78, 1, 50, 0.5);
     s.label("LED neon flex", 72, 78, 34)
-      .label("Open line on clear backer", 72, 65, 58)
-      .label("Low-voltage power supply", 62, 100, 82)
+      .label("Line on clear backer", 72, 65, 58)
+      .label("Low-voltage supply", 62, 100, 82)
       .label("Standoffs optional", 50, 90, 108)
       .label("Glows at night", 72, 110, 132);
     return "Section";
@@ -63,7 +63,7 @@ const DRAW = {
       .label("Scrolling message line", 70, 70, 58)
       .label("Over door or window", 48, 62, 82)
       .label("Aluminum extrusion", 51, 85, 108)
-      .label("Electrical coordination required", 55, 95, 132);
+      .label("Electrical coordination", 55, 95, 132);
     return "Section";
   },
 };

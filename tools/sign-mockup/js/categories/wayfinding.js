@@ -10,6 +10,7 @@ export default defineCategory({
   id: "wayfinding",
   label: "Interior Wayfinding",
   noun: "wayfinding sign",
+  titleNoun: "Interior wayfinding sign",
   title: "Choose a wayfinding sign",
   intro: "Lobby, directory and room signs for corridors and elevators. The drawings are sections, not to scale.",
   groups: [

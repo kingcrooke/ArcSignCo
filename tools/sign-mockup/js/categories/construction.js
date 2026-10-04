@@ -2,7 +2,7 @@
 import { defineCategory } from "./define.js";
 import { constructionDiagram } from "./construction/diagrams.js";
 import {
-  defaultConstructionOptions, sanitizeConstructionOptions, constructionOptionFields, constructionDetails, parseSize,
+  defaultConstructionOptions, sanitizeConstructionOptions, constructionOptionFields, constructionDetails, parseSize, placeWidthIn,
 } from "./construction/options.js";
 import { kindAspect } from "../kinds.js";
 
@@ -10,6 +10,7 @@ export default defineCategory({
   id: "construction",
   label: "Construction Signs",
   noun: "construction sign",
+  titleNoun: "Construction sign",
   title: "Choose a construction sign",
   intro: "Printed boards, parapet panels and safety notices for job sites. The drawings are sections, not to scale.",
   groups: [
@@ -79,8 +80,8 @@ export default defineCategory({
       group: "safety",
       name: "Permit posting board",
       lighting: "none",
-      summary: "The owner, architect and contractor board required at the site. Wording is confirmed with the permit holder after review.",
-      notice: "Required wording is confirmed with the permit holder after a site review. This mockup does not set permit text.",
+      summary: "The owner, architect and contractor board a job site may require. Wording is confirmed with the permit holder during survey.",
+      notice: "Posting rules may require specific wording, confirmed with the permit holder during survey. This mockup does not set permit text.",
       parts: ["Aluminum composite panel", "Printed permit layout", "Standoffs into the wall", "Laminated face", "No lighting"],
       render: { kind: "panel", gap: 1, thick: 0.25, standoffs: true, face: "panel" },
       options: ["panel"],
@@ -99,6 +100,7 @@ export default defineCategory({
   },
   ui: {
     tabLabel: "Construction",
+    placeWidthIn,
     textLabel: "Board text",
     placeTip: "Drag the four corner handles onto the fence, hoarding or wall. Drag inside to move the board. Switch to <strong>Night</strong> to see ambient light on the face.",
     flatLabel: "The construction sign artwork, flat",

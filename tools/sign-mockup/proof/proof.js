@@ -1,7 +1,8 @@
 // Phone proof page for a mockup (any category): shows the shared day/night views, the construction, the
 // preliminary range, and lets the client comment, approve and download the PDF.
 // The proof id travels in the URL fragment, so it never reaches server logs or Referer headers.
-import { getType, describe, diagramSvg, categoryOf } from "../js/catalog.js";
+import { getType, describe, diagramSvg, categoryOf, litWith } from "../js/catalog.js";
+import { mountEstimateForm } from "../js/estimate-form.js";
 import { priceView } from "../js/pricing.js";
 import { buildSignPdf } from "../js/proof-pdf.js";
 
@@ -36,10 +37,16 @@ async function api(path, body) {
   return data;
 }
 
+// Test proofs, ?test=1 and automated browsers never email Arc.
+const isTestRun = (sheet, search = location.search, webdriver = navigator.webdriver) =>
+  !!sheet?.test || new URLSearchParams(search).get("test") === "1" || !!webdriver;
+
 // Optional notification through Netlify Forms; the proof is saved whether or not this lands.
 function notifyArc(event, name, message) {
+  if (isTestRun(sheet)) return;
   const body = new URLSearchParams({
     "form-name": "sign-proof-activity", "bot-field": "", event, proof: location.href, project: sheet.project || "", name: name || "", message: message || "",
+    tab: sheet.category || "", type: sheet.typeId || "", src: sheet.src || "",
   });
   fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body }).catch(() => {});
 }
@@ -61,7 +68,7 @@ function mailtoHref() {
   const subject = `${Noun} proof${sheet.project ? `: ${sheet.project}` : ""}`;
   const lines = [
     "Hi Arc,", "", `About this ${noun} proof: ${location.href}`, "",
-    sheet.approval ? `Concept approval, a request for a formal estimate (not a contract): ${sheet.approval.name}, ${when(sheet.approval.at)}.` : "", "",
+    sheet.approval ? `Concept approved, request a formal estimate: ${sheet.approval.name}, ${when(sheet.approval.at)}.` : "", "",
   ];
   return `mailto:arc@arcsignco.com?cc=jc@arcsignco.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
 }
@@ -70,10 +77,21 @@ function renderApproval() {
   const a = sheet.approval;
   $("approvedBox").hidden = !a;
   $("approveForm").hidden = !!a;
-  $("approvalTitle").textContent = a ? "Concept approved" : "Approve this concept";
-  if (a) $("approvedText").textContent = `Concept approved by ${a.name} on ${when(a.at)}. This asks Arc for a formal estimate. It is not a contract.`;
+  $("approvalTitle").textContent = a ? "Concept approved" : "Review this concept";
+  if (a) $("approvedText").textContent = `${a.name} approved the concept on ${when(a.at)} and asked Arc for a formal written estimate.`;
   $("emailArc").href = mailtoHref();
+  $("estimateCard").hidden = !a;
+  if (a) {
+    estimate ||= mountEstimateForm($("estimateForm"), {
+      context: () => ({
+        typeId: sheet.typeId, src: sheet.src, test: sheet.test, proof: location.href, name: sheet.approval?.name,
+        widthIn: sheet.size?.width, heightIn: sheet.size?.height, lit: litWith(getType(sheet.typeId), sheet.options),
+      }),
+    });
+    estimate.prefill();
+  }
 }
+let estimate = null;
 
 function renderComments() {
   const list = $("comments");
@@ -100,7 +118,7 @@ function render() {
   const info = describe(type, sheet.options, sheet.size);
   const cat = categoryOf(type);
   document.title = `${sheet.project || `${cat.Noun} mockup`} for approval | Arc Signage Co`;
-  $("title").textContent = sheet.project || `Storefront ${cat.noun}`;
+  $("title").textContent = sheet.project || cat.titleNoun;
   $("eyebrow").textContent = `${cat.Noun} mockup for approval`;
   $("detailsTitle").textContent = `The ${cat.noun}`;
   $("typeLabel").textContent = cat.typeLabel;
@@ -180,7 +198,7 @@ $("approveForm").addEventListener("submit", async e => {
   try {
     sheet = await api("/approve", { name });
     renderApproval();
-    notifyArc("approved", name, `Concept approved on ${when(sheet.approval.at)} (request for a formal estimate)`);
+    notifyArc("approved", name, `Concept approved, request a formal estimate (${when(sheet.approval.at)})`);
     $("approvedBox").focus?.();
   } catch (err) {
     if (err.status === 409) { sheet = await api("").catch(() => sheet); renderApproval(); }

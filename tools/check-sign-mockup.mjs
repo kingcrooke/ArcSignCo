@@ -92,6 +92,14 @@ for (const id of NEW_CATS) {
   }
 }
 check(NEW_CATS.every(id => !CATEGORIES.find(c => c.id === id).examples.length), "live categories are not placeholders");
+// "How it's built" labels start at x = 214 on a 320-wide card; anything past the edge is cut off.
+{
+  const unesc = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+  const clipped = ALL_TYPES.flatMap(t => [...diagramSvg(t).matchAll(/<text x="214" y="[\d.]+" font-size="([\d.]+)"[^>]*>([^<]*)<\/text>/g)]
+    .map(([, size, text]) => ({ id: t.id, text: unesc(text), right: 214 + textWidth(unesc(text), false, Number(size)) }))
+    .filter(l => l.right > 318));
+  check(!clipped.length, `diagram labels fit the card${clipped.length ? ` (${clipped.map(l => `${l.id}: "${l.text}"`).join("; ")})` : ""}`);
+}
 for (const t of ALL_TYPES) {
   const fields = optionFields(t, defaultOptions(t), { width: 144, height: 40 });
   if (!fields.every(f => f.kind !== "select" || (f.choices.length && f.choices.some(([v]) => v === f.value)))) check(false, `${t.id}: every select field offers its current value`);
@@ -228,9 +236,26 @@ const awPdf = pdfStrings(buildProofPdf({
   price: priceView(estimatePrice("aw-traditional", { width: 144, height: 40 })),
   size: { width: `12' 0"`, height: `3' 4"`, area: "40 sq ft" },
 }));
-for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "A price is prepared after a site survey", DISCLAIMER]) {
+for (const needle of ["Storefront awning mockup", "AWNING SHAPE", "Drop", "Traditional slope", "Cover: Coated vinyl", "Projection:", "Pricing comes in a formal written estimate", DISCLAIMER]) {
   check(awPdf.includes(needle), `awning PDF includes ${JSON.stringify(needle)}`);
 }
+// Interior and job-site tabs aren't storefront mockups.
+for (const [id, title] of [["wf-lobby", "Interior wayfinding sign mockup"], ["ada-room", "ADA and code sign mockup"], ["constr-site-board", "Construction sign mockup"],
+  ["vinyl-wall-mural", "Vinyl graphic mockup"], ["led-ticker", "LED display mockup"], ["halo", "Storefront sign mockup"]]) {
+  const info = describe(getType(id), null, null);
+  const t = pdfStrings(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), type: { ...info, lighting: info.lightingLabel } }));
+  check(t.includes(title) && (id === "halo" || !/Storefront/.test(t)), `${id} PDF is titled "${title}"`);
+}
+// A long project and client line wraps to two lines and ends in "…" rather than losing the client silently.
+const longSub = pdfStrings(buildProofPdf({
+  logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600),
+  project: "Riverside Medical Arts Building, ground-floor lobby and elevator wayfinding refresh, phase two",
+  preparedFor: "Northeast Property Management Group, attention Dolores Müller-Hernández, facilities director, with copies to the building engineer and the leasing office",
+})).split("\n");
+const subLines = longSub.filter(s => /Riverside|Northeast|Müller|…$/.test(s) && !/Page \d/.test(s));
+check(subLines.length === 2 && subLines[1].endsWith("…"), `long PDF subtitle wraps to two lines ending in "…" (${subLines.length} lines)`);
+const shortSub = pdfStrings(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), project: "Corner Deli", preparedFor: "Ana Müller" }));
+check(shortSub.includes("Corner Deli  ·  Prepared for Ana Müller"), "short PDF subtitle stays on one line, whole");
 
 // Copy guardrails across the tool's own files (vendored libraries excluded).
 const walk = dir => fs.readdirSync(path.join(toolDir, dir), { withFileTypes: true })
@@ -238,7 +263,11 @@ const walk = dir => fs.readdirSync(path.join(toolDir, dir), { withFileTypes: tru
 const own = ["index.html", "sign-mockup.css", ...walk("js"), ...walk("proof")];
 const BANNED = [
   /\bApt\b/i, /83 Post Ave/i, /ada[- ]compliant/i, /fully compliant/i, /(?<!(not|n't|no) )guarantee/i, /\bcertified\b/i,
-  /dob[- ]approved/i, /\bour license/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
+  /dob[- ]approved/i, /\bour license\b/i, /\bwe are (a )?licensed/i, /stamped by arc/i, /years in business/i, /\breviews?\b.*\bstars?\b/i,
+  // Arc team wording rules: nothing reads like a contract, deposit or go-ahead; ADA is "for architect
+  // and inspector review", never compliant; no slip-resistance claims; the only phone is the 347 line.
+  /\bcontracts?\b/i, /\bdeposits?\b/i, /go[- ]ahead/i, /payment authori[sz]ation/i, /\bcompliant\b/i, /\bcompliance\b/i,
+  /slip[- ]?resist/i, /\b(non|anti)[- ]?slip\b/i, /\(917\)|\b917[ .-]\d{3}[ .-]?\d{4}\b|\+1[ -]?917/,
 ];
 // Reference catalogs and awning makers are research only: their names never ship.
 const VENDORS = [
@@ -264,10 +293,45 @@ const proofHtml = fs.readFileSync(path.join(toolDir, "proof/index.html"), "utf8"
 check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof page is noindex");
 check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
 check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
+check(/id="approveBtn">Concept approved, request a formal estimate</.test(proofHtml), "the approve button reads \"Concept approved, request a formal estimate\"");
+check(html.includes("Upload a storefront photo, see your sign in 2 minutes. Free, no account."), "step 1 opens with the Arc intro line");
+check(/<strong>Concept approved, request a formal estimate<\/strong>/.test(proofHtml), "the approval confirmation reads \"Concept approved, request a formal estimate\"");
+check(STAMP_TITLE === "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE", "the PDF approval stamp reads \"Concept approved, request a formal estimate\"");
+for (const f of own) {
+  const body = fs.readFileSync(path.join(toolDir, f), "utf8");
+  const bare = [...body.matchAll(/\(347\) 450-2110/g)].filter(m => !/(call or text\s*(<a [^>]*>)?|phone: ")$/i.test(body.slice(Math.max(0, m.index - 80), m.index)));
+  check(!bare.length, `${f}: every phone line reads "Call or text (347) 450-2110"${bare.length ? ` (${bare.length} bare)` : ""}`);
+}
 check((proofHtml.split(DISCLAIMER_FULL).length - 1) === 2, "proof page carries the full disclaimer in the price box and the footer");
 check(html.includes(DISCLAIMER_FULL), "the tool's step 4 carries the full disclaimer");
 check(!/Approved by/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof email doesn't say \"Approved by\"");
 check(/<form name="sign-proof-activity"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(proofHtml), "proof activity form is registered with Netlify Forms (honeypot on)");
+check(["tab", "type", "src"].every(n => new RegExp(`<form name="sign-proof-activity"[\\s\\S]*<input name="${n}">[\\s\\S]*</form>`).test(proofHtml)), "proof activity form registers the tab, type and src fields");
+check(/function notifyArc\([^)]*\) \{\n  if \(isTestRun\(sheet\)\) return;/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof page never notifies Arc from a test run");
+// "Request a formal estimate" form: the Netlify registration copy lists exactly the module's fields.
+{
+  const ef = await import("./sign-mockup/js/estimate-form.js");
+  const reg = html.match(/<form name="sign-estimate-request"[^>]*>([\s\S]*?)<\/form>/);
+  check(reg && /data-netlify="true"/.test(reg[0]) && /netlify-honeypot="bot-field"/.test(reg[0]) && /enctype="multipart\/form-data"/.test(reg[0]), "estimate form is registered with Netlify Forms (multipart, honeypot on)");
+  const regNames = reg ? [...reg[1].matchAll(/name="([^"]+)"/g)].map(m => m[1]).filter(n => n !== "form-name") : [];
+  check(regNames.join() === ef.FIELD_NAMES.join(), `estimate form registration lists the module's ${ef.FIELD_NAMES.length} fields in order`);
+  check(ef.FILE_FIELDS.every(n => new RegExp(`<input type="file" name="${n}">`).test(reg?.[1] || "")), "estimate form registers photo_1…photo_10 and artwork as file fields");
+  check(ef.FIELD_NAMES[0] === "flags" && ["tab", "type", "src", "proof", "bot-field", "subject"].every(n => ef.FIELD_NAMES.includes(n)), "estimate form keeps the hidden tab/type/src/proof fields and the honeypot, with flags first");
+  check(ef.subjectFor({ business: "Corner Deli", name: "Ana", city: "Brooklyn", sign_type: "Channel letters", src: "GBP" }) === "[Sign Preview] Corner Deli / Brooklyn / Channel letters / source=gbp", "estimate subject: business, borough, sign type, source");
+  check(ef.subjectFor({ name: "Ana Ruiz", city: "Queens", sign_type: "Awning", src: "" }) === "[Sign Preview] Ana Ruiz / Queens / Awning / source=direct", "estimate subject falls back to the name and source=direct");
+  check(ef.flagsFor({ lit: "Lit", services: ["Installation", "Permits / DOB filing"], landmark: "Yes", height: "2nd floor or higher" }).join() === "Lit,Permits requested,Landmark = Yes,Height 2nd floor+", "estimate flags: lit, permits, landmark, height");
+  check(ef.flagsFor({ lit: "Non-lit", services: ["Permit-only for an existing sign"], landmark: "Not sure", height: "12–25 ft" }).join() === "Permits requested", "permit-only counts as permits requested; nothing else flags");
+  check(ef.flagsFor({ lit: "Not sure", services: ["Design"], landmark: "No" }).length === 0, "no flags when none apply");
+  const st = [["halo", "Channel letters"], ["lightbox", "Lightbox / cabinet"], ["bladelit", "Blade / projecting"], ["panel", "Storefront / fascia"], ["vinyl-door-hours", "Window vinyl / graphics"],
+    ["vinyl-wall-mural", "Mural / painted"], ["aw-traditional", "Awning"], ["wf-lobby", "ADA / interior wayfinding"], ["ada-room", "ADA / interior wayfinding"], ["led-ticker", "Other"], ["constr-site-board", "Other"]];
+  const wrong = st.filter(([id, want]) => ef.signTypeFor(id) !== want);
+  check(!wrong.length && READY.flatMap(c => c.types).every(t => ef.SIGN_TYPES.includes(ef.signTypeFor(t.id))), `every mockup type prefills a listed sign type${wrong.length ? ` (${wrong.map(w => w[0]).join(", ")})` : ""}`);
+  const sz = ef.sizeFields(144, 30), small = ef.sizeFields(18, 12);
+  check(sz.w === "12" && sz.h === "2.5" && sz.unit === "ft" && small.w === "18" && small.unit === "in" && ef.sizeFields(0, 0) === null, "size prefill: feet to the half foot from 3 ft, inches below");
+  check(ef.MAX_PHOTOS === 10 && ef.MAX_FILE_BYTES === 10 * 1024 * 1024 && ef.MAX_UPLOAD_BYTES < 8 * 1024 * 1024, "photos: up to 10, 10 MB each, sent under Netlify's 8 MB request limit");
+  const efSrc = fs.readFileSync(path.join(toolDir, "js/estimate-form.js"), "utf8");
+  check(/if \(isTestRun\(context\(\)\)\) \{/.test(efSrc), "the estimate form never sends from a test run");
+}
 const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
 check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
 check(READY.every(c => c.pricing && Object.keys(c.pricing).join() === "row"), "every live category only maps its types to config rows");

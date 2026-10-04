@@ -132,6 +132,7 @@ Each entry in `types` is one card in the library. Every field:
 | `options` | no | Which built-in option fields to show (see step 6). `[]` shows none. |
 | `aspect` | no | Height ÷ width used when it is first placed, for types whose shape doesn't come from the artwork. |
 | `pinHint` | no | A tip shown above the text box, e.g. which corners to pin. |
+| `mount` | no | `"door"` starts it on the door, about 50 in up, when the scale line is labeled as a door (hours and door decals). |
 | `notice` | no | A notice shown under the options (rules to verify, etc.). Keep it factual. |
 
 ## 4. Pick a construction kind (render rules)
@@ -160,7 +161,7 @@ The canvas is 320 × 200. The `Svg` methods (in `js/diagram-kit.js`):
 - `s.wall()`: the hatched wall on the left, with the wall face at x = 44. Draw your parts from x = 44 to the right, staying left of x ≈ 200.
 - `s.rect(x, y, w, h, fill, stroke, strokeWidth)`, `s.line(x1, y1, x2, y2, stroke, width)`, `s.path(d, fill, stroke, width)` and `s.circle(cx, cy, r, fill, stroke, width)`. Each returns `s`, so calls chain.
 - `s.led(x, y)` draws an LED module and `s.rays(x, y, dir)` draws light rays (`dir` is 1 to the right, −1 to the left).
-- `s.label(text, px, py, rowY)`: a dot at (px, py) with a leader line to a label at row `rowY` in the right-hand column. Keep 3 to 6 labels with rows between 20 and 180, spaced at least 14 apart.
+- `s.label(text, px, py, rowY)`: a dot at (px, py) with a leader line to a label at row `rowY` in the right-hand column. Keep 3 to 6 labels with rows between 20 and 180, spaced at least 14 apart. The label column is only about 100 units wide (roughly 20 characters); `npm test` fails if a label runs past the card's edge.
 - `return "Section"` (or `"Front view"`, `"Side view"`) sets the caption in the corner.
 
 Colors come from `PALETTE`: `ink`, `muted`, `wall`, `metal`, `metalLight`, `acrylic`, `led`, `ray`, `paint`, `fabric`, `glass`, `clear`. Draw your own simple drawings. **Do not trace or copy a manufacturer's drawing, and don't name a manufacturer.**
@@ -219,14 +220,16 @@ Defaults come from `noun`. Override any of these in `ui: { … }`:
 | --- | --- | --- |
 | `tabLabel` | `label` | `"Vinyl"` (short pill in the step 3 tab bar; full `label` stays in aria-label) |
 | `textLabel` | `"<Noun> text"` | `"Board text"` |
-| `plaque` | `false` | `true` for interior plaques: first placement uses `placeWidthIn`, not the storefront sign band |
-| `placeWidthIn` | `null` | `(type, opts) => 9` inches wide when scale is set |
 | `placeTip` | Drag-the-corners tip using the noun | HTML is allowed (`<strong>`). |
 | `heightLabel` | `"Height"` | Awnings use `"Drop"`. |
 | `heightShort` | `"H"` | Shown in the size chip, e.g. "12' W × 3' H". |
 | `flatLabel` | `"The <noun> artwork, flat"` | Alt text for the flat artwork image. |
 | `hangs` | `false` | `true` means it hangs from its top edge (awnings): resizing keeps the top edge and a "Set the drop" field appears. |
+| `placeWidthIn` | `null` | `(type, opts) => inches`: the typical width it is first placed at once the scale is set, usually from a size preset. Switching types or picking another preset re-sizes it until the user drags a corner. |
+| `plaque` | `false` | `true` places it beside the scaled door at about 60 in up (small wall plaques), never at the storefront sign band. Without `placeWidthIn` it starts 10 in wide. |
 | `sizeExtra` | Area in sq ft | `(type, opts, size) => ({ label: "Panels", value: "3" })` |
+
+`titleNoun` (top level, default `"Storefront <noun>"`) names the mockup in the PDF title, the share sheet and the proof page: "<titleNoun> mockup". Set it for anything that isn't on a storefront (`"Interior wayfinding sign"`).
 
 Other optional top-level fields are `typeWord` (`"type"`, or `"shape"` for awnings), `cardNote(type)` (the line under each library card), `aliases` (old id → new id) and `spillReach` (how far night light spreads, as a multiple of the height; default 0.7).
 

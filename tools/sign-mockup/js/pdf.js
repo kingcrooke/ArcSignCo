@@ -286,6 +286,17 @@ function banner(pg, y, note) {
   pg.text(wrapText(note, false, 9.5, room)[0], M + 16 + dw + 14, y + 18, { size: 9.5, color: C.ink });
 }
 
+/** At most maxLines wrapped lines; the last one ends in "…" when text was left out. */
+export function clampLines(text, bold, size, maxWidth, maxLines) {
+  const lines = wrapText(text, bold, size, maxWidth);
+  if (lines.length <= maxLines) return lines;
+  const out = lines.slice(0, maxLines);
+  let last = out[maxLines - 1];
+  while (last && textWidth(`${last}…`, bold, size) > maxWidth) last = last.slice(0, -1);
+  out[maxLines - 1] = `${last.trimEnd()}…`;
+  return out;
+}
+
 export const FINE = `${DISCLAIMER_FULL} Sizes are estimated from one photo and one reference measurement, and the artwork is placed by hand. Lighting is simulated. Measurements are verified before anything is built.`;
 
 // Page content stays above this line; the footer and the full disclaimer sit below it.
@@ -339,8 +350,8 @@ function column(pg, x, width, top, bottom) {
   return api;
 }
 
-export const STAMP_TITLE = "CONCEPT APPROVED — REQUEST A FORMAL ESTIMATE";
-export const STAMP_NOTE = "Not a contract, deposit, or payment authorization.";
+export const STAMP_TITLE = "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE";
+export const STAMP_NOTE = "Pricing, size and permits are confirmed in a formal written estimate.";
 
 function approvalStamp(pg, approval, x, y, w) {
   const tw = w - 20;
@@ -391,6 +402,7 @@ export function buildProofPdf(p) {
   const notes = String(p.notes || "").split(/\r?\n/).map(pdfSafe).join("\n").trim();
   const dateText = date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const noun = type?.noun || "sign";
+  const titleNoun = type?.titleNoun || `Storefront ${noun}`;
   const heightLabel = type?.heightLabel || "Height";
   const typeWord = (type?.typeLabel || "Type").toLowerCase();
   const pages = [];
@@ -402,10 +414,13 @@ export function buildProofPdf(p) {
     const pg = new Page();
     pages.push(pg);
     header(pg, logo);
-    pg.text(`Storefront ${noun} mockup`, M, 98, { size: 20, bold: true, color: C.navy });
+    pg.text(`${titleNoun} mockup`, M, 98, { size: 20, bold: true, color: C.navy });
     pg.text(`Prepared ${dateText}`, W - M, 98, { size: 10, color: C.muted, align: "right" });
     const sub = [project, preparedFor && `Prepared for ${preparedFor}`].filter(Boolean).join("  ·  ");
-    if (sub) pg.text(wrapText(sub, false, 12, W - 2 * M - 160)[0], M, 116, { size: 12, color: C.ink });
+    const subW = W - 2 * M - 160;
+    if (sub && textWidth(sub, false, 12) <= subW) pg.text(sub, M, 116, { size: 12, color: C.ink });
+    // Two smaller lines still clear the banner at y 128.
+    else if (sub) clampLines(sub, false, 10, subW, 2).forEach((line, i) => pg.text(line, M, 112 + i * 11, { size: 10, color: C.ink }));
     banner(pg, 128, "For visual discussion only. Sizes are estimates from a photo.");
 
     const top = 170, boxW = 500, boxH = CONTENT_BOTTOM - 170;
@@ -523,7 +538,7 @@ export function buildProofPdf(p) {
   pages.forEach((pg, i) => footer(pg, i + 1, pages.length));
 
   return serialize(pages, {
-    Title: `Storefront ${noun} mockup${project ? ` – ${project}` : ""}`,
+    Title: `${titleNoun} mockup${project ? ` – ${project}` : ""}`,
     Author: CONTACT.name,
     Subject: DISCLAIMER,
     Creator: `${CONTACT.site} sign mockup tool`,

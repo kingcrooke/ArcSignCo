@@ -29,7 +29,7 @@
     {
       "@type": "Question",
       "name": "Is the mockup a shop drawing or permit check?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. The preview is for planning and discussion only. It is not a shop drawing, engineering document, or permit or code review. Final sizes, construction details, and compliance come from measured shop drawings and the project's licensed professionals." }
+      "acceptedAnswer": { "@type": "Answer", "text": "No. The preview is for planning and discussion only. It is not a shop drawing, engineering document, or permit or code review. Final sizes, construction details, and code requirements are confirmed during the site survey and in a formal written estimate, for review by the project's architect and inspector." }
     },
     {
       "@type": "Question",
@@ -50,6 +50,7 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="stylesheet" href="/assets/css/service-page.v5.css">
 <link rel="stylesheet" href="/tools/sign-mockup/sign-mockup.css">
+<link rel="stylesheet" href="/tools/sign-mockup/estimate-form.css">
 <link rel="modulepreload" href="/tools/sign-mockup/js/app.js">
 </head>
 <body class="sm-page">
@@ -72,6 +73,8 @@
             <a href="/ada-signs/">ADA &amp; tactile signs</a>
             <a href="/channel-letters/">Channel letters</a>
             <a href="/construction-signs/">Construction site signs</a>
+            <a href="/wayfinding-signs/">Interior wayfinding</a>
+            <a href="/awnings/">Storefront awnings</a>
           </div>
         </div>
         <a href="/#work">Scopes</a>
@@ -138,6 +141,7 @@
       <div class="sm-panel">
         <section class="sm-card" data-panel="photo" aria-labelledby="p-photo">
           <h2 id="p-photo"><b>1</b> Storefront photo</h2>
+          <p class="sm-lead" id="stepIntro">Upload a storefront photo, see your sign in 2 minutes. Free, no account.</p>
           <p>Use a straight-on photo of the facade with the whole sign area in view. Shooting from across the street keeps distortion low.</p>
           <div class="sm-actions">
             <label class="btn gold sm-file" for="photoInput">Choose photo</label>
@@ -277,7 +281,7 @@
             <button type="button" class="btn white" id="sharePdf" hidden>Share PDF</button>
           </div>
           <p class="note">The PDF has the day view, the night view, how it's built, and the flat artwork. Nothing is made until Arc confirms the price.</p>
-          <p class="note sm-disclaimer" id="disclaimerNote">Preliminary estimate only. Not a quote or a contract. Subject to a site survey, final artwork, permits and fees, electrical and install conditions, and sales tax. The mockup is illustrative, not to scale, and not a shop drawing. Permit requirements are confirmed after a site survey; approval is not guaranteed.</p>
+          <p class="note sm-disclaimer" id="disclaimerNote">Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through our licensed partners.</p>
           <div class="sm-approve" id="approveBox">
             <h3>Phone approval link</h3>
             <p>Send your client a link to a page made for phones. They can switch day and night, comment, approve the concept as a request for a formal estimate, and download the PDF.</p>
@@ -294,11 +298,23 @@
               </div>
             </div>
           </div>
+          <a class="btn gold lg sm-estimate-cta" id="estimateCta" href="#estimate">Request a formal estimate</a>
           <p class="note">Want Arc to price it? Email the PDF and project address to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> or <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
         </section>
 
         <p class="sm-status" id="status" role="status" aria-live="polite"></p>
       </div>
+    </div>
+  </section>
+
+  <section class="section sm-estimate" id="estimate" aria-labelledby="estimateTitle">
+    <div class="wrap sm-estimate-wrap">
+      <div class="section-head">
+        <span class="eyebrow">Free, no obligation</span>
+        <h2 id="estimateTitle">Request a formal estimate</h2>
+        <p>Tell Arc about the job. The sign type, size and lighting are filled in from your mockup; change anything that's off.</p>
+      </div>
+      <div id="estimateForm"></div>
     </div>
   </section>
 
@@ -356,7 +372,7 @@
         </article>
         <article class="faq-item">
           <h3>Is the mockup a shop drawing or permit check?</h3>
-          <p>No. The preview is for planning and discussion only. It is not a shop drawing, engineering document, or permit or code review. Final sizes, construction details, and compliance come from measured shop drawings and the project's licensed professionals.</p>
+          <p>No. The preview is for planning and discussion only. It is not a shop drawing, engineering document, or permit or code review. Final sizes, construction details, and code requirements are confirmed during the site survey and in a formal written estimate, for review by the project's architect and inspector.</p>
         </article>
         <article class="faq-item">
           <h3>Who can use the sign mockup tool?</h3>
@@ -422,10 +438,12 @@
     <a href="/ada-signs/">ADA &amp; tactile signs</a>
     <a href="/channel-letters/">Channel letters</a>
     <a href="/construction-signs/">Construction site signs</a>
+    <a href="/wayfinding-signs/">Interior wayfinding</a>
+    <a href="/awnings/">Storefront awnings</a>
   </nav>
   <div class="wrap footer-meta">
     <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
-    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
+    <span><a href="tel:+13474502110">Call or text (347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
 
@@ -450,6 +468,54 @@ document.addEventListener("keydown", event => {
   }
 });
 </script>
+<!-- Registers the "Request a formal estimate" form with Netlify Forms. The visible form is built by
+     js/estimate-form.js from the same field list and submitted with fetch. -->
+<form name="sign-estimate-request" method="POST" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="sign-estimate-request">
+  <input name="flags">
+  <input name="subject">
+  <input name="tab">
+  <input name="type">
+  <input name="src">
+  <input name="proof">
+  <input name="bot-field">
+  <input name="name">
+  <input name="email">
+  <input name="phone">
+  <input name="street">
+  <input name="city">
+  <input name="zip">
+  <input name="role">
+  <input name="sign_type">
+  <input name="sign_count">
+  <input name="size_w">
+  <input name="size_h">
+  <input name="size_unit">
+  <input name="size_not_sure">
+  <input name="lit">
+  <input name="job">
+  <input name="services">
+  <input name="target_date">
+  <input type="file" name="photo_1">
+  <input type="file" name="photo_2">
+  <input type="file" name="photo_3">
+  <input type="file" name="photo_4">
+  <input type="file" name="photo_5">
+  <input type="file" name="photo_6">
+  <input type="file" name="photo_7">
+  <input type="file" name="photo_8">
+  <input type="file" name="photo_9">
+  <input type="file" name="photo_10">
+  <input name="business">
+  <input name="contact_pref">
+  <input name="landmark">
+  <input name="surface">
+  <input name="height">
+  <input name="power">
+  <input name="budget">
+  <input type="file" name="artwork">
+  <textarea name="notes"></textarea>
+</form>
 <script type="module" src="/tools/sign-mockup/js/app.js"></script>
 </body>
 </html>

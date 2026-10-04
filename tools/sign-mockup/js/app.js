@@ -7,11 +7,15 @@ import { coverFromQuad, sampleAround, coveredPhoto, hexOf, rgbOf } from "./cover
 import { createScene } from "./scene.js";
 import {
   CATEGORIES, READY, DEFAULT_TYPE, getType, getCategory, categoryOf, litWith, describe, cleanOptions,
-  defaultOptions, optionFields, aspectFor, diagramSvg, codeWarnings,
+  defaultOptions, optionFields, aspectFor, diagramSvg, codeWarnings, isKnownType, cleanSource,
 } from "./catalog.js";
 import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
+import { mountEstimateForm } from "./estimate-form.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
+import {
+  anchorCenter, hasPlaceAnchor, isWindowGlassType, PLACE_ANCHOR, STOREFRONT_WIDTH_IN, usesFasciaBand, windowGlassMaxSize,
+} from "./place-anchors.js";
 
 const $ = id => document.getElementById(id);
 const stage = $("stage"), canvas = $("view"), ctx = canvas.getContext("2d");
@@ -42,6 +46,7 @@ const state = {
   selected: null,     // { kind: "cal" | "quad" | "cover", index }
   cover: null,        // { quad, color:[r,g,b], auto } patch over an existing sign, or null
   home: null,         // { x, y, w } where a new sign starts on this photo (the sample's sign band)
+  sampleRegions: null, // { window, ground } pixel rects on the built-in sample storefront only
   touchedSign: false,
   typeId: DEFAULT_TYPE,
   typeOptions: {},    // per type id, so switching back keeps choices
@@ -49,6 +54,8 @@ const state = {
   placed: {},         // per category: { quad, edited } while the other category is shown
   mode: "day",
   proof: null,        // { id, url } once an approval link exists for the current design
+  src: "",            // the link's ?src= tag, carried into approval links
+  test: false,        // ?test=1: approval links are marked as tests and never notify Arc
 };
 
 const scene = createScene();
@@ -389,7 +396,7 @@ function updateChip(size) {
     const cat = currentCat();
     html = size
       ? `≈ ${size.w} W × ${size.h} ${cat.ui.heightShort}<small>${cat.ui.hangs ? "" : `≈ ${size.area} · `}estimate from your scale line</small>`
-      : `${cat.Noun} placed<small>Set the scale in step 2 to see its size</small>`;
+      : `${cat.Noun} placed<small>${presetWidthPx() && !calibrated() ? "Draw a scale line for true size" : "Set the scale in step 2 to see its size"}</small>`;
   } else if (state.step === "scale" && calibrated()) {
     html = `Scale set<small>${formatFeetInches(state.calInches)} reference line</small>`;
   }
@@ -614,6 +621,7 @@ async function loadPhoto(file) {
     state.placed = {};
     state.selected = null;
     state.home = null;
+    state.sampleRegions = null;
     setCover(false);
     $("drop").hidden = true;
     $("zoomBar").hidden = false;
@@ -640,6 +648,9 @@ const SAMPLE = {
   url: new URL("../img/sample-storefront.jpg", import.meta.url),
   cal: [{ x: 752, y: 676 }, { x: 914, y: 676 }], inches: 36, label: "Door width",
   band: { x: 565, y: 258, w: 480 },
+  // Display window (glass) and lower sidewalk/brick band for construction defaults.
+  window: { x: 478, y: 378, w: 432, h: 292 },
+  ground: { x: 72, y: 708, w: 1008, h: 148 },
 };
 $("trySample").addEventListener("click", async () => {
   try {
@@ -655,6 +666,7 @@ $("trySample").addEventListener("click", async () => {
     state.cal = { a: { ...SAMPLE.cal[0] }, b: { ...SAMPLE.cal[1] } };
     state.calInches = SAMPLE.inches;
     state.home = { ...SAMPLE.band };
+    state.sampleRegions = { window: { ...SAMPLE.window }, ground: { ...SAMPLE.ground } };
     if (state.art) placeSign();
     setStatus("Sample photo loaded. Its scale line is already set across the door (3 ft).");
     updateUI();
@@ -810,7 +822,9 @@ function plaqueMountPoint(photo) {
   const margin = 8;
   const pierOk = pier.x > margin && pier.x < photo.width - margin
     && pier.y > margin && pier.y < photo.height - margin;
-  if (pierOk) return pier;
+  // A wide plaque centered on the pier would cover the door: it goes right of clearRight, or left of
+  // clearLeft when the wall right of the door is too narrow.
+  if (pierOk) return { ...pier, clearRight: doorRight + 6 / inPerPx, clearLeft: doorLeft - 6 / inPerPx };
   // Fallback: center of the wall strip beside the door, mid-door height.
   const beside = doorRight < photo.width * 0.55
     ? doorRight + (photo.width - doorRight) * 0.35
@@ -821,6 +835,18 @@ function plaqueMountPoint(photo) {
   };
 }
 
+/**
+ * For door decals: centered on a scale line drawn across a door (labeled "door"), about 50 in up,
+ * where hours and door copy sit at eye level. Null when the reference isn't a door.
+ */
+function doorMountPoint(photo) {
+  if (!state.cal || !state.calInches || !/door/i.test($("calLabel").value)) return null;
+  const calPx = dist(state.cal.a, state.cal.b);
+  if (calPx < 1) return null;
+  const p = { x: (state.cal.a.x + state.cal.b.x) / 2, y: (state.cal.a.y + state.cal.b.y) / 2 - 50 * calPx / state.calInches };
+  return p.x > 0 && p.x < photo.width && p.y > 0 && p.y < photo.height ? p : null;
+}
+
 const QUAD_CLAMP_MARGIN = 3;
 
 function quadInsidePhoto(photo, quad = state.quad, margin = QUAD_CLAMP_MARGIN) {
@@ -828,66 +854,135 @@ function quadInsidePhoto(photo, quad = state.quad, margin = QUAD_CLAMP_MARGIN) {
   return quad.every(p => p.x >= margin && p.x <= photo.width - margin && p.y >= margin && p.y <= photo.height - margin);
 }
 
+/** Keep the quad inside a pixel rectangle (sample window glass), shrinking if needed. */
+function clampQuadInsideRect(rect, photo) {
+  if (!state.quad || !rect) return;
+  const m = 8;
+  const maxW = Math.max(12, rect.w - 2 * m), maxH = Math.max(12, rect.h - 2 * m);
+  let q = state.quad;
+  for (let pass = 0; pass < 8; pass++) {
+    const b = bounds(q);
+    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
+    if (bw > maxW || bh > maxH) {
+      q = scaleQuad(q, Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh)) * 0.98, centroid(q));
+      continue;
+    }
+    let dx = 0, dy = 0;
+    if (b.minX < rect.x + m) dx = rect.x + m - b.minX;
+    else if (b.maxX > rect.x + rect.w - m) dx = rect.x + rect.w - m - b.maxX;
+    if (b.minY < rect.y + m) dy = rect.y + m - b.minY;
+    else if (b.maxY > rect.y + rect.h - m) dy = rect.y + rect.h - m - b.maxY;
+    if (!dx && !dy) break;
+    q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
+  }
+  state.quad = q;
+}
+
 /** Shift (and slightly shrink if needed) so every corner stays inside the photo. */
 function clampQuadInsidePhoto(photo) {
   if (!state.quad || !photo) return;
   const m = QUAD_CLAMP_MARGIN;
   let q = state.quad;
+  const maxW = photo.width - 2 * m, maxH = photo.height - 2 * m;
   for (let pass = 0; pass < 8; pass++) {
     const b = bounds(q);
+    // Shrink before shifting: a quad taller or wider than the photo can't be shifted inside.
+    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
+    if (bw > maxW || bh > maxH) {
+      q = scaleQuad(q, Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh)) * 0.98, centroid(q));
+      continue;
+    }
     let dx = 0, dy = 0;
     if (b.minX < m) dx = m - b.minX;
     else if (b.maxX > photo.width - m) dx = (photo.width - m) - b.maxX;
     if (b.minY < m) dy = m - b.minY;
     else if (b.maxY > photo.height - m) dy = (photo.height - m) - b.maxY;
-    if (dx || dy) {
-      q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
-      continue;
-    }
-    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
-    const maxW = photo.width - 2 * m, maxH = photo.height - 2 * m;
-    if (bw <= maxW && bh <= maxH) break;
-    const k = Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh), 1) * 0.98;
-    if (k >= 0.999) break;
-    q = scaleQuad(q, k, centroid(q));
+    if (!dx && !dy) break;
+    q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
   }
   state.quad = q;
 }
 
+// The type's typical width from its size preset, in photo pixels (null without a preset or a scale).
+function presetWidthPx() {
+  const cat = currentCat();
+  if (typeof cat.ui.placeWidthIn !== "function") return null;
+  const widthIn = cat.ui.placeWidthIn(currentType(), optionsFor());
+  const scaled = scaledWidthPx(widthIn);
+  if (scaled) return scaled;
+  const photo = state.photo?.canvas;
+  if (!state.calInches && photo && widthIn) return photo.width * (widthIn / STOREFRONT_WIDTH_IN);
+  return null;
+}
+
 function defaultPlaceWidthPx(photo) {
   const cat = currentCat();
-  const placeIn = typeof cat.ui.placeWidthIn === "function"
-    ? cat.ui.placeWidthIn(currentType(), optionsFor())
-    : (cat.ui.plaque ? 10 : null);
-  const scaled = placeIn ? scaledWidthPx(placeIn) : null;
+  const preset = presetWidthPx();
+  if (preset) return preset;
+  const scaled = cat.ui.plaque ? scaledWidthPx(10) : null;
   if (scaled) return scaled;
   if (cat.ui.plaque) return photo.width * 0.06;
-  if (state.home?.w) return state.home.w;
+  if (state.sampleRegions?.window && isWindowGlassType(currentType())) {
+    return state.sampleRegions.window.w * 0.72;
+  }
+  if (state.home?.w && usesFasciaBand(currentType())) return state.home.w;
+  if (state.home?.w && !hasPlaceAnchor(currentType())) return state.home.w;
   return photo.width * 0.45;
 }
 
 function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
   const cat = currentCat();
+  const type = currentType();
+  const preset = presetWidthPx();
   let w = defaultPlaceWidthPx(photo);
-  let c = (!cat.ui.plaque && state.home)
-    ? { x: state.home.x, y: state.home.y }
-    : { x: photo.width / 2, y: photo.height * 0.36 };
-  if (cat.ui.plaque) {
-    const mount = plaqueMountPoint(photo);
-    if (mount) c = mount;
-  } else if (keepCenter && state.quad) {
+  const mountCtx = {
+    home: state.home,
+    door: doorMountPoint(photo),
+    plaque: plaqueMountPoint(photo),
+    sample: state.sampleRegions,
+  };
+  let c;
+  if (keepCenter && state.quad && state.calInches) {
     c = centroid(state.quad);
-    w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
-    if (w < photo.width * 0.04) w = photo.width * 0.45;
+    if (!preset) {
+      w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
+      if (w < photo.width * 0.04) w = photo.width * 0.45;
+    }
+  } else if (type.mount === "door" && mountCtx.door) {
+    c = mountCtx.door;
+  } else if (cat.ui.plaque) {
+    c = mountCtx.plaque || anchorCenter(photo, type, mountCtx);
+  } else if (usesFasciaBand(type) && state.home) {
+    c = { x: state.home.x, y: state.home.y };
+  } else if (hasPlaceAnchor(type)) {
+    c = anchorCenter(photo, type, mountCtx);
+  } else if (!cat.ui.plaque && state.home) {
+    c = { x: state.home.x, y: state.home.y };
+  } else {
+    c = { x: photo.width / 2, y: photo.height * 0.36 };
   }
-  if (cat.ui.plaque) {
+  const glassCap = windowGlassMaxSize(photo, type, mountCtx);
+  if (glassCap && !preset) {
+    if (w > glassCap.maxW) w = glassCap.maxW;
+    if (w * aspect > glassCap.maxH) w = glassCap.maxH / aspect;
+  }
+  // A size preset is drawn at its size; clampQuadInsidePhoto shrinks it only if it can't fit.
+  if (!preset && cat.ui.plaque) {
     const maxW = photo.width * 0.22;
     if (w > maxW) w = maxW;
-  } else if (w * aspect > photo.height * 0.5) {
+  } else if (!preset && w * aspect > photo.height * 0.5) {
     w = (photo.height * 0.5) / aspect;
   }
+  if (c.clearRight) {
+    const m = QUAD_CLAMP_MARGIN, right = Math.max(c.x, c.clearRight + w / 2), left = c.clearLeft - w / 2;
+    if (right + w / 2 <= photo.width - m) c = { x: right, y: c.y };
+    else if (left - w / 2 >= m) c = { x: left, y: c.y };
+  }
   state.quad = rectQuad(c.x, c.y, w, w * aspect);
+  if (state.sampleRegions?.window && isWindowGlassType(type)) {
+    clampQuadInsideRect(state.sampleRegions.window, photo);
+  }
   clampQuadInsidePhoto(photo);
   state.quadEdited = false;
 }
@@ -985,7 +1080,14 @@ $("typeOptions").addEventListener("input", e => {
     if (auto) auto.checked = false;
     if (f.kind === "range" && f.format) t.previousElementSibling.textContent = f.format(Number(t.value));
   }
+  const prevAspect = state.art ? signAspect() : null, prevPreset = presetWidthPx();
   setOptionsFor(type, opts);
+  // A new size preset re-sizes an unpinned quad; a pinned one keeps its width and follows the new shape.
+  if (state.art && state.quad) {
+    const preset = presetWidthPx();
+    if (preset && preset !== prevPreset && !state.quadEdited) placeSign(signAspect(), !currentCat().ui.plaque);
+    else fitQuadToArt(prevAspect);
+  }
   // A change that alters which other choices apply re-draws the card and its fields.
   if (f.refresh) renderTypeCard();
   updateUI();
@@ -1025,7 +1127,19 @@ function renderTypeCard() {
       b.tabIndex = on ? 0 : -1;
     }
   }
+  revealCategoryTab();
   renderTypeOptions();
+}
+// Scrolls the tab row (not the page) so the selected tab is fully visible. The row snaps to tab
+// starts, so it scrolls to the first tab start that shows the whole tab clear of the edge fade.
+function revealCategoryTab() {
+  const bar = $("category"), on = bar.querySelector('[role="radio"][aria-checked="true"]');
+  if (!on || bar.scrollWidth <= bar.clientWidth) return;
+  const x = el => el.getBoundingClientRect().left - bar.getBoundingClientRect().left + bar.scrollLeft;
+  const left = x(on), right = left + on.offsetWidth, view = bar.clientWidth - 28;
+  if (left >= bar.scrollLeft && right <= bar.scrollLeft + view) return;
+  const starts = [...bar.querySelectorAll('[role="radio"]')].map(x).filter(s => s <= left);
+  bar.scrollLeft = starts.find(s => right - s <= view) ?? left;
 }
 
 function setType(id) {
@@ -1037,17 +1151,24 @@ function setType(id) {
   // Each category sits in its own place on the wall (a sign over the door, an awning over the
   // window), so each keeps its own placement.
   const from = prevType.category, to = next.category;
-  const stash = from !== to && state.placed[to];
-  if (from !== to && state.quad) state.placed[from] = { quad: state.quad.map(p => ({ ...p })), edited: state.quadEdited, aspect: prev };
+  // An unpinned placement left for another type of that category is re-drawn at this type's preset size.
+  const kept = from !== to && state.placed[to];
+  const stash = kept && (kept.edited || kept.typeId === next.id || !presetWidthPx()) && kept;
+  if (from !== to && state.quad) state.placed[from] = { quad: state.quad.map(p => ({ ...p })), edited: state.quadEdited, aspect: prev, typeId: prevType.id };
   if (stash) {
     state.quad = stash.quad;
     state.quadEdited = stash.edited;
     // The artwork may have changed while the other category was shown.
     if (state.art && stash.aspect) fitQuadToArt(stash.aspect);
   } else if (state.art && !(from === to && categoryOf(next).ui.hangs && state.quadEdited)) {
-    const nextCat = categoryOf(next);
-    if (nextCat.ui.plaque && !state.quadEdited && from !== to) {
-      placeSign(aspectFor(next, state.art, optionsFor(next)));
+    const nextCat = categoryOf(next), prevCat = categoryOf(prevType);
+    // An unpinned quad takes the new type's own size (its preset) rather than the last type's,
+    // and never carries a plaque's size into a storefront category or the other way round.
+    const anchorChanged = from === to && prevType.id !== next.id
+      && (PLACE_ANCHOR[prevType.id] !== PLACE_ANCHOR[next.id] || prevType.mount !== next.mount);
+    if (!state.quadEdited && (presetWidthPx() || anchorChanged || (from !== to && (nextCat.ui.plaque || prevCat.ui.plaque)))) {
+      const keepCenter = !anchorChanged && next.mount !== "door" && !nextCat.ui.plaque && !prevCat.ui.plaque && prevType.mount !== "door";
+      placeSign(aspectFor(next, state.art, optionsFor(next)), keepCenter);
     } else {
       // Switching between hanging shapes keeps a wall area the user has pinned.
       fitQuadToArt(prev);
@@ -1398,7 +1519,7 @@ $("downloadPng").addEventListener("click", () => runExport("Building image…", 
 }));
 $("sharePdf").addEventListener("click", () => runExport("Building PDF…", async () => {
   const file = await makePdf();
-  await navigator.share({ files: [file], title: `Storefront ${currentCat().noun} mockup` });
+  await navigator.share({ files: [file], title: `${currentCat().titleNoun} mockup` });
   setStatus("Shared.");
 }));
 try {
@@ -1431,6 +1552,8 @@ async function createProof() {
   const size = sizeInfo();
   const sheet = {
     typeId: state.typeId,
+    src: state.src,
+    test: state.test || undefined,
     options: cleanOptions(currentType(), optionsFor()),
     project: $("project").value.trim(),
     preparedFor: $("preparedFor").value.trim(),
@@ -1451,13 +1574,13 @@ async function createProof() {
   form.set("art", artB, "art.jpg");
   let res;
   try {
-    res = await fetch(API, { method: "POST", body: form });
+    res = await fetch(API, { method: "POST", body: form, headers: state.test ? { "X-Sign-Mockup-Test": "1" } : {} });
   } catch {
     throw new UserError("Couldn't reach the server. Check your connection and try again.");
   }
   const body = await res.json().catch(() => null);
   if (!res.ok || !body?.id) {
-    throw new UserError(res.status === 404 || res.status === 405
+    throw new UserError(res.status === 404 || res.status === 405 || (state.test && res.status === 403)
       ? "Approval links aren't available here."
       : body?.error || "Couldn't create the link. Try again.");
   }
@@ -1628,11 +1751,37 @@ buildTypeList();
 renderTypeCard();
 resizeCanvas();
 updateUI();
+openDeepLink(new URLSearchParams(location.search));
+
+const estimate = mountEstimateForm($("estimateForm"), {
+  context: () => {
+    const size = sizeInfo();
+    return {
+      typeId: state.typeId, src: state.src, test: state.test,
+      proof: state.proof && state.proof.key === designKey() ? state.proof.url : "",
+      widthIn: size?.width, heightIn: size?.height, lit: litWith(currentType(), optionsFor()),
+    };
+  },
+});
+$("estimateCta").addEventListener("click", () => estimate.prefill());
+new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) estimate.prefill(); }).observe($("estimate"));
+
+// /tools/sign-mockup/?tab=<category>&type=<type id>&src=<tag>: opens that tab and type. Unknown
+// or coming-soon values fall back to the default tab rather than failing.
+function openDeepLink(q) {
+  state.src = cleanSource(q.get("src"));
+  state.test = q.get("test") === "1";
+  const type = q.get("type"), tab = q.get("tab");
+  const cat = READY.find(c => c.id === tab);
+  if (type && isKnownType(type) && (!cat || getType(type).category === cat.id)) setType(type);
+  else if (cat) setCategory(cat.id);
+}
 
 // Lets automated checks drive the tool without simulating every gesture.
 window.signMockup = {
   state, loadPhoto, loadSignFile, setStep, setType, setCategory, setMode, makePdf, composite, requestRender, designKey,
   sizeInfo,
+  get estimate() { return estimate; },
   quadInsidePhoto() {
     return state.photo?.canvas ? quadInsidePhoto(state.photo.canvas) : false;
   },
