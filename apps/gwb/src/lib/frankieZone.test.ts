@@ -11,6 +11,8 @@ import {
   computeFrankieZoneView,
   findZoneCollisions,
   firstWeekAtLossCount,
+  limitZoneCollisions,
+  regularSeasonLastWeek,
   resolveZoneName,
   renameMeterLabel,
   zoneHeroTitle,
@@ -49,6 +51,7 @@ describe('frankieZone', () => {
       throughWeek: week,
       selectedWeek: week,
       weekInProgress: false,
+      playoffWeekStart: 15,
     })
   }
 
@@ -89,7 +92,7 @@ describe('frankieZone', () => {
     expect(renameMeterLabel(7)).toBe('1 loss from breaking the record')
   })
 
-  it('detects zone-vs-zone collisions when schedule includes a future week', () => {
+  it('detects zone-vs-zone collisions after the as-of week only', () => {
     const week4: SleeperMatchup[] = [
       { roster_id: 1, matchup_id: 5, points: 0, starters: [], starters_points: [], players_points: {} },
       { roster_id: 11, matchup_id: 5, points: 0, starters: [], starters_points: [], players_points: {} },
@@ -97,10 +100,47 @@ describe('frankieZone', () => {
       { roster_id: 5, matchup_id: 4, points: 0, starters: [], starters_points: [], players_points: {} },
     ]
     const sched = buildScheduleByWeek(new Map([[4, week4]]))
-    const hits = findZoneCollisions(new Set([1, 11]), sched, teams, 4, 3)
+    const hits = findZoneCollisions(new Set([1, 11]), sched, teams, 4, 3, 15)
     expect(hits).toHaveLength(1)
     expect(hits[0].week).toBe(4)
     expect(hits[0].weeksUntil).toBe(1)
+  })
+
+  it('excludes playoff weeks and caps displayed collisions at two', () => {
+    expect(regularSeasonLastWeek(15)).toBe(14)
+    const sched = new Map<number, Map<number, number>>()
+    for (let week = 2; week <= 17; week++) {
+      sched.set(week, new Map([[1, 11], [11, 1]]))
+    }
+    const all = findZoneCollisions(new Set([1, 11]), sched, teams, 2, 1, 15)
+    expect(all.every((c) => c.week < 15)).toBe(true)
+    expect(all[0].week).toBe(2)
+    expect(all.at(-1)?.week).toBe(14)
+    const limited = limitZoneCollisions(all, 2)
+    expect(limited.collisions).toHaveLength(2)
+    expect(limited.moreCount).toBe(all.length - 2)
+  })
+
+  it('week 3 view surfaces at most two upcoming collisions', () => {
+    const sched = new Map<number, Map<number, number>>()
+    for (let week = 4; week <= 14; week++) {
+      sched.set(week, new Map([[1, 11], [11, 1]]))
+    }
+    const matchupsByWeek = matchupsThroughWeek(3)
+    const standings = computeStandingsThroughWeek(matchupsByWeek, teams, 3)
+    const view = computeFrankieZoneView({
+      standings,
+      teams,
+      matchupsByWeek,
+      scheduleByWeek: sched,
+      throughWeek: 3,
+      selectedWeek: 3,
+      weekInProgress: false,
+      playoffWeekStart: 15,
+    })
+    expect(view.collisions.length).toBeLessThanOrEqual(2)
+    expect(view.collisions[0]?.week).toBe(4)
+    expect(view.moreCollisionsCount).toBeGreaterThan(0)
   })
 
   it('resolves renamed zone when a team hits 0-8', () => {

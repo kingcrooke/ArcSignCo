@@ -86,6 +86,8 @@ export type ZoneCollision = {
   featured?: boolean
 }
 
+export const ZONE_COLLISION_DISPLAY_LIMIT = 2
+
 export type FrankieZoneView = {
   zoneName: string
   heroTitle: string
@@ -95,8 +97,23 @@ export type FrankieZoneView = {
   residents: ZoneResident[]
   escapes: ZoneEscape[]
   collisions: ZoneCollision[]
+  moreCollisionsCount: number
   isEmpty: boolean
   throughWeek: number
+}
+
+export function regularSeasonLastWeek(playoffWeekStart: number): number {
+  return Math.max(1, playoffWeekStart - 1)
+}
+
+export function limitZoneCollisions(
+  collisions: ZoneCollision[],
+  limit = ZONE_COLLISION_DISPLAY_LIMIT,
+): { collisions: ZoneCollision[]; moreCount: number } {
+  return {
+    collisions: collisions.slice(0, limit),
+    moreCount: Math.max(0, collisions.length - limit),
+  }
 }
 
 export function managerZoneName(
@@ -296,10 +313,11 @@ export function findZoneCollisions(
   teams: Map<number, TeamInfo>,
   fromWeek: number,
   currentWeek: number,
-  maxWeek = 18,
+  playoffWeekStart = 15,
 ): ZoneCollision[] {
   const hits: ZoneCollision[] = []
-  for (let week = fromWeek; week <= maxWeek; week++) {
+  const lastRegularWeek = regularSeasonLastWeek(playoffWeekStart)
+  for (let week = fromWeek; week <= lastRegularWeek; week++) {
     const pairs = scheduleByWeek.get(week)
     if (!pairs) continue
     const seen = new Set<string>()
@@ -366,6 +384,7 @@ export function computeFrankieZoneView(input: {
   throughWeek: number
   selectedWeek: number
   weekInProgress: boolean
+  playoffWeekStart?: number
 }): FrankieZoneView {
   const {
     standings,
@@ -375,6 +394,7 @@ export function computeFrankieZoneView(input: {
     throughWeek,
     selectedWeek,
     weekInProgress,
+    playoffWeekStart = 15,
   } = input
 
   const zoneName = resolveZoneName(
@@ -409,13 +429,15 @@ export function computeFrankieZoneView(input: {
   }))
 
   const escapes = buildEscapeLog(matchupsByWeek, teams, throughWeek)
-  const collisions = findZoneCollisions(
+  const allCollisions = findZoneCollisions(
     residentIds,
     scheduleByWeek,
     teams,
     nextFromWeek,
     throughWeek,
+    playoffWeekStart,
   )
+  const { collisions, moreCount } = limitZoneCollisions(allCollisions)
 
   return {
     zoneName,
@@ -431,6 +453,7 @@ export function computeFrankieZoneView(input: {
     residents: residentViews,
     escapes,
     collisions,
+    moreCollisionsCount: moreCount,
     isEmpty: residents.length === 0,
     throughWeek,
   }

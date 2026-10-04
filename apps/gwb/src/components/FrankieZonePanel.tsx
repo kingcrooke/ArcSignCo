@@ -28,6 +28,7 @@ type Props = {
   throughWeek: number
   weekInProgress: boolean
   deferralNote: string | null
+  playoffWeekStart: number
   onOpenRecap: (week: number, recapId: string) => void
 }
 
@@ -114,6 +115,7 @@ export function FrankieZonePanel({
   throughWeek,
   weekInProgress,
   deferralNote,
+  playoffWeekStart,
   onOpenRecap,
 }: Props) {
   const [scheduleByWeek, setScheduleByWeek] = useState(() =>
@@ -186,6 +188,7 @@ export function FrankieZonePanel({
         throughWeek,
         selectedWeek,
         weekInProgress,
+        playoffWeekStart,
       }),
     [
       standings,
@@ -195,6 +198,7 @@ export function FrankieZonePanel({
       throughWeek,
       selectedWeek,
       weekInProgress,
+      playoffWeekStart,
     ],
   )
 
@@ -265,7 +269,9 @@ export function FrankieZonePanel({
             </ul>
           </section>
 
-          {(!scheduleReady || view.collisions.length > 0) && (
+          {(!scheduleReady ||
+            view.collisions.length > 0 ||
+            view.moreCollisionsCount > 0) && (
             <section aria-labelledby="fz-collisions-heading">
               <h3
                 id="fz-collisions-heading"
@@ -281,13 +287,20 @@ export function FrankieZonePanel({
                   Loading season schedule for collision watch…
                 </p>
               ) : view.collisions.length > 0 ? (
-                <ul className="space-y-3" role="list">
-                  {view.collisions.map((c) => (
-                    <li key={`${c.week}-${c.rosterA}-${c.rosterB}`}>
-                      <CollisionCard collision={c} />
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="space-y-3" role="list">
+                    {view.collisions.map((c) => (
+                      <li key={`${c.week}-${c.rosterA}-${c.rosterB}`}>
+                        <CollisionCard collision={c} />
+                      </li>
+                    ))}
+                  </ul>
+                  {view.moreCollisionsCount > 0 && (
+                    <p className="mt-2 text-xs text-[var(--gwb-muted)]">
+                      +{view.moreCollisionsCount} more zone-vs-zone games this season
+                    </p>
+                  )}
+                </>
               ) : (
                 <p className="text-sm text-[var(--gwb-muted)]">
                   No head-to-head collisions scheduled between current residents.

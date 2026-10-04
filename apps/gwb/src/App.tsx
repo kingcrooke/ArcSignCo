@@ -235,6 +235,7 @@ export default function App() {
                   data.nflState,
                   'Frankie Zone',
                 )}
+                playoffWeekStart={data.league.settings.playoff_week_start ?? 15}
                 onOpenRecap={openRecapFromZone}
               />
             </section>
