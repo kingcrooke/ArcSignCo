@@ -87,23 +87,26 @@ export default function App() {
           </div>
 
           <nav
-            className="mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+            className="gwb-section-tabs mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
+            role="tablist"
           >
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setTab(t.id)}
-                className={`flex-1 whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                  tab === t.id
-                    ? 'bg-[var(--gwb-accent)] text-[#1a1200]'
-                    : 'text-[var(--gwb-muted)] hover:text-[var(--gwb-text)]'
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
+            {TABS.map((t) => {
+              const selected = tab === t.id
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  tabIndex={selected ? 0 : -1}
+                  className="gwb-section-tab"
+                  onClick={() => setTab(t.id)}
+                >
+                  {t.label}
+                </button>
+              )
+            })}
           </nav>
 
           {tab === 'standings' && (
