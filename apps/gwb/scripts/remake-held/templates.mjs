@@ -12,20 +12,18 @@ const cssVs = `
 .hero { margin-top: 22px; display: flex; align-items: baseline; gap: 22px; font-size: 72px; line-height: 1.18; color: ${COLORS.white}; }
 .hero .vs { font-size: 72px; }
 .records { margin-top: 18px; font-size: 26px; color: ${COLORS.gold}; display: flex; gap: 30px; align-items: center; }
-.card { position: absolute; top: 276px; width: 420px; height: 700px; border-radius: 18px; overflow: hidden; }
+.card { position: absolute; top: 276px; width: 400px; height: 720px; border-radius: 18px; overflow: hidden; background: #111; }
 .card.left { left: ${MARGIN}px; }
-.card.right { left: 588px; }
-.card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.badge { position: absolute; top: 14px; padding: 10px 20px; border-radius: 999px; background: ${COLORS.gold}; color: #111;
-  font-size: 24px; line-height: 1; z-index: 3; }
-.badge.left { left: 14px; }
-.badge.right { right: 14px; }
-.vs-wrap { position: absolute; left: 498px; top: 602px; width: 96px; height: 96px; z-index: 12; }
-.vs-mask { position: absolute; inset: 0; background: #000; border-radius: 50%; }
+.card.right { left: 608px; }
+.card img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+.badge { position: absolute; top: 18px; padding: 10px 18px; border-radius: 999px; background: ${COLORS.gold}; color: #111;
+  font-size: 22px; line-height: 1; z-index: 3; }
+.badge.left { left: 16px; }
+.badge.right { right: 16px; }
 .vs-badge {
-  position: absolute; inset: 4px; border-radius: 50%;
-  background: ${COLORS.gold}; color: #111;
-  display: flex; align-items: center; justify-content: center; font-size: 38px;
+  position: absolute; left: 494px; top: 600px; width: 92px; height: 92px; border-radius: 50%;
+  background: ${COLORS.gold}; color: #111; z-index: 4;
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
 }
 .sneaky { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1048px; text-align: center; font-size: 34px; color: ${COLORS.gold}; }
 .poll { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1108px; }
@@ -50,7 +48,7 @@ export function vsM3HadiManny() {
     <div class="records bebas"><span>HADI (2-1)</span><span>vs</span><span>MANNY (2-1)</span></div>
   </div>
   <div class="card left"><img src="${left}" alt="" /><span class="badge left bebas">HADI 2-1</span></div>
-  <div class="vs-wrap"><div class="vs-mask"></div><div class="vs-badge bebas">VS</div></div>
+  <div class="vs-badge bebas">VS</div>
   <div class="card right"><img src="${right}" alt="" /><span class="badge right bebas">MANNY 2-1</span></div>
   <div class="sneaky bebas">SNEAKY GAME OF THE WEEK</div>
   <div class="poll">
@@ -128,24 +126,19 @@ export function w4Slide10() {
 }
 
 const cssW4TextBg = `
-.slide { position: relative; }
-.bg { position: absolute; inset: 0; background-size: cover; background-position: center right; }
-.shade {
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, ${COLORS.bg} 0%, ${COLORS.bg} 56%, rgba(10,15,20,0.35) 72%, transparent 88%);
-}
-.text { position: absolute; left: ${MARGIN}px; top: 48px; width: 580px; z-index: 2; }
+.slide { position: relative; background: ${COLORS.bg}; }
+.sky { position: absolute; top: 0; right: 0; width: 280px; height: 1350px; object-fit: cover; object-position: center; }
+.text { position: absolute; left: ${MARGIN}px; top: 48px; width: 680px; z-index: 2; background: ${COLORS.bg}; padding-right: 24px; }
 .hero { font-size: 72px; line-height: 1.12; margin-top: 22px; }
 .body { margin-top: 34px; font-size: 28px; line-height: 1.42; color: #c8d4e0; font-weight: 600; }
 .body p { margin-bottom: 10px; }
 `
 
 export function w4Slide06() {
-  const bg = fileUrl(path.join(SRC, 'w4-slide-06.jpg'))
+  const sky = fileUrl(path.join(ASSETS, 'w4-06-sky.png'))
   return wrapHtml(
     `<div class="slide">
-  <div class="bg" style="background-image:url('${bg}')"></div>
-  <div class="shade"></div>
+  <img class="sky" src="${sky}" alt="" />
   <div class="text">
     <div class="kicker bebas">GWB | WEEK 4 | EL CAMPEON</div>
     <div class="kicker-line"></div>
@@ -171,9 +164,7 @@ export function w4Slide06() {
 }
 
 const cssW4List = `
-.slide { position: relative; }
-.bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
-.scrim { position: absolute; inset: 0; background: rgba(8, 12, 18, 0.55); }
+.slide { position: relative; background: ${COLORS.bg}; }
 .hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 2; }
 .center-title { margin-top: 22px; font-size: 64px; color: ${COLORS.gold}; line-height: 1.15; }
 .list {
@@ -186,13 +177,11 @@ const cssW4List = `
 .row .p { color: ${COLORS.white}; flex: 1; }
 .note {
   position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1038px; z-index: 2;
-  font-size: 26px; color: #9aa8b8; line-height: 1.45; font-weight: 600;
-  background: rgba(10, 15, 20, 0.92); padding: 8px 0;
+  font-size: 26px; color: #c8d4e0; line-height: 1.45; font-weight: 600;
 }
 `
 
 export function w4Slide14() {
-  const bg = fileUrl(path.join(ASSETS, 'w4-14-plate.jpg'))
   const rows = [
     ['1', 'Josh Allen', 'Matt'],
     ['2', 'Lamar', 'Crooke'],
@@ -213,8 +202,6 @@ export function w4Slide14() {
     .join('')
   return wrapHtml(
     `<div class="slide">
-  <div class="bg" style="background-image:url('${bg}')"></div>
-  <div class="scrim"></div>
   <div class="hdr">
     <div class="kicker bebas">GWB | WEEK 4 | QB HEAT CHECK</div>
     <div class="kicker-line"></div>
@@ -234,28 +221,25 @@ export function w4Slide14() {
 
 const cssW4Picks = `
 .slide { position: relative; background: ${COLORS.bg}; }
-.bull { position: absolute; top: 0; left: 0; width: 1080px; height: 340px; object-fit: cover; object-position: center top; }
-.bull-fade { position: absolute; top: 220px; left: 0; right: 0; height: 160px; background: linear-gradient(180deg, transparent 0%, ${COLORS.bg} 88%); z-index: 1; }
-.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 3; }
-.picks-title { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 368px; font-size: 64px; color: ${COLORS.white}; z-index: 2; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 2; }
+.picks-title { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 148px; font-size: 64px; color: ${COLORS.white}; z-index: 2; }
 .pick-row {
   position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; z-index: 2;
-  background: rgba(22, 30, 42, 0.97); padding: 16px 20px; font-size: 28px; font-weight: 600;
+  background: #161e28; padding: 14px 18px; font-size: 28px; font-weight: 600;
 }
 .pick-row .g { color: ${COLORS.gold}; }
-.r1 { top: 468px; } .r2 { top: 532px; } .r3 { top: 596px; } .r4 { top: 660px; } .r5 { top: 724px; } .r6 { top: 788px; }
+.r1 { top: 248px; } .r2 { top: 312px; } .r3 { top: 376px; } .r4 { top: 440px; } .r5 { top: 504px; } .r6 { top: 568px; }
 .coral {
-  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 868px; z-index: 2;
-  color: ${COLORS.coral}; font-size: 26px; line-height: 1.45; font-weight: 600;
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 660px; z-index: 2;
+  color: ${COLORS.coral}; font-size: 26px; line-height: 1.4; font-weight: 600;
 }
 .closing {
-  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1008px; z-index: 2;
-  font-size: 28px; line-height: 1.38; color: #e8e8e8; font-weight: 600;
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 900px; z-index: 2;
+  font-size: 28px; line-height: 1.4; color: #e8e8e8; font-weight: 600;
 }
 `
 
 export function w4Slide16() {
-  const bull = fileUrl(path.join(ASSETS, 'w4-16-bull.png'))
   const picks = [
     ['r1', '<span class="g">Crooke</span> over Danny'],
     ['r2', '<span class="g">Eric</span> over Mauricio - barely'],
@@ -266,8 +250,6 @@ export function w4Slide16() {
   ]
   return wrapHtml(
     `<div class="slide">
-  <img class="bull" src="${bull}" alt="" />
-  <div class="bull-fade"></div>
   <div class="hdr">
     <div class="kicker bebas">GWB | WEEK 4 | CROOKE'S PICKS</div>
     <div class="kicker-line"></div>
@@ -298,22 +280,21 @@ const cssResult = `
 .hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; text-align: center; }
 .final { font-size: 62px; line-height: 1.18; margin-top: 22px; }
 .scoreline { margin-top: 14px; font-size: 36px; color: ${COLORS.gold}; letter-spacing: 0.04em; }
-.cards { position: absolute; left: 0; right: 0; top: 252px; height: 740px; }
+.cards { position: absolute; left: 0; right: 0; top: 268px; height: 700px; }
 .winner {
-  position: absolute; left: 40px; top: 8px; width: 560px; height: 692px; border-radius: 16px;
-  border: 3px solid rgba(232,185,35,0.5); box-shadow: 0 0 36px rgba(232,185,35,0.2); z-index: 2; background: #111;
+  position: absolute; left: 56px; top: 0; width: 440px; height: 680px; border-radius: 16px;
+  border: 3px solid rgba(232,185,35,0.5); z-index: 1; background: #111;
 }
 .loser {
-  position: absolute; right: 40px; top: 64px; width: 500px; height: 608px; border-radius: 16px;
+  position: absolute; left: 584px; top: 40px; width: 440px; height: 620px; border-radius: 16px;
   border: 2px solid #3a4454; z-index: 1; background: #111;
 }
-.card-art { position: absolute; left: 0; right: 0; top: 0; bottom: 58px; overflow: hidden; border-radius: 14px 14px 0 0; }
+.card-art { position: absolute; left: 0; right: 0; top: 0; bottom: 64px; overflow: hidden; }
 .card-art img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 .medal {
-  position: absolute; left: 502px; top: 368px; width: 76px; height: 76px; border-radius: 50%;
-  background: ${COLORS.gold}; color: #111; font-size: 44px; z-index: 5;
+  position: absolute; left: 502px; top: 300px; width: 76px; height: 76px; border-radius: 50%;
+  background: ${COLORS.gold}; color: #111; font-size: 44px; z-index: 2;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 0 4px #080c10;
 }
 .tag { position: absolute; padding: 8px 18px; border-radius: 999px; font-family: 'Bebas Neue'; font-size: 24px; z-index: 4; }
 .tag.wt { top: 16px; left: 16px; background: ${COLORS.gold}; color: #111; }

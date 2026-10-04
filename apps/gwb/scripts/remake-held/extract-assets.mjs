@@ -63,31 +63,26 @@ async function main() {
   const w409 = path.join(PUB, 'w4-slide-09.full.jpg')
   await copyFile(w409, path.join(SRC, 'w4-plate-matchup.jpg')).catch(() => {})
 
+  // Inset well inside card frames: below name badges, clear of the VS circle.
   await crop('vs-m3-left-card.png', 'vs-m3-hadi-manny.jpg', {
-    left: 76,
-    top: 420,
-    width: 428,
-    height: 600,
+    left: 100,
+    top: 480,
+    width: 300,
+    height: 540,
   })
   await crop('vs-m3-right-card.png', 'vs-m3-hadi-manny.jpg', {
-    left: 576,
-    top: 420,
-    width: 428,
-    height: 600,
+    left: 700,
+    top: 480,
+    width: 300,
+    height: 540,
   })
 
-  await crop('w4-06-hero.png', 'w4-slide-06.jpg', {
-    left: 400,
-    top: 100,
-    width: 680,
-    height: 1250,
-  })
-
-  await crop('w4-16-bull.png', 'w4-slide-16.jpg', {
-    left: 0,
+  // Right-edge sky only — left of this still has baked body copy.
+  await crop('w4-06-sky.png', 'w4-slide-06.jpg', {
+    left: 820,
     top: 200,
-    width: 1080,
-    height: 320,
+    width: 260,
+    height: 1000,
   })
 
   await blurPlate('w4-10-plate.jpg', path.join(SRC, 'w4-plate-matchup.jpg'), {
@@ -96,13 +91,14 @@ async function main() {
   })
   await ruinStripsPlate()
 
+  // Inner illustration only: below the name badge, above WINNER/LOSER, clear of the W circle.
   const resultCrops = [
-    ['results-w1-m2-winner.png', 'results-w1-m2.jpg', { left: 56, top: 360, width: 520, height: 560 }],
-    ['results-w1-m2-loser.png', 'results-w1-m2.jpg', { left: 540, top: 400, width: 480, height: 500 }],
-    ['results-w2-m1-winner.png', 'results-w2-m1.jpg', { left: 56, top: 360, width: 520, height: 560 }],
-    ['results-w2-m1-loser.png', 'results-w2-m1.jpg', { left: 540, top: 400, width: 480, height: 500 }],
-    ['results-w3-m2-winner.png', 'results-w3-m2.jpg', { left: 56, top: 360, width: 520, height: 560 }],
-    ['results-w3-m2-loser.png', 'results-w3-m2.jpg', { left: 540, top: 400, width: 480, height: 500 }],
+    ['results-w1-m2-winner.png', 'results-w1-m2.jpg', { left: 100, top: 430, width: 380, height: 460 }],
+    ['results-w1-m2-loser.png', 'results-w1-m2.jpg', { left: 720, top: 470, width: 280, height: 340 }],
+    ['results-w2-m1-winner.png', 'results-w2-m1.jpg', { left: 100, top: 430, width: 380, height: 460 }],
+    ['results-w2-m1-loser.png', 'results-w2-m1.jpg', { left: 720, top: 470, width: 280, height: 340 }],
+    ['results-w3-m2-winner.png', 'results-w3-m2.jpg', { left: 100, top: 430, width: 380, height: 460 }],
+    ['results-w3-m2-loser.png', 'results-w3-m2.jpg', { left: 720, top: 470, width: 280, height: 340 }],
   ]
   for (const [name, src, region] of resultCrops) {
     await crop(name, src, region)
