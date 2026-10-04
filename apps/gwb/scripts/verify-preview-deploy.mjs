@@ -56,8 +56,17 @@ async function verifySlides() {
   console.log('all w1–w3 slide webp/jpg assets return 200')
 }
 
+async function waitForApp(page) {
+  await page.goto(PREVIEW, { waitUntil: 'domcontentloaded', timeout: 180_000 })
+  await page.waitForSelector('nav.gwb-section-tabs', { timeout: 180_000 })
+  await page
+    .getByText('Loading GWB league data')
+    .waitFor({ state: 'detached', timeout: 180_000 })
+    .catch(() => {})
+}
+
 async function scrollReportColumn(page, week) {
-  await page.goto(PREVIEW, { waitUntil: 'networkidle', timeout: 180_000 })
+  await waitForApp(page)
   await page.getByLabel('NFL Week').selectOption(String(week))
   await page.getByRole('tab', { name: 'Graphics', exact: true }).click()
   const report = page.locator(`#graphics-week-${week}-report`)
@@ -91,9 +100,8 @@ async function main() {
 
   for (const width of [1280, 390]) {
     await shot(page, 'gwb-preview-nav-standings', width, async () => {
-      await page.goto(PREVIEW, { waitUntil: 'networkidle', timeout: 180_000 })
+      await waitForApp(page)
       await page.getByRole('tab', { name: 'Standings', exact: true }).click()
-      await page.waitForSelector('nav.gwb-section-tabs', { timeout: 60_000 })
     })
     await shot(page, 'gwb-preview-nav-mulligans', width, async () => {
       await page.getByRole('tab', { name: 'Mulligans', exact: true }).click()
@@ -103,10 +111,10 @@ async function main() {
   for (const week of [1, 4]) {
     for (const width of [1280, 390]) {
       await shot(page, `gwb-preview-standings-week${week}`, width, async () => {
-        await page.goto(PREVIEW, { waitUntil: 'networkidle', timeout: 180_000 })
+        await waitForApp(page)
         await page.getByLabel('NFL Week').selectOption(String(week))
         await page.getByRole('tab', { name: 'Standings', exact: true }).click()
-        await page.waitForSelector('table', { timeout: 120_000 })
+        await page.waitForSelector('table tbody tr', { timeout: 120_000 })
       })
     }
   }
@@ -114,7 +122,7 @@ async function main() {
   for (const week of [1, 4]) {
     for (const width of [1280, 390]) {
       await shot(page, `gwb-preview-mulligans-week${week}`, width, async () => {
-        await page.goto(PREVIEW, { waitUntil: 'networkidle', timeout: 180_000 })
+        await waitForApp(page)
         await page.getByLabel('NFL Week').selectOption(String(week))
         await page.getByRole('tab', { name: 'Mulligans', exact: true }).click()
         await page.waitForSelector('#mulligans-section', { timeout: 120_000 })
