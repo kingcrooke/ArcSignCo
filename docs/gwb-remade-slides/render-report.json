@@ -1,0 +1,66 @@
+[
+  {
+    "id": "vs-m3-hadi-manny",
+    "png": "/workspace/docs/gwb-remade-slides/vs-m3-hadi-manny.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/vs-m3-hadi-manny-compare.png",
+    "ocrSample": "GWB + WEEK 4\n\nHADI (2-1) VS MANNY (2-1)\n\nSNEAKY GAME OF THE WEEK\n\nMANNY 52% HADI 48%\nee\n\nMahomes QB3 vs Kyler QB14_ * JSN + Bowers back\n\ngwb_fantasy_football VS ¢ M3\n",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "w4-slide-06",
+    "png": "/workspace/docs/gwb-remade-slides/w4-slide-06.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/w4-slide-06-compare.png",
+    "ocrSample": "GWB | WEEK 4 | EL CAMPEON\n\nBrock Bowers returned from the knee\nprocedure and immediately went:\n10 catches. 116 yards. 1 TD.\n\nHadi goes from AJ Barner...\n\nback to an elite tight end!\n\nRanked around top",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "w4-slide-10",
+    "png": "/workspace/docs/gwb-remade-slides/w4-slide-10.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/w4-slide-10-compare.png",
+    "ocrSample": "GWB | WEEK 4 | MATCHUP 3\n\nHADI VS MANNY\n\nHADI (2-1)\n\n“El Campeon de la Liga\"\nKyler, JSN, Bowers, Pickens, Skattebo.\nQuietly getting healthier.\n\nMANRY (2-1)\n\n“The Corporation\"\nMahomes (QB3), Cook, Dava",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "w4-slide-14",
+    "png": "/workspace/docs/gwb-remade-slides/w4-slide-14.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/w4-slide-14-compare.png",
+    "ocrSample": "GWB | WEEK 4 | QB HEAT CHECK\n\nQB HEAT CHECK\n\n=\n\noOo a Fb Ww N\n\n11\n\n14\n\nDarnold isn't top-tier this week...\nafter 47.89 GWB points, I'm not telling\n\nJosh Allen\nLamar\nMahomes\nLawrence\nHurts\n\nGoff\nPurdy\n",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "w4-slide-16",
+    "png": "/workspace/docs/gwb-remade-slides/w4-slide-16.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/w4-slide-16-compare.png",
+    "ocrSample": "GWB | WEEK 4 | CROOKE'S PICKS\n\nTHE PICKS\n\nCrooke over Danny\n\nEric over Mauricio - barely\nSteven over Narking\nKayser over Frankie\nManny over Hadi - coin flip\n\nMatt over Jamil - coin flip\n\nUpset watch: ",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "results-w1-m2",
+    "png": "/workspace/docs/gwb-remade-slides/results-w1-m2.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/results-w1-m2-compare.png",
+    "ocrSample": "GWB + WEEK 1\n\nFINAL: KAYSER TAKES IT\n\nKAYSER 138.7 — 119.4 HADI\n\nB AGP aa\nA une Seas\n\nx KGS oe\na fd =}\n\nTHE SPECIAL ONE STRIKES\nKAYSER 138.7 119.4 HADI\n\nKayser 1-O — Hadi's crown slips in Week 1\n\ngwb_",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "results-w2-m1",
+    "png": "/workspace/docs/gwb-remade-slides/results-w2-m1.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/results-w2-m1-compare.png",
+    "ocrSample": "GWB + WEEK 2\n\nFINAL: HADI TAKES IT\n\nHADI 151.0 — 123.7 CROOKE\n\ney ae\n\nHADI1-1°” } - ;\nj =] 1\nVe ! h a GROOKEO-2 3\nVW fy \"| '\n\n\"\niy eae\n-\n\nEL CAMPEON RESPONDS\n\nHADI 151.0 123.7 CROOKE\n\nHadi evens up at",
+    "issues": [],
+    "ok": true
+  },
+  {
+    "id": "results-w3-m2",
+    "png": "/workspace/docs/gwb-remade-slides/results-w3-m2.png",
+    "compare": "/opt/cursor/artifacts/gwb-slide-remakes/results-w3-m2-compare.png",
+    "ocrSample": "GWB + WEEK 3\n\nFINAL: HADI TAKES IT\n\nHADI 132.0 — 121.7 DANNY\n\nEL CAMPEON TO 2-1\nHADI 132.0 121.7 DANNY\n\nDanny's negative mulligan — first in GWB history\n\ngwb_fantasy_football RESULTS * W3M2\n",
+    "issues": [],
+    "ok": true
+  }
+]

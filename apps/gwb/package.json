@@ -12,6 +12,7 @@
     "test:e2e": "playwright test",
     "screenshots": "node scripts/capture-artifacts.mjs",
     "optimize-slides": "node scripts/optimize-published-slides.mjs",
+    "remake-held-slides": "node scripts/remake-held/render.mjs",
     "prepare-recaps": "node scripts/prepare-commissioner-recaps.mjs"
   },
   "dependencies": {
