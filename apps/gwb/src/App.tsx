@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { FrankieZonePanel } from './components/FrankieZonePanel'
+import { WaiverPanel } from './components/WaiverPanel'
 import { RecapsPanel } from './components/RecapsPanel'
 import { MulligansPanel } from './components/MulligansPanel'
 import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
@@ -17,7 +18,7 @@ import { cumulativeDeferralNote, lastCompletedWeek } from './lib/weeks'
 import { computeStandingsThroughWeek } from './lib/standings'
 import { useLeagueData } from './hooks/useLeagueData'
 
-type Tab = 'standings' | 'gallery' | 'recaps' | 'mulligans' | 'frankie'
+type Tab = 'standings' | 'gallery' | 'recaps' | 'mulligans' | 'frankie' | 'waivers'
 
 const BASE_TABS: { id: Tab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
@@ -25,6 +26,7 @@ const BASE_TABS: { id: Tab; label: string }[] = [
   { id: 'recaps', label: 'Recaps' },
   { id: 'mulligans', label: 'Mulligans' },
   { id: 'frankie', label: 'Frankie Zone' },
+  { id: 'waivers', label: 'Waiver Wire Champion' },
 ]
 
 export default function App() {
@@ -75,7 +77,7 @@ export default function App() {
   return (
     <div
       className={`mx-auto flex min-h-dvh flex-col px-4 pb-8 pt-6 ${
-        tab === 'gallery' ? 'max-w-6xl' : 'max-w-3xl'
+        tab === 'gallery' || tab === 'waivers' ? 'max-w-6xl' : 'max-w-3xl'
       }`}
     >
       <header className="mb-6">
@@ -237,6 +239,22 @@ export default function App() {
                 )}
                 playoffWeekStart={data.league.settings.playoff_week_start ?? 15}
                 onOpenRecap={openRecapFromZone}
+              />
+            </section>
+          )}
+          {tab === 'waivers' && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold">
+                Waiver Wire Champion
+                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                  through Week {data.standingsThroughWeek}
+                </span>
+              </h2>
+              <WaiverPanel
+                board={data.waiverBoard}
+                players={data.players}
+                deferralNote={data.waiverDeferralNote}
+                loadError={data.waiverLoadError}
               />
             </section>
           )}

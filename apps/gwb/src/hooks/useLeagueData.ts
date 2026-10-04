@@ -7,8 +7,10 @@ import {
   fetchMatchups,
   fetchNflState,
   fetchRosters,
+  fetchTransactionsThroughWeek,
   fetchUsers,
 } from '../lib/sleeperApi'
+import { computeWaiverBoard } from '../lib/waiverWire'
 import { computeStandings, computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import {
@@ -27,9 +29,11 @@ import type {
   SleeperLeague,
   SleeperMatchup,
   SleeperRoster,
+  SleeperTransaction,
   StandingRow,
   TeamInfo,
 } from '../lib/types'
+import type { WaiverBoard } from '../lib/waiverWire'
 
 export type LoadState = 'idle' | 'loading' | 'ready' | 'error'
 
@@ -54,6 +58,9 @@ export interface LeagueData {
   standingsThroughWeek: number
   standingsDeferralNote: string | null
   mulligansDeferralNote: string | null
+  waiverBoard: WaiverBoard
+  waiverLoadError: string | null
+  waiverDeferralNote: string | null
 }
 
 export function useLeagueData(): {
@@ -73,6 +80,8 @@ export function useLeagueData(): {
     teams: Map<number, TeamInfo>
     standings: StandingRow[]
     seasonStandings: StandingRow[]
+    transactions: SleeperTransaction[]
+    waiverLoadError: string | null
   } | null>(null)
   const [selectedWeek, setSelectedWeek] = useState(1)
 
@@ -90,12 +99,25 @@ export function useLeagueData(): {
       const nflWeek = currentNflWeek(nflState)
       const completed = lastCompletedWeek(league, nflState)
       const through = Math.max(nflWeek, completed)
-      const matchupsByWeek = await fetchAllMatchupsThroughWeek(through)
+      const [matchupsByWeek, txResult] = await Promise.all([
+        fetchAllMatchupsThroughWeek(through),
+        fetchTransactionsThroughWeek(through).then(
+          (transactions) => ({
+            transactions,
+            waiverLoadError: null as string | null,
+          }),
+          (e: unknown) => ({
+            transactions: [] as SleeperTransaction[],
+            waiverLoadError:
+              e instanceof Error ? e.message : 'Waiver moves did not load',
+          }),
+        ),
+      ])
       const teams = buildTeamMap(users, rosters)
       const standings = computeStandings(rosters, teams)
       const seasonStandings = standings
 
-      setSelectedWeek(completed)
+      setSelectedWeek(nflWeek)
       setBase({
         league,
         nflState,
@@ -105,6 +127,8 @@ export function useLeagueData(): {
         teams,
         standings,
         seasonStandings,
+        transactions: txResult.transactions,
+        waiverLoadError: txResult.waiverLoadError,
       })
       setState('ready')
     } catch (e) {
@@ -127,6 +151,8 @@ export function useLeagueData(): {
       seasonStandings,
       league,
       nflState,
+      transactions,
+      waiverLoadError,
     } = base
     const completedWeek = lastCompletedWeek(league, nflState)
     const throughForCumulative = standingsThroughWeek(
@@ -155,6 +181,21 @@ export function useLeagueData(): {
 
     const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
     const weekLabel = weekStatusLabel(selectedWeek, league, nflState)
+    const waiverBoard = computeWaiverBoard({
+      transactions,
+      matchupsByWeek,
+      teams,
+      rosters,
+      scoringThrough: throughForCumulative,
+      selectedWeek,
+      selectedWeekComplete: !isSelectedWeekLive,
+    })
+    const waiverDeferralNote = cumulativeDeferralNote(
+      selectedWeek,
+      league,
+      nflState,
+      'waiver scores',
+    )
 
     return {
       league,
@@ -175,6 +216,9 @@ export function useLeagueData(): {
       standingsThroughWeek: throughForCumulative,
       standingsDeferralNote: deferNote,
       mulligansDeferralNote: mulliganDeferNote,
+      waiverBoard,
+      waiverLoadError,
+      waiverDeferralNote,
     }
   }, [base, selectedWeek, load])
 

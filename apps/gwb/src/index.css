@@ -70,7 +70,8 @@ body {
 
 /* Section tabs — instant active swap (no bg transition; avoids double-highlight glitch) */
 nav.gwb-section-tabs button.gwb-section-tab {
-  flex: 1 1 0;
+  flex: 1 0 auto;
+  min-width: max-content;
   white-space: nowrap;
   border-radius: 0.5rem;
   padding: 0.625rem 0.75rem;
