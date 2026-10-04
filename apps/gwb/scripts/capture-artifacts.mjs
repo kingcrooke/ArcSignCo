@@ -3,7 +3,8 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 const OUT = '/opt/cursor/artifacts/screenshots'
-const BASE = process.env.PREVIEW_URL || 'http://127.0.0.1:4317'
+const BASE =
+  process.env.PREVIEW_URL || 'http://127.0.0.1:4317/gwb-fe006a16/'
 
 async function shot(page, name, width) {
   await page.setViewportSize({ width, height: width === 390 ? 844 : 900 })
@@ -35,12 +36,18 @@ async function main() {
   }
 
   await page.getByRole('button', { name: 'Recaps' }).click()
+  await page.waitForSelector('summary', { timeout: 30_000 })
+  const firstRecap = page.locator('details').first()
+  if (!(await firstRecap.getAttribute('open'))) {
+    await firstRecap.locator('summary').click()
+  }
   for (const w of [1280, 390]) {
     await page.setViewportSize({ width: w, height: w === 390 ? 844 : 900 })
     await page.screenshot({
-      path: join(OUT, `recaps-${w}.png`),
+      path: join(OUT, `gwb-recaps-${w}.png`),
       fullPage: true,
     })
+    console.log('recaps', w)
   }
 
   await page.getByRole('button', { name: 'IG' }).click()

@@ -82,6 +82,8 @@ async function captureSlides(page, width) {
   await page.setViewportSize({ width, height })
   await openSlidesTab(page)
   await waitForGalleryImages(page)
+  await page.locator('#slides-results-week-1').scrollIntoViewIfNeeded()
+  await page.waitForTimeout(300)
   await page.screenshot({
     path: join(OUT, `gwb-slides-gallery-${width}.png`),
     fullPage: true,
@@ -125,6 +127,7 @@ async function verifyMobileScroll(page) {
 async function copyFixedMasters() {
   const { copyFile } = await import('node:fs/promises')
   const fixedDir = new URL('../../../docs/gwb-fixed-slides/', import.meta.url)
+  const resultsDir = new URL('../../../docs/gwb-results-cards/', import.meta.url)
   const names = [
     'w4-slide-06.png',
     'w4-slide-10.png',
@@ -132,11 +135,18 @@ async function copyFixedMasters() {
     'w4-slide-16.png',
     'vs-m3-hadi-manny.png',
   ]
+  const resultNames = ['results-w1-m2.png']
   for (const name of names) {
     const src = new URL(name, fixedDir)
     const dest = join(OUT, `gwb-fixed-${name}`)
     await copyFile(src, dest)
     console.log('fixed master', dest)
+  }
+  for (const name of resultNames) {
+    const src = new URL(name, resultsDir)
+    const dest = join(OUT, `gwb-fixed-${name}`)
+    await copyFile(src, dest)
+    console.log('fixed result', dest)
   }
 }
 

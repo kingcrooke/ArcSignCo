@@ -16,6 +16,10 @@ const FULL_WIDTH = 1080
 const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
+const RESULTS_BASENAMES = [1, 2, 3].flatMap((w) =>
+  [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
+)
+
 const SLIDE_BASENAMES = [
   ...Array.from({ length: 16 }, (_, i) =>
     `w4-slide-${String(i + 1).padStart(2, '0')}`,
@@ -26,6 +30,7 @@ const SLIDE_BASENAMES = [
   'vs-m4-jamil-matt',
   'vs-m5-mauricio-eric',
   'vs-m6-danny-crooke',
+  ...RESULTS_BASENAMES,
 ]
 
 async function findSourceForBasename(basename, searchDirs) {
@@ -116,6 +121,7 @@ async function processOne(inputPath, basename) {
 async function main() {
   const cliSources = process.argv.slice(2).filter((a) => !a.startsWith('-'))
   const searchDirs = [
+    path.join(__dirname, '../../../docs/gwb-results-cards'),
     path.join(__dirname, '../../../docs/gwb-fixed-slides'),
     path.join(__dirname, 'slide-sources'),
     '/home/ubuntu/.cursor/projects/workspace/uploads',

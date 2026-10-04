@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { GraphicsPanel } from './components/GraphicsPanel'
 import { PowerPanel } from './components/PowerPanel'
+import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { RecapsPanel } from './components/RecapsPanel'
 import { MulligansPanel } from './components/MulligansPanel'
 import { SlidesPanel } from './components/SlidesPanel'
@@ -128,18 +129,24 @@ export default function App() {
             </section>
           )}
           {tab === 'recaps' && (
-            <section>
-              <h2 className="mb-3 text-lg font-semibold">
-                Week {data.selectedWeek} recaps
-                {data.isSelectedWeekLive ? ' (live scores)' : ''}
-              </h2>
-              <RecapsPanel
-                recaps={data.recaps}
-                week={data.selectedWeek}
-                hasScores={weekHasMatchups(
-                  data.matchupsByWeek.get(data.selectedWeek),
-                )}
-              />
+            <section className="space-y-8">
+              <div>
+                <h2 className="mb-3 text-lg font-semibold">Commissioner&apos;s recaps</h2>
+                <CommissionerRecapsPanel />
+              </div>
+              <div>
+                <h2 className="mb-3 text-lg font-semibold">
+                  Week {data.selectedWeek} matchup recaps
+                  {data.isSelectedWeekLive ? ' (live scores)' : ''}
+                </h2>
+                <RecapsPanel
+                  recaps={data.recaps}
+                  week={data.selectedWeek}
+                  hasScores={weekHasMatchups(
+                    data.matchupsByWeek.get(data.selectedWeek),
+                  )}
+                />
+              </div>
             </section>
           )}
           {tab === 'graphics' && (

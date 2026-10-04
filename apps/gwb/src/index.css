@@ -44,3 +44,26 @@ body {
   background: var(--gwb-bg);
   color: var(--gwb-text);
 }
+
+.commissioner-recap-prose p {
+  margin: 0.75em 0;
+}
+
+.commissioner-recap-prose p:first-child {
+  margin-top: 0;
+}
+
+.commissioner-recap-prose strong {
+  font-weight: 600;
+  color: var(--gwb-text);
+}
+
+.commissioner-recap-prose hr,
+.commissioner-recap-prose p:has(+ hr) {
+  border: none;
+}
+
+.commissioner-recap-prose hr {
+  margin: 1.25em 0;
+  height: 0;
+}

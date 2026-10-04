@@ -13,7 +13,8 @@ test('loads real GWB league data and core sections', async ({ page }) => {
   await expect(page.getByText('How power score works')).toBeVisible()
 
   await page.getByRole('button', { name: 'Recaps' }).click()
-  await expect(page.getByText(/Week \d+ recaps/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: /Commissioner's recaps/i })).toBeVisible()
+  await expect(page.getByText(/Week \d+ matchup recaps/)).toBeVisible()
 
   await page.getByRole('button', { name: 'IG' }).click()
   await expect(page.getByText('Instagram graphics')).toBeVisible()

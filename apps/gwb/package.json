@@ -11,11 +11,13 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "screenshots": "node scripts/capture-artifacts.mjs",
-    "optimize-slides": "node scripts/optimize-published-slides.mjs"
+    "optimize-slides": "node scripts/optimize-published-slides.mjs",
+    "prepare-recaps": "node scripts/prepare-commissioner-recaps.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
