@@ -30,6 +30,8 @@ export function TeamAvatar({
     <img
       src={team.avatarUrl}
       alt=""
+      crossOrigin="anonymous"
+      referrerPolicy="no-referrer"
       className={`${dim} shrink-0 rounded-full border border-[var(--gwb-border)] object-cover`}
       onError={() => setUseInitials(true)}
       onLoad={(e) => {
