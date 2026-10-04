@@ -21,6 +21,10 @@ test('loads real GWB league data and core sections', async ({ page }) => {
   await page.getByRole('button', { name: 'Mulligans' }).click()
   await expect(page.locator('#mulligans-section')).toBeVisible()
 
+  await page.getByRole('button', { name: /Zone$/ }).click()
+  await expect(page.locator('#frankie-zone-section')).toBeVisible()
+  await expect(page.getByText(/THE .* ZONE/)).toBeVisible()
+
   await page.getByRole('button', { name: 'Graphics' }).click()
   await page.getByLabel('NFL Week').selectOption('1')
   await expect(page.getByRole('heading', { name: 'Results', exact: true })).toBeVisible()
