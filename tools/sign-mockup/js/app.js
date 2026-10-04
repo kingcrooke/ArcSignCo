@@ -13,7 +13,9 @@ import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
 import { mountEstimateForm } from "./estimate-form.js";
 import { DISCLAIMER } from "./pdf.js";
 import { buildSignPdf, flatArtwork, jpegBlob } from "./proof-pdf.js";
-import { anchorCenter, STOREFRONT_WIDTH_IN, usesFasciaBand } from "./place-anchors.js";
+import {
+  anchorCenter, hasPlaceAnchor, isWindowGlassType, PLACE_ANCHOR, STOREFRONT_WIDTH_IN, usesFasciaBand, windowGlassMaxSize,
+} from "./place-anchors.js";
 
 const $ = id => document.getElementById(id);
 const stage = $("stage"), canvas = $("view"), ctx = canvas.getContext("2d");
@@ -44,6 +46,7 @@ const state = {
   selected: null,     // { kind: "cal" | "quad" | "cover", index }
   cover: null,        // { quad, color:[r,g,b], auto } patch over an existing sign, or null
   home: null,         // { x, y, w } where a new sign starts on this photo (the sample's sign band)
+  sampleRegions: null, // { window, ground } pixel rects on the built-in sample storefront only
   touchedSign: false,
   typeId: DEFAULT_TYPE,
   typeOptions: {},    // per type id, so switching back keeps choices
@@ -618,6 +621,7 @@ async function loadPhoto(file) {
     state.placed = {};
     state.selected = null;
     state.home = null;
+    state.sampleRegions = null;
     setCover(false);
     $("drop").hidden = true;
     $("zoomBar").hidden = false;
@@ -644,6 +648,9 @@ const SAMPLE = {
   url: new URL("../img/sample-storefront.jpg", import.meta.url),
   cal: [{ x: 752, y: 676 }, { x: 914, y: 676 }], inches: 36, label: "Door width",
   band: { x: 565, y: 258, w: 480 },
+  // Display window (glass) and lower sidewalk/brick band for construction defaults.
+  window: { x: 478, y: 378, w: 432, h: 292 },
+  ground: { x: 72, y: 708, w: 1008, h: 148 },
 };
 $("trySample").addEventListener("click", async () => {
   try {
@@ -659,6 +666,7 @@ $("trySample").addEventListener("click", async () => {
     state.cal = { a: { ...SAMPLE.cal[0] }, b: { ...SAMPLE.cal[1] } };
     state.calInches = SAMPLE.inches;
     state.home = { ...SAMPLE.band };
+    state.sampleRegions = { window: { ...SAMPLE.window }, ground: { ...SAMPLE.ground } };
     if (state.art) placeSign();
     setStatus("Sample photo loaded. Its scale line is already set across the door (3 ft).");
     updateUI();
@@ -846,6 +854,30 @@ function quadInsidePhoto(photo, quad = state.quad, margin = QUAD_CLAMP_MARGIN) {
   return quad.every(p => p.x >= margin && p.x <= photo.width - margin && p.y >= margin && p.y <= photo.height - margin);
 }
 
+/** Keep the quad inside a pixel rectangle (sample window glass), shrinking if needed. */
+function clampQuadInsideRect(rect, photo) {
+  if (!state.quad || !rect) return;
+  const m = 8;
+  const maxW = Math.max(12, rect.w - 2 * m), maxH = Math.max(12, rect.h - 2 * m);
+  let q = state.quad;
+  for (let pass = 0; pass < 8; pass++) {
+    const b = bounds(q);
+    const bw = b.maxX - b.minX, bh = b.maxY - b.minY;
+    if (bw > maxW || bh > maxH) {
+      q = scaleQuad(q, Math.min(maxW / Math.max(1, bw), maxH / Math.max(1, bh)) * 0.98, centroid(q));
+      continue;
+    }
+    let dx = 0, dy = 0;
+    if (b.minX < rect.x + m) dx = rect.x + m - b.minX;
+    else if (b.maxX > rect.x + rect.w - m) dx = rect.x + rect.w - m - b.maxX;
+    if (b.minY < rect.y + m) dy = rect.y + m - b.minY;
+    else if (b.maxY > rect.y + rect.h - m) dy = rect.y + rect.h - m - b.maxY;
+    if (!dx && !dy) break;
+    q = q.map(p => ({ x: p.x + dx, y: p.y + dy }));
+  }
+  state.quad = q;
+}
+
 /** Shift (and slightly shrink if needed) so every corner stays inside the photo. */
 function clampQuadInsidePhoto(photo) {
   if (!state.quad || !photo) return;
@@ -890,39 +922,50 @@ function defaultPlaceWidthPx(photo) {
   const scaled = cat.ui.plaque ? scaledWidthPx(10) : null;
   if (scaled) return scaled;
   if (cat.ui.plaque) return photo.width * 0.06;
-  if (state.home?.w) return state.home.w;
+  if (state.sampleRegions?.window && isWindowGlassType(currentType())) {
+    return state.sampleRegions.window.w * 0.72;
+  }
+  if (state.home?.w && usesFasciaBand(currentType())) return state.home.w;
+  if (state.home?.w && !hasPlaceAnchor(currentType())) return state.home.w;
   return photo.width * 0.45;
 }
 
 function placeSign(aspect = signAspect(), keepCenter = false) {
   const photo = state.photo.canvas;
   const cat = currentCat();
+  const type = currentType();
   const preset = presetWidthPx();
   let w = defaultPlaceWidthPx(photo);
-  let c = (!cat.ui.plaque && state.home)
-    ? { x: state.home.x, y: state.home.y }
-    : { x: photo.width / 2, y: photo.height * 0.36 };
-  const door = currentType().mount === "door" ? doorMountPoint(photo) : null;
-  if (door) {
-    c = door;
-  } else if (cat.ui.plaque) {
-    const mount = plaqueMountPoint(photo);
-    if (mount) c = mount;
-  } else if (!state.calInches) {
-    c = anchorCenter(photo, currentType(), {
-      home: state.home,
-      door: doorMountPoint(photo),
-      plaque: plaqueMountPoint(photo),
-    });
-    if (state.home && usesFasciaBand(currentType())) {
-      c = { x: state.home.x, y: state.home.y };
-    }
-  } else if (keepCenter && state.quad) {
+  const mountCtx = {
+    home: state.home,
+    door: doorMountPoint(photo),
+    plaque: plaqueMountPoint(photo),
+    sample: state.sampleRegions,
+  };
+  let c;
+  if (keepCenter && state.quad && state.calInches) {
     c = centroid(state.quad);
     if (!preset) {
       w = (dist(state.quad[0], state.quad[1]) + dist(state.quad[3], state.quad[2])) / 2;
       if (w < photo.width * 0.04) w = photo.width * 0.45;
     }
+  } else if (type.mount === "door" && mountCtx.door) {
+    c = mountCtx.door;
+  } else if (cat.ui.plaque) {
+    c = mountCtx.plaque || anchorCenter(photo, type, mountCtx);
+  } else if (usesFasciaBand(type) && state.home) {
+    c = { x: state.home.x, y: state.home.y };
+  } else if (hasPlaceAnchor(type)) {
+    c = anchorCenter(photo, type, mountCtx);
+  } else if (!cat.ui.plaque && state.home) {
+    c = { x: state.home.x, y: state.home.y };
+  } else {
+    c = { x: photo.width / 2, y: photo.height * 0.36 };
+  }
+  const glassCap = windowGlassMaxSize(photo, type, mountCtx);
+  if (glassCap && !preset) {
+    if (w > glassCap.maxW) w = glassCap.maxW;
+    if (w * aspect > glassCap.maxH) w = glassCap.maxH / aspect;
   }
   // A size preset is drawn at its size; clampQuadInsidePhoto shrinks it only if it can't fit.
   if (!preset && cat.ui.plaque) {
@@ -937,6 +980,9 @@ function placeSign(aspect = signAspect(), keepCenter = false) {
     else if (left - w / 2 >= m) c = { x: left, y: c.y };
   }
   state.quad = rectQuad(c.x, c.y, w, w * aspect);
+  if (state.sampleRegions?.window && isWindowGlassType(type)) {
+    clampQuadInsideRect(state.sampleRegions.window, photo);
+  }
   clampQuadInsidePhoto(photo);
   state.quadEdited = false;
 }
@@ -1118,8 +1164,11 @@ function setType(id) {
     const nextCat = categoryOf(next), prevCat = categoryOf(prevType);
     // An unpinned quad takes the new type's own size (its preset) rather than the last type's,
     // and never carries a plaque's size into a storefront category or the other way round.
-    if (!state.quadEdited && (presetWidthPx() || (from !== to && (nextCat.ui.plaque || prevCat.ui.plaque)))) {
-      placeSign(aspectFor(next, state.art, optionsFor(next)), !nextCat.ui.plaque && !prevCat.ui.plaque && prevType.mount !== "door");
+    const anchorChanged = from === to && prevType.id !== next.id
+      && (PLACE_ANCHOR[prevType.id] !== PLACE_ANCHOR[next.id] || prevType.mount !== next.mount);
+    if (!state.quadEdited && (presetWidthPx() || anchorChanged || (from !== to && (nextCat.ui.plaque || prevCat.ui.plaque)))) {
+      const keepCenter = !anchorChanged && next.mount !== "door" && !nextCat.ui.plaque && !prevCat.ui.plaque && prevType.mount !== "door";
+      placeSign(aspectFor(next, state.art, optionsFor(next)), keepCenter);
     } else {
       // Switching between hanging shapes keeps a wall area the user has pinned.
       fitQuadToArt(prev);

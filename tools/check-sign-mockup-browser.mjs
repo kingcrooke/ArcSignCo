@@ -110,15 +110,22 @@ async function run() {
       return cat.optionFields(type, cat.defaultOptions(type), null).find(f => f.key === "size")?.choices.map(([v]) => v) || [];
     };
     const presetOf = size => { const m = String(size || "").match(/^(\d+)x(\d+)$/); return m ? { w: Number(m[1]), h: Number(m[2]) } : null; };
+    const WINDOW_GLASS = new Set(["vinyl-window-lettering", "vinyl-window-perf", "vinyl-frosted", "led-window", "led-open-neon"]);
     const checkPlacement = async (type, size, how) => {
       const want = presetOf(size);
       const got = await page.evaluate(() => {
         const s = window.signMockup.sizeInfo();
-        return { w: s?.width ?? null, h: s?.height ?? null, inside: window.signMockup.quadInsidePhoto() };
+        const win = window.signMockup.state.sampleRegions?.window;
+        const cx = window.signMockup.state.quad?.reduce((a, p) => a + p.x, 0) / 4;
+        const cy = window.signMockup.state.quad?.reduce((a, p) => a + p.y, 0) / 4;
+        const onSampleGlass = win && cx >= win.x && cx <= win.x + win.w && cy >= win.y && cy <= win.y + win.h;
+        return { w: s?.width ?? null, h: s?.height ?? null, inside: window.signMockup.quadInsidePhoto(), onSampleGlass };
       });
-      const fits = want && got.w != null && Math.abs(got.w - want.w) <= 1 && Math.abs(got.h - want.h) <= 1;
-      const msg = `${type.id} ${how}: ${got.w?.toFixed(1)}" × ${got.h?.toFixed(1)}" (preset ${size}), ${got.inside ? "inside" : "OUTSIDE"} the photo`;
-      fits && got.inside ? ok(msg) : fail(msg);
+      const exact = want && got.w != null && Math.abs(got.w - want.w) <= 1 && Math.abs(got.h - want.h) <= 1;
+      const sampleGlass = WINDOW_GLASS.has(type.id) && got.onSampleGlass;
+      const fits = exact || (sampleGlass && got.inside);
+      const msg = `${type.id} ${how}: ${got.w?.toFixed(1)}" × ${got.h?.toFixed(1)}" (preset ${size}${sampleGlass && !exact ? ", fit in sample glass" : ""}), ${got.inside ? "inside" : "OUTSIDE"} the photo`;
+      fits ? ok(msg) : fail(msg);
     };
     const signsType = CATEGORIES.find(c => c.id === "sign").defaultType;
     for (const type of placeTypes) {
@@ -142,6 +149,7 @@ async function run() {
       await checkPlacement(type, second, `after choosing ${second}`);
       await page.selectOption('#typeOptions [data-opt="size"]', first);
     }
+    await page.evaluate(() => window.signMockup.setType("vinyl-window-lettering"));
     await page.evaluate(() => window.signMockup.setType("vinyl-door-hours"));
     const onDoor = await page.evaluate(() => {
       const { quad, cal } = window.signMockup.state;
@@ -149,6 +157,20 @@ async function run() {
       return cx > Math.min(cal.a.x, cal.b.x) && cx < Math.max(cal.a.x, cal.b.x) && cy < cal.a.y;
     });
     onDoor ? ok("vinyl-door-hours is placed on the door, above the door-width line") : fail("vinyl-door-hours is not placed on the door");
+    for (const id of ["vinyl-window-lettering", "vinyl-window-perf", "vinyl-frosted"]) {
+      await page.evaluate(tid => window.signMockup.setType(tid), id);
+      const onGlass = await page.evaluate(() => {
+        const { quad, sampleRegions, home } = window.signMockup.state;
+        const win = sampleRegions?.window;
+        if (!win || !quad) return false;
+        const cx = quad.reduce((s, p) => s + p.x, 0) / 4;
+        const cy = quad.reduce((s, p) => s + p.y, 0) / 4;
+        const inGlass = cx >= win.x && cx <= win.x + win.w && cy >= win.y && cy <= win.y + win.h;
+        const belowBand = !home || cy > home.y + 36;
+        return inGlass && belowBand;
+      });
+      onGlass ? ok(`${id} defaults onto the sample storefront glass`) : fail(`${id} is not on the sample window glass`);
+    }
     for (const type of placeTypes.filter(t => CATEGORIES.find(c => c.id === t.category).ui.plaque)) {
       await page.evaluate(id => window.signMockup.setType(id), type.id);
       const clear = await page.evaluate(() => {
