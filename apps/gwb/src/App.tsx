@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { PowerPanel } from './components/PowerPanel'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { RecapsPanel } from './components/RecapsPanel'
 import { MulligansPanel } from './components/MulligansPanel'
@@ -10,14 +9,13 @@ import { LEAGUE_NAME } from './lib/constants'
 import { weekHasMatchups } from './lib/recaps'
 import { useLeagueData } from './hooks/useLeagueData'
 
-type Tab = 'standings' | 'mulligans' | 'power' | 'recaps' | 'gallery'
+type Tab = 'standings' | 'gallery' | 'recaps' | 'mulligans'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
-  { id: 'mulligans', label: 'Mulligans' },
-  { id: 'power', label: 'Power' },
-  { id: 'recaps', label: 'Recaps' },
   { id: 'gallery', label: 'Graphics' },
+  { id: 'recaps', label: 'Recaps' },
+  { id: 'mulligans', label: 'Mulligans' },
 ]
 
 export default function App() {
@@ -127,26 +125,12 @@ export default function App() {
               />
             </section>
           )}
-          {tab === 'mulligans' && (
-            <section>
-              <h2 className="mb-3 text-lg font-semibold">Mulligans</h2>
-              <MulligansPanel
-                rows={data.standings}
-                selectedWeek={data.selectedWeek}
-                statusThroughWeek={data.standingsThroughWeek}
-                deferralNote={data.mulligansDeferralNote}
-              />
-            </section>
-          )}
-          {tab === 'power' && (
+          {tab === 'gallery' && (
             <section>
               <h2 className="mb-3 text-lg font-semibold">
-                Power rankings
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
-                  after Week {data.graphicsWeek}
-                </span>
+                Week {data.selectedWeek} graphics
               </h2>
-              <PowerPanel rows={data.power} />
+              <WeekGraphicsPanel week={data.selectedWeek} />
             </section>
           )}
           {tab === 'recaps' && (
@@ -170,12 +154,15 @@ export default function App() {
               </div>
             </section>
           )}
-          {tab === 'gallery' && (
+          {tab === 'mulligans' && (
             <section>
-              <h2 className="mb-3 text-lg font-semibold">
-                Week {data.selectedWeek} graphics
-              </h2>
-              <WeekGraphicsPanel week={data.selectedWeek} />
+              <h2 className="mb-3 text-lg font-semibold">Mulligans</h2>
+              <MulligansPanel
+                rows={data.standings}
+                selectedWeek={data.selectedWeek}
+                statusThroughWeek={data.standingsThroughWeek}
+                deferralNote={data.mulligansDeferralNote}
+              />
             </section>
           )}
         </>

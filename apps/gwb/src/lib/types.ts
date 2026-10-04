@@ -91,18 +91,6 @@ export interface StandingRow {
   streak: string
 }
 
-export interface PowerRankingRow {
-  rank: number
-  rosterId: number
-  teamName: string
-  score: number
-  recentForm: number
-  pointsForRate: number
-  allPlayWinPct: number
-  lineupEfficiency: number
-  movement: number | null
-}
-
 export interface MatchupRecap {
   matchupId: number
   teamA: TeamSideRecap

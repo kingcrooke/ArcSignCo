@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { loadPlayersMap } from '../lib/playersCache'
-import { computePowerRankings } from '../lib/powerRankings'
 import { buildWeekRecaps, weekHasMatchups } from '../lib/recaps'
 import {
   fetchAllMatchupsThroughWeek,
@@ -25,7 +24,6 @@ import type {
   MatchupRecap,
   NflState,
   PlayersMap,
-  PowerRankingRow,
   SleeperLeague,
   SleeperMatchup,
   SleeperRoster,
@@ -43,7 +41,6 @@ export interface LeagueData {
   standings: StandingRow[]
   /** Full-season Sleeper roster standings — IG graphics & recaps (unchanged). */
   seasonStandings: StandingRow[]
-  power: PowerRankingRow[]
   recaps: MatchupRecap[]
   matchupsByWeek: Map<number, SleeperMatchup[]>
   players: PlayersMap
@@ -51,11 +48,9 @@ export interface LeagueData {
   selectedWeek: number
   setSelectedWeek: (w: number) => void
   refresh: () => void
-  starterSlots: number
   completedWeek: number
   isSelectedWeekLive: boolean
   weekLabel: string
-  graphicsWeek: number
   standingsThroughWeek: number
   standingsDeferralNote: string | null
   mulligansDeferralNote: string | null
@@ -78,7 +73,6 @@ export function useLeagueData(): {
     teams: Map<number, TeamInfo>
     standings: StandingRow[]
     seasonStandings: StandingRow[]
-    starterSlots: number
   } | null>(null)
   const [selectedWeek, setSelectedWeek] = useState(1)
 
@@ -100,9 +94,6 @@ export function useLeagueData(): {
       const teams = buildTeamMap(users, rosters)
       const standings = computeStandings(rosters, teams)
       const seasonStandings = standings
-      const starterSlots =
-        league.roster_positions?.filter((p) => p !== 'BN' && !p.startsWith('IR'))
-          .length ?? 10
 
       setSelectedWeek(completed)
       setBase({
@@ -114,7 +105,6 @@ export function useLeagueData(): {
         teams,
         standings,
         seasonStandings,
-        starterSlots,
       })
       setState('ready')
     } catch (e) {
@@ -135,7 +125,6 @@ export function useLeagueData(): {
       teams,
       players,
       seasonStandings,
-      starterSlots,
       league,
       nflState,
     } = base
@@ -145,11 +134,6 @@ export function useLeagueData(): {
       league,
       nflState,
     )
-    const analysisWeek = isWeekLive(selectedWeek, league, nflState)
-      ? completedWeek
-      : selectedWeek
-    const graphicsWeek = analysisWeek
-
     const standings = computeStandingsThroughWeek(
       matchupsByWeek,
       teams,
@@ -161,30 +145,6 @@ export function useLeagueData(): {
       league,
       nflState,
       'mulligan status',
-    )
-
-    const weeksThrough = new Map<number, SleeperMatchup[]>()
-    for (const [w, m] of matchupsByWeek) {
-      if (w <= analysisWeek) weeksThrough.set(w, m)
-    }
-    const prevWeeks = new Map<number, SleeperMatchup[]>()
-    for (const [w, m] of matchupsByWeek) {
-      if (w < analysisWeek) prevWeeks.set(w, m)
-    }
-    const powerPrev = computePowerRankings(
-      rosters,
-      teams,
-      prevWeeks,
-      Math.max(analysisWeek - 1, 1),
-      starterSlots,
-    )
-    const power = computePowerRankings(
-      rosters,
-      teams,
-      weeksThrough,
-      analysisWeek,
-      starterSlots,
-      powerPrev,
     )
 
     const weekMatchups = matchupsByWeek.get(selectedWeek)
@@ -202,7 +162,6 @@ export function useLeagueData(): {
       rosters,
       standings,
       seasonStandings,
-      power,
       recaps,
       matchupsByWeek,
       players,
@@ -210,11 +169,9 @@ export function useLeagueData(): {
       selectedWeek,
       setSelectedWeek,
       refresh: load,
-      starterSlots,
       completedWeek,
       isSelectedWeekLive,
       weekLabel,
-      graphicsWeek,
       standingsThroughWeek: throughForCumulative,
       standingsDeferralNote: deferNote,
       mulligansDeferralNote: mulliganDeferNote,

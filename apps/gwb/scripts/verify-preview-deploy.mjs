@@ -21,6 +21,9 @@ async function verifyBundle() {
   const jsUrl = `${ORIGIN}${BASE_PATH}${jsMatch[0]}`
   const js = await (await fetch(jsUrl)).text()
   if (!js.includes('Mulligan')) throw new Error('Bundle missing Mulligan')
+  if (js.includes('How power score works') || js.includes('label:"Power"')) {
+    throw new Error('Bundle still contains Power tab UI')
+  }
   const igTabMarkers = [
     'Instagram graphics',
     'Download standings PNG',
