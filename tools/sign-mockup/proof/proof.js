@@ -36,10 +36,16 @@ async function api(path, body) {
   return data;
 }
 
+// Test proofs, ?test=1 and automated browsers never email Arc.
+const isTestRun = (sheet, search = location.search, webdriver = navigator.webdriver) =>
+  !!sheet?.test || new URLSearchParams(search).get("test") === "1" || !!webdriver;
+
 // Optional notification through Netlify Forms; the proof is saved whether or not this lands.
 function notifyArc(event, name, message) {
+  if (isTestRun(sheet)) return;
   const body = new URLSearchParams({
     "form-name": "sign-proof-activity", "bot-field": "", event, proof: location.href, project: sheet.project || "", name: name || "", message: message || "",
+    tab: sheet.category || "", type: sheet.typeId || "", src: sheet.src || "",
   });
   fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body }).catch(() => {});
 }

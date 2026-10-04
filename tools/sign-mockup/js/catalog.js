@@ -22,6 +22,8 @@ export const getType = id => BY_ID.get(ALIASES[id] || id) || BY_ID.get(DEFAULT_T
 export const getCategory = id => BY_CAT.get(id) || READY[0];
 /** The category module a type belongs to. */
 export const categoryOf = type => getCategory(type?.category);
+/** A link's source tag (?src=), e.g. "gbp" or "instagram-bio": lowercase letters, digits, "." "_" "-". */
+export const cleanSource = src => String(src ?? "").toLowerCase().replace(/[^a-z0-9._-]/g, "").slice(0, 40);
 
 /** The lighting key in effect for a type with these options (a key of lighting.js). */
 export const lightingOf = (type, opts) => categoryOf(type).lightingOf(type, opts);

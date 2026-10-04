@@ -7,7 +7,7 @@ import { coverFromQuad, sampleAround, coveredPhoto, hexOf, rgbOf } from "./cover
 import { createScene } from "./scene.js";
 import {
   CATEGORIES, READY, DEFAULT_TYPE, getType, getCategory, categoryOf, litWith, describe, cleanOptions,
-  defaultOptions, optionFields, aspectFor, diagramSvg, codeWarnings,
+  defaultOptions, optionFields, aspectFor, diagramSvg, codeWarnings, isKnownType, cleanSource,
 } from "./catalog.js";
 import { estimatePrice, priceView, PRICES_LIVE } from "./pricing.js";
 import { DISCLAIMER } from "./pdf.js";
@@ -49,6 +49,8 @@ const state = {
   placed: {},         // per category: { quad, edited } while the other category is shown
   mode: "day",
   proof: null,        // { id, url } once an approval link exists for the current design
+  src: "",            // the link's ?src= tag, carried into approval links
+  test: false,        // ?test=1: approval links are marked as tests and never notify Arc
 };
 
 const scene = createScene();
@@ -1485,6 +1487,8 @@ async function createProof() {
   const size = sizeInfo();
   const sheet = {
     typeId: state.typeId,
+    src: state.src,
+    test: state.test || undefined,
     options: cleanOptions(currentType(), optionsFor()),
     project: $("project").value.trim(),
     preparedFor: $("preparedFor").value.trim(),
@@ -1505,13 +1509,13 @@ async function createProof() {
   form.set("art", artB, "art.jpg");
   let res;
   try {
-    res = await fetch(API, { method: "POST", body: form });
+    res = await fetch(API, { method: "POST", body: form, headers: state.test ? { "X-Sign-Mockup-Test": "1" } : {} });
   } catch {
     throw new UserError("Couldn't reach the server. Check your connection and try again.");
   }
   const body = await res.json().catch(() => null);
   if (!res.ok || !body?.id) {
-    throw new UserError(res.status === 404 || res.status === 405
+    throw new UserError(res.status === 404 || res.status === 405 || (state.test && res.status === 403)
       ? "Approval links aren't available here."
       : body?.error || "Couldn't create the link. Try again.");
   }
@@ -1682,6 +1686,18 @@ buildTypeList();
 renderTypeCard();
 resizeCanvas();
 updateUI();
+openDeepLink(new URLSearchParams(location.search));
+
+// /tools/sign-mockup/?tab=<category>&type=<type id>&src=<tag>: opens that tab and type. Unknown
+// or coming-soon values fall back to the default tab rather than failing.
+function openDeepLink(q) {
+  state.src = cleanSource(q.get("src"));
+  state.test = q.get("test") === "1";
+  const type = q.get("type"), tab = q.get("tab");
+  const cat = READY.find(c => c.id === tab);
+  if (type && isKnownType(type) && (!cat || getType(type).category === cat.id)) setType(type);
+  else if (cat) setCategory(cat.id);
+}
 
 // Lets automated checks drive the tool without simulating every gesture.
 window.signMockup = {

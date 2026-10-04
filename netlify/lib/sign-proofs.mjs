@@ -2,13 +2,13 @@
 // Netlify runtime so tools/sign-proofs.test.mjs can run it against an in-memory store.
 //
 // Storage: one Netlify Blobs store, STORE_NAME, used only by this feature. Keys are namespaced
-//   v1/<deploy context>/<proof id>/sheet.json   project, type, options, size, price, comments, approval
+//   v1/<deploy context>/<proof id>/sheet.json   project, type, source tag, options, size, price, comments, approval
 //   v1/<deploy context>/<proof id>/day.jpg      day mockup
 //   v1/<deploy context>/<proof id>/night.jpg    night mockup
 //   v1/<deploy context>/<proof id>/art.jpg      flat artwork
 // so proofs made on deploy previews never mix with production ones and can be cleared by prefix.
 import { estimatePrice } from "../../tools/sign-mockup/js/pricing.js";
-import { getType, isKnownType, cleanOptions, describe } from "../../tools/sign-mockup/js/catalog.js";
+import { getType, isKnownType, cleanOptions, describe, cleanSource } from "../../tools/sign-mockup/js/catalog.js";
 
 export const STORE_NAME = "arc-sign-mockup-proofs";
 export const KEY_VERSION = "v1";
@@ -93,6 +93,9 @@ async function create(req, { store, ns, now, makeId }) {
   try { meta = JSON.parse(String(form.get("sheet") || "")); } catch { return fail(400, "Missing proof details."); }
   if (!meta || typeof meta !== "object") return fail(400, "Missing proof details.");
   if (!isKnownType(meta.typeId)) return fail(400, "Unknown product type.");
+  // Automated checks mark their proofs as tests; the live site never stores one.
+  const test = meta.test === true || req.headers.get("x-sign-mockup-test") === "1";
+  if (test && ns === "production") return fail(403, "Test proofs are not stored on the live site.");
 
   const files = {};
   const dims = {};
@@ -134,6 +137,8 @@ async function create(req, { store, ns, now, makeId }) {
     reference: clean(meta.reference, t.reference),
     typeId: signType.id,
     category: signType.category,
+    src: cleanSource(meta.src),
+    ...(test ? { test: true } : {}),
     typeName: signType.name,
     lighting: describe(signType, options).lightingLabel,
     options,

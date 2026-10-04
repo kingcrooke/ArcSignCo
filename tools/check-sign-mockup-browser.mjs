@@ -4,6 +4,8 @@
 //   node tools/check-sign-mockup-browser.mjs
 //   SIGN_MOCKUP_BASE_URL=https://deploy-preview-NN--arcsign.netlify.app node tools/check-sign-mockup-browser.mjs
 //
+// Never the live site: the tool runs with ?test=1, so approval links are marked as tests (the
+// production server refuses them) and the proof page never notifies Arc.
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -17,6 +19,11 @@ const SCREENSHOTS = path.join(ARTIFACTS, "screenshots");
 const PORT = Number(process.env.SIGN_MOCKUP_PORT) || 9876;
 const BASE = (process.env.SIGN_MOCKUP_BASE_URL || `http://127.0.0.1:${PORT}`).replace(/\/$/, "");
 const LOCAL = !process.env.SIGN_MOCKUP_BASE_URL;
+if (/^https?:\/\/(www\.)?arcsignco\.com(\/|$)/i.test(BASE)) {
+  console.error("Refusing to run against the live site. Use a local server or a Netlify deploy preview.");
+  process.exit(1);
+}
+const TOOL = `${BASE}/tools/sign-mockup/?test=1&src=qa-check`;
 
 const NEW_CATS = ["vinyl", "construction", "wayfinding", "ada", "led"];
 let failures = 0;
@@ -49,7 +56,7 @@ async function run() {
     const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext();
     const page = await context.newPage();
-    await page.goto(`${BASE}/tools/sign-mockup/`, { waitUntil: "networkidle" });
+    await page.goto(TOOL, { waitUntil: "networkidle" });
     await page.waitForFunction(() => window.signMockup?.state);
 
     for (const id of NEW_CATS) {
@@ -156,7 +163,7 @@ async function run() {
     // and the 20' ones are shrunk to fit; nothing hangs off the photo.
     {
       const own = await context.newPage();
-      await own.goto(`${BASE}/tools/sign-mockup/`, { waitUntil: "networkidle" });
+      await own.goto(TOOL, { waitUntil: "networkidle" });
       await own.setInputFiles("#photoInput", path.join(root, "docs/qa/sample-photo.jpg"));
       await own.waitForFunction(() => window.signMockup.state.photo);
       await own.click("#toScale");
@@ -254,13 +261,91 @@ async function run() {
       const link = await page.inputValue("#linkUrl");
       if (!/\/tools\/sign-mockup\/proof\/#[a-f0-9]+/i.test(link)) fail(`approval link malformed: ${link}`);
       else ok(`approval link created on preview (${link.slice(0, 60)}…)`);
+      const sheet = await (await fetch(`${BASE}/api/sign-proofs/${link.split("#")[1]}`)).json();
+      sheet.test === true && sheet.src === "qa-check" && sheet.typeId && sheet.category
+        ? ok(`approval link sheet is a test proof with tab/type/src (${sheet.category}/${sheet.typeId}/${sheet.src})`)
+        : fail(`approval link sheet: test=${sheet.test} src=${sheet.src}`);
       const proof = await context.newPage();
+      const posts = [];
+      await proof.route(`${BASE}/`, route => { if (route.request().method() === "POST") posts.push(route.request().postData()); return route.abort(); });
       await proof.goto(link, { waitUntil: "networkidle" });
       const hasShot = await proof.locator("#shot").evaluate(img => img.complete && img.naturalWidth > 0);
       hasShot ? ok("proof page shows mockup image") : fail("proof page image missing");
       await proof.close();
     } else {
       ok("approval link check skipped (set SIGN_MOCKUP_BASE_URL to a Netlify preview)");
+    }
+
+    // Deep links: ?tab=&type=&src= open that tab and type; bad values fall back to the default.
+    for (const [query, cat, type, src] of [
+      ["tab=vinyl&type=vinyl-door-hours&src=GBP", "vinyl", "vinyl-door-hours", "gbp"],
+      ["tab=led", "led", READY.find(c => c.id === "led").defaultType, ""],
+      ["type=wf-directory&src=instagram-bio", "wayfinding", "wf-directory", "instagram-bio"],
+      ["tab=vinyl&type=halo", "vinyl", READY.find(c => c.id === "vinyl").defaultType, ""],
+      ["tab=nope&type=bogus&src=<x>", READY[0].id, READY[0].defaultType, "x"],
+    ]) {
+      const dl = await context.newPage();
+      await dl.goto(`${BASE}/tools/sign-mockup/?${query}`, { waitUntil: "networkidle" });
+      await dl.waitForFunction(() => window.signMockup?.state);
+      const got = await dl.evaluate(() => ({
+        type: window.signMockup.state.typeId, src: window.signMockup.state.src,
+        tab: document.querySelector('#category [aria-checked="true"]')?.dataset.cat,
+      }));
+      got.type === type && got.tab === cat && got.src === src
+        ? ok(`deep link ?${query} opens ${cat} / ${type}${src ? ` (src ${src})` : ""}`)
+        : fail(`deep link ?${query}: got ${JSON.stringify(got)}`);
+      await dl.close();
+    }
+
+    // Proof page against a mocked API: the approval wording, no notification from an automated
+    // browser or a test proof, and a real notification carries tab, type and src.
+    {
+      const pid = "ab".repeat(16);
+      const jpeg = fs.readFileSync(path.join(root, "docs/qa/sample-photo.jpg"));
+      const proofCase = async ({ test, webdriver }) => {
+        const pg = await context.newPage();
+        if (!webdriver) await pg.addInitScript(() => Object.defineProperty(Navigator.prototype, "webdriver", { get: () => false }));
+        const sheet = {
+          v: 1, id: pid, createdAt: "2026-10-03T15:00:00.000Z", project: "QA deep link", preparedFor: "", notes: "", reference: "",
+          typeId: "vinyl-door-hours", category: "vinyl", src: "gbp", options: null, size: null, sizeText: null, price: null,
+          images: { day: { width: 900, height: 596 } }, comments: [], approval: null, ...(test ? { test: true } : {}),
+        };
+        const posts = [];
+        await pg.route(`${BASE}/api/sign-proofs/${pid}**`, route => {
+          const url = route.request().url();
+          if (url.endsWith("/day")) return route.fulfill({ body: jpeg, contentType: "image/jpeg" });
+          if (url.endsWith("/approve")) return route.fulfill({ json: { ...sheet, approval: { name: "QA Tester", at: "2026-10-03T15:05:00.000Z" } } });
+          return route.fulfill({ json: sheet });
+        });
+        await pg.route(`${BASE}/`, route => {
+          if (route.request().method() !== "POST") return route.continue();
+          posts.push(Object.fromEntries(new URLSearchParams(route.request().postData())));
+          return route.fulfill({ status: 200, body: "" });
+        });
+        await pg.goto(`${BASE}/tools/sign-mockup/proof/#${pid}`, { waitUntil: "networkidle" });
+        await pg.waitForSelector("#approveBtn", { state: "visible" });
+        const btn = (await pg.textContent("#approveBtn")).trim();
+        await pg.fill("#approveName", "QA Tester");
+        await pg.check("#approveOk");
+        await pg.click("#approveBtn");
+        await pg.waitForSelector("#approvedBox:not([hidden])");
+        await pg.waitForTimeout(300);
+        const box = (await pg.textContent("#approvedBox")).replace(/\s+/g, " ");
+        await pg.close();
+        return { btn, box, posts };
+      };
+      const auto = await proofCase({ test: false, webdriver: true });
+      auto.btn === "Concept approved, request a formal estimate" && auto.box.includes("Concept approved, request a formal estimate")
+        ? ok("proof approve button and confirmation read \"Concept approved, request a formal estimate\"")
+        : fail(`proof approval wording: ${JSON.stringify({ btn: auto.btn, box: auto.box })}`);
+      auto.posts.length === 0 ? ok("automated browser: approving sends no notification") : fail(`automated browser sent ${auto.posts.length} notification(s)`);
+      const flagged = await proofCase({ test: true, webdriver: false });
+      flagged.posts.length === 0 ? ok("test proof: approving sends no notification") : fail(`test proof sent ${flagged.posts.length} notification(s)`);
+      const real = await proofCase({ test: false, webdriver: false });
+      const n = real.posts[0] || {};
+      real.posts.length === 1 && n["form-name"] === "sign-proof-activity" && n.tab === "vinyl" && n.type === "vinyl-door-hours" && n.src === "gbp"
+        ? ok("real proof: the notification carries tab, type and src (intercepted, not sent)")
+        : fail(`real proof notification: ${JSON.stringify(real.posts)}`);
     }
 
     await browser.close();

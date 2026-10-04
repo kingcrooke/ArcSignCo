@@ -306,6 +306,8 @@ check((proofHtml.split(DISCLAIMER_FULL).length - 1) === 2, "proof page carries t
 check(html.includes(DISCLAIMER_FULL), "the tool's step 4 carries the full disclaimer");
 check(!/Approved by/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof email doesn't say \"Approved by\"");
 check(/<form name="sign-proof-activity"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(proofHtml), "proof activity form is registered with Netlify Forms (honeypot on)");
+check(["tab", "type", "src"].every(n => new RegExp(`<form name="sign-proof-activity"[\\s\\S]*<input name="${n}">[\\s\\S]*</form>`).test(proofHtml)), "proof activity form registers the tab, type and src fields");
+check(/function notifyArc\([^)]*\) \{\n  if \(isTestRun\(sheet\)\) return;/.test(fs.readFileSync(path.join(toolDir, "proof/proof.js"), "utf8")), "the proof page never notifies Arc from a test run");
 const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
 check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
 check(READY.every(c => c.pricing && Object.keys(c.pricing).join() === "row"), "every live category only maps its types to config rows");

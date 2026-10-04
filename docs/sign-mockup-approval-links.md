@@ -108,11 +108,30 @@ images in Blobs.
 
 After an approval or a comment, the proof page also posts to the Netlify form
 `sign-proof-activity` (static copy in `proof/index.html`, honeypot `bot-field`). Its fields are
-`event` (`approved` or `comment`), `proof` (the link), `project`, `name` and `message`. To get an
+`event` (`approved` or `comment`), `proof` (the link), `project`, `name`, `message`, and `tab`,
+`type` and `src` (the category, the type id and the link's source tag). To get an
 email for each, add a form notification for `sign-proof-activity` in Netlify under Project
 configuration > Notifications (same place as `quote-request`). The proof is saved whether or not
-the form post lands; the form is only the alert. Deploy Preview tests also post to this form, so
-expect test entries there.
+the form post lands; the form is only the alert.
+
+## Deep links and source tags
+
+`/tools/sign-mockup/?tab=<category>&type=<type id>&src=<tag>` opens that tab and type, for example
+`/tools/sign-mockup/?tab=vinyl&type=vinyl-door-hours&src=gbp`. `tab` alone opens the tab on its
+default type; unknown values fall back to the default tab. `src` is cleaned to lowercase letters,
+digits, `.`, `_` and `-` (40 characters), saved in the approval link's `sheet.json` as `src` next to
+`category` and `typeId`, and sent with the `sign-proof-activity` notification.
+
+## Test mode
+
+Automated checks must never email Arc or store proofs on the live site:
+
+- `?test=1` on the tool marks approval links as tests (`"test": true` in the sheet and an
+  `X-Sign-Mockup-Test: 1` header). The server refuses test proofs on the `production` context.
+- The proof page sends no `sign-proof-activity` notification for a test proof, with `?test=1` in its
+  URL, or in an automated browser (`navigator.webdriver`).
+- `tools/check-sign-mockup-browser.mjs` loads the tool with `?test=1` and refuses to run against
+  arcsignco.com.
 
 ## Local testing
 
