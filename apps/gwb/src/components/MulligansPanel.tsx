@@ -6,11 +6,13 @@ import {
   mulliganStatusForRoster,
   mulligansFlippedThroughWeek,
   mulligansUsedThroughWeek,
+  mulliganLiveContextForEntry,
   MULLIGAN_LEDGER_META,
 } from '../lib/mulligans'
 import { managerNickname } from '../lib/nicknames'
-import type { MulliganLedgerEntry } from '../lib/mulligans'
-import type { StandingRow } from '../lib/types'
+import type { MulliganLedgerEntry, MulliganLiveContext } from '../lib/mulligans'
+import { resolveMulliganNetImpact } from '../lib/mulligans'
+import type { SleeperMatchup, StandingRow } from '../lib/types'
 import { MulliganChipRack } from './MulliganChipRack'
 
 export function MulligansPanel({
@@ -18,12 +20,14 @@ export function MulligansPanel({
   selectedWeek,
   statusThroughWeek,
   deferralNote,
+  weekMatchups,
   onNegativeMulliganOpen,
 }: {
   rows: StandingRow[]
   selectedWeek: number
   statusThroughWeek: number
   deferralNote: string | null
+  weekMatchups?: SleeperMatchup[]
   onNegativeMulliganOpen?: () => void
 }) {
   const weekResults = mulliganEntriesForWeek(selectedWeek)
@@ -104,13 +108,23 @@ export function MulligansPanel({
           </p>
         ) : (
           <ul className="space-y-3">
-            {weekResults.map((entry) => (
-              <MulliganReceiptRow
-                key={entry.id}
-                entry={entry}
-                onOpen={onNegativeMulliganOpen}
-              />
-            ))}
+            {weekResults.map((entry) => {
+              const matchup = weekMatchups?.find(
+                (m) => m.roster_id === entry.rosterId,
+              )
+              const liveCtx = mulliganLiveContextForEntry(
+                entry,
+                matchup?.players_points,
+              )
+              return (
+                <MulliganReceiptRow
+                  key={entry.id}
+                  entry={entry}
+                  liveCtx={liveCtx}
+                  onOpen={onNegativeMulliganOpen}
+                />
+              )
+            })}
           </ul>
         )}
       </div>
@@ -120,12 +134,15 @@ export function MulligansPanel({
 
 function MulliganReceiptRow({
   entry,
+  liveCtx,
   onOpen,
 }: {
   entry: MulliganLedgerEntry
+  liveCtx?: MulliganLiveContext
   onOpen?: () => void
 }) {
-  const negative = entry.netImpact < 0
+  const net = resolveMulliganNetImpact(entry, liveCtx)
+  const negative = net !== null && net < 0
   return (
     <li
       className="rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm"
@@ -133,9 +150,11 @@ function MulliganReceiptRow({
         if (negative) onOpen?.()
       }}
     >
-      <p className="font-medium text-[var(--gwb-text)]">{formatMulliganReceipt(entry)}</p>
+      <p className="font-medium text-[var(--gwb-text)]">
+        {formatMulliganReceipt(entry, liveCtx)}
+      </p>
       <p className="mt-1 text-xs leading-snug text-[var(--gwb-muted)]">
-        {formatMulliganLedgerLine(entry)}
+        {formatMulliganLedgerLine(entry, liveCtx)}
       </p>
     </li>
   )

@@ -1,5 +1,5 @@
 {
-  "throughWeek": 3,
+  "throughWeek": 4,
   "weekNote": "",
   "entries": [
     {
@@ -84,6 +84,38 @@
       "opponentLabel": "Hadi",
       "won": false,
       "flipped": false
+    },
+    {
+      "id": "w4-jesus",
+      "week": 4,
+      "rosterId": 8,
+      "manager": "kingCrooke",
+      "managerShort": "Jesus",
+      "team": "Darkseid Jackson",
+      "out": {
+        "name": "Parker Washington",
+        "position": "WR",
+        "points": 2.0,
+        "team": "JAX"
+      },
+      "in": {
+        "name": "Mike Evans",
+        "position": "WR",
+        "points": 0,
+        "team": "SF",
+        "pointsPending": true,
+        "sleeperPlayerId": "2216"
+      },
+      "netImpact": 0,
+      "netImpactPending": true,
+      "scoreWith": 107.21,
+      "scoreWithout": 109.21,
+      "opponentScore": 110.31,
+      "opponentLabel": "Danny",
+      "won": false,
+      "flipped": false,
+      "resultPending": true,
+      "footnote": "Chase ruled out at 5.7 mid-game; swapped lowest WR Washington. Trailing 109.21–110.31 at the chip; result TBD."
     }
   ]
 }
