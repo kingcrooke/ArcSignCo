@@ -118,6 +118,7 @@ export function FrankieZonePanel({
     buildScheduleByWeek(matchupsByWeek),
   )
   const scheduleWeeksLoaded = useRef(new Set<number>())
+  const [scheduleReady, setScheduleReady] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const slides = useMemo(() => getFrankieZoneSlides(), [])
 
@@ -130,24 +131,31 @@ export function FrankieZonePanel({
 
   useEffect(() => {
     let cancelled = false
+    setScheduleReady(false)
     void (async () => {
+      const toFetch: number[] = []
       for (let week = 1; week <= 18; week++) {
-        if (cancelled) return
-        if (scheduleWeeksLoaded.current.has(week)) continue
-        scheduleWeeksLoaded.current.add(week)
-        try {
-          const rows = await fetchMatchups(week)
-          if (!rows?.length) continue
-          setScheduleByWeek((prev) => mergeScheduleWeek(prev, week, rows))
-        } catch {
-          scheduleWeeksLoaded.current.delete(week)
-        }
+        if (!scheduleWeeksLoaded.current.has(week)) toFetch.push(week)
       }
+      await Promise.all(
+        toFetch.map(async (week) => {
+          if (cancelled) return
+          scheduleWeeksLoaded.current.add(week)
+          try {
+            const rows = await fetchMatchups(week)
+            if (!rows?.length) return
+            setScheduleByWeek((prev) => mergeScheduleWeek(prev, week, rows))
+          } catch {
+            scheduleWeeksLoaded.current.delete(week)
+          }
+        }),
+      )
+      if (!cancelled) setScheduleReady(true)
     })()
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [matchupsByWeek])
 
   const view = useMemo(
     () =>
@@ -236,7 +244,7 @@ export function FrankieZonePanel({
             </ul>
           </section>
 
-          {view.collisions.length > 0 && (
+          {(!scheduleReady || view.collisions.length > 0) && (
             <section aria-labelledby="fz-collisions-heading">
               <h3
                 id="fz-collisions-heading"
@@ -244,13 +252,26 @@ export function FrankieZonePanel({
               >
                 Collisions
               </h3>
-              <ul className="space-y-3" role="list">
-                {view.collisions.map((c) => (
-                  <li key={`${c.week}-${c.rosterA}-${c.rosterB}`}>
-                    <CollisionCard collision={c} />
-                  </li>
-                ))}
-              </ul>
+              {!scheduleReady ? (
+                <p
+                  className="rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-4 py-3 text-sm text-[var(--gwb-muted)]"
+                  data-schedule-loading
+                >
+                  Loading season schedule for collision watch…
+                </p>
+              ) : view.collisions.length > 0 ? (
+                <ul className="space-y-3" role="list">
+                  {view.collisions.map((c) => (
+                    <li key={`${c.week}-${c.rosterA}-${c.rosterB}`}>
+                      <CollisionCard collision={c} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-[var(--gwb-muted)]">
+                  No head-to-head collisions scheduled between current residents.
+                </p>
+              )}
             </section>
           )}
 
@@ -349,8 +370,10 @@ export function FrankieZonePanel({
                     alt=""
                     width={THUMB_WIDTH}
                     height={THUMB_HEIGHT}
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
+                    fetchPriority={i < 4 ? 'high' : 'auto'}
+                    data-fz-slide-thumb={slide.id}
                     className="aspect-[4/5] w-full bg-[#0d1319] object-cover"
                   />
                   <p className="truncate px-2 py-1.5 text-xs text-[var(--gwb-muted)]">

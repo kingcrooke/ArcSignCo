@@ -77,10 +77,48 @@ describe('frankieZone', () => {
     expect(name).toBe('Frankie')
   })
 
-  it('builds escape log from first-win weeks', () => {
-    const escapes = buildEscapeLog(matchupsByWeek, teams, 3)
-    expect(escapes.length).toBeGreaterThan(0)
-    expect(escapes[0].line).toMatch(/escaped W\d+/)
+  it('escape log skips week-1 winners who never entered the zone', () => {
+    const pair = (
+      a: number,
+      mid: number,
+      aPts: number,
+      b: number,
+      bPts: number,
+    ): SleeperMatchup[] => [
+      {
+        roster_id: a,
+        matchup_id: mid,
+        points: aPts,
+        starters: ['p1'],
+        starters_points: [aPts],
+        players_points: {},
+      },
+      {
+        roster_id: b,
+        matchup_id: mid,
+        points: bPts,
+        starters: ['p2'],
+        starters_points: [bPts],
+        players_points: {},
+      },
+    ]
+    const crooke = teams.get(8)!
+    const narking = teams.get(3)!
+    const steven = teams.get(7)!
+    const frankie = teams.get(11)!
+    const byWeek = new Map<number, SleeperMatchup[]>([
+      [1, [...pair(7, 1, 199, 11, 135), ...pair(8, 2, 100, 3, 120)]],
+      [2, [...pair(8, 1, 90, 3, 110)]],
+      [3, [...pair(8, 1, 167.66, 3, 136.7)]],
+    ])
+    const escapes = buildEscapeLog(byWeek, teams, 3)
+    expect(escapes).toHaveLength(1)
+    expect(escapes[0].teamName).toBe(crooke.teamName)
+    expect(escapes[0].week).toBe(3)
+    expect(escapes[0].opponentLabel).toBe(narking.displayName)
+    expect(escapes[0].line).toContain('167.66')
+    expect(escapes.map((e) => e.rosterId)).not.toContain(steven.rosterId)
+    expect(escapes.map((e) => e.rosterId)).not.toContain(frankie.rosterId)
   })
 
   it('firstWeekAtLossCount tracks milestone weeks', () => {

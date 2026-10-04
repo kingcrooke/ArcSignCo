@@ -213,6 +213,14 @@ export function buildEscapeLog(
     for (let week = 1; week <= throughWeek; week++) {
       const wins = winsThroughWeek(team.rosterId, matchupsByWeek, week)
       if (prevWins === 0 && wins === 1) {
+        const lossesBefore =
+          week <= 1
+            ? 0
+            : lossesThroughWeek(team.rosterId, matchupsByWeek, week - 1)
+        if (lossesBefore < 1) {
+          prevWins = wins
+          continue
+        }
         const matchups = matchupsByWeek.get(week)
         const mine = matchups?.find((m) => m.roster_id === team.rosterId)
         const opp = matchups?.find(
