@@ -32,7 +32,11 @@ describe('buildWeekRecaps', () => {
     const players = load<PlayersMap>('players-slim.json')
     const teams = buildTeamMap(users, rosters)
     const standings = computeStandings(rosters, teams)
-    const recaps = buildWeekRecaps(matchups, teams, players, standings)
+    const recaps = buildWeekRecaps(matchups, teams, players, {
+      rosterPositions: load('league.json').roster_positions,
+      preWeekStandings: standings,
+      isWeekFinal: true,
+    })
     expect(recaps.length).toBeGreaterThan(0)
     const blowout = recaps.find((r) => r.tags.includes('Blowout'))
     expect(blowout).toBeTruthy()
@@ -66,16 +70,18 @@ describe('commissioner recaps timeline', () => {
       'recap-9',
       'recap-10',
       'recap-11',
-      'recap-13',
       'recap-12',
+      'recap-13',
     ])
   })
 
-  it('puts final reports after monday night and corrections last', () => {
+  it('puts final reports after monday night; correction before final when earlier', () => {
     const week2 = filterCommissionerRecapsByWeek(recaps, 2)
     expect(week2.at(-1)?.label).toBe('Final')
     const week3 = filterCommissionerRecapsByWeek(recaps, 3)
     expect(week3.find((r) => r.label === 'Correction')?.id).toBe('recap-12')
-    expect(week3.at(-1)?.label).toBe('Correction')
+    const correctionIdx = week3.findIndex((r) => r.id === 'recap-12')
+    const finalIdx = week3.findIndex((r) => r.id === 'recap-13')
+    expect(correctionIdx).toBeLessThan(finalIdx)
   })
 })

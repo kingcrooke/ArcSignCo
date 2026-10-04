@@ -1,13 +1,25 @@
-import type { MatchupRecap } from '../lib/types'
+import { allPlayLine } from '../lib/allPlay'
+import { buildWeekReceipt } from '../lib/receiptOfWeek'
+import type { MatchupRecap, SleeperMatchup } from '../lib/types'
+import { LiveScoresStrip } from './LiveScoresStrip'
+import { ReceiptOfWeek } from './ReceiptOfWeek'
 
 export function RecapsPanel({
   recaps,
   week,
   hasScores,
+  isLive,
+  weekMatchups,
+  teams,
+  playersLoading,
 }: {
   recaps: MatchupRecap[]
   week: number
   hasScores: boolean
+  isLive: boolean
+  weekMatchups?: SleeperMatchup[]
+  teams: Map<number, import('../lib/types').TeamInfo>
+  playersLoading?: boolean
 }) {
   if (!hasScores) {
     return (
@@ -17,14 +29,30 @@ export function RecapsPanel({
       </p>
     )
   }
-  if (!recaps.length) {
+
+  if (playersLoading) {
     return (
-      <p className="text-[var(--gwb-muted)]">No head-to-head pairings found this week.</p>
+      <p className="rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+        Loading player names for recap details…
+      </p>
     )
   }
+
+  const receipt = buildWeekReceipt(recaps)
+
   return (
     <div className="space-y-4">
-      {recaps.map((r) => (
+      {isLive && weekMatchups && (
+        <LiveScoresStrip matchups={weekMatchups} teams={teams} />
+      )}
+      {receipt && !isLive && <ReceiptOfWeek receipt={receipt} />}
+      {!recaps.length && isLive && (
+        <p className="text-sm text-[var(--gwb-muted)]">
+          Live scores above — full recap cards appear when the week is final.
+        </p>
+      )}
+      {!isLive &&
+        recaps.map((r) => (
         <article
           key={r.matchupId}
           className={`rounded-xl border p-4 ${
@@ -63,44 +91,51 @@ export function RecapsPanel({
               </div>
             )}
           </div>
-          <p className="mt-2 text-sm text-[var(--gwb-muted)]">{r.narrative}</p>
-          {r.starsLine && (
+          {!isLive && <p className="mt-2 text-sm text-[var(--gwb-muted)]">{r.narrative}</p>}
+          {r.starsLine && !isLive && (
             <p className="mt-1 text-sm text-[var(--gwb-text)]">{r.starsLine}</p>
           )}
-          <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
-            <div>
-              <dt className="text-xs uppercase text-[var(--gwb-muted)]">Top scorer A</dt>
-              <dd>
-                {r.teamA.topScorer
-                  ? `${r.teamA.topScorer.name} · ${r.teamA.topScorer.points.toFixed(1)}`
-                  : '—'}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase text-[var(--gwb-muted)]">Top scorer B</dt>
-              <dd>
-                {r.teamB.topScorer
-                  ? `${r.teamB.topScorer.name} · ${r.teamB.topScorer.points.toFixed(1)}`
-                  : '—'}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase text-[var(--gwb-muted)]">Bench miss A</dt>
-              <dd>
-                {r.teamA.benchMiss
-                  ? `${r.teamA.benchMiss.name} left ${r.teamA.benchMiss.points.toFixed(1)} on bench`
-                  : '—'}
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase text-[var(--gwb-muted)]">Bench miss B</dt>
-              <dd>
-                {r.teamB.benchMiss
-                  ? `${r.teamB.benchMiss.name} left ${r.teamB.benchMiss.points.toFixed(1)} on bench`
-                  : '—'}
-              </dd>
-            </div>
-          </dl>
+          {weekMatchups && !isLive && (
+            <p className="mt-1 text-xs text-[var(--gwb-muted)]">
+              {allPlayLine(r.teamA.points, weekMatchups, r.teamA.rosterId)}
+            </p>
+          )}
+          {!isLive && (
+            <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2">
+              <div>
+                <dt className="text-xs uppercase text-[var(--gwb-muted)]">
+                  Top scorer · {r.teamA.teamName}
+                </dt>
+                <dd>
+                  {r.teamA.topScorer
+                    ? `${r.teamA.topScorer.name} · ${r.teamA.topScorer.points.toFixed(1)}`
+                    : '—'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase text-[var(--gwb-muted)]">
+                  Top scorer · {r.teamB.teamName}
+                </dt>
+                <dd>
+                  {r.teamB.topScorer
+                    ? `${r.teamB.topScorer.name} · ${r.teamB.topScorer.points.toFixed(1)}`
+                    : '—'}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase text-[var(--gwb-muted)]">
+                  Bench miss · {r.teamA.teamName}
+                </dt>
+                <dd>{r.teamA.benchMiss?.message ?? '—'}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase text-[var(--gwb-muted)]">
+                  Bench miss · {r.teamB.teamName}
+                </dt>
+                <dd>{r.teamB.benchMiss?.message ?? '—'}</dd>
+              </div>
+            </dl>
+          )}
         </article>
       ))}
     </div>

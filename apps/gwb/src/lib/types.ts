@@ -22,6 +22,8 @@ export interface SleeperRoster {
     fpts_against_decimal: number
     ppts: number
     ppts_decimal: number
+    waiver_position?: number
+    waiver_budget_used?: number
   }
   metadata?: {
     streak?: string
@@ -36,6 +38,27 @@ export interface SleeperMatchup {
   starters: string[]
   starters_points: number[]
   players_points: Record<string, number>
+  /** Roster that scored this week. Absent on older fixtures. */
+  players?: string[]
+}
+
+export interface SleeperTransaction {
+  type: string
+  status: string
+  status_updated: number
+  created?: number
+  leg: number
+  roster_ids?: number[]
+  adds: Record<string, number> | null
+  drops: Record<string, number> | null
+  settings?: {
+    waiver_bid?: number
+    seq?: number
+    priority?: number
+  } | null
+  metadata?: { notes?: string } | null
+  waiver_budget?: { sender: number; receiver: number; amount: number }[]
+  transaction_id?: string
 }
 
 export interface SleeperLeague {
@@ -109,5 +132,5 @@ export interface TeamSideRecap {
   teamName: string
   points: number
   topScorer: { name: string; points: number } | null
-  benchMiss: { name: string; points: number; starterPoints: number } | null
+  benchMiss: { name: string; gain: number; message: string } | null
 }

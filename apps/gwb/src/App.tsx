@@ -1,8 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { FrankieZonePanel } from './components/FrankieZonePanel'
+import { GwbFooter } from './components/GwbFooter'
+import { WaiverPanel } from './components/WaiverPanel'
 import { RecapsPanel } from './components/RecapsPanel'
 import { MulligansPanel } from './components/MulligansPanel'
+import { SoundToggle } from './components/SoundToggle'
 import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
 import { StandingsPanel } from './components/StandingsPanel'
 import { WeekPicker } from './components/WeekPicker'
@@ -13,31 +16,53 @@ import {
   zoneTabLabel,
 } from './lib/frankieZone'
 import { weekHasMatchups } from './lib/recaps'
-import { cumulativeDeferralNote, lastCompletedWeek } from './lib/weeks'
 import { computeStandingsThroughWeek } from './lib/standings'
+import type { GraphicsSectionKind } from './lib/weekGraphics'
+import {
+  cumulativeDeferralNote,
+  lastCompletedWeek,
+} from './lib/weeks'
 import { useLeagueData } from './hooks/useLeagueData'
+import { useSound } from './hooks/useSound'
+import { type AppTab } from './hooks/useUrlState'
 
-type Tab = 'standings' | 'gallery' | 'recaps' | 'mulligans' | 'frankie'
-
-const BASE_TABS: { id: Tab; label: string }[] = [
+const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
   { id: 'gallery', label: 'Graphics' },
   { id: 'recaps', label: 'Recaps' },
   { id: 'mulligans', label: 'Mulligans' },
   { id: 'frankie', label: 'Frankie Zone' },
+  { id: 'waiver', label: 'Waiver Wire Champion' },
+]
+
+const TAB_IDS: AppTab[] = [
+  'standings',
+  'gallery',
+  'recaps',
+  'mulligans',
+  'frankie',
+  'waiver',
 ]
 
 export default function App() {
   const { state, error, data, refresh } = useLeagueData()
-  const [tab, setTab] = useState<Tab>('standings')
+  const [tab, setTab] = useState<AppTab>('standings')
+  const [slideParam, setSlideParam] = useState<string | null>(null)
   const [recapFocusId, setRecapFocusId] = useState<string | null>(null)
+  const sound = useSound()
+  const [deckKind, setDeckKind] = useState<GraphicsSectionKind | null>(null)
 
-  const openRecapFromZone = useCallback((week: number, recapId: string) => {
-    if (!data) return
-    data.setSelectedWeek(week)
-    setRecapFocusId(recapId)
-    setTab('recaps')
-  }, [data])
+  const openRecapFromZone = useCallback(
+    (week: number, recapId: string) => {
+      if (!data) return
+      data.setSelectedWeek(week)
+      setRecapFocusId(recapId)
+      setSlideParam(null)
+      setDeckKind(null)
+      setTab('recaps')
+    },
+    [data],
+  )
 
   const frankieTabLabel = useMemo(() => {
     if (!data) return zoneTabLabel('Frankie')
@@ -72,22 +97,90 @@ export default function App() {
     data?.league.settings.last_scored_leg ?? 18,
   )
 
+  useEffect(() => {
+    if (!data) return
+    const params = new URLSearchParams(window.location.search)
+    const w = params.get('week')
+    const t = params.get('tab') as AppTab | null
+    const slide = params.get('slide')
+    if (w) {
+      const n = Number.parseInt(w, 10)
+      if (!Number.isNaN(n)) data.setSelectedWeek(n)
+    }
+    if (t && TAB_IDS.includes(t)) setTab(t)
+    if (slide) setSlideParam(slide)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hydrate once when data loads
+  }, [data?.league.league_id])
+
+  useEffect(() => {
+    if (!data) return
+    const params = new URLSearchParams()
+    params.set('week', String(data.selectedWeek))
+    params.set('tab', tab)
+    if (slideParam) params.set('slide', slideParam)
+    const qs = params.toString()
+    window.history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${qs}`,
+    )
+  }, [data?.selectedWeek, tab, slideParam, data])
+
+  useEffect(() => {
+    if (tab === 'recaps' || tab === 'waiver') data?.ensurePlayers()
+  }, [tab, data])
+
+  useEffect(() => {
+    if (!sound.armed) return
+    if (tab === 'gallery' && deckKind) {
+      sound.setDeckBed(deckKind)
+      return
+    }
+    sound.setTabBed(tab)
+  }, [tab, deckKind, sound])
+
+  const onTabChange = (next: AppTab) => {
+    sound.playClick()
+    setTab(next)
+    if (next !== 'gallery' && next !== 'frankie') setSlideParam(null)
+    if (next !== 'gallery') setDeckKind(null)
+  }
+
+  const onWeekChange = (w: number) => {
+    sound.playClick()
+    data?.setSelectedWeek(w)
+  }
+
+  const frankieSlideId =
+    tab === 'frankie' ? slideParam : null
+
+  const gallerySlideId =
+    tab === 'gallery' ? slideParam : null
+
   return (
     <div
       className={`mx-auto flex min-h-dvh flex-col px-4 pb-8 pt-6 ${
-        tab === 'gallery' ? 'max-w-6xl' : 'max-w-3xl'
+        tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'
       }`}
     >
-      <header className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]">
-          Command Center
-        </p>
-        <h1 className="mt-1 font-['Anton'] text-4xl uppercase leading-tight sm:text-5xl">
-          {LEAGUE_NAME} League
-        </h1>
-        <p className="mt-2 text-sm text-[var(--gwb-muted)]">
-          REDRAFT · Sleeper public data · No tracking
-        </p>
+      <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]">
+            Command Center
+          </p>
+          <h1 className="mt-1 font-['Anton'] text-4xl uppercase leading-tight sm:text-5xl">
+            {LEAGUE_NAME} League
+          </h1>
+          <p className="mt-2 text-sm text-[var(--gwb-muted)]">
+            REDRAFT · Sleeper public data · No tracking
+          </p>
+        </div>
+        <SoundToggle
+          label={sound.label}
+          pressed={sound.pressed}
+          showTapHint={sound.showTapHint}
+          onToggle={() => sound.unlock()}
+        />
       </header>
 
       {state === 'loading' && (
@@ -117,7 +210,7 @@ export default function App() {
             <WeekPicker
               week={data.selectedWeek}
               maxWeek={maxWeek}
-              onChange={data.setSelectedWeek}
+              onChange={onWeekChange}
             />
             <p className="text-sm text-[var(--gwb-muted)]">
               Season {data.league.season} · NFL Week {data.nflState.week}
@@ -145,7 +238,7 @@ export default function App() {
                       : 'gwb-section-tab'
                   }
                   aria-current={active ? 'page' : undefined}
-                  onClick={() => setTab(t.id)}
+                  onClick={() => onTabChange(t.id)}
                 >
                   {t.label}
                 </button>
@@ -167,6 +260,9 @@ export default function App() {
               <StandingsPanel
                 rows={data.standings}
                 deferralNote={data.standingsDeferralNote}
+                matchupsByWeek={data.matchupsByWeek}
+                standingsThroughWeek={data.standingsThroughWeek}
+                teams={data.teams}
               />
             </section>
           )}
@@ -175,7 +271,12 @@ export default function App() {
               <h2 className="mb-3 text-lg font-semibold">
                 Week {data.selectedWeek} graphics
               </h2>
-              <WeekGraphicsPanel week={data.selectedWeek} />
+              <WeekGraphicsPanel
+                week={data.selectedWeek}
+                initialSlideId={gallerySlideId}
+                onSlideUrlChange={setSlideParam}
+                onDeckKindChange={setDeckKind}
+              />
             </section>
           )}
           {tab === 'recaps' && (
@@ -199,6 +300,10 @@ export default function App() {
                   hasScores={weekHasMatchups(
                     data.matchupsByWeek.get(data.selectedWeek),
                   )}
+                  isLive={data.isSelectedWeekLive}
+                  weekMatchups={data.matchupsByWeek.get(data.selectedWeek)}
+                  teams={data.teams}
+                  playersLoading={data.playersLoading}
                 />
               </div>
             </section>
@@ -211,6 +316,7 @@ export default function App() {
                 selectedWeek={data.selectedWeek}
                 statusThroughWeek={data.standingsThroughWeek}
                 deferralNote={data.mulligansDeferralNote}
+                onNegativeMulliganOpen={() => sound.playBuzzer()}
               />
             </section>
           )}
@@ -237,9 +343,29 @@ export default function App() {
                 )}
                 playoffWeekStart={data.league.settings.playoff_week_start ?? 15}
                 onOpenRecap={openRecapFromZone}
+                initialSlideId={frankieSlideId}
+                onSlideUrlChange={setSlideParam}
               />
             </section>
           )}
+          {tab === 'waiver' && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold">
+                Waiver Wire Champion
+                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                  through Week {data.standingsThroughWeek}
+                </span>
+              </h2>
+              <WaiverPanel
+                board={data.waiverBoard}
+                players={data.players}
+                deferralNote={data.waiverDeferralNote}
+                loadError={data.waiverLoadError}
+              />
+            </section>
+          )}
+
+          <GwbFooter />
         </>
       )}
     </div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import recapsData from '../content/commissioner-recaps.json'
 import { FRANKIE_ZONE_RECORD } from '../lib/constants'
+import { managerNickname } from '../lib/nicknames'
 import {
   computeFrankieZoneView,
   buildScheduleByWeek,
@@ -30,6 +31,8 @@ type Props = {
   deferralNote: string | null
   playoffWeekStart: number
   onOpenRecap: (week: number, recapId: string) => void
+  initialSlideId?: string | null
+  onSlideUrlChange?: (slideId: string | null) => void
 }
 
 function PathTracker({ losses }: { losses: number }) {
@@ -117,6 +120,8 @@ export function FrankieZonePanel({
   deferralNote,
   playoffWeekStart,
   onOpenRecap,
+  initialSlideId,
+  onSlideUrlChange,
 }: Props) {
   const [scheduleByWeek, setScheduleByWeek] = useState(() =>
     buildScheduleByWeek(matchupsByWeek),
@@ -202,8 +207,30 @@ export function FrankieZonePanel({
     ],
   )
 
-  const openSlide = useCallback((index: number) => setLightboxIndex(index), [])
-  const closeSlide = useCallback(() => setLightboxIndex(null), [])
+  const indexBySlideId = useMemo(() => {
+    const map = new Map<string, number>()
+    slides.forEach((s, i) => map.set(s.id, i))
+    return map
+  }, [slides])
+
+  const openSlide = useCallback(
+    (index: number) => {
+      setLightboxIndex(index)
+      const slide = slides[index]
+      onSlideUrlChange?.(slide?.id ?? null)
+    },
+    [slides, onSlideUrlChange],
+  )
+  const closeSlide = useCallback(() => {
+    setLightboxIndex(null)
+    onSlideUrlChange?.(null)
+  }, [onSlideUrlChange])
+
+  useEffect(() => {
+    if (!initialSlideId) return
+    const idx = indexBySlideId.get(initialSlideId)
+    if (idx != null) setLightboxIndex(idx)
+  }, [initialSlideId, indexBySlideId])
 
   const recapTitles = useMemo(() => {
     const map = new Map<string, string>()
@@ -252,8 +279,15 @@ export function FrankieZonePanel({
                 >
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <div>
-                      <p className="text-lg font-semibold">{r.displayName}</p>
-                      <p className="text-sm text-[var(--gwb-muted)]">{r.teamName}</p>
+                      <p className="text-lg font-semibold">
+                        {managerNickname(r.rosterId, r.displayName)}
+                      </p>
+                      <p className="text-sm text-[var(--gwb-muted)]">
+                        {r.teamName}
+                        <span className="ml-1 text-xs" title={`Sleeper: ${r.displayName}`}>
+                          (@{r.displayName})
+                        </span>
+                      </p>
                     </div>
                     <div className="text-right">
                       <p className="font-['Bebas Neue'] text-2xl text-red-300">
@@ -322,7 +356,9 @@ export function FrankieZonePanel({
                   key={r.rosterId}
                   className="rounded-xl border border-[var(--gwb-border)] bg-[#0d1319] p-4"
                 >
-                  <p className="font-medium">{r.teamName}</p>
+                  <p className="font-medium">
+                    {managerNickname(r.rosterId, r.displayName)} · {r.teamName}
+                  </p>
                   <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-teal-300">
                     {pathStatusLine(r.losses, Boolean(r.nextOpponent))}
                   </p>
@@ -338,7 +374,10 @@ export function FrankieZonePanel({
                         Up next · Week {r.nextOpponent.week}
                       </p>
                       <p className="mt-1 font-medium">
-                        {r.nextOpponent.displayName}{' '}
+                        {managerNickname(
+                          r.nextOpponent.rosterId,
+                          r.nextOpponent.displayName,
+                        )}{' '}
                         <span className="text-[var(--gwb-muted)]">
                           ({r.nextOpponent.record})
                         </span>
@@ -456,7 +495,10 @@ export function FrankieZonePanel({
           slides={slides}
           index={lightboxIndex}
           onClose={closeSlide}
-          onIndexChange={setLightboxIndex}
+          onIndexChange={(idx) => {
+            setLightboxIndex(idx)
+            onSlideUrlChange?.(slides[idx]?.id ?? null)
+          }}
         />
       )}
     </div>

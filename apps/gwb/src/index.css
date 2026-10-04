@@ -1,16 +1,16 @@
 @import 'tailwindcss';
 
 @font-face {
-  font-family: 'Anton';
-  src: url('/fonts/Anton-Regular.ttf') format('truetype');
+  font-family: 'Bebas Neue';
+  src: url('/fonts/BebasNeue-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Bebas Neue';
-  src: url('/fonts/BebasNeue-Regular.ttf') format('truetype');
+  font-family: 'Anton';
+  src: url('/fonts/Anton-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -18,7 +18,7 @@
 
 @font-face {
   font-family: 'Inter';
-  src: url('/fonts/Inter-Variable.ttf') format('truetype');
+  src: url('/fonts/Inter-Variable.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -70,7 +70,8 @@ body {
 
 /* Section tabs — instant active swap (no bg transition; avoids double-highlight glitch) */
 nav.gwb-section-tabs button.gwb-section-tab {
-  flex: 1 1 0;
+  flex: 1 0 auto;
+  min-width: max-content;
   white-space: nowrap;
   border-radius: 0.5rem;
   padding: 0.625rem 0.75rem;
