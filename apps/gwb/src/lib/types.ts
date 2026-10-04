@@ -71,6 +71,7 @@ export interface SleeperLeague {
     leg: number
     last_scored_leg?: number
     playoff_week_start?: number
+    playoff_teams?: number
   }
   roster_positions: string[]
   scoring_settings: Record<string, number>

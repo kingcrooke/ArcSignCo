@@ -282,14 +282,13 @@ export default function App() {
                 </span>
               </h2>
               <p className="mb-3 text-xs text-[var(--gwb-muted)]">
-                Tiebreak: win%, then points for, then points against.
+                Sorted by wins, then points for (Sleeper-style).
               </p>
               <StandingsPanel
                 rows={data.standings}
                 deferralNote={data.standingsDeferralNote}
-                matchupsByWeek={data.matchupsByWeek}
-                standingsThroughWeek={data.standingsThroughWeek}
                 teams={data.teams}
+                playoffTeams={data.league.settings.playoff_teams ?? null}
               />
             </section>
           )}

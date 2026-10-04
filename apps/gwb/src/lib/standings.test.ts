@@ -7,6 +7,7 @@ import {
   computeStandings,
   computeStandingsThroughWeek,
   recordLabel,
+  streakLabel,
 } from './standings'
 import type { SleeperMatchup, SleeperRoster, SleeperUser } from './types'
 
@@ -29,6 +30,12 @@ describe('computeStandings', () => {
     expect(undefeated.length).toBeGreaterThan(0)
     expect(standings[0].rank).toBe(1)
     expect(recordLabel(standings[0])).toMatch(/^\d+-\d+/)
+  })
+
+  it('formats Sleeper streak metadata for display', () => {
+    expect(streakLabel('3L')).toBe('L3')
+    expect(streakLabel('2W')).toBe('W2')
+    expect(streakLabel('')).toBe('')
   })
 
   it('through one week gives 1-0 or 0-1 records', () => {

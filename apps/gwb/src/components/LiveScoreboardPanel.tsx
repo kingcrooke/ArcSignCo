@@ -11,32 +11,7 @@ import type { ProjectionsMap } from '../lib/projections'
 import type { NflState, PlayersMap, SleeperLeague, SleeperMatchup, TeamInfo } from '../lib/types'
 import { isWeekLive } from '../lib/weeks'
 import { MatchupDetailSheet } from './MatchupDetailSheet'
-
-function TeamAvatar({
-  team,
-  size = 'md',
-}: {
-  team: TeamInfo | undefined
-  size?: 'sm' | 'md'
-}) {
-  const dim = size === 'sm' ? 'h-8 w-8' : 'h-10 w-10'
-  if (team?.avatarUrl) {
-    return (
-      <img
-        src={team.avatarUrl}
-        alt=""
-        className={`${dim} rounded-full border border-[var(--gwb-border)] object-cover`}
-      />
-    )
-  }
-  return (
-    <div
-      className={`${dim} flex items-center justify-center rounded-full border border-[var(--gwb-border)] bg-[#243040] text-xs font-semibold text-[var(--gwb-muted)]`}
-    >
-      {team?.teamName?.slice(0, 1) ?? '?'}
-    </div>
-  )
-}
+import { TeamAvatar } from './TeamAvatar'
 
 function formatUpdated(d: Date | null): string {
   if (!d) return '—'
