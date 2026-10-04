@@ -18,4 +18,9 @@ test('loads real GWB league data and core sections', async ({ page }) => {
 
   await page.getByRole('button', { name: 'IG' }).click()
   await expect(page.getByText('Instagram graphics')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Graphics' }).click()
+  await expect(page.getByRole('heading', { name: /Week \d+ graphics/i })).toBeVisible()
+  await page.getByLabel('NFL Week').selectOption('1')
+  await expect(page.getByRole('heading', { name: 'Results', exact: true })).toBeVisible()
 })

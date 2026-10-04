@@ -5,11 +5,14 @@ import { join } from 'node:path'
 const OUT = '/opt/cursor/artifacts/screenshots'
 const BASE = process.env.PREVIEW_URL || 'http://127.0.0.1:4317/gwb-fe006a16/'
 
-async function openSlidesTab(page) {
+async function openGraphicsTab(page, week = 4) {
   await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 120_000 })
   await page.waitForSelector('nav[aria-label="Sections"]', { timeout: 120_000 })
-  await page.getByRole('button', { name: 'Slides' }).click()
-  await page.waitForSelector('h3:has-text("Week 4 Report")', { timeout: 120_000 })
+  await page.getByLabel('NFL Week').selectOption(String(week))
+  await page.getByRole('button', { name: 'Graphics' }).click()
+  await page.waitForSelector(`#graphics-week-${week}-matchups, #graphics-week-${week}-results`, {
+    timeout: 120_000,
+  })
 }
 
 async function waitForGalleryImages(page) {
@@ -80,15 +83,24 @@ async function waitForLightboxImage(page) {
 async function captureSlides(page, width) {
   const height = width === 390 ? 844 : 900
   await page.setViewportSize({ width, height })
-  await openSlidesTab(page)
+  await openGraphicsTab(page, 4)
   await waitForGalleryImages(page)
-  await page.locator('#slides-results-week-1').scrollIntoViewIfNeeded()
+  await page.locator('#graphics-week-4-report').scrollIntoViewIfNeeded()
   await page.waitForTimeout(300)
   await page.screenshot({
-    path: join(OUT, `gwb-slides-gallery-${width}.png`),
+    path: join(OUT, `gwb-graphics-week4-${width}.png`),
     fullPage: true,
   })
-  console.log('gallery', width)
+  console.log('graphics week 4', width)
+
+  await page.getByLabel('NFL Week').selectOption('1')
+  await page.waitForSelector('#graphics-week-1-results', { timeout: 60_000 })
+  await waitForGalleryImages(page)
+  await page.screenshot({
+    path: join(OUT, `gwb-graphics-week1-${width}.png`),
+    fullPage: true,
+  })
+  console.log('graphics week 1', width)
 
   await page.locator('section ul li button').first().click()
   await page.waitForSelector('[role="dialog"]', { timeout: 10_000 })
@@ -103,7 +115,7 @@ async function captureSlides(page, width) {
 
 async function verifyMobileScroll(page) {
   await page.setViewportSize({ width: 390, height: 844 })
-  await openSlidesTab(page)
+  await openGraphicsTab(page, 4)
   const thumbs = page.locator('section ul li button img')
   const count = await thumbs.count()
   let loaded = 0

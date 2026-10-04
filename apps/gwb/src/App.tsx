@@ -4,21 +4,21 @@ import { PowerPanel } from './components/PowerPanel'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { RecapsPanel } from './components/RecapsPanel'
 import { MulligansPanel } from './components/MulligansPanel'
-import { SlidesPanel } from './components/SlidesPanel'
+import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
 import { StandingsPanel } from './components/StandingsPanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
 import { weekHasMatchups } from './lib/recaps'
 import { useLeagueData } from './hooks/useLeagueData'
 
-type Tab = 'standings' | 'power' | 'recaps' | 'graphics' | 'slides'
+type Tab = 'standings' | 'power' | 'recaps' | 'ig' | 'gallery'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
   { id: 'power', label: 'Power' },
   { id: 'recaps', label: 'Recaps' },
-  { id: 'graphics', label: 'IG' },
-  { id: 'slides', label: 'Slides' },
+  { id: 'ig', label: 'IG' },
+  { id: 'gallery', label: 'Graphics' },
 ]
 
 export default function App() {
@@ -33,7 +33,7 @@ export default function App() {
   return (
     <div
       className={`mx-auto flex min-h-dvh flex-col px-4 pb-8 pt-6 ${
-        tab === 'slides' ? 'max-w-6xl' : 'max-w-3xl'
+        tab === 'gallery' ? 'max-w-6xl' : 'max-w-3xl'
       }`}
     >
       <header className="mb-6">
@@ -149,16 +149,18 @@ export default function App() {
               </div>
             </section>
           )}
-          {tab === 'graphics' && (
+          {tab === 'ig' && (
             <section>
               <h2 className="mb-3 text-lg font-semibold">Instagram graphics</h2>
               <GraphicsPanel data={data} />
             </section>
           )}
-          {tab === 'slides' && (
+          {tab === 'gallery' && (
             <section>
-              <h2 className="mb-3 text-lg font-semibold">Slides</h2>
-              <SlidesPanel />
+              <h2 className="mb-3 text-lg font-semibold">
+                Week {data.selectedWeek} graphics
+              </h2>
+              <WeekGraphicsPanel week={data.selectedWeek} />
             </section>
           )}
         </>
