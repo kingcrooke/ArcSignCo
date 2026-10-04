@@ -1,20 +1,50 @@
 import { createSign, createPrivateKey } from "node:crypto";
 import { env } from "./env.mjs";
+
+const SHEET_RANGE = "LeadLog!A:M";
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const SHEETS_BASE = "https://sheets.googleapis.com/v4/spreadsheets";
 
-/** In-memory mock used when credentials are missing (tests and local dev). */
+/** In-memory mock used when no Sheet integration is configured (tests and local dev). */
 export const mockSheetRows = [];
 
 export function resetMockSheet() {
   mockSheetRows.length = 0;
 }
 
+export function appsScriptConfigured() {
+  return Boolean(env("QUOTE_ENGINE_SHEET_APP_URL"));
+}
 
-const SHEET_RANGE = "LeadLog!A:M";
+export function serviceAccountConfigured() {
+  return Boolean(env("QUOTE_ENGINE_SHEET_ID") && env("QUOTE_ENGINE_GOOGLE_CREDENTIALS"));
+}
 
 export function sheetsConfigured() {
-  return Boolean(env("QUOTE_ENGINE_SHEET_ID") && env("QUOTE_ENGINE_GOOGLE_CREDENTIALS"));
+  return appsScriptConfigured() || serviceAccountConfigured();
+}
+
+function appSecret() {
+  return env("QUOTE_ENGINE_SHEET_APP_SECRET") || "";
+}
+
+async function appsScriptPost(payload) {
+  const url = env("QUOTE_ENGINE_SHEET_APP_URL");
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...payload, secret: appSecret() || undefined }),
+    redirect: "follow",
+  });
+  const text = await res.text();
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch {
+    throw new Error(`Apps Script bad response (${res.status})`);
+  }
+  if (!res.ok || json.error) throw new Error(json.error || `Apps Script HTTP ${res.status}`);
+  return json;
 }
 
 function parseCredentials() {
@@ -88,19 +118,31 @@ async function sheetsFetch(path, { method = "GET", body, token }) {
   return res.status === 204 ? null : res.json();
 }
 
+function mockAppend(rowValues) {
+  mockSheetRows.push([...rowValues]);
+  return { ok: true, mode: "mock", sheetRow: mockSheetRows.length + 1 };
+}
+
 /**
- * @returns {{ ok: boolean, mode: "sheet"|"mock", sheetRow?: number, error?: string }}
+ * @returns {{ ok: boolean, mode: "apps-script"|"sheet"|"mock", sheetRow?: number, error?: string }}
  */
 export async function appendLeadRow(rowValues) {
-  if (!sheetsConfigured()) {
-    mockSheetRows.push([...rowValues]);
-    return { ok: true, mode: "mock", sheetRow: mockSheetRows.length + 1 };
+  if (appsScriptConfigured()) {
+    try {
+      const json = await appsScriptPost({ action: "append", row: rowValues });
+      return { ok: true, mode: "apps-script", sheetRow: json.sheetRow };
+    } catch (err) {
+      console.error("quote-engine apps script append", err);
+      return { ...mockAppend(rowValues), error: String(err.message || err) };
+    }
+  }
+  if (!serviceAccountConfigured()) {
+    return mockAppend(rowValues);
   }
   const creds = parseCredentials();
   const sheetId = env("QUOTE_ENGINE_SHEET_ID");
   if (!creds?.client_email || !creds?.private_key) {
-    mockSheetRows.push([...rowValues]);
-    return { ok: true, mode: "mock", sheetRow: mockSheetRows.length + 1, error: "invalid_credentials" };
+    return { ...mockAppend(rowValues), error: "invalid_credentials" };
   }
   try {
     const token = await googleAccessToken(creds);
@@ -115,13 +157,26 @@ export async function appendLeadRow(rowValues) {
     return { ok: true, mode: "sheet", sheetRow };
   } catch (err) {
     console.error("quote-engine sheets append", err);
-    mockSheetRows.push([...rowValues]);
-    return { ok: true, mode: "mock", sheetRow: mockSheetRows.length + 1, error: String(err.message || err) };
+    return { ...mockAppend(rowValues), error: String(err.message || err) };
   }
 }
 
 export async function listLeadRows() {
-  if (!sheetsConfigured()) {
+  if (appsScriptConfigured()) {
+    try {
+      const json = await appsScriptPost({ action: "list" });
+      return { ok: true, mode: "apps-script", rows: json.rows || [] };
+    } catch (err) {
+      console.error("quote-engine apps script list", err);
+      return {
+        ok: true,
+        mode: "mock",
+        rows: mockSheetRows.map((r, i) => ({ row: i + 2, values: r })),
+        error: String(err.message || err),
+      };
+    }
+  }
+  if (!serviceAccountConfigured()) {
     return { ok: true, mode: "mock", rows: mockSheetRows.map((r, i) => ({ row: i + 2, values: r })) };
   }
   const creds = parseCredentials();
@@ -149,12 +204,13 @@ export async function listLeadRows() {
 /** Update status, quoted_value, next_step columns (D, E, F) for a sheet row. */
 export async function patchLeadRow(sheetRow, { status, quotedValue, nextStep }) {
   if (!sheetRow || sheetRow < 2) throw new Error("invalid row");
-  const updates = [];
-  if (status != null) updates.push({ range: `LeadLog!D${sheetRow}`, values: [[status]] });
-  if (quotedValue != null) updates.push({ range: `LeadLog!E${sheetRow}`, values: [[quotedValue]] });
-  if (nextStep != null) updates.push({ range: `LeadLog!F${sheetRow}`, values: [[nextStep]] });
 
-  if (!sheetsConfigured()) {
+  if (appsScriptConfigured()) {
+    await appsScriptPost({ action: "patch", row: sheetRow, status, quotedValue, nextStep });
+    return { ok: true, mode: "apps-script" };
+  }
+
+  if (!serviceAccountConfigured()) {
     const idx = sheetRow - 2;
     if (mockSheetRows[idx]) {
       if (status != null) mockSheetRows[idx][3] = status;
@@ -163,6 +219,12 @@ export async function patchLeadRow(sheetRow, { status, quotedValue, nextStep }) 
     }
     return { ok: true, mode: "mock" };
   }
+
+  const updates = [];
+  if (status != null) updates.push({ range: `LeadLog!D${sheetRow}`, values: [[status]] });
+  if (quotedValue != null) updates.push({ range: `LeadLog!E${sheetRow}`, values: [[quotedValue]] });
+  if (nextStep != null) updates.push({ range: `LeadLog!F${sheetRow}`, values: [[nextStep]] });
+
   const creds = parseCredentials();
   const sheetId = env("QUOTE_ENGINE_SHEET_ID");
   const token = await googleAccessToken(creds);

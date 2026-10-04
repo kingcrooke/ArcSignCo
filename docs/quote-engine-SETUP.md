@@ -1,113 +1,116 @@
 # Quote Engine lite — setup (Jesus)
 
-This doc is for turning on the **private Quote Engine** on Netlify: Google Sheet lead log, form webhooks, and the hidden admin URL. The admin path is **`/ops-qel16cb/`** (not linked from the public site).
+Step-by-step to turn on the **private Quote Engine** on Netlify. Admin URL: **`/ops-qel16cb/`** (not linked from the public site).
 
 ---
 
-## 1. Netlify environment variables
+## Step 1 — Ops password (required)
 
-In **Netlify → Site (arcsign) → Project configuration → Environment variables**, add these for **Production** (and **Deploy previews** if you want to test leads there).
-
-| Variable | Required | What to put |
-|----------|----------|-------------|
-| `QUOTE_ENGINE_PASSWORD` | **Yes** | A long random password for the ops admin. Share only with Arc staff. |
-| `QUOTE_ENGINE_SHEET_ID` | For Google Sheet | The ID from the Sheet URL (`https://docs.google.com/spreadsheets/d/`**`THIS_PART`**/edit). |
-| `QUOTE_ENGINE_GOOGLE_CREDENTIALS` | For Google Sheet | The **full JSON** of a Google Cloud service account key (single line or pasted JSON). |
-| `QUOTE_ENGINE_WEBHOOK_SECRET` | Recommended | A random string. Netlify sends it as header **`X-Quote-Engine-Secret`** on form webhooks. |
-
-If Sheet variables are missing, the site **still works**: leads are stored in **Netlify Blobs** and the Sheet API is mocked in tests. Email notifications from Netlify Forms are unchanged.
-
-**Never commit secret values.** Names only are listed in the root `README.md`.
+1. Open **Netlify → Site (arcsign) → Project configuration → Environment variables**.
+2. Add **`QUOTE_ENGINE_PASSWORD`** = a long random password (Production, and Deploy previews if you test there).
+3. Save. Redeploy or wait for the next deploy so functions see it.
 
 ---
 
-## 2. Google Sheet (lead log)
+## Step 2 — Google Sheet lead log (recommended: Apps Script, one URL)
 
-1. In Google Drive (jc@ account), create a spreadsheet named e.g. **Arc Quote Engine — Lead log**.
-2. Add a tab named exactly **`LeadLog`**.
-3. Row **1** headers (columns A–M):
+### 2a. Create the Sheet
 
-   `lead_id` | `received_at` | `source` | `status` | `quoted_value` | `next_step` | `name` | `email` | `phone` | `company` | `address` | `project_type` | `scope_summary`
+1. In Google Drive (jc@), create **Arc Quote Engine — Lead log**.
+2. Rename the first tab to **`LeadLog`**.
+3. Row **1**, columns A–M:
 
-4. **Google Cloud console** (same Google account or a small project):
-   - Enable **Google Sheets API**.
-   - Create a **Service account** → **Keys** → **Add key** → JSON.
-   - Copy the entire JSON into `QUOTE_ENGINE_GOOGLE_CREDENTIALS`.
-5. In the Sheet, **Share** with the service account email (`….iam.gserviceaccount.com`) as **Editor**.
+   `lead_id` · `received_at` · `source` · `status` · `quoted_value` · `next_step` · `name` · `email` · `phone` · `company` · `address` · `project_type` · `scope_summary`
 
-Status, quoted value, and next step are updated from the admin when you click **Save lead**.
+### 2b. Add the Apps Script (recommended)
+
+No Google Cloud project and no JSON key.
+
+1. In the spreadsheet: **Extensions → Apps Script**.
+2. Delete any starter code. Paste everything from **`docs/quote-engine-sheet-apps-script.gs`** in this repo → **Save**.
+3. (Optional) **Project settings → Script properties** → add property **`SECRET`** = a random string (same value as Netlify **`QUOTE_ENGINE_SHEET_APP_SECRET`** in step 2d).
+4. **Deploy → New deployment → Type: Web app**
+   - **Execute as:** Me (jc@…)
+   - **Who has access:** Anyone  
+   (The URL is unguessable; optional `SECRET` above adds a check.)
+5. Copy the **Web app URL** (ends in `/exec`).
+
+### 2c. Netlify variables for Apps Script
+
+| Variable | Required | Value |
+|----------|----------|--------|
+| **`QUOTE_ENGINE_SHEET_APP_URL`** | **Yes** (for Sheet) | The Web app URL from step 2b |
+| **`QUOTE_ENGINE_SHEET_APP_SECRET`** | Optional | Same as Apps Script `SECRET` if you set one |
+
+### 2d. Alternative — Service account + Sheets API (advanced)
+
+Use this only if Apps Script is not an option.
+
+| Variable | Value |
+|----------|--------|
+| **`QUOTE_ENGINE_SHEET_ID`** | ID from the Sheet URL |
+| **`QUOTE_ENGINE_GOOGLE_CREDENTIALS`** | Full JSON key for a Google Cloud service account with Sheets API |
+
+Share the Sheet with the service account email as **Editor**. Steps: enable Sheets API, create service account, download JSON — same as a typical Google API setup.
+
+If **no** Sheet variables are set, leads still save to **Netlify Blobs**; email form notifications are unchanged.
 
 ---
 
-## 3. Form webhooks (quote-request + sign-estimate-request)
+## Step 3 — Form webhooks
 
-Scope Finder data is already included on **`quote-request`** via the hidden **`scope-finder`** field — no separate webhook.
+Scope Finder rides on **`quote-request`** (hidden **`scope-finder`** field). No extra form.
 
-For **each** form below, add an outgoing webhook in Netlify:
+For **each** form:
 
-**Netlify → Forms → (form name) → Form submission notifications → Add notification → Webhook**
+**Netlify → Forms → (form) → Form submission notifications → Add notification → Webhook**
 
-| Form name | Webhook URL |
-|-----------|-------------|
+| Form | Webhook URL |
+|------|-------------|
 | `quote-request` | `https://arcsignco.com/api/quote-engine/webhook` |
-| `sign-estimate-request` | `https://arcsignco.com/api/quote-engine/webhook` |
+| `sign-estimate-request` | same |
 
-On **Deploy Previews**, use the preview host instead, e.g.  
-`https://deploy-preview-NN--arcsign.netlify.app/api/quote-engine/webhook`
+On a **Deploy Preview**, swap the host, e.g.  
+`https://deploy-preview-24--arcsign.netlify.app/api/quote-engine/webhook`
 
-If `QUOTE_ENGINE_WEBHOOK_SECRET` is set, configure the webhook to send header:
-
-- **Name:** `X-Quote-Engine-Secret`  
-- **Value:** (same as the env var)
-
-Netlify’s built-in email notifications to **arc@arcsignco.com** can stay as they are.
+Optional: set **`QUOTE_ENGINE_WEBHOOK_SECRET`** on Netlify and add header **`X-Quote-Engine-Secret`** with the same value on both webhooks.
 
 ---
 
-## 4. Open the admin
+## Step 4 — Use the admin
 
-1. Deploy the branch/PR after env vars are set.
-2. Visit (production example):  
-   **`https://arcsignco.com/ops-qel16cb/`**
-3. Enter **`QUOTE_ENGINE_PASSWORD`**.
-4. Workflow:
-   - Pick a lead in the log.
-   - Adjust calculator fields → **Calculate** (uses placeholder rates until PM drops in real **`quote-rates`** numbers).
-   - Set **Status**, **Quoted value**, **Next step** → **Save lead**.
-   - **Generate proposal draft** → printable HTML (use **Print / Save as PDF** in the browser) or append **`.pdf`** to the API URL for a simple PDF.
+1. Open **`https://arcsignco.com/ops-qel16cb/`** (or your preview URL + `/ops-qel16cb/`).
+2. Enter **`QUOTE_ENGINE_PASSWORD`**.
+3. Select a lead → **Calculate** → set **Status / Quoted value / Next step** → **Save lead** → **Generate proposal draft** (print to PDF in the browser, or use the `.pdf` API link).
 
-Proposal copy is client-facing: no vendor names or sub costs; contact **(347) 450-2110**, **jc@arcsignco.com**, Mon–Fri 8 AM–6 PM; Arc third-person voice.
+Proposal copy is client-facing: no vendor or sub costs; **(347) 450-2110**, **jc@arcsignco.com**, Mon–Fri 8 AM–6 PM; Arc third-person voice.
 
 ---
 
-## 5. When Construction PM sends real rates
+## Step 5 — Real rates (later, Construction PM)
 
-1. Edit **`netlify/lib/quote-rates.mjs`** (or replace values from their spreadsheet).
-2. Set **`PLACEHOLDER = false`** and bump **`RATES_VERSION`**.
-3. Merge via PR; no calculator code changes required.
+1. Edit **`netlify/lib/quote-rates.mjs`**, replace placeholder numbers, set **`PLACEHOLDER = false`**, bump **`RATES_VERSION`**.
+2. Merge via PR.
 
 ---
 
-## 6. Checklist
+## Checklist
 
-- [ ] `QUOTE_ENGINE_PASSWORD` set on Netlify  
-- [ ] Sheet created with **`LeadLog`** tab and headers  
-- [ ] Service account JSON in `QUOTE_ENGINE_GOOGLE_CREDENTIALS`  
-- [ ] Sheet shared with service account  
-- [ ] `QUOTE_ENGINE_SHEET_ID` set  
-- [ ] Webhooks on **`quote-request`** and **`sign-estimate-request`**  
-- [ ] Optional webhook secret header  
-- [ ] Admin URL tested on Deploy Preview before production  
+- [ ] `QUOTE_ENGINE_PASSWORD`
+- [ ] Sheet + **`LeadLog`** headers
+- [ ] **`QUOTE_ENGINE_SHEET_APP_URL`** (recommended) *or* service account pair
+- [ ] Webhooks on **`quote-request`** and **`sign-estimate-request`**
+- [ ] Admin tested on Deploy Preview
 
 ---
 
 ## Troubleshooting
 
-| Symptom | What to check |
-|---------|----------------|
-| Admin says Unauthorized | Password env on this deploy context; hard refresh after saving env. |
-| Leads list empty | Webhook URL and form names; Netlify Forms → Submissions still arriving; without Sheet, check Blobs after a test submit. |
-| Sheet not updating | Service account editor access; tab name **`LeadLog`**; Netlify function logs. |
-| Calculator shows PLACEHOLDER | Expected until PM rates are merged and `PLACEHOLDER` is false. |
+| Symptom | Check |
+|---------|--------|
+| Unauthorized | Password env on this deploy; hard refresh. |
+| Empty lead list | Webhook URL; form names; submit a test lead. |
+| Sheet not updating | Apps Script deployed as Web app; tab **`LeadLog`**; function logs in Netlify. |
+| PLACEHOLDER in calculator | Expected until PM rates land. |
 
-Internal plan reference: `/opt/cursor/artifacts/docs/quote-engine-lite-PLAN.md` (planning artifact; not published on the site).
+Never commit secrets. Variable names are also in the root **`README.md`**.

@@ -1,4 +1,5 @@
 // Browser checks for the private Quote Engine admin (mocked API; static server).
+// Writes screenshots and a sample proposal PDF under /opt/cursor/artifacts/.
 //
 //   node tools/check-quote-engine-browser.mjs
 import fs from "node:fs";
@@ -6,14 +7,18 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { chromium } from "playwright";
+import { computeQuote } from "../netlify/lib/quote-compute.mjs";
+import { buildProposalHtml, buildProposalPdfBytes } from "../netlify/lib/proposal.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ARTIFACTS = process.env.CURSOR_ARTIFACTS_DIR || "/opt/cursor/artifacts";
 const SCREENSHOTS = path.join(ARTIFACTS, "screenshots");
+const SAMPLE_PDF = path.join(ARTIFACTS, "quote-engine-sample-proposal.pdf");
 const PORT = Number(process.env.QUOTE_ENGINE_PORT) || 9877;
 const BASE = `http://127.0.0.1:${PORT}`;
 const OPS = `${BASE}/ops-qel16cb/`;
 const PASS = "qa-quote-engine-pass";
+const MIN_PNG_BYTES = 35_000;
 
 const demoLead = {
   id: "quote-request-9001",
@@ -28,7 +33,8 @@ const demoLead = {
   phone: "(555) 555-0100",
   address: "245 Atlantic Ave, Brooklyn, NY",
   projectType: "Channel letters",
-  scopeSummary: "Exterior Signage Package · Lit storefront letters · DOB path",
+  scopeSummary:
+    "Exterior Signage Package\n\nProject: exterior\nPermits/approvals: yes\nRecommended items:\n- Storefront channel letters, face-lit\n- DOB approval coordination",
   boroughZone: "brooklyn",
   calculatorInput: {
     signType: "Channel letters",
@@ -42,6 +48,8 @@ const demoLead = {
     boroughZone: "brooklyn",
   },
 };
+
+const demoQuote = computeQuote(demoLead.calculatorInput);
 
 function startServer() {
   return spawn("python3", ["-m", "http.server", String(PORT), "--bind", "127.0.0.1"], { cwd: root, stdio: "pipe" });
@@ -57,9 +65,39 @@ async function waitFor(url) {
   throw new Error(`server missing at ${url}`);
 }
 
+function assertPng(filePath) {
+  const size = fs.statSync(filePath).size;
+  if (size < MIN_PNG_BYTES) {
+    throw new Error(`${filePath} is only ${size} bytes — likely blank or failed to render`);
+  }
+}
+
 async function shot(page, name, width) {
   await page.setViewportSize({ width, height: 900 });
-  await page.screenshot({ path: path.join(SCREENSHOTS, `${name}-${width}.png`), fullPage: true });
+  const filePath = path.join(SCREENSHOTS, `${name}-${width}.png`);
+  await page.screenshot({ path: filePath, fullPage: true });
+  assertPng(filePath);
+  console.log(`ok   ${path.basename(filePath)} (${fs.statSync(filePath).size} bytes)`);
+}
+
+async function captureProposal(context) {
+  const html = buildProposalHtml({ lead: demoLead, quote: demoQuote, draft: true });
+  const page = await context.newPage();
+  await page.setContent(html, { waitUntil: "load" });
+  await page.waitForSelector(".wrap h1", { state: "visible" });
+  await page.waitForSelector("table tbody tr", { state: "visible" });
+  await page.waitForFunction(() => {
+    const t = document.querySelector("tfoot .amt");
+    return t && t.textContent && t.textContent.includes("$");
+  });
+  await shot(page, "quote-engine-proposal", 1280);
+  await shot(page, "quote-engine-proposal", 390);
+  await page.close();
+
+  const pdfBytes = await buildProposalPdfBytes({ lead: demoLead, quote: demoQuote });
+  fs.writeFileSync(SAMPLE_PDF, pdfBytes);
+  if (pdfBytes.length < 500) throw new Error("sample PDF too small");
+  console.log(`ok   ${SAMPLE_PDF} (${pdfBytes.length} bytes)`);
 }
 
 async function run() {
@@ -77,28 +115,11 @@ async function run() {
         return route.fulfill({ json: { mode: "mock", leads: [demoLead] } });
       }
       if (url.pathname.endsWith("/calculate") && route.request().method() === "POST") {
-        const body = JSON.parse(route.request().postData() || "{}");
-        const input = body.input || {};
-        const total = 12450;
-        return route.fulfill({
-          json: {
-            quote: {
-              label: "Internal placeholder estimate",
-              placeholder: true,
-              version: "browser-mock",
-              total,
-              lines: [
-                { label: "Channel letters, trim cap", amount: 8200 },
-                { label: "Illumination and power supply", amount: 2100 },
-                { label: "Site survey and travel (Brooklyn)", amount: 225 },
-              ],
-            },
-          },
-        });
+        return route.fulfill({ json: { quote: demoQuote } });
       }
       if (url.pathname.includes("/proposal/")) {
-        const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Proposal</title></head><body><h1>Written estimate</h1><p>Harbor Retail LLC</p><p>Total: $12,450</p><p>Call or text (347) 450-2110 · jc@arcsignco.com</p></body></html>`;
-        return route.fulfill({ contentType: "text/html", body: html });
+        const html = buildProposalHtml({ lead: demoLead, quote: demoQuote, draft: true });
+        return route.fulfill({ contentType: "text/html; charset=utf-8", body: html });
       }
       return route.fulfill({ json: { ok: true } });
     });
@@ -107,29 +128,20 @@ async function run() {
     await page.fill("#gatePass", PASS);
     await page.click("#gateBtn");
     await page.waitForSelector("#app:not([hidden])", { timeout: 10000 });
-    await page.waitForSelector(".lead-list li");
+    await page.waitForSelector(".lead-list li .name");
     await shot(page, "quote-engine-leads", 1280);
     await shot(page, "quote-engine-leads", 390);
 
     await page.click(".lead-list li");
     await page.click('button[type="submit"]');
     await page.waitForSelector("#quoteOut:not([hidden])");
+    await page.waitForSelector("#quoteOut table tr");
     await shot(page, "quote-engine-calculator", 1280);
     await shot(page, "quote-engine-calculator", 390);
 
-    const [proposal] = await Promise.all([
-      context.waitForEvent("page"),
-      page.click("#genProposal"),
-    ]);
-    await proposal.waitForLoadState("domcontentloaded");
-    await proposal.setViewportSize({ width: 1280, height: 900 });
-    await proposal.screenshot({ path: path.join(SCREENSHOTS, "quote-engine-proposal-1280.png"), fullPage: true });
-    await proposal.setViewportSize({ width: 390, height: 900 });
-    await proposal.screenshot({ path: path.join(SCREENSHOTS, "quote-engine-proposal-390.png"), fullPage: true });
-    await proposal.close();
+    await captureProposal(context);
 
     await browser.close();
-    console.log("ok   quote-engine browser screenshots saved");
   } finally {
     server.kill("SIGTERM");
   }

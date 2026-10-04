@@ -275,8 +275,10 @@ Quote Engine lite (private ops — see `docs/quote-engine-SETUP.md`):
 | Name | Purpose |
 |------|---------|
 | `QUOTE_ENGINE_PASSWORD` | Ops admin login (Bearer / Basic / `?token=` on proposal links) |
-| `QUOTE_ENGINE_SHEET_ID` | Google Sheet ID for the lead log tab **`LeadLog`** |
-| `QUOTE_ENGINE_GOOGLE_CREDENTIALS` | Service account JSON for Sheets API |
+| `QUOTE_ENGINE_SHEET_APP_URL` | **Recommended:** Google Apps Script web app URL that appends/updates the Sheet |
+| `QUOTE_ENGINE_SHEET_APP_SECRET` | Optional shared secret (must match Apps Script `SECRET` script property) |
+| `QUOTE_ENGINE_SHEET_ID` | **Alternative:** Google Sheet ID (service account API) |
+| `QUOTE_ENGINE_GOOGLE_CREDENTIALS` | **Alternative:** Service account JSON for Sheets API |
 | `QUOTE_ENGINE_WEBHOOK_SECRET` | Optional shared secret header on form webhooks |
 
 Set values in the Netlify UI only; never commit secrets.
