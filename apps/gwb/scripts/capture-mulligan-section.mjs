@@ -25,7 +25,10 @@ async function main() {
   await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 120_000 })
   await page.waitForSelector('#mulligans-section', { timeout: 120_000 })
   const text = await page.locator('#mulligans-section').innerText()
-  const mustNot = ['Hady', '+7.3', 'pending', 'staged', 'Week 4 swap']
+  const mustNot = ['Hady', '+7.3', 'pending', 'staged', 'Week 4 swap', '(………)']
+  if (/\(\.{3,}\)/.test(text) || text.includes('………')) {
+    throw new Error('Dot placeholder still visible in mulligan section')
+  }
   for (const token of mustNot) {
     if (text.toLowerCase().includes(token.toLowerCase())) {
       throw new Error(`Forbidden token visible in mulligan section: ${token}`)

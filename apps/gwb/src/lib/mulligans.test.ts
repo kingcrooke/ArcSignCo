@@ -37,7 +37,8 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(mauricio)).toContain(
       'Won anyway; the swap actually cost 0.9.',
     )
-    expect(formatMulliganLedgerLine(matt)).toContain('The first failed mulligan.')
+    expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).toContain('Manny (Mnny)')
+    expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).not.toContain('………')
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toContain('+7.3')
   })
