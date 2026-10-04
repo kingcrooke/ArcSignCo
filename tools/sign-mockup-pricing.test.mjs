@@ -1,9 +1,11 @@
 // Unit tests for the preliminary estimate.  node --test tools/
+import "./pricing-test-bootstrap.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  PLACEHOLDER, RATES_LABEL, RATES_NOTE, NO_PRICE_MESSAGE, DISCLAIMER_FULL, TAX_NOTE, VALID_DAYS, ROUNDING, RANGE, ROWS, ADDERS, EXTRAS,
+  PLACEHOLDER, RATES_LABEL, RATES_NOTE, NO_PRICE_MESSAGE, DISCLAIMER_FULL, ROUNDING, RANGE, ROWS, ADDERS, EXTRAS,
 } from "./sign-mockup/js/pricing-config.js";
+import { ROWS as RATE_ROWS, ADDERS as RATE_ADDERS, EXTRAS as RATE_EXTRAS, TAX_NOTE, VALID_DAYS } from "./pricing-rates-data.mjs";
 import { estimatePrice, computeEstimate, priceView, formatRange, rowFor, PRICES_LIVE } from "./sign-mockup/js/pricing.js";
 import { ALL_TYPES, READY, getCategory } from "./sign-mockup/js/catalog.js";
 import awnings from "./sign-mockup/js/categories/awnings.js";
@@ -21,7 +23,7 @@ const DOLLARS = /\$\s?\d/;
 test("every live type points at a row in pricing-config.js, and only types do", () => {
   for (const cat of READY) {
     assert.deepEqual(Object.keys(cat.pricing.row).sort(), cat.types.map(t => t.id).sort(), cat.id);
-    for (const row of Object.values(cat.pricing.row)) assert.ok(ROWS[row], `${cat.id}: row ${row}`);
+    for (const row of Object.values(cat.pricing.row)) assert.ok(ROWS[row] && RATE_ROWS[row], `${cat.id}: row ${row}`);
   }
   for (const t of ALL_TYPES) assert.ok(rowFor(t.id), t.id);
   assert.equal(rowFor("not-a-type"), null);
@@ -40,18 +42,18 @@ test("category modules hold no price numbers", () => {
 });
 
 test("rows, adders and extras are well formed", () => {
-  for (const [id, r] of Object.entries(ROWS)) {
+  for (const [id, r] of Object.entries(RATE_ROWS)) {
     assert.ok(["letters", "sqft", "lf", "projecting"].includes(r.unit), `${id} unit`);
     assert.ok(r.base >= 0 && r.rate > 0 && r.min > 0, `${id} numbers`);
     assert.ok(r.label, `${id} label`);
     if (r.unit === "projecting") assert.ok(r.projRate > 0, `${id} prices projection`);
-    for (const a of r.adders || []) assert.ok(ADDERS[a], `${id} adder ${a}`);
+    for (const a of r.adders || []) assert.ok(RATE_ADDERS[a], `${id} adder ${a}`);
   }
-  for (const [id, a] of Object.entries(ADDERS)) assert.ok(["sqft", "lf"].includes(a.per) && a.rate > 0 && a.label, id);
-  for (const k of ["face-lit", "halo-lit", "raceway", "backlit"]) assert.ok(ADDERS[k], `illumination adder ${k}`);
-  const keys = EXTRAS.map(e => e.key);
+  for (const [id, a] of Object.entries(RATE_ADDERS)) assert.ok(["sqft", "lf"].includes(a.per) && a.rate > 0 && a.label, id);
+  for (const k of ["face-lit", "halo-lit", "raceway", "backlit"]) assert.ok(RATE_ADDERS[k], `illumination adder ${k}`);
+  const keys = RATE_EXTRAS.map(e => e.key);
   for (const k of ["lift", "removal", "afterHours", "access", "permit", "survey"]) assert.ok(keys.includes(k), `extra line ${k}`);
-  for (const e of EXTRAS) {
+  for (const e of RATE_EXTRAS) {
     if (["permit", "survey"].includes(e.key)) assert.equal(e.confirm, "confirmed after site survey", e.key);
     else assert.ok(e.range[0] > 0 && e.range[0] < e.range[1], e.key);
   }
@@ -85,13 +87,13 @@ test("while the rates are placeholders, nothing client-facing carries a number",
 });
 
 test("the full disclaimer is the one the Arc team approved", () => {
-  assert.equal(DISCLAIMER_FULL, "Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through our licensed partners.");
+  assert.equal(DISCLAIMER_FULL, "Concept preview only, not to scale. Final size, materials, survey, permits and fees, electrical and install conditions are confirmed in a formal written estimate. Permit approval is not guaranteed. Work is coordinated through Arc's licensed partners.");
 });
 
 test("an estimate is base plus size rate, with the minimum rounded up and adders after it", () => {
   // Non-lit flat cut-out letters, 10 ft × 2 ft = 20 sq ft of letters.
   const fco = computeEstimate("fco", { width: 120, height: 24 });
-  const r = ROWS["letters-fco"];
+  const r = RATE_ROWS["letters-fco"];
   const raw = r.base + r.rate * 20;
   assert.equal(fco.quantity, 20);
   assert.equal(fco.low, Math.max(Math.ceil(r.min / STEP) * STEP, Math.floor(raw / STEP) * STEP));
@@ -100,12 +102,12 @@ test("an estimate is base plus size rate, with the minimum rounded up and adders
   // Tiny job: the minimum applies, and the low end never drops below it.
   const tiny = computeEstimate("vinyl", { width: 1, height: 1 });
   assert.equal(tiny.minApplied, true);
-  assert.equal(tiny.low, Math.ceil(ROWS["graphics-vinyl"].min / STEP) * STEP);
+  assert.equal(tiny.low, Math.ceil(RATE_ROWS["graphics-vinyl"].min / STEP) * STEP);
   // Face-lit letters add the face-lit adder on top of the minimum.
   const small = computeEstimate("trimcap", { width: 12, height: 6 });
   assert.equal(small.minApplied, true);
   assert.deepEqual(small.adders.map(a => a.key), ["face-lit"]);
-  assert.ok(small.low > ROWS["letters-trimcap"].min, "adders land after the minimum");
+  assert.ok(small.low > RATE_ROWS["letters-trimcap"].min, "adders land after the minimum");
   assert.deepEqual(computeEstimate("combo", { width: 120, height: 24 }).adders.map(a => a.key), ["face-lit", "halo-lit"]);
   assert.deepEqual(computeEstimate("halo", { width: 120, height: 24 }).adders.map(a => a.key), ["halo-lit"]);
   assert.deepEqual(computeEstimate("raceway", { width: 120, height: 24 }).adders.map(a => a.key).sort(), ["face-lit", "raceway"]);

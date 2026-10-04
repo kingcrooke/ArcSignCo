@@ -2,7 +2,12 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { buildWeekRecaps } from './recaps'
+import commissionerRecaps from '../content/commissioner-recaps.json'
+import {
+  buildWeekRecaps,
+  filterCommissionerRecapsByWeek,
+  type CommissionerRecap,
+} from './recaps'
 import { computeStandings } from './standings'
 import { buildTeamMap } from './teams'
 import type {
@@ -36,5 +41,41 @@ describe('buildWeekRecaps', () => {
       expect(r.narrative.length).toBeGreaterThan(10)
       expect(r.teamA.topScorer).toBeTruthy()
     })
+  })
+})
+
+describe('commissioner recaps timeline', () => {
+  const recaps = commissionerRecaps.recaps as CommissionerRecap[]
+
+  it('orders week 2 posts chronologically', () => {
+    const ids = filterCommissionerRecapsByWeek(recaps, 2).map((r) => r.id)
+    expect(ids).toEqual([
+      'recap-6',
+      'recap-2',
+      'recap-3',
+      'recap-4',
+      'recap-5',
+      'recap-7',
+      'recap-8',
+    ])
+  })
+
+  it('orders week 3 posts chronologically', () => {
+    const ids = filterCommissionerRecapsByWeek(recaps, 3).map((r) => r.id)
+    expect(ids).toEqual([
+      'recap-9',
+      'recap-10',
+      'recap-11',
+      'recap-13',
+      'recap-12',
+    ])
+  })
+
+  it('puts final reports after monday night and corrections last', () => {
+    const week2 = filterCommissionerRecapsByWeek(recaps, 2)
+    expect(week2.at(-1)?.label).toBe('Final')
+    const week3 = filterCommissionerRecapsByWeek(recaps, 3)
+    expect(week3.find((r) => r.label === 'Correction')?.id).toBe('recap-12')
+    expect(week3.at(-1)?.label).toBe('Correction')
   })
 })

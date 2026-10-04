@@ -185,3 +185,143 @@ export function weekHasMatchups(matchups: SleeperMatchup[] | undefined): boolean
   if (!matchups?.length) return false
   return matchups.some((m) => m.starters?.length > 0)
 }
+
+/** Commissioner chat recap (hidden GWB page). */
+export type CommissionerRecapLabel =
+  | 'Predictions'
+  | 'Waivers'
+  | 'Thursday'
+  | 'Saturday'
+  | 'Sunday'
+  | 'Monday Morning'
+  | 'Monday Night'
+  | 'Final'
+  | 'Correction'
+
+export type CommissionerRecap = {
+  id: string
+  index: number
+  title: string
+  week: number
+  label: CommissionerRecapLabel
+  /** ISO date or date-time for chronological sort within a week. */
+  postedAt: string
+  reconstructed?: boolean
+  bodyMarkdown: string
+}
+
+const COMMISSIONER_LABEL_ORDER: Record<CommissionerRecapLabel, number> = {
+  Waivers: 20,
+  Predictions: 30,
+  Thursday: 40,
+  Saturday: 50,
+  Sunday: 60,
+  'Monday Morning': 70,
+  'Monday Night': 80,
+  Final: 90,
+  Correction: 100,
+}
+
+const CHIP_LABEL: Record<CommissionerRecapLabel, string> = {
+  Predictions: 'Predictions',
+  Waivers: 'Waivers',
+  Thursday: 'Thursday',
+  Saturday: 'Saturday',
+  Sunday: 'Sunday',
+  'Monday Morning': 'Monday',
+  'Monday Night': 'Monday Night',
+  Final: 'Final',
+  Correction: 'Correction',
+}
+
+export function commissionerRecapChipLabel(
+  label: CommissionerRecapLabel,
+): string {
+  return CHIP_LABEL[label]
+}
+
+export function inferCommissionerRecapLabel(
+  title: string,
+): CommissionerRecapLabel {
+  const t = title.toUpperCase()
+  if (t.includes('CORRECTION') || t.includes('AI CORRECTION')) {
+    return 'Correction'
+  }
+  if (t.includes('FINAL REPORT')) return 'Final'
+  if (/\bWEEK\s*1\b/.test(t) && t.includes('RECAP')) return 'Final'
+  if (t.includes('MULLIGAN WATCH')) return 'Monday Night'
+  if (t.includes('MONDAY NIGHT REPORT')) return 'Monday Night'
+  if (t.includes('MONDAY MORNING')) return 'Monday Morning'
+  if (t.includes('SUNDAY MORNING') || t.includes('SUNDAY CHECK')) {
+    return 'Sunday'
+  }
+  if (t.includes('SATURDAY NIGHT') || t.includes('SATURDAY')) {
+    return 'Saturday'
+  }
+  if (
+    t.includes('FRIDAY MORNING') ||
+    t.includes('THURSDAY') ||
+    t.includes('FRIDAY')
+  ) {
+    return 'Thursday'
+  }
+  if (t.includes('WAIVER') || t.includes('POST-WAIVER')) return 'Waivers'
+  if (
+    t.includes('PREDICTION') ||
+    t.includes('CRYSTAL BALL') ||
+    t.includes('CHECKPOINT')
+  ) {
+    return 'Predictions'
+  }
+  return 'Final'
+}
+
+export function compareCommissionerRecaps(
+  a: CommissionerRecap,
+  b: CommissionerRecap,
+): number {
+  const orderA = COMMISSIONER_LABEL_ORDER[a.label] ?? 50
+  const orderB = COMMISSIONER_LABEL_ORDER[b.label] ?? 50
+  if (orderA !== orderB) return orderA - orderB
+  const timeA = Date.parse(a.postedAt)
+  const timeB = Date.parse(b.postedAt)
+  if (timeA !== timeB) return timeA - timeB
+  return a.index - b.index
+}
+
+export function sortCommissionerRecaps(
+  recaps: CommissionerRecap[],
+): CommissionerRecap[] {
+  return [...recaps].sort(compareCommissionerRecaps)
+}
+
+export function filterCommissionerRecapsByWeek(
+  recaps: CommissionerRecap[],
+  week: number,
+): CommissionerRecap[] {
+  return sortCommissionerRecaps(recaps.filter((r) => r.week === week))
+}
+
+/** Plain-text preview for collapsed recap cards (no markdown). */
+export function commissionerRecapExcerpt(
+  bodyMarkdown: string,
+  maxLines = 3,
+): string {
+  const lines = bodyMarkdown
+    .split('\n')
+    .map((line) =>
+      line
+        .replace(/^#+\s*/, '')
+        .replace(/\*\*([^*]+)\*\*/g, '$1')
+        .replace(/\*([^*]+)\*/g, '$1')
+        .trim(),
+    )
+    .filter(
+      (line) =>
+        line.length > 0 &&
+        line !== '⸻' &&
+        !line.startsWith('---') &&
+        !/^🦬+$/.test(line),
+    )
+  return lines.slice(0, maxLines).join(' ')
+}
