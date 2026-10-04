@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { GraphicsPanel } from './components/GraphicsPanel'
 import { PowerPanel } from './components/PowerPanel'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { RecapsPanel } from './components/RecapsPanel'
@@ -11,13 +10,13 @@ import { LEAGUE_NAME } from './lib/constants'
 import { weekHasMatchups } from './lib/recaps'
 import { useLeagueData } from './hooks/useLeagueData'
 
-type Tab = 'standings' | 'power' | 'recaps' | 'ig' | 'gallery'
+type Tab = 'standings' | 'mulligans' | 'power' | 'recaps' | 'gallery'
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
+  { id: 'mulligans', label: 'Mulligans' },
   { id: 'power', label: 'Power' },
   { id: 'recaps', label: 'Recaps' },
-  { id: 'ig', label: 'IG' },
   { id: 'gallery', label: 'Graphics' },
 ]
 
@@ -88,33 +87,55 @@ export default function App() {
           </div>
 
           <nav
-            className="mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+            className="gwb-section-tabs mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
           >
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => setTab(t.id)}
-                className={`flex-1 whitespace-nowrap rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                  tab === t.id
-                    ? 'bg-[var(--gwb-accent)] text-[#1a1200]'
-                    : 'text-[var(--gwb-muted)] hover:text-[var(--gwb-text)]'
-                }`}
-              >
-                {t.label}
-              </button>
-            ))}
+            {TABS.map((t) => {
+              const active = tab === t.id
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={
+                    active
+                      ? 'gwb-section-tab gwb-section-tab--active'
+                      : 'gwb-section-tab'
+                  }
+                  aria-current={active ? 'page' : undefined}
+                  onClick={() => setTab(t.id)}
+                >
+                  {t.label}
+                </button>
+              )
+            })}
           </nav>
 
           {tab === 'standings' && (
             <section>
-              <h2 className="mb-3 text-lg font-semibold">Standings</h2>
+              <h2 className="mb-3 text-lg font-semibold">
+                Standings
+                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                  through Week {data.standingsThroughWeek}
+                </span>
+              </h2>
               <p className="mb-3 text-xs text-[var(--gwb-muted)]">
                 Tiebreak: win%, then points for, then points against.
               </p>
-              <StandingsPanel rows={data.standings} />
-              <MulligansPanel rows={data.standings} />
+              <StandingsPanel
+                rows={data.standings}
+                deferralNote={data.standingsDeferralNote}
+              />
+            </section>
+          )}
+          {tab === 'mulligans' && (
+            <section>
+              <h2 className="mb-3 text-lg font-semibold">Mulligans</h2>
+              <MulligansPanel
+                rows={data.standings}
+                selectedWeek={data.selectedWeek}
+                statusThroughWeek={data.standingsThroughWeek}
+                deferralNote={data.mulligansDeferralNote}
+              />
             </section>
           )}
           {tab === 'power' && (
@@ -147,12 +168,6 @@ export default function App() {
                   )}
                 />
               </div>
-            </section>
-          )}
-          {tab === 'ig' && (
-            <section>
-              <h2 className="mb-3 text-lg font-semibold">Instagram graphics</h2>
-              <GraphicsPanel data={data} />
             </section>
           )}
           {tab === 'gallery' && (

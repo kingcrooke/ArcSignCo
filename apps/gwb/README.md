@@ -7,7 +7,8 @@ Static command center for the **GWB** REDRAFT Sleeper league (`13893753262571847
 - **Standings** — W-L-T, PF/PA, streak, rank (tiebreak: win%, then PF, then PA)
 - **Power rankings** — transparent weighted formula with week-over-week movement
 - **Weekly recaps** — scores, top scorers, bench misses, upset/blowout tags, template narratives
-- **Instagram feed PNGs** (1080×1350) — standings, power, and recap slides with one-click download and captions (`#FantasyFootball #NFL #Football #NYC #GWBFF`)
+- **Mulligans** — per-manager status and weekly swap ledger from `mulligan-ledger.json`
+- **Week graphics** — published slide gallery by NFL week
 
 ## Local development
 
@@ -37,11 +38,15 @@ npm run test:e2e      # Playwright against production build + live Sleeper API
 
 Optional: run `npm run preview` locally to verify the production bundle.
 
+To refresh the live static path at `/gwb-fe006a16/` (Netlify publishes repo root with no GWB build step):
+
+```bash
+cd apps/gwb && npm run publish-static
+```
+
+Commit the updated `gwb-fe006a16/` folder with your PR.
+
 ## Data notes
 
 - NFL player names are loaded once from `/players/nfl`, trimmed to needed fields, and cached in `localStorage` for seven days.
 - Matchups are fetched per week through the current scored leg; empty or future weeks show a friendly empty state.
-
-## Instagram standards
-
-Slide typography and layout follow the locked GWB feed standards (Anton hero, Bebas Neue labels, Inter body, ~56px margins, centered stack). See `uploads/SKILL_0af0.md`.

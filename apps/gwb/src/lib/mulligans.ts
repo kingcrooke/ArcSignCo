@@ -58,8 +58,20 @@ export function mulliganForRoster(rosterId: number): MulliganLedgerEntry | undef
   return MULLIGAN_LEDGER_ENTRIES.find((e) => e.rosterId === rosterId)
 }
 
-export function mulliganStatusForRoster(rosterId: number): MulliganStatus {
-  const entry = mulliganForRoster(rosterId)
+export function mulliganForRosterThroughWeek(
+  rosterId: number,
+  throughWeek: number,
+): MulliganLedgerEntry | undefined {
+  return MULLIGAN_LEDGER_ENTRIES.find(
+    (e) => e.rosterId === rosterId && e.week <= throughWeek,
+  )
+}
+
+export function mulliganStatusForRoster(
+  rosterId: number,
+  throughWeek = Number.POSITIVE_INFINITY,
+): MulliganStatus {
+  const entry = mulliganForRosterThroughWeek(rosterId, throughWeek)
   if (!entry) {
     return { rosterId, used: false }
   }
@@ -68,6 +80,16 @@ export function mulliganStatusForRoster(rosterId: number): MulliganStatus {
     used: true,
     usedDetail: `Week ${entry.week} — ${formatSwapSummary(entry)}`,
   }
+}
+
+export function mulliganEntriesForWeek(week: number): MulliganLedgerEntry[] {
+  return MULLIGAN_LEDGER_ENTRIES.filter((e) => e.week === week).sort(
+    (a, b) => a.rosterId - b.rosterId,
+  )
+}
+
+export function mulligansUsedThroughWeek(throughWeek: number): number {
+  return MULLIGAN_LEDGER_ENTRIES.filter((e) => e.week <= throughWeek).length
 }
 
 export function mulliganLabel(status: MulliganStatus): string {

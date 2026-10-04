@@ -50,3 +50,34 @@ export function weekStatusLabel(
   if (isWeekLive(week, league, nflState)) return 'LIVE'
   return 'FINAL'
 }
+
+/** When the picker is on a live week, cumulative views use the last scored leg. */
+export function standingsThroughWeek(
+  selectedWeek: number,
+  league: SleeperLeague,
+  nflState: NflState,
+): number {
+  if (isWeekLive(selectedWeek, league, nflState)) {
+    return lastCompletedWeek(league, nflState)
+  }
+  return selectedWeek
+}
+
+export function standingsDeferralNote(
+  selectedWeek: number,
+  league: SleeperLeague,
+  nflState: NflState,
+): string | null {
+  return cumulativeDeferralNote(selectedWeek, league, nflState, 'standings')
+}
+
+export function cumulativeDeferralNote(
+  selectedWeek: number,
+  league: SleeperLeague,
+  nflState: NflState,
+  subject: string,
+): string | null {
+  if (!isWeekLive(selectedWeek, league, nflState)) return null
+  const through = lastCompletedWeek(league, nflState)
+  return `Week ${selectedWeek} in progress, ${subject} through Week ${through}.`
+}

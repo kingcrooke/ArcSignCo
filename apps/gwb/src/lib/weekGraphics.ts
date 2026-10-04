@@ -45,6 +45,16 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     sections.push({ kind: 'results', heading: 'Results', slides: results })
   }
 
+  const reportByWeek: Record<number, PublishedSlide[]> = {
+    1: publish(WEEK_1_REPORT),
+    2: publish(WEEK_2_REPORT),
+    3: publish(WEEK_3_REPORT),
+  }
+  const report = reportByWeek[week]
+  if (report?.length) {
+    sections.push({ kind: 'report', heading: 'Report', slides: report })
+  }
+
   return sections
 }
 
@@ -53,6 +63,72 @@ const SLIDE_SIZE = { width: 1080, height: 1350 }
 function w4(id: string, title: string): PublishedSlide {
   return { id, title, basename: id, ...SLIDE_SIZE }
 }
+
+function reportSlide(week: 1 | 2 | 3, index: number, title: string): PublishedSlide {
+  const id = `w${week}-slide-${String(index).padStart(2, '0')}`
+  return { id, title, basename: id, ...SLIDE_SIZE }
+}
+
+function finalReportDeck(week: 1 | 2 | 3, titles: string[]): PublishedSlide[] {
+  return titles.map((title, i) => reportSlide(week, i + 1, title))
+}
+
+const WEEK_1_REPORT: PublishedSlide[] = finalReportDeck(1, [
+  'We are so back',
+  'Slide 2',
+  'Slide 3',
+  'Slide 4',
+  'Slide 5',
+  'Slide 6',
+  'Slide 7',
+  'Slide 8',
+  'Slide 9',
+  'Slide 10',
+  'Slide 11',
+  'Slide 12',
+  'Slide 13',
+  'Slide 14',
+  'Slide 15',
+  'Slide 16',
+])
+
+const WEEK_2_REPORT: PublishedSlide[] = finalReportDeck(2, [
+  'Week 2 final report',
+  'Slide 2',
+  'Slide 3',
+  'Slide 4',
+  'Slide 5',
+  'Slide 6',
+  'Slide 7',
+  'Slide 8',
+  'Slide 9',
+  'Slide 10',
+  'Slide 11',
+  'Slide 12',
+  'Slide 13',
+  'Slide 14',
+  'Slide 15',
+  'Slide 16',
+])
+
+const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
+  'Week 3 final report',
+  'Slide 2',
+  'Slide 3',
+  'Slide 4',
+  'Slide 5',
+  'Slide 6',
+  'Slide 7',
+  'Slide 8',
+  'Slide 9',
+  'Slide 10',
+  'Slide 11',
+  'Slide 12',
+  'Slide 13',
+  'Slide 14',
+  'Slide 15',
+  'Slide 16',
+])
 
 function vs(id: string, title: string): PublishedSlide {
   return { id, title, basename: id, ...SLIDE_SIZE }
