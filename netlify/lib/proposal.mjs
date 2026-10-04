@@ -97,33 +97,151 @@ export function buildProposalHtml({ lead, quote, draft = true }) {
 </html>`;
 }
 
-export async function buildProposalPdfBytes({ lead, quote }) {
+function pdfSafe(text) {
+  return String(text ?? "")
+    .replace(/\u2013/g, "-")
+    .replace(/\u2014/g, "-")
+    .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, "");
+}
+
+function wrapPdfLine(text, font, size, maxWidth) {
+  const words = pdfSafe(text).split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = "";
+  for (const word of words) {
+    const next = line ? `${line} ${word}` : word;
+    if (font.widthOfTextAtSize(next, size) <= maxWidth) {
+      line = next;
+    } else {
+      if (line) lines.push(line);
+      line = word;
+    }
+  }
+  if (line) lines.push(line);
+  return lines.length ? lines : [""];
+}
+
+function wrapPdfParagraphs(text, font, size, maxWidth) {
+  const out = [];
+  for (const chunk of pdfSafe(text).split(/\n/)) {
+    out.push(...wrapPdfLine(chunk, font, size, maxWidth));
+  }
+  return out;
+}
+
+export async function buildProposalPdfBytes({ lead, quote, draft = true }) {
   const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
-  const page = doc.addPage([612, 792]);
   const navy = rgb(0.04, 0.11, 0.2);
+  const muted = rgb(0.35, 0.35, 0.35);
+  const margin = 48;
+  const maxWidth = 612 - margin * 2;
+  let page = doc.addPage([612, 792]);
   let y = 740;
-  const draw = (text, { size = 10, f = font, color = navy } = {}) => {
-    page.drawText(String(text).slice(0, 120), { x: 48, y, size, font: f, color });
-    y -= size + 6;
+
+  const newPageIfNeeded = (need = 40) => {
+    if (y < margin + need) {
+      page = doc.addPage([612, 792]);
+      y = 740;
+    }
   };
-  draw("Arc Signage Co", { size: 11, f: bold });
-  draw("Written estimate", { size: 16, f: bold });
-  y -= 4;
-  draw(`Prepared for: ${lead.company || lead.name || "Client"}`);
-  if (lead.address) draw(lead.address);
+
+  const drawLines = (lines, { size = 10, f = font, color = navy, gap = 4 } = {}) => {
+    for (const line of lines) {
+      newPageIfNeeded(size + gap + 20);
+      page.drawText(line, { x: margin, y, size, font: f, color });
+      y -= size + gap;
+    }
+  };
+
+  const drawHeading = (text, size = 11) => {
+    newPageIfNeeded(size + 10);
+    page.drawText(pdfSafe(text), { x: margin, y, size, font: bold, color: navy });
+    y -= size + 8;
+  };
+
+  const date = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+  const validThrough = new Date(Date.now() + PROPOSAL.validDays * 86400000).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+  if (draft) {
+    drawLines(wrapPdfLine("Draft for review — not yet sent to the client", font, 9, maxWidth), { size: 9, color: muted });
+    y -= 4;
+  }
+
+  drawHeading("Arc Signage Co", 11);
+  drawHeading("Written estimate", 16);
+  drawLines(wrapPdfLine(`Prepared ${date} · Valid through ${validThrough}`, font, 9, maxWidth), { size: 9, color: muted });
+  y -= 6;
+
+  drawLines(wrapPdfLine(`Prepared for: ${lead.company || lead.name || "Client"}`, font, 10, maxWidth));
+  if (lead.name && lead.company) drawLines(wrapPdfLine(lead.name, font, 10, maxWidth));
+  if (lead.address) drawLines(wrapPdfLine(lead.address, font, 10, maxWidth));
+  if (lead.email) drawLines(wrapPdfLine(lead.email, font, 10, maxWidth));
   y -= 8;
-  draw("Estimate", { f: bold });
+
+  drawHeading("Scope summary", 11);
+  drawLines(
+    wrapPdfParagraphs(lead.scopeSummary || lead.projectType || "Signage scope per intake form.", font, 9, maxWidth),
+    { size: 9, color: muted, gap: 3 },
+  );
+  y -= 6;
+
+  drawHeading("Estimate", 11);
+  page.drawText("Description", { x: margin, y, size: 8, font: bold, color: muted });
+  page.drawText("Amount", {
+    x: 612 - margin - bold.widthOfTextAtSize("Amount", 8),
+    y,
+    size: 8,
+    font: bold,
+    color: muted,
+  });
+  y -= 14;
   for (const line of quote?.clientLines || []) {
-    draw(`${line.label}: ${formatMoney(line.amount)}`, { size: 9 });
+    const labelLines = wrapPdfLine(line.label, font, 9, maxWidth * 0.62);
+    const amt = formatMoney(line.amount);
+    newPageIfNeeded(30);
+    page.drawText(labelLines[0] || "", { x: margin, y, size: 9, font, color: navy });
+    page.drawText(amt, { x: 612 - margin - font.widthOfTextAtSize(amt, 9), y, size: 9, font, color: navy });
+    y -= 12;
+    for (let i = 1; i < labelLines.length; i += 1) {
+      drawLines([labelLines[i]], { size: 9 });
+    }
+    if (line.note) {
+      drawLines(wrapPdfLine(line.note, font, 8, maxWidth), { size: 8, color: muted, gap: 2 });
+    }
   }
   y -= 4;
-  draw(`Estimated total: ${formatMoney(quote?.total || 0)}`, { f: bold });
-  y -= 12;
-  draw(PROPOSAL.disclaimer.slice(0, 200) + "…", { size: 8, color: rgb(0.35, 0.35, 0.35) });
-  y -= 16;
-  draw(`Call or text ${CONTACT.phone} · ${CONTACT.email} · ${CONTACT.hours}`, { size: 9 });
-  return doc.save();
+  const totalLabel = "Estimated total";
+  const totalAmt = formatMoney(quote?.total || 0);
+  newPageIfNeeded(24);
+  page.drawLine({ start: { x: margin, y: y + 8 }, end: { x: 612 - margin, y: y + 8 }, thickness: 1, color: navy });
+  y -= 4;
+  page.drawText(totalLabel, { x: margin, y, size: 11, font: bold, color: navy });
+  page.drawText(totalAmt, {
+    x: 612 - margin - bold.widthOfTextAtSize(totalAmt, 11),
+    y,
+    size: 11,
+    font: bold,
+    color: navy,
+  });
+  y -= 20;
+
+  drawLines(wrapPdfLine(PROPOSAL.taxNote, font, 9, maxWidth), { size: 9, color: muted, gap: 3 });
+  drawLines(wrapPdfParagraphs(PROPOSAL.disclaimer, font, 9, maxWidth), { size: 9, color: muted, gap: 3 });
+  y -= 8;
+
+  drawHeading("Questions?", 10);
+  drawLines(
+    wrapPdfLine(`Call or text ${CONTACT.phone} · ${CONTACT.email} · ${CONTACT.hours}`, font, 9, maxWidth),
+    { size: 9, color: muted },
+  );
+  drawLines(wrapPdfLine("Arc Signage Co · New York / Tri-State", font, 9, maxWidth), { size: 9, color: muted });
+
+  return doc.save({ useObjectStreams: false });
 }

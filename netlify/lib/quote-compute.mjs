@@ -49,10 +49,12 @@ function sizeToFeet(input) {
 }
 
 function accessBand(height) {
-  const h = String(height || "").toLowerCase();
+  const h = String(height || "")
+    .toLowerCase()
+    .replace(/\u2013/g, "-");
   if (h.includes("2nd") || h.includes("higher")) return ACCESS.high;
-  if (h.includes("12") || h.includes("25")) return ACCESS.mid;
   if (h.includes("ground") || h.includes("under 12")) return ACCESS.ground;
+  if (h.includes("12") && h.includes("25")) return ACCESS.mid;
   return ACCESS.default;
 }
 

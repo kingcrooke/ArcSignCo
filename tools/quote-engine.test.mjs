@@ -3,7 +3,7 @@ import { test, beforeEach } from "node:test";
 import { resetMockSheet, mockSheetRows, appendLeadRow } from "../netlify/lib/google-sheets.mjs";
 import { normalizeLead, isQuoteEngineForm, leadToSheetRow } from "../netlify/lib/quote-leads.mjs";
 import { computeQuote, formatMoney } from "../netlify/lib/quote-compute.mjs";
-import { buildProposalHtml } from "../netlify/lib/proposal.mjs";
+import { buildProposalHtml, buildProposalPdfBytes } from "../netlify/lib/proposal.mjs";
 import { handleQuoteEngine } from "../netlify/lib/quote-engine-api.mjs";
 import { PLACEHOLDER } from "../netlify/lib/quote-rates.mjs";
 
@@ -58,6 +58,35 @@ test("computeQuote uses placeholder rates and minimum job charge", () => {
   assert.equal(quote.placeholder, true);
 });
 
+test("ground floor height band does not add lift or boom line", () => {
+  const q = computeQuote({
+    signType: "Channel letters",
+    sizeW: 14,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "Ground floor, under 12 ft",
+    boroughZone: "brooklyn",
+  });
+  assert.equal(q.lines.some(l => l.key === "lift"), false);
+  assert.equal(q.clientLines.some(l => l.label === "Lift or boom access"), false);
+});
+
+test("12–25 ft height band adds lift allowance", () => {
+  const q = computeQuote({
+    signType: "Channel letters",
+    sizeW: 14,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "12–25 ft",
+    boroughZone: "brooklyn",
+  });
+  const lift = q.lines.find(l => l.key === "lift");
+  assert.ok(lift);
+  assert.equal(lift.amount, 650);
+});
+
 test("appendLeadRow falls back to mock sheet without credentials", async () => {
   const lead = normalizeLead({ number: 1, form_name: "quote-request", data: { name: "Test" } });
   const row = leadToSheetRow(lead);
@@ -77,6 +106,31 @@ test("proposal html is client-safe copy", () => {
   assert.doesNotMatch(html, /\bvendor\b/i);
   assert.doesNotMatch(html, />\s*I\s+/);
   assert.ok(html.includes(formatMoney(quote.total)));
+});
+
+test("proposal pdf includes scope, line items, total, and contact footer", async () => {
+  const lead = {
+    company: "Harbor Retail LLC",
+    name: "Jordan Lee",
+    address: "245 Atlantic Ave, Brooklyn, NY",
+    scopeSummary: "Exterior storefront channel letters",
+  };
+  const quote = computeQuote({
+    signType: "Channel letters",
+    sizeW: 14,
+    sizeH: 2.5,
+    sizeUnit: "ft",
+    lit: "Lit",
+    height: "Ground floor, under 12 ft",
+    boroughZone: "brooklyn",
+    permitsRequested: true,
+  });
+  const bytes = await buildProposalPdfBytes({ lead, quote });
+  const { PDFDocument } = await import("pdf-lib");
+  const doc = await PDFDocument.load(bytes);
+  assert.ok(doc.getPageCount() >= 1);
+  assert.ok(bytes.length > 1800);
+  assert.equal(quote.clientLines.some(l => l.label === "Lift or boom access"), false);
 });
 
 test("calculate API requires password", async () => {

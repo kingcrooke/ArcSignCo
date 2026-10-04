@@ -94,10 +94,18 @@ async function captureProposal(context) {
   await shot(page, "quote-engine-proposal", 390);
   await page.close();
 
-  const pdfBytes = await buildProposalPdfBytes({ lead: demoLead, quote: demoQuote });
-  fs.writeFileSync(SAMPLE_PDF, pdfBytes);
-  if (pdfBytes.length < 500) throw new Error("sample PDF too small");
-  console.log(`ok   ${SAMPLE_PDF} (${pdfBytes.length} bytes)`);
+  const pdfPage = await context.newPage();
+  await pdfPage.setContent(html, { waitUntil: "load" });
+  await pdfPage.waitForSelector(".wrap h1");
+  await pdfPage.pdf({
+    path: SAMPLE_PDF,
+    format: "Letter",
+    printBackground: true,
+    margin: { top: "0.45in", bottom: "0.45in", left: "0.55in", right: "0.55in" },
+  });
+  await pdfPage.close();
+  if (fs.statSync(SAMPLE_PDF).size < 8000) throw new Error("sample PDF too small");
+  console.log(`ok   ${SAMPLE_PDF} (${fs.statSync(SAMPLE_PDF).size} bytes)`);
 }
 
 async function run() {
