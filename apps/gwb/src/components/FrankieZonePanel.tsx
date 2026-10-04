@@ -123,6 +123,23 @@ export function FrankieZonePanel({
   const slides = useMemo(() => getFrankieZoneSlides(), [])
 
   useEffect(() => {
+    const links: HTMLLinkElement[] = []
+    for (const slide of slides) {
+      for (const variant of ['webp', 'jpg'] as const) {
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.href = slideAssetUrl(slide.basename, 'thumb', variant)
+        document.head.appendChild(link)
+        links.push(link)
+      }
+    }
+    return () => {
+      for (const link of links) link.remove()
+    }
+  }, [slides])
+
+  useEffect(() => {
     setScheduleByWeek(buildScheduleByWeek(matchupsByWeek))
     for (const week of matchupsByWeek.keys()) {
       scheduleWeeksLoaded.current.add(week)
@@ -353,7 +370,6 @@ export function FrankieZonePanel({
         </h3>
         <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="list">
           {slides.map((slide, i) => {
-            const webp = slideAssetUrl(slide.basename, 'thumb', 'webp')
             const jpg = slideAssetUrl(slide.basename, 'thumb', 'jpg')
             return (
               <li key={slide.id}>
@@ -365,14 +381,12 @@ export function FrankieZonePanel({
                 >
                   <img
                     src={jpg}
-                    srcSet={`${webp} ${THUMB_WIDTH}w`}
-                    sizes="(max-width: 640px) 50vw, 33vw"
                     alt=""
                     width={THUMB_WIDTH}
                     height={THUMB_HEIGHT}
                     loading="eager"
-                    decoding="async"
-                    fetchPriority={i < 4 ? 'high' : 'auto'}
+                    decoding="sync"
+                    fetchPriority="high"
                     data-fz-slide-thumb={slide.id}
                     className="aspect-[4/5] w-full bg-[#0d1319] object-cover"
                   />
