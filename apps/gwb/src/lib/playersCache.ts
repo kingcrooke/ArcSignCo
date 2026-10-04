@@ -1,7 +1,7 @@
 import { PLAYERS_CACHE_KEY, SLEEPER_API } from './constants'
 import type { PlayerSlim, PlayersMap } from './types'
 
-const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000
 
 interface StoredPlayers {
   fetchedAt: number
