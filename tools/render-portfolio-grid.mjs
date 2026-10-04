@@ -40,11 +40,9 @@ const PHOTOS = [
     cap: "Storefront decal panels, shop fabrication.",
   },
   {
-    missing: true,
-    todo: 7,
-    master: "2026-06-01_We-dimensional-letters-color-prototype.jpg",
-    alt: "Dimensional letter color prototype, photo pending.",
-    cap: "Dimensional letter color prototype (photo pending).",
+    slug: "we-dimensional-letters-color-prototype",
+    alt: "Dimensional letters in a color prototype layout.",
+    cap: "Dimensional letter color prototype.",
   },
   {
     slug: "navy-yard-wayfinding-frame-buildings-33-36",
@@ -52,18 +50,14 @@ const PHOTOS = [
     cap: "Wayfinding sign frame fabrication, Buildings 33–36.",
   },
   {
-    missing: true,
-    todo: 9,
-    master: "2025-05-01_acrylic-panel-production-proof.jpg",
-    alt: "Acrylic panel production, photo pending.",
-    cap: "Acrylic panel production (photo pending).",
+    slug: "acrylic-panel-production",
+    alt: "Acrylic sign panels on a production table.",
+    cap: "Acrylic panel production.",
   },
   {
-    missing: true,
-    todo: 10,
-    master: "2026-05-04_delivery-handling-wrapped-stainless-sign-panel.jpg",
-    alt: "Wrapped stainless sign panel, photo pending.",
-    cap: "Wrapped stainless sign panel delivery (photo pending).",
+    slug: "wrapped-stainless-sign-panel-delivery",
+    alt: "Stainless sign panel wrapped for delivery.",
+    cap: "Wrapped stainless sign panel delivery.",
   },
   {
     slug: "nomad-dimensional-letters-shop",
@@ -71,11 +65,9 @@ const PHOTOS = [
     cap: "Dimensional letters, shop fabrication.",
   },
   {
-    missing: true,
-    todo: 12,
-    master: "2023-06-02_site-visit-elevator-control-room-install.jpg",
-    alt: "Elevator control room signs install, photo pending.",
-    cap: "Elevator control room signs install (photo pending).",
+    slug: "elevator-control-room-signs-install",
+    alt: "Elevator control room identification signs on a wall.",
+    cap: "Elevator control room signs, installed.",
   },
 ];
 
@@ -92,7 +84,7 @@ function srcset(slug, ext, ws) {
   return ws.map((w) => `/assets/portfolio/${slug}-${w}.${VERSION}.${ext} ${w}w`).join(", ");
 }
 
-function figure(p, i) {
+async function figure(p, i) {
   const lazy = i === 0 ? 'fetchpriority="high"' : 'loading="lazy"';
   if (p.missing) {
     return `          <figure class="pf-fig pf-fig--missing" data-todo-photo="${p.todo}">
@@ -107,7 +99,7 @@ function figure(p, i) {
   const ws = widthsForSlug(p.slug);
   const maxW = Math.max(...ws);
   const jpg = path.join(dir, `${p.slug}-${maxW}.${VERSION}.jpg`);
-  const dim = awaitMeta(jpg);
+  const dim = await imageMeta(jpg);
   const href = `/assets/portfolio/${p.slug}-${maxW}.${VERSION}.jpg`;
   return `          <figure class="pf-fig">
             <a class="pf-zoom" href="${href}"><picture>
@@ -119,14 +111,15 @@ function figure(p, i) {
           </figure>`;
 }
 
-// dimensions from file command via sync read - parse from known files
-import { execSync } from "node:child_process";
-function awaitMeta(file) {
-  const out = execSync(`file "${file}"`).toString();
-  const m = out.match(/(\d+)\s*x\s*(\d+)/);
-  if (!m) throw new Error(`Could not parse dimensions for ${file}`);
-  return { w: Number(m[1]), h: Number(m[2]) };
+import { createRequire } from "node:module";
+const require = createRequire("/tmp/img-tools/package.json");
+const sharp = require("sharp");
+
+async function imageMeta(file) {
+  const { width, height } = await sharp(file).metadata();
+  if (!width || !height) throw new Error(`Could not read dimensions for ${file}`);
+  return { w: width, h: height };
 }
 
-const figures = PHOTOS.map((p, i) => figure(p, i)).join("\n");
+const figures = (await Promise.all(PHOTOS.map((p, i) => figure(p, i)))).join("\n");
 process.stdout.write(figures + "\n");
