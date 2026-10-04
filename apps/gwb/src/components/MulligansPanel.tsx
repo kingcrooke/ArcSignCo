@@ -1,18 +1,45 @@
-import { mulliganForRoster, mulliganLabel } from '../lib/mulligans'
+import {
+  formatMulliganLedgerLine,
+  mulliganLabel,
+  mulliganLedgerEntries,
+  mulliganStatusForRoster,
+  MULLIGAN_LEDGER_META,
+} from '../lib/mulligans'
 import type { StandingRow } from '../lib/types'
 
+const MANAGER_COUNT = 12
+
 export function MulligansPanel({ rows }: { rows: StandingRow[] }) {
+  const ledger = mulliganLedgerEntries()
   const sorted = [...rows].sort((a, b) => a.teamName.localeCompare(b.teamName))
 
   return (
-    <div className="mt-6">
+    <div id="mulligans-section" className="mt-6">
       <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]">
         Mulligans
       </h3>
       <p className="mb-3 text-xs text-[var(--gwb-muted)]">
-        One per manager per season. Danny&apos;s Week 4 swap and Mauricio&apos;s
-        Week 1 move count as used.
+        One per manager per season. {ledger.length} used / {MANAGER_COUNT} managers
+        through Week {MULLIGAN_LEDGER_META.throughWeek}. {MULLIGAN_LEDGER_META.weekNote}{' '}
+        None flipped a result.
       </p>
+
+      <div className="mb-4">
+        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-muted)]">
+          2026 mulligan ledger
+        </h4>
+        <ul className="space-y-2">
+          {ledger.map((entry) => (
+            <li
+              key={entry.id}
+              className="rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm leading-snug text-[var(--gwb-text)]"
+            >
+              {formatMulliganLedgerLine(entry)}
+            </li>
+          ))}
+        </ul>
+      </div>
+
       <div className="overflow-x-auto rounded-xl border border-[var(--gwb-border)]">
         <table className="w-full min-w-[360px] text-left text-sm">
           <thead className="bg-[var(--gwb-surface)] text-[var(--gwb-muted)] uppercase text-xs tracking-wider">
@@ -23,7 +50,7 @@ export function MulligansPanel({ rows }: { rows: StandingRow[] }) {
           </thead>
           <tbody>
             {sorted.map((r) => {
-              const m = mulliganForRoster(r.rosterId)
+              const m = mulliganStatusForRoster(r.rosterId)
               return (
                 <tr
                   key={r.rosterId}

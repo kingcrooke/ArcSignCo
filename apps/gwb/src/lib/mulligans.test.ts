@@ -1,16 +1,45 @@
 import { describe, expect, it } from 'vitest'
-import { mulliganForRoster, mulliganLabel } from './mulligans'
+import {
+  formatMulliganLedgerLine,
+  mulliganForRoster,
+  mulliganLabel,
+  mulliganLedgerEntries,
+  mulliganStatusForRoster,
+  MULLIGAN_LEDGER_ENTRIES,
+} from './mulligans'
 
 describe('mulligans', () => {
-  it('marks Danny and Mauricio as used with notes', () => {
-    expect(mulliganForRoster(11).used).toBe(true)
-    expect(mulliganLabel(mulliganForRoster(11))).toContain('Week 4 swap')
-    expect(mulliganForRoster(12).used).toBe(true)
-    expect(mulliganLabel(mulliganForRoster(12))).toContain('Week 1')
+  it('lists all five confirmed uses in ledger order', () => {
+    expect(mulliganLedgerEntries()).toHaveLength(5)
+    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(5)
   })
 
-  it('leaves other rosters available', () => {
-    expect(mulliganForRoster(8).used).toBe(false)
-    expect(mulliganLabel(mulliganForRoster(8))).toBe('Available')
+  it('marks rosters 1, 2, 3, 9, 12 as used and leaves others available', () => {
+    for (const id of [1, 2, 3, 9, 12]) {
+      expect(mulliganStatusForRoster(id).used).toBe(true)
+    }
+    expect(mulliganLabel(mulliganStatusForRoster(1))).toContain('Bateman')
+    expect(mulliganLabel(mulliganStatusForRoster(12))).toContain('Week 2')
+    expect(mulliganLabel(mulliganStatusForRoster(12))).toContain('DJ Moore')
+    expect(mulliganStatusForRoster(11).used).toBe(false)
+    expect(mulliganLabel(mulliganStatusForRoster(11))).toBe('Available')
+    expect(mulliganLabel(mulliganStatusForRoster(8))).toBe('Available')
+  })
+
+  it('uses Hadi, +5.3, Mauricio note, and Matt failed tag', () => {
+    const narking = mulliganForRoster(3)!
+    const danny = mulliganForRoster(1)!
+    const mauricio = mulliganForRoster(2)!
+    const matt = mulliganForRoster(12)!
+    expect(formatMulliganLedgerLine(narking)).toContain('+5.3')
+    expect(formatMulliganLedgerLine(narking)).not.toContain('+7.3')
+    expect(formatMulliganLedgerLine(danny)).toContain('Hadi')
+    expect(formatMulliganLedgerLine(mauricio)).toContain(
+      'Won anyway; the swap actually cost 0.9.',
+    )
+    expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).toContain('Manny (Mnny)')
+    expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).not.toContain('………')
+    expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
+    expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toContain('+7.3')
   })
 })
