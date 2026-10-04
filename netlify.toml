@@ -82,6 +82,22 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Hidden Quote Engine admin (URL-only; not linked from the public site).
+[[headers]]
+  for = "/ops-qel16cb/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/ops-qel16cb/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/ops-qel16cb/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # Hidden GWB league dashboard (URL-only; not linked from the public site).
 [[headers]]
   for = "/gwb-fe006a16/*"

@@ -29,6 +29,9 @@ mockup's approval links (`netlify/functions/`); `package.json` exists only for i
 | `tools/sign-mockup/` | Storefront sign and awning mockup tool, served at `/tools/sign-mockup/` (in the sitemap and site nav; proof links stay noindex) |
 | `tools/sign-mockup/proof/` | Phone proof page for approval links, served at `/tools/sign-mockup/proof/#<id>` (noindex) |
 | `netlify/functions/sign-proofs.mjs`, `netlify/lib/sign-proofs.mjs` | Approval link API (`/api/sign-proofs`), stored in Netlify Blobs |
+| `netlify/functions/quote-engine.mjs`, `netlify/lib/quote-*.mjs` | Private Quote Engine: form webhook, lead log, calculator, proposals (`/api/quote-engine/*`) |
+| `ops-qel16cb/` | Hidden Quote Engine admin UI (URL-only, noindex; not linked from the public site) |
+| `docs/quote-engine-SETUP.md` | Jesus setup: Google Sheet, webhooks, env vars (internal; `/docs/*` 404 on site) |
 | `package.json` | `@netlify/blobs` for the function, and `npm test` for the mockup checks |
 | `tools/check-sign-mockup.mjs` | Checks the mockup tool's geometry, sign types, awning shapes and meshes, PDF output, and copy guardrails |
 | `tools/sign-mockup-pricing.test.mjs`, `tools/sign-proofs.test.mjs` | Unit tests: placeholder rates and the approval link API |
@@ -267,5 +270,13 @@ Nothing else is tracked. The GA4 `config` call uses Google's defaults.
 
 ## Environment variables
 
-None are used today. If any are added later, list the variable **names** here (never the values);
-values are set in the Netlify UI.
+Quote Engine lite (private ops — see `docs/quote-engine-SETUP.md`):
+
+| Name | Purpose |
+|------|---------|
+| `QUOTE_ENGINE_PASSWORD` | Ops admin login (Bearer / Basic / `?token=` on proposal links) |
+| `QUOTE_ENGINE_SHEET_ID` | Google Sheet ID for the lead log tab **`LeadLog`** |
+| `QUOTE_ENGINE_GOOGLE_CREDENTIALS` | Service account JSON for Sheets API |
+| `QUOTE_ENGINE_WEBHOOK_SECRET` | Optional shared secret header on form webhooks |
+
+Set values in the Netlify UI only; never commit secrets.
