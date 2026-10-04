@@ -25,25 +25,30 @@ const DECK_LOOPS: Record<GraphicsSectionKind, string> = {
   report: `${BASE}volatile-loop.mp3`,
 }
 
-function readStored(): boolean {
+/** Sound is on unless the user explicitly muted (`gwb-sound=off`). */
+function readMuted(): boolean {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'on'
+    return localStorage.getItem(STORAGE_KEY) === 'off'
   } catch {
     return false
   }
 }
 
 export function useSound() {
-  const [armed, setArmed] = useState(() => readStored())
-  const [sessionReady, setSessionReady] = useState(false)
+  const [armed, setArmed] = useState(() => !readMuted())
+  const [unlocked, setUnlocked] = useState(false)
+  const [playing, setPlaying] = useState(false)
   const bedRef = useRef<HTMLAudioElement | null>(null)
   const stingerRef = useRef<HTMLAudioElement | null>(null)
+  const pendingSrcRef = useRef(TAB_LOOPS.standings)
 
   const ensureAudio = useCallback(() => {
     if (!bedRef.current) {
       bedRef.current = new Audio()
       bedRef.current.loop = true
       bedRef.current.volume = 0.35
+      bedRef.current.addEventListener('playing', () => setPlaying(true))
+      bedRef.current.addEventListener('pause', () => setPlaying(false))
     }
     if (!stingerRef.current) {
       stingerRef.current = new Audio()
@@ -59,49 +64,67 @@ export function useSound() {
       bed.removeAttribute('src')
       bed.load()
     }
+    setPlaying(false)
   }, [])
 
-  const playLoop = useCallback(
-    async (src: string) => {
-      if (!armed || !sessionReady) return
-      const { bed } = ensureAudio()
-      if (bed.src.endsWith(src) && !bed.paused) return
+  const tryPlayBed = useCallback(async () => {
+    if (!armed) return false
+    const { bed } = ensureAudio()
+    const src = pendingSrcRef.current
+    const file = src.split('/').pop() ?? src
+    if (!bed.src || !bed.src.endsWith(file)) {
       bed.src = src
-      try {
-        await bed.play()
-      } catch {
-        /* autoplay policy */
-      }
+    }
+    try {
+      await bed.play()
+      setUnlocked(true)
+      setPlaying(true)
+      return true
+    } catch {
+      return false
+    }
+  }, [armed, ensureAudio])
+
+  const playLoop = useCallback(
+    (src: string) => {
+      if (!armed) return
+      pendingSrcRef.current = src
+      if (!unlocked) return
+      void tryPlayBed()
     },
-    [armed, sessionReady, ensureAudio],
+    [armed, unlocked, tryPlayBed],
   )
 
   const unlock = useCallback(() => {
     const next = !armed
     setArmed(next)
     try {
-      localStorage.setItem(STORAGE_KEY, next ? 'on' : 'off')
+      if (next) {
+        localStorage.removeItem(STORAGE_KEY)
+      } else {
+        localStorage.setItem(STORAGE_KEY, 'off')
+      }
     } catch {
       /* ignore */
     }
     if (next) {
       ensureAudio()
-      setSessionReady(true)
+      void tryPlayBed()
     } else {
-      setSessionReady(false)
+      setUnlocked(false)
       stopAll()
     }
-  }, [armed, ensureAudio, stopAll])
+  }, [armed, ensureAudio, stopAll, tryPlayBed])
 
   const onUserGesture = useCallback(() => {
-    if (!armed || sessionReady) return
-    setSessionReady(true)
+    if (!armed || unlocked) return
     ensureAudio()
-  }, [armed, sessionReady, ensureAudio])
+    void tryPlayBed()
+  }, [armed, unlocked, ensureAudio, tryPlayBed])
 
   const setTabBed = useCallback(
     (tab: TabSound) => {
-      void playLoop(TAB_LOOPS[tab])
+      playLoop(TAB_LOOPS[tab])
     },
     [playLoop],
   )
@@ -112,31 +135,65 @@ export function useSound() {
         setTabBed('gallery')
         return
       }
-      void playLoop(DECK_LOOPS[kind])
+      playLoop(DECK_LOOPS[kind])
     },
     [playLoop, setTabBed],
   )
 
   const playClick = useCallback(() => {
-    if (!armed || !sessionReady) return
+    if (!armed || !unlocked) return
     const { stinger } = ensureAudio()
     stinger.src = `${BASE}click.mp3`
     void stinger.play().catch(() => {})
-  }, [armed, sessionReady, ensureAudio])
+  }, [armed, unlocked, ensureAudio])
 
   const playBuzzer = useCallback(() => {
-    if (!armed || !sessionReady) return
+    if (!armed || !unlocked) return
     const { stinger } = ensureAudio()
     stinger.src = `${BASE}buzzer.mp3`
     void stinger.play().catch(() => {})
-  }, [armed, sessionReady, ensureAudio])
+  }, [armed, unlocked, ensureAudio])
 
   useEffect(() => {
     if (!armed) {
       stopAll()
-      setSessionReady(false)
+      setUnlocked(false)
     }
   }, [armed, stopAll])
+
+  useEffect(() => {
+    if (!armed) return
+    ensureAudio()
+    pendingSrcRef.current = TAB_LOOPS.standings
+    const bed = bedRef.current
+    if (bed && !bed.src) {
+      bed.src = TAB_LOOPS.standings
+    }
+    void tryPlayBed()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps -- once on mount
+
+  useEffect(() => {
+    if (!armed || unlocked) return
+
+    const onGesture = () => {
+      onUserGesture()
+    }
+
+    const opts: AddEventListenerOptions = { capture: true, passive: true }
+    window.addEventListener('pointerdown', onGesture, opts)
+    window.addEventListener('keydown', onGesture, opts)
+    window.addEventListener('touchstart', onGesture, opts)
+    window.addEventListener('click', onGesture, opts)
+
+    return () => {
+      window.removeEventListener('pointerdown', onGesture, opts)
+      window.removeEventListener('keydown', onGesture, opts)
+      window.removeEventListener('touchstart', onGesture, opts)
+      window.removeEventListener('click', onGesture, opts)
+    }
+  }, [armed, unlocked, onUserGesture])
+
+  const showTapHint = armed && !playing
 
   return {
     armed,
@@ -148,5 +205,6 @@ export function useSound() {
     playBuzzer,
     label: armed ? 'Sound on' : 'Sound off',
     pressed: armed,
+    showTapHint,
   }
 }

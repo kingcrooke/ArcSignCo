@@ -12,3 +12,10 @@ Published under `/gwb-fe006a16/audio/` after `npm run publish-static`. Replace f
 | `buzzer.mp3` | Negative mulligan stinger | Generated buzz (Freesound KevinVG207 substitute) |
 
 The 12 original-cue prompts in the GWB review are for a future AI music pass — do not ship placeholders for those slots until real masters exist.
+
+## Behavior
+
+- Sound defaults **on** (toggle shows on). Only `localStorage` key `gwb-sound=off` remembers mute.
+- On load the app tries to play the current tab bed (Standings uses `impact-loop.mp3`); autoplay failures are ignored.
+- If the browser blocks audio, the first `pointerdown`, `keydown`, `touchstart`, or `click` anywhere on the page starts the bed (lazy `src` for non-initial tracks until then). A small “Tap anywhere for sound” hint appears until playback starts.
+- Only the active loop/stinger is fetched; other tab/deck loops load when that tab or deck is selected.

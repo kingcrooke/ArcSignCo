@@ -50,6 +50,10 @@ async function main() {
     if (tab.id === 'recaps') {
       await page.waitForTimeout(1500)
     }
+    if (tab.id === 'frankie') {
+      await page.locator('#frankie-zone-section').waitFor({ timeout: 60_000 })
+      await page.waitForTimeout(600)
+    }
     for (const w of [1280, 390]) {
       await shot(page, `preview-${tab.id}`, w)
     }
