@@ -89,18 +89,19 @@ export default function App() {
           <nav
             className="gwb-section-tabs mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
-            role="tablist"
           >
             {TABS.map((t) => {
-              const selected = tab === t.id
+              const active = tab === t.id
               return (
                 <button
                   key={t.id}
                   type="button"
-                  role="tab"
-                  aria-selected={selected}
-                  tabIndex={selected ? 0 : -1}
-                  className="gwb-section-tab"
+                  className={
+                    active
+                      ? 'gwb-section-tab gwb-section-tab--active'
+                      : 'gwb-section-tab'
+                  }
+                  aria-current={active ? 'page' : undefined}
                   onClick={() => setTab(t.id)}
                 >
                   {t.label}

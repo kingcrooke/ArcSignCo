@@ -68,7 +68,7 @@ async function waitForApp(page) {
 async function scrollReportColumn(page, week) {
   await waitForApp(page)
   await page.getByLabel('NFL Week').selectOption(String(week))
-  await page.getByRole('tab', { name: 'Graphics', exact: true }).click()
+  await page.getByRole('button', { name: 'Graphics', exact: true }).click()
   const report = page.locator(`#graphics-week-${week}-report`)
   await report.waitFor({ timeout: 120_000 })
   await report.scrollIntoViewIfNeeded()
@@ -101,10 +101,10 @@ async function main() {
   for (const width of [1280, 390]) {
     await shot(page, 'gwb-preview-nav-standings', width, async () => {
       await waitForApp(page)
-      await page.getByRole('tab', { name: 'Standings', exact: true }).click()
+      await page.getByRole('button', { name: 'Standings', exact: true }).click()
     })
     await shot(page, 'gwb-preview-nav-mulligans', width, async () => {
-      await page.getByRole('tab', { name: 'Mulligans', exact: true }).click()
+      await page.getByRole('button', { name: 'Mulligans', exact: true }).click()
     })
   }
 
@@ -113,7 +113,7 @@ async function main() {
       await shot(page, `gwb-preview-standings-week${week}`, width, async () => {
         await waitForApp(page)
         await page.getByLabel('NFL Week').selectOption(String(week))
-        await page.getByRole('tab', { name: 'Standings', exact: true }).click()
+        await page.getByRole('button', { name: 'Standings', exact: true }).click()
         await page.waitForSelector('table tbody tr', { timeout: 120_000 })
       })
     }
@@ -124,7 +124,7 @@ async function main() {
       await shot(page, `gwb-preview-mulligans-week${week}`, width, async () => {
         await waitForApp(page)
         await page.getByLabel('NFL Week').selectOption(String(week))
-        await page.getByRole('tab', { name: 'Mulligans', exact: true }).click()
+        await page.getByRole('button', { name: 'Mulligans', exact: true }).click()
         await page.waitForSelector('#mulligans-section', { timeout: 120_000 })
       })
     }

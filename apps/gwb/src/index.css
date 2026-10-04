@@ -68,7 +68,7 @@ body {
   height: 0;
 }
 
-/* Section tabs — one active highlight, readable label contrast */
+/* Section tabs — instant active swap (no bg transition; avoids double-highlight glitch) */
 nav.gwb-section-tabs button.gwb-section-tab {
   flex: 1 1 0;
   white-space: nowrap;
@@ -77,9 +77,8 @@ nav.gwb-section-tabs button.gwb-section-tab {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
-  transition:
-    background-color 0.15s ease,
-    color 0.15s ease;
+  border: none;
+  cursor: pointer;
   background-color: transparent;
   color: var(--gwb-muted);
 }
@@ -88,15 +87,15 @@ nav.gwb-section-tabs button.gwb-section-tab:hover {
   color: var(--gwb-text);
 }
 
-nav.gwb-section-tabs button.gwb-section-tab[aria-selected='true'] {
+nav.gwb-section-tabs button.gwb-section-tab--active,
+nav.gwb-section-tabs button.gwb-section-tab.gwb-section-tab--active {
   background-color: var(--gwb-accent);
   color: #1a1200;
   font-weight: 600;
 }
 
-nav.gwb-section-tabs button.gwb-section-tab[aria-selected='false'] {
-  background-color: transparent;
-  color: var(--gwb-muted);
+nav.gwb-section-tabs button.gwb-section-tab--active:hover {
+  color: #1a1200;
 }
 
 nav.gwb-section-tabs button.gwb-section-tab:focus {
@@ -108,6 +107,6 @@ nav.gwb-section-tabs button.gwb-section-tab:focus-visible {
   outline-offset: 2px;
 }
 
-nav.gwb-section-tabs button.gwb-section-tab[aria-selected='true']:focus-visible {
+nav.gwb-section-tabs button.gwb-section-tab--active:focus-visible {
   outline-color: var(--gwb-text);
 }
