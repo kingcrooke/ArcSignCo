@@ -10,6 +10,29 @@ function pfPa(row: StandingRow): { pf: string; pa: string } {
   }
 }
 
+function StreakBadge({ streak }: { streak: string }) {
+  if (!streak) {
+    return (
+      <span className="min-w-[2.25rem] text-center text-xs text-[var(--gwb-muted)]">
+        —
+      </span>
+    )
+  }
+  return (
+    <span
+      className={`min-w-[2.25rem] text-center text-xs font-semibold tabular-nums ${
+        streak.startsWith('W')
+          ? 'text-emerald-400/90'
+          : streak.startsWith('L')
+            ? 'text-rose-400/80'
+            : 'text-[var(--gwb-muted)]'
+      }`}
+    >
+      {streak}
+    </span>
+  )
+}
+
 export function StandingsPanel({
   rows,
   deferralNote,
@@ -44,18 +67,19 @@ export function StandingsPanel({
           const team = teams.get(r.rosterId)
           const { pf, pa } = pfPa(r)
           const streak = streakLabel(r.streak)
+          const manager = managerNickname(r.rosterId, r.displayName)
           const showPlayoffLine =
             cutoff !== null && r.rank === cutoff && index < rows.length - 1
 
           return (
             <li key={r.rosterId}>
               <div
-                className={`flex items-center gap-2.5 border-t border-[var(--gwb-border)] px-3 py-2.5 first:border-t-0 sm:gap-3 sm:px-4 sm:py-3 ${
+                className={`flex items-start gap-2.5 border-t border-[var(--gwb-border)] px-3 py-2.5 first:border-t-0 sm:items-center sm:gap-3 sm:px-4 sm:py-3 ${
                   index % 2 === 1 ? 'bg-[#0d1319]/60' : ''
                 }`}
               >
                 <span
-                  className="w-5 shrink-0 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)] sm:w-6"
+                  className="w-5 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)] sm:w-6 sm:pt-0"
                   aria-label={`Rank ${r.rank}`}
                 >
                   {r.rank}
@@ -64,67 +88,55 @@ export function StandingsPanel({
                 <TeamAvatar team={team} size="sm" />
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold leading-tight sm:text-[15px]">
-                    {r.teamName}
-                  </p>
-                  <p className="truncate text-xs text-[var(--gwb-muted)]">
-                    {managerNickname(r.rosterId, r.displayName)}
-                    {r.displayName ? (
-                      <span className="text-[var(--gwb-muted)]/75">
+                  <div className="flex items-start justify-between gap-2 sm:items-center">
+                    <p
+                      className="min-w-0 flex-1 text-sm font-semibold leading-snug break-words sm:truncate sm:leading-tight sm:text-[15px]"
+                    >
+                      {r.teamName}
+                    </p>
+
+                    <div className="flex shrink-0 items-center gap-2 sm:hidden">
+                      <p className="text-sm font-semibold tabular-nums leading-tight">
+                        {recordLabel(r)}
+                      </p>
+                      <StreakBadge streak={streak} />
+                    </div>
+                  </div>
+
+                  <p className="mt-0.5 text-xs leading-snug text-[var(--gwb-muted)] sm:truncate">
+                    <span className="sm:hidden">
+                      {manager}
+                      <span className="text-[var(--gwb-muted)]/80">
                         {' '}
-                        · @{r.displayName}
+                        · {pf} PF · {pa} PA
                       </span>
-                    ) : null}
+                    </span>
+                    <span className="hidden sm:inline">
+                      {manager}
+                      {r.displayName ? (
+                        <span className="text-[var(--gwb-muted)]/75">
+                          {' '}
+                          · @{r.displayName}
+                        </span>
+                      ) : null}
+                    </span>
                   </p>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2 sm:gap-4">
+                <div className="hidden shrink-0 items-center gap-4 sm:flex">
                   <div className="text-right">
                     <p className="text-sm font-semibold tabular-nums leading-tight">
                       {recordLabel(r)}
                     </p>
-                    <p className="mt-0.5 text-[10px] leading-tight text-[var(--gwb-muted)] sm:text-xs">
+                    <p className="mt-0.5 text-xs leading-tight text-[var(--gwb-muted)]">
                       <span>PF </span>
                       <span className="tabular-nums">{pf}</span>
                       <span className="mx-1 text-[var(--gwb-border)]">·</span>
                       <span>PA </span>
                       <span className="tabular-nums">{pa}</span>
-                      {streak ? (
-                        <>
-                          <span className="mx-1 text-[var(--gwb-border)]">·</span>
-                          <span
-                            className={
-                              streak.startsWith('W')
-                                ? 'font-semibold text-emerald-400/90'
-                                : streak.startsWith('L')
-                                  ? 'font-semibold text-rose-400/80'
-                                  : 'font-semibold'
-                            }
-                          >
-                            {streak}
-                          </span>
-                        </>
-                      ) : null}
                     </p>
                   </div>
-
-                  {streak ? (
-                    <span
-                      className={`hidden min-w-[2.25rem] text-center text-xs font-semibold tabular-nums sm:inline ${
-                        streak.startsWith('W')
-                          ? 'text-emerald-400/90'
-                          : streak.startsWith('L')
-                            ? 'text-rose-400/80'
-                            : 'text-[var(--gwb-muted)]'
-                      }`}
-                    >
-                      {streak}
-                    </span>
-                  ) : (
-                    <span className="hidden min-w-[2.25rem] text-center text-xs text-[var(--gwb-muted)] sm:inline">
-                      —
-                    </span>
-                  )}
+                  <StreakBadge streak={streak} />
                 </div>
               </div>
 
