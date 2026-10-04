@@ -377,14 +377,13 @@ async function run() {
       await ep.fill(`${f} [name="zip"]`, "11201");
       await ep.check(`${f} [name="role"][value="Tenant"]`);
       await ep.check(`${f} [name="job"][value="New sign"]`);
-      await ep.check(`${f} [data-service][value="Fabrication"]`);
-      await ep.check(`${f} [data-service][value="Permits / DOB filing"]`);
+      await ep.check(`${f} [data-service][value="Fabrication through Arc's licensed partners"]`);
+      await ep.check(`${f} [data-service][value="Permit drawings and coordination with the licensed applicant (Arc does not file)"]`);
       await ep.fill(`${f} [name="target_date"]`, new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10));
       await ep.fill(`${f} [name="business"]`, "QA Bakery");
       await ep.check(`${f} [name="landmark"][value="Yes"]`);
       await ep.selectOption(`${f} [name="height"]`, "2nd floor or higher");
       await ep.check(`${f} [name="power"][value="Yes"]`);
-      await ep.selectOption(`${f} [name="budget"]`, "$3–10k");
       const jpg = fs.readFileSync(path.join(root, "docs/qa/sample-photo.jpg"));
       await ep.setInputFiles(`${f} [data-photos]`, [
         { name: "wide.jpg", mimeType: "image/jpeg", buffer: jpg },
@@ -406,7 +405,7 @@ async function run() {
       out && out["form-name"] === "sign-estimate-request" && out.subject === "[Sign Preview] QA Bakery / Brooklyn / Channel letters / source=qa-check"
         ? ok(`estimate subject: ${out.subject}`) : fail(`estimate subject: ${out?.subject}`);
       out?.flags === "FLAGS: Lit · Permits requested · Landmark = Yes · Height 2nd floor+" ? ok(`estimate flags: ${out.flags}`) : fail(`estimate flags: ${out?.flags}`);
-      out && out.services === "Fabrication, Permits / DOB filing" && out.role === "Tenant" && out.power === "Yes" && out.budget === "$3–10k" && out.tab === "sign" && out.type === "halo" && out.src === "qa-check"
+      out && out.services.includes("Fabrication through Arc's licensed partners") && out.services.includes("Arc does not file") && out.role === "Tenant" && out.power === "Yes" && !out.budget && out.tab === "sign" && out.type === "halo" && out.src === "qa-check"
         ? ok("estimate submission carries every field, the services list and the hidden tab/type/src")
         : fail(`estimate fields: ${JSON.stringify(out)}`);
       out && out.photo_1?.name === "wide.jpg" && out.photo_2?.name === "close.jpg" && out.photo_3?.name === "plan.pdf" && !out.photo_4 && out.artwork?.name === "logo.svg"

@@ -3,13 +3,13 @@ import { formatFeetInches } from "../../geometry.js";
 export const MATERIAL = [["acrylic", "Photopolymer / acrylic"], ["metal", "Brushed aluminum"]];
 export const FINISH = [["matte", "Matte"], ["satin", "Satin"]];
 export const MOUNT = [["standoff", "Standoffs beside door"], ["adhesive", "Adhesive / stud"]];
-export const EXIT_FACE = [["red", "Red exit"], ["green", "Green exit"]];
 
 export const SIZE_CHOICES = {
   "ada-room": [["9x6", "9\" × 6\""], ["8x5", "8\" × 5\""], ["10x7", "10\" × 7\""]],
-  "ada-restroom": [["9x6", "9\" × 6\""], ["8x8", "8\" × 8\""], ["10x7", "10\" × 7\""]],
-  "ada-stair": [["12x8", "12\" × 8\""], ["10x7", "10\" × 7\""], ["8x6", "8\" × 6\""]],
-  "ada-exit": [["12x8", "12\" × 8\""], ["18x10", "18\" × 10\""], ["24x12", "24\" × 12\""]],
+  "ada-restroom": [["10x12", "10\" × 12\" (6\" pictogram field)"], ["9x10", "9\" × 10\""], ["12x14", "12\" × 14\""]],
+  "ada-stair": [["18x12", "18\" × 12\" floor ID (min)"], ["20x14", "20\" × 14\""], ["24x18", "24\" × 18\""]],
+  "ada-exit-tactile": [["9x6", "9\" × 6\" tactile EXIT"], ["8x5", "8\" × 5\""], ["10x7", "10\" × 7\""]],
+  "ada-exit": [["18x6", "18\" × 6\" illuminated (6\" letters min)"], ["24x8", "24\" × 8\" (Group A / R-1)"], ["30x10", "30\" × 10\""]],
 };
 
 export function parseSize(raw) {
@@ -31,7 +31,6 @@ export function defaultAdaOptions(type) {
     material: "acrylic",
     finish: "matte",
     mount: "standoff",
-    exitFace: "red",
     panel: type.id === "ada-exit" ? "#cc2a2a" : "#f4f6f8",
     frame: "#24262b",
     size: sizes[0][0],
@@ -42,15 +41,11 @@ export function sanitizeAdaOptions(type, raw) {
   const d = defaultAdaOptions(type);
   const sizes = SIZE_CHOICES[type.id] || [];
   const allowed = new Set(sizes.map(([v]) => v));
-  let panel = /^#[0-9a-f]{6}$/i.test(raw?.panel || "") ? raw.panel : d.panel;
-  if (type.id === "ada-exit" && raw?.exitFace === "green") panel = "#1a7a3a";
-  if (type.id === "ada-exit" && raw?.exitFace === "red") panel = "#cc2a2a";
   return {
     material: MATERIAL.some(([v]) => v === raw?.material) ? raw.material : d.material,
     finish: FINISH.some(([v]) => v === raw?.finish) ? raw.finish : d.finish,
     mount: MOUNT.some(([v]) => v === raw?.mount) ? raw.mount : d.mount,
-    exitFace: EXIT_FACE.some(([v]) => v === raw?.exitFace) ? raw.exitFace : d.exitFace,
-    panel,
+    panel: /^#[0-9a-f]{6}$/i.test(raw?.panel || "") ? raw.panel : d.panel,
     frame: /^#[0-9a-f]{6}$/i.test(raw?.frame || "") ? raw.frame : d.frame,
     size: allowed.has(raw?.size) ? raw.size : d.size,
   };
@@ -67,7 +62,9 @@ export function adaDetails(type, opts) {
     ["Mounting", label(MOUNT, o.mount)],
     ["Layout", "Preview only; shop drawings confirm spacing"],
   ];
-  if (type.id === "ada-exit") rows.push(["Exit style", label(EXIT_FACE, o.exitFace)]);
+  if (type.id === "ada-exit") rows.push(["Illumination", "Red letters, UL 924, always on, 90-min emergency power"]);
+  if (type.id === "ada-exit-tactile") rows.push(["Type", "Tactile EXIT (BC 1013.4), not the illuminated exit"]);
+  if (type.id !== "ada-exit") rows.push(["Mount height", "Baseline 48 in min, 60 in max (latch side)"]);
   return rows;
 }
 
@@ -86,7 +83,6 @@ export function adaOptionFields(type, opts) {
     { key: "panel", label: type.id === "ada-exit" ? "Face color" : "Plaque color", kind: "color", value: o.panel },
   ];
   if (type.id === "ada-exit") {
-    fields.push({ key: "exitFace", label: "Exit style", kind: "select", value: o.exitFace, choices: EXIT_FACE, refresh: true });
     fields.push({ key: "frame", label: "Cabinet color", kind: "color", value: o.frame });
   }
   return fields;

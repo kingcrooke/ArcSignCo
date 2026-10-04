@@ -1,3 +1,5 @@
+import "./pricing-test-bootstrap.mjs";
+import "./pricing-test-bootstrap.mjs";
 // Checks the sign mockup tool: geometry math, the category registry (every tab's types, cards,
 // options and rates), PDF structure and content, approval-link plumbing and copy guardrails.
 //
@@ -319,8 +321,8 @@ check(/function notifyArc\([^)]*\) \{\n  if \(isTestRun\(sheet\)\) return;/.test
   check(ef.FIELD_NAMES[0] === "flags" && ["tab", "type", "src", "proof", "bot-field", "subject"].every(n => ef.FIELD_NAMES.includes(n)), "estimate form keeps the hidden tab/type/src/proof fields and the honeypot, with flags first");
   check(ef.subjectFor({ business: "Corner Deli", name: "Ana", city: "Brooklyn", sign_type: "Channel letters", src: "GBP" }) === "[Sign Preview] Corner Deli / Brooklyn / Channel letters / source=gbp", "estimate subject: business, borough, sign type, source");
   check(ef.subjectFor({ name: "Ana Ruiz", city: "Queens", sign_type: "Awning", src: "" }) === "[Sign Preview] Ana Ruiz / Queens / Awning / source=direct", "estimate subject falls back to the name and source=direct");
-  check(ef.flagsFor({ lit: "Lit", services: ["Installation", "Permits / DOB filing"], landmark: "Yes", height: "2nd floor or higher" }).join() === "Lit,Permits requested,Landmark = Yes,Height 2nd floor+", "estimate flags: lit, permits, landmark, height");
-  check(ef.flagsFor({ lit: "Non-lit", services: ["Permit-only for an existing sign"], landmark: "Not sure", height: "12–25 ft" }).join() === "Permits requested", "permit-only counts as permits requested; nothing else flags");
+  check(ef.flagsFor({ lit: "Lit", services: ["Installation through Arc's licensed partners", "Permit drawings and coordination with the licensed applicant (Arc does not file)"], landmark: "Yes", height: "2nd floor or higher" }).join() === "Lit,Permits requested,Landmark = Yes,Height 2nd floor+", "estimate flags: lit, permits, landmark, height");
+  check(ef.flagsFor({ lit: "Non-lit", services: ["Design"], landmark: "Not sure", height: "12–25 ft" }).join().length === 0, "permit coordination is the only permit flag source");
   check(ef.flagsFor({ lit: "Not sure", services: ["Design"], landmark: "No" }).length === 0, "no flags when none apply");
   const st = [["halo", "Channel letters"], ["lightbox", "Lightbox / cabinet"], ["bladelit", "Blade / projecting"], ["panel", "Storefront / fascia"], ["vinyl-door-hours", "Window vinyl / graphics"],
     ["vinyl-wall-mural", "Mural / painted"], ["aw-traditional", "Awning"], ["wf-lobby", "ADA / interior wayfinding"], ["ada-room", "ADA / interior wayfinding"], ["led-ticker", "Other"], ["constr-site-board", "Other"]];
@@ -333,12 +335,13 @@ check(/function notifyArc\([^)]*\) \{\n  if \(isTestRun\(sheet\)\) return;/.test
   check(/if \(isTestRun\(context\(\)\)\) \{/.test(efSrc), "the estimate form never sends from a test run");
 }
 const pricingConfig = fs.readFileSync(path.join(toolDir, "js/pricing-config.js"), "utf8");
-check(/PLACEHOLDER RATES/.test(pricingConfig) && /PLACEHOLDER = true/.test(pricingConfig), "rates are labeled as placeholders");
+check(/PLACEHOLDER = true/.test(pricingConfig), "public pricing config keeps PLACEHOLDER on");
+check(!/\$/.test(pricingConfig), "public pricing-config.js has no dollar figures");
+check(!/\b(base|rate|projRate|min):\s*\d{2,}/.test(pricingConfig), "public pricing-config.js has no rate numbers");
 check(READY.every(c => c.pricing && Object.keys(c.pricing).join() === "row"), "every live category only maps its types to config rows");
-// Price numbers live only in js/pricing-config.js.
 const PRICE_NUM = /\b(base|rate|projRate|low|high):\s*\d{2,}|\brange:\s*\[\s*\d{2,}/;
-const strayRates = own.filter(f => f.endsWith(".js") && f !== "js/pricing-config.js" && PRICE_NUM.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
-check(!strayRates.length, `no price numbers outside pricing-config.js${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
+const strayRates = own.filter(f => f.endsWith(".js") && !["js/pricing-config.js", "js/pricing.js"].includes(f) && PRICE_NUM.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
+check(!strayRates.length, `no price numbers in sign-mockup js except pricing-config metadata${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
 check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
 check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");

@@ -26,13 +26,17 @@ export const SIGN_TYPES = [
 ];
 export const LIT = ["Lit", "Non-lit", "Not sure"];
 export const JOBS = ["New sign", "Replacing or removing an existing sign"];
-export const SERVICES = ["Design", "Fabrication", "Installation", "Removal of old sign", "Permits / DOB filing", "Permit-only for an existing sign"];
+export const SERVICES = [
+  "Design",
+  "Fabrication through Arc's licensed partners",
+  "Installation through Arc's licensed partners",
+  "Removal of old sign through Arc's licensed partners",
+  "Permit drawings and coordination with the licensed applicant (Arc does not file)",
+];
 export const CONTACT_PREFS = ["Call", "Text", "Either"];
 export const YES_NO = ["Yes", "No", "Not sure"];
 export const SURFACES = ["Brick", "Stone / masonry", "Stucco / EIFS", "Metal panel", "Wood", "Glass", "Awning frame", "Not sure"];
 export const HEIGHTS = ["Ground floor, under 12 ft", "12–25 ft", "2nd floor or higher", "Not sure"];
-// Ranges the customer picks for their own budget; not Arc prices.
-export const BUDGETS = ["Under $1k", "$1–3k", "$3–10k", "$10–25k", "$25k+", "Not sure"];
 const BOROUGHS = ["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island", "Jersey City", "Hoboken", "Newark", "Stamford"];
 
 const PHOTO_FIELDS = Array.from({ length: MAX_PHOTOS }, (_, i) => `photo_${i + 1}`);
@@ -41,7 +45,7 @@ export const FIELD_NAMES = [
   "flags", "subject", "tab", "type", "src", "proof", "bot-field",
   "name", "email", "phone", "street", "city", "zip", "role", "sign_type", "sign_count",
   "size_w", "size_h", "size_unit", "size_not_sure", "lit", "job", "services", "target_date",
-  ...PHOTO_FIELDS, "business", "contact_pref", "landmark", "surface", "height", "power", "budget", "artwork", "notes",
+  ...PHOTO_FIELDS, "business", "contact_pref", "landmark", "surface", "height", "power", "artwork", "notes",
 ];
 export const FILE_FIELDS = [...PHOTO_FIELDS, "artwork"];
 
@@ -189,11 +193,11 @@ function markup(p) {
         <legend>Power at the sign location?</legend>
         <div class="ef-choices">${radios("power", YES_NO)}</div>
       </fieldset>
-      <label class="ef-field">Budget range <small>(your range, not a price)</small> ${select("budget", BUDGETS)}</label>
+      <p class="ef-hint">Anything already budgeted? Add it in notes. Arc's price is only in the formal estimate.</p>
       <label class="ef-field">Artwork or logo file <small>(AI, EPS, PDF, SVG or PNG)</small>
         <input type="file" name="artwork" accept="${ART_ACCEPT}">
       </label>
-      <label class="ef-field">Notes <textarea name="notes" rows="3" maxlength="1500" placeholder="Colors, materials, timing, access, anything else"></textarea></label>
+      <label class="ef-field">Notes <textarea name="notes" rows="3" maxlength="1500" placeholder="Budget, colors, materials, timing, access, anything else"></textarea></label>
     </div>
   </details>
 
