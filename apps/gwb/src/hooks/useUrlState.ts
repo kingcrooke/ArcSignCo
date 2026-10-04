@@ -1,8 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export type AppTab = 'standings' | 'gallery' | 'recaps' | 'mulligans'
+export type AppTab =
+  | 'standings'
+  | 'gallery'
+  | 'recaps'
+  | 'mulligans'
+  | 'frankie'
 
-const TAB_SET = new Set<AppTab>(['standings', 'gallery', 'recaps', 'mulligans'])
+const TAB_SET = new Set<AppTab>([
+  'standings',
+  'gallery',
+  'recaps',
+  'mulligans',
+  'frankie',
+])
 
 function readParams(): { week: number | null; tab: AppTab | null; slide: string | null } {
   const params = new URLSearchParams(window.location.search)

@@ -4,13 +4,19 @@ import type { GraphicsSectionKind } from '../lib/weekGraphics'
 const STORAGE_KEY = 'gwb-sound'
 const BASE = `${import.meta.env.BASE_URL}audio`
 
-type TabSound = 'standings' | 'gallery' | 'recaps' | 'mulligans'
+type TabSound =
+  | 'standings'
+  | 'gallery'
+  | 'recaps'
+  | 'mulligans'
+  | 'frankie'
 
 const TAB_LOOPS: Record<TabSound, string> = {
   standings: `${BASE}impact-loop.mp3`,
   gallery: `${BASE}impact-loop.mp3`,
   recaps: `${BASE}impact-loop.mp3`,
   mulligans: `${BASE}monkeys-loop.mp3`,
+  frankie: `${BASE}sneaky-loop.mp3`,
 }
 
 const DECK_LOOPS: Record<GraphicsSectionKind, string> = {
