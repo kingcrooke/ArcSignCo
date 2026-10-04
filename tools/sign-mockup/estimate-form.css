@@ -29,12 +29,12 @@
 .ef-set legend small { color: var(--muted); font-weight: 600; }
 .ef-choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .ef-choice {
-  display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; min-height: 44px; padding: 8px 12px;
+  display: inline-grid; grid-template-columns: 20px auto; align-items: center; gap: 2px 8px; min-height: 44px; padding: 8px 12px;
   border: 1px solid #c9d2de; border-radius: 8px; background: var(--white); color: var(--ink); font-size: 15px; font-weight: 700; cursor: pointer;
 }
 .ef-choice input { width: 20px; height: 20px; margin: 0; accent-color: var(--navy); flex: none; }
 .ef-choice:has(input:checked) { border-color: var(--navy); background: #eef3f9; }
-.ef-choice .ef-hint { flex-basis: 100%; padding-left: 28px; }
+.ef-choice .ef-hint { grid-column: 2; }
 .ef-hint { color: var(--muted); font-size: 13px; font-weight: 600; }
 .ef-fine { color: var(--muted); font-size: 12.5px; }
 .ef-fine a, .ef-done a { color: var(--navy); font-weight: 700; }
