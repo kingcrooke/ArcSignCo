@@ -1,26 +1,75 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
+import { FrankieZonePanel } from './components/FrankieZonePanel'
 import { RecapsPanel } from './components/RecapsPanel'
 import { MulligansPanel } from './components/MulligansPanel'
 import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
 import { StandingsPanel } from './components/StandingsPanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
+import {
+  buildScheduleByWeek,
+  computeFrankieZoneView,
+  zoneTabLabel,
+} from './lib/frankieZone'
 import { weekHasMatchups } from './lib/recaps'
+import { currentNflWeek, isWeekLive, lastCompletedWeek } from './lib/weeks'
+import { computeStandingsThroughWeek } from './lib/standings'
 import { useLeagueData } from './hooks/useLeagueData'
 
-type Tab = 'standings' | 'gallery' | 'recaps' | 'mulligans'
+type Tab = 'standings' | 'gallery' | 'recaps' | 'mulligans' | 'frankie'
 
-const TABS: { id: Tab; label: string }[] = [
+const BASE_TABS: { id: Tab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
   { id: 'gallery', label: 'Graphics' },
   { id: 'recaps', label: 'Recaps' },
   { id: 'mulligans', label: 'Mulligans' },
+  { id: 'frankie', label: 'Frankie Zone' },
 ]
 
 export default function App() {
   const { state, error, data, refresh } = useLeagueData()
   const [tab, setTab] = useState<Tab>('standings')
+  const [recapFocusId, setRecapFocusId] = useState<string | null>(null)
+
+  const openRecapFromZone = useCallback((week: number, recapId: string) => {
+    if (!data) return
+    data.setSelectedWeek(week)
+    setRecapFocusId(recapId)
+    setTab('recaps')
+  }, [data])
+
+  const frankieTabLabel = useMemo(() => {
+    if (!data) return zoneTabLabel('Frankie')
+    const through = lastCompletedWeek(data.league, data.nflState)
+    const standings = computeStandingsThroughWeek(
+      data.matchupsByWeek,
+      data.teams,
+      through,
+    )
+    const view = computeFrankieZoneView({
+      standings,
+      teams: data.teams,
+      matchupsByWeek: data.matchupsByWeek,
+      scheduleByWeek: buildScheduleByWeek(data.matchupsByWeek),
+      throughWeek: through,
+      nflWeek: currentNflWeek(data.nflState),
+      weekInProgress: isWeekLive(
+        data.nflState.week,
+        data.league,
+        data.nflState,
+      ),
+    })
+    return view.tabLabel
+  }, [data])
+
+  const tabs = useMemo(
+    () =>
+      BASE_TABS.map((t) =>
+        t.id === 'frankie' ? { ...t, label: frankieTabLabel } : t,
+      ),
+    [frankieTabLabel],
+  )
 
   const maxWeek = Math.max(
     data?.nflState.week ?? 18,
@@ -88,7 +137,7 @@ export default function App() {
             className="gwb-section-tabs mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
           >
-            {TABS.map((t) => {
+            {tabs.map((t) => {
               const active = tab === t.id
               return (
                 <button
@@ -137,7 +186,11 @@ export default function App() {
             <section className="space-y-8">
               <div>
                 <h2 className="mb-3 text-lg font-semibold">Commissioner&apos;s recaps</h2>
-                <CommissionerRecapsPanel week={data.selectedWeek} />
+                <CommissionerRecapsPanel
+                  week={data.selectedWeek}
+                  focusRecapId={recapFocusId}
+                  onFocusHandled={() => setRecapFocusId(null)}
+                />
               </div>
               <div>
                 <h2 className="mb-3 text-lg font-semibold">
@@ -162,6 +215,27 @@ export default function App() {
                 selectedWeek={data.selectedWeek}
                 statusThroughWeek={data.standingsThroughWeek}
                 deferralNote={data.mulligansDeferralNote}
+              />
+            </section>
+          )}
+          {tab === 'frankie' && (
+            <section>
+              <FrankieZonePanel
+                standings={computeStandingsThroughWeek(
+                  data.matchupsByWeek,
+                  data.teams,
+                  lastCompletedWeek(data.league, data.nflState),
+                )}
+                teams={data.teams}
+                matchupsByWeek={data.matchupsByWeek}
+                throughWeek={lastCompletedWeek(data.league, data.nflState)}
+                nflWeek={currentNflWeek(data.nflState)}
+                weekInProgress={isWeekLive(
+                  data.nflState.week,
+                  data.league,
+                  data.nflState,
+                )}
+                onOpenRecap={openRecapFromZone}
               />
             </section>
           )}

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import recapsData from '../content/commissioner-recaps.json'
 import {
@@ -10,11 +10,29 @@ import {
 
 const RECAPS = recapsData.recaps as CommissionerRecap[]
 
-export function CommissionerRecapsPanel({ week }: { week: number }) {
+export function CommissionerRecapsPanel({
+  week,
+  focusRecapId,
+  onFocusHandled,
+}: {
+  week: number
+  focusRecapId?: string | null
+  onFocusHandled?: () => void
+}) {
   const items = useMemo(
     () => filterCommissionerRecapsByWeek(RECAPS, week),
     [week],
   )
+
+  useEffect(() => {
+    if (!focusRecapId) return
+    const el = document.getElementById(`commissioner-recap-${focusRecapId}`)
+    if (!el) return
+    const details = el.querySelector('details')
+    if (details) details.open = true
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    onFocusHandled?.()
+  }, [focusRecapId, week, onFocusHandled])
 
   return (
     <div className="space-y-4">
@@ -29,7 +47,7 @@ export function CommissionerRecapsPanel({ week }: { week: number }) {
       ) : (
         <ol className="relative space-y-2 border-l border-[var(--gwb-border)] pl-4">
           {items.map((r) => (
-            <li key={r.id} className="relative">
+            <li key={r.id} id={`commissioner-recap-${r.id}`} className="relative">
               <span
                 className="absolute -left-[1.125rem] top-4 h-2 w-2 rounded-full bg-[var(--gwb-accent)]"
                 aria-hidden
