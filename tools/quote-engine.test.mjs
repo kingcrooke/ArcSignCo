@@ -51,6 +51,8 @@ test("computeQuote uses placeholder card and job minimums", async () => {
     lit: "Lit",
     height: "2nd floor or higher",
     permitsRequested: true,
+    allowFilingExpediting: true,
+    allowElectrical: true,
     boroughZone: "brooklyn",
   });
   assert.ok(quote.low >= 40);
@@ -116,6 +118,10 @@ test("proposal html is client-safe copy without TBD flags", async () => {
 });
 
 test("proposal pdf matches HTML and has no template leakage", async () => {
+  const prevNetlify = process.env.NETLIFY;
+  const prevPdf = process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT;
+  delete process.env.NETLIFY;
+  process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT = "1";
   const lead = {
     company: "Harbor Retail LLC",
     name: "Jordan Lee",
@@ -136,6 +142,9 @@ test("proposal pdf matches HTML and has no template leakage", async () => {
   assert.ok(bytes.length > 8000, `PDF too small (${bytes.length} bytes)`);
   assertClientCopySanitized(Buffer.from(bytes).toString("latin1"), "proposal PDF", { skipRawMarkdownChecks: true });
   assert.equal(quote.clientLines.some(l => /Site survey and travel/i.test(l.label)), false);
+  process.env.NETLIFY = prevNetlify;
+  if (prevPdf === undefined) delete process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT;
+  else process.env.QUOTE_ENGINE_PDF_PLAYWRIGHT = prevPdf;
 });
 
 test("calculate API requires password", async () => {

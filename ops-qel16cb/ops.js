@@ -84,6 +84,27 @@ function money(n) {
   return `$${Math.round(n).toLocaleString("en-US")}`;
 }
 
+function allowanceDefaultsFromInput(i) {
+  const permits = Boolean(i.permitsRequested);
+  const lit = i.lit === "Lit";
+  return {
+    allowFilingExpediting: permits,
+    allowDrawingsStamp: false,
+    allowSignHanger: false,
+    allowLpc: false,
+    allowElectrical: permits || lit,
+  };
+}
+
+function setAllowanceCheckboxes(i) {
+  const d = allowanceDefaultsFromInput(i);
+  document.getElementById("fAllowFiling").checked = i.allowFilingExpediting ?? d.allowFilingExpediting;
+  document.getElementById("fAllowDrawings").checked = i.allowDrawingsStamp ?? d.allowDrawingsStamp;
+  document.getElementById("fAllowHanger").checked = i.allowSignHanger ?? d.allowSignHanger;
+  document.getElementById("fAllowLpc").checked = i.allowLpc ?? d.allowLpc;
+  document.getElementById("fAllowElectrical").checked = i.allowElectrical ?? d.allowElectrical;
+}
+
 function fillCalcFromLead(lead) {
   const i = lead.calculatorInput || {};
   calcForm.signType.value = i.signType || lead.projectType || "";
@@ -93,11 +114,22 @@ function fillCalcFromLead(lead) {
   calcForm.sizeUnit.value = i.sizeUnit || "ft";
   calcForm.lit.value = i.lit || "Not sure";
   calcForm.height.value = i.height || "";
-  calcForm.permitsRequested.checked = Boolean(i.permitsRequested);
+  document.getElementById("fPermitsLikely").checked = Boolean(i.permitsRequested);
+  setAllowanceCheckboxes(i);
   document.getElementById("fSurveyConfirmed").checked = Boolean(i.surveyConfirmed);
   document.getElementById("fStatus").value = lead.status || "New";
   document.getElementById("fValue").value = lead.quotedValue || "";
   document.getElementById("fNext").value = lead.nextStep || "";
+}
+
+function refreshAllowanceDefaultsFromPermitsLit() {
+  const i = {
+    permitsRequested: document.getElementById("fPermitsLikely").checked,
+    lit: calcForm.lit.value,
+  };
+  const d = allowanceDefaultsFromInput(i);
+  document.getElementById("fAllowFiling").checked = d.allowFilingExpediting;
+  document.getElementById("fAllowElectrical").checked = d.allowElectrical;
 }
 
 function selectLead(id) {
@@ -137,9 +169,17 @@ function calcInputFromForm() {
     lit: fd.get("lit"),
     height: fd.get("height"),
     permitsRequested: fd.get("permitsRequested") === "on",
+    allowFilingExpediting: fd.get("allowFilingExpediting") === "on",
+    allowDrawingsStamp: fd.get("allowDrawingsStamp") === "on",
+    allowSignHanger: fd.get("allowSignHanger") === "on",
+    allowLpc: fd.get("allowLpc") === "on",
+    allowElectrical: fd.get("allowElectrical") === "on",
     boroughZone: active?.boroughZone || active?.calculatorInput?.boroughZone || "brooklyn",
   };
 }
+
+document.getElementById("fPermitsLikely").addEventListener("change", refreshAllowanceDefaultsFromPermitsLit);
+calcForm.lit.addEventListener("change", refreshAllowanceDefaultsFromPermitsLit);
 
 function lineAmount(l, preliminary) {
   if (l.quoteRequired) return '<span class="quote-required">Quote required</span>';

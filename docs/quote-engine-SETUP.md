@@ -81,7 +81,11 @@ Optional: set **`QUOTE_ENGINE_WEBHOOK_SECRET`** on Netlify and add header **`X-Q
 
 1. Open **`https://arcsignco.com/ops-qel16cb/`** (or your preview URL + `/ops-qel16cb/`).
 2. Enter **`QUOTE_ENGINE_PASSWORD`**.
-3. Select a lead → **Calculate** → set **Status / Quoted value / Next step** → **Save lead** → **Generate proposal draft** (print to PDF in the browser, or use the `.pdf` API link).
+3. Select a lead → set **Allowances** checkboxes as needed → **Calculate** → set **Status / Quoted value / Next step** → **Save lead** → **Generate proposal draft** (print to PDF in the browser, or open the `.pdf` link).
+
+**PDF on Netlify:** the `.pdf` URL returns the same HTML proposal with a short notice and **Print or save as PDF** (no headless Chromium in functions). Locally, set `QUOTE_ENGINE_PDF_PLAYWRIGHT=1` if you need server-generated PDF bytes.
+
+**Allowances:** by default, only **DOB filing** (when Permits likely) and **electrician** (when Permits likely or Lit) are checked. LPC, PE/RA drawings, and Sign Hanger stay off until Jesus checks them.
 
 Proposal copy is client-facing: no vendor or sub costs; **(347) 450-2110**, **jc@arcsignco.com**, Mon–Fri 8 AM–6 PM; Arc third-person voice.
 

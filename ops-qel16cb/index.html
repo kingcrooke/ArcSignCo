@@ -63,7 +63,15 @@
               <option>2nd floor or higher</option>
             </select>
           </label>
-          <label class="check"><input type="checkbox" name="permitsRequested"> Permits likely</label>
+          <label class="check"><input type="checkbox" name="permitsRequested" id="fPermitsLikely"> Permits likely</label>
+          <fieldset class="allowances">
+            <legend>Allowances (include in quote)</legend>
+            <label class="check"><input type="checkbox" name="allowFilingExpediting" id="fAllowFiling"> DOB sign permit — filing &amp; expediting</label>
+            <label class="check"><input type="checkbox" name="allowDrawingsStamp" id="fAllowDrawings"> Drawings with PE/RA stamp</label>
+            <label class="check"><input type="checkbox" name="allowSignHanger" id="fAllowHanger"> Licensed Sign Hanger allowance</label>
+            <label class="check"><input type="checkbox" name="allowLpc" id="fAllowLpc"> LPC / landmarks allowance</label>
+            <label class="check"><input type="checkbox" name="allowElectrical" id="fAllowElectrical"> Licensed electrician allowance</label>
+          </fieldset>
           <label class="check"><input type="checkbox" name="surveyConfirmed" id="fSurveyConfirmed"> Survey done, sizes confirmed (single total)</label>
           <button type="submit" class="btn gold">Calculate</button>
         </form>

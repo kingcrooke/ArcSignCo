@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import { computeQuote } from "../netlify/lib/quote-compute.mjs";
-import { buildProposalHtml, buildProposalPdfBytes } from "../netlify/lib/proposal.mjs";
+import { buildProposalHtml } from "../netlify/lib/proposal.mjs";
 import { setTestRateCard, clearTestRateCard } from "../netlify/lib/rate-card-store.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -100,10 +100,18 @@ async function captureProposal(context, demoQuote) {
   await page.waitForSelector("table tr", { state: "visible" });
   await shot(page, "quote-engine-proposal", 1280);
   await shot(page, "quote-engine-proposal", 390);
-  await page.close();
 
-  const pdfBytes = await buildProposalPdfBytes({ lead: demoLead, quote: demoQuote, draft: true });
-  fs.writeFileSync(SAMPLE_PDF, Buffer.from(pdfBytes));
+  const pdfPage = await context.newPage();
+  await pdfPage.setContent(html, { waitUntil: "load" });
+  await pdfPage.emulateMedia({ media: "print" });
+  await pdfPage.pdf({
+    path: SAMPLE_PDF,
+    format: "Letter",
+    printBackground: true,
+    margin: { top: "0.45in", bottom: "0.45in", left: "0.55in", right: "0.55in" },
+  });
+  await pdfPage.close();
+  await page.close();
   if (fs.statSync(SAMPLE_PDF).size < MIN_PDF_BYTES) throw new Error("sample PDF too small");
   console.log(`ok   ${SAMPLE_PDF} (${fs.statSync(SAMPLE_PDF).size} bytes)`);
 }

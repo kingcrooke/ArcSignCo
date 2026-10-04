@@ -1,4 +1,5 @@
 import { loadRateCardForCompute } from "./rate-card-store.mjs";
+import { resolveAllowances } from "./allowance-input.mjs";
 
 export const TBD_LABEL = "TBD — Jesus to confirm";
 export const CLIENT_TAX_LINE = "Sales tax: to be determined";
@@ -161,6 +162,7 @@ export function computePathBLine({ label, materialCost, markupRate, preliminary,
 
 export function computeQuoteFromCard(card, input = {}, options = {}) {
   const surveyConfirmed = Boolean(options.surveyConfirmed);
+  const allowances = resolveAllowances(input, card);
   const lines = [];
   let quoteRequiredAny = false;
 
@@ -212,7 +214,7 @@ export function computeQuoteFromCard(card, input = {}, options = {}) {
     }
   }
 
-  if (input.lit === "Lit" || input.lit === "Not sure") {
+  if (allowances.allowElectrical) {
     const elec = card.electrical;
     if (elec?.low != null) {
       addLine(lines, {
@@ -253,20 +255,19 @@ export function computeQuoteFromCard(card, input = {}, options = {}) {
     });
   }
 
-  if (input.permitsRequested) {
-    for (const pl of card.permits?.lines || []) {
-      if (pl.price_role === "city_pass_through_at_cost") continue;
-      if (pl.low == null) continue;
-      addLine(lines, {
-        key: pl.id,
-        label: pl.label,
-        clientLabel: pl.label,
-        path: "A",
-        tbd: isTbd(pl),
-        low: roundLine(pl.low),
-        high: roundLine(pl.high ?? pl.low),
-      });
-    }
+  for (const pl of card.permits?.lines || []) {
+    if (pl.price_role === "city_pass_through_at_cost") continue;
+    if (pl.low == null) continue;
+    if (!allowances.permitLineIds.has(pl.id)) continue;
+    addLine(lines, {
+      key: pl.id,
+      label: pl.label,
+      clientLabel: pl.label,
+      path: "A",
+      tbd: isTbd(pl),
+      low: roundLine(pl.low),
+      high: roundLine(pl.high ?? pl.low),
+    });
   }
 
   const priced = lines.filter(l => !l.quoteRequired);

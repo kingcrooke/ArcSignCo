@@ -34,6 +34,9 @@ h1 { margin: 0; font-size: 1.35rem; color: var(--navy); }
 .lead-list .sub { font-size: .82rem; color: var(--muted); }
 .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
 .calc-grid label.check { grid-column: 1 / -1; display: flex; align-items: center; gap: .5rem; }
+.allowances { grid-column: 1 / -1; border: 1px solid var(--line); border-radius: 8px; padding: .65rem .75rem; margin: 0; }
+.allowances legend { font-size: .85rem; font-weight: 600; color: var(--navy); padding: 0 .35rem; }
+.allowances label.check { margin: .25rem 0; }
 .quote-out { margin-top: 1rem; padding: .75rem; background: #f8fafc; border-radius: 8px; font-size: .9rem; }
 .quote-out table { width: 100%; border-collapse: collapse; }
 .quote-out td { padding: .25rem 0; border-bottom: 1px solid var(--line); }

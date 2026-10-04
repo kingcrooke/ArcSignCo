@@ -15,8 +15,15 @@ export async function saveLeadBlob(lead, meta = {}) {
 
 export async function getLeadBlob(id) {
   if (!id) return null;
-  const store = blobStore();
-  return store.get(`lead/${id}`, { type: "json" });
+  if (!process.env.NETLIFY_SITE_ID && !process.env.NETLIFY_BLOBS_CONTEXT) {
+    return null;
+  }
+  try {
+    const store = blobStore();
+    return store.get(`lead/${id}`, { type: "json" });
+  } catch {
+    return null;
+  }
 }
 
 export async function listLeadBlobs() {

@@ -102,12 +102,13 @@ export async function handleQuoteEngine(req, context) {
     return json({ quote });
   }
 
-  const proposalMatch = path.match(/^\/api\/quote-engine\/proposal\/([^/]+)(\.pdf)?$/);
+  const proposalMatch = path.match(/^\/api\/quote-engine\/proposal\/(.+)$/);
   if (proposalMatch && req.method === "GET") {
     const deny = requireAuth(req);
     if (deny) return deny;
-    const id = decodeURIComponent(proposalMatch[1]);
-    const asPdf = Boolean(proposalMatch[2]);
+    const rawId = proposalMatch[1];
+    const asPdf = rawId.endsWith(".pdf");
+    const id = decodeURIComponent(asPdf ? rawId.slice(0, -4) : rawId);
     const lead = (await getLeadBlob(id)) || {
       id,
       name: url.searchParams.get("name") || "Sample Client",
@@ -135,13 +136,25 @@ export async function handleQuoteEngine(req, context) {
       quote = { ...quote, total: Number(quoteParam) || quote.total };
     }
     if (asPdf) {
-      const bytes = await buildProposalPdfBytes({ lead, quote });
-      return new Response(bytes, {
+      const bytes = await buildProposalPdfBytes({ lead, quote, draft: true });
+      if (bytes) {
+        return new Response(bytes, {
+          headers: {
+            ...ROBOTS,
+            "Content-Type": "application/pdf",
+            "Content-Disposition": `inline; filename="arc-estimate-${id}.pdf"`,
+            "Cache-Control": "no-store",
+          },
+        });
+      }
+      const html = buildProposalHtml({ lead, quote, draft: true, pdfFallback: true });
+      return new Response(html, {
         headers: {
           ...ROBOTS,
-          "Content-Type": "application/pdf",
-          "Content-Disposition": `inline; filename="arc-estimate-${id}.pdf"`,
+          "Content-Type": "text/html; charset=utf-8",
+          "Content-Disposition": `inline; filename="arc-estimate-${id}.html"`,
           "Cache-Control": "no-store",
+          "X-Quote-Engine-Pdf-Fallback": "html",
         },
       });
     }

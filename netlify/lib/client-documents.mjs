@@ -109,7 +109,7 @@ function mdToHtml(md) {
   return out.join("\n");
 }
 
-function docShell(title, body, draft) {
+function docShell(title, body, draft, pdfFallback = false) {
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
 <title>${escHtml(title)}</title>
@@ -119,10 +119,12 @@ table{width:100%;border-collapse:collapse;margin:1rem 0;font-family:system-ui,sa
 td,th{border-bottom:1px solid #ddd;padding:.45rem .3rem;text-align:left}
 a{color:#0b1d33}
 .draft{background:#fff3cd;padding:.35rem .6rem;font-family:system-ui,sans-serif;font-size:.85rem}
+.pdf-fallback{background:#eef3fb;border:1px solid #c8d6ea;padding:.45rem .6rem;font-family:system-ui,sans-serif;font-size:.85rem;margin-bottom:1rem}
 .no-print{margin-top:1.5rem}
 @media print{.draft{display:none}.no-print{display:none}}
 </style></head><body>
 ${draft ? '<p class="draft">Draft for review — not yet sent to the client</p>' : ""}
+${pdfFallback ? '<p class="pdf-fallback">Server PDF is not available here. Use <strong>Print or save as PDF</strong> below.</p>' : ""}
 ${body}
 <p class="no-print"><button type="button" onclick="window.print()">Print or save as PDF</button></p>
 </body></html>`;
@@ -147,7 +149,7 @@ export function assertClientCopySanitized(content, label = "document", opts = {}
   }
 }
 
-export function buildClientDocument({ lead, quote, kind = "estimate", draft = true }) {
+export function buildClientDocument({ lead, quote, kind = "estimate", draft = true, pdfFallback = false }) {
   const date = new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
   const preliminary = quote.preliminary !== false;
   const tplName = preliminary ? "arc_estimate_template.md" : "arc_proposal_template.md";
@@ -197,7 +199,7 @@ export function buildClientDocument({ lead, quote, kind = "estimate", draft = tr
   const title = preliminary
     ? `Preliminary estimate — ${vars.client_company || vars.client_name}`
     : `Proposal — ${vars.client_company || vars.client_name}`;
-  const html = docShell(title, htmlBody, draft);
+  const html = docShell(title, htmlBody, draft, pdfFallback);
   assertClientCopySanitized(html, "client HTML");
   return { html, md, preliminary };
 }
