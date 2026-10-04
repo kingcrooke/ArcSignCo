@@ -12,9 +12,7 @@ This is a preliminary range for {{project_name}} at {{project_address}}, prepare
 
 | Description | Low | High |
 | --- | --- | --- |
-| {{description}} | {{line_low}} | {{line_high}} |
-
-*Repeat the row for each line item.*
+{{range_line_items_table}}
 
 | | Low | High |
 | --- | --- | --- |

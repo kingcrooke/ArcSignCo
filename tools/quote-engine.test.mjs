@@ -3,7 +3,7 @@ import { test, beforeEach } from "node:test";
 import { resetMockSheet, mockSheetRows, appendLeadRow } from "../netlify/lib/google-sheets.mjs";
 import { normalizeLead, isQuoteEngineForm, leadToSheetRow } from "../netlify/lib/quote-leads.mjs";
 import { computeQuote, formatMoney } from "../netlify/lib/quote-compute.mjs";
-import { buildProposalHtml, buildProposalPdfBytes } from "../netlify/lib/proposal.mjs";
+import { buildProposalHtml, buildProposalPdfBytes, assertClientCopySanitized } from "../netlify/lib/proposal.mjs";
 import { handleQuoteEngine } from "../netlify/lib/quote-engine-api.mjs";
 import { clearTestRateCard } from "../netlify/lib/rate-card-store.mjs";
 
@@ -111,9 +111,11 @@ test("proposal html is client-safe copy without TBD flags", async () => {
   assert.doesNotMatch(html, /\bvendor\b/i);
   assert.doesNotMatch(html, /TBD — Jesus/i);
   assert.ok(html.includes(formatMoney(quote.low)));
+  assert.ok(html.includes("Sales tax: to be determined"));
+  assertClientCopySanitized(html, "proposal HTML");
 });
 
-test("proposal pdf includes scope and preliminary range", async () => {
+test("proposal pdf matches HTML and has no template leakage", async () => {
   const lead = {
     company: "Harbor Retail LLC",
     name: "Jordan Lee",
@@ -131,10 +133,9 @@ test("proposal pdf includes scope and preliminary range", async () => {
     permitsRequested: true,
   });
   const bytes = await buildProposalPdfBytes({ lead, quote });
-  const { PDFDocument } = await import("pdf-lib");
-  const doc = await PDFDocument.load(bytes);
-  assert.ok(doc.getPageCount() >= 1);
-  assert.ok(bytes.length > 1800);
+  assert.ok(bytes.length > 8000, `PDF too small (${bytes.length} bytes)`);
+  assertClientCopySanitized(Buffer.from(bytes).toString("latin1"), "proposal PDF", { skipRawMarkdownChecks: true });
+  assert.equal(quote.clientLines.some(l => /Site survey and travel/i.test(l.label)), false);
 });
 
 test("calculate API requires password", async () => {

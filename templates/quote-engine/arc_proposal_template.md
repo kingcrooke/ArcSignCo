@@ -25,9 +25,7 @@
 
 | Qty | Description | Amount |
 | --- | --- | --- |
-| {{qty}} | {{description}} | {{amount}} |
-
-*Repeat the row for each line item.*
+{{line_items_table}}
 
 **Total {{total}}**
 

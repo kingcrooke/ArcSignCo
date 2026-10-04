@@ -1,7 +1,7 @@
 // Browser checks for the private Quote Engine admin (mocked API; static server).
 // Writes screenshots and a sample proposal PDF under /opt/cursor/artifacts/.
 //
-//   node tools/check-quote-engine-browser.mjs
+//   ARC_RATE_CARD_TEST_PATH=/path/to/arc_pricing_inputs.json node tools/check-quote-engine-browser.mjs
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,16 +9,21 @@ import { spawn } from "node:child_process";
 import { chromium } from "playwright";
 import { computeQuote } from "../netlify/lib/quote-compute.mjs";
 import { buildProposalHtml, buildProposalPdfBytes } from "../netlify/lib/proposal.mjs";
+import { setTestRateCard, clearTestRateCard } from "../netlify/lib/rate-card-store.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ARTIFACTS = process.env.CURSOR_ARTIFACTS_DIR || "/opt/cursor/artifacts";
 const SCREENSHOTS = path.join(ARTIFACTS, "screenshots");
 const SAMPLE_PDF = path.join(ARTIFACTS, "quote-engine-sample-proposal.pdf");
+const RATE_PATH =
+  process.env.ARC_RATE_CARD_TEST_PATH ||
+  "/home/ubuntu/.cursor/projects/workspace/uploads/arc_pricing_inputs_a870.json";
 const PORT = Number(process.env.QUOTE_ENGINE_PORT) || 9877;
 const BASE = `http://127.0.0.1:${PORT}`;
 const OPS = `${BASE}/ops-qel16cb/`;
 const PASS = "qa-quote-engine-pass";
 const MIN_PNG_BYTES = 35_000;
+const MIN_PDF_BYTES = 8000;
 
 const demoLead = {
   id: "quote-request-9001",
@@ -49,6 +54,13 @@ const demoLead = {
   },
 };
 
+function loadRealRateCard() {
+  if (!fs.existsSync(RATE_PATH)) {
+    throw new Error(`Real rate card not found at ${RATE_PATH} — set ARC_RATE_CARD_TEST_PATH`);
+  }
+  setTestRateCard(JSON.parse(fs.readFileSync(RATE_PATH, "utf8")));
+}
+
 function startServer() {
   return spawn("python3", ["-m", "http.server", String(PORT), "--bind", "127.0.0.1"], { cwd: root, stdio: "pipe" });
 }
@@ -77,7 +89,7 @@ async function shot(page, name, width) {
   const filePath = path.join(SCREENSHOTS, `${name}-${width}.png`);
   await page.screenshot({ path: filePath, fullPage: true });
   assertPng(filePath);
-  console.log(`ok   ${path.basename(filePath)} (${fs.statSync(filePath).size} bytes)`);
+  console.log(`ok   ${filePath} (${fs.statSync(filePath).size} bytes)`);
 }
 
 async function captureProposal(context, demoQuote) {
@@ -92,12 +104,13 @@ async function captureProposal(context, demoQuote) {
 
   const pdfBytes = await buildProposalPdfBytes({ lead: demoLead, quote: demoQuote, draft: true });
   fs.writeFileSync(SAMPLE_PDF, Buffer.from(pdfBytes));
-  if (fs.statSync(SAMPLE_PDF).size < 1500) throw new Error("sample PDF too small");
+  if (fs.statSync(SAMPLE_PDF).size < MIN_PDF_BYTES) throw new Error("sample PDF too small");
   console.log(`ok   ${SAMPLE_PDF} (${fs.statSync(SAMPLE_PDF).size} bytes)`);
 }
 
 async function run() {
   fs.mkdirSync(SCREENSHOTS, { recursive: true });
+  loadRealRateCard();
   const demoQuote = await computeQuote(demoLead.calculatorInput, { surveyConfirmed: false });
   const server = startServer();
   try {
@@ -113,7 +126,7 @@ async function run() {
       }
       if (url.pathname.endsWith("/rate-card") && route.request().method() === "GET") {
         return route.fulfill({
-          json: { source: "placeholder", placeholder: true, version: "placeholder-repo-0", signTypeCount: 3 },
+          json: { source: "blob", placeholder: false, version: "1.0", name: "PM card (local test)", signTypeCount: 22 },
         });
       }
       if (url.pathname.endsWith("/calculate") && route.request().method() === "POST") {
@@ -147,6 +160,7 @@ async function run() {
     await browser.close();
   } finally {
     server.kill("SIGTERM");
+    clearTestRateCard();
   }
 }
 

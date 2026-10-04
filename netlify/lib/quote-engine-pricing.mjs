@@ -1,6 +1,7 @@
 import { loadRateCardForCompute } from "./rate-card-store.mjs";
 
 export const TBD_LABEL = "TBD — Jesus to confirm";
+export const CLIENT_TAX_LINE = "Sales tax: to be determined";
 
 export function formatMoney(v) {
   return `$${Math.round(v).toLocaleString("en-US")}`;
@@ -231,7 +232,7 @@ export function computeQuoteFromCard(card, input = {}, options = {}) {
     addLine(lines, {
       key: "travel",
       label: `Trip fee (${zone.label || "zone"})`,
-      clientLabel: "Site survey and travel",
+      clientLabel: zone.label ? `Travel — ${zone.label}` : "Travel and trip fee",
       path: "A",
       tbd: isTbd(zone) || isTbd(card.travel),
       low: roundLine(zone.flat_low),
@@ -304,7 +305,7 @@ export function computeQuoteFromCard(card, input = {}, options = {}) {
     tbdCount,
     tbdBanner: tbdCount ? `${TBD_LABEL} (${tbdCount} rate${tbdCount === 1 ? "" : "s"} in this quote)` : "",
     quoteRequiredAny,
-    taxNote: card.tax?.engine_until_confirmed || "Sales tax is extra unless this document shows a tax amount.",
+    taxClientLine: CLIENT_TAX_LINE,
     validityDays: card.markup?.quote_validity_days?.suggested ?? 30,
     depositWording: card.markup?.deposit?.wording,
     qtyNote,
