@@ -8,7 +8,7 @@ const BASE =
 
 async function capture(page, width) {
   await page.setViewportSize({ width, height: width === 390 ? 900 : 900 })
-  await page.goto(BASE, { waitUntil: 'networkidle', timeout: 120_000 })
+  await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 120_000 })
   await page.waitForSelector('#mulligans-section', { timeout: 120_000 })
   const section = page.locator('#mulligans-section')
   await section.scrollIntoViewIfNeeded()
@@ -22,7 +22,7 @@ async function main() {
   const browser = await chromium.launch()
   const page = await browser.newPage()
 
-  await page.goto(BASE, { waitUntil: 'networkidle', timeout: 120_000 })
+  await page.goto(BASE, { waitUntil: 'domcontentloaded', timeout: 120_000 })
   await page.waitForSelector('#mulligans-section', { timeout: 120_000 })
   const text = await page.locator('#mulligans-section').innerText()
   const mustNot = ['Hady', '+7.3', 'pending', 'staged', 'Week 4 swap']
