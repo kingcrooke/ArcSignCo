@@ -71,6 +71,54 @@ def inpaint_region(img: Image.Image, box: tuple[int, int, int, int]) -> None:
     img.paste(Image.fromarray(cv2.cvtColor(cleaned, cv2.COLOR_BGR2RGB)))
 
 
+def expand_box(
+    box: tuple[int, int, int, int],
+    pad: int,
+    max_w: int,
+    max_h: int,
+) -> tuple[int, int, int, int]:
+    x0, y0, x1, y1 = box
+    return (
+        max(0, x0 - pad),
+        max(0, y0 - pad),
+        min(max_w, x1 + pad),
+        min(max_h, y1 + pad),
+    )
+
+
+def sample_panel_fill(
+    img: Image.Image, box: tuple[int, int, int, int]
+) -> tuple[int, int, int]:
+    x0, y0, x1, y1 = box
+    strips = [
+        img.crop((x0, max(0, y0 - 6), x1, y0)),
+        img.crop((x0, y1, x1, min(img.height, y1 + 6))),
+        img.crop((max(0, x0 - 6), y0, x0, y1)),
+        img.crop((x1, y0, min(img.width, x1 + 6), y1)),
+    ]
+    pixels = np.concatenate([np.array(s).reshape(-1, 3) for s in strips if s.size])
+    if pixels.size == 0:
+        return tuple(int(x) for x in np.array(img.crop(box)).mean(axis=(0, 1)))
+    return tuple(int(x) for x in pixels.mean(axis=0))
+
+
+def box_is_flat(img: Image.Image, box: tuple[int, int, int, int], threshold: float = 28.0) -> bool:
+    patch = np.array(img.crop(box))
+    return float(patch.std()) < threshold
+
+
+def clear_text_area(
+    img: Image.Image, box: tuple[int, int, int, int], pad: int = 10
+) -> None:
+    """Cover an entire text line or word box before re-typesetting."""
+    region = expand_box(box, pad, img.width, img.height)
+    if box_is_flat(img, region):
+        fill = sample_panel_fill(img, region)
+        ImageDraw.Draw(img).rectangle(region, fill=fill)
+    else:
+        inpaint_region(img, region)
+
+
 def inpaint_gold_text_on_crop(crop: Image.Image) -> Image.Image:
     arr = np.array(crop)
     gold = (arr[:, :, 0] > 190) & (arr[:, :, 1] > 115) & (arr[:, :, 2] < 145)
@@ -144,87 +192,94 @@ def replace_word_in_box(
     x0, y0, x1, y1 = box
     target_h = y1 - y0
     target_w = x1 - x0
-    inpaint_text_in_box(img, box)
+    clear_text_area(img, box, pad=8)
     size = fit_size(family, new_word, target_h=target_h - 2, min_s=12, max_s=120)
     for candidate in range(size, 11, -1):
         spec = FontSpec(family, candidate, fill)
         tw, th = text_size(new_word, spec)
-        if tw <= target_w + 6 and th <= target_h + 2:
+        if tw <= target_w + 10 and th <= target_h + 2:
             size = candidate
             break
     draw_text(img, (x0, y0), new_word, FontSpec(family, size, fill), anchor="ls")
 
 
-def replace_last_glyph(
+def replace_line_in_box(
     img: Image.Image,
     box: tuple[int, int, int, int],
+    new_line: str,
     family: str,
     fill: tuple[int, int, int],
-    old_word: str,
-    new_last: str,
 ) -> None:
-    """HADY→HADI / Hady→Hadi by swapping only the last glyph."""
     x0, y0, x1, y1 = box
-    w, h = x1 - x0, y1 - y0
-    size = fit_size(family, old_word, target_h=h - 2, min_s=12, max_s=120)
-    spec = FontSpec(family, size, fill)
-    prefix = old_word[:-1]
-    prefix_w = text_size(prefix, spec)[0] if prefix else 0
-    last_old_w = text_size(old_word[-1], spec)[0]
-    last_new_w = text_size(new_last, spec)[0]
-    last_x0 = x0 + prefix_w
-    last_x1 = min(x1, last_x0 + max(last_old_w, last_new_w) + 6)
-    inpaint_text_in_box(img, (last_x0, y0, last_x1, y1))
-    draw_text(
-        img,
-        (last_x0 + max(0, (last_old_w - last_new_w) // 2), y0),
-        new_last,
-        spec,
-        anchor="ls",
-    )
+    target_h = y1 - y0
+    target_w = x1 - x0
+    clear_text_area(img, box, pad=12)
+    size = fit_size(family, new_line, target_h=target_h - 2, min_s=12, max_s=120)
+    for candidate in range(size, 11, -1):
+        spec = FontSpec(family, candidate, fill)
+        tw, th = text_size(new_line, spec)
+        if tw <= target_w + 8 and th <= target_h + 2:
+            size = candidate
+            break
+    draw_text(img, (x0, y0), new_line, FontSpec(family, size, fill), anchor="ls")
 
 
 def repair_vs_matchup_layout(img: Image.Image, poll_y: int) -> None:
-    """vs-m3 card — change HADY→HADI without re-typesetting MANNY."""
+    """vs-m3 card — full-line re-typeset for Hady→Hadi."""
     white = sample_text_color(img, (353, 147, 574, 219))
     gold = sample_text_color(img, (73, 241, 169, 264))
-    replace_last_glyph(img, (73, 147, 231, 219), "anton", white, "HADY", "I")
-    replace_last_glyph(img, (73, 241, 169, 264), "bebas", gold, "HADY", "I")
-    badge_gold = sample_text_color(img, (86, 320, 162, 351))
-    replace_last_glyph(img, (86, 320, 162, 351), "bebas", badge_gold, "HADY", "I")
+    replace_line_in_box(img, (60, 135, 590, 228), "HADI VS MANNY", "anton", white)
+    replace_line_in_box(
+        img,
+        (60, 228, 520, 270),
+        "HADI (2-1) VS MANNY (2-1)",
+        "bebas",
+        gold,
+    )
     poll_white = sample_text_color(img, (833, poll_y, 921, poll_y + 32))
-    replace_last_glyph(
+    replace_word_in_box(
         img,
         (833, poll_y, 921, poll_y + 31),
+        "Hadi",
         "bebas",
         poll_white,
-        "Hady",
-        "i",
     )
 
 
 def repair_w4_slide_10(src: Path, dest: Path) -> None:
     img = load_rgb(src)
     white = sample_text_color(img, (285, 170, 454, 226))
-    replace_last_glyph(img, (72, 170, 193, 226), "anton", white, "HADY", "I")
+    replace_word_in_box(img, (72, 170, 193, 226), "HADI", "anton", white)
     ref_color = sample_text_color(img, (107, 505, 246, 530))
-    replace_last_glyph(img, (107, 319, 210, 344), "bebas", ref_color, "HADY", "I")
+    replace_word_in_box(img, (107, 319, 210, 344), "HADI", "bebas", ref_color)
     poll_white = sample_text_color(img, (833, 684, 920, 715))
-    replace_last_glyph(img, (833, 684, 920, 715), "bebas", poll_white, "Hady", "i")
+    replace_word_in_box(img, (833, 684, 920, 715), "Hadi", "bebas", poll_white)
     img.save(dest, optimize=True)
 
 
 def repair_w4_slide_14(src: Path, dest: Path) -> None:
     img = load_rgb(src)
     gray = sample_text_color(img, (856, 878, 979, 901))
-    replace_last_glyph(img, (905, 948, 979, 977), "inter-semibold", gray, "Hady", "i")
+    replace_line_in_box(
+        img,
+        (95, 935, 990, 985),
+        "14 Kyler - Hadi",
+        "inter-semibold",
+        gray,
+    )
     img.save(dest, optimize=True)
 
 
 def repair_w4_slide_06(src: Path, dest: Path) -> None:
     img = load_rgb(src)
     fill = sample_text_color(img, (188, 562, 280, 600))
-    replace_last_glyph(img, (74, 562, 172, 600), "inter-semibold", fill, "Hady", "i")
+    replace_line_in_box(
+        img,
+        (55, 555, 640, 605),
+        "Hadi goes from AJ Barner...",
+        "inter-semibold",
+        fill,
+    )
     img.save(dest, optimize=True)
 
 
@@ -307,7 +362,7 @@ def repair_w4_slide_16(src: Path, footer_ref: Path, dest: Path) -> None:
     ref_footer = load_rgb(footer_ref)
 
     pick_color = sample_text_color(img, (428, 579, 486, 602))
-    replace_last_glyph(img, (322, 579, 396, 608), "inter-semibold", pick_color, "Hady", "i")
+    replace_word_in_box(img, (322, 579, 396, 608), "Hadi", "inter-semibold", pick_color)
 
     for box in tesseract_word_boxes(src, 828, 1295):
         inpaint_text_in_box(img, box)
