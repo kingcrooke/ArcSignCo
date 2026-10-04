@@ -5,7 +5,9 @@ test('loads real GWB league data and core sections', async ({ page }) => {
   await expect(page.getByRole('heading', { name: /GWB League/i })).toBeVisible({
     timeout: 90_000,
   })
-  await expect(page.locator('table').getByText('Hairy Chest').first()).toBeVisible({
+  await expect(
+    page.getByRole('list', { name: 'League standings' }).getByText('Hairy Chest').first(),
+  ).toBeVisible({
     timeout: 90_000,
   })
   await expect(page.getByRole('button', { name: 'IG', exact: true })).toHaveCount(0)

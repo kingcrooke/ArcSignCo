@@ -25,25 +25,29 @@ function formatStreak(outcomes: Outcome[]): string {
     if (outcomes[i] !== last) break
     count++
   }
-  return `${count}${last}`
+  return `${last}${count}`
+}
+
+/** Sleeper roster metadata uses `3L`; display as `L3` / `W2`. */
+export function streakLabel(streak: string): string {
+  const trimmed = streak.trim()
+  if (!trimmed) return ''
+  const sleeper = /^(\d+)([WLT])$/i.exec(trimmed)
+  if (sleeper) return `${sleeper[2].toUpperCase()}${sleeper[1]}`
+  return trimmed
 }
 
 function sortStandingRows(
   rows: Omit<StandingRow, 'rank'>[],
 ): StandingRow[] {
-  const withPct = rows.map((r) => ({
-    ...r,
-    winPct:
-      (r.wins + r.ties * 0.5) / Math.max(r.wins + r.losses + r.ties, 1),
-  }))
-
-  withPct.sort((a, b) => {
-    if (b.winPct !== a.winPct) return b.winPct - a.winPct
+  const sorted = [...rows]
+  sorted.sort((a, b) => {
+    if (b.wins !== a.wins) return b.wins - a.wins
     if (b.pointsFor !== a.pointsFor) return b.pointsFor - a.pointsFor
     return a.pointsAgainst - b.pointsAgainst
   })
 
-  return withPct.map((r, i) => ({
+  return sorted.map((r, i) => ({
     rank: i + 1,
     rosterId: r.rosterId,
     teamName: r.teamName,
@@ -138,10 +142,10 @@ export function computeStandingsThroughWeek(
 }
 
 /**
- * Tiebreakers (assumption — Sleeper league JSON does not expose a custom seeding rule):
- * 1) Win percentage (W-L-T)
+ * Tiebreakers (Sleeper-style regular-season seeding):
+ * 1) Wins
  * 2) Total points for
- * 3) Total points against (lower is better — common secondary tiebreaker)
+ * 3) Total points against (lower is better)
  */
 export function computeStandings(
   rosters: SleeperRoster[],
@@ -161,7 +165,7 @@ export function computeStandings(
       ties,
       pointsFor: rosterPointsFor(r.settings),
       pointsAgainst: rosterPointsAgainst(r.settings),
-      streak: r.metadata?.streak ?? '',
+      streak: streakLabel(r.metadata?.streak ?? ''),
     }
   })
 
