@@ -18,7 +18,6 @@ import {
   zoneTabLabel,
 } from './lib/frankieZone'
 import { weekHasMatchups } from './lib/recaps'
-import { rankBestGames } from './lib/bestGames'
 import { MULLIGAN_LEDGER_ENTRIES } from './lib/mulligans'
 import { computeStandingsThroughWeek } from './lib/standings'
 import type { GraphicsSectionKind } from './lib/weekGraphics'
@@ -144,17 +143,6 @@ export default function App() {
       data?.ensurePlayers()
     }
   }, [tab, data])
-
-  const bestGames = useMemo(() => {
-    if (!data) return []
-    return rankBestGames(
-      data.matchupsByWeek,
-      data.league,
-      data.nflState,
-      MULLIGAN_LEDGER_ENTRIES,
-      6,
-    )
-  }, [data])
 
   useEffect(() => {
     if (!sound.armed) return
@@ -317,16 +305,14 @@ export default function App() {
           )}
           {tab === 'bestgames' && (
             <section>
-              <h2 className="mb-3 text-lg font-semibold">
-                Best Games
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
-                  through Week {data.standingsThroughWeek}
-                </span>
-              </h2>
+              <h2 className="mb-3 text-lg font-semibold">Best Games</h2>
               <BestGamesPanel
-                games={bestGames}
-                teams={data.teams}
+                matchupsByWeek={data.matchupsByWeek}
                 league={data.league}
+                nflState={data.nflState}
+                maxWeek={maxWeek}
+                ledger={MULLIGAN_LEDGER_ENTRIES}
+                teams={data.teams}
                 players={data.players}
                 playersLoading={data.playersLoading}
                 ensurePlayers={data.ensurePlayers}

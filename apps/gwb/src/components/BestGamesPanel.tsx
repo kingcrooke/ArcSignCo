@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   contentForMatchup,
+  rankBestGames,
+  rankBestGamesForWeek,
   youtubeEmbedUrl,
   type RankedBestGame,
 } from '../lib/bestGames'
+import type { MulliganLedgerEntry } from '../lib/mulligans'
 import {
   playerDisplayName,
   playerMetaLine,
@@ -11,8 +14,19 @@ import {
   starterPositions,
 } from '../lib/matchupBoard'
 import { managerNickname } from '../lib/nicknames'
-import type { PlayersMap, SleeperLeague, TeamInfo } from '../lib/types'
+import type {
+  NflState,
+  PlayersMap,
+  SleeperLeague,
+  SleeperMatchup,
+  TeamInfo,
+} from '../lib/types'
+import { isWeekLive, lastCompletedWeek } from '../lib/weeks'
 import { TeamAvatar } from './TeamAvatar'
+import {
+  BestGamesWeekScope,
+  type BestGamesScope,
+} from './BestGamesWeekScope'
 
 function Badge({ label }: { label: string }) {
   const tone =
@@ -155,23 +169,60 @@ function RecapMedia({ matchupKey }: { matchupKey: string }) {
 }
 
 export function BestGamesPanel({
-  games,
-  teams,
+  matchupsByWeek,
   league,
+  nflState,
+  maxWeek,
+  ledger,
+  teams,
   players,
   playersLoading,
   ensurePlayers,
   deferralNote,
 }: {
-  games: RankedBestGame[]
-  teams: Map<number, TeamInfo>
+  matchupsByWeek: Map<number, SleeperMatchup[]>
   league: SleeperLeague
+  nflState: NflState
+  maxWeek: number
+  ledger: MulliganLedgerEntry[]
+  teams: Map<number, TeamInfo>
   players: PlayersMap | null
   playersLoading: boolean
   ensurePlayers: () => void
   deferralNote?: string | null
 }) {
+  const completedThrough = lastCompletedWeek(league, nflState)
+  const [scope, setScope] = useState<BestGamesScope>(() => completedThrough)
   const [expandedKey, setExpandedKey] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (
+      typeof scope === 'number' &&
+      (isWeekLive(scope, league, nflState) || scope > completedThrough)
+    ) {
+      setScope(completedThrough)
+    }
+  }, [scope, completedThrough, league, nflState])
+
+  const games = useMemo(() => {
+    if (scope === 'all') {
+      return rankBestGames(
+        matchupsByWeek,
+        league,
+        nflState,
+        ledger,
+        6,
+      )
+    }
+    return rankBestGamesForWeek(
+      scope,
+      matchupsByWeek,
+      league,
+      nflState,
+      ledger,
+    )
+  }, [scope, matchupsByWeek, league, nflState, ledger])
+
   const slots = useMemo(
     () => starterPositions(league.roster_positions),
     [league.roster_positions],
@@ -181,7 +232,12 @@ export function BestGamesPanel({
     ensurePlayers()
   }, [ensurePlayers])
 
-  if (!games.length) {
+  const scopeLabel =
+    scope === 'all'
+      ? `season top ${games.length || 6}`
+      : `Week ${scope}`
+
+  if (!games.length && scope === 'all' && completedThrough < 1) {
     return (
       <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
         No final matchups ranked yet. Check back after the first full scoring week.
@@ -197,10 +253,38 @@ export function BestGamesPanel({
         </p>
       )}
 
+      <BestGamesWeekScope
+        scope={scope}
+        maxWeek={maxWeek}
+        league={league}
+        nflState={nflState}
+        onChange={(next) => {
+          setExpandedKey(null)
+          setScope(next)
+        }}
+      />
+
       <p className="text-xs text-[var(--gwb-muted)]">
-        Ranked by closeness, shootout, upset, and mulligan drama — top{' '}
-        {games.length} final matchups season-to-date.
+        {scope === 'all' ? (
+          <>
+            Ranked by closeness, shootout, upset, and mulligan drama — top final
+            matchups season-to-date ({scopeLabel}).
+          </>
+        ) : (
+          <>
+            Best matchups in Week {scope}, ranked within the week by closeness,
+            shootout, upset, and mulligan drama.
+          </>
+        )}
       </p>
+
+      {!games.length ? (
+        <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+          {typeof scope === 'number' && isWeekLive(scope, league, nflState)
+            ? `Week ${scope} is still in progress — rankings appear when scoring is final.`
+            : 'No scored matchups for this week yet.'}
+        </p>
+      ) : null}
 
       {playersLoading || !players ? (
         <p className="rounded-xl border border-[var(--gwb-border)] p-4 text-center text-sm text-[var(--gwb-muted)]">
@@ -208,10 +292,15 @@ export function BestGamesPanel({
         </p>
       ) : null}
 
+      {games.length > 0 ? (
       <ul
         className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
         role="list"
-        aria-label="Best games of the season"
+        aria-label={
+          scope === 'all'
+            ? 'Best games of the season'
+            : `Best games of week ${scope}`
+        }
       >
         {games.map((game, index) => {
           const { home, away, breakdown } = game
@@ -242,7 +331,10 @@ export function BestGamesPanel({
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-xs font-semibold uppercase tracking-wide text-[var(--gwb-accent)]">
+                      <span
+                        className="rounded-md border border-[var(--gwb-accent)]/45 bg-[var(--gwb-accent)]/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--gwb-accent)]"
+                        aria-label={`NFL week ${game.week}`}
+                      >
                         Week {game.week}
                       </span>
                       {game.badges.map((b) => (
@@ -308,6 +400,7 @@ export function BestGamesPanel({
           )
         })}
       </ul>
+      ) : null}
     </div>
   )
 }

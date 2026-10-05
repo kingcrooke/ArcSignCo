@@ -9,6 +9,7 @@ import {
   computeMulliganBonus,
   makeMatchupKey,
   rankBestGames,
+  rankBestGamesForWeek,
   youtubeEmbedUrl,
 } from './bestGames'
 import { groupMatchupPairs } from './matchupBoard'
@@ -96,6 +97,28 @@ describe('rankBestGames', () => {
     for (const g of ranked) {
       const pairs = groupMatchupPairs(map.get(g.week) ?? [])
       expect(pairs.some((p) => p.matchupId === g.matchupId)).toBe(true)
+    }
+  })
+
+  it('ranks matchups within a single week', () => {
+    const league = load<SleeperLeague>('league.json')
+    const nflState = load<NflState>('state-nfl.json')
+    const m3 = load<SleeperMatchup[]>('matchups-3.json')
+    const map = new Map<number, SleeperMatchup[]>([[3, m3]])
+    const weekRanked = rankBestGamesForWeek(
+      3,
+      map,
+      { ...league, settings: { ...league.settings, last_scored_leg: 3 } },
+      nflState,
+      MULLIGAN_LEDGER_ENTRIES,
+    )
+    expect(weekRanked.length).toBeGreaterThan(0)
+    expect(weekRanked.every((g) => g.week === 3)).toBe(true)
+    expect(weekRanked[0].rank).toBe(1)
+    for (let i = 1; i < weekRanked.length; i++) {
+      expect(weekRanked[i].breakdown.composite).toBeLessThanOrEqual(
+        weekRanked[i - 1].breakdown.composite,
+      )
     }
   })
 })

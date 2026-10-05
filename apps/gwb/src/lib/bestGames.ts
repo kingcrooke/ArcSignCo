@@ -199,6 +199,77 @@ export function badgesForBreakdown(
   return badges
 }
 
+function compareCandidates(
+  a: Omit<RankedBestGame, 'rank'>,
+  b: Omit<RankedBestGame, 'rank'>,
+): number {
+  if (b.breakdown.composite !== a.breakdown.composite) {
+    return b.breakdown.composite - a.breakdown.composite
+  }
+  if (a.breakdown.margin !== b.breakdown.margin) {
+    return a.breakdown.margin - b.breakdown.margin
+  }
+  return b.breakdown.combinedPoints - a.breakdown.combinedPoints
+}
+
+function rankCandidates(
+  candidates: Omit<RankedBestGame, 'rank'>[],
+  limit?: number,
+): RankedBestGame[] {
+  const sorted = [...candidates].sort(compareCandidates)
+  const slice = limit != null ? sorted.slice(0, limit) : sorted
+  return slice.map((g, i) => ({ ...g, rank: i + 1 }))
+}
+
+function candidatesForWeek(
+  week: number,
+  matchupsByWeek: Map<number, SleeperMatchup[]>,
+  ledger: MulliganLedgerEntry[],
+): Omit<RankedBestGame, 'rank'>[] {
+  const matchups = matchupsByWeek.get(week)
+  if (!matchups?.length) return []
+  const recordsBefore = recordsBeforeWeek(matchupsByWeek, week)
+  const out: Omit<RankedBestGame, 'rank'>[] = []
+  for (const { matchupId, home, away } of groupMatchupPairs(matchups)) {
+    const breakdown = computeGameBreakdown(
+      home,
+      away,
+      week,
+      recordsBefore,
+      ledger,
+    )
+    const winnerRosterId =
+      home.points >= away.points ? home.roster_id : away.roster_id
+    const loserRosterId =
+      winnerRosterId === home.roster_id ? away.roster_id : home.roster_id
+    out.push({
+      week,
+      matchupId,
+      matchupKey: makeMatchupKey(week, matchupId),
+      home,
+      away,
+      winnerRosterId,
+      loserRosterId,
+      breakdown,
+      badges: badgesForBreakdown(breakdown),
+    })
+  }
+  return out
+}
+
+/** Rank final matchups within one fantasy week (all head-to-heads, best first). */
+export function rankBestGamesForWeek(
+  week: number,
+  matchupsByWeek: Map<number, SleeperMatchup[]>,
+  league: SleeperLeague,
+  nflState: NflState,
+  ledger: MulliganLedgerEntry[],
+): RankedBestGame[] {
+  if (isWeekLive(week, league, nflState)) return []
+  const candidates = candidatesForWeek(week, matchupsByWeek, ledger)
+  return rankCandidates(candidates)
+}
+
 export function rankBestGames(
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   league: SleeperLeague,
@@ -211,44 +282,8 @@ export function rankBestGames(
 
   for (let week = 1; week <= completedThrough; week++) {
     if (isWeekLive(week, league, nflState)) continue
-    const matchups = matchupsByWeek.get(week)
-    if (!matchups?.length) continue
-    const recordsBefore = recordsBeforeWeek(matchupsByWeek, week)
-    for (const { matchupId, home, away } of groupMatchupPairs(matchups)) {
-      const breakdown = computeGameBreakdown(
-        home,
-        away,
-        week,
-        recordsBefore,
-        ledger,
-      )
-      const winnerRosterId =
-        home.points >= away.points ? home.roster_id : away.roster_id
-      const loserRosterId =
-        winnerRosterId === home.roster_id ? away.roster_id : home.roster_id
-      candidates.push({
-        week,
-        matchupId,
-        matchupKey: makeMatchupKey(week, matchupId),
-        home,
-        away,
-        winnerRosterId,
-        loserRosterId,
-        breakdown,
-        badges: badgesForBreakdown(breakdown),
-      })
-    }
+    candidates.push(...candidatesForWeek(week, matchupsByWeek, ledger))
   }
 
-  candidates.sort((a, b) => {
-    if (b.breakdown.composite !== a.breakdown.composite) {
-      return b.breakdown.composite - a.breakdown.composite
-    }
-    if (a.breakdown.margin !== b.breakdown.margin) {
-      return a.breakdown.margin - b.breakdown.margin
-    }
-    return b.breakdown.combinedPoints - a.breakdown.combinedPoints
-  })
-
-  return candidates.slice(0, limit).map((g, i) => ({ ...g, rank: i + 1 }))
+  return rankCandidates(candidates, limit)
 }
