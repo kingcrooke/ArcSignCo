@@ -32,24 +32,24 @@ import { type AppTab } from './hooks/useUrlState'
 
 const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
-  { id: 'bestgames', label: 'Best Games' },
   { id: 'live', label: 'Live' },
   { id: 'gallery', label: 'Graphics' },
   { id: 'recaps', label: 'Recaps' },
   { id: 'mulligans', label: 'Mulligans' },
   { id: 'frankie', label: 'Frankie Zone' },
   { id: 'waiver', label: 'Waiver Wire Champion' },
+  { id: 'bestgames', label: 'Best Games' },
 ]
 
 const TAB_IDS: AppTab[] = [
   'standings',
-  'bestgames',
   'live',
   'gallery',
   'recaps',
   'mulligans',
   'frankie',
   'waiver',
+  'bestgames',
 ]
 
 export default function App() {
