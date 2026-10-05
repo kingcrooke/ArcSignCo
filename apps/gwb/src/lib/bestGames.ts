@@ -21,7 +21,7 @@ export interface GameScoreBreakdown {
 }
 
 /** How many matchups to surface per completed fantasy week. */
-export const BEST_GAMES_PER_WEEK = 2
+export const BEST_GAMES_PER_WEEK = 3
 
 export interface RankedBestGame {
   rank: number
