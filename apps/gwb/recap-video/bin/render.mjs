@@ -7,7 +7,7 @@
  */
 import { chromium } from 'playwright'
 import { execSync } from 'node:child_process'
-import { copyFileSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { buildRecapConfig } from '../src/buildConfig.mjs'
@@ -17,14 +17,19 @@ const ROOT = path.join(__dirname, '..')
 const PUBLIC = path.join(ROOT, 'public')
 
 function parseArgs(argv) {
-  const out = { week: 3, matchup: 2, outDir: '/opt/cursor/artifacts/gwb-recap-test', vertical: true }
+  const out = { week: 3, matchup: 2, outDir: '/opt/cursor/artifacts/gwb-recap-test', vertical: true, suffix: '' }
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === '--week') out.week = Number(argv[++i])
     else if (argv[i] === '--matchup') out.matchup = Number(argv[++i])
     else if (argv[i] === '--out') out.outDir = argv[++i]
+    else if (argv[i] === '--suffix') out.suffix = argv[++i]
     else if (argv[i] === '--no-vertical') out.vertical = false
   }
   return out
+}
+
+function tag(base, suffix) {
+  return suffix ? `${base}-${suffix}` : base
 }
 
 function run(cmd) {
@@ -34,12 +39,22 @@ function run(cmd) {
 function latestWebm(dir) {
   const files = readdirSync(dir)
     .filter((f) => f.endsWith('.webm'))
-    .map((f) => ({ f, t: path.join(dir, f) }))
+    .map((f) => {
+      const full = path.join(dir, f)
+      return { full, mtime: statSync(full).mtimeMs }
+    })
+    .sort((a, b) => b.mtime - a.mtime)
   if (!files.length) throw new Error(`No webm in ${dir}`)
-  return files[0].t
+  return files[0].full
+}
+
+function cleanPlaywrightVideo(parentDir) {
+  const videoDir = path.join(parentDir, '.playwright-video')
+  rmSync(videoDir, { recursive: true, force: true })
 }
 
 async function recordHtml(config, { width, height, durationSec, outWebm }) {
+  cleanPlaywrightVideo(path.dirname(outWebm))
   const videoDir = path.join(path.dirname(outWebm), '.playwright-video')
   mkdirSync(videoDir, { recursive: true })
 
@@ -72,12 +87,12 @@ function postProcess(webmPath, mp4Path, durationSec) {
   )
 }
 
-function extractStills(mp4Path, outDir, durationSec) {
+function extractStills(mp4Path, outDir, durationSec, suffix) {
   const marks = [2, 8, 18, 34, 42, 50]
   const frames = []
   for (const sec of marks) {
     if (sec > durationSec) continue
-    const name = `still-${String(sec).padStart(2, '0')}s.png`
+    const name = tag(`still-${String(sec).padStart(2, '0')}s`, suffix) + '.png'
     const out = path.join(outDir, name)
     run(`ffmpeg -y -ss ${sec} -i "${mp4Path}" -frames:v 1 -update 1 "${out}"`)
     frames.push(out)
@@ -88,30 +103,33 @@ function extractStills(mp4Path, outDir, durationSec) {
 async function main() {
   const args = parseArgs(process.argv)
   mkdirSync(args.outDir, { recursive: true })
+  cleanPlaywrightVideo(args.outDir)
 
   const config = await buildRecapConfig({ week: args.week, matchupId: args.matchup })
+  const base = `gwb-recap-w${args.week}-m${args.matchup}`
+  const tagged = tag(base, args.suffix)
 
-  const configPath = path.join(args.outDir, `recap-w${args.week}-m${args.matchup}.config.json`)
-  const timingsPath = path.join(args.outDir, 'scene-timings.json')
+  const configPath = path.join(args.outDir, tag(`recap-w${args.week}-m${args.matchup}`, args.suffix) + '.config.json')
+  const timingsPath = path.join(args.outDir, tag('scene-timings', args.suffix) + '.json')
   writeFileSync(configPath, JSON.stringify(config, null, 2))
   writeFileSync(timingsPath, JSON.stringify(config.timing, null, 2))
 
   const durationSec = config.timing.durationSec
-  const webm = path.join(args.outDir, 'recap-landscape.webm')
-  const mp4 = path.join(args.outDir, `gwb-recap-w${args.week}-m${args.matchup}-1080p.mp4`)
+  const webm = path.join(args.outDir, tag('recap-landscape', args.suffix) + '.webm')
+  const mp4 = path.join(args.outDir, `${tagged}-1080p.mp4`)
 
   console.log('Recording landscape…', { week: args.week, matchup: args.matchup })
   await recordHtml(config, { width: 1920, height: 1080, durationSec, outWebm: webm })
   postProcess(webm, mp4, durationSec)
 
-  const poster = path.join(args.outDir, `gwb-recap-w${args.week}-m${args.matchup}-poster.png`)
-  run(`ffmpeg -y -ss ${durationSec - 2} -i "${mp4}" -frames:v 1 "${poster}"`)
+  const poster = path.join(args.outDir, `${tagged}-poster.png`)
+  run(`ffmpeg -y -ss ${durationSec - 2} -i "${mp4}" -frames:v 1 -update 1 "${poster}"`)
 
-  const stills = extractStills(mp4, args.outDir, durationSec)
+  const stills = extractStills(mp4, args.outDir, durationSec, args.suffix)
 
   let verticalMp4 = null
   if (args.vertical) {
-    verticalMp4 = path.join(args.outDir, `gwb-recap-w${args.week}-m${args.matchup}-vertical-1080x1920.mp4`)
+    verticalMp4 = path.join(args.outDir, `${tagged}-vertical-1080x1920.mp4`)
     const silent = 'anullsrc=channel_layout=stereo:sample_rate=48000'
     run(
       `ffmpeg -y -i "${mp4}" -f lavfi -i ${silent} -t ${durationSec} -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0x0b0d12" -r 30 -c:v libx264 -pix_fmt yuv420p -c:a aac -shortest "${verticalMp4}"`,
@@ -132,7 +150,7 @@ async function main() {
       loserPoints: config.matchup.loser.points,
     },
   }
-  writeFileSync(path.join(args.outDir, 'render-summary.json'), JSON.stringify(summary, null, 2))
+  writeFileSync(path.join(args.outDir, tag('render-summary', args.suffix) + '.json'), JSON.stringify(summary, null, 2))
   console.log(JSON.stringify(summary, null, 2))
 }
 
