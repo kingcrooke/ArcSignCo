@@ -11,6 +11,7 @@ export function audioSrc(file: string, base = import.meta.env.BASE_URL): string 
 
 type TabSound =
   | 'standings'
+  | 'bestgames'
   | 'live'
   | 'gallery'
   | 'recaps'
@@ -20,6 +21,7 @@ type TabSound =
 
 const TAB_LOOPS: Record<TabSound, string> = {
   standings: audioSrc('impact-loop.mp3'),
+  bestgames: audioSrc('impact-loop.mp3'),
   live: audioSrc('impact-loop.mp3'),
   gallery: audioSrc('impact-loop.mp3'),
   recaps: audioSrc('impact-loop.mp3'),
