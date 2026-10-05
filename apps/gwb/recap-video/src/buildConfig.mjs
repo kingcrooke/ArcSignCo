@@ -1,32 +1,64 @@
 import path from 'node:path'
+import { readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import { buildScoreTimeline, topPerformers } from './timeline.mjs'
 import { SCENE_TIMINGS } from './sceneTimings.mjs'
+import { formatGraphicScore } from './scores.mjs'
+import { DEFAULT_JERSEY_STYLES, loadArtManifest, resolvePortraitUrls } from './art.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+/** Published copy for W3M2 (remake-held/templates.mjs results-w3-m2). */
+const W3M2_GRAPHIC = {
+  tagline: 'EL CAMPEON TO 2-1',
+  note: "Danny's negative mulligan — first in GWB history",
+}
+
 export async function buildRecapConfig({ week, matchupId }) {
-  const { resolveMatchup } = await import('./sleeper.mjs')
+  const { resolveMatchup, recordsBeforeWeek, recordsThroughWeek } = await import('./sleeper.mjs')
   const mulliganPath = path.join(__dirname, '../../src/content/mulligan-ledger.json')
+  const manifestPath = path.join(__dirname, '../manifest/art.manifest.json')
+  const artManifest = await loadArtManifest(manifestPath)
+  const portraits = resolvePortraitUrls(artManifest)
+
   const matchup = await resolveMatchup({ week, matchupId, mulliganLedgerPath: mulliganPath })
+  const [recordsBefore, recordsAfter] = await Promise.all([
+    recordsBeforeWeek(week),
+    recordsThroughWeek(week),
+  ])
 
   const scoreTicks = buildScoreTimeline(matchup)
   const wTop = topPerformers(matchup.winner)
   const lTop = topPerformers(matchup.loser)
 
-  const matchupTag = matchup.mulligan
-    ? 'MULLIGAN WATCH'
-    : matchup.upset
-      ? 'UPSET ALERT'
-      : matchup.margin < 12
-        ? 'NAIL-BITER'
-        : `WEEK ${week} DUEL`
+  const wDisplay = formatGraphicScore(matchup.winner.points)
+  const lDisplay = formatGraphicScore(matchup.loser.points)
+
+  const winnerJersey = {
+    ...DEFAULT_JERSEY_STYLES.winner,
+    number: String(matchup.jersey.winner.number || DEFAULT_JERSEY_STYLES.winner.number),
+    player: matchup.jersey.winner.name,
+  }
+  const loserJersey = {
+    ...DEFAULT_JERSEY_STYLES.loser,
+    number: String(matchup.jersey.loser.number || DEFAULT_JERSEY_STYLES.loser.number),
+    player: matchup.jersey.loser.name,
+  }
 
   const mulliganCopy = matchup.mulligan
     ? `${matchup.mulligan.managerShort ?? matchup.mulligan.manager} mulligan: ${matchup.mulligan.out.name} → ${matchup.mulligan.in.name} (${matchup.mulligan.netImpact >= 0 ? '+' : ''}${matchup.mulligan.netImpact} pts)`
     : null
 
-  const subtitleFinal = `${matchup.winner.nickname} ${matchup.winner.points.toFixed(1)} — ${matchup.loser.nickname}'s ${matchup.loser.topScorer.name.split(' ').pop()} wasn't enough`
+  const graphic =
+    week === 3 && matchupId === 2
+      ? W3M2_GRAPHIC
+      : {
+          tagline: matchup.mulligan ? 'MULLIGAN WATCH' : `WEEK ${week} DUEL`,
+          note: `${matchup.winner.nickname} ${wDisplay} — ${matchup.loser.nickname} ${lDisplay}`,
+        }
+
+  const winnerRecordAfter = `${recordsAfter.wins[matchup.winner.rosterId] ?? 0}-${recordsAfter.losses[matchup.winner.rosterId] ?? 0}`
+  const loserRecordAfter = `${recordsAfter.wins[matchup.loser.rosterId] ?? 0}-${recordsAfter.losses[matchup.loser.rosterId] ?? 0}`
 
   return {
     meta: {
@@ -37,57 +69,61 @@ export async function buildRecapConfig({ week, matchupId }) {
       matchupId,
       matchupKey: `W${week}M${matchupId}`,
     },
+    art: {
+      manifestPath,
+      mode: portraits.mode,
+      portraits,
+      imagineSlots: {
+        winner: artManifest.winner?.imagineSlot ?? 'winner',
+        loser: artManifest.loser?.imagineSlot ?? 'loser',
+      },
+    },
     timing: SCENE_TIMINGS,
     matchup: {
       winner: {
         nickname: matchup.winner.nickname,
         teamName: matchup.winner.teamName,
         points: matchup.winner.points,
-        recordBefore: matchup.winner.recordBefore,
-        jersey: {
-          team: matchup.jersey.winner.team,
-          number: matchup.jersey.winner.number,
-          player: matchup.jersey.winner.name,
-        },
+        pointsDisplay: wDisplay,
+        recordBefore: `${recordsBefore.wins[matchup.winner.rosterId] ?? 0}-${recordsBefore.losses[matchup.winner.rosterId] ?? 0}`,
+        recordAfter: winnerRecordAfter,
+        jersey: winnerJersey,
         topPerformers: wTop,
       },
       loser: {
         nickname: matchup.loser.nickname,
         teamName: matchup.loser.teamName,
         points: matchup.loser.points,
-        recordBefore: matchup.loser.recordBefore,
-        jersey: {
-          team: matchup.jersey.loser.team,
-          number: matchup.jersey.loser.number,
-          player: matchup.jersey.loser.name,
-        },
+        pointsDisplay: lDisplay,
+        recordBefore: `${recordsBefore.wins[matchup.loser.rosterId] ?? 0}-${recordsBefore.losses[matchup.loser.rosterId] ?? 0}`,
+        recordAfter: loserRecordAfter,
+        jersey: loserJersey,
         topPerformers: lTop,
       },
       margin: matchup.margin,
       upset: matchup.upset,
-      tagline: matchupTag,
+      tagline: graphic.tagline,
       mulligan: matchup.mulligan,
       mulliganCopy,
     },
     scoreTicks,
     copy: {
       headline: `FINAL: ${matchup.winner.nickname.toUpperCase()} TAKES IT`,
-      headerScore: `${matchup.winner.nickname.toUpperCase()} ${matchup.winner.points.toFixed(1)} — ${matchup.loser.points.toFixed(1)} ${matchup.loser.nickname.toUpperCase()}`,
-      subtitleFinal,
+      scoreline: `${matchup.winner.nickname.toUpperCase()} ${wDisplay} — ${lDisplay} ${matchup.loser.nickname.toUpperCase()}`,
+      caption: graphic.note,
+      subtitleFinal: graphic.note,
       swingLines: [
-        `${matchup.winner.nickname} ${matchup.winner.points.toFixed(1)} — ${matchup.loser.nickname} ${matchup.loser.points.toFixed(1)} (margin ${matchup.margin.toFixed(1)})`,
+        `${matchup.winner.nickname} ${wDisplay} — ${matchup.loser.nickname} ${lDisplay} (Sleeper ${matchup.winner.points}–${matchup.loser.points})`,
         mulliganCopy,
-        matchup.upset
-          ? `Upset: ${matchup.winner.nickname} (${matchup.winner.recordBefore}) over ${matchup.loser.nickname} (${matchup.loser.recordBefore})`
-          : `${matchup.winner.topScorer.name} (${matchup.winner.topScorer.points}) powered ${matchup.winner.nickname}`,
-        `${matchup.loser.topScorer.name} (${matchup.loser.topScorer.points}) led ${matchup.loser.nickname} but fell short`,
+        `${matchup.winner.topScorer.name} (${formatGraphicScore(matchup.winner.topScorer.points)}) led ${matchup.winner.nickname}`,
+        `${matchup.loser.topScorer.name} (${formatGraphicScore(matchup.loser.topScorer.points)}) led ${matchup.loser.nickname}`,
       ].filter(Boolean),
     },
     assumptions: [
-      'Score progression buckets use NFL team kickoff windows (static map), not play-by-play.',
-      'Projected tick is a stylistic pre-game estimate (~42–44% of combined final), not Sleeper projections.',
-      'Winner buffalo jersey = highest-scoring starter; loser = starting QB that week.',
-      'Buffalo character art is league stock; jerseys are generic colors/numbers (no NFL logos).',
+      'Display scores use one decimal (weekGraphics / results slides); Sleeper raw totals kept in swing copy.',
+      'Running score bar sums starter points into kickoff windows only; cumulative from 0 to final.',
+      'Buffalo slots use logo-free placeholders until Imagine assets are set in manifest/art.manifest.json.',
+      'Jerseys are generic color panels (navy/green #11 winner, teal #16 loser) — no NFL marks.',
     ],
   }
 }

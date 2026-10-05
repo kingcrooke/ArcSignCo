@@ -1,77 +1,79 @@
-import { BUCKET_ORDER, TEAM_KICKOFF_BUCKET } from './constants.mjs'
+import { TEAM_KICKOFF_BUCKET } from './constants.mjs'
+import { formatGraphicScore } from './scores.mjs'
 
-function round1(n) {
-  return Math.round(n * 10) / 10
+const PLAY_WINDOWS = ['kickoff', 'early', 'late', 'night', 'final']
+
+function sumStarters(starters) {
+  return starters.reduce((t, s) => t + (s.points ?? 0), 0)
+}
+
+function bucketStarterPoints(starters) {
+  const buckets = { early: 0, late: 0, night: 0 }
+  for (const s of starters) {
+    const pts = s.points ?? 0
+    if (s.position === 'DEF' || !s.playerId || s.playerId.length <= 3) {
+      buckets.late += pts
+      continue
+    }
+    const kick = TEAM_KICKOFF_BUCKET[s.team] ?? 'early'
+    if (kick === 'night') buckets.night += pts
+    else if (kick === 'late') buckets.late += pts
+    else buckets.early += pts
+  }
+  return buckets
 }
 
 /**
- * Approximate in-day score progression from final starter totals.
- * Sleeper does not expose per-play timestamps; we bucket by team kickoff window.
+ * Cumulative starter totals by kickoff window; ends at exact Sleeper team points.
  */
 export function buildScoreTimeline(matchup) {
   const { winner, loser } = matchup
+  const wB = bucketStarterPoints(winner.starters)
+  const lB = bucketStarterPoints(loser.starters)
 
-  function bucketPoints(starters) {
-    const buckets = { projected: 0, early: 0, late: 0, night: 0, final: 0 }
-    for (const s of starters) {
-      if (s.position === 'DEF' || s.playerId?.length <= 3) {
-        buckets.early += s.points * 0.5
-        buckets.late += s.points * 0.5
-        continue
-      }
-      const kick = TEAM_KICKOFF_BUCKET[s.team] ?? 'early'
-      if (kick === 'early') buckets.early += s.points
-      else if (kick === 'late') buckets.late += s.points
-      else buckets.night += s.points
-    }
-    return buckets
-  }
-
-  const wB = bucketPoints(winner.starters)
-  const lB = bucketPoints(loser.starters)
-
-  const wProj = round1((winner.points + loser.points) / 2 * 0.42)
-  const lProj = round1((winner.points + loser.points) / 2 * 0.44)
+  const wFinal = winner.points
+  const lFinal = loser.points
 
   const ticks = []
   let wCum = 0
   let lCum = 0
 
-  for (const key of BUCKET_ORDER) {
+  for (const key of PLAY_WINDOWS) {
     let label = key
     let note = ''
-    if (key === 'projected') {
-      wCum = wProj
-      lCum = lProj
-      label = 'Projected'
-      note = 'Pre-kickoff'
+    if (key === 'kickoff') {
+      label = 'Kickoff'
+      note = '0–0'
     } else if (key === 'early') {
-      wCum = round1(wProj + wB.early)
-      lCum = round1(lProj + lB.early)
+      wCum += wB.early
+      lCum += lB.early
       label = 'Early window'
       note = '1:00 ET games'
     } else if (key === 'late') {
-      wCum = round1(wCum + wB.late)
-      lCum = round1(lCum + lB.late)
+      wCum += wB.late
+      lCum += lB.late
       label = 'Afternoon'
       note = '4:00 ET games'
     } else if (key === 'night') {
-      wCum = round1(wCum + wB.night)
-      lCum = round1(lCum + lB.night)
+      wCum += wB.night
+      lCum += lB.night
       label = 'Prime time'
       note = 'SNF / MNF'
     } else {
-      wCum = round1(winner.points)
-      lCum = round1(loser.points)
+      wCum = wFinal
+      lCum = lFinal
       label = 'Final'
       note = 'Sleeper final'
     }
+
     ticks.push({
       key,
       label,
       note,
       winnerPoints: wCum,
       loserPoints: lCum,
+      winnerDisplay: formatGraphicScore(wCum),
+      loserDisplay: formatGraphicScore(lCum),
       leader: wCum >= lCum ? matchup.winner.nickname : matchup.loser.nickname,
     })
   }

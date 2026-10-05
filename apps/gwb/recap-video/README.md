@@ -42,4 +42,4 @@ node bin/render.mjs --week <n> --matchup <id> --out <artifact-dir> [--no-vertica
 
 ## Art
 
-Buffalo PNGs are copied from the approved results-card kit (`winner-art.png`, `loser-art.png`). Winner wears the **top scorer** jersey; loser wears the **starting QB** jersey that week.
+Buffalo slots read `manifest/art.manifest.json` (placeholder SVG by default; set `mode: custom` and portrait paths when Imagine assets are ready). Generic jersey panels: **navy + green #11** (winner top scorer), **teal + #16** (loser starting QB) — no NFL logos.

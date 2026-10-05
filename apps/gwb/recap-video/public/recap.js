@@ -9,18 +9,29 @@ const TIMING = {
   final: [46, 54],
 }
 
-function teamColorClass(team) {
-  const t = (team || '').toUpperCase()
-  return `team-colors-${t.length === 2 || t.length === 3 ? t : 'default'}`
+function applyJersey(panelEl, numEl, jersey) {
+  panelEl.style.backgroundColor = jersey.bodyColor
+  numEl.textContent = jersey.number
+  numEl.style.color = jersey.numberColor
 }
 
-function setJersey(el, jersey) {
-  el.textContent = `#${jersey.number || '—'}`
-  el.className = `jersey-badge ${teamColorClass(jersey.team)}`
-  el.title = jersey.player
+function applyPortrait(el, url) {
+  if (!el || !url) return
+  el.style.backgroundImage = `url('${url}')`
 }
 
-function activateScene(id, t) {
+function applyArtToCard(prefix, config, side) {
+  const jersey = config.matchup[side].jersey
+  const portraitUrl = config.art.portraits[side === 'winner' ? 'winner' : 'loser']
+  applyPortrait(document.getElementById(`${prefix}portrait-${side === 'winner' ? 'w' : 'l'}`), portraitUrl)
+  applyJersey(
+    document.getElementById(`${prefix}jersey-panel-${side === 'winner' ? 'w' : 'l'}`),
+    document.getElementById(`${prefix}jersey-num-${side === 'winner' ? 'w' : 'l'}`),
+    jersey,
+  )
+}
+
+function activateScene(id) {
   document.querySelectorAll('.scene').forEach((s) => {
     s.classList.toggle('active', s.id === `scene-${id}`)
   })
@@ -56,18 +67,18 @@ function renderSwings(config) {
   })
 }
 
-function updateScorebar(config, tickIndex) {
+function updateScorebar(config, tickIndex, ids) {
   const tick = config.scoreTicks[tickIndex]
   if (!tick) return
-  document.getElementById('tick-label').textContent = tick.label
-  document.getElementById('tick-note').textContent = tick.note
   const w = config.matchup.winner
   const l = config.matchup.loser
-  document.getElementById('score-w').textContent = `${w.nickname} ${tick.winnerPoints.toFixed(1)}`
-  document.getElementById('score-l').textContent = `${tick.loserPoints.toFixed(1)} ${l.nickname}`
+  document.getElementById(ids.label).textContent = tick.label
+  document.getElementById(ids.note).textContent = tick.note
+  document.getElementById(ids.w).textContent = `${w.nickname} ${tick.winnerDisplay}`
+  document.getElementById(ids.l).textContent = `${tick.loserDisplay} ${l.nickname}`
   const total = tick.winnerPoints + tick.loserPoints
   const pct = total > 0 ? (tick.winnerPoints / total) * 100 : 50
-  document.getElementById('score-fill').style.width = `${pct}%`
+  document.getElementById(ids.fill).style.width = `${pct}%`
 }
 
 function applyConfig(config) {
@@ -75,25 +86,37 @@ function applyConfig(config) {
   document.getElementById('intro-week').textContent = `WEEK ${config.meta.week}`
   const names = [config.matchup.winner.nickname, config.matchup.loser.nickname].sort()
   document.getElementById('intro-matchup').textContent = `${names[0]} vs ${names[1]}`
-  document.getElementById('faceoff-w-record').textContent = `${config.matchup.winner.nickname} ${config.matchup.winner.recordBefore}`
-  document.getElementById('faceoff-l-record').textContent = `${config.matchup.loser.nickname} ${config.matchup.loser.recordBefore}`
-  setJersey(document.getElementById('jersey-w'), config.matchup.winner.jersey)
-  setJersey(document.getElementById('jersey-l'), config.matchup.loser.jersey)
-  setJersey(document.getElementById('final-jersey-w'), config.matchup.winner.jersey)
-  setJersey(document.getElementById('final-jersey-l'), config.matchup.loser.jersey)
+
+  document.getElementById('faceoff-w-record').textContent =
+    `${config.matchup.winner.nickname} ${config.matchup.winner.recordBefore}`
+  document.getElementById('faceoff-l-record').textContent =
+    `${config.matchup.loser.nickname} ${config.matchup.loser.recordBefore}`
+
+  applyArtToCard('', config, 'winner')
+  applyArtToCard('', config, 'loser')
+  applyArtToCard('final-', config, 'winner')
+  applyArtToCard('final-', config, 'loser')
 
   document.getElementById('final-eyebrow').textContent = `GWB • WEEK ${config.meta.week}`
   document.getElementById('final-headline').textContent = config.copy.headline
-  document.getElementById('final-header-score').textContent = config.copy.headerScore
+  document.getElementById('final-scoreline').textContent = config.copy.scoreline
   document.getElementById('final-tagline').textContent = config.matchup.tagline
-  document.getElementById('final-subtitle').textContent = config.copy.subtitleFinal
+  document.getElementById('final-caption').textContent = config.copy.caption
   document.getElementById('final-results').textContent = `RESULTS • ${config.meta.matchupKey}`
-  document.getElementById('final-w-record').textContent = `${config.matchup.winner.nickname} ${config.matchup.winner.recordBefore}`
-  document.getElementById('final-l-record').textContent = `${config.matchup.loser.nickname} ${config.matchup.loser.recordBefore}`
+  document.getElementById('final-w-record').textContent =
+    `${config.matchup.winner.nickname} ${config.matchup.winner.recordAfter}`
+  document.getElementById('final-l-record').textContent =
+    `${config.matchup.loser.nickname} ${config.matchup.loser.recordAfter}`
 
   renderPerformers(config)
   renderSwings(config)
-  updateScorebar(config, 0)
+  updateScorebar(config, 0, {
+    label: 'tick-label',
+    note: 'tick-note',
+    w: 'score-w',
+    l: 'score-l',
+    fill: 'score-fill',
+  })
 }
 
 function sceneAtTime(t) {
@@ -105,19 +128,37 @@ function sceneAtTime(t) {
 
 function onFrame(t, config) {
   const scene = sceneAtTime(t)
-  activateScene(scene, t)
+  activateScene(scene)
 
-  if (scene === 'faceoff' || scene === 'final') {
-    const show = t > (scene === 'faceoff' ? 6 : 47)
-    document.querySelectorAll('.char-card').forEach((c) => c.classList.toggle('show', show))
-    document.getElementById('w-medallion').classList.toggle('show', t > (scene === 'faceoff' ? 8 : 48))
+  const faceoffCards = document.querySelectorAll('#scene-faceoff .char-card')
+  const finalCards = document.querySelectorAll('#scene-final .char-card')
+  const faceoffMedal = document.getElementById('faceoff-medallion')
+  const finalMedal = document.getElementById('final-medallion')
+
+  if (scene === 'faceoff') {
+    const show = t > 6
+    faceoffCards.forEach((c) => c.classList.toggle('show', show))
+    faceoffMedal.classList.toggle('show', t > 8)
+    finalMedal.classList.remove('show')
+  } else if (scene === 'final') {
+    finalCards.forEach((c) => c.classList.add('show'))
+    finalMedal.classList.add('show')
+    faceoffMedal.classList.remove('show')
+  } else {
+    faceoffMedal.classList.remove('show')
   }
 
   if (scene === 'scorebar') {
     const local = t - TIMING.scorebar[0]
     const span = TIMING.scorebar[1] - TIMING.scorebar[0]
     const idx = Math.min(config.scoreTicks.length - 1, Math.floor((local / span) * config.scoreTicks.length))
-    updateScorebar(config, idx)
+    updateScorebar(config, idx, {
+      label: 'tick-label',
+      note: 'tick-note',
+      w: 'score-w',
+      l: 'score-l',
+      fill: 'score-fill',
+    })
   }
 
   if (scene === 'performers') {
@@ -137,13 +178,13 @@ function onFrame(t, config) {
   }
 
   if (scene === 'final') {
-    updateScorebar(config, config.scoreTicks.length - 1)
     const w = config.matchup.winner
     const l = config.matchup.loser
-    document.getElementById('final-score-w').textContent = `${w.nickname} ${w.points.toFixed(1)}`
-    document.getElementById('final-score-l').textContent = `${l.points.toFixed(1)} ${l.nickname}`
-    const total = w.points + l.points
-    document.getElementById('final-score-fill').style.width = `${(w.points / total) * 100}%`
+    const last = config.scoreTicks[config.scoreTicks.length - 1]
+    document.getElementById('final-score-w').textContent = `${w.nickname} ${w.pointsDisplay}`
+    document.getElementById('final-score-l').textContent = `${l.pointsDisplay} ${l.nickname}`
+    const total = last.winnerPoints + last.loserPoints
+    document.getElementById('final-score-fill').style.width = `${(last.winnerPoints / total) * 100}%`
   }
 }
 
@@ -155,8 +196,8 @@ function startRecapPlayback(config) {
   return new Promise((resolve) => {
     function frame() {
       const elapsed = (performance.now() - start) / 1000
-      const t = Math.min(elapsed, duration)
-      onFrame(t, config)
+      const tick = Math.min(elapsed, duration)
+      onFrame(tick, config)
       if (elapsed < duration + 0.05) requestAnimationFrame(frame)
       else resolve()
     }

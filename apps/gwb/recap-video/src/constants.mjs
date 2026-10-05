@@ -51,5 +51,3 @@ export const TEAM_KICKOFF_BUCKET = {
   SF: 'late',
   SEA: 'late',
 }
-
-export const BUCKET_ORDER = ['projected', 'early', 'late', 'night', 'final']

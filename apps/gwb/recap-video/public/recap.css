@@ -16,6 +16,14 @@ body {
   color: #f4f5f7;
 }
 
+.bebas {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.inter {
+  font-family: Inter, system-ui, sans-serif;
+}
+
 #stage {
   position: relative;
   width: 1920px;
@@ -57,7 +65,7 @@ body {
 
 .eyebrow {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 52px;
+  font-size: 40px;
   letter-spacing: 0.06em;
   color: #ebb83c;
 }
@@ -79,7 +87,6 @@ body {
   letter-spacing: 0.04em;
 }
 
-/* Intro */
 #scene-intro .content {
   position: absolute;
   left: 120px;
@@ -93,12 +100,15 @@ body {
   letter-spacing: 0.08em;
 }
 
-/* Face-off */
-.faceoff-wrap {
+.faceoff-wrap,
+.final-cards {
   position: absolute;
   left: 120px;
-  top: 160px;
   width: 1680px;
+}
+
+.faceoff-wrap {
+  top: 160px;
   height: 720px;
 }
 
@@ -108,7 +118,7 @@ body {
   height: 680px;
   border-radius: 28px;
   overflow: hidden;
-  background: #0a0c10 center top / cover no-repeat;
+  background: #0a0c10;
   transform: translateY(40px);
   opacity: 0;
 }
@@ -120,7 +130,6 @@ body {
   box-shadow:
     0 0 0 1px rgba(235, 184, 60, 0.35),
     0 0 28px rgba(235, 184, 60, 0.45);
-  background-image: url('assets/winner-art.png');
   z-index: 3;
 }
 
@@ -128,8 +137,6 @@ body {
   right: 0;
   top: 80px;
   border: 3px solid #4a5160;
-  background-image: url('assets/loser-art.png');
-  filter: saturate(0.85) brightness(0.92);
   z-index: 2;
 }
 
@@ -141,15 +148,46 @@ body {
     opacity 0.6s ease;
 }
 
+.card-body {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.buffalo-portrait {
+  flex: 0 0 58%;
+  background: #12151c center 20% / 72% no-repeat;
+  filter: grayscale(0.35) contrast(1.05);
+  mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+
+.jersey-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -8%;
+  border-top: 3px solid rgba(255, 255, 255, 0.12);
+}
+
+.jersey-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
 .record-pill {
   position: absolute;
-  left: 20px;
-  top: 20px;
-  padding: 12px 22px;
+  left: 16px;
+  top: 16px;
+  padding: 10px 20px;
   border-radius: 18px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 40px;
-  background: rgba(8, 10, 14, 0.9);
+  font-size: 36px;
+  background: rgba(8, 10, 14, 0.92);
+  z-index: 4;
 }
 
 .record-pill.winner {
@@ -162,18 +200,26 @@ body {
   color: #e8eaee;
 }
 
-.jersey-badge {
+.status-pill {
   position: absolute;
-  right: 24px;
-  top: 24px;
-  min-width: 88px;
-  padding: 10px 16px;
-  border-radius: 12px;
+  right: 16px;
+  bottom: 16px;
+  padding: 10px 22px;
+  border-radius: 18px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 48px;
-  text-align: center;
-  color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.25);
+  font-size: 38px;
+  z-index: 4;
+}
+
+.status-pill.winner {
+  background: #ebb83c;
+  color: #101010;
+}
+
+.status-pill.loser {
+  background: rgba(48, 52, 62, 0.95);
+  color: #f4f5f7;
+  border: 1px solid rgba(90, 98, 112, 0.8);
 }
 
 .w-medallion {
@@ -193,7 +239,7 @@ body {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 120px;
   color: #101010;
-  z-index: 5;
+  z-index: 10;
   transform: scale(0.6);
   opacity: 0;
 }
@@ -204,7 +250,6 @@ body {
   transition: all 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
 }
 
-/* Score bar scene */
 #scene-scorebar .panel {
   position: absolute;
   left: 120px;
@@ -253,7 +298,6 @@ body {
   color: #a8afb9;
 }
 
-/* Performers */
 .performer-col {
   position: absolute;
   top: 220px;
@@ -301,7 +345,12 @@ body {
   color: #ebb83c;
 }
 
-/* Swings */
+.swing-eyebrow {
+  position: absolute;
+  left: 200px;
+  top: 200px;
+}
+
 #scene-swings .swing-list {
   position: absolute;
   left: 200px;
@@ -326,39 +375,95 @@ body {
   transition: all 0.5s ease;
 }
 
-/* Final card (16:9 adaptation) */
+/* Final results card — spacing aligned to approved results template */
 #scene-final .final-header {
   position: absolute;
-  left: 120px;
-  top: 120px;
+  left: 100px;
+  top: 48px;
+  width: 1720px;
+}
+
+#scene-final .header-divider {
+  margin-top: 10px;
+  width: 154px;
+  height: 3px;
+  background: #ebb83c;
+}
+
+#scene-final .final-headline {
+  margin-top: 14px;
+  font-family: Anton, sans-serif;
+  font-size: 74px;
+  line-height: 1.02;
+  text-transform: uppercase;
+  color: #fff;
 }
 
 #scene-final .final-cards {
-  position: absolute;
-  left: 120px;
-  top: 340px;
-  width: 1680px;
+  top: 200px;
   height: 520px;
 }
 
 #scene-final .char-card {
-  width: 720px;
-  height: 500px;
+  width: 700px;
+  height: 480px;
 }
 
 #scene-final .char-card.loser {
-  top: 40px;
+  top: 36px;
+}
+
+#scene-final .final-scoreline {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  top: 700px;
+  text-align: center;
+  font-size: 52px;
+  letter-spacing: 0.04em;
+  color: #ebb83c;
+  line-height: 1;
+}
+
+#scene-final .final-tagline {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  top: 768px;
+  text-align: center;
+  font-size: 48px;
+  letter-spacing: 0.04em;
+  color: #ebb83c;
+  line-height: 1;
+}
+
+#scene-final .final-scoreblock {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  top: 840px;
+}
+
+#scene-final .final-scoreblock .score-row {
+  font-size: 56px;
+}
+
+#scene-final .final-caption {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 26px;
+  color: #a8afb9;
 }
 
 #scene-final .final-footer {
   position: absolute;
-  left: 120px;
-  right: 120px;
-  bottom: 100px;
+  left: 100px;
+  right: 100px;
+  bottom: 48px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-size: 36px;
+  font-size: 32px;
   color: #6d7684;
 }
 
@@ -368,31 +473,6 @@ body {
   letter-spacing: 0.06em;
 }
 
-#scene-final .final-scorebar {
-  position: absolute;
-  left: 120px;
-  right: 120px;
-  bottom: 180px;
-}
-
-.team-colors-JAX {
-  background: #006778;
-}
-.team-colors-SEA {
-  background: #002244;
-}
-.team-colors-NE {
-  background: #002244;
-}
-.team-colors-DAL {
-  background: #041E42;
-}
-.team-colors-GB {
-  background: #203731;
-}
-.team-colors-MIN {
-  background: #4f2683;
-}
-.team-colors-default {
-  background: #2a303c;
+#scene-final .w-medallion {
+  top: 54%;
 }

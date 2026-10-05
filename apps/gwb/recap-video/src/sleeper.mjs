@@ -38,6 +38,31 @@ export async function fetchMatchups(week) {
   return fetchJson(`https://api.sleeper.app/v1/league/${LEAGUE_ID}/matchups/${week}`)
 }
 
+export async function recordsThroughWeek(week) {
+  const wins = Object.create(null)
+  const losses = Object.create(null)
+  for (let w = 1; w <= week; w++) {
+    const rows = await fetchMatchups(w)
+    const byMid = new Map()
+    for (const r of rows) {
+      if (!byMid.has(r.matchup_id)) byMid.set(r.matchup_id, [])
+      byMid.get(r.matchup_id).push(r)
+    }
+    for (const pair of byMid.values()) {
+      if (pair.length !== 2) continue
+      const [a, b] = pair
+      if (a.points > b.points) {
+        wins[a.roster_id] = (wins[a.roster_id] ?? 0) + 1
+        losses[b.roster_id] = (losses[b.roster_id] ?? 0) + 1
+      } else if (b.points > a.points) {
+        wins[b.roster_id] = (wins[b.roster_id] ?? 0) + 1
+        losses[a.roster_id] = (losses[a.roster_id] ?? 0) + 1
+      }
+    }
+  }
+  return { wins, losses }
+}
+
 export async function recordsBeforeWeek(week) {
   const wins = Object.create(null)
   const losses = Object.create(null)

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 320" role="img" aria-label="Buffalo">
+  <defs>
+    <linearGradient id="fur" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e8ecef"/>
+      <stop offset="100%" stop-color="#9aa3ad"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="200" cy="290" rx="160" ry="24" fill="#0a0c10" opacity="0.5"/>
+  <path fill="url(#fur)" d="M120 200c-20-60 10-120 80-130 70-10 110 40 100 110-5 40-30 70-60 80-50 15-95-5-120-60z"/>
+  <path fill="#d5dbe0" d="M95 120c-25-15-45-5-55 15-8 18-2 38 18 48 12 6 28 4 38-8 10-12 8-32-1-55z"/>
+  <path fill="#d5dbe0" d="M305 120c25-15 45-5 55 15 8 18 2 38-18 48-12 6-28 4-38-8-10-12-8-32 1-55z"/>
+  <ellipse cx="165" cy="155" rx="14" ry="10" fill="#1a1f26"/>
+  <ellipse cx="235" cy="155" rx="14" ry="10" fill="#1a1f26"/>
+  <path fill="#7a848e" d="M188 175h24v18c-8 8-20 8-24 0z"/>
+</svg>
