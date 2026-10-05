@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { BestGamesScope } from './components/BestGamesWeekScope'
 import { CommissionerRecapsPanel } from './components/CommissionerRecapsPanel'
 import { FrankieZonePanel } from './components/FrankieZonePanel'
 import { GwbFooter } from './components/GwbFooter'
@@ -58,6 +59,9 @@ export default function App() {
   const [recapFocusId, setRecapFocusId] = useState<string | null>(null)
   const sound = useSound()
   const [deckKind, setDeckKind] = useState<GraphicsSectionKind | null>(null)
+  const [bestGamesScope, setBestGamesScope] = useState<BestGamesScope>(1)
+  const navRef = useRef<HTMLElement>(null)
+  const didInitialTabScroll = useRef(false)
 
   const openRecapFromZone = useCallback(
     (week: number, recapId: string) => {
@@ -110,7 +114,16 @@ export default function App() {
     const w = params.get('week')
     const t = params.get('tab') as AppTab | null
     const slide = params.get('slide')
-    if (w) {
+    const completed = lastCompletedWeek(data.league, data.nflState)
+    if (t === 'bestgames') {
+      if (w === 'all') setBestGamesScope('all')
+      else if (w) {
+        const n = Number.parseInt(w, 10)
+        setBestGamesScope(!Number.isNaN(n) ? n : completed)
+      } else {
+        setBestGamesScope(completed)
+      }
+    } else if (w) {
       const n = Number.parseInt(w, 10)
       if (!Number.isNaN(n)) data.setSelectedWeek(n)
     }
@@ -122,7 +135,14 @@ export default function App() {
   useEffect(() => {
     if (!data) return
     const params = new URLSearchParams()
-    params.set('week', String(data.selectedWeek))
+    if (tab === 'bestgames') {
+      params.set(
+        'week',
+        bestGamesScope === 'all' ? 'all' : String(bestGamesScope),
+      )
+    } else {
+      params.set('week', String(data.selectedWeek))
+    }
     params.set('tab', tab)
     if (slideParam) params.set('slide', slideParam)
     const qs = params.toString()
@@ -131,7 +151,22 @@ export default function App() {
       '',
       `${window.location.pathname}?${qs}`,
     )
-  }, [data?.selectedWeek, tab, slideParam, data])
+  }, [data?.selectedWeek, tab, slideParam, data, bestGamesScope])
+
+  const scrollActiveTabIntoView = useCallback((behavior: ScrollBehavior) => {
+    const nav = navRef.current
+    if (!nav) return
+    nav
+      .querySelector<HTMLElement>('.gwb-section-tab--active')
+      ?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior })
+  }, [])
+
+  useEffect(() => {
+    if (state !== 'ready' || !data) return
+    const behavior = didInitialTabScroll.current ? 'smooth' : 'instant'
+    didInitialTabScroll.current = true
+    requestAnimationFrame(() => scrollActiveTabIntoView(behavior))
+  }, [tab, state, data, scrollActiveTabIntoView])
 
   useEffect(() => {
     if (
@@ -237,6 +272,7 @@ export default function App() {
           </div>
 
           <nav
+            ref={navRef}
             className="gwb-section-tabs mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
           >
@@ -317,6 +353,11 @@ export default function App() {
                 playersLoading={data.playersLoading}
                 ensurePlayers={data.ensurePlayers}
                 deferralNote={data.standingsDeferralNote}
+                scope={bestGamesScope}
+                onScopeChange={(next) => {
+                  sound.playClick()
+                  setBestGamesScope(next)
+                }}
               />
             </section>
           )}

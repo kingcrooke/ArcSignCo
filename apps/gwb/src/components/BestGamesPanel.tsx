@@ -179,6 +179,8 @@ export function BestGamesPanel({
   playersLoading,
   ensurePlayers,
   deferralNote,
+  scope,
+  onScopeChange,
 }: {
   matchupsByWeek: Map<number, SleeperMatchup[]>
   league: SleeperLeague
@@ -190,9 +192,10 @@ export function BestGamesPanel({
   playersLoading: boolean
   ensurePlayers: () => void
   deferralNote?: string | null
+  scope: BestGamesScope
+  onScopeChange: (scope: BestGamesScope) => void
 }) {
   const completedThrough = lastCompletedWeek(league, nflState)
-  const [scope, setScope] = useState<BestGamesScope>(() => completedThrough)
   const [expandedKey, setExpandedKey] = useState<string | null>(null)
 
   useEffect(() => {
@@ -200,9 +203,9 @@ export function BestGamesPanel({
       typeof scope === 'number' &&
       (isWeekLive(scope, league, nflState) || scope > completedThrough)
     ) {
-      setScope(completedThrough)
+      onScopeChange(completedThrough)
     }
-  }, [scope, completedThrough, league, nflState])
+  }, [scope, completedThrough, league, nflState, onScopeChange])
 
   const games = useMemo(() => {
     if (scope === 'all') {
@@ -260,7 +263,7 @@ export function BestGamesPanel({
         nflState={nflState}
         onChange={(next) => {
           setExpandedKey(null)
-          setScope(next)
+          onScopeChange(next)
         }}
       />
 
