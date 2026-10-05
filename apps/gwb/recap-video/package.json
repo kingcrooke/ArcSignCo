@@ -1,0 +1,14 @@
+{
+  "name": "gwb-recap-video",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "GWB motion-graphic matchup recap renderer (Sleeper stats + buffalo art)",
+  "scripts": {
+    "render": "node bin/render.mjs",
+    "render:test": "node bin/render.mjs --week 3 --matchup 2"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

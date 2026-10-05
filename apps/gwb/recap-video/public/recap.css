@@ -1,0 +1,398 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: #0b0d12;
+  font-family: Inter, system-ui, sans-serif;
+  color: #f4f5f7;
+}
+
+#stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  background: linear-gradient(180deg, #0c0e14 0%, #141820 38%, #10131a 72%, #090b10 100%);
+}
+
+.top-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 6px;
+  background: #ebb83c;
+}
+
+.title-safe-guide {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 10%;
+  bottom: 15%;
+  pointer-events: none;
+  border: 1px dashed rgba(255, 255, 255, 0.04);
+  opacity: 0;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.scene.active {
+  opacity: 1;
+}
+
+.eyebrow {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  letter-spacing: 0.06em;
+  color: #ebb83c;
+}
+
+.headline {
+  font-family: Anton, sans-serif;
+  font-size: 96px;
+  line-height: 1.02;
+  text-transform: uppercase;
+  color: #fff;
+  margin-top: 12px;
+}
+
+.subhead {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px;
+  color: #ebb83c;
+  margin-top: 16px;
+  letter-spacing: 0.04em;
+}
+
+/* Intro */
+#scene-intro .content {
+  position: absolute;
+  left: 120px;
+  top: 280px;
+}
+
+#scene-intro .gwb-mark {
+  font-family: Anton, sans-serif;
+  font-size: 180px;
+  color: #ebb83c;
+  letter-spacing: 0.08em;
+}
+
+/* Face-off */
+.faceoff-wrap {
+  position: absolute;
+  left: 120px;
+  top: 160px;
+  width: 1680px;
+  height: 720px;
+}
+
+.char-card {
+  position: absolute;
+  width: 760px;
+  height: 680px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #0a0c10 center top / cover no-repeat;
+  transform: translateY(40px);
+  opacity: 0;
+}
+
+.char-card.winner {
+  left: 0;
+  top: 20px;
+  border: 5px solid #ebb83c;
+  box-shadow:
+    0 0 0 1px rgba(235, 184, 60, 0.35),
+    0 0 28px rgba(235, 184, 60, 0.45);
+  background-image: url('assets/winner-art.png');
+  z-index: 3;
+}
+
+.char-card.loser {
+  right: 0;
+  top: 80px;
+  border: 3px solid #4a5160;
+  background-image: url('assets/loser-art.png');
+  filter: saturate(0.85) brightness(0.92);
+  z-index: 2;
+}
+
+.char-card.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    transform 0.8s cubic-bezier(0.2, 0.9, 0.2, 1),
+    opacity 0.6s ease;
+}
+
+.record-pill {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  padding: 12px 22px;
+  border-radius: 18px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  background: rgba(8, 10, 14, 0.9);
+}
+
+.record-pill.winner {
+  border: 2px solid rgba(235, 184, 60, 0.85);
+  color: #ebb83c;
+}
+
+.record-pill.loser {
+  border: 2px solid rgba(120, 128, 145, 0.9);
+  color: #e8eaee;
+}
+
+.jersey-badge {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  min-width: 88px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  text-align: center;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.w-medallion {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 200px;
+  height: 200px;
+  margin-left: -100px;
+  margin-top: -100px;
+  border-radius: 50%;
+  background: #ebb83c;
+  border: 6px solid #9a7010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 120px;
+  color: #101010;
+  z-index: 5;
+  transform: scale(0.6);
+  opacity: 0;
+}
+
+.w-medallion.show {
+  transform: scale(1);
+  opacity: 1;
+  transition: all 0.5s cubic-bezier(0.2, 0.9, 0.2, 1);
+}
+
+/* Score bar scene */
+#scene-scorebar .panel {
+  position: absolute;
+  left: 120px;
+  top: 200px;
+  width: 1680px;
+}
+
+.scorebar-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  color: #ebb83c;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.score-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  margin-bottom: 16px;
+}
+
+.score-row .win {
+  color: #ebb83c;
+}
+
+.score-bar {
+  height: 36px;
+  border-radius: 10px;
+  background: #2a303c;
+  overflow: hidden;
+}
+
+.score-bar .fill {
+  height: 100%;
+  background: #ebb83c;
+  width: 50%;
+  transition: width 0.9s ease;
+}
+
+.tick-note {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 28px;
+  color: #a8afb9;
+}
+
+/* Performers */
+.performer-col {
+  position: absolute;
+  top: 220px;
+  width: 760px;
+}
+
+.performer-col.winner {
+  left: 120px;
+}
+
+.performer-col.loser {
+  right: 120px;
+}
+
+.performer-col h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  color: #ebb83c;
+  margin-bottom: 20px;
+}
+
+.performer-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 32px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateX(-12px);
+}
+
+.performer-col.loser .performer-row {
+  transform: translateX(12px);
+}
+
+.performer-row.show {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.45s ease;
+}
+
+.performer-row .pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  color: #ebb83c;
+}
+
+/* Swings */
+#scene-swings .swing-list {
+  position: absolute;
+  left: 200px;
+  top: 280px;
+  width: 1520px;
+}
+
+.swing-line {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  line-height: 1.25;
+  margin: 28px 0;
+  padding-left: 28px;
+  border-left: 6px solid #ebb83c;
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.swing-line.show {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+}
+
+/* Final card (16:9 adaptation) */
+#scene-final .final-header {
+  position: absolute;
+  left: 120px;
+  top: 120px;
+}
+
+#scene-final .final-cards {
+  position: absolute;
+  left: 120px;
+  top: 340px;
+  width: 1680px;
+  height: 520px;
+}
+
+#scene-final .char-card {
+  width: 720px;
+  height: 500px;
+}
+
+#scene-final .char-card.loser {
+  top: 40px;
+}
+
+#scene-final .final-footer {
+  position: absolute;
+  left: 120px;
+  right: 120px;
+  bottom: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 36px;
+  color: #6d7684;
+}
+
+#scene-final .results-pill {
+  font-weight: 600;
+  color: #f0f2f6;
+  letter-spacing: 0.06em;
+}
+
+#scene-final .final-scorebar {
+  position: absolute;
+  left: 120px;
+  right: 120px;
+  bottom: 180px;
+}
+
+.team-colors-JAX {
+  background: #006778;
+}
+.team-colors-SEA {
+  background: #002244;
+}
+.team-colors-NE {
+  background: #002244;
+}
+.team-colors-DAL {
+  background: #041E42;
+}
+.team-colors-GB {
+  background: #203731;
+}
+.team-colors-MIN {
+  background: #4f2683;
+}
+.team-colors-default {
+  background: #2a303c;
+}

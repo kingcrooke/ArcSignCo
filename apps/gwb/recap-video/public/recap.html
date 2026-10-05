@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GWB Recap</title>
+    <link rel="stylesheet" href="recap.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <div class="top-bar"></div>
+      <div class="title-safe-guide" aria-hidden="true"></div>
+
+      <section class="scene" id="scene-intro">
+        <div class="content">
+          <div class="gwb-mark">GWB</div>
+          <div class="eyebrow" id="intro-week">WEEK —</div>
+          <h1 class="headline">BEST GAME RECAP</h1>
+          <p class="subhead" id="intro-matchup">—</p>
+        </div>
+      </section>
+
+      <section class="scene" id="scene-faceoff">
+        <div class="faceoff-wrap">
+          <div class="char-card winner" id="card-w">
+            <div class="record-pill winner" id="faceoff-w-record">—</div>
+            <div class="jersey-badge team-colors-default" id="jersey-w">#—</div>
+          </div>
+          <div class="char-card loser" id="card-l">
+            <div class="record-pill loser" id="faceoff-l-record">—</div>
+            <div class="jersey-badge team-colors-default" id="jersey-l">#—</div>
+          </div>
+          <div class="w-medallion" id="w-medallion">W</div>
+        </div>
+      </section>
+
+      <section class="scene" id="scene-scorebar">
+        <div class="panel">
+          <div class="scorebar-label" id="tick-label">Projected</div>
+          <div class="score-row">
+            <span class="win" id="score-w">—</span>
+            <span id="score-l">—</span>
+          </div>
+          <div class="score-bar"><div class="fill" id="score-fill"></div></div>
+          <p class="tick-note" id="tick-note">—</p>
+        </div>
+      </section>
+
+      <section class="scene" id="scene-performers">
+        <div class="performer-col winner" id="performers-winner"></div>
+        <div class="performer-col loser" id="performers-loser"></div>
+      </section>
+
+      <section class="scene" id="scene-swings">
+        <div class="eyebrow" style="position: absolute; left: 200px; top: 200px">KEY MOMENTS</div>
+        <div class="swing-list" id="swing-lines"></div>
+      </section>
+
+      <section class="scene" id="scene-final">
+        <header class="final-header">
+          <div class="eyebrow" id="final-eyebrow">GWB • WEEK —</div>
+          <h1 class="headline" id="final-headline">FINAL</h1>
+          <p class="subhead" id="final-header-score">—</p>
+        </header>
+        <div class="final-cards faceoff-wrap">
+          <div class="char-card winner show">
+            <div class="record-pill winner" id="final-w-record"></div>
+            <div class="jersey-badge" id="final-jersey-w"></div>
+          </div>
+          <div class="char-card loser show">
+            <div class="record-pill loser" id="final-l-record"></div>
+            <div class="jersey-badge" id="final-jersey-l"></div>
+          </div>
+          <div class="w-medallion show">W</div>
+        </div>
+        <p class="subhead" style="position: absolute; left: 120px; bottom: 280px" id="final-tagline">—</p>
+        <div class="final-scorebar">
+          <div class="score-row">
+            <span class="win" id="final-score-w">—</span>
+            <span id="final-score-l">—</span>
+          </div>
+          <div class="score-bar"><div class="fill" id="final-score-fill"></div></div>
+          <p class="tick-note" id="final-subtitle">—</p>
+        </div>
+        <footer class="final-footer">
+          <span>gwb_fantasy_football</span>
+          <span class="results-pill" id="final-results">RESULTS</span>
+        </footer>
+      </section>
+    </div>
+    <script src="recap.js"></script>
+  </body>
+</html>
