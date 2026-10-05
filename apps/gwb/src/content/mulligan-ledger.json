@@ -112,6 +112,36 @@
       "opponentLabel": "Lambs2Slaughter",
       "won": false,
       "flipped": false
+    },
+    {
+      "id": "w4-kayser",
+      "week": 4,
+      "rosterId": 4,
+      "manager": "powpeazy",
+      "managerShort": "Kayser",
+      "team": "The Special One",
+      "out": {
+        "name": "Rashee Rice",
+        "position": "WR",
+        "points": 0.0,
+        "team": "KC",
+        "note": "hamstring"
+      },
+      "in": {
+        "name": "Brycen Tremayne",
+        "position": "WR",
+        "points": 5.2,
+        "team": "CAR"
+      },
+      "netImpact": 5.2,
+      "scoreWith": 128.44,
+      "scoreWithout": 123.24,
+      "opponentScore": 127.4,
+      "opponentLabel": "Turn Your Head And Goff",
+      "won": true,
+      "flipped": true,
+      "resultPending": true,
+      "footnote": "PENDING MNF — Frankie still has Devaughn Vele (NO). Current lead 1.04; without mulligan would trail by 4.16."
     }
   ]
 }
