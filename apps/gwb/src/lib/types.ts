@@ -86,6 +86,16 @@ export interface NflState {
   season_has_scores: boolean
 }
 
+/** Sleeper NFL scoreboard row for a single game in a fantasy week. */
+export interface NflWeekGame {
+  status: string
+  week: number
+  metadata?: {
+    home_team?: string
+    away_team?: string
+  }
+}
+
 export interface PlayerSlim {
   first_name: string
   last_name: string

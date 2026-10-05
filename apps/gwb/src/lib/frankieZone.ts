@@ -2,8 +2,11 @@ import {
   FRANKIE_ZONE_RECORD,
   ZONE_MANAGER_SHORT_NAMES,
 } from './constants'
-import { recordLabel } from './standings'
+import { finalizedMatchupKeysForWeek } from './matchupBoard'
+import { recordLabel, sortStandingRows } from './standings'
 import type {
+  NflWeekGame,
+  PlayersMap,
   SleeperMatchup,
   StandingRow,
   TeamInfo,
@@ -131,14 +134,45 @@ export function zoneTabLabel(zoneName: string): string {
   return `${zoneName} Zone`
 }
 
+export type ZoneOutcomeContext = {
+  completedThroughWeek: number
+  partialWeek?: number
+  finalizedMatchupKeys?: Set<string>
+}
+
+/** Cumulative outcomes through `asOfWeek` (respecting partial-week finals). */
+export function zoneContextThrough(
+  asOfWeek: number,
+  context: ZoneOutcomeContext,
+): ZoneOutcomeContext {
+  const { completedThroughWeek, partialWeek, finalizedMatchupKeys } = context
+  if (partialWeek !== undefined && asOfWeek >= partialWeek) {
+    return {
+      completedThroughWeek,
+      partialWeek,
+      finalizedMatchupKeys,
+    }
+  }
+  return { completedThroughWeek: Math.min(completedThroughWeek, asOfWeek) }
+}
+
 function winsThroughWeek(
   rosterId: number,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
-  throughWeek: number,
+  context: ZoneOutcomeContext,
 ): number {
   let wins = 0
-  for (let week = 1; week <= throughWeek; week++) {
-    const outcome = matchupOutcomeForWeek(rosterId, week, matchupsByWeek)
+  const lastWeek = Math.max(
+    context.completedThroughWeek,
+    context.partialWeek ?? 0,
+  )
+  for (let week = 1; week <= lastWeek; week++) {
+    const outcome = matchupOutcomeForWeek(
+      rosterId,
+      week,
+      matchupsByWeek,
+      context,
+    )
     if (outcome === 'W') wins++
   }
   return wins
@@ -147,21 +181,41 @@ function winsThroughWeek(
 function lossesThroughWeek(
   rosterId: number,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
-  throughWeek: number,
+  context: ZoneOutcomeContext,
 ): number {
   let losses = 0
-  for (let week = 1; week <= throughWeek; week++) {
-    const outcome = matchupOutcomeForWeek(rosterId, week, matchupsByWeek)
+  const lastWeek = Math.max(
+    context.completedThroughWeek,
+    context.partialWeek ?? 0,
+  )
+  for (let week = 1; week <= lastWeek; week++) {
+    const outcome = matchupOutcomeForWeek(
+      rosterId,
+      week,
+      matchupsByWeek,
+      context,
+    )
     if (outcome === 'L') losses++
   }
   return losses
 }
 
-function matchupOutcomeForWeek(
+function matchupCountsForWeek(
+  week: number,
+  context: ZoneOutcomeContext,
+): boolean {
+  if (week <= context.completedThroughWeek) return true
+  if (context.partialWeek !== week) return false
+  return Boolean(context.finalizedMatchupKeys?.size)
+}
+
+export function matchupOutcomeForWeek(
   rosterId: number,
   week: number,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
+  context: ZoneOutcomeContext,
 ): 'W' | 'L' | 'T' | null {
+  if (!matchupCountsForWeek(week, context)) return null
   const matchups = matchupsByWeek.get(week)
   if (!matchups?.length) return null
   const mine = matchups.find((m) => m.roster_id === rosterId)
@@ -170,6 +224,13 @@ function matchupOutcomeForWeek(
     (m) => m.matchup_id === mine.matchup_id && m.roster_id !== rosterId,
   )
   if (!opp) return null
+  if (
+    context.partialWeek === week &&
+    week > context.completedThroughWeek
+  ) {
+    const key = `${week}-${mine.matchup_id}`
+    if (!context.finalizedMatchupKeys?.has(key)) return null
+  }
   if (mine.points === 0 && opp.points === 0) {
     const played = mine.starters?.some((_, i) => (mine.starters_points[i] ?? 0) > 0)
     if (!played) return null
@@ -179,16 +240,130 @@ function matchupOutcomeForWeek(
   return 'T'
 }
 
+/** Standings for zone residency, including finalized matchups in a live week. */
+export function computeZoneStandings(
+  matchupsByWeek: Map<number, SleeperMatchup[]>,
+  teams: Map<number, TeamInfo>,
+  completedThroughWeek: number,
+  context: ZoneOutcomeContext,
+): StandingRow[] {
+  const rows = [...teams.entries()].map(([rosterId, t]) => {
+    const wins = winsThroughWeek(rosterId, matchupsByWeek, context)
+    const losses = lossesThroughWeek(rosterId, matchupsByWeek, context)
+    let pointsFor = 0
+    let pointsAgainst = 0
+    const outcomes: ('W' | 'L' | 'T')[] = []
+    const lastWeek = Math.max(
+      completedThroughWeek,
+      context.partialWeek ?? 0,
+    )
+    for (let week = 1; week <= lastWeek; week++) {
+      const outcome = matchupOutcomeForWeek(
+        rosterId,
+        week,
+        matchupsByWeek,
+        context,
+      )
+      if (!outcome) continue
+      const matchups = matchupsByWeek.get(week)
+      const mine = matchups?.find((m) => m.roster_id === rosterId)
+      const opp = matchups?.find(
+        (m) =>
+          mine &&
+          m.matchup_id === mine.matchup_id &&
+          m.roster_id !== rosterId,
+      )
+      if (!mine || !opp) continue
+      pointsFor += mine.points
+      pointsAgainst += opp.points
+      outcomes.push(outcome)
+    }
+    const streak =
+      outcomes.length === 0
+        ? ''
+        : (() => {
+            const last = outcomes[outcomes.length - 1]
+            let count = 0
+            for (let i = outcomes.length - 1; i >= 0; i--) {
+              if (outcomes[i] !== last) break
+              count++
+            }
+            return `${last}${count}`
+          })()
+    return {
+      rosterId,
+      teamName: t.teamName,
+      displayName: t.displayName,
+      wins,
+      losses,
+      ties: 0,
+      pointsFor,
+      pointsAgainst,
+      streak,
+    }
+  })
+  return sortStandingRows(rows)
+}
+
+export function buildZoneOutcomeContext(input: {
+  completedThroughWeek: number
+  weekInProgress: boolean
+  selectedWeek: number
+  matchupsByWeek: Map<number, SleeperMatchup[]>
+  players: PlayersMap | null | undefined
+  nflWeekGames: NflWeekGame[] | null | undefined
+}): ZoneOutcomeContext {
+  const {
+    completedThroughWeek,
+    weekInProgress,
+    selectedWeek,
+    matchupsByWeek,
+    players,
+    nflWeekGames,
+  } = input
+  if (
+    !weekInProgress ||
+    selectedWeek <= completedThroughWeek ||
+    !players ||
+    !nflWeekGames?.length
+  ) {
+    return { completedThroughWeek }
+  }
+  const matchups = matchupsByWeek.get(selectedWeek)
+  if (!matchups?.length) {
+    return { completedThroughWeek }
+  }
+  const finalizedMatchupKeys = finalizedMatchupKeysForWeek(
+    selectedWeek,
+    matchups,
+    players,
+    nflWeekGames,
+  )
+  if (!finalizedMatchupKeys.size) {
+    return { completedThroughWeek }
+  }
+  return {
+    completedThroughWeek,
+    partialWeek: selectedWeek,
+    finalizedMatchupKeys,
+  }
+}
+
 /** First week a team reaches `lossCount` losses with zero wins (completed weeks only). */
 export function firstWeekAtLossCount(
   rosterId: number,
   lossCount: number,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
-  throughWeek: number,
+  context: ZoneOutcomeContext,
 ): number | null {
-  for (let week = 1; week <= throughWeek; week++) {
-    const wins = winsThroughWeek(rosterId, matchupsByWeek, week)
-    const losses = lossesThroughWeek(rosterId, matchupsByWeek, week)
+  const lastWeek = Math.max(
+    context.completedThroughWeek,
+    context.partialWeek ?? 0,
+  )
+  for (let week = 1; week <= lastWeek; week++) {
+    const atWeek = zoneContextThrough(week, context)
+    const wins = winsThroughWeek(rosterId, matchupsByWeek, atWeek)
+    const losses = lossesThroughWeek(rosterId, matchupsByWeek, atWeek)
     if (wins === 0 && losses >= lossCount) return week
   }
   return null
@@ -198,7 +373,7 @@ export function resolveZoneName(
   standings: StandingRow[],
   teams: Map<number, TeamInfo>,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
-  throughWeek: number,
+  context: ZoneOutcomeContext,
 ): string {
   const threshold = FRANKIE_ZONE_RECORD.renameAtLosses
   let best: { week: number; name: string } | null = null
@@ -212,8 +387,8 @@ export function resolveZoneName(
         row.rosterId,
         threshold,
         matchupsByWeek,
-        throughWeek,
-      ) ?? throughWeek
+        context,
+      ) ?? context.completedThroughWeek
     if (!best || week < best.week) best = { week, name }
   }
   return best?.name ?? FRANKIE_ZONE_RECORD.holderName
@@ -222,18 +397,27 @@ export function resolveZoneName(
 export function buildEscapeLog(
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   teams: Map<number, TeamInfo>,
-  throughWeek: number,
+  context: ZoneOutcomeContext,
 ): ZoneEscape[] {
   const escapes: ZoneEscape[] = []
+  const lastWeek = Math.max(
+    context.completedThroughWeek,
+    context.partialWeek ?? 0,
+  )
   for (const team of teams.values()) {
     let prevWins = 0
-    for (let week = 1; week <= throughWeek; week++) {
-      const wins = winsThroughWeek(team.rosterId, matchupsByWeek, week)
+    for (let week = 1; week <= lastWeek; week++) {
+      const atWeek = zoneContextThrough(week, context)
+      const wins = winsThroughWeek(team.rosterId, matchupsByWeek, atWeek)
       if (prevWins === 0 && wins === 1) {
         const lossesBefore =
           week <= 1
             ? 0
-            : lossesThroughWeek(team.rosterId, matchupsByWeek, week - 1)
+            : lossesThroughWeek(
+                team.rosterId,
+                matchupsByWeek,
+                zoneContextThrough(week - 1, context),
+              )
         if (lossesBefore < 1) {
           prevWins = wins
           continue
@@ -376,39 +560,65 @@ export function renameMeterLabel(losses: number): string {
 }
 
 export function computeFrankieZoneView(input: {
-  standings: StandingRow[]
   teams: Map<number, TeamInfo>
   matchupsByWeek: Map<number, SleeperMatchup[]>
   scheduleByWeek: Map<number, Map<number, number>>
-  /** Cumulative stats through this week (may trail selectedWeek when live). */
-  throughWeek: number
+  /** Last fully scored fantasy week (Sleeper leg). */
+  completedThroughWeek: number
   selectedWeek: number
   weekInProgress: boolean
+  players?: PlayersMap | null
+  nflWeekGames?: NflWeekGame[] | null
   playoffWeekStart?: number
 }): FrankieZoneView {
   const {
-    standings,
     teams,
     matchupsByWeek,
     scheduleByWeek,
-    throughWeek,
+    completedThroughWeek,
     selectedWeek,
     weekInProgress,
+    players,
+    nflWeekGames,
     playoffWeekStart = 15,
   } = input
+
+  const outcomeContext = buildZoneOutcomeContext({
+    completedThroughWeek,
+    weekInProgress,
+    selectedWeek,
+    matchupsByWeek,
+    players,
+    nflWeekGames,
+  })
+  const standings = computeZoneStandings(
+    matchupsByWeek,
+    teams,
+    completedThroughWeek,
+    outcomeContext,
+  )
+  const throughWeek = outcomeContext.completedThroughWeek
+  const hasPartialWeek =
+    outcomeContext.partialWeek !== undefined &&
+    outcomeContext.partialWeek > completedThroughWeek
 
   const zoneName = resolveZoneName(
     standings,
     teams,
     matchupsByWeek,
-    throughWeek,
+    outcomeContext,
   )
   const residents = standings
     .filter((r) => r.wins === 0)
     .sort((a, b) => b.losses - a.losses || a.pointsFor - b.pointsFor)
 
   const standingsByRoster = new Map(standings.map((r) => [r.rosterId, r]))
-  const nextFromWeek = throughWeek + 1
+  const nextFromWeek = hasPartialWeek
+    ? (outcomeContext.partialWeek ?? completedThroughWeek) + 1
+    : completedThroughWeek + 1
+  const collisionCurrentWeek = hasPartialWeek
+    ? (outcomeContext.partialWeek ?? selectedWeek)
+    : completedThroughWeek
   const residentIds = new Set(residents.map((r) => r.rosterId))
 
   const residentViews: ZoneResident[] = residents.map((row) => ({
@@ -428,13 +638,13 @@ export function computeFrankieZoneView(input: {
     ),
   }))
 
-  const escapes = buildEscapeLog(matchupsByWeek, teams, throughWeek)
+  const escapes = buildEscapeLog(matchupsByWeek, teams, outcomeContext)
   const allCollisions = findZoneCollisions(
     residentIds,
     scheduleByWeek,
     teams,
     nextFromWeek,
-    throughWeek,
+    collisionCurrentWeek,
     playoffWeekStart,
   )
   const { collisions, moreCount } = limitZoneCollisions(allCollisions)
@@ -449,13 +659,19 @@ export function computeFrankieZoneView(input: {
       weekInProgress,
       selectedWeek,
     ),
-    weekInProgressNote: null,
+    weekInProgressNote: hasPartialWeek
+      ? `Week ${outcomeContext.partialWeek} in progress — zone updated for finalized matchups only.`
+      : weekInProgress
+        ? `Week ${selectedWeek} in progress — zone updates when matchups finalize.`
+        : null,
     residents: residentViews,
     escapes,
     collisions,
     moreCollisionsCount: moreCount,
     isEmpty: residents.length === 0,
-    throughWeek,
+    throughWeek: hasPartialWeek
+      ? (outcomeContext.partialWeek ?? throughWeek)
+      : throughWeek,
   }
 }
 

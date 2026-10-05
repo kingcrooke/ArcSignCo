@@ -37,7 +37,7 @@ export function streakLabel(streak: string): string {
   return trimmed
 }
 
-function sortStandingRows(
+export function sortStandingRows(
   rows: Omit<StandingRow, 'rank'>[],
 ): StandingRow[] {
   const sorted = [...rows]

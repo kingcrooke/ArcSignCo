@@ -13,21 +13,29 @@ import {
   type FrankieZoneView,
 } from '../lib/frankieZone'
 import { getFrankieZoneSlides } from '../lib/frankieZoneSlides'
-import { fetchMatchups } from '../lib/sleeperApi'
+import { fetchMatchups, fetchNflWeekScores } from '../lib/sleeperApi'
 import { slideAssetUrl } from '../lib/publishedSlides'
-import type { SleeperMatchup, StandingRow, TeamInfo } from '../lib/types'
+import type {
+  NflState,
+  NflWeekGame,
+  PlayersMap,
+  SleeperMatchup,
+  TeamInfo,
+} from '../lib/types'
 import { SlideLightbox } from './SlideLightbox'
 
 const THUMB_WIDTH = 540
 const THUMB_HEIGHT = 675
 
 type Props = {
-  standings: StandingRow[]
   teams: Map<number, TeamInfo>
   matchupsByWeek: Map<number, SleeperMatchup[]>
   selectedWeek: number
-  throughWeek: number
+  completedThroughWeek: number
   weekInProgress: boolean
+  nflState: NflState
+  players: PlayersMap | null
+  ensurePlayers: () => void
   deferralNote: string | null
   playoffWeekStart: number
   onOpenRecap: (week: number, recapId: string) => void
@@ -111,12 +119,14 @@ function CollisionCard({
 }
 
 export function FrankieZonePanel({
-  standings,
   teams,
   matchupsByWeek,
   selectedWeek,
-  throughWeek,
+  completedThroughWeek,
   weekInProgress,
+  nflState,
+  players,
+  ensurePlayers,
   deferralNote,
   playoffWeekStart,
   onOpenRecap,
@@ -128,8 +138,32 @@ export function FrankieZonePanel({
   )
   const scheduleWeeksLoaded = useRef(new Set<number>())
   const [scheduleReady, setScheduleReady] = useState(false)
+  const [nflWeekGames, setNflWeekGames] = useState<NflWeekGame[] | null>(null)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const slides = useMemo(() => getFrankieZoneSlides(), [])
+
+  useEffect(() => {
+    if (!weekInProgress) {
+      setNflWeekGames(null)
+      return
+    }
+    ensurePlayers()
+    let cancelled = false
+    void fetchNflWeekScores(
+      nflState.season,
+      selectedWeek,
+      nflState.season_type,
+    )
+      .then((games) => {
+        if (!cancelled) setNflWeekGames(games)
+      })
+      .catch(() => {
+        if (!cancelled) setNflWeekGames(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [weekInProgress, selectedWeek, nflState.season, nflState.season_type, ensurePlayers])
 
   useEffect(() => {
     const links: HTMLLinkElement[] = []
@@ -186,23 +220,25 @@ export function FrankieZonePanel({
   const view = useMemo(
     () =>
       computeFrankieZoneView({
-        standings,
         teams,
         matchupsByWeek,
         scheduleByWeek,
-        throughWeek,
+        completedThroughWeek,
         selectedWeek,
         weekInProgress,
+        players,
+        nflWeekGames,
         playoffWeekStart,
       }),
     [
-      standings,
       teams,
       matchupsByWeek,
       scheduleByWeek,
-      throughWeek,
+      completedThroughWeek,
       selectedWeek,
       weekInProgress,
+      players,
+      nflWeekGames,
       playoffWeekStart,
     ],
   )
@@ -242,10 +278,16 @@ export function FrankieZonePanel({
 
   return (
     <div id="frankie-zone-section" className="space-y-8">
-      {deferralNote && (
+      {view.weekInProgressNote ? (
         <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
-          {deferralNote}
+          {view.weekInProgressNote}
         </p>
+      ) : (
+        deferralNote && (
+          <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
+            {deferralNote}
+          </p>
+        )
       )}
       <header className="text-center">
         <h2 className="font-['Anton'] text-4xl uppercase leading-tight text-[var(--gwb-accent)] sm:text-5xl">

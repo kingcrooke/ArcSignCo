@@ -41,14 +41,12 @@ describe('frankieZone', () => {
 
   function viewAtWeek(week: number) {
     const matchupsByWeek = matchupsThroughWeek(week)
-    const standings = computeStandingsThroughWeek(matchupsByWeek, teams, week)
     const scheduleByWeek = buildScheduleByWeek(matchupsByWeek)
     return computeFrankieZoneView({
-      standings,
       teams,
       matchupsByWeek,
       scheduleByWeek,
-      throughWeek: week,
+      completedThroughWeek: week,
       selectedWeek: week,
       weekInProgress: false,
       playoffWeekStart: 15,
@@ -127,13 +125,11 @@ describe('frankieZone', () => {
       sched.set(week, new Map([[1, 11], [11, 1]]))
     }
     const matchupsByWeek = matchupsThroughWeek(3)
-    const standings = computeStandingsThroughWeek(matchupsByWeek, teams, 3)
     const view = computeFrankieZoneView({
-      standings,
       teams,
       matchupsByWeek,
       scheduleByWeek: sched,
-      throughWeek: 3,
+      completedThroughWeek: 3,
       selectedWeek: 3,
       weekInProgress: false,
       playoffWeekStart: 15,
@@ -149,7 +145,9 @@ describe('frankieZone', () => {
     const fakeStandings = standings.map((r) =>
       r.rosterId === 11 ? { ...r, wins: 0, losses: 8 } : r,
     )
-    const name = resolveZoneName(fakeStandings, teams, matchupsByWeek, 8)
+    const name = resolveZoneName(fakeStandings, teams, matchupsByWeek, {
+      completedThroughWeek: 8,
+    })
     expect(name).toBe('Frankie')
   })
 
@@ -187,7 +185,7 @@ describe('frankieZone', () => {
       [2, [...pair(8, 1, 90, 3, 110)]],
       [3, [...pair(8, 1, 167.66, 3, 136.7)]],
     ])
-    const escapes = buildEscapeLog(byWeek, teams, 3)
+    const escapes = buildEscapeLog(byWeek, teams, { completedThroughWeek: 3 })
     expect(escapes).toHaveLength(1)
     expect(escapes[0].teamName).toBe(crooke.teamName)
     expect(escapes[0].week).toBe(3)
@@ -222,7 +220,9 @@ describe('frankieZone', () => {
       [2, loss(11, 2, 90, 110)],
       [3, loss(11, 3, 95, 115)],
     ])
-    const w = firstWeekAtLossCount(frankieRoster.roster_id, 3, multiWeek, 3)
+    const w = firstWeekAtLossCount(frankieRoster.roster_id, 3, multiWeek, {
+      completedThroughWeek: 3,
+    })
     expect(w).toBe(3)
   })
 })

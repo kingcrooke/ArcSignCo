@@ -20,7 +20,6 @@ import {
 } from './lib/frankieZone'
 import { weekHasMatchups } from './lib/recaps'
 import { MULLIGAN_LEDGER_ENTRIES } from './lib/mulligans'
-import { computeStandingsThroughWeek } from './lib/standings'
 import type { GraphicsSectionKind } from './lib/weekGraphics'
 import {
   cumulativeDeferralNote,
@@ -78,19 +77,15 @@ export default function App() {
   const frankieTabLabel = useMemo(() => {
     if (!data) return zoneTabLabel('Frankie')
     const through = lastCompletedWeek(data.league, data.nflState)
-    const standings = computeStandingsThroughWeek(
-      data.matchupsByWeek,
-      data.teams,
-      through,
-    )
     const view = computeFrankieZoneView({
-      standings,
       teams: data.teams,
       matchupsByWeek: data.matchupsByWeek,
       scheduleByWeek: buildScheduleByWeek(data.matchupsByWeek),
-      throughWeek: through,
-      selectedWeek: through,
-      weekInProgress: false,
+      completedThroughWeek: through,
+      selectedWeek: data.selectedWeek,
+      weekInProgress: data.isSelectedWeekLive,
+      players: data.players,
+      nflWeekGames: null,
     })
     return view.tabLabel
   }, [data])
@@ -424,12 +419,14 @@ export default function App() {
                 </span>
               </h2>
               <FrankieZonePanel
-                standings={data.standings}
                 teams={data.teams}
                 matchupsByWeek={data.matchupsByWeek}
                 selectedWeek={data.selectedWeek}
-                throughWeek={data.standingsThroughWeek}
+                completedThroughWeek={data.standingsThroughWeek}
                 weekInProgress={data.isSelectedWeekLive}
+                nflState={data.nflState}
+                players={data.players}
+                ensurePlayers={data.ensurePlayers}
                 deferralNote={cumulativeDeferralNote(
                   data.selectedWeek,
                   data.league,
