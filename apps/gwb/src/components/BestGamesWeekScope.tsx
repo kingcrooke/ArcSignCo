@@ -26,7 +26,7 @@ export function BestGamesWeekScope({
         Games by week
       </span>
       <div
-        className="flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+        className="gwb-week-scope-chips flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
         role="group"
         aria-label="Filter best games by week"
       >
@@ -68,11 +68,9 @@ function ScopeChip({
       type="button"
       disabled={disabled}
       className={
-        disabled
-          ? 'shrink-0 cursor-not-allowed rounded-lg px-3 py-2 text-xs font-medium text-[var(--gwb-muted)] opacity-60'
-          : active
-            ? 'gwb-section-tab gwb-section-tab--active shrink-0 px-3 py-2 text-xs'
-            : 'gwb-section-tab shrink-0 px-3 py-2 text-xs'
+        active
+          ? 'gwb-week-scope-chip gwb-week-scope-chip--active shrink-0 px-3 py-2 text-xs'
+          : 'gwb-week-scope-chip shrink-0 px-3 py-2 text-xs'
       }
       aria-pressed={active}
       onClick={onClick}

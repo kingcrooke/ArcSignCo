@@ -111,3 +111,76 @@ nav.gwb-section-tabs button.gwb-section-tab:focus-visible {
 nav.gwb-section-tabs button.gwb-section-tab--active:focus-visible {
   outline-color: var(--gwb-text);
 }
+
+/* Scroll hint on narrow viewports — tab bar overflows horizontally */
+nav.gwb-section-tabs {
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+nav.gwb-section-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+nav.gwb-section-tabs::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1.75rem;
+  pointer-events: none;
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--gwb-surface) 85%
+  );
+}
+
+/* Best Games week scope chips (same gold active look as section tabs) */
+.gwb-week-scope-chips button.gwb-week-scope-chip {
+  flex: 0 0 auto;
+  min-width: max-content;
+  white-space: nowrap;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background-color: transparent;
+  color: var(--gwb-muted);
+  font-weight: 500;
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip:hover:not(:disabled) {
+  color: var(--gwb-text);
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip--active {
+  background-color: var(--gwb-accent);
+  color: #1a1200;
+  font-weight: 600;
+  border-color: var(--gwb-accent);
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip--active:hover {
+  color: #1a1200;
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip:focus {
+  outline: none;
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip:focus-visible {
+  outline: 2px solid var(--gwb-accent);
+  outline-offset: 2px;
+}
+
+.gwb-week-scope-chips button.gwb-week-scope-chip--active:focus-visible {
+  outline-color: var(--gwb-text);
+}

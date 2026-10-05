@@ -20,6 +20,9 @@ export interface GameScoreBreakdown {
   combinedPoints: number
 }
 
+/** How many matchups to surface per completed fantasy week. */
+export const BEST_GAMES_PER_WEEK = 3
+
 export interface RankedBestGame {
   rank: number
   week: number
@@ -31,6 +34,11 @@ export interface RankedBestGame {
   loserRosterId: number
   breakdown: GameScoreBreakdown
   badges: BestGameBadge[]
+}
+
+export interface BestGamesWeekGroup {
+  week: number
+  games: RankedBestGame[]
 }
 
 export interface BestGameContentEntry {
@@ -257,33 +265,41 @@ function candidatesForWeek(
   return out
 }
 
-/** Rank final matchups within one fantasy week (all head-to-heads, best first). */
+/** Rank final matchups within one fantasy week (top N by score, best first). */
 export function rankBestGamesForWeek(
   week: number,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   league: SleeperLeague,
   nflState: NflState,
   ledger: MulliganLedgerEntry[],
+  limit = BEST_GAMES_PER_WEEK,
 ): RankedBestGame[] {
   if (isWeekLive(week, league, nflState)) return []
   const candidates = candidatesForWeek(week, matchupsByWeek, ledger)
-  return rankCandidates(candidates)
+  return rankCandidates(candidates, limit)
 }
 
-export function rankBestGames(
+/** Top games per completed week, grouped for the All scope (newest week first). */
+export function rankBestGamesByWeek(
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   league: SleeperLeague,
   nflState: NflState,
   ledger: MulliganLedgerEntry[],
-  limit = 6,
-): RankedBestGame[] {
+): BestGamesWeekGroup[] {
   const completedThrough = lastCompletedWeek(league, nflState)
-  const candidates: Omit<RankedBestGame, 'rank'>[] = []
+  const groups: BestGamesWeekGroup[] = []
 
-  for (let week = 1; week <= completedThrough; week++) {
+  for (let week = completedThrough; week >= 1; week--) {
     if (isWeekLive(week, league, nflState)) continue
-    candidates.push(...candidatesForWeek(week, matchupsByWeek, ledger))
+    const games = rankBestGamesForWeek(
+      week,
+      matchupsByWeek,
+      league,
+      nflState,
+      ledger,
+    )
+    if (games.length) groups.push({ week, games })
   }
 
-  return rankCandidates(candidates, limit)
+  return groups
 }
