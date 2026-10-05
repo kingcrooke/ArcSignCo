@@ -17,15 +17,17 @@ import state from '../test/fixtures/state-nfl.json'
 import type { NflState, SleeperLeague } from './types'
 
 describe('mulligans', () => {
-  it('lists all six confirmed uses in ledger order', () => {
-    expect(mulliganLedgerEntries()).toHaveLength(6)
-    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(6)
+  it('lists all seven confirmed uses in ledger order', () => {
+    expect(mulliganLedgerEntries()).toHaveLength(7)
+    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(7)
   })
 
-  it('marks rosters 1, 2, 3, 8, 9, 12 as used and leaves others available', () => {
-    for (const id of [1, 2, 3, 8, 9, 12]) {
+  it('marks rosters 1, 2, 3, 4, 8, 9, 12 as used and leaves others available', () => {
+    for (const id of [1, 2, 3, 4, 8, 9, 12]) {
       expect(mulliganStatusForRoster(id).used).toBe(true)
     }
+    expect(mulliganLabel(mulliganStatusForRoster(4))).toContain('Used')
+    expect(mulliganLabel(mulliganStatusForRoster(4))).toContain('Rashee Rice')
     expect(mulliganLabel(mulliganStatusForRoster(1))).toContain('Bateman')
     expect(mulliganLabel(mulliganStatusForRoster(12))).toContain('Week 2')
     expect(mulliganLabel(mulliganStatusForRoster(12))).toContain('DJ Moore')
@@ -64,17 +66,46 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(jesus)).toContain('Lost')
   })
 
+  it('shows Kayser week 4 swap as a pending flip vs Turn Your Head And Goff', () => {
+    const kayser = mulliganForRoster(4)!
+    expect(kayser.id).toBe('w4-kayser')
+    expect(kayser.week).toBe(4)
+    expect(kayser.won).toBe(true)
+    expect(kayser.flipped).toBe(true)
+    expect(kayser.resultPending).toBe(true)
+    expect(kayser.netImpact).toBe(5.2)
+    expect(kayser.scoreWith).toBe(128.44)
+    expect(kayser.scoreWithout).toBe(123.24)
+    expect(kayser.opponentScore).toBe(127.4)
+    expect(formatMulliganReceipt(kayser)).toContain('Brycen Tremayne')
+    expect(formatMulliganReceipt(kayser)).toContain('+5.20')
+    expect(formatMulliganReceipt(kayser)).toContain('TBD 128.44–127.40')
+    expect(formatMulliganLedgerLine(kayser)).toContain('WR KC')
+    expect(formatMulliganLedgerLine(kayser)).toContain('WR CAR')
+    expect(formatMulliganLedgerLine(kayser)).toContain('Result TBD')
+    expect(formatMulliganLedgerLine(kayser)).toContain('Flipped result')
+    expect(formatMulliganLedgerLine(kayser)).toContain(
+      'PENDING MNF — Frankie still has Devaughn Vele (NO). Current lead 1.04; without mulligan would trail by 4.16.',
+    )
+    expect(mulliganEntriesForWeek(4).map((e) => e.managerShort)).toEqual([
+      'Kayser',
+      'Jesus',
+    ])
+  })
+
   it('respects throughWeek for status and week filters for results', () => {
     expect(mulligansUsedThroughWeek(1)).toBe(1)
     expect(mulligansUsedThroughWeek(2)).toBe(3)
     expect(mulligansUsedThroughWeek(3)).toBe(5)
-    expect(mulligansUsedThroughWeek(4)).toBe(6)
+    expect(mulligansUsedThroughWeek(4)).toBe(7)
     expect(mulliganStatusForRoster(9, 1).used).toBe(false)
     expect(mulliganStatusForRoster(9, 2).used).toBe(true)
     expect(mulliganStatusForRoster(8, 3).used).toBe(false)
     expect(mulliganStatusForRoster(8, 4).used).toBe(true)
     expect(mulliganEntriesForWeek(2)).toHaveLength(2)
-    expect(mulliganEntriesForWeek(4)).toHaveLength(1)
+    expect(mulliganEntriesForWeek(4)).toHaveLength(2)
+    expect(mulliganStatusForRoster(4, 3).used).toBe(false)
+    expect(mulliganStatusForRoster(4, 4).used).toBe(true)
   })
 
   it('extends mulligan status through the ledger week while standings defer', () => {
