@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
+  BEST_GAMES_PER_WEEK,
   contentForMatchup,
-  rankBestGames,
+  rankBestGamesByWeek,
   rankBestGamesForWeek,
   youtubeEmbedUrl,
   type RankedBestGame,
@@ -136,6 +137,134 @@ function ExpandedLineup({
   )
 }
 
+function GamesList({
+  games,
+  teams,
+  players,
+  slots,
+  expandedKey,
+  onToggleExpand,
+  showWeekOnCard,
+  listLabel,
+}: {
+  games: RankedBestGame[]
+  teams: Map<number, TeamInfo>
+  players: PlayersMap | null
+  slots: string[]
+  expandedKey: string | null
+  onToggleExpand: (key: string) => void
+  showWeekOnCard: boolean
+  listLabel: string
+}) {
+  if (!games.length) return null
+
+  return (
+    <ul
+      className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
+      role="list"
+      aria-label={listLabel}
+    >
+      {games.map((game, index) => {
+        const { home, away, breakdown } = game
+        const winner =
+          home.points >= away.points ? home.roster_id : away.roster_id
+        const open = expandedKey === game.matchupKey
+        const teamH = teams.get(home.roster_id)
+        const teamA = teams.get(away.roster_id)
+
+        return (
+          <li key={game.matchupKey}>
+            <button
+              type="button"
+              className={`w-full border-t border-[var(--gwb-border)] px-3 py-3 text-left first:border-t-0 sm:px-4 ${
+                index % 2 === 1 ? 'bg-[#0d1319]/60' : ''
+              }`}
+              aria-expanded={open}
+              onClick={() => onToggleExpand(game.matchupKey)}
+            >
+              <div className="flex items-start gap-2">
+                <span
+                  className="w-6 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)]"
+                  aria-label={`Rank ${game.rank}`}
+                >
+                  {game.rank}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {showWeekOnCard ? (
+                      <span
+                        className="rounded-md border border-[var(--gwb-accent)]/45 bg-[var(--gwb-accent)]/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--gwb-accent)]"
+                        aria-label={`NFL week ${game.week}`}
+                      >
+                        Week {game.week}
+                      </span>
+                    ) : null}
+                    {game.badges.map((b) => (
+                      <Badge key={b} label={b} />
+                    ))}
+                  </div>
+
+                  <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                    <ScoreSide
+                      rosterId={home.roster_id}
+                      points={home.points}
+                      teams={teams}
+                      winning={winner === home.roster_id}
+                    />
+                    <span className="hidden shrink-0 text-xs font-semibold uppercase text-[var(--gwb-muted)] sm:block">
+                      vs
+                    </span>
+                    <ScoreSide
+                      rosterId={away.roster_id}
+                      points={away.points}
+                      teams={teams}
+                      winning={winner === away.roster_id}
+                    />
+                  </div>
+
+                  <p className="mt-2 text-xs text-[var(--gwb-muted)]">
+                    Score {breakdown.composite.toFixed(1)}
+                    <span className="mx-1 text-[var(--gwb-border)]">·</span>
+                    {breakdown.margin.toFixed(1)} pt margin
+                    <span className="mx-1 text-[var(--gwb-border)]">·</span>
+                    {breakdown.combinedPoints.toFixed(1)} combined
+                  </p>
+                </div>
+                <span
+                  className="shrink-0 pt-1 text-[var(--gwb-muted)]"
+                  aria-hidden
+                >
+                  {open ? '▾' : '▸'}
+                </span>
+              </div>
+            </button>
+
+            {open && players && (
+              <div className="border-t border-[var(--gwb-border)] bg-[#0a0e12]/90 px-3 pb-4 pt-3 sm:px-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <ExpandedLineup
+                    matchup={home}
+                    team={teamH}
+                    slots={slots}
+                    players={players}
+                  />
+                  <ExpandedLineup
+                    matchup={away}
+                    team={teamA}
+                    slots={slots}
+                    players={players}
+                  />
+                </div>
+                <RecapMedia matchupKey={game.matchupKey} />
+              </div>
+            )}
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
 function RecapMedia({ matchupKey }: { matchupKey: string }) {
   const entry = contentForMatchup(matchupKey)
   if (entry?.status === 'live' && entry.videoUrl) {
@@ -207,16 +336,13 @@ export function BestGamesPanel({
     }
   }, [scope, completedThrough, league, nflState, onScopeChange])
 
-  const games = useMemo(() => {
-    if (scope === 'all') {
-      return rankBestGames(
-        matchupsByWeek,
-        league,
-        nflState,
-        ledger,
-        6,
-      )
-    }
+  const weekGroups = useMemo(() => {
+    if (scope !== 'all') return null
+    return rankBestGamesByWeek(matchupsByWeek, league, nflState, ledger)
+  }, [scope, matchupsByWeek, league, nflState, ledger])
+
+  const weekGames = useMemo(() => {
+    if (scope === 'all') return []
     return rankBestGamesForWeek(
       scope,
       matchupsByWeek,
@@ -225,6 +351,11 @@ export function BestGamesPanel({
       ledger,
     )
   }, [scope, matchupsByWeek, league, nflState, ledger])
+
+  const hasContent =
+    scope === 'all'
+      ? (weekGroups?.length ?? 0) > 0
+      : weekGames.length > 0
 
   const slots = useMemo(
     () => starterPositions(league.roster_positions),
@@ -235,12 +366,11 @@ export function BestGamesPanel({
     ensurePlayers()
   }, [ensurePlayers])
 
-  const scopeLabel =
-    scope === 'all'
-      ? `season top ${games.length || 6}`
-      : `Week ${scope}`
+  const toggleExpand = (key: string) => {
+    setExpandedKey((prev) => (prev === key ? null : key))
+  }
 
-  if (!games.length && scope === 'all' && completedThrough < 1) {
+  if (!hasContent && scope === 'all' && completedThrough < 1) {
     return (
       <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
         No final matchups ranked yet. Check back after the first full scoring week.
@@ -270,18 +400,19 @@ export function BestGamesPanel({
       <p className="text-xs text-[var(--gwb-muted)]">
         {scope === 'all' ? (
           <>
-            Ranked by closeness, shootout, upset, and mulligan drama — top final
-            matchups season-to-date ({scopeLabel}).
+            Top {BEST_GAMES_PER_WEEK} final matchups per week, grouped newest
+            week first — ranked by closeness, shootout, upset, and mulligan
+            drama.
           </>
         ) : (
           <>
-            Best matchups in Week {scope}, ranked within the week by closeness,
-            shootout, upset, and mulligan drama.
+            Top {BEST_GAMES_PER_WEEK} matchups in Week {scope}, ranked within
+            the week by closeness, shootout, upset, and mulligan drama.
           </>
         )}
       </p>
 
-      {!games.length ? (
+      {!hasContent ? (
         <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
           {typeof scope === 'number' && isWeekLive(scope, league, nflState)
             ? `Week ${scope} is still in progress — rankings appear when scoring is final.`
@@ -295,114 +426,42 @@ export function BestGamesPanel({
         </p>
       ) : null}
 
-      {games.length > 0 ? (
-      <ul
-        className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
-        role="list"
-        aria-label={
-          scope === 'all'
-            ? 'Best games of the season'
-            : `Best games of week ${scope}`
-        }
-      >
-        {games.map((game, index) => {
-          const { home, away, breakdown } = game
-          const winner =
-            home.points >= away.points ? home.roster_id : away.roster_id
-          const open = expandedKey === game.matchupKey
-          const teamH = teams.get(home.roster_id)
-          const teamA = teams.get(away.roster_id)
-
-          return (
-            <li key={game.matchupKey}>
-              <button
-                type="button"
-                className={`w-full border-t border-[var(--gwb-border)] px-3 py-3 text-left first:border-t-0 sm:px-4 ${
-                  index % 2 === 1 ? 'bg-[#0d1319]/60' : ''
-                }`}
-                aria-expanded={open}
-                onClick={() =>
-                  setExpandedKey(open ? null : game.matchupKey)
-                }
+      {scope === 'all' && weekGroups && weekGroups.length > 0 ? (
+        <div className="space-y-5">
+          {weekGroups.map(({ week, games }) => (
+            <section key={week} aria-labelledby={`best-games-week-${week}`}>
+              <h3
+                id={`best-games-week-${week}`}
+                className="mb-2 font-['Anton'] text-xl uppercase tracking-wide text-[var(--gwb-text)]"
               >
-                <div className="flex items-start gap-2">
-                  <span
-                    className="w-6 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)]"
-                    aria-label={`Rank ${game.rank}`}
-                  >
-                    {game.rank}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span
-                        className="rounded-md border border-[var(--gwb-accent)]/45 bg-[var(--gwb-accent)]/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--gwb-accent)]"
-                        aria-label={`NFL week ${game.week}`}
-                      >
-                        Week {game.week}
-                      </span>
-                      {game.badges.map((b) => (
-                        <Badge key={b} label={b} />
-                      ))}
-                    </div>
+                Week {week}
+              </h3>
+              <GamesList
+                games={games}
+                teams={teams}
+                players={players}
+                slots={slots}
+                expandedKey={expandedKey}
+                onToggleExpand={toggleExpand}
+                showWeekOnCard={false}
+                listLabel={`Best games of week ${week}`}
+              />
+            </section>
+          ))}
+        </div>
+      ) : null}
 
-                    <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
-                      <ScoreSide
-                        rosterId={home.roster_id}
-                        points={home.points}
-                        teams={teams}
-                        winning={winner === home.roster_id}
-                      />
-                      <span className="hidden shrink-0 text-xs font-semibold uppercase text-[var(--gwb-muted)] sm:block">
-                        vs
-                      </span>
-                      <ScoreSide
-                        rosterId={away.roster_id}
-                        points={away.points}
-                        teams={teams}
-                        winning={winner === away.roster_id}
-                      />
-                    </div>
-
-                    <p className="mt-2 text-xs text-[var(--gwb-muted)]">
-                      Score {breakdown.composite.toFixed(1)}
-                      <span className="mx-1 text-[var(--gwb-border)]">·</span>
-                      {breakdown.margin.toFixed(1)} pt margin
-                      <span className="mx-1 text-[var(--gwb-border)]">·</span>
-                      {breakdown.combinedPoints.toFixed(1)} combined
-                    </p>
-                  </div>
-                  <span
-                    className="shrink-0 pt-1 text-[var(--gwb-muted)]"
-                    aria-hidden
-                  >
-                    {open ? '▾' : '▸'}
-                  </span>
-                </div>
-              </button>
-
-              {open && players && (
-                <div className="border-t border-[var(--gwb-border)] bg-[#0a0e12]/90 px-3 pb-4 pt-3 sm:px-4">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <ExpandedLineup
-                      matchup={home}
-                      team={teamH}
-                      slots={slots}
-                      players={players}
-                    />
-                    <ExpandedLineup
-                      matchup={away}
-                      team={teamA}
-                      slots={slots}
-                      players={players}
-                    />
-                  </div>
-                  <RecapMedia matchupKey={game.matchupKey} />
-                </div>
-              )}
-            </li>
-          )
-        })}
-      </ul>
+      {scope !== 'all' && weekGames.length > 0 ? (
+        <GamesList
+          games={weekGames}
+          teams={teams}
+          players={players}
+          slots={slots}
+          expandedKey={expandedKey}
+          onToggleExpand={toggleExpand}
+          showWeekOnCard={true}
+          listLabel={`Best games of week ${scope}`}
+        />
       ) : null}
     </div>
   )

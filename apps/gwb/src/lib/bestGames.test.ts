@@ -8,7 +8,8 @@ import {
   computeGameBreakdown,
   computeMulliganBonus,
   makeMatchupKey,
-  rankBestGames,
+  BEST_GAMES_PER_WEEK,
+  rankBestGamesByWeek,
   rankBestGamesForWeek,
   youtubeEmbedUrl,
 } from './bestGames'
@@ -69,7 +70,7 @@ describe('bestGames scoring', () => {
 })
 
 describe('rankBestGames', () => {
-  it('ranks completed weeks from fixtures', () => {
+  it('groups top games per completed week, newest first', () => {
     const league = load<SleeperLeague>('league.json')
     const nflState = load<NflState>('state-nfl.json')
     const m1 = load<SleeperMatchup[]>('matchups-1.json')
@@ -80,23 +81,22 @@ describe('rankBestGames', () => {
       [2, m2],
       [3, m3],
     ])
-    const ranked = rankBestGames(
+    const groups = rankBestGamesByWeek(
       map,
       { ...league, settings: { ...league.settings, last_scored_leg: 3 } },
       nflState,
       MULLIGAN_LEDGER_ENTRIES,
-      6,
     )
-    expect(ranked.length).toBeGreaterThan(0)
-    expect(ranked[0].rank).toBe(1)
-    for (let i = 1; i < ranked.length; i++) {
-      expect(ranked[i].breakdown.composite).toBeLessThanOrEqual(
-        ranked[i - 1].breakdown.composite,
-      )
-    }
-    for (const g of ranked) {
-      const pairs = groupMatchupPairs(map.get(g.week) ?? [])
-      expect(pairs.some((p) => p.matchupId === g.matchupId)).toBe(true)
+    expect(groups.length).toBe(3)
+    expect(groups[0].week).toBe(3)
+    expect(groups[2].week).toBe(1)
+    for (const { week, games } of groups) {
+      expect(games.length).toBeLessThanOrEqual(BEST_GAMES_PER_WEEK)
+      expect(games.every((g) => g.week === week)).toBe(true)
+      for (const g of games) {
+        const pairs = groupMatchupPairs(map.get(g.week) ?? [])
+        expect(pairs.some((p) => p.matchupId === g.matchupId)).toBe(true)
+      }
     }
   })
 
@@ -113,6 +113,7 @@ describe('rankBestGames', () => {
       MULLIGAN_LEDGER_ENTRIES,
     )
     expect(weekRanked.length).toBeGreaterThan(0)
+    expect(weekRanked.length).toBeLessThanOrEqual(BEST_GAMES_PER_WEEK)
     expect(weekRanked.every((g) => g.week === 3)).toBe(true)
     expect(weekRanked[0].rank).toBe(1)
     for (let i = 1; i < weekRanked.length; i++) {
