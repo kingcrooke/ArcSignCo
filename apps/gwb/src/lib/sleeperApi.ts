@@ -1,6 +1,7 @@
 import { LEAGUE_ID, SLEEPER_API } from './constants'
 import type {
   NflState,
+  NflWeekGame,
   SleeperLeague,
   SleeperMatchup,
   SleeperRoster,
@@ -18,6 +19,14 @@ async function getJson<T>(path: string): Promise<T> {
 
 export function fetchNflState(): Promise<NflState> {
   return getJson('/state/nfl')
+}
+
+export function fetchNflWeekScores(
+  season: string,
+  week: number,
+  seasonType = 'regular',
+): Promise<NflWeekGame[]> {
+  return getJson(`/scores/nfl/${seasonType}/${season}/${week}`)
 }
 
 export function fetchLeague(leagueId = LEAGUE_ID): Promise<SleeperLeague> {

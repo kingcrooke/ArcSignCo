@@ -1,4 +1,4 @@
-import type { PlayersMap, SleeperMatchup, TeamInfo } from './types'
+import type { NflWeekGame, PlayersMap, SleeperMatchup, TeamInfo } from './types'
 
 export interface MatchupPair {
   matchupId: number
@@ -109,4 +109,76 @@ export function leaderRosterId(
   if (a.points > b.points) return a.roster_id
   if (b.points > a.points) return b.roster_id
   return null
+}
+
+/** NFL teams with at least one non-final game in this fantasy week. */
+export function nflTeamsWithOpenGames(games: NflWeekGame[]): Set<string> {
+  const open = new Set<string>()
+  for (const game of games) {
+    if (game.status === 'complete') continue
+    const home = game.metadata?.home_team
+    const away = game.metadata?.away_team
+    if (home) open.add(home)
+    if (away) open.add(away)
+  }
+  return open
+}
+
+export function starterNflTeam(
+  playerId: string,
+  players: PlayersMap,
+): string | null {
+  if (isEmptyPlayerId(playerId)) return null
+  if (isDefenseId(playerId)) return playerId
+  return players[playerId]?.team ?? null
+}
+
+/** True when a starter still has an NFL game left to play this week. */
+export function rosterHasStartersWithGamesRemaining(
+  matchup: SleeperMatchup,
+  players: PlayersMap,
+  openTeams: Set<string>,
+): boolean {
+  for (const pid of matchup.starters ?? []) {
+    const team = starterNflTeam(pid, players)
+    if (team && openTeams.has(team)) return true
+  }
+  return false
+}
+
+export function isMatchupPairFinal(
+  home: SleeperMatchup,
+  away: SleeperMatchup,
+  players: PlayersMap,
+  nflGames: NflWeekGame[],
+): boolean {
+  const openTeams = nflTeamsWithOpenGames(nflGames)
+  if (
+    rosterHasStartersWithGamesRemaining(home, players, openTeams) ||
+    rosterHasStartersWithGamesRemaining(away, players, openTeams)
+  ) {
+    return false
+  }
+  if (home.points === 0 && away.points === 0) {
+    const played =
+      home.starters?.some((_, i) => (home.starters_points[i] ?? 0) > 0) ||
+      away.starters?.some((_, i) => (away.starters_points[i] ?? 0) > 0)
+    if (!played) return false
+  }
+  return true
+}
+
+export function finalizedMatchupKeysForWeek(
+  week: number,
+  matchups: SleeperMatchup[],
+  players: PlayersMap,
+  nflGames: NflWeekGame[],
+): Set<string> {
+  const keys = new Set<string>()
+  for (const { home, away } of groupMatchupPairs(matchups)) {
+    if (isMatchupPairFinal(home, away, players, nflGames)) {
+      keys.add(`${week}-${home.matchup_id}`)
+    }
+  }
+  return keys
 }
