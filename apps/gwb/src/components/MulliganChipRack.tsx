@@ -1,4 +1,6 @@
-const TOTAL = 12
+export const MULLIGAN_CHIP_TOTAL = 12
+
+const TOTAL = MULLIGAN_CHIP_TOTAL
 
 export function MulliganChipRack({ used }: { used: number }) {
   return (

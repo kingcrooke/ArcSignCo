@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   BEST_GAMES_PER_WEEK,
-  contentForMatchup,
   rankBestGamesByWeek,
   rankBestGamesForWeek,
-  youtubeEmbedUrl,
   type RankedBestGame,
 } from '../lib/bestGames'
 import type { MulliganLedgerEntry } from '../lib/mulligans'
@@ -255,45 +253,12 @@ function GamesList({
                     players={players}
                   />
                 </div>
-                <RecapMedia matchupKey={game.matchupKey} />
               </div>
             )}
           </li>
         )
       })}
     </ul>
-  )
-}
-
-function RecapMedia({ matchupKey }: { matchupKey: string }) {
-  const entry = contentForMatchup(matchupKey)
-  if (entry?.status === 'live' && entry.videoUrl) {
-    const embed = youtubeEmbedUrl(entry.videoUrl)
-    if (embed) {
-      return (
-        <div className="mt-3 overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-black">
-          <div className="relative aspect-video w-full">
-            <iframe
-              title="Best game recap"
-              src={embed}
-              className="absolute inset-0 h-full w-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      )
-    }
-  }
-  return (
-    <div className="mt-3 rounded-lg border border-dashed border-[var(--gwb-border)] bg-[#0d1319]/80 px-4 py-6 text-center">
-      <p className="text-sm font-medium text-[var(--gwb-text)]">
-        Recap video coming soon
-      </p>
-      <p className="mt-1 text-xs text-[var(--gwb-muted)]">
-        Motion recap lands here after commissioner review — no broadcast footage.
-      </p>
-    </div>
   )
 }
 

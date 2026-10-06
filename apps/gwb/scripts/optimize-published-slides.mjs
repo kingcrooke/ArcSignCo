@@ -151,10 +151,10 @@ async function main() {
     : SLIDE_BASENAMES
   ).filter((basename) => !only || only.has(basename))
   const searchDirs = [
+    path.join(__dirname, 'slide-sources'),
     path.join(__dirname, '../../../docs/gwb-remade-slides'),
     path.join(__dirname, '../../../docs/gwb-results-cards'),
     path.join(__dirname, '../../../docs/gwb-fixed-slides'),
-    path.join(__dirname, 'slide-sources'),
     '/home/ubuntu/.cursor/projects/workspace/uploads',
   ]
 

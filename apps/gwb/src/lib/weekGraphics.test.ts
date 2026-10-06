@@ -8,6 +8,28 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results', 'Report'])
   })
 
+  it('publishes the sixteen Week 4 recap slides in order', () => {
+    const report = getWeekGraphicsSections(4).find((s) => s.kind === 'report')
+    expect(report?.slides.map((s) => [s.id, s.title])).toEqual([
+      ['w4-slide-01', 'The Frankie Zone Has Been Evacuated'],
+      ['w4-slide-02', 'Steven 180.56 def Narking'],
+      ['w4-slide-03', 'Mauricio 141.24 def Eric'],
+      ['w4-slide-04', 'Frankie 144.80 def Kayser'],
+      ['w4-slide-05', 'Danny 163.91 def Crooke'],
+      ['w4-slide-06', 'Hadi 141.65 def Manny'],
+      ['w4-slide-07', 'Jamil 162.83 def Matt'],
+      ['w4-slide-08', 'Kayser Mulligan #7: Good Mulligan, Lost Anyway'],
+      ['w4-slide-09', 'Frankie Zone Temporarily Closed'],
+      ['w4-slide-10', 'But One Very Nice Website'],
+      ['w4-slide-11', 'Final Week 4 Scoring'],
+      ['w4-slide-12', 'Stat of the Week: 0.03'],
+      ['w4-slide-13', 'Standings After Week 4'],
+      ['w4-slide-14', 'AI Hadi Got Cooked'],
+      ['w4-slide-15', 'Week 4 Awards'],
+      ['w4-slide-16', 'Week 5: We Run It Back'],
+    ])
+  })
+
   it('publishes the six final result cards with approved headlines', () => {
     const results = getWeekGraphicsSections(4).find((s) => s.kind === 'results')
     expect(results?.slides.map((s) => [s.id, s.title])).toEqual([
