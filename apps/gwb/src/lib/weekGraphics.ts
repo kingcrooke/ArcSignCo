@@ -29,6 +29,10 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     if (matchups.length) {
       sections.push({ kind: 'matchups', heading: 'Matchups', slides: matchups })
     }
+    const results = publish(RESULTS_W4)
+    if (results.length) {
+      sections.push({ kind: 'results', heading: 'Results', slides: results })
+    }
     const report = publish(WEEK_4_REPORT)
     if (report.length) {
       sections.push({ kind: 'report', heading: 'Report', slides: report })
@@ -201,4 +205,13 @@ const RESULTS_W3: PublishedSlide[] = [
   result('results-w3-m4', 'Kayser 151.9 – Manny 129.7'),
   result('results-w3-m5', 'Eric 130.4 – Matt 128.6'),
   result('results-w3-m6', 'Jamil 113.6 – Frankie 95.8'),
+]
+
+const RESULTS_W4: PublishedSlide[] = [
+  result('results-w4-m1', 'Steven 180.6 – Narking 141.2'),
+  result('results-w4-m2', 'Frankie 144.8 – Kayser 128.4'),
+  result('results-w4-m3', 'Hadi 141.7 – Manny 134.9'),
+  result('results-w4-m4', 'Jamil 162.8 – Matt 143.6'),
+  result('results-w4-m5', 'Mauricio 141.2 – Eric 123.7'),
+  result('results-w4-m6', 'Danny 163.9 – Crooke 121.3'),
 ]
