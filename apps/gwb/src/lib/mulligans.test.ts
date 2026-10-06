@@ -66,26 +66,26 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(jesus)).toContain('Lost')
   })
 
-  it('shows Kayser week 4 swap as a pending flip vs Turn Your Head And Goff', () => {
+  it('shows Kayser week 4 swap as final loss vs Turn Your Head And Goff (no flip)', () => {
     const kayser = mulliganForRoster(4)!
     expect(kayser.id).toBe('w4-kayser')
     expect(kayser.week).toBe(4)
-    expect(kayser.won).toBe(true)
-    expect(kayser.flipped).toBe(true)
-    expect(kayser.resultPending).toBe(true)
+    expect(kayser.won).toBe(false)
+    expect(kayser.flipped).toBe(false)
+    expect(kayser.resultPending).toBeUndefined()
     expect(kayser.netImpact).toBe(5.2)
     expect(kayser.scoreWith).toBe(128.44)
     expect(kayser.scoreWithout).toBe(123.24)
-    expect(kayser.opponentScore).toBe(127.4)
+    expect(kayser.opponentScore).toBe(144.8)
     expect(formatMulliganReceipt(kayser)).toContain('Brycen Tremayne')
     expect(formatMulliganReceipt(kayser)).toContain('+5.20')
-    expect(formatMulliganReceipt(kayser)).toContain('TBD 128.44–127.40')
+    expect(formatMulliganReceipt(kayser)).toContain('L 128.44–144.80')
     expect(formatMulliganLedgerLine(kayser)).toContain('WR KC')
     expect(formatMulliganLedgerLine(kayser)).toContain('WR CAR')
-    expect(formatMulliganLedgerLine(kayser)).toContain('Result TBD')
-    expect(formatMulliganLedgerLine(kayser)).toContain('Flipped result')
+    expect(formatMulliganLedgerLine(kayser)).toContain('Lost')
+    expect(formatMulliganLedgerLine(kayser)).toContain('No flip')
     expect(formatMulliganLedgerLine(kayser)).toContain(
-      'PENDING MNF — Frankie still has Devaughn Vele (NO). Current lead 1.04; without mulligan would trail by 4.16.',
+      'Vele dropped 17.4 on MNF; lost by 16.36 even with the +5.2.',
     )
     expect(mulliganEntriesForWeek(4).map((e) => e.managerShort)).toEqual([
       'Kayser',
