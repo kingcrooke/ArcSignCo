@@ -16,7 +16,7 @@ const FULL_WIDTH = 1080
 const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
-const RESULTS_BASENAMES = [1, 2, 3].flatMap((w) =>
+const RESULTS_BASENAMES = [1, 2, 3, 4].flatMap((w) =>
   [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
 )
 
@@ -132,18 +132,29 @@ async function main() {
         .map((s) => Number(s.trim()))
         .filter((n) => n > 0)
     : null
-  const basenames = weeks?.length
+  const onlyArg = process.argv.find((a) => a.startsWith('--only='))
+  const only = onlyArg
+    ? new Set(
+        onlyArg
+          .slice('--only='.length)
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      )
+    : null
+  const basenames = (weeks?.length
     ? weeks.flatMap((w) =>
         Array.from({ length: 16 }, (_, i) =>
           `w${w}-slide-${String(i + 1).padStart(2, '0')}`,
         ),
       )
     : SLIDE_BASENAMES
+  ).filter((basename) => !only || only.has(basename))
   const searchDirs = [
+    path.join(__dirname, 'slide-sources'),
     path.join(__dirname, '../../../docs/gwb-remade-slides'),
     path.join(__dirname, '../../../docs/gwb-results-cards'),
     path.join(__dirname, '../../../docs/gwb-fixed-slides'),
-    path.join(__dirname, 'slide-sources'),
     '/home/ubuntu/.cursor/projects/workspace/uploads',
   ]
 

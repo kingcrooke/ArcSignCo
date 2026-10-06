@@ -13,7 +13,7 @@ import { managerNickname } from '../lib/nicknames'
 import type { MulliganLedgerEntry, MulliganLiveContext } from '../lib/mulligans'
 import { resolveMulliganNetImpact } from '../lib/mulligans'
 import type { SleeperMatchup, StandingRow } from '../lib/types'
-import { MulliganChipRack } from './MulliganChipRack'
+import { MULLIGAN_CHIP_TOTAL, MulliganChipRack } from './MulliganChipRack'
 
 export function MulligansPanel({
   rows,
@@ -35,10 +35,8 @@ export function MulligansPanel({
   const flipped = mulligansFlippedThroughWeek(statusThroughWeek)
   const sorted = [...rows].sort((a, b) => a.teamName.localeCompare(b.teamName))
 
-  const flipLine =
-    flipped === 0
-      ? `${flipped} of ${usedThrough} flipped a result.`
-      : `${flipped} of ${usedThrough} flipped a result.`
+  const chipsLeft = MULLIGAN_CHIP_TOTAL - usedThrough
+  const flipLine = `${flipped} of ${usedThrough} flipped, ${usedThrough} used, ${chipsLeft} left.`
 
   return (
     <div id="mulligans-section" className="space-y-6">

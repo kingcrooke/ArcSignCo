@@ -29,6 +29,10 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     if (matchups.length) {
       sections.push({ kind: 'matchups', heading: 'Matchups', slides: matchups })
     }
+    const results = publish(RESULTS_W4)
+    if (results.length) {
+      sections.push({ kind: 'results', heading: 'Results', slides: results })
+    }
     const report = publish(WEEK_4_REPORT)
     if (report.length) {
       sections.push({ kind: 'report', heading: 'Report', slides: report })
@@ -149,22 +153,22 @@ function result(id: string, title: string): PublishedSlide {
 }
 
 const WEEK_4_REPORT: PublishedSlide[] = [
-  w4('w4-slide-01', 'Waivers, injuries & panic'),
-  w4('w4-slide-02', 'Slide 2'),
-  w4('w4-slide-03', 'Slide 3'),
-  w4('w4-slide-04', 'The rest of the wire'),
-  w4('w4-slide-05', 'Slide 5'),
-  w4('w4-slide-06', 'Slide 6'),
-  w4('w4-slide-07', 'Slide 7'),
-  w4('w4-slide-08', 'Slide 8'),
-  w4('w4-slide-09', 'Slide 9'),
-  w4('w4-slide-10', 'Hadi vs Manny (matchup 3)'),
-  w4('w4-slide-11', 'Slide 11'),
-  w4('w4-slide-12', 'Slide 12'),
-  w4('w4-slide-13', 'Slide 13'),
-  w4('w4-slide-14', 'QB heat check'),
-  w4('w4-slide-15', 'Waiver awards'),
-  w4('w4-slide-16', "Crooke's picks"),
+  w4('w4-slide-01', 'The Frankie Zone Has Been Evacuated'),
+  w4('w4-slide-02', 'Steven 180.56 def Narking'),
+  w4('w4-slide-03', 'Mauricio 141.24 def Eric'),
+  w4('w4-slide-04', 'Frankie 144.80 def Kayser'),
+  w4('w4-slide-05', 'Danny 163.91 def Crooke'),
+  w4('w4-slide-06', 'Hadi 141.65 def Manny'),
+  w4('w4-slide-07', 'Jamil 162.83 def Matt'),
+  w4('w4-slide-08', 'Kayser Mulligan #7: Good Mulligan, Lost Anyway'),
+  w4('w4-slide-09', 'Frankie Zone Temporarily Closed'),
+  w4('w4-slide-10', 'But One Very Nice Website'),
+  w4('w4-slide-11', 'Final Week 4 Scoring'),
+  w4('w4-slide-12', 'Stat of the Week: 0.03'),
+  w4('w4-slide-13', 'Standings After Week 4'),
+  w4('w4-slide-14', 'AI Hadi Got Cooked'),
+  w4('w4-slide-15', 'Week 4 Awards'),
+  w4('w4-slide-16', 'Week 5: We Run It Back'),
 ]
 
 const WEEK_4_MATCHUPS: PublishedSlide[] = [
@@ -201,4 +205,13 @@ const RESULTS_W3: PublishedSlide[] = [
   result('results-w3-m4', 'Kayser 151.9 – Manny 129.7'),
   result('results-w3-m5', 'Eric 130.4 – Matt 128.6'),
   result('results-w3-m6', 'Jamil 113.6 – Frankie 95.8'),
+]
+
+const RESULTS_W4: PublishedSlide[] = [
+  result('results-w4-m1', 'Steven 180.6 – Narking 141.2'),
+  result('results-w4-m2', 'Frankie 144.8 – Kayser 128.4'),
+  result('results-w4-m3', 'Hadi 141.7 – Manny 134.9'),
+  result('results-w4-m4', 'Jamil 162.8 – Matt 143.6'),
+  result('results-w4-m5', 'Mauricio 141.2 – Eric 123.7'),
+  result('results-w4-m6', 'Danny 163.9 – Crooke 121.3'),
 ]

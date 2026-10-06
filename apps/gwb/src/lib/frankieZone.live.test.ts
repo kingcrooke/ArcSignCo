@@ -60,6 +60,8 @@ describe('frankieZone live Sleeper', () => {
     expect(view.residents.map((r) => r.displayName)).not.toContain('GetThePapers2x')
     expect(view.residents).toHaveLength(0)
     expect(view.isEmpty).toBe(true)
-    expect(view.weekInProgressNote).toContain('finalized matchups only')
+    expect(view.weekInProgressNote).toMatch(
+      /Week \d+ in progress — zone updates? (for finalized matchups only|when matchups finalize)\./,
+    )
   })
 })
