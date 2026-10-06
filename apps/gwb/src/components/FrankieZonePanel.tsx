@@ -301,7 +301,7 @@ export function FrankieZonePanel({
       {view.isEmpty ? (
         <div className="rounded-xl border border-dashed border-[var(--gwb-border)] p-8 text-center">
           <p className="font-['Bebas Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]">
-            ZONE EMPTY · FRANKIE&apos;S 0-7 RECORD STANDS
+            ZONE EMPTY · FRANKIE&apos;S 0-{FRANKIE_ZONE_RECORD.lossesWithoutWin} RECORD STANDS
           </p>
         </div>
       ) : (

@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { computeStandingsThroughWeek } from './standings'
 import { buildTeamMap } from './teams'
+import { FRANKIE_ZONE_RECORD } from './constants'
 import {
   buildEscapeLog,
   buildScheduleByWeek,
@@ -15,6 +16,7 @@ import {
   regularSeasonLastWeek,
   resolveZoneName,
   renameMeterLabel,
+  ZONE_PATH_STEPS,
   zoneHeroTitle,
 } from './frankieZone'
 import type { SleeperMatchup, SleeperRoster, SleeperUser } from './types'
@@ -83,11 +85,18 @@ describe('frankieZone', () => {
     expect(view.residents.every((r) => r.losses === 3)).toBe(true)
   })
 
+  it('tracks Frankie 0-9 and renames the zone at 0-10', () => {
+    expect(FRANKIE_ZONE_RECORD.lossesWithoutWin).toBe(9)
+    expect(FRANKIE_ZONE_RECORD.renameAtLosses).toBe(10)
+    expect([...ZONE_PATH_STEPS]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  })
+
   it('formats census and rename meter', () => {
     expect(censusSubtitle(2, 3, true, 4)).toContain('AFTER WEEK 3')
     expect(censusSubtitle(2, 3, true, 4)).toContain('IN PROGRESS')
-    expect(renameMeterLabel(3)).toBe('5 losses from breaking the record')
-    expect(renameMeterLabel(7)).toBe('1 loss from breaking the record')
+    expect(renameMeterLabel(3)).toBe('7 losses from breaking the record')
+    expect(renameMeterLabel(9)).toBe('1 loss from breaking the record')
+    expect(renameMeterLabel(10)).toBe('RECORD BROKEN — ZONE RENAMED')
   })
 
   it('detects zone-vs-zone collisions after the as-of week only', () => {
@@ -139,16 +148,21 @@ describe('frankieZone', () => {
     expect(view.moreCollisionsCount).toBeGreaterThan(0)
   })
 
-  it('resolves renamed zone when a team hits 0-8', () => {
+  it('keeps the Frankie Zone at 0-9 and renames it at 0-10', () => {
     const matchupsByWeek = matchupsThroughWeek(3)
     const standings = computeStandingsThroughWeek(matchupsByWeek, teams, 3)
-    const fakeStandings = standings.map((r) =>
-      r.rosterId === 11 ? { ...r, wins: 0, losses: 8 } : r,
-    )
-    const name = resolveZoneName(fakeStandings, teams, matchupsByWeek, {
-      completedThroughWeek: 8,
-    })
-    expect(name).toBe('Frankie')
+    const atLosses = (rosterId: number, losses: number) =>
+      standings.map((r) =>
+        r.rosterId === rosterId ? { ...r, wins: 0, losses } : r,
+      )
+    const nameAt = (rosterId: number, losses: number) =>
+      resolveZoneName(atLosses(rosterId, losses), teams, matchupsByWeek, {
+        completedThroughWeek: losses,
+      })
+
+    expect(nameAt(1, 9)).toBe('Frankie')
+    expect(nameAt(1, 10)).toBe('Santagua')
+    expect(nameAt(11, 10)).toBe('Frankie')
   })
 
   it('escape log skips week-1 winners who never entered the zone', () => {

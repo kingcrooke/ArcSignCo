@@ -16,7 +16,7 @@ function publish(slides: PublishedSlide[]): PublishedSlide[] {
   return slides.filter((s) => !HELD.has(s.id))
 }
 
-/** Slides for a week in lightbox order: matchups → results → report. */
+/** Finished week: results, then report. Matchup cards are for an upcoming week only. */
 export function getWeekGraphicsSlides(week: number): PublishedSlide[] {
   return getWeekGraphicsSections(week).flatMap((s) => s.slides)
 }
@@ -24,26 +24,11 @@ export function getWeekGraphicsSlides(week: number): PublishedSlide[] {
 export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const sections: WeekGraphicsSection[] = []
 
-  if (week === 4) {
-    const matchups = publish(WEEK_4_MATCHUPS)
-    if (matchups.length) {
-      sections.push({ kind: 'matchups', heading: 'Matchups', slides: matchups })
-    }
-    const results = publish(RESULTS_W4)
-    if (results.length) {
-      sections.push({ kind: 'results', heading: 'Results', slides: results })
-    }
-    const report = publish(WEEK_4_REPORT)
-    if (report.length) {
-      sections.push({ kind: 'report', heading: 'Report', slides: report })
-    }
-    return sections
-  }
-
   const resultsByWeek: Record<number, PublishedSlide[]> = {
     1: publish(RESULTS_W1),
     2: publish(RESULTS_W2),
     3: publish(RESULTS_W3),
+    4: publish(RESULTS_W4),
   }
   const results = resultsByWeek[week]
   if (results?.length) {
@@ -54,6 +39,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     1: publish(WEEK_1_REPORT),
     2: publish(WEEK_2_REPORT),
     3: publish(WEEK_3_REPORT),
+    4: publish(WEEK_4_REPORT),
   }
   const report = reportByWeek[week]
   if (report?.length) {
@@ -144,10 +130,6 @@ const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
   'Slide 16',
 ])
 
-function vs(id: string, title: string): PublishedSlide {
-  return titled(id, title)
-}
-
 function result(id: string, title: string): PublishedSlide {
   return titled(id, title)
 }
@@ -169,15 +151,6 @@ const WEEK_4_REPORT: PublishedSlide[] = [
   w4('w4-slide-14', 'AI Hadi Got Cooked'),
   w4('w4-slide-15', 'Week 4 Awards'),
   w4('w4-slide-16', 'Week 5: We Run It Back'),
-]
-
-const WEEK_4_MATCHUPS: PublishedSlide[] = [
-  vs('vs-m1-narking-steven', 'Narking vs Steven'),
-  vs('vs-m2-kayser-frankie', 'Kayser vs Frankie'),
-  vs('vs-m3-hadi-manny', 'Hadi vs Manny'),
-  vs('vs-m4-jamil-matt', 'Jamil vs Matt'),
-  vs('vs-m5-mauricio-eric', 'Mauricio vs Eric'),
-  vs('vs-m6-danny-crooke', 'Danny vs Crooke'),
 ]
 
 const RESULTS_W1: PublishedSlide[] = [

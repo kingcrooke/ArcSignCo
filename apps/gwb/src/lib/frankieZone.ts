@@ -12,7 +12,7 @@ import type {
   TeamInfo,
 } from './types'
 
-export const ZONE_PATH_STEPS = [1, 2, 3, 4, 5, 6, 7, 8] as const
+export const ZONE_PATH_STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const
 
 export type ZoneLoreQuote = {
   quote: string

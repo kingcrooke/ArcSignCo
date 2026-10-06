@@ -2,10 +2,23 @@ import { describe, expect, it } from 'vitest'
 import { getWeekGraphicsSections } from './weekGraphics'
 
 describe('getWeekGraphicsSections week 4', () => {
-  it('lists Results between Matchups and Report', () => {
+  it('lists Results and Report only for a finished week', () => {
     const sections = getWeekGraphicsSections(4)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results', 'Report'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'report'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Report'])
+    expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
+    expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
+    expect(
+      sections.flatMap((s) => s.slides).some((s) => s.id.startsWith('vs-')),
+    ).toBe(false)
+  })
+
+  it('keeps finished weeks 1–3 on results and report only', () => {
+    for (const week of [1, 2, 3]) {
+      const sections = getWeekGraphicsSections(week)
+      expect(sections.map((s) => s.kind)).toEqual(['results', 'report'])
+      expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
+    }
   })
 
   it('publishes the sixteen Week 4 recap slides in order', () => {
