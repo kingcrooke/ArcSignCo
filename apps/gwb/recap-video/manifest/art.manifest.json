@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "mode": "placeholder",
+  "comment": "Set mode to custom and fill portrait paths when Grok Imagine assets land.",
+  "winner": {
+    "imagineSlot": "winner",
+    "portrait": null
+  },
+  "loser": {
+    "imagineSlot": "loser",
+    "portrait": null
+  },
+  "placeholder": {
+    "portrait": "assets/buffalo-neutral.svg"
+  }
+}

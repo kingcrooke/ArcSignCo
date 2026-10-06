@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GWB Recap</title>
+    <link rel="stylesheet" href="recap.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <div class="top-bar"></div>
+      <div class="title-safe-guide" aria-hidden="true"></div>
+
+      <section class="scene" id="scene-intro">
+        <div class="content">
+          <div class="gwb-mark">GWB</div>
+          <div class="eyebrow" id="intro-week">WEEK —</div>
+          <h1 class="headline">BEST GAME RECAP</h1>
+          <p class="subhead" id="intro-matchup">—</p>
+        </div>
+      </section>
+
+      <section class="scene" id="scene-faceoff">
+        <div class="faceoff-wrap">
+          <div class="char-card winner" id="card-w">
+            <div class="record-pill winner" id="faceoff-w-record">—</div>
+            <div class="card-body">
+              <div class="buffalo-portrait" id="portrait-w"></div>
+              <div class="jersey-panel" id="jersey-panel-w"><span class="jersey-number" id="jersey-num-w">11</span></div>
+            </div>
+          </div>
+          <div class="char-card loser" id="card-l">
+            <div class="record-pill loser" id="faceoff-l-record">—</div>
+            <div class="card-body">
+              <div class="buffalo-portrait" id="portrait-l"></div>
+              <div class="jersey-panel" id="jersey-panel-l"><span class="jersey-number" id="jersey-num-l">16</span></div>
+            </div>
+          </div>
+          <div class="w-medallion" id="faceoff-medallion">W</div>
+        </div>
+      </section>
+
+      <section class="scene" id="scene-scorebar">
+        <div class="panel">
+          <div class="scorebar-label" id="tick-label">Kickoff</div>
+          <div class="score-row">
+            <span class="win" id="score-w">—</span>
+            <span id="score-l">—</span>
+          </div>
+          <div class="score-bar"><div class="fill" id="score-fill"></div></div>
+          <p class="tick-note" id="tick-note">—</p>
+        </div>
+      </section>
+
+      <section class="scene" id="scene-performers">
+        <div class="performer-col winner" id="performers-winner"></div>
+        <div class="performer-col loser" id="performers-loser"></div>
+      </section>
+
+      <section class="scene" id="scene-swings">
+        <div class="eyebrow swing-eyebrow">KEY MOMENTS</div>
+        <div class="swing-list" id="swing-lines"></div>
+      </section>
+
+      <section class="scene" id="scene-final">
+        <header class="final-header">
+          <div class="eyebrow" id="final-eyebrow">GWB • WEEK —</div>
+          <div class="header-divider"></div>
+          <h1 class="final-headline" id="final-headline">FINAL</h1>
+        </header>
+
+        <div class="final-cards">
+          <div class="char-card winner show" id="final-card-w">
+            <div class="record-pill winner" id="final-w-record"></div>
+            <div class="card-body">
+              <div class="buffalo-portrait" id="final-portrait-w"></div>
+              <div class="jersey-panel" id="final-jersey-panel-w"><span class="jersey-number" id="final-jersey-num-w"></span></div>
+            </div>
+            <div class="status-pill winner">WINNER</div>
+          </div>
+          <div class="char-card loser show" id="final-card-l">
+            <div class="record-pill loser" id="final-l-record"></div>
+            <div class="card-body">
+              <div class="buffalo-portrait" id="final-portrait-l"></div>
+              <div class="jersey-panel" id="final-jersey-panel-l"><span class="jersey-number" id="final-jersey-num-l"></span></div>
+            </div>
+            <div class="status-pill loser">LOSER</div>
+          </div>
+          <div class="w-medallion show" id="final-medallion">W</div>
+        </div>
+
+        <p class="final-scoreline bebas" id="final-scoreline">—</p>
+        <h2 class="final-tagline bebas" id="final-tagline">—</h2>
+
+        <div class="final-scoreblock">
+          <div class="score-row">
+            <span class="win" id="final-score-w">—</span>
+            <span id="final-score-l">—</span>
+          </div>
+          <div class="score-bar"><div class="fill" id="final-score-fill"></div></div>
+          <p class="final-caption inter" id="final-caption">—</p>
+        </div>
+
+        <footer class="final-footer">
+          <span>gwb_fantasy_football</span>
+          <span class="results-pill" id="final-results">RESULTS</span>
+        </footer>
+      </section>
+    </div>
+    <script src="recap.js"></script>
+  </body>
+</html>
