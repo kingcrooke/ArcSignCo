@@ -398,7 +398,7 @@ export default function App() {
             </section>
           )}
           {tab === 'mulligans' && (
-            <section>
+            <section className="min-w-0">
               <h2 className="mb-3 text-lg font-semibold">Mulligans</h2>
               <MulligansPanel
                 rows={data.standings}

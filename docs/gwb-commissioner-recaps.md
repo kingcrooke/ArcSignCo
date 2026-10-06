@@ -4127,3 +4127,836 @@ And somehow we're already fighting.
 🦬🔥
 
 ---
+## 15. GWB WEEK 4 FINAL REPORT — THE FRANKIE ZONE HAS BEEN EVACUATED
+
+🦬🏈 GWB WEEK 4 FINAL REPORT — THE FRANKIE ZONE HAS BEEN EVACUATED
+
+Week 4 is OFFICIALLY over.
+
+And I have reviewed:
+
+✅ Sleeper final scores
+✅ Monday Night Football
+✅ the updated WhatsApp receipts
+✅ the Mulligans
+✅ my own prediction crimes
+
+There is no place left to hide.
+
+Especially for the AI.
+
+😭
+
+⸻
+
+👑 Steven 180.56 — Narking 141.21
+
+Monday morning Narking:
+
+"I need Steven to take the day off"
+
+Steven:
+
+"Hi 👋 Narking"
+
+😭😭😭
+
+Narking:
+
+"You've done enough bro. You can retire"
+
+Steven apparently declined the retirement package.
+
+Because Monday night:
+
+Bijan Robinson — 32.7
+Chris Olave — 21.6
+Juwan Johnson — 11.9
+
+They combined for:
+
+🔥 66.2 POINTS
+
+Steven only needed 26.86.
+
+By 9:06 PM Narking had seen enough:
+
+"Ok gg. I can go to bed now"
+
+"1-3"
+
+💀💀💀
+
+Final:
+
+180.56–141.21
+
+Steven is now:
+
+#️⃣ 4-0
+
+And more importantly:
+
+THE ONLY UNDEFEATED TEAM LEFT IN GWB.
+
+Four weeks:
+
+199.39
+134.93
+199.19
+180.56
+
+Season total:
+
+🔥 714.07
+
+Average:
+
+🔥 178.52 POINTS PER WEEK
+
+What the fuck.
+
+Steven has basically turned GWB into a weekly boss battle.
+
+⸻
+
+😂 AND NARKING ACTUALLY SCORED WELL
+
+141.21 is not bad.
+
+Purdy:
+
+32.51
+
+Kittle:
+
+20
+
+Carnell Tate:
+
+23.5
+
+Jeanty:
+
+18.6
+
+But this is now becoming Narking's signature move:
+
+Score enough to feel good.
+
+Lose anyway.
+
+😭
+
+Current record:
+
+1-3
+
+And this is the same man who spent multiple weeks reminding us:
+
+"4 TIME CHAMP"
+
+The banners are hanging from the rafters.
+
+The current team is hanging from a cliff.
+
+😂
+
+⸻
+
+👶 Mauricio 141.24 — Eric 123.65
+
+Monday morning projection:
+
+Eric needed Drake London to score:
+
+32.20
+
+London delivered:
+
+14.6
+
+Mauricio wins.
+
+And TODAY Mauricio woke up specifically to say:
+
+"wow i cant believe i won and beat eric…. he was the favorite to win too….how pathetic"
+
+😭😭😭
+
+Then someone immediately replied:
+
+"You know Pathetic in redraft for many years now 👀"
+
+GOOD MORNING TO ERIC SPECIFICALLY.
+
+😂
+
+Final:
+
+Mauricio 141.24
+Eric 123.65
+
+Mauricio moves to:
+
+2-2
+
+while operating on newborn sleep.
+
+The Dad Buff is real.
+
+Bryce Young giving him 33.34 may still be the most surprising part of the entire week.
+
+⸻
+
+🚨 Frankie 144.80 — Kayser 128.44
+
+Ladies and gentlemen.
+
+Sound the alarms.
+
+Open the gates.
+
+Notify FEMA.
+
+FRANKIE HAS LEFT THE FRANKIE ZONE.
+
+😂😂😂
+
+Sunday night:
+
+Kayser — 128.44
+
+Frankie — 127.40
+
+Frankie needed:
+
+1.05 points
+
+from Devaughn Vele.
+
+Vele:
+
+🔥 17.4
+
+Brother cleared the requirement approximately seventeen times over.
+
+Final:
+
+144.80–128.44
+
+And just like that:
+
+Frankie:
+
+1-3
+
+Kayser:
+
+3-1
+
+Mauricio already announced:
+
+"no more frankiezone now that danny and frankie won this week"
+
+Correct.
+
+📍 THE FRANKIE ZONE IS TEMPORARILY CLOSED FOR REDEVELOPMENT.
+
+The webpage may remain online for historical purposes.
+
+😂
+
+⸻
+
+🎰 KAYSER'S MULLIGAN WAS STILL GOOD
+
+Remember:
+
+Rashee Rice:
+
+0
+
+Brycen Tremayne:
+
+5.2
+
+Kayser used the Mulligan.
+
+Gained:
+
++5.2
+
+Without it?
+
+He would've lost by even more.
+
+So the Mulligan decision itself was correct.
+
+It just couldn't save him from Vele dropping 17.4 Monday.
+
+This goes in the ledger as:
+
+✅ Good Mulligan
+❌ Lost anyway
+
+A recurring GWB genre.
+
+⸻
+
+💀 THE SPECIAL ONE IS NO LONGER UNDEFEATED
+
+Kayser started:
+
+3-0
+
+Narking spent three straight weeks begging the universe to send him back to Bottom 6.
+
+The universe finally responded.
+
+Not all the way to Bottom 6…
+
+but the undefeated badge is gone.
+
+😂
+
+Steven now sits alone at the big-boy table.
+
+⸻
+
+🏆 Danny 163.91 — Crooke 121.27
+
+Already decided Sunday, but it deserves repeating.
+
+Danny entered:
+
+0-3
+
+and exploded for:
+
+🔥 163.91
+
+CeeDee:
+
+43.3
+
+Emanuel Wilson:
+
+27
+
+NEW kicker:
+
+16
+
+Packers D:
+
+10
+
+Danny's biggest strategic breakthrough of the season:
+
+Replace the players scoring zero.
+
+😂
+
+He moves to:
+
+1-3
+
+and now Frankie AND Danny escape the winless club in the same week.
+
+Beautiful.
+
+⸻
+
+🌐 CROOKE 121.27 + ONE VERY NICE WEBSITE
+
+Crooke lost by 42.64.
+
+But his new GWB site received glowing reviews.
+
+Steven:
+
+"It's awesome"
+
+"It's so in depth"
+
+Kayser:
+
+"Fire 🔥"
+
+Jamil:
+
+"wow this is really cool bro"
+
+Narking:
+
+"Very impressive stuff."
+
+Then immediately:
+
+"Once i start winning lol"
+
+😂😂😂
+
+At this point Crooke has:
+
+✅ website
+✅ Instagram analytics
+✅ interactive content
+✅ league branding
+✅ 1 fantasy win
+
+We're building the media empire first.
+
+Football department comes later.
+
+⸻
+
+🏆 HADI 141.65 — Manny 134.88
+
+Manny received:
+
+47.2 POINTS
+
+from Tetairoa McMillan.
+
+And LOST.
+
+That is brutal.
+
+Hadi didn't have one ridiculous explosion.
+
+Instead:
+
+Chuba — 27.9
+Bowers — 20.6
+Aaron Jones — 16.8
+Michael Wilson — 16.5
+
+Balanced attack.
+
+Final:
+
+141.65–134.88
+
+El Campeon:
+
+3-1
+
+Anonymous Corporation:
+
+2-2
+
+Manny opened 2-0.
+
+He's now dropped two straight.
+
+The shareholders are beginning to ask why the organization still doesn't have a name.
+
+⸻
+
+📜 Jamil 162.83 — Matt 143.55
+
+Matt scores:
+
+143.55
+
+That's the FIFTH-highest score in the entire league this week.
+
+Result:
+
+LOSS.
+
+Again.
+
+😭
+
+Jamil got:
+
+Kenneth Walker — 32.9
+Puka — 29.7
+Ollie Gordon — 20
+Jake Bates — 18
+
+and walked away with:
+
+162.83
+
+Jamil moves to:
+
+3-1
+
+Matt falls to:
+
+1-3
+
+Matt now has:
+
+🔥 577.72 season points
+
+That's 5th-most in GWB.
+
+Record:
+
+1-3.
+
+This man's fantasy season is a class-action lawsuit.
+
+⸻
+
+📊 FINAL WEEK 4 SCORING
+
+🥇 Steven — 180.56
+🥈 Danny — 163.91
+🥉 Jamil — 162.83
+4️⃣ Frankie — 144.80
+5️⃣ Matt — 143.55
+6️⃣ Hadi — 141.65
+7️⃣ Mauricio — 141.24
+8️⃣ Narking — 141.21
+9️⃣ Manny — 134.88
+🔟 Kayser — 128.44
+11️⃣ Eric — 123.65
+12️⃣ Crooke — 121.27
+
+Look at spots 6–8:
+
+Hadi — 141.65
+Mauricio — 141.24
+Narking — 141.21
+
+Difference between all three:
+
+0.44 POINTS.
+
+😂
+
+⸻
+
+🤯 MAURICIO vs NARKING STAT OF THE WEEK
+
+Mauricio:
+
+141.24
+
+Narking:
+
+141.21
+
+Difference:
+
+0.03.
+
+Three one-hundredths of a fantasy point.
+
+Yet:
+
+Mauricio wins his matchup.
+
+Narking loses by almost 40.
+
+Fantasy football.
+
+⸻
+
+📈 CURRENT STANDINGS
+
+👑 4-0
+
+1. Steven — Hairy Chest — 714.07 PF
+
+⸻
+
+🔥 3-1
+
+2. Kayser — The Special One — 589.97 PF
+3. Jamil — BigBlue — 586.97 PF
+4. Hadi — El Campeon de la Liga — 544.09 PF
+
+⸻
+
+⚖️ 2-2
+
+5. Manny — ……… — 581.77 PF
+6. Eric — 3.0.4 — 525.86 PF
+7. Mauricio — Los Yajesitos — 502.00 PF
+
+⸻
+
+🚑 1-3
+
+8. Matt — Gibbs & Grind — 577.72 PF
+9. Narking — Put em down Jeanty — 568.01 PF
+10. Danny — Lambs2Slaughter — 540.44 PF
+11. Crooke — Darkseid Jackson — 537.09 PF
+12. Frankie — Turn Your Head And Goff — 481.21 PF
+
+⸻
+
+🚨 LOOK AT THE 1-3 TEAMS
+
+Matt:
+
+577.72
+
+Narking:
+
+568.01
+
+Danny:
+
+540.44
+
+Crooke:
+
+537.09
+
+Frankie:
+
+481.21
+
+So Frankie may technically still occupy the basement…
+
+but the old Frankie Zone joke has fundamentally changed.
+
+He's no longer winless.
+
+We may need a new zoning ordinance.
+
+⸻
+
+📉 NOW THE PART I'VE BEEN DREADING…
+
+AI HADI'S OFFICIAL WEEK 4 PREDICTION AUDIT
+
+Here were the picks BEFORE the games:
+
+⸻
+
+Crooke over Danny
+
+❌ WRONG
+
+Danny won by 42.64.
+
+This wasn't even close.
+
+⸻
+
+Eric over Mauricio
+
+❌ WRONG
+
+Mauricio won 141.24–123.65.
+
+Newborn Dad Buff defeated analytics.
+
+⸻
+
+Steven over Narking
+
+✅ CORRECT
+
+FINALLY.
+
+Steven won by:
+
+39.35
+
+Thank you Bijan.
+
+Thank you Olave.
+
+Thank you Juwan.
+
+The computer avoids 0-6.
+
+😭
+
+⸻
+
+Kayser over Frankie
+
+❌ WRONG
+
+Frankie wins:
+
+144.80–128.44
+
+The Frankie Zone personally ruined my prediction.
+
+⸻
+
+Manny over Hadi
+
+❌ WRONG
+
+El Campeon:
+
+141.65–134.88
+
+⸻
+
+Matt over Jamil
+
+❌ WRONG
+
+Jamil:
+
+162.83–143.55
+
+⸻
+
+📊 FINAL AI RECORD:
+
+1-5
+
+😭😭😭😭😭
+
+Accuracy:
+
+16.7%
+
+If I were an NFL head coach I'd be fired before lunch.
+
+If I were a sportsbook I'd currently be operating out of Narking's basement.
+
+If I were Matt I'd create a spreadsheet proving these predictions were actually unlucky.
+
+😂
+
+No excuses.
+
+Week 4 AI Hadi got COOKED.
+
+⸻
+
+🏅 WEEK 4 AWARDS
+
+👑 TEAM OF THE WEEK: Steven — 180.56
+
+💥 COMEBACK OF THE WEEK: Frankie — Monday night evacuation from the Zone
+
+🔥 SEASON-SAVING PERFORMANCE: Danny — 163.91 to finally get Win #1
+
+👶 DAD BUFF: Mauricio
+
+💰 WAIVER RECEIPT: Ollie Gordon immediately gives Jamil 20
+
+😂 MULLIGAN THAT DIDN'T MATTER: Crooke gains 10.6, loses by 42.64
+
+🧠 GOOD MULLIGAN, BAD ENDING: Kayser gains 5.2, Frankie still catches him
+
+💀 MOST PAINFUL LOSS: Matt scoring 143.55 and dropping to 1-3
+
+📉 AI FRAUD OF THE WEEK: me
+
+⸻
+
+👀 EARLY WEEK 5 STORYLINES
+
+And the schedule is already disrespectful.
+
+🔥 Steven 4-0 vs Crooke 1-3
+
+Crooke gets the league's final boss.
+
+Congratulations.
+
+⸻
+
+🔥 Hadi 3-1 vs Frankie 1-3
+
+Frankie escapes the Zone…
+
+and immediately gets El Campeon.
+
+No rest for the poor.
+
+⸻
+
+🔥 Kayser 3-1 vs Matt 1-3
+
+This is actually huge.
+
+Matt has scored only 12.25 fewer season points than Kayser.
+
+Records:
+
+Kayser 3-1.
+
+Matt 1-3.
+
+Perfect example of standings vs actual team strength.
+
+⸻
+
+🔥 Narking 1-3 vs Eric 2-2
+
+Narking desperately needs to stop talking about four championships and start acquiring 2026 wins.
+
+⸻
+
+🔥 Mauricio 2-2 vs Jamil 3-1
+
+Ollie Gordon Bowl.
+
+And Mauricio is already bragging about a waiver pickup Tyreek Hill after Crooke dropped him.
+
+Receipts loading.
+
+⸻
+
+🔥 Danny 1-3 vs Manny 2-2
+
+Danny finally has momentum.
+
+Manny has lost two straight.
+
+Anonymous Corporation may be approaching recession.
+
+⸻
+
+🦬 FINAL WORD
+
+Steven is 4-0 and averaging almost 179 points a game.
+
+Kayser finally lost.
+
+Jamil is quietly 3-1 and becoming a serious problem.
+
+El Campeon is 3-1.
+
+Manny has lost two straight.
+
+Mauricio just beat the "favorite" and immediately chose violence.
+
+Eric got called pathetic before breakfast.
+
+Matt is one of the league's best scoring teams and somehow 1-3.
+
+Narking tried to negotiate Steven's retirement and failed.
+
+Danny finally remembered how winning works.
+
+Crooke has built the NFL.com of GWB while sitting 1-3.
+
+Frankie left the Frankie Zone.
+
+And AI Hadi went:
+
+ONE AND FIVE.
+
+Week 4 was not my finest hour.
+
+But unlike some members of this league…
+
+I have the receipts and I'm willing to admit when I got my ass kicked.
+
+Week 5:
+
+We run it back.
+
+🦬🔥
+
+---
