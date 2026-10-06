@@ -1,9 +1,7 @@
 import {
-  formatMulliganLedgerLine,
-  formatMulliganReceipt,
   mulliganEntriesForWeek,
-  mulliganLabel,
-  mulliganStatusForRoster,
+  mulliganReceiptParts,
+  mulliganStatusParts,
   mulligansFlippedThroughWeek,
   mulligansUsedThroughWeek,
   mulliganLiveContextForEntry,
@@ -61,23 +59,28 @@ export function MulligansPanel({
 
         <ul className="overflow-hidden rounded-xl border border-[var(--gwb-border)]">
           {sorted.map((r) => {
-            const m = mulliganStatusForRoster(r.rosterId, statusThroughWeek)
+            const status = mulliganStatusParts(r.rosterId, statusThroughWeek)
             return (
               <li
                 key={r.rosterId}
-                className="min-w-0 border-t border-[var(--gwb-border)] px-3 py-2.5 first:border-t-0 odd:bg-[#0d1319]"
+                className="min-w-0 border-t border-[var(--gwb-border)] px-3 py-3 first:border-t-0 odd:bg-[#0d1319]"
               >
                 <div className="font-medium break-words">{r.teamName}</div>
                 <div className="text-xs text-[var(--gwb-muted)]">
                   {managerNickname(r.rosterId, r.displayName)}
                 </div>
-                <p
-                  className={`mt-1 break-words text-sm leading-snug ${
-                    m.used ? 'text-amber-300' : 'text-[var(--gwb-muted)]'
-                  }`}
-                >
-                  {mulliganLabel(m)}
-                </p>
+                {status.used ? (
+                  <div className="mt-2 space-y-0.5 text-sm leading-snug">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-amber-300">
+                      Used · Week {status.week}
+                    </p>
+                    <p className="break-words">{status.outLine}</p>
+                    <p className="break-words">{status.inLine}</p>
+                    <p className="break-words text-amber-200">{status.netLine}</p>
+                  </div>
+                ) : (
+                  <p className="mt-2 text-sm text-[var(--gwb-muted)]">Available</p>
+                )}
               </li>
             )
           })}
@@ -129,19 +132,29 @@ function MulliganReceiptRow({
 }) {
   const net = resolveMulliganNetImpact(entry, liveCtx)
   const negative = net !== null && net < 0
+  const parts = mulliganReceiptParts(entry, liveCtx)
   return (
     <li
-      className="min-w-0 rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm"
+      className="min-w-0 rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-3 text-sm"
       onClick={() => {
         if (negative) onOpen?.()
       }}
     >
-      <p className="break-words font-medium leading-snug text-[var(--gwb-text)]">
-        {formatMulliganReceipt(entry, liveCtx)}
+      <p className="break-words text-base font-semibold leading-snug text-[var(--gwb-text)]">
+        {parts.manager}
       </p>
-      <p className="mt-1 break-words text-xs leading-relaxed text-[var(--gwb-muted)]">
-        {formatMulliganLedgerLine(entry, liveCtx)}
-      </p>
+      <div className="mt-2 space-y-0.5 leading-snug">
+        <p className="break-words">{parts.outLine}</p>
+        <p className="break-words">{parts.inLine}</p>
+        <p className="break-words font-medium text-amber-200">{parts.netLine}</p>
+        <p className="break-words font-medium">{parts.resultLine}</p>
+      </div>
+      <div className="mt-2 space-y-0.5 break-words text-xs leading-relaxed text-[var(--gwb-muted)]">
+        <p>{parts.versusLine}</p>
+        <p>{parts.withoutLine}</p>
+        <p>{parts.flipLine}</p>
+        {parts.footnote ? <p>{parts.footnote}</p> : null}
+      </div>
     </li>
   )
 }

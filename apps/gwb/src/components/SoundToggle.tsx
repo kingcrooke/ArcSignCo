@@ -10,7 +10,7 @@ export function SoundToggle({
   onToggle: () => void
 }) {
   return (
-    <div className="flex flex-col items-end gap-1">
+    <div className="flex max-w-full flex-col items-end gap-1">
       <button
         type="button"
         className="inline-flex items-center gap-2 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-1.5 text-sm font-medium text-[var(--gwb-text)] hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
