@@ -136,12 +136,11 @@
       "netImpact": 5.2,
       "scoreWith": 128.44,
       "scoreWithout": 123.24,
-      "opponentScore": 127.4,
+      "opponentScore": 144.8,
       "opponentLabel": "Turn Your Head And Goff",
-      "won": true,
-      "flipped": true,
-      "resultPending": true,
-      "footnote": "PENDING MNF — Frankie still has Devaughn Vele (NO). Current lead 1.04; without mulligan would trail by 4.16."
+      "won": false,
+      "flipped": false,
+      "footnote": "Vele dropped 17.4 on MNF; lost by 16.36 even with the +5.2."
     }
   ]
 }
