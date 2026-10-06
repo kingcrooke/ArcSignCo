@@ -174,6 +174,74 @@ function resolveScoreWith(
   return entry.scoreWithout + net
 }
 
+export type MulliganStatusParts =
+  | { used: false }
+  | {
+      used: true
+      week: number
+      outLine: string
+      inLine: string
+      netLine: string
+    }
+
+/** Stacked status copy: name block, then OUT / IN / net on their own lines. */
+export function mulliganStatusParts(
+  rosterId: number,
+  throughWeek = Number.POSITIVE_INFINITY,
+): MulliganStatusParts {
+  const entry = mulliganForRosterThroughWeek(rosterId, throughWeek)
+  if (!entry) return { used: false }
+  const outNote = entry.out.note ? ` (${entry.out.note})` : ''
+  return {
+    used: true,
+    week: entry.week,
+    outLine: `OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote}`,
+    inLine: `IN ${entry.in.name} ${formatSwapPoints(entry.in)}`,
+    netLine: `Net ${formatNetImpact(entry)}`,
+  }
+}
+
+export type MulliganReceiptParts = {
+  manager: string
+  outLine: string
+  inLine: string
+  netLine: string
+  resultLine: string
+  versusLine: string
+  withoutLine: string
+  flipLine: string
+  footnote?: string
+}
+
+/** Week-detail card copy, one fact per line. */
+export function mulliganReceiptParts(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): MulliganReceiptParts {
+  const manager = entry.managerShort ?? entry.manager
+  const outNote = entry.out.note ? ` (${entry.out.note})` : ''
+  const result = entry.resultPending ? 'TBD' : entry.won ? 'W' : 'L'
+  const scoreWith = resolveScoreWith(entry, ctx)
+  const resultVerb = entry.resultPending
+    ? 'Result TBD'
+    : entry.won
+      ? 'Won'
+      : 'Lost'
+  const vsWord = entry.resultPending || entry.won ? 'vs' : 'to'
+  const flip = entry.flipped ? 'Flipped the result' : 'No flip'
+  return {
+    manager,
+    outLine: `OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote}`,
+    inLine: `IN ${entry.in.name} ${formatSwapPoints(entry.in, ctx)}`,
+    netLine: `Net ${formatNetImpact(entry, ctx)}`,
+    resultLine: `${result} ${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`,
+    versusLine: `${resultVerb} ${vsWord} ${entry.opponentLabel}`,
+    withoutLine: `Would've been ${formatScore(entry.scoreWithout)} without it`,
+    flipLine: flip,
+    footnote: entry.footnote,
+  }
+}
+
 export function formatMulliganReceipt(
   entry: MulliganLedgerEntry,
   ctx?: MulliganLiveContext,

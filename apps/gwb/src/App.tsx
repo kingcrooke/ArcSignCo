@@ -203,11 +203,11 @@ export default function App() {
 
   return (
     <div
-      className={`mx-auto flex min-h-dvh flex-col px-4 pb-8 pt-6 ${
+      className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${
         tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'
       }`}
     >
-      <header className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <header className="mb-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]">
             Command Center
@@ -250,7 +250,7 @@ export default function App() {
 
       {state === 'ready' && data && (
         <>
-          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mb-4 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <WeekPicker
               week={data.selectedWeek}
               maxWeek={maxWeek}
@@ -268,7 +268,7 @@ export default function App() {
 
           <nav
             ref={navRef}
-            className="gwb-section-tabs mb-6 flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+            className="gwb-section-tabs mb-6 flex w-full min-w-0 flex-wrap gap-1 rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
           >
             {tabs.map((t) => {
@@ -292,7 +292,7 @@ export default function App() {
           </nav>
 
           {tab === 'live' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Week {data.selectedWeek} scoreboard
                 {data.isSelectedWeekLive && (
@@ -316,7 +316,7 @@ export default function App() {
             </section>
           )}
           {tab === 'standings' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Standings
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
@@ -335,7 +335,7 @@ export default function App() {
             </section>
           )}
           {tab === 'bestgames' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">Best Games</h2>
               <BestGamesPanel
                 matchupsByWeek={data.matchupsByWeek}
@@ -357,7 +357,7 @@ export default function App() {
             </section>
           )}
           {tab === 'gallery' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Week {data.selectedWeek} graphics
               </h2>
@@ -370,7 +370,7 @@ export default function App() {
             </section>
           )}
           {tab === 'recaps' && (
-            <section className="space-y-8">
+            <section className="min-w-0 w-full space-y-8">
               <div>
                 <h2 className="mb-3 text-lg font-semibold">Commissioner&apos;s recaps</h2>
                 <CommissionerRecapsPanel
@@ -398,7 +398,7 @@ export default function App() {
             </section>
           )}
           {tab === 'mulligans' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">Mulligans</h2>
               <MulligansPanel
                 rows={data.standings}
@@ -411,7 +411,7 @@ export default function App() {
             </section>
           )}
           {tab === 'frankie' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Frankie Zone
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
@@ -441,7 +441,7 @@ export default function App() {
             </section>
           )}
           {tab === 'waiver' && (
-            <section>
+            <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Waiver Wire Champion
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">

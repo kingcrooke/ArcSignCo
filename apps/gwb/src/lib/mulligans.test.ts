@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   formatMulliganLedgerLine,
   formatMulliganReceipt,
+  mulliganReceiptParts,
+  mulliganStatusParts,
   mulliganEntriesForWeek,
   mulliganForRoster,
   mulliganLabel,
@@ -52,6 +54,26 @@ describe('mulligans', () => {
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
     expect(narking.netImpactOverride).toBe(5.3)
     expect(mulliganLabel(mulliganStatusForRoster(3))).toContain('+5.30')
+  })
+
+  it('splits status and receipts onto separate lines', () => {
+    const mauricio = mulliganStatusParts(2, 3)
+    expect(mauricio.used).toBe(true)
+    if (!mauricio.used) return
+    expect(mauricio.week).toBe(1)
+    expect(mauricio.outLine).toBe('OUT A.J. Brown 5.60')
+    expect(mauricio.inLine).toBe('IN Tre Tucker 4.70')
+    expect(mauricio.netLine).toBe('Net −0.90')
+    expect(mauricio.outLine).not.toContain('IN')
+
+    const jesus = mulliganReceiptParts(mulliganForRoster(8)!)
+    expect(jesus.manager).toBe('Jesus')
+    expect(jesus.outLine).toContain('Parker Washington')
+    expect(jesus.inLine).toContain('Mike Evans')
+    expect(jesus.netLine).toBe('Net +10.60')
+    expect(jesus.resultLine).toBe('L 121.27–163.91')
+    expect(jesus.outLine).not.toContain('Net')
+    expect(jesus.resultLine).not.toContain('OUT')
   })
 
   it('shows Jesus week 4 swap with final Evans points and loss vs Lambs2Slaughter', () => {

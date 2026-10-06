@@ -84,4 +84,27 @@ describe('commissioner recaps timeline', () => {
     const finalIdx = week3.findIndex((r) => r.id === 'recap-13')
     expect(correctionIdx).toBeLessThan(finalIdx)
   })
+
+  it('lists the week 4 final report above the predictions post', () => {
+    const week4 = filterCommissionerRecapsByWeek(recaps, 4)
+    const ids = week4.map((r) => r.id)
+    expect(ids).toEqual(['recap-15', 'recap-14'])
+    const final = week4[0]
+    expect(final?.label).toBe('Final')
+    expect(final?.week).toBe(4)
+    expect(final?.reconstructed).toBe(false)
+    expect(final?.index).toBeGreaterThan(14)
+    expect(final?.title).toContain('WEEK 4 FINAL REPORT')
+    expect(final?.title).toContain('FRANKIE ZONE HAS BEEN EVACUATED')
+    expect(final?.bodyMarkdown).toContain('Steven 180.56')
+    expect(final?.bodyMarkdown).toContain('Narking 141.21')
+    expect(final?.bodyMarkdown).toContain('714.07')
+    expect(final?.bodyMarkdown).toContain('Kayser')
+    expect(final?.bodyMarkdown).toContain('Hadi')
+    expect(final?.bodyMarkdown).not.toMatch(/Hady|HADY|Kaiser|@\d{8,}/)
+    const waiver = week4[1]
+    expect(waiver?.id).toBe('recap-14')
+    expect(waiver?.label).toBe('Predictions')
+    expect(waiver?.title).toContain("WHO'S ACTUALLY GOOD?")
+  })
 })

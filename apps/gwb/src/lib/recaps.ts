@@ -273,17 +273,27 @@ export function inferCommissionerRecapLabel(
   return 'Final'
 }
 
+/**
+ * Weeks 1–3 read oldest-first (a timeline).
+ * From Week 4 on, the newest post is first so a final report sits above
+ * earlier posts in that week. A higher index wins remaining ties.
+ */
+function newestFirstWeek(a: CommissionerRecap, b: CommissionerRecap): boolean {
+  return a.week === b.week && a.week >= 4
+}
+
 export function compareCommissionerRecaps(
   a: CommissionerRecap,
   b: CommissionerRecap,
 ): number {
+  const newestFirst = newestFirstWeek(a, b)
   const timeA = parsePostedAt(a.postedAt)
   const timeB = parsePostedAt(b.postedAt)
-  if (timeA !== timeB) return timeA - timeB
+  if (timeA !== timeB) return newestFirst ? timeB - timeA : timeA - timeB
   const orderA = COMMISSIONER_LABEL_ORDER[a.label] ?? 50
   const orderB = COMMISSIONER_LABEL_ORDER[b.label] ?? 50
-  if (orderA !== orderB) return orderA - orderB
-  return a.index - b.index
+  if (orderA !== orderB) return newestFirst ? orderB - orderA : orderA - orderB
+  return newestFirst ? b.index - a.index : a.index - b.index
 }
 
 export function sortCommissionerRecaps(
