@@ -43,6 +43,20 @@ describe('getWeekGraphicsSections week 4', () => {
     ])
   })
 
+  it('lists Matchups only for upcoming Week 5', () => {
+    const sections = getWeekGraphicsSections(5)
+    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
+    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['vs-w5-m1', 'vs-w5-m1', 'Steven vs Crooke'],
+      ['vs-w5-m2', 'vs-w5-m2', 'Danny vs Manny'],
+      ['vs-w5-m3', 'vs-w5-m3', 'Narking vs Eric'],
+      ['vs-w5-m4', 'vs-w5-m4', 'Hadi vs Frankie'],
+      ['vs-w5-m5', 'vs-w5-m5', 'Mauricio vs Jamil'],
+      ['vs-w5-m6', 'vs-w5-m6', 'Kayser vs Matt'],
+    ])
+  })
+
   it('publishes the six final result cards with approved headlines', () => {
     const results = getWeekGraphicsSections(4).find((s) => s.kind === 'results')
     expect(results?.slides.map((s) => [s.id, s.title])).toEqual([
