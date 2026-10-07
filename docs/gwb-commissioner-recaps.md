@@ -79,15 +79,15 @@ Why? Because nobody scores 199 twice in a row. Nobody.
 
 ⸻
 
-😈 CROOKE vs HADI
+😈 CROOKE vs Hady
 
 El Campeon vs the Instagram department.
 
-Hadi's team is solid. Crooke's team is… a content strategy.
+Hady's team is solid. Crooke's team is… a content strategy.
 
 But the crystal ball sees something brewing.
 
-**PICK: Crooke over Hadi, 64/36.**
+**PICK: Crooke over Hady, 64/36.**
 
 Bold? Yes. But 64/36 isn't a guess — it's a vibe.
 
@@ -272,7 +272,7 @@ Danny hasn't started yet.
 
 ⸻
 
-🏆 HADI vs CROOKE — 0 to 0
+🏆 Hady vs CROOKE — 0 to 0
 
 Nobody played Thursday.
 
@@ -367,7 +367,7 @@ Danny's squad is fully rested and fully capable of ruining that.
 
 ⸻
 
-🏆 HADI 0 vs CROOKE 0
+🏆 Hady 0 vs CROOKE 0
 
 Fresh start.
 
@@ -659,7 +659,7 @@ FANTASY FOOTBALL IS CRUEL.
 
 ⸻
 
-🏆 HADI 124.54 vs CROOKE 123.65
+🏆 Hady 124.54 vs CROOKE 123.65
 
 The closest one.
 
@@ -674,7 +674,7 @@ And he still has:
 
 Monday night.
 
-Hadi is done at 124.54.
+Hady is done at 124.54.
 
 Crooke needs less than a point from Skattebo + Rams D.
 
@@ -865,7 +865,7 @@ Either way: C+.
 
 😴 NO CLAIMS
 
-Hadi — stood pat.
+Hady — stood pat.
 
 Steven — stood pat.
 
@@ -964,7 +964,7 @@ The Constitution Department does not lose quietly.
 
 🚨 ALERT #2 — Crooke
 
-Crooke trails Hadi by 0.89 points.
+Crooke trails Hady by 0.89 points.
 
 ZERO POINT EIGHT NINE.
 
@@ -1124,7 +1124,7 @@ Bond villain behavior.
 
 ⸻
 
-🏆 HADI 151.04 — Crooke 123.65
+🏆 Hady 151.04 — Crooke 123.65
 
 Crooke needed 0.89 points from Skattebo + Rams D.
 
@@ -1140,7 +1140,7 @@ I don't know what happened on Monday night.
 
 I don't want to know.
 
-Hadi moves to 1-1.
+Hady moves to 1-1.
 
 Crooke falls to 0-2.
 
@@ -1221,7 +1221,7 @@ The 4X champ would like everyone to know this proves something.
 
 🥇 Manny — 183.99
 🥈 Kayser — 170.91
-🥉 Hadi — 151.04
+🥉 Hady — 151.04
 4. Danny — 142.96
 5. Eric — 142.69
 6. Jamil — 138.89
@@ -1274,7 +1274,7 @@ Matt — Week 2 — ❌ Lost (first FAILED Mulligan)
 
 Kayser vs Manny — undefeated board meeting. **Lean: Manny 54%.**
 
-Hadi vs Danny — El Campeon vs the winless. **Lean: Hadi 56%.**
+Hady vs Danny — El Campeon vs the winless. **Lean: Hady 56%.**
 
 Narking vs Crooke — somebody's getting right. **Lean: Narking 52%.**
 
@@ -1475,7 +1475,7 @@ CONFUSING MOVE OF THE WEEK.
 
 😴 NO MOVES
 
-Hadi — stood pat.
+Hady — stood pat.
 
 Eric — stood pat.
 
@@ -1509,7 +1509,7 @@ Jamil — 310.59
 Matt — 305.60
 Narking — 290.10
 Eric — 271.82
-Hadi — 270.47
+Hady — 270.47
 Mauricio — 236.86
 
 0-2
@@ -1563,11 +1563,11 @@ Eric — 30.40 vs Matt — 24.50
 
 Early edge to Eric in a matchup that matters for the 2-1 club.
 
-Danny — 22.60 vs Hadi — 0
+Danny — 22.60 vs Hady — 0
 
 Danny's got 22.60 in the bank.
 
-Hadi hasn't started.
+Hady hasn't started.
 
 El Campeon is coming from behind.
 
@@ -1651,7 +1651,7 @@ The Constitution Department has been put on notice.
 
 🔮 SATURDAY NIGHT PICKS
 
-Hadi over Danny — 53/47
+Hady over Danny — 53/47
 
 Narking over Crooke — 53/47
 
@@ -1869,11 +1869,11 @@ Frankie currently wins Round 1 of the Receipt War.
 
 Narking told him:
 
-"If it works out, I look forward to AI Hadi coming for your neck for that drop lol"
+"If it works out, I look forward to AI Hady coming for your neck for that drop lol"
 
 Brother…
 
-AI Hadi checked the box score.
+AI Hady checked the box score.
 
 Neck temporarily safe.
 
@@ -1947,7 +1947,7 @@ Meanwhile:
 
 El Campeon de la Liga improves to 2-1.
 
-After Week 1, Hadi had:
+After Week 1, Hady had:
 
 Autodraft allegations.
 
@@ -2094,7 +2094,7 @@ The Frankie Zone becomes a sovereign nation.
 🥈 Crooke — 167.66 ✅
 🥉 Kayser — 151.93 ✅
 4. Narking — 136.70 ❌
-5. Hadi — 131.97 ✅
+5. Hady — 131.97 ✅
 6. Eric — 130.39 ⏳
 7. Manny — 129.68 ❌
 8. Matt — 127.57 ⏳
@@ -2156,7 +2156,7 @@ Kayser → 3-0
 
 Crooke finally climbs out of the winless basement.
 
-Hadi gets above .500 at 2-1.
+Hady gets above .500 at 2-1.
 
 Manny drops to 2-1.
 
@@ -2258,7 +2258,7 @@ That is a VERY different assignment. 😭
 
 So yes Frankie:
 
-AI Hadi accepts the flag on the play.
+AI Hady accepts the flag on the play.
 
 15-yard penalty.
 
@@ -2479,7 +2479,7 @@ It just had the strategic impact of putting premium gas in a car that's already 
 
 ⸻
 
-🏆 HADI 131.97 — Danny 121.69
+🏆 Hady 131.97 — Danny 121.69
 
 Okay.
 
@@ -2529,7 +2529,7 @@ Danny's kicker gave him:
 
 ZERO.
 
-Hadi literally told him later:
+Hady literally told him later:
 
 "honestly i thought you were going to pick up a kicker and replace the one that gave you 0"
 
@@ -2547,7 +2547,7 @@ Danny falls to:
 
 0-3
 
-Hadi improves to:
+Hady improves to:
 
 2-1
 
@@ -2655,7 +2655,7 @@ And you know what?
 
 Frankie was RIGHT.
 
-AI Hadi accepted the penalty.
+AI Hady accepted the penalty.
 
 Frankie had:
 
@@ -2728,7 +2728,7 @@ The Frankie Zone has officially received statehood.
 🥈 Crooke — 167.66
 🥉 Kayser — 151.93
 4. Narking — 136.70
-5. Hadi — 131.97
+5. Hady — 131.97
 6. Eric — 130.39
 7. Manny — 129.68
 8. Matt — 128.57
@@ -2765,7 +2765,7 @@ Brother's relationship with fantasy scheduling is abusive.
 
 7️⃣ Crooke — 415.82
 
-8️⃣ Hadi — 402.44
+8️⃣ Hady — 402.44
 
 9️⃣ Eric — 402.21
 
@@ -2789,11 +2789,11 @@ Fantasy football does not recognize justice.
 
 ⸻
 
-😳 HADI VS ERIC STAT OF THE WEEK
+😳 Hady VS ERIC STAT OF THE WEEK
 
 After three full weeks:
 
-Hadi PF:
+Hady PF:
 
 402.44
 
@@ -3024,7 +3024,7 @@ No longer needs to submit Instagram impressions as evidence of competitive succe
 
 🥉 Manny — ………
 4️⃣ Jamil — BigBlue
-5️⃣ Hadi — El Campeon de la Liga
+5️⃣ Hady — El Campeon de la Liga
 6️⃣ Eric — 3.0.4
 
 1-2
@@ -3107,7 +3107,7 @@ This has tremendous bullying potential.
 
 ⸻
 
-🔥 HADI 2-1 vs MANNY 2-1
+🔥 Hady 2-1 vs MANNY 2-1
 
 El Campeon vs the anonymous corporation.
 
@@ -3145,7 +3145,7 @@ Manny finally lost.
 
 Jamil once again proved that Monday night means Monday NIGHT.
 
-Hadi and Eric are separated by less than a quarter of a fantasy point after three weeks.
+Hady and Eric are separated by less than a quarter of a fantasy point after three weeks.
 
 Matt is 4th in scoring and still 1-2 because the universe hates optimization.
 
@@ -3497,7 +3497,7 @@ That's fantasy terrorism.
 
 ---
 
-💪 **HADI GETS BROCK BOWERS BACK**
+💪 **Hady GETS BROCK BOWERS BACK**
 
 This one matters.
 
@@ -3543,7 +3543,7 @@ Nobody say anything.
 
 Manny — 446.89
 Jamil — 424.14
-Hadi — 402.44
+Hady — 402.44
 Eric — 402.21
 
 **1-2**
@@ -3651,7 +3651,7 @@ And somehow…
 
 he's undefeated.
 
-Frankie spent Monday telling AI Hadi to step its game up.
+Frankie spent Monday telling AI Hady to step its game up.
 
 Then got beat.
 
@@ -3681,13 +3681,13 @@ The Frankie Zone becomes a UNESCO World Heritage Site.
 
 ---
 
-🔥 **WEEK 4 MATCHUP #3 — HADI vs Manny**
+🔥 **WEEK 4 MATCHUP #3 — Hady vs Manny**
 
 **2-1 vs 2-1**
 
 This is sneaky Game of the Week material.
 
-Hadi:
+Hady:
 
 Kyler
 JSN
@@ -3710,7 +3710,7 @@ Kyler — around **QB14**.
 
 Huge Manny edge there.
 
-But Hadi has:
+But Hady has:
 
 **JSN — elite WR1 territory**
 
@@ -3718,7 +3718,7 @@ and Bowers back.
 
 Manny's flex depth is also getting shaky.
 
-**PREDICTION: Manny 52% — Hadi 48%**
+**PREDICTION: Manny 52% — Hady 48%**
 
 Essentially a coin flip.
 
@@ -3870,7 +3870,7 @@ And when he sent unreleased GWB graphics and said:
 
 > "Delete from your phone"
 
-Hadi:
+Hady:
 
 > "Send me $50"
 
@@ -3954,7 +3954,7 @@ His team quality and his actual available roster are suddenly two different conv
 
 ---
 
-**Hadi / Eric**
+**Hady / Eric**
 
 402.44 vs 402.21 PF.
 
@@ -3979,7 +3979,7 @@ Current consensus:
 7️⃣ Purdy — Narking
 9️⃣ Dak — Eric
 11️⃣ Bryce — Mauricio
-14️⃣ Kyler — Hadi
+14️⃣ Kyler — Hady
 
 Steven's Darnold isn't in that top tier this week…
 
@@ -4073,7 +4073,7 @@ Direct all complaints to Human Resources.
 🟢 Eric over Mauricio — barely
 🟢 Steven over Narking
 🟢 Kayser over Frankie
-🟢 Manny over Hadi — coin flip
+🟢 Manny over Hady — coin flip
 🟢 Matt over Jamil — coin flip
 
 **Upset I'm watching:**
@@ -4512,7 +4512,7 @@ Football department comes later.
 
 ⸻
 
-🏆 HADI 141.65 — Manny 134.88
+🏆 Hady 141.65 — Manny 134.88
 
 Manny received:
 
@@ -4524,7 +4524,7 @@ And LOST.
 
 That is brutal.
 
-Hadi didn't have one ridiculous explosion.
+Hady didn't have one ridiculous explosion.
 
 Instead:
 
@@ -4611,7 +4611,7 @@ This man's fantasy season is a class-action lawsuit.
 🥉 Jamil — 162.83
 4️⃣ Frankie — 144.80
 5️⃣ Matt — 143.55
-6️⃣ Hadi — 141.65
+6️⃣ Hady — 141.65
 7️⃣ Mauricio — 141.24
 8️⃣ Narking — 141.21
 9️⃣ Manny — 134.88
@@ -4621,7 +4621,7 @@ This man's fantasy season is a class-action lawsuit.
 
 Look at spots 6–8:
 
-Hadi — 141.65
+Hady — 141.65
 Mauricio — 141.24
 Narking — 141.21
 
@@ -4671,7 +4671,7 @@ Fantasy football.
 
 2. Kayser — The Special One — 589.97 PF
 3. Jamil — BigBlue — 586.97 PF
-4. Hadi — El Campeon de la Liga — 544.09 PF
+4. Hady — El Campeon de la Liga — 544.09 PF
 
 ⸻
 
@@ -4727,7 +4727,7 @@ We may need a new zoning ordinance.
 
 📉 NOW THE PART I'VE BEEN DREADING…
 
-AI HADI'S OFFICIAL WEEK 4 PREDICTION AUDIT
+AI Hady'S OFFICIAL WEEK 4 PREDICTION AUDIT
 
 Here were the picks BEFORE the games:
 
@@ -4787,7 +4787,7 @@ The Frankie Zone personally ruined my prediction.
 
 ⸻
 
-Manny over Hadi
+Manny over Hady
 
 ❌ WRONG
 
@@ -4827,7 +4827,7 @@ If I were Matt I'd create a spreadsheet proving these predictions were actually 
 
 No excuses.
 
-Week 4 AI Hadi got COOKED.
+Week 4 AI Hady got COOKED.
 
 ⸻
 
@@ -4865,7 +4865,7 @@ Congratulations.
 
 ⸻
 
-🔥 Hadi 3-1 vs Frankie 1-3
+🔥 Hady 3-1 vs Frankie 1-3
 
 Frankie escapes the Zone…
 
@@ -4943,7 +4943,7 @@ Crooke has built the NFL.com of GWB while sitting 1-3.
 
 Frankie left the Frankie Zone.
 
-And AI Hadi went:
+And AI Hady went:
 
 ONE AND FIVE.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild held GWB slides: preserve art, re-typeset all text (Hadi)."""
+"""Rebuild held GWB slides: preserve art, re-typeset all text (Hady)."""
 from __future__ import annotations
 
 import json
@@ -118,16 +118,16 @@ def recompose_vs_m3() -> Path:
 
     draw_left(img, (72, 54), "GWB", "bebas", gold, 28)
     draw_left(img, (213, 54), "WEEK 4", "bebas", gold, 28)
-    draw_left(img, (73, 147), "HADI", "anton", white, 72)
+    draw_left(img, (73, 147), "Hady", "anton", white, 72)
     draw_left(img, (252, 157), "vs", "anton", white, 72)
     draw_left(img, (353, 147), "MANNY", "anton", white, 72)
-    draw_left(img, (73, 241), "HADI (2-1)", "bebas", gold, 24)
+    draw_left(img, (73, 241), "Hady (2-1)", "bebas", gold, 24)
     draw_left(img, (302, 246), "vs", "bebas", gold, 24)
     draw_left(img, (377, 241), "MANNY (2-1)", "bebas", gold, 24)
 
     badge_fill = (12, 12, 12)
     for box, label in [
-        ((78, 318, 210, 358), "HADI 2-1"),
+        ((78, 318, 210, 358), "Hady 2-1"),
         ((368, 318, 530, 358), "MANNY 2-1"),
     ]:
         inpaint_region(img, box)
@@ -140,7 +140,7 @@ def recompose_vs_m3() -> Path:
     ImageDraw.Draw(img).rectangle((72, bar_y0, 520, bar_y1), fill=poll_orange)
     ImageDraw.Draw(img).rectangle((520, bar_y0, 1008, bar_y1), fill=(45, 52, 60))
     draw_left(img, (73, 1113), "Manny 52%", "bebas", (20, 20, 20), 30)
-    draw_left(img, (833, 1112), "Hadi 48%", "bebas", (245, 245, 245), 30)
+    draw_left(img, (833, 1112), "Hady 48%", "bebas", (245, 245, 245), 30)
 
     draw_centered(
         img,
@@ -179,14 +179,14 @@ def recompose_w4_slide_10() -> Path:
     clear_zones(img, zones)
 
     draw_left(img, (72, 54), "GWB | WEEK 4 | MATCHUP 3", "bebas", gold, 26)
-    draw_left(img, (72, 170), "HADI vs MANNY", "anton", white, 58)
+    draw_left(img, (72, 170), "Hady vs MANNY", "anton", white, 58)
 
     card_bg = (22, 30, 42)
     for y0, y1 in [(268, 448), (458, 638)]:
         ImageDraw.Draw(img).rectangle((72, y0, 1008, y1), fill=card_bg)
         ImageDraw.Draw(img).rectangle((72, y0, 88, y1), fill=white)
 
-    draw_left(img, (107, 319), "HADI (2-1)", "bebas", white, 26)
+    draw_left(img, (107, 319), "Hady (2-1)", "bebas", white, 26)
     draw_left(img, (107, 352), '"El Campeon de la Liga"', "inter-semibold", muted, 22)
     draw_left(
         img,
@@ -214,7 +214,7 @@ def recompose_w4_slide_10() -> Path:
     ImageDraw.Draw(img).rectangle((72, bar_y0, 520, bar_y1), fill=orange)
     ImageDraw.Draw(img).rectangle((520, bar_y0, 1008, bar_y1), fill=(45, 52, 60))
     draw_left(img, (73, 685), "Manny 52%", "bebas", (20, 20, 20), 30)
-    draw_left(img, (833, 684), "Hadi 48%", "bebas", white, 30)
+    draw_left(img, (833, 684), "Hady 48%", "bebas", white, 30)
 
     draw_left(
         img,
@@ -266,7 +266,7 @@ def recompose_w4_slide_06() -> Path:
         "procedure and immediately went:",
         "10 catches. 116 yards. 1 TD.",
         "",
-        "Hadi goes from AJ Barner...",
+        "Hady goes from AJ Barner...",
         "back to an elite tight end!",
         "Ranked around top-15 overall FLEX -",
         "absurd for a tight end.",
@@ -317,7 +317,7 @@ def recompose_w4_slide_14() -> Path:
         "7 Purdy - Narking",
         "9 Dak - Eric",
         "11 Bryce - Mauricio",
-        "14 Kyler - Hadi",
+        "14 Kyler - Hady",
     ]
     panel = (120, 250, 960, 980)
     ImageDraw.Draw(img).rectangle(panel, fill=(18, 24, 32))
@@ -369,7 +369,7 @@ def recompose_w4_slide_16() -> Path:
         "Eric over Mauricio - barely",
         "Steven over Narking",
         "Kayser over Frankie",
-        "Manny over Hadi - coin flip",
+        "Manny over Hady - coin flip",
         "Matt over Jamil - coin flip",
     ]
     y = 260
@@ -534,11 +534,11 @@ def main() -> None:
         matchup="W1M2",
         final_line="FINAL: KAYSER TAKES IT",
         winner="KAYSER",
-        loser="HADI",
+        loser="Hady",
         w_score="138.7",
         l_score="119.4",
         tagline="THE SPECIAL ONE STRIKES",
-        note="Kayser 1-0 — Hadi's crown slips in Week 1",
+        note="Kayser 1-0 — Hady's crown slips in Week 1",
         winner_badge="KAYSER 1-0",
     )
     jobs.append(
@@ -554,14 +554,14 @@ def main() -> None:
         "results-w2-m1.png",
         week=2,
         matchup="W2M1",
-        final_line="FINAL: HADI TAKES IT",
-        winner="HADI",
+        final_line="FINAL: Hady TAKES IT",
+        winner="Hady",
         loser="CROOKE",
         w_score="151.0",
         l_score="123.7",
         tagline="EL CAMPEON RESPONDS",
-        note="Hadi evens up at 1-1 — Crooke falls to 0-2",
-        winner_badge="HADI 1-1",
+        note="Hady evens up at 1-1 — Crooke falls to 0-2",
+        winner_badge="Hady 1-1",
     )
     jobs.append(
         (
@@ -576,14 +576,14 @@ def main() -> None:
         "results-w3-m2.png",
         week=3,
         matchup="W3M2",
-        final_line="FINAL: HADI TAKES IT",
-        winner="HADI",
+        final_line="FINAL: Hady TAKES IT",
+        winner="Hady",
         loser="DANNY",
         w_score="132.0",
         l_score="121.7",
         tagline="EL CAMPEON TO 2-1",
         note="Danny's negative mulligan — first in GWB history",
-        winner_badge="HADI 2-1",
+        winner_badge="Hady 2-1",
     )
     jobs.append(
         (
