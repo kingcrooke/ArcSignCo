@@ -20,6 +20,7 @@ FONTS = {
     "bebas": FONT_DIR / "BebasNeue-Regular.ttf",
     "inter": FONT_DIR / "Inter-Regular.ttf",
     "inter-semibold": FONT_DIR / "Inter-SemiBold.ttf",
+    "dejavu-bold": FONT_DIR / "DejaVuSans-Bold.ttf",
 }
 UPLOADS = Path("/home/ubuntu/.cursor/projects/workspace/uploads")
 OUT_DOCS = ROOT / "docs/gwb-fixed-slides"
