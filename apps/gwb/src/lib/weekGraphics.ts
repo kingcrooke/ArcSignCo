@@ -24,6 +24,14 @@ export function getWeekGraphicsSlides(week: number): PublishedSlide[] {
 export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const sections: WeekGraphicsSection[] = []
 
+  const matchupsByWeek: Record<number, PublishedSlide[]> = {
+    5: publish(WEEK_5_MATCHUPS),
+  }
+  const matchups = matchupsByWeek[week]
+  if (matchups?.length) {
+    sections.push({ kind: 'matchups', heading: 'Matchups', slides: matchups })
+  }
+
   const resultsByWeek: Record<number, PublishedSlide[]> = {
     1: publish(RESULTS_W1),
     2: publish(RESULTS_W2),
@@ -130,9 +138,22 @@ const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
   'Slide 16',
 ])
 
+function vs(id: string, title: string): PublishedSlide {
+  return titled(id, title)
+}
+
 function result(id: string, title: string): PublishedSlide {
   return titled(id, title)
 }
+
+const WEEK_5_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w5-m1', 'Steven vs Crooke'),
+  vs('vs-w5-m2', 'Danny vs Manny'),
+  vs('vs-w5-m3', 'Narking vs Eric'),
+  vs('vs-w5-m4', 'Hadi vs Frankie'),
+  vs('vs-w5-m5', 'Mauricio vs Jamil'),
+  vs('vs-w5-m6', 'Kayser vs Matt'),
+]
 
 const WEEK_4_REPORT: PublishedSlide[] = [
   w4('w4-slide-01', 'The Frankie Zone Has Been Evacuated'),
