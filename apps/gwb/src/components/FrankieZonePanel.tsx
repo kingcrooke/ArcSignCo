@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import recapsData from '../content/commissioner-recaps.json'
 import { FRANKIE_ZONE_RECORD } from '../lib/constants'
 import { managerNickname } from '../lib/nicknames'
@@ -26,6 +26,28 @@ import { SlideLightbox } from './SlideLightbox'
 
 const THUMB_WIDTH = 540
 const THUMB_HEIGHT = 675
+
+/**
+ * Renders "A · B · C" so each segment stays on one line and a wrap can only
+ * happen after a middle dot (never orphaning a lone word or number). Pair with
+ * `text-balance` on the parent so wrapped lines come out even.
+ */
+function DotSeparatedLine({ text }: { text: string }) {
+  const segments = text.split(' · ')
+  return (
+    <>
+      {segments.map((segment, i) => (
+        <Fragment key={i}>
+          {i > 0 && ' '}
+          <span className="whitespace-nowrap">
+            {segment}
+            {i < segments.length - 1 && '\u00a0·'}
+          </span>
+        </Fragment>
+      ))}
+    </>
+  )
+}
 
 type Props = {
   teams: Map<number, TeamInfo>
@@ -293,15 +315,19 @@ export function FrankieZonePanel({
         <h2 className="font-['Anton'] text-4xl uppercase leading-tight text-[var(--gwb-accent)] sm:text-5xl">
           {view.heroTitle}
         </h2>
-        <p className="mt-2 font-['Bebas Neue'] text-lg tracking-[0.12em] text-[var(--gwb-text)] sm:text-xl">
-          {view.censusLine}
+        <p className="mt-2 font-['Bebas Neue'] text-lg tracking-[0.08em] text-balance text-[var(--gwb-text)] sm:text-xl sm:tracking-[0.12em]">
+          <DotSeparatedLine text={view.censusLine} />
         </p>
       </header>
 
       {view.isEmpty ? (
         <div className="rounded-xl border border-dashed border-[var(--gwb-border)] p-8 text-center">
-          <p className="font-['Bebas Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]">
-            ZONE EMPTY · FRANKIE&apos;S 0-{FRANKIE_ZONE_RECORD.lossesWithoutWin} RECORD STANDS
+          <p className="font-['Bebas Neue'] text-2xl tracking-wide text-balance text-[var(--gwb-accent)]">
+            <span className="whitespace-nowrap">ZONE EMPTY&nbsp;·</span>{' '}
+            <span className="whitespace-nowrap">
+              FRANKIE&apos;S 0-{FRANKIE_ZONE_RECORD.lossesWithoutWin}
+            </span>{' '}
+            <span className="whitespace-nowrap">RECORD STANDS</span>
           </p>
         </div>
       ) : (
