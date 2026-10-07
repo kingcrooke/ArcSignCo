@@ -319,7 +319,7 @@ export default function App() {
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Standings
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                <span className="ml-2 whitespace-nowrap text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>
@@ -414,7 +414,7 @@ export default function App() {
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Frankie Zone
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                <span className="ml-2 whitespace-nowrap text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>
@@ -444,7 +444,7 @@ export default function App() {
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Waiver Wire Champion
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                <span className="ml-2 whitespace-nowrap text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>
