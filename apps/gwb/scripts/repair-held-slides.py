@@ -14,7 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 GWB = Path(__file__).resolve().parents[1]
 ROOT = GWB.parents[1]
-FONT_DIR = GWB / "public/fonts"
+FONT_DIR = GWB / "scripts/fonts-local"
 FONTS = {
     "anton": FONT_DIR / "Anton-Regular.ttf",
     "bebas": FONT_DIR / "BebasNeue-Regular.ttf",
