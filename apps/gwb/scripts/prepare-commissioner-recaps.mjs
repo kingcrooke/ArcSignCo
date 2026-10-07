@@ -91,9 +91,6 @@ function cleanBody(raw, { reconstructed }) {
     text = text.replaceAll(`@${id}`, name)
   }
 
-  text = text.replaceAll('HADY', 'HADI')
-  text = text.replaceAll('Hady', 'Hadi')
-
   text = text.replaceAll('+7.3', '+5.3')
   text = text.replace(
     /gained seven points/gi,

@@ -5,7 +5,7 @@ const NICKNAME_BY_ROSTER: Record<number, string> = {
   3: 'Narking',
   4: 'Kayser',
   5: 'Eric',
-  6: 'Hadi',
+  6: 'Hady',
   7: 'Steven',
   8: 'Crooke',
   9: 'Manny',

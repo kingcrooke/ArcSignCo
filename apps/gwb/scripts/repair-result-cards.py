@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HADY→HADI repairs on Results Weeks 1–3 cards (full-line re-typeset)."""
+"""HADY→Hady repairs on Results Weeks 1–3 cards (full-line re-typeset)."""
 from __future__ import annotations
 
 import runpy
@@ -71,7 +71,7 @@ def repair_final_headline(img, path: Path) -> None:
     R["replace_line_in_box"](
         img,
         (60, y0, 720, y1),
-        "FINAL: HADI TAKES IT",
+        "FINAL: Hady TAKES IT",
         "anton",
         fill,
     )
@@ -89,13 +89,13 @@ def repair_card(path: Path, dest: Path) -> None:
         family = pick_family(width, height)
         fill = R["sample_text_color"](img, box)
         if text.lower() in ("hady's", "hadys"):
-            R["replace_word_in_box"](img, box, "Hadi's", family, fill)
+            R["replace_word_in_box"](img, box, "Hady's", family, fill)
         elif text.upper() == "HADY":
-            R["replace_word_in_box"](img, box, "HADI", family, fill)
+            R["replace_word_in_box"](img, box, "Hady", family, fill)
         elif text.lower() == "hady":
-            R["replace_word_in_box"](img, box, "Hadi", family, fill)
+            R["replace_word_in_box"](img, box, "Hady", family, fill)
         else:
-            cleaned = text.replace("Hady", "Hadi").replace("HADY", "HADI")
+            cleaned = text.replace("Hady", "Hady").replace("HADY", "Hady")
             R["replace_word_in_box"](img, box, cleaned, family, fill)
 
     dest.parent.mkdir(parents=True, exist_ok=True)

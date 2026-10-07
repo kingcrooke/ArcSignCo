@@ -150,7 +150,7 @@ const WEEK_5_MATCHUPS: PublishedSlide[] = [
   vs('vs-w5-m1', 'Steven vs Crooke'),
   vs('vs-w5-m2', 'Danny vs Manny'),
   vs('vs-w5-m3', 'Narking vs Eric'),
-  vs('vs-w5-m4', 'Hadi vs Frankie'),
+  vs('vs-w5-m4', 'Hady vs Frankie'),
   vs('vs-w5-m5', 'Mauricio vs Jamil'),
   vs('vs-w5-m6', 'Kayser vs Matt'),
 ]
@@ -161,7 +161,7 @@ const WEEK_4_REPORT: PublishedSlide[] = [
   w4('w4-slide-03', 'Mauricio 141.24 def Eric'),
   w4('w4-slide-04', 'Frankie 144.80 def Kayser'),
   w4('w4-slide-05', 'Danny 163.91 def Crooke'),
-  w4('w4-slide-06', 'Hadi 141.65 def Manny'),
+  w4('w4-slide-06', 'Hady 141.65 def Manny'),
   w4('w4-slide-07', 'Jamil 162.83 def Matt'),
   w4('w4-slide-08', 'Kayser Mulligan #7: Good Mulligan, Lost Anyway'),
   w4('w4-slide-09', 'Frankie Zone Temporarily Closed'),
@@ -169,14 +169,14 @@ const WEEK_4_REPORT: PublishedSlide[] = [
   w4('w4-slide-11', 'Final Week 4 Scoring'),
   w4('w4-slide-12', 'Stat of the Week: 0.03'),
   w4('w4-slide-13', 'Standings After Week 4'),
-  w4('w4-slide-14', 'AI Hadi Got Cooked'),
+  w4('w4-slide-14', 'AI Hady Got Cooked'),
   w4('w4-slide-15', 'Week 4 Awards'),
   w4('w4-slide-16', 'Week 5: We Run It Back'),
 ]
 
 const RESULTS_W1: PublishedSlide[] = [
   result('results-w1-m1', 'Mauricio 137.1 – Crooke 124.5'),
-  result('results-w1-m2', 'Kayser 138.7 – Hadi 119.4'),
+  result('results-w1-m2', 'Kayser 138.7 – Hady 119.4'),
   result('results-w1-m3', 'Matt 175.1 – Narking 158.2'),
   result('results-w1-m4', 'Jamil 171.7 – Danny 111.9'),
   result('results-w1-m5', 'Steven 199.4 – Frankie 135.4'),
@@ -184,7 +184,7 @@ const RESULTS_W1: PublishedSlide[] = [
 ]
 
 const RESULTS_W2: PublishedSlide[] = [
-  result('results-w2-m1', 'Hadi 151.0 – Crooke 123.7'),
+  result('results-w2-m1', 'Hady 151.0 – Crooke 123.7'),
   result('results-w2-m2', 'Narking 131.9 – Mauricio 99.8'),
   result('results-w2-m3', 'Kayser 170.9 – Danny 143.0'),
   result('results-w2-m4', 'Steven 134.9 – Matt 130.5'),
@@ -194,7 +194,7 @@ const RESULTS_W2: PublishedSlide[] = [
 
 const RESULTS_W3: PublishedSlide[] = [
   result('results-w3-m1', 'Crooke 167.7 – Narking 136.7'),
-  result('results-w3-m2', 'Hadi 132.0 – Danny 121.7'),
+  result('results-w3-m2', 'Hady 132.0 – Danny 121.7'),
   result('results-w3-m3', 'Steven 199.2 – Mauricio 123.9'),
   result('results-w3-m4', 'Kayser 151.9 – Manny 129.7'),
   result('results-w3-m5', 'Eric 130.4 – Matt 128.6'),
@@ -204,7 +204,7 @@ const RESULTS_W3: PublishedSlide[] = [
 const RESULTS_W4: PublishedSlide[] = [
   result('results-w4-m1', 'Steven 180.6 – Narking 141.2'),
   result('results-w4-m2', 'Frankie 144.8 – Kayser 128.4'),
-  result('results-w4-m3', 'Hadi 141.7 – Manny 134.9'),
+  result('results-w4-m3', 'Hady 141.7 – Manny 134.9'),
   result('results-w4-m4', 'Jamil 162.8 – Matt 143.6'),
   result('results-w4-m5', 'Mauricio 141.2 – Eric 123.7'),
   result('results-w4-m6', 'Danny 163.9 – Crooke 121.3'),
