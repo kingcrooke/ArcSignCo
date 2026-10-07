@@ -1,6 +1,12 @@
+import { useMemo } from 'react'
+import {
+  computeAllPlayThroughWeek,
+  formatAllPlayRecord,
+  playoffSeedHint,
+} from '../lib/allPlay'
 import { managerNickname } from '../lib/nicknames'
 import { recordLabel, streakLabel } from '../lib/standings'
-import type { StandingRow, TeamInfo } from '../lib/types'
+import type { SleeperMatchup, StandingRow, TeamInfo } from '../lib/types'
 import { TeamAvatar } from './TeamAvatar'
 
 function pfPa(row: StandingRow): { pf: string; pa: string } {
@@ -38,17 +44,26 @@ export function StandingsPanel({
   deferralNote,
   teams,
   playoffTeams,
+  matchupsByWeek,
+  standingsThroughWeek,
 }: {
   rows: StandingRow[]
   deferralNote?: string | null
   teams: Map<number, TeamInfo>
   playoffTeams?: number | null
+  matchupsByWeek: Map<number, SleeperMatchup[]>
+  standingsThroughWeek: number
 }) {
   const sacko = rows.length ? rows[rows.length - 1] : null
   const cutoff =
     playoffTeams && playoffTeams > 0 && playoffTeams < rows.length
       ? playoffTeams
       : null
+
+  const allPlay = useMemo(
+    () => computeAllPlayThroughWeek(matchupsByWeek, standingsThroughWeek),
+    [matchupsByWeek, standingsThroughWeek],
+  )
 
   return (
     <div className="space-y-3">
@@ -70,6 +85,12 @@ export function StandingsPanel({
           const manager = managerNickname(r.rosterId, r.displayName)
           const showPlayoffLine =
             cutoff !== null && r.rank === cutoff && index < rows.length - 1
+          const seedLine =
+            playoffTeams && playoffTeams > 0
+              ? playoffSeedHint(r.rank, playoffTeams)
+              : null
+          const ap = allPlay.get(r.rosterId)
+          const allPlayLabel = ap ? formatAllPlayRecord(ap) : '—'
 
           return (
             <li key={r.rosterId}>
@@ -108,7 +129,7 @@ export function StandingsPanel({
                       {manager}
                       <span className="text-[var(--gwb-muted)]/80">
                         {' '}
-                        · {pf} PF · {pa} PA
+                        · {pf} PF · {pa} PA · AP {allPlayLabel}
                       </span>
                     </span>
                     <span className="hidden sm:inline">
@@ -121,9 +142,22 @@ export function StandingsPanel({
                       ) : null}
                     </span>
                   </p>
+                  {seedLine && (
+                    <p className="mt-1 text-[0.65rem] leading-snug text-[var(--gwb-muted)]/90 sm:text-xs">
+                      {seedLine}
+                    </p>
+                  )}
                 </div>
 
-                <div className="hidden shrink-0 items-center gap-4 sm:flex">
+                <div className="hidden shrink-0 items-center gap-3 sm:flex">
+                  <div className="text-right">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]">
+                      All-play
+                    </p>
+                    <p className="text-sm font-semibold tabular-nums leading-tight">
+                      {allPlayLabel}
+                    </p>
+                  </div>
                   <div className="text-right">
                     <p className="text-sm font-semibold tabular-nums leading-tight">
                       {recordLabel(r)}

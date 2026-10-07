@@ -203,7 +203,7 @@ describe('frankieZone', () => {
     expect(escapes).toHaveLength(1)
     expect(escapes[0].teamName).toBe(crooke.teamName)
     expect(escapes[0].week).toBe(3)
-    expect(escapes[0].opponentLabel).toBe(narking.displayName)
+    expect(escapes[0].opponentLabel).toBe('Narking')
     expect(escapes[0].line).toContain('167.66')
     expect(escapes.map((e) => e.rosterId)).not.toContain(steven.rosterId)
     expect(escapes.map((e) => e.rosterId)).not.toContain(frankie.rosterId)

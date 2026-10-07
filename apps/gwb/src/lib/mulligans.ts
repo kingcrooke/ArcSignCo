@@ -1,4 +1,5 @@
 import ledgerJson from '../content/mulligan-ledger.json'
+import { managerNickname } from './nicknames'
 import type { NflState, SleeperLeague } from './types'
 import { isWeekLive, lastCompletedWeek } from './weeks'
 
@@ -36,6 +37,7 @@ export interface MulliganLedgerEntry {
   scoreWithout: number
   opponentScore: number
   opponentLabel: string
+  opponentRosterId?: number
   won: boolean
   flipped: boolean
   resultPending?: boolean
@@ -214,11 +216,26 @@ export type MulliganReceiptParts = {
 }
 
 /** Week-detail card copy, one fact per line. */
+function receiptManagerName(entry: MulliganLedgerEntry): string {
+  return managerNickname(
+    entry.rosterId,
+    entry.managerShort ?? entry.manager,
+  )
+}
+
+function receiptOpponentName(entry: MulliganLedgerEntry): string {
+  if (entry.opponentRosterId != null) {
+    return managerNickname(entry.opponentRosterId, entry.opponentLabel)
+  }
+  return entry.opponentLabel
+}
+
 export function mulliganReceiptParts(
   entry: MulliganLedgerEntry,
   ctx?: MulliganLiveContext,
 ): MulliganReceiptParts {
-  const manager = entry.managerShort ?? entry.manager
+  const manager = receiptManagerName(entry)
+  const opponent = receiptOpponentName(entry)
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
   const result = entry.resultPending ? 'TBD' : entry.won ? 'W' : 'L'
   const scoreWith = resolveScoreWith(entry, ctx)
@@ -235,7 +252,7 @@ export function mulliganReceiptParts(
     inLine: `IN ${entry.in.name} ${formatSwapPoints(entry.in, ctx)}`,
     netLine: `Net ${formatNetImpact(entry, ctx)}`,
     resultLine: `${result} ${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`,
-    versusLine: `${resultVerb} ${vsWord} ${entry.opponentLabel}`,
+    versusLine: `${resultVerb} ${vsWord} ${opponent}`,
     withoutLine: `Would've been ${formatScore(entry.scoreWithout)} without it`,
     flipLine: flip,
     footnote: entry.footnote,
@@ -246,7 +263,7 @@ export function formatMulliganReceipt(
   entry: MulliganLedgerEntry,
   ctx?: MulliganLiveContext,
 ): string {
-  const manager = entry.managerShort ?? entry.manager
+  const manager = receiptManagerName(entry)
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
   const result = entry.resultPending ? 'TBD' : entry.won ? 'W' : 'L'
   const scoreWith = resolveScoreWith(entry, ctx)
@@ -332,7 +349,7 @@ export function formatMulliganLedgerLine(
     `OUT ${entry.out.name} ${entry.out.position}${outTeam} ${formatScore(entry.out.points)}${outNote} → ` +
     `IN ${entry.in.name} ${entry.in.position}${inTeam} ${formatSwapPoints(entry.in, ctx)} · ` +
     `Net ${formatNetImpact(entry, ctx)} · ` +
-    `${resultVerb} ${matchup} ${vsWord} ${entry.opponentLabel} ` +
+    `${resultVerb} ${matchup} ${vsWord} ${receiptOpponentName(entry)} ` +
     `(would've been ${formatScore(entry.scoreWithout)} without it) · ${flip}${tail}`
   )
 }

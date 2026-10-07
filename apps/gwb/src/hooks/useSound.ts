@@ -68,6 +68,7 @@ export function useSound() {
   const ensureAudio = useCallback(() => {
     if (!bedRef.current) {
       bedRef.current = new Audio()
+      bedRef.current.preload = 'none'
       bedRef.current.loop = true
       bedRef.current.volume = 0.35
       bedRef.current.addEventListener('playing', () => setPlaying(true))
@@ -75,6 +76,7 @@ export function useSound() {
     }
     if (!stingerRef.current) {
       stingerRef.current = new Audio()
+      stingerRef.current.preload = 'none'
       stingerRef.current.volume = 0.5
     }
     return { bed: bedRef.current, stinger: stingerRef.current }
@@ -196,15 +198,6 @@ export function useSound() {
       setUnlocked(false)
     }
   }, [armed, stopAll])
-
-  useEffect(() => {
-    if (!armedRef.current) return
-    ensureAudio()
-    pendingSrcRef.current = TAB_LOOPS.standings
-    const bed = bedRef.current
-    if (bed && !bed.src) bed.src = TAB_LOOPS.standings
-    playBedNow()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps -- once on mount
 
   useEffect(() => {
     if (!armed || unlocked) return

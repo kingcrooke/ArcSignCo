@@ -21,6 +21,13 @@ const SWIPE_THRESHOLD_PX = 48
 const FOCUSABLE =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
 
+async function fetchFullSlideBlob(basename: string): Promise<Blob> {
+  const jpg = slideAssetUrl(basename, 'full', 'jpg')
+  const res = await fetch(jpg)
+  if (!res.ok) throw new Error('Could not load full slide')
+  return res.blob()
+}
+
 export function SlideLightbox({
   slides,
   index,
@@ -32,6 +39,9 @@ export function SlideLightbox({
   const imgRef = useRef<HTMLImageElement>(null)
   const touchStartX = useRef<number | null>(null)
   const [imageReady, setImageReady] = useState(false)
+  const [saveState, setSaveState] = useState<'idle' | 'busy' | 'done' | 'error'>(
+    'idle',
+  )
   const slide = slides[index]
 
   const goPrev = useCallback(() => {
@@ -54,6 +64,7 @@ export function SlideLightbox({
 
   useEffect(() => {
     setImageReady(false)
+    setSaveState('idle')
   }, [slide?.basename])
 
   useEffect(() => {
@@ -112,10 +123,55 @@ export function SlideLightbox({
     if (img.naturalWidth > 0) setImageReady(true)
   }, [])
 
+  const saveOrShare = useCallback(async () => {
+    if (!slide) return
+    setSaveState('busy')
+    try {
+      const blob = await fetchFullSlideBlob(slide.basename)
+      const file = new File([blob], `${slide.basename}.jpg`, {
+        type: blob.type || 'image/jpeg',
+      })
+      const canShare =
+        typeof navigator.share === 'function' &&
+        (!navigator.canShare || navigator.canShare({ files: [file] }))
+
+      if (canShare) {
+        await navigator.share({
+          files: [file],
+          title: slide.title,
+        })
+        setSaveState('done')
+        return
+      }
+
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${slide.basename}.jpg`
+      a.rel = 'noopener'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+      setSaveState('done')
+    } catch {
+      setSaveState('error')
+    }
+  }, [slide])
+
   if (!slide) return null
 
   const webp = slideAssetUrl(slide.basename, 'full', 'webp')
   const jpg = slideAssetUrl(slide.basename, 'full', 'jpg')
+
+  const saveLabel =
+    saveState === 'busy'
+      ? 'Saving…'
+      : saveState === 'done'
+        ? 'Saved'
+        : saveState === 'error'
+          ? 'Try again'
+          : 'Save image'
 
   return (
     <div
@@ -131,7 +187,7 @@ export function SlideLightbox({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="flex shrink-0 flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6">
+      <div className="flex shrink-0 flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6">
         <p className="text-sm text-white/80">
           <span className="block sm:inline">
             {index + 1} / {slides.length}
@@ -141,14 +197,25 @@ export function SlideLightbox({
             {slide.title}
           </span>
         </p>
-        <button
-          type="button"
-          className="self-end rounded-lg border border-white/20 px-3 py-1.5 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)] sm:self-auto"
-          onClick={onClose}
-          aria-label="Close slide viewer"
-        >
-          Close
-        </button>
+        <div className="flex shrink-0 items-center justify-end gap-2">
+          <button
+            type="button"
+            className="min-h-11 rounded-lg border border-white/25 px-3 py-2 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)] disabled:opacity-50"
+            onClick={() => void saveOrShare()}
+            disabled={saveState === 'busy'}
+            aria-label="Save or share full size slide image"
+          >
+            {saveLabel}
+          </button>
+          <button
+            type="button"
+            className="min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
+            onClick={onClose}
+            aria-label="Close slide viewer"
+          >
+            Close
+          </button>
+        </div>
       </div>
 
       <div className="relative flex min-h-0 flex-1 items-center justify-center px-14 pb-4 pt-2 sm:px-20">

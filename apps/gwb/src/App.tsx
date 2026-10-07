@@ -331,6 +331,8 @@ export default function App() {
                 deferralNote={data.standingsDeferralNote}
                 teams={data.teams}
                 playoffTeams={data.league.settings.playoff_teams ?? null}
+                matchupsByWeek={data.matchupsByWeek}
+                standingsThroughWeek={data.standingsThroughWeek}
               />
             </section>
           )}
@@ -366,6 +368,11 @@ export default function App() {
                 initialSlideId={gallerySlideId}
                 onSlideUrlChange={setSlideParam}
                 onDeckKindChange={setDeckKind}
+                league={data.league}
+                matchups={data.matchupsByWeek.get(data.selectedWeek)}
+                players={data.players}
+                ensurePlayers={data.ensurePlayers}
+                isActive={tab === 'gallery'}
               />
             </section>
           )}

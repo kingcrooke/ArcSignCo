@@ -52,6 +52,7 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).toContain('Manny (Mnny)')
     expect(formatMulliganLedgerLine(mulliganForRoster(9)!)).not.toContain('………')
     expect(JSON.stringify(MULLIGAN_LEDGER_ENTRIES)).not.toMatch(/Hady/i)
+    expect(danny.opponentLabel).toBe('Hadi')
     expect(narking.netImpactOverride).toBe(5.3)
     expect(mulliganLabel(mulliganStatusForRoster(3))).toContain('+5.30')
   })
@@ -66,26 +67,27 @@ describe('mulligans', () => {
     expect(mauricio.netLine).toBe('Net −0.90')
     expect(mauricio.outLine).not.toContain('IN')
 
-    const jesus = mulliganReceiptParts(mulliganForRoster(8)!)
-    expect(jesus.manager).toBe('Jesus')
-    expect(jesus.outLine).toContain('Parker Washington')
-    expect(jesus.inLine).toContain('Mike Evans')
-    expect(jesus.netLine).toBe('Net +10.60')
-    expect(jesus.resultLine).toBe('L 121.27–163.91')
-    expect(jesus.outLine).not.toContain('Net')
-    expect(jesus.resultLine).not.toContain('OUT')
+    const crooke = mulliganReceiptParts(mulliganForRoster(8)!)
+    expect(crooke.manager).toBe('Crooke')
+    expect(crooke.outLine).toContain('Parker Washington')
+    expect(crooke.inLine).toContain('Mike Evans')
+    expect(crooke.netLine).toBe('Net +10.60')
+    expect(crooke.resultLine).toBe('L 121.27–163.91')
+    expect(crooke.versusLine).toContain('Danny')
+    expect(crooke.outLine).not.toContain('Net')
+    expect(crooke.resultLine).not.toContain('OUT')
   })
 
-  it('shows Jesus week 4 swap with final Evans points and loss vs Lambs2Slaughter', () => {
-    const jesus = mulliganForRoster(8)!
-    expect(jesus.week).toBe(4)
-    expect(formatMulliganReceipt(jesus)).toContain('12.60')
-    expect(formatMulliganReceipt(jesus)).toContain('+10.60')
-    expect(formatMulliganReceipt(jesus)).toContain('L 121.27–163.91')
-    expect(formatMulliganReceipt(jesus)).not.toContain('pending')
-    expect(formatMulliganReceipt(jesus)).not.toContain('live')
-    expect(formatMulliganLedgerLine(jesus)).toContain('Lambs2Slaughter')
-    expect(formatMulliganLedgerLine(jesus)).toContain('Lost')
+  it('shows Crooke week 4 swap with final Evans points and loss vs Danny', () => {
+    const crooke = mulliganForRoster(8)!
+    expect(crooke.week).toBe(4)
+    expect(formatMulliganReceipt(crooke)).toContain('12.60')
+    expect(formatMulliganReceipt(crooke)).toContain('+10.60')
+    expect(formatMulliganReceipt(crooke)).toContain('L 121.27–163.91')
+    expect(formatMulliganReceipt(crooke)).not.toContain('pending')
+    expect(formatMulliganReceipt(crooke)).not.toContain('live')
+    expect(mulliganReceiptParts(crooke).versusLine).toContain('Danny')
+    expect(formatMulliganLedgerLine(crooke)).toContain('Lost')
   })
 
   it('shows Kayser week 4 swap as final loss vs Turn Your Head And Goff (no flip)', () => {
@@ -111,7 +113,7 @@ describe('mulligans', () => {
     )
     expect(mulliganEntriesForWeek(4).map((e) => e.managerShort)).toEqual([
       'Kayser',
-      'Jesus',
+      'Crooke',
     ])
   })
 

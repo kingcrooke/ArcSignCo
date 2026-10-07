@@ -2,6 +2,7 @@ import {
   FRANKIE_ZONE_RECORD,
   ZONE_MANAGER_SHORT_NAMES,
 } from './constants'
+import { managerNickname } from './nicknames'
 import { finalizedMatchupKeysForWeek } from './matchupBoard'
 import { recordLabel, sortStandingRows } from './standings'
 import type {
@@ -431,8 +432,13 @@ export function buildEscapeLog(
             m.roster_id !== team.rosterId,
         )
         const oppInfo = opp ? teams.get(opp.roster_id) : undefined
-        const oppLabel =
-          oppInfo?.displayName ?? oppInfo?.teamName ?? 'opponent'
+        const escaper = managerNickname(team.rosterId, team.displayName)
+        const oppLabel = opp
+          ? managerNickname(
+              opp.roster_id,
+              oppInfo?.displayName ?? oppInfo?.teamName ?? 'opponent',
+            )
+          : 'opponent'
         const pts = mine?.points ?? 0
         escapes.push({
           rosterId: team.rosterId,
@@ -441,7 +447,7 @@ export function buildEscapeLog(
           week,
           points: pts,
           opponentLabel: oppLabel,
-          line: `${team.teamName} escaped W${week} · ${pts.toFixed(2)} vs ${oppLabel}`,
+          line: `${escaper} escaped W${week} · ${pts.toFixed(2)} vs ${oppLabel}`,
         })
       }
       prevWins = wins
@@ -518,8 +524,11 @@ export function findZoneCollisions(
         weeksUntil: Math.max(0, week - currentWeek),
         rosterA: rosterId,
         rosterB: oppId,
-        labelA: a?.displayName ?? `Roster ${rosterId}`,
-        labelB: b?.displayName ?? `Roster ${oppId}`,
+        labelA: managerNickname(
+          rosterId,
+          a?.displayName ?? `Roster ${rosterId}`,
+        ),
+        labelB: managerNickname(oppId, b?.displayName ?? `Roster ${oppId}`),
       })
     }
   }

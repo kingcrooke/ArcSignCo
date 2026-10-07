@@ -1,5 +1,5 @@
-/** League-facing nicknames (group chat names), keyed by Sleeper roster_id. */
-const NICKNAME_BY_ROSTER: Record<number, string> = {
+/** League-facing public names (group chat nicknames), keyed by Sleeper roster_id. */
+const PUBLIC_NAME_BY_ROSTER: Record<number, string> = {
   1: 'Danny',
   2: 'Mauricio',
   3: 'Narking',
@@ -14,6 +14,11 @@ const NICKNAME_BY_ROSTER: Record<number, string> = {
   12: 'Matt',
 }
 
+/** Canonical display name for a manager in UI copy, captions, and receipts. */
+export function publicManagerName(rosterId: number, fallback = ''): string {
+  return PUBLIC_NAME_BY_ROSTER[rosterId] ?? fallback
+}
+
 export function managerNickname(rosterId: number, displayName: string): string {
-  return NICKNAME_BY_ROSTER[rosterId] ?? displayName
+  return publicManagerName(rosterId, displayName)
 }

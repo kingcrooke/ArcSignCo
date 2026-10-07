@@ -1,3 +1,4 @@
+import { managerNickname } from './nicknames'
 import type { NflWeekGame, PlayersMap, SleeperMatchup, TeamInfo } from './types'
 
 export interface MatchupPair {
@@ -99,7 +100,9 @@ export function teamLabel(
   rosterId: number,
   teams: Map<number, TeamInfo>,
 ): string {
-  return teams.get(rosterId)?.teamName ?? `Team ${rosterId}`
+  const team = teams.get(rosterId)
+  if (!team) return `Team ${rosterId}`
+  return managerNickname(rosterId, team.displayName)
 }
 
 export function leaderRosterId(
