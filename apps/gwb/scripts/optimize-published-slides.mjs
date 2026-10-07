@@ -123,7 +123,16 @@ async function processOne(inputPath, basename) {
 }
 
 async function main() {
-  const cliSources = process.argv.slice(2).filter((a) => !a.startsWith('-'))
+  const cliSources = process.argv
+    .slice(2)
+    .filter((a) => !a.startsWith('-') && !a.startsWith('--'))
+  const basenameArg = process.argv.find((a) => a.startsWith('--basename='))
+  const singleBasename = basenameArg?.slice('--basename='.length)
+  if (cliSources.length === 1 && singleBasename) {
+    await mkdir(OUT_DIR, { recursive: true })
+    await processOne(cliSources[0], singleBasename)
+    return
+  }
   const weeksArg = process.argv.find((a) => a.startsWith('--weeks='))
   const weeks = weeksArg
     ? weeksArg

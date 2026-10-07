@@ -49,7 +49,7 @@ function ocrText(pngPath) {
 
 function qaSlide(id, pngPath, ocr) {
   const issues = []
-  if (/\bhady\b/i.test(ocr)) issues.push('OCR: Hady present')
+  if (/\bhady\b/i.test(ocr)) issues.push('OCR: Hadi present')
   for (const re of GHOST_PHRASES) {
     if (re.test(ocr) && id !== 'w4-slide-16') {
       /* allow duplicate phrases only if not hady-related */

@@ -146,9 +146,9 @@ function main() {
   const md = readFileSync(SOURCE, 'utf8')
   const recaps = parseRecaps(md)
 
-  const hadyLeft = JSON.stringify(recaps).match(/Hady|HADY/g)
-  if (hadyLeft) {
-    throw new Error(`Hady still present after cleanup: ${hadyLeft.length}`)
+  const wrongSpelling = JSON.stringify(recaps).match(/Hady|HADY/g)
+  if (wrongSpelling) {
+    throw new Error(`Hady/HADY still present after cleanup: ${wrongSpelling.length}`)
   }
   const idLeft = JSON.stringify(recaps).match(/@\d{10,}/g)
   if (idLeft) {
