@@ -100,8 +100,8 @@ describe('commissioner recaps timeline', () => {
     expect(final?.bodyMarkdown).toContain('Narking 141.21')
     expect(final?.bodyMarkdown).toContain('714.07')
     expect(final?.bodyMarkdown).toContain('Kayser')
-    expect(final?.bodyMarkdown).toContain('Hadi')
-    expect(final?.bodyMarkdown).not.toMatch(/Hady|HADY|Kaiser|@\d{8,}/)
+    expect(final?.bodyMarkdown).toContain('Hady')
+    expect(final?.bodyMarkdown).not.toMatch(/Hadi|HADI|Kaiser|@\d{8,}/)
     const waiver = week4[1]
     expect(waiver?.id).toBe('recap-14')
     expect(waiver?.label).toBe('Predictions')

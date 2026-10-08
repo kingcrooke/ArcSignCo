@@ -29,7 +29,7 @@ describe('getWeekGraphicsSections week 4', () => {
       ['w4-slide-03', 'Mauricio 141.24 def Eric'],
       ['w4-slide-04', 'Frankie 144.80 def Kayser'],
       ['w4-slide-05', 'Danny 163.91 def Crooke'],
-      ['w4-slide-06', 'Hadi 141.65 def Manny'],
+      ['w4-slide-06', 'Hady 141.65 def Manny'],
       ['w4-slide-07', 'Jamil 162.83 def Matt'],
       ['w4-slide-08', 'Kayser Mulligan #7: Good Mulligan, Lost Anyway'],
       ['w4-slide-09', 'Frankie Zone Temporarily Closed'],
@@ -37,7 +37,7 @@ describe('getWeekGraphicsSections week 4', () => {
       ['w4-slide-11', 'Final Week 4 Scoring'],
       ['w4-slide-12', 'Stat of the Week: 0.03'],
       ['w4-slide-13', 'Standings After Week 4'],
-      ['w4-slide-14', 'AI Hadi Got Cooked'],
+      ['w4-slide-14', 'AI Hady Got Cooked'],
       ['w4-slide-15', 'Week 4 Awards'],
       ['w4-slide-16', 'Week 5: We Run It Back'],
     ])
@@ -51,7 +51,7 @@ describe('getWeekGraphicsSections week 4', () => {
       ['vs-w5-m1', 'vs-w5-m1', 'Steven vs Crooke'],
       ['vs-w5-m2', 'vs-w5-m2', 'Danny vs Manny'],
       ['vs-w5-m3', 'vs-w5-m3', 'Narking vs Eric'],
-      ['vs-w5-m4', 'vs-w5-m4', 'Hadi vs Frankie'],
+      ['vs-w5-m4', 'vs-w5-m4', 'Hady vs Frankie'],
       ['vs-w5-m5', 'vs-w5-m5', 'Mauricio vs Jamil'],
       ['vs-w5-m6', 'vs-w5-m6', 'Kayser vs Matt'],
     ])
@@ -62,7 +62,7 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(results?.slides.map((s) => [s.id, s.title])).toEqual([
       ['results-w4-m1', 'FINAL: STEVEN TAKES IT'],
       ['results-w4-m2', 'FINAL: FRANKIE TAKES IT'],
-      ['results-w4-m3', 'FINAL: Hadi TAKES IT'],
+      ['results-w4-m3', 'FINAL: Hady TAKES IT'],
       ['results-w4-m4', 'FINAL: JAMIL TAKES IT'],
       ['results-w4-m5', 'FINAL: MAURICIO TAKES IT'],
       ['results-w4-m6', 'FINAL: DANNY TAKES IT'],
