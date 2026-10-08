@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Deprecated: use rebuild-hadi-report-slides.py (full-zone re-typeset, no glyph splice)."""
 """Hady→Hadi on W1–W3 report slides via last-letter glyph splice (no re-typeset)."""
 from __future__ import annotations
 
