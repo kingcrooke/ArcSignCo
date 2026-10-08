@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { publishSlideBasename } from './publishedSlides'
 import { getWeekGraphicsSections } from './weekGraphics'
 
 describe('getWeekGraphicsSections week 4', () => {
@@ -51,7 +52,7 @@ describe('getWeekGraphicsSections week 4', () => {
       ['vs-w5-m1', 'vs-w5-m1', 'Steven vs Crooke'],
       ['vs-w5-m2', 'vs-w5-m2', 'Danny vs Manny'],
       ['vs-w5-m3', 'vs-w5-m3', 'Narking vs Eric'],
-      ['vs-w5-m4', 'vs-w5-m4', 'Hady vs Frankie'],
+      ['vs-w5-m4', publishSlideBasename('vs-w5-m4'), 'Hady vs Frankie'],
       ['vs-w5-m5', 'vs-w5-m5', 'Mauricio vs Jamil'],
       ['vs-w5-m6', 'vs-w5-m6', 'Kayser vs Matt'],
     ])

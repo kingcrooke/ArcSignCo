@@ -1,9 +1,10 @@
 import type { PublishedSlide } from './publishedSlides'
+import { publishSlideBasename } from './publishedSlides'
 
 const SLIDE_SIZE = { width: 1080, height: 1350 }
 
 function slide(id: string, title: string): PublishedSlide {
-  return { id, title, basename: id, ...SLIDE_SIZE }
+  return { id, title, basename: publishSlideBasename(id), ...SLIDE_SIZE }
 }
 
 /** Frankie Zone gallery — add new slide ids here as graphics ship. */

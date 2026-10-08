@@ -4,13 +4,15 @@
  *
  *   node scripts/optimize-published-slides.mjs /path/to/w4-slide-01.png ...
  */
-import { mkdir, readdir, stat } from 'node:fs/promises'
+import { mkdir, readdir, readFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const OUT_DIR = path.join(__dirname, '..', 'public', 'slides')
+const appRoot = path.join(__dirname, '..')
+const OUT_DIR = path.join(appRoot, 'public', 'slides')
+const HASH_MANIFEST = path.join(appRoot, 'src/content/slide-asset-basenames.json')
 const MAX_BYTES = 600 * 1024
 const FULL_WIDTH = 1080
 const THUMB_WIDTH = 540
@@ -30,7 +32,6 @@ const SLIDE_BASENAMES = [
   ),
   'vs-m1-narking-steven',
   'vs-m2-kayser-frankie',
-  'vs-m3-hadi-manny',
   'vs-m4-jamil-matt',
   'vs-m5-mauricio-eric',
   'vs-m6-danny-crooke',
@@ -142,6 +143,14 @@ async function main() {
           .filter(Boolean),
       )
     : null
+  let hashedLogicalIds = new Set()
+  try {
+    const manifest = JSON.parse(await readFile(HASH_MANIFEST, 'utf8'))
+    hashedLogicalIds = new Set(Object.keys(manifest))
+  } catch {
+    /* no manifest */
+  }
+
   const basenames = (weeks?.length
     ? weeks.flatMap((w) =>
         Array.from({ length: 16 }, (_, i) =>
@@ -149,7 +158,9 @@ async function main() {
         ),
       )
     : SLIDE_BASENAMES
-  ).filter((basename) => !only || only.has(basename))
+  )
+    .filter((basename) => !hashedLogicalIds.has(basename))
+    .filter((basename) => !only || only.has(basename))
   const searchDirs = [
     path.join(__dirname, 'slide-sources'),
     path.join(__dirname, '../../../docs/gwb-remade-slides'),
@@ -170,6 +181,15 @@ async function main() {
       continue
     }
     await processOne(input, basename)
+  }
+
+  if (hashedLogicalIds.size) {
+    const { spawnSync } = await import('node:child_process')
+    const r = spawnSync('node', ['scripts/publish-hashed-slides.mjs'], {
+      cwd: appRoot,
+      stdio: 'inherit',
+    })
+    if (r.status !== 0) process.exit(r.status ?? 1)
   }
 
   if (process.exitCode) process.exit(process.exitCode)

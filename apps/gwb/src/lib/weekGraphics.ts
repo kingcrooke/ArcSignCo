@@ -1,5 +1,5 @@
 import type { PublishedSlide } from './publishedSlides'
-import { HELD_BACK_SLIDES } from './publishedSlides'
+import { HELD_BACK_SLIDES, publishSlideBasename } from './publishedSlides'
 import { slideHeadline } from './slideHeadlines'
 
 export type GraphicsSectionKind = 'matchups' | 'results' | 'report'
@@ -63,7 +63,7 @@ function titled(id: string, fallback: string): PublishedSlide {
   return {
     id,
     title: slideHeadline(id, fallback),
-    basename: id,
+    basename: publishSlideBasename(id),
     ...SLIDE_SIZE,
   }
 }
