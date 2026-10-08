@@ -115,7 +115,7 @@
 [[headers]]
   for = "/gwb-fe006a16/slides/*"
   [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    Cache-Control = "public, max-age=0, must-revalidate"
   [headers.conditions]
     Status = "200"
 

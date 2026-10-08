@@ -14,12 +14,13 @@ from PIL import Image, ImageDraw, ImageFont
 
 GWB = Path(__file__).resolve().parents[1]
 ROOT = GWB.parents[1]
-FONT_DIR = GWB / "public/fonts"
+FONT_DIR = GWB / "scripts/fonts-local"
 FONTS = {
     "anton": FONT_DIR / "Anton-Regular.ttf",
     "bebas": FONT_DIR / "BebasNeue-Regular.ttf",
     "inter": FONT_DIR / "Inter-Regular.ttf",
     "inter-semibold": FONT_DIR / "Inter-SemiBold.ttf",
+    "dejavu-bold": FONT_DIR / "DejaVuSans-Bold.ttf",
 }
 UPLOADS = Path("/home/ubuntu/.cursor/projects/workspace/uploads")
 OUT_DOCS = ROOT / "docs/gwb-fixed-slides"
@@ -225,14 +226,14 @@ def replace_line_in_box(
 
 
 def repair_vs_matchup_layout(img: Image.Image, poll_y: int) -> None:
-    """vs-m3 card — full-line re-typeset for Hady→Hady."""
+    """vs-m3 card — full-line re-typeset for Hadi→Hadi."""
     white = sample_text_color(img, (353, 147, 574, 219))
     gold = sample_text_color(img, (73, 241, 169, 264))
-    replace_line_in_box(img, (60, 135, 590, 228), "Hady VS MANNY", "anton", white)
+    replace_line_in_box(img, (60, 135, 590, 228), "Hadi VS MANNY", "anton", white)
     replace_line_in_box(
         img,
         (60, 228, 520, 270),
-        "Hady (2-1) VS MANNY (2-1)",
+        "Hadi (2-1) VS MANNY (2-1)",
         "bebas",
         gold,
     )
@@ -240,7 +241,7 @@ def repair_vs_matchup_layout(img: Image.Image, poll_y: int) -> None:
     replace_word_in_box(
         img,
         (833, poll_y, 921, poll_y + 31),
-        "Hady",
+        "Hadi",
         "bebas",
         poll_white,
     )
@@ -249,11 +250,11 @@ def repair_vs_matchup_layout(img: Image.Image, poll_y: int) -> None:
 def repair_w4_slide_10(src: Path, dest: Path) -> None:
     img = load_rgb(src)
     white = sample_text_color(img, (285, 170, 454, 226))
-    replace_word_in_box(img, (72, 170, 193, 226), "Hady", "anton", white)
+    replace_word_in_box(img, (72, 170, 193, 226), "Hadi", "anton", white)
     ref_color = sample_text_color(img, (107, 505, 246, 530))
-    replace_word_in_box(img, (107, 319, 210, 344), "Hady", "bebas", ref_color)
+    replace_word_in_box(img, (107, 319, 210, 344), "Hadi", "bebas", ref_color)
     poll_white = sample_text_color(img, (833, 684, 920, 715))
-    replace_word_in_box(img, (833, 684, 920, 715), "Hady", "bebas", poll_white)
+    replace_word_in_box(img, (833, 684, 920, 715), "Hadi", "bebas", poll_white)
     img.save(dest, optimize=True)
 
 
@@ -263,7 +264,7 @@ def repair_w4_slide_14(src: Path, dest: Path) -> None:
     replace_line_in_box(
         img,
         (95, 935, 990, 985),
-        "14 Kyler - Hady",
+        "14 Kyler - Hadi",
         "inter-semibold",
         gray,
     )
@@ -276,7 +277,7 @@ def repair_w4_slide_06(src: Path, dest: Path) -> None:
     replace_line_in_box(
         img,
         (55, 555, 640, 605),
-        "Hady goes from AJ Barner...",
+        "Hadi goes from AJ Barner...",
         "inter-semibold",
         fill,
     )
@@ -362,7 +363,7 @@ def repair_w4_slide_16(src: Path, footer_ref: Path, dest: Path) -> None:
     ref_footer = load_rgb(footer_ref)
 
     pick_color = sample_text_color(img, (428, 579, 486, 602))
-    replace_word_in_box(img, (322, 579, 396, 608), "Hady", "inter-semibold", pick_color)
+    replace_word_in_box(img, (322, 579, 396, 608), "Hadi", "inter-semibold", pick_color)
 
     for box in tesseract_word_boxes(src, 828, 1295):
         inpaint_text_in_box(img, box)

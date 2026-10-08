@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HADY→Hady repairs on Results Weeks 1–3 cards (full-line re-typeset)."""
+"""HADI→Hadi repairs on Results Weeks 1–3 cards (full-line re-typeset)."""
 from __future__ import annotations
 
 import runpy
@@ -59,8 +59,8 @@ def pick_family(width: int, height: int) -> str:
 
 
 def repair_final_headline(img, path: Path) -> None:
-    words = [w for w in tesseract_words(path) if w[0].upper() in ("FINAL:", "HADY", "TAKES", "IT", "KAYSER")]
-    if not any(w[0].upper() == "HADY" for w in words):
+    words = [w for w in tesseract_words(path) if w[0].upper() in ("FINAL:", "HADI", "TAKES", "IT", "KAYSER")]
+    if not any(w[0].upper() == "HADI" for w in words):
         return
     tops = [w[2] for w in words if w[2] < 250]
     if not tops:
@@ -71,7 +71,7 @@ def repair_final_headline(img, path: Path) -> None:
     R["replace_line_in_box"](
         img,
         (60, y0, 720, y1),
-        "FINAL: Hady TAKES IT",
+        "FINAL: Hadi TAKES IT",
         "anton",
         fill,
     )
@@ -89,13 +89,13 @@ def repair_card(path: Path, dest: Path) -> None:
         family = pick_family(width, height)
         fill = R["sample_text_color"](img, box)
         if text.lower() in ("hady's", "hadys"):
-            R["replace_word_in_box"](img, box, "Hady's", family, fill)
-        elif text.upper() == "HADY":
-            R["replace_word_in_box"](img, box, "Hady", family, fill)
+            R["replace_word_in_box"](img, box, "Hadi's", family, fill)
+        elif text.upper() == "HADI":
+            R["replace_word_in_box"](img, box, "Hadi", family, fill)
         elif text.lower() == "hady":
-            R["replace_word_in_box"](img, box, "Hady", family, fill)
+            R["replace_word_in_box"](img, box, "Hadi", family, fill)
         else:
-            cleaned = text.replace("Hady", "Hady").replace("HADY", "Hady")
+            cleaned = text.replace("Hadi", "Hadi").replace("HADI", "Hadi")
             R["replace_word_in_box"](img, box, cleaned, family, fill)
 
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -107,7 +107,7 @@ def verify(path: Path) -> None:
         ["tesseract", str(path), "stdout"], stderr=subprocess.DEVNULL, text=True
     )
     if "hady" in out.lower():
-        raise SystemExit(f"Hady still in {path.name}")
+        raise SystemExit(f"Hadi still in {path.name}")
 
 
 def main() -> None:

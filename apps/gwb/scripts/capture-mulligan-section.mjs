@@ -20,7 +20,7 @@ async function capture(width) {
   console.log('wrote', path)
 
   const text = await section.innerText()
-  const mustNot = ['Hady', '+7.3', 'pending', 'staged', 'Week 4 swap', '(………)']
+  const mustNot = ['Hady', 'HADY', '+7.3', 'pending', 'staged', 'Week 4 swap', '(………)']
   if (text.includes('………')) {
     throw new Error('Dot placeholder still visible in mulligan section')
   }
