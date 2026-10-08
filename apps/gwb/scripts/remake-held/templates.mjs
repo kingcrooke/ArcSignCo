@@ -44,15 +44,15 @@ export function vsM3HadiManny() {
   <div class="hdr">
     <div class="kicker bebas">GWB &nbsp;•&nbsp; WEEK 4</div>
     <div class="kicker-line"></div>
-    <h1 class="hero anton"><span>Hadi</span><span class="vs">vs</span><span>MANNY</span></h1>
-    <div class="records bebas"><span>Hadi (2-1)</span><span>vs</span><span>MANNY (2-1)</span></div>
+    <h1 class="hero anton"><span>Hady</span><span class="vs">vs</span><span>MANNY</span></h1>
+    <div class="records bebas"><span>Hady (2-1)</span><span>vs</span><span>MANNY (2-1)</span></div>
   </div>
-  <div class="card left"><img src="${left}" alt="" /><span class="badge left bebas">Hadi 2-1</span></div>
+  <div class="card left"><img src="${left}" alt="" /><span class="badge left bebas">Hady 2-1</span></div>
   <div class="vs-badge bebas">VS</div>
   <div class="card right"><img src="${right}" alt="" /><span class="badge right bebas">MANNY 2-1</span></div>
   <div class="sneaky bebas">SNEAKY GAME OF THE WEEK</div>
   <div class="poll">
-    <div class="poll-labels bebas"><span class="l">Manny 52%</span><span class="r">Hadi 48%</span></div>
+    <div class="poll-labels bebas"><span class="l">Manny 52%</span><span class="r">Hady 48%</span></div>
     <div class="poll-bar"><div class="a"></div><div class="b"></div></div>
   </div>
   <p class="detail inter">Mahomes QB3 vs Kyler QB14 &nbsp;•&nbsp; JSN + Bowers back</p>
@@ -97,10 +97,10 @@ export function w4Slide10() {
   <div class="hdr">
     <div class="kicker bebas">GWB | WEEK 4 | MATCHUP 3</div>
     <div class="kicker-line"></div>
-    <h1 class="title anton">Hadi vs MANNY</h1>
+    <h1 class="title anton">Hady vs MANNY</h1>
   </div>
   <div class="info-card card-a inter-semibold">
-    <h3 class="bebas" style="color:${COLORS.white}">Hadi (2-1)</h3>
+    <h3 class="bebas" style="color:${COLORS.white}">Hady (2-1)</h3>
     <p>"El Campeon de la Liga"</p>
     <p>Kyler, JSN, Bowers, Pickens, Skattebo.</p>
     <p>Quietly getting healthier.</p>
@@ -112,7 +112,7 @@ export function w4Slide10() {
     <p>Huge QB edge. Shaky flex depth.</p>
   </div>
   <div class="poll">
-    <div class="poll-labels bebas"><span style="color:${COLORS.orange}">Manny 52%</span><span>Hadi 48%</span></div>
+    <div class="poll-labels bebas"><span style="color:${COLORS.orange}">Manny 52%</span><span>Hady 48%</span></div>
     <div class="poll-bar"><div class="a"></div><div class="b"></div></div>
   </div>
   <div class="orange inter-semibold">
@@ -148,7 +148,7 @@ export function w4Slide06() {
       <p>procedure and immediately went:</p>
       <p>10 catches. 116 yards. 1 TD.</p>
       <p>&nbsp;</p>
-      <p>Hadi goes from AJ Barner...</p>
+      <p>Hady goes from AJ Barner...</p>
       <p>back to an elite tight end!</p>
       <p>Ranked around top-15 overall FLEX -</p>
       <p>absurd for a tight end.</p>
@@ -192,7 +192,7 @@ export function w4Slide14() {
     ['7', 'Purdy', 'Narking'],
     ['9', 'Dak', 'Eric'],
     ['11', 'Bryce', 'Mauricio'],
-    ['14', 'Kyler', 'Hadi'],
+    ['14', 'Kyler', 'Hady'],
   ]
   const rowsHtml = rows
     .map(
@@ -245,7 +245,7 @@ export function w4Slide16() {
     ['r2', '<span class="g">Eric</span> over Mauricio - barely'],
     ['r3', '<span class="g">Steven</span> over Narking'],
     ['r4', '<span class="g">Kayser</span> over Frankie'],
-    ['r5', '<span class="g">Manny</span> over Hadi - coin flip'],
+    ['r5', '<span class="g">Manny</span> over Hady - coin flip'],
     ['r6', '<span class="g">Matt</span> over Jamil - coin flip'],
   ]
   return wrapHtml(
@@ -358,19 +358,19 @@ export const SLIDES = {
       resultSlide({
         week: 1,
         finalLine: 'FINAL: KAYSER TAKES IT',
-        scoreline: 'KAYSER 138.7 — 119.4 Hadi',
+        scoreline: 'KAYSER 138.7 — 119.4 Hady',
         winnerImg: 'results-w1-m2-winner.png',
         loserImg: 'results-w1-m2-loser.png',
         winnerBadge: 'KAYSER 1-0',
-        loserBadge: 'Hadi 0-1',
+        loserBadge: 'Hady 0-1',
         winner: 'KAYSER',
-        loser: 'Hadi',
+        loser: 'Hady',
         wScore: '138.7',
         lScore: '119.4',
         barWin: 54,
         barLose: 46,
         tagline: 'THE SPECIAL ONE STRIKES',
-        note: "Kayser 1-0 — Hadi's crown slips in Week 1",
+        note: "Kayser 1-0 — Hady's crown slips in Week 1",
         matchup: 'W1M2',
       }),
   },
@@ -378,20 +378,20 @@ export const SLIDES = {
     html: () =>
       resultSlide({
         week: 2,
-        finalLine: 'FINAL: Hadi TAKES IT',
-        scoreline: 'Hadi 151.0 — 123.7 CROOKE',
+        finalLine: 'FINAL: Hady TAKES IT',
+        scoreline: 'Hady 151.0 — 123.7 CROOKE',
         winnerImg: 'results-w2-m1-winner.png',
         loserImg: 'results-w2-m1-loser.png',
-        winnerBadge: 'Hadi 1-1',
+        winnerBadge: 'Hady 1-1',
         loserBadge: 'CROOKE 0-2',
-        winner: 'Hadi',
+        winner: 'Hady',
         loser: 'CROOKE',
         wScore: '151.0',
         lScore: '123.7',
         barWin: 55,
         barLose: 45,
         tagline: 'EL CAMPEON RESPONDS',
-        note: 'Hadi evens up at 1-1 — Crooke falls to 0-2',
+        note: 'Hady evens up at 1-1 — Crooke falls to 0-2',
         matchup: 'W2M1',
       }),
   },
@@ -399,13 +399,13 @@ export const SLIDES = {
     html: () =>
       resultSlide({
         week: 3,
-        finalLine: 'FINAL: Hadi TAKES IT',
-        scoreline: 'Hadi 132.0 — 121.7 DANNY',
+        finalLine: 'FINAL: Hady TAKES IT',
+        scoreline: 'Hady 132.0 — 121.7 DANNY',
         winnerImg: 'results-w3-m2-winner.png',
         loserImg: 'results-w3-m2-loser.png',
-        winnerBadge: 'Hadi 2-1',
+        winnerBadge: 'Hady 2-1',
         loserBadge: 'DANNY 0-3',
-        winner: 'Hadi',
+        winner: 'Hady',
         loser: 'DANNY',
         wScore: '132.0',
         lScore: '121.7',

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""HADI→Hadi repairs on Results Weeks 1–3 cards (full-line re-typeset)."""
+"""HADI→Hady repairs on Results Weeks 1–3 cards (full-line re-typeset)."""
 from __future__ import annotations
 
+import re
 import runpy
 import subprocess
 from pathlib import Path
@@ -71,7 +72,7 @@ def repair_final_headline(img, path: Path) -> None:
     R["replace_line_in_box"](
         img,
         (60, y0, 720, y1),
-        "FINAL: Hadi TAKES IT",
+        "FINAL: Hady TAKES IT",
         "anton",
         fill,
     )
@@ -82,20 +83,20 @@ def repair_card(path: Path, dest: Path) -> None:
     repair_final_headline(img, path)
 
     for text, left, top, width, height in tesseract_words(path):
-        if "hady" not in text.lower():
+        if "hadi" not in text.lower():
             continue
         pad = 4
         box = (left - pad, top - pad, left + width + pad, top + height + pad)
         family = pick_family(width, height)
         fill = R["sample_text_color"](img, box)
-        if text.lower() in ("hady's", "hadys"):
-            R["replace_word_in_box"](img, box, "Hadi's", family, fill)
+        if text.lower() in ("hadi's", "hadis"):
+            R["replace_word_in_box"](img, box, "Hady's", family, fill)
         elif text.upper() == "HADI":
-            R["replace_word_in_box"](img, box, "Hadi", family, fill)
-        elif text.lower() == "hady":
-            R["replace_word_in_box"](img, box, "Hadi", family, fill)
+            R["replace_word_in_box"](img, box, "Hady", family, fill)
+        elif text.lower() == "hadi":
+            R["replace_word_in_box"](img, box, "Hady", family, fill)
         else:
-            cleaned = text.replace("Hadi", "Hadi").replace("HADI", "Hadi")
+            cleaned = text.replace("Hadi", "Hady").replace("HADI", "Hady")
             R["replace_word_in_box"](img, box, cleaned, family, fill)
 
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -106,7 +107,7 @@ def verify(path: Path) -> None:
     out = subprocess.check_output(
         ["tesseract", str(path), "stdout"], stderr=subprocess.DEVNULL, text=True
     )
-    if "hady" in out.lower():
+    if re.search(r"\bhadi\b", out, re.IGNORECASE):
         raise SystemExit(f"Hadi still in {path.name}")
 
 
@@ -116,7 +117,7 @@ def main() -> None:
         dest = OUT_DIR / f"{card}.png"
         repair_card(src, dest)
         verify(dest)
-        print("OK", card)
+        print("OK", dest.name)
 
 
 if __name__ == "__main__":
