@@ -1,20 +1,32 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { loadPlayersMap } from '../lib/playersCache'
 import { buildWeekRecaps, weekHasMatchups } from '../lib/recaps'
+import { regularSeasonLastWeek } from '../lib/frankieZone'
+import { computePlayoffOdds, type PlayoffOddsRow } from '../lib/playoffOdds'
+import { buildSeasonTimeline, type TimelineEvent } from '../lib/seasonTimeline'
+import {
+  buildTradeLogEntry,
+  mergeTradeLogs,
+  type TradeLogEntry,
+} from '../lib/trades'
 import {
   fetchAllMatchupsThroughWeek,
   fetchLeague,
-  fetchNflState,
   fetchMatchups,
+  fetchMatchupsForWeekRange,
+  fetchNflState,
   fetchRosters,
+  fetchTradeHistoryChain,
   fetchTransactionsThroughWeek,
   fetchUsers,
 } from '../lib/sleeperApi'
-import { computeWaiverBoard } from '../lib/waiverWire'
+import { computeWeeklyAwards, type WeeklyAwardsWeek } from '../lib/weeklyAwards'
 import {
+  MULLIGAN_LEDGER_ENTRIES,
   mulliganStatusThroughWeek as ledgerMulliganStatusThroughWeek,
   mulligansDeferralNote as ledgerMulligansDeferralNote,
 } from '../lib/mulligans'
+import { computeWaiverBoard, weekCloses } from '../lib/waiverWire'
 import { computeStandings, computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import {
@@ -70,6 +82,13 @@ export interface LeagueData {
   waiverLoadError: string | null
   waiverDeferralNote: string | null
   updateWeekMatchups: (week: number, rows: SleeperMatchup[]) => void
+  tradeLog: TradeLogEntry[]
+  tradePriorSeasonsIncluded: string[]
+  tradePriorSeasonsFailed: boolean
+  weeklyAwards: WeeklyAwardsWeek[]
+  playoffOdds: PlayoffOddsRow[]
+  seasonTimeline: TimelineEvent[]
+  regularSeasonLastWeek: number
 }
 
 export function useLeagueData(): {
@@ -92,6 +111,8 @@ export function useLeagueData(): {
     seasonStandings: StandingRow[]
     transactions: SleeperTransaction[]
     waiverLoadError: string | null
+    tradeBundles: Awaited<ReturnType<typeof fetchTradeHistoryChain>>['bundles']
+    tradePriorSeasonsFailed: boolean
   } | null>(null)
   const [selectedWeek, setSelectedWeek] = useState(1)
 
@@ -117,20 +138,32 @@ export function useLeagueData(): {
       const nflWeek = currentNflWeek(nflState)
       const completed = lastCompletedWeek(league, nflState)
       const through = Math.max(nflWeek, completed)
-      const [matchupsByWeek, txResult] = await Promise.all([
-        fetchAllMatchupsThroughWeek(through),
-        fetchTransactionsThroughWeek(through).then(
-          (transactions) => ({
-            transactions,
-            waiverLoadError: null as string | null,
-          }),
-          (e: unknown) => ({
-            transactions: [] as SleeperTransaction[],
-            waiverLoadError:
-              e instanceof Error ? e.message : 'Waiver moves did not load',
-          }),
-        ),
-      ])
+      const regLast = regularSeasonLastWeek(
+        league.settings.playoff_week_start ?? 15,
+      )
+      const [matchupsScored, futureMatchups, txResult, tradeChain] =
+        await Promise.all([
+          fetchAllMatchupsThroughWeek(through),
+          through < regLast
+            ? fetchMatchupsForWeekRange(through + 1, regLast)
+            : Promise.resolve(new Map<number, SleeperMatchup[]>()),
+          fetchTransactionsThroughWeek(through).then(
+            (transactions) => ({
+              transactions,
+              waiverLoadError: null as string | null,
+            }),
+            (e: unknown) => ({
+              transactions: [] as SleeperTransaction[],
+              waiverLoadError:
+                e instanceof Error ? e.message : 'Waiver moves did not load',
+            }),
+          ),
+          fetchTradeHistoryChain(league.league_id),
+        ])
+      const matchupsByWeek = new Map(matchupsScored)
+      for (const [w, rows] of futureMatchups) {
+        if (!matchupsByWeek.has(w)) matchupsByWeek.set(w, rows)
+      }
       const teams = buildTeamMap(users, rosters)
       const standings = computeStandings(rosters, teams)
       const seasonStandings = standings
@@ -146,6 +179,8 @@ export function useLeagueData(): {
         seasonStandings,
         transactions: txResult.transactions,
         waiverLoadError: txResult.waiverLoadError,
+        tradeBundles: tradeChain.bundles,
+        tradePriorSeasonsFailed: tradeChain.priorSeasonsFailed,
       })
       setState('ready')
     } catch (e) {
@@ -178,6 +213,8 @@ export function useLeagueData(): {
       nflState,
       transactions,
       waiverLoadError,
+      tradeBundles,
+      tradePriorSeasonsFailed,
     } = base
     const completedWeek = lastCompletedWeek(league, nflState)
     const throughForCumulative = standingsThroughWeek(
@@ -235,6 +272,48 @@ export function useLeagueData(): {
       'waiver scores',
     )
 
+    const tradeEntries: TradeLogEntry[] = []
+    const priorSeasonsIncluded: string[] = []
+    for (const bundle of tradeBundles) {
+      if (bundle.league.league_id !== league.league_id) {
+        priorSeasonsIncluded.push(bundle.league.season)
+      }
+      for (const tx of bundle.transactions) {
+        const entry = buildTradeLogEntry(
+          tx,
+          bundle.league,
+          bundle.teams,
+          players,
+        )
+        if (entry) tradeEntries.push(entry)
+      }
+    }
+    const tradeLog = mergeTradeLogs(tradeEntries)
+    const weeklyAwards = computeWeeklyAwards(
+      matchupsByWeek,
+      teams,
+      league,
+      nflState,
+    )
+    const regLast = regularSeasonLastWeek(
+      league.settings.playoff_week_start ?? 15,
+    )
+    const playoffOdds = computePlayoffOdds({
+      standings,
+      matchupsByWeek,
+      throughWeek: throughForCumulative,
+      playoffTeams: league.settings.playoff_teams ?? 6,
+      regularSeasonLastWeek: regLast,
+    })
+    const seasonTimeline = buildSeasonTimeline({
+      season: league.season,
+      matchupsByWeek,
+      teams,
+      mulliganEntries: MULLIGAN_LEDGER_ENTRIES,
+      trades: tradeLog.filter((t) => t.season === league.season),
+      weekCloses: weekCloses(transactions, throughForCumulative),
+    })
+
     return {
       league,
       nflState,
@@ -261,6 +340,13 @@ export function useLeagueData(): {
       waiverLoadError,
       waiverDeferralNote,
       updateWeekMatchups,
+      tradeLog,
+      tradePriorSeasonsIncluded: priorSeasonsIncluded,
+      tradePriorSeasonsFailed,
+      weeklyAwards,
+      playoffOdds,
+      seasonTimeline,
+      regularSeasonLastWeek: regLast,
     }
   }, [base, selectedWeek, load, players, playersLoading, ensurePlayers, updateWeekMatchups])
 

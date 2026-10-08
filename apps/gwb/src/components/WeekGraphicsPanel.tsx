@@ -20,6 +20,7 @@ import type {
   SleeperLeague,
   SleeperMatchup,
 } from '../lib/types'
+import { ShareCardButton } from './ShareCardButton'
 import { SlideLightbox } from './SlideLightbox'
 
 const THUMB_WIDTH = 540
@@ -27,40 +28,36 @@ const THUMB_HEIGHT = 675
 
 function GraphicThumb({
   slide,
-  indexInWeek,
   onOpen,
   eager,
   buttonRef,
   projectionLine,
 }: {
   slide: PublishedSlide
-  indexInWeek: number
-  onOpen: (indexInWeek: number) => void
+  onOpen: () => void
   eager: boolean
   buttonRef?: React.RefObject<HTMLButtonElement | null>
   projectionLine?: string | null
 }) {
-  const webp = slideAssetUrl(slide.basename, 'thumb', 'webp')
   const jpg = slideAssetUrl(slide.basename, 'thumb', 'jpg')
 
   return (
     <button
       ref={buttonRef}
       type="button"
-      className="group block w-full overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] text-left transition hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
-      onClick={() => onOpen(indexInWeek)}
+      className="group block w-full shrink-0 overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] text-left transition hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
+      onClick={onOpen}
       aria-label={`Open ${slide.title}`}
     >
       <img
         src={jpg}
-        srcSet={`${webp} ${THUMB_WIDTH}w`}
-        sizes="(max-width: 1024px) 50vw, 20vw"
         alt=""
         width={THUMB_WIDTH}
         height={THUMB_HEIGHT}
         loading={eager ? 'eager' : 'lazy'}
-        decoding="async"
-        className="aspect-[4/5] w-full bg-[#0d1319] object-cover transition group-hover:opacity-95"
+        fetchPriority={eager ? 'high' : 'auto'}
+        decoding={eager ? 'sync' : 'async'}
+        className="aspect-[4/5] w-full bg-[#0d1319] object-cover object-top transition group-hover:opacity-95"
       />
       <p className="truncate px-2 py-1.5 text-xs text-[var(--gwb-muted)]">
         {slide.title}
@@ -203,15 +200,15 @@ export function WeekGraphicsPanel({
     <div className="space-y-6">
       <p className="text-sm text-[var(--gwb-muted)]">
         Week {week} graphics. Tap a card for full size; swipe or use arrows in the
-        viewer. Use &quot;Copy link&quot; on a card to deep-link this slide.
+        viewer.
       </p>
 
-      <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-6">
+      <div className="flex flex-col gap-8">
         {sections.map((section) => (
           <section
             key={section.kind}
             id={`graphics-week-${week}-${section.kind}`}
-            className="min-w-0 flex-1"
+            className="min-w-0 w-full"
             aria-labelledby={`graphics-heading-${week}-${section.kind}`}
           >
             <h3
@@ -221,19 +218,25 @@ export function WeekGraphicsPanel({
               {section.heading}
             </h3>
             <ul
-              className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2"
+              className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2"
               role="list"
             >
-              {section.slides.map((slide, i) => {
+              {section.slides.map((slide) => {
                 const indexInWeek = indexById.get(slide.id) ?? 0
                 const isDeepLinkTarget = initialSlideId === slide.id
+                const showShare =
+                  section.kind === 'results' || section.kind === 'matchups'
+                const eager = section.kind === 'matchups'
                 return (
-                  <li key={slide.id} className="space-y-1">
+                  <li
+                    key={slide.id}
+                    className="flex min-w-0 flex-col gap-2"
+                    data-slide-id={slide.id}
+                  >
                     <GraphicThumb
                       slide={slide}
-                      indexInWeek={indexInWeek}
-                      onOpen={open}
-                      eager={i < 4 && section.kind === sections[0]?.kind}
+                      onOpen={() => open(indexInWeek)}
+                      eager={eager}
                       buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                       projectionLine={
                         section.kind === 'matchups'
@@ -241,13 +244,31 @@ export function WeekGraphicsPanel({
                           : null
                       }
                     />
-                    <button
-                      type="button"
-                      className="min-h-11 w-full text-xs text-[var(--gwb-accent)] underline"
-                      onClick={() => copySlideLink(slide)}
-                    >
-                      Copy link
-                    </button>
+                    {showShare && (
+                      <div className="grid grid-cols-2 gap-2">
+                        <ShareCardButton
+                          basename={slide.basename}
+                          title={slide.title}
+                          className="w-full"
+                        />
+                        <button
+                          type="button"
+                          className="min-h-11 w-full rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-2 text-xs font-semibold text-[var(--gwb-accent)]"
+                          onClick={() => copySlideLink(slide)}
+                        >
+                          Copy link
+                        </button>
+                      </div>
+                    )}
+                    {!showShare && (
+                      <button
+                        type="button"
+                        className="min-h-11 w-full text-xs text-[var(--gwb-accent)] underline"
+                        onClick={() => copySlideLink(slide)}
+                      >
+                        Copy link
+                      </button>
+                    )}
                   </li>
                 )
               })}

@@ -1,4 +1,5 @@
 import { LEAGUE_ID, SLEEPER_API } from './constants'
+import { buildTeamMap } from './teams'
 import type {
   NflState,
   NflWeekGame,
@@ -7,6 +8,7 @@ import type {
   SleeperRoster,
   SleeperTransaction,
   SleeperUser,
+  TeamInfo,
 } from './types'
 
 async function getJson<T>(path: string): Promise<T> {
@@ -83,4 +85,69 @@ export async function fetchAllMatchupsThroughWeek(
     if (hasScores) map.set(w, rows)
   }
   return map
+}
+
+export async function fetchMatchupsForWeekRange(
+  fromWeek: number,
+  toWeek: number,
+  leagueId = LEAGUE_ID,
+): Promise<Map<number, SleeperMatchup[]>> {
+  const map = new Map<number, SleeperMatchup[]>()
+  if (toWeek < fromWeek) return map
+  const weeks = Array.from(
+    { length: toWeek - fromWeek + 1 },
+    (_, i) => fromWeek + i,
+  )
+  const results = await Promise.all(
+    weeks.map((w) => fetchMatchups(w, leagueId).then((rows) => ({ w, rows }))),
+  )
+  for (const { w, rows } of results) {
+    if (rows?.length) map.set(w, rows)
+  }
+  return map
+}
+
+/** GWB redraft chain runs 2026 → 2019 (`475803598278619136`). */
+const MAX_PRIOR_LEAGUE_CHAIN = 12
+const REGULAR_SEASON_MAX_WEEK = 18
+
+export interface LeagueTradeBundle {
+  league: SleeperLeague
+  teams: Map<number, TeamInfo>
+  transactions: SleeperTransaction[]
+}
+
+export async function fetchTradeHistoryChain(
+  startLeagueId = LEAGUE_ID,
+): Promise<{
+  bundles: LeagueTradeBundle[]
+  priorSeasonsFailed: boolean
+}> {
+  const bundles: LeagueTradeBundle[] = []
+  let priorSeasonsFailed = false
+  let leagueId: string | null = startLeagueId
+  let depth = 0
+
+  while (leagueId && depth < MAX_PRIOR_LEAGUE_CHAIN) {
+    try {
+      const league = await fetchLeague(leagueId)
+      const [users, rosters] = await Promise.all([
+        fetchUsers(leagueId),
+        fetchRosters(leagueId),
+      ])
+      const teams = buildTeamMap(users, rosters)
+      const transactions = await fetchTransactionsThroughWeek(
+        REGULAR_SEASON_MAX_WEEK,
+        leagueId,
+      )
+      bundles.push({ league, teams, transactions })
+      leagueId = league.previous_league_id ?? null
+      depth++
+    } catch {
+      if (depth > 0) priorSeasonsFailed = true
+      break
+    }
+  }
+
+  return { bundles, priorSeasonsFailed }
 }
