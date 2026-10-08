@@ -125,6 +125,12 @@ function txRosterId(t: SleeperTransaction): number | null {
 }
 
 /** Latest waiver-batch timestamp for each completed leg. In-progress legs are omitted. */
+export function waiverSeasonStory(row: ManagerWaiverRow): string {
+  const net = row.netWaiverPoints
+  const sign = net >= 0 ? '+' : '−'
+  return `${row.rosteredPickups} rostered pickups · net ${sign}${Math.abs(net).toFixed(2)} points`
+}
+
 export function weekCloses(
   transactions: SleeperTransaction[],
   scoringThrough: number,

@@ -5,9 +5,15 @@ import {
   leaderRosterId,
   teamLabel,
 } from '../lib/matchupBoard'
+import {
+  pairProjectionLine,
+  weekShouldShowProjectedTotals,
+} from '../lib/matchupProjections'
 import { fetchWeekProjections } from '../lib/projections'
 import { weekHasMatchups } from '../lib/recaps'
 import type { ProjectionsMap } from '../lib/projections'
+import { fetchNflWeekScores } from '../lib/sleeperApi'
+import type { NflWeekGame } from '../lib/types'
 import type { NflState, PlayersMap, SleeperLeague, SleeperMatchup, TeamInfo } from '../lib/types'
 import { isWeekLive } from '../lib/weeks'
 import { MatchupDetailSheet } from './MatchupDetailSheet'
@@ -58,6 +64,7 @@ export function LiveScoreboardPanel({
   const [detailId, setDetailId] = useState<number | null>(null)
   const [projections, setProjections] = useState<ProjectionsMap | null>(null)
   const [showProjections, setShowProjections] = useState(false)
+  const [nflGames, setNflGames] = useState<NflWeekGame[] | null>(null)
 
   useEffect(() => {
     ensurePlayers()
@@ -75,17 +82,33 @@ export function LiveScoreboardPanel({
         if (cancelled) return
         if (map && Object.keys(map).length > 0) {
           setProjections(map)
-          setShowProjections(true)
         } else {
           setProjections(null)
-          setShowProjections(false)
         }
       },
     )
+    void fetchNflWeekScores(league.season, week, nflState.season_type)
+      .then((games) => {
+        if (!cancelled) setNflGames(games)
+      })
+      .catch(() => {
+        if (!cancelled) setNflGames(null)
+      })
     return () => {
       cancelled = true
     }
   }, [week, league.season, nflState.season_type, isActive])
+
+  useEffect(() => {
+    if (!matchups || !players) {
+      setShowProjections(false)
+      return
+    }
+    const show =
+      projections != null &&
+      weekShouldShowProjectedTotals(matchups, players, nflGames)
+    setShowProjections(show)
+  }, [matchups, players, projections, nflGames])
 
   const pairs = useMemo(
     () => (matchups ? groupMatchupPairs(matchups) : []),
@@ -135,6 +158,10 @@ export function LiveScoreboardPanel({
           const leader = leaderRosterId(home, away)
           const teamH = teams.get(home.roster_id)
           const teamA = teams.get(away.roster_id)
+          const projLine =
+            showProjections && projections
+              ? pairProjectionLine(home, away, projections)
+              : null
           return (
             <li key={matchupId}>
               <button
@@ -189,6 +216,11 @@ export function LiveScoreboardPanel({
                     {away.points.toFixed(2)}
                   </span>
                 </div>
+                {projLine && (
+                  <p className="mt-2 text-center text-[10px] font-semibold tabular-nums tracking-wide text-amber-200/90">
+                    {projLine}
+                  </p>
+                )}
               </button>
             </li>
           )

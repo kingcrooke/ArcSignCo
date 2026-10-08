@@ -457,8 +457,6 @@ export function FrankieZonePanel({
         </section>
       )}
 
-      {!view.isEmpty && (
-      <>
       <section aria-labelledby="fz-slides-heading">
         <h3
           id="fz-slides-heading"
@@ -529,8 +527,6 @@ export function FrankieZonePanel({
           ))}
         </ol>
       </section>
-      </>
-      )}
 
       {lightboxIndex !== null && (
         <SlideLightbox

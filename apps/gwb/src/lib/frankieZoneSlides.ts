@@ -8,7 +8,7 @@ function slide(id: string, title: string): PublishedSlide {
 
 /** Frankie Zone gallery — add new slide ids here as graphics ship. */
 export const FRANKIE_ZONE_SLIDE_IDS: { id: string; title: string }[] = [
-  { id: 'vs-m2-kayser-frankie', title: 'Kayser vs Frankie' },
+  { id: 'results-w4-m2', title: 'Frankie 144.8 – Kayser 128.4' },
   { id: 'results-w1-m5', title: 'Steven 199.4 – Frankie 135.4' },
   { id: 'results-w2-m6', title: 'Eric 142.7 – Frankie 105.2' },
   { id: 'results-w3-m6', title: 'Jamil 113.6 – Frankie 95.8' },

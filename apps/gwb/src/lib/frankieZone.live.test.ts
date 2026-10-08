@@ -48,12 +48,12 @@ describe('frankieZone live Sleeper', () => {
     const danny = view.escapes.find((e) => e.displayName === 'Santagua')
     expect(danny?.week).toBe(4)
     expect(danny?.line).toMatch(/163\.91/)
-    expect(danny?.opponentLabel).toBe('kingCrooke')
+    expect(danny?.opponentLabel).toBe('Crooke')
 
     const frankie = view.escapes.find((e) => e.displayName === 'GetThePapers2x')
     expect(frankie?.week).toBe(4)
     expect(frankie?.points).toBeCloseTo(144.8, 2)
-    expect(frankie?.opponentLabel).toBe('powpeazy')
+    expect(frankie?.opponentLabel).toBe('Kayser')
     expect(frankie?.line).toMatch(/144\.80/)
 
     expect(view.residents.map((r) => r.displayName)).not.toContain('Santagua')

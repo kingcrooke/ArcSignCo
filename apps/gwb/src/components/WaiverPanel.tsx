@@ -2,7 +2,11 @@ import { useMemo, useState } from 'react'
 import { managerNickname } from '../lib/nicknames'
 import { playerLabel } from '../lib/playersCache'
 import type { ManagerWaiverRow, WaiverBoard, WaiverMove } from '../lib/waiverWire'
-import { HIT_LINE, MIN_ROSTERED_PICKUPS } from '../lib/waiverWire'
+import {
+  HIT_LINE,
+  MIN_ROSTERED_PICKUPS,
+  waiverSeasonStory,
+} from '../lib/waiverWire'
 import type { PlayersMap } from '../lib/types'
 import { WaiverCumulativeChart, WaiverEfficiencyChart } from './WaiverCharts'
 
@@ -90,6 +94,12 @@ export function WaiverPanel({
           {deferralNote} Moves from Week {board.selectedWeek} are still in the log.
         </p>
       )}
+
+      <WeeklyAddsStrip
+        board={board}
+        name={name}
+        managerName={(id) => managerName(board, id)}
+      />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <ChampionCard board={board} />
@@ -221,6 +231,59 @@ export function WaiverPanel({
   )
 }
 
+function WeeklyAddsStrip({
+  board,
+  name,
+  managerName,
+}: {
+  board: WaiverBoard
+  name: (id: string) => string
+  managerName: (id: number) => string
+}) {
+  const adds = board.moves.filter(
+    (m) =>
+      m.leg === board.selectedWeek &&
+      m.status === 'complete' &&
+      m.adds.length > 0,
+  )
+  if (!adds.length) return null
+
+  const showPending = !board.selectedWeekComplete
+
+  return (
+    <section aria-labelledby="waiver-week-adds-heading">
+      <h3
+        id="waiver-week-adds-heading"
+        className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]"
+      >
+        This week&apos;s adds
+      </h3>
+      <ul className="flex gap-2 overflow-x-auto pb-1" role="list">
+        {adds.map((m) => (
+          <li
+            key={m.id}
+            className="min-w-[9.5rem] shrink-0 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2 text-xs"
+          >
+            <p className="font-medium">{managerName(m.rosterId)}</p>
+            <p className="mt-0.5 text-[var(--gwb-muted)]">
+              +{m.adds.map(name).join(', ')}
+            </p>
+            {showPending && m.pending ? (
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
+                Pending
+              </p>
+            ) : m.startedPoints != null ? (
+              <p className="mt-1 tabular-nums text-[var(--gwb-accent)]">
+                {pts(m.startedPoints)} started
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
 function ChampionCard({ board }: { board: WaiverBoard }) {
   const c = board.champion
   return (
@@ -238,8 +301,7 @@ function ChampionCard({ board }: { board: WaiverBoard }) {
             {pts(c.wes)}
           </p>
           <p className="mt-1 text-xs text-[var(--gwb-muted)]">
-            {c.rosteredPickups} rostered pickups · net {pts(c.netWaiverPoints)} · through
-            Week {board.scoringThrough}
+            {waiverSeasonStory(c)} · through Week {board.scoringThrough}
           </p>
         </>
       ) : (
@@ -269,7 +331,7 @@ function CellarCard({ board }: { board: WaiverBoard }) {
             {pts(c.wes)}
           </p>
           <p className="mt-1 text-xs text-red-200/70">
-            Last in the pool · net {pts(c.netWaiverPoints)} · through Week{' '}
+            Last in the pool · {waiverSeasonStory(c)} · through Week{' '}
             {board.scoringThrough}
           </p>
         </>

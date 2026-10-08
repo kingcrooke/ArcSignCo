@@ -1,6 +1,22 @@
 const PROJ_BASE = 'https://api.sleeper.app/projections/nfl'
 
+import type { SleeperMatchup } from './types'
+
 export type ProjectionsMap = Record<string, number>
+
+export function rosterProjectedPoints(
+  matchup: SleeperMatchup,
+  projections: ProjectionsMap,
+): number {
+  let sum = 0
+  for (const pid of matchup.starters ?? []) {
+    if (!pid || pid === '0') continue
+    if (/^[A-Z]{2,4}$/.test(pid)) continue
+    const pts = projections[pid]
+    if (typeof pts === 'number' && !Number.isNaN(pts)) sum += pts
+  }
+  return sum
+}
 
 interface ProjectionRow {
   player_id?: string

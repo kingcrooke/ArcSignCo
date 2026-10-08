@@ -15,6 +15,7 @@
       "scoreWithout": 138.0,
       "opponentScore": 124.51,
       "opponentLabel": "Jesus",
+      "opponentRosterId": 8,
       "won": true,
       "flipped": false,
       "footnote": "Won anyway; the swap actually cost 0.9."
@@ -66,6 +67,7 @@
       "scoreWithout": 131.4,
       "opponentScore": 167.66,
       "opponentLabel": "Darkseid Jackson",
+      "opponentRosterId": 8,
       "won": false,
       "flipped": false
     },
@@ -83,6 +85,7 @@
       "scoreWithout": 122.19,
       "opponentScore": 131.97,
       "opponentLabel": "Hadi",
+      "opponentRosterId": 6,
       "won": false,
       "flipped": false
     },
@@ -91,7 +94,7 @@
       "week": 4,
       "rosterId": 8,
       "manager": "kingCrooke",
-      "managerShort": "Jesus",
+      "managerShort": "Crooke",
       "team": "Darkseid Jackson",
       "out": {
         "name": "Parker Washington",
@@ -110,6 +113,7 @@
       "scoreWithout": 110.67,
       "opponentScore": 163.91,
       "opponentLabel": "Lambs2Slaughter",
+      "opponentRosterId": 1,
       "won": false,
       "flipped": false
     },
@@ -138,6 +142,7 @@
       "scoreWithout": 123.24,
       "opponentScore": 144.8,
       "opponentLabel": "Turn Your Head And Goff",
+      "opponentRosterId": 11,
       "won": false,
       "flipped": false,
       "footnote": "Vele dropped 17.4 on MNF; lost by 16.36 even with the +5.2."
