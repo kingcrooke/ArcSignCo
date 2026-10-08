@@ -135,14 +135,18 @@ export function buildTradeLogEntry(
   const completedAtMs = tx.status_updated || tx.created || 0
   const sideA = sideFromRoster(a, tx, teams, players)
   const sideB = sideFromRoster(b, tx, teams, players)
-  if (
-    !sideA.received.length &&
-    !sideA.sent.length &&
-    !sideB.received.length &&
-    !sideB.sent.length
-  ) {
-    return null
-  }
+  const hasAssets =
+    sideA.received.length ||
+    sideA.sent.length ||
+    sideB.received.length ||
+    sideB.sent.length
+  const hasRaw =
+    (tx.adds && Object.keys(tx.adds).length > 0) ||
+    (tx.drops && Object.keys(tx.drops).length > 0) ||
+    (tx.draft_picks?.length ?? 0) > 0 ||
+    (tx.waiver_budget?.length ?? 0) > 0
+  if (!hasAssets && !hasRaw) return null
+  if (!hasAssets && hasRaw && !players) return null
   return {
     transactionId: tx.transaction_id ?? `${league.league_id}-${completedAtMs}`,
     leagueId: league.league_id,
@@ -158,8 +162,17 @@ export function buildTradeLogEntry(
 export function mergeTradeLogs(entries: TradeLogEntry[]): TradeLogEntry[] {
   return [...entries].sort((a, b) => {
     if (b.completedAtMs !== a.completedAtMs) return b.completedAtMs - a.completedAtMs
+    if (b.season !== a.season) return Number(b.season) - Number(a.season)
     return b.week - a.week
   })
+}
+
+export function tradeCountBySeason(trades: TradeLogEntry[]): Map<string, number> {
+  const map = new Map<string, number>()
+  for (const t of trades) {
+    map.set(t.season, (map.get(t.season) ?? 0) + 1)
+  }
+  return map
 }
 
 export function formatTradeAssetList(assets: TradeAsset[]): string {

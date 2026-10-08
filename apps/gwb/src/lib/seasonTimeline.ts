@@ -1,6 +1,14 @@
 import { groupMatchupPairs } from './matchupBoard'
 import { managerNickname } from './nicknames'
 import type { MulliganLedgerEntry } from './mulligans'
+
+/** Mulligans shown on the season timeline (commissioner-confirmed only). */
+export const TIMELINE_MULLIGAN_ENTRY_IDS = new Set([
+  'w1-mauricio',
+  'w3-narking',
+  'w3-danny',
+  'w4-kayser',
+])
 import type { TradeLogEntry } from './trades'
 import type { SleeperMatchup, TeamInfo } from './types'
 
@@ -89,7 +97,10 @@ export function buildSeasonTimeline({
   }
 
   for (const entry of mulliganEntries) {
-    const name = managerNickname(entry.rosterId, entry.manager)
+    if (!TIMELINE_MULLIGAN_ENTRY_IDS.has(entry.id)) continue
+    const name =
+      entry.managerShort ??
+      managerNickname(entry.rosterId, entry.manager)
     events.push({
       id: `mulligan-${entry.rosterId}-w${entry.week}`,
       kind: 'mulligan',
@@ -112,7 +123,7 @@ export function buildSeasonTimeline({
       dateLabel: trade.dateLabel,
       week: trade.week,
       headline: `${trade.sideA.managerName} ↔ ${trade.sideB.managerName}`,
-      detail: `Week ${trade.week} trade`,
+      detail: `${trade.season} · Week ${trade.week} trade`,
     })
   }
 

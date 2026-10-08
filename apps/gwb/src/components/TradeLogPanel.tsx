@@ -4,10 +4,12 @@ export function TradeLogPanel({
   trades,
   priorSeasonsIncluded,
   priorSeasonsFailed,
+  playersLoading,
 }: {
   trades: TradeLogEntry[]
   priorSeasonsIncluded: string[]
   priorSeasonsFailed: boolean
+  playersLoading: boolean
 }) {
   return (
     <div className="space-y-3" id="trade-log-panel">
@@ -17,12 +19,21 @@ export function TradeLogPanel({
           only. (FAIL)
         </p>
       )}
-      {priorSeasonsIncluded.length > 0 && (
-        <p className="text-xs text-[var(--gwb-muted)]">
-          Includes seasons: {priorSeasonsIncluded.join(', ')}
+      {(() => {
+        const seasons = [
+          ...new Set([...priorSeasonsIncluded, ...trades.map((t) => t.season)]),
+        ].sort()
+        return seasons.length > 0 ? (
+          <p className="text-xs text-[var(--gwb-muted)]">
+            Includes seasons: {seasons.join(', ')} ({trades.length} trades)
+          </p>
+        ) : null
+      })()}
+      {playersLoading ? (
+        <p className="rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+          Loading trade history…
         </p>
-      )}
-      {!trades.length ? (
+      ) : !trades.length ? (
         <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
           No completed trades yet.
         </p>
@@ -41,8 +52,7 @@ export function TradeLogPanel({
                   {t.sideA.managerName} ↔ {t.sideB.managerName}
                 </p>
                 <p className="text-xs text-[var(--gwb-muted)]">
-                  {t.dateLabel || '—'} · Week {t.week}
-                  {t.season !== trades[0]?.season ? ` · ${t.season}` : ''}
+                  {t.dateLabel || '—'} · {t.season} · Week {t.week}
                 </p>
               </div>
               <div className="mt-2 grid gap-2 text-sm sm:grid-cols-2">

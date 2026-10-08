@@ -2,7 +2,6 @@ import {
   groupMatchupPairs,
   isMatchupPairFinal,
   nflTeamsWithOpenGames,
-  rosterHasStartersWithGamesRemaining,
   starterNflTeam,
 } from './matchupBoard'
 import type { ProjectionsMap } from './projections'
@@ -11,19 +10,22 @@ import type { NflWeekGame, PlayersMap, SleeperMatchup } from './types'
 export interface LiveFlipInsight {
   matchupId: number
   canFlip: boolean
-  leaderRosterId: number | null
-  trailingRosterId: number | null
-  margin: number
-  pointsStillOut: { rosterId: number; points: number }[]
+  trailingRosterId: number
+  trailingStillOut: number
+  leaderStillOut: number
   summary: string
 }
 
+/**
+ * Remaining starter points for players whose NFL game is not complete.
+ * Returns null when projections are unavailable for any such starter.
+ */
 function starterPointsStillOut(
   matchup: SleeperMatchup,
   players: PlayersMap,
   openTeams: Set<string>,
-  projections: ProjectionsMap | null,
-): number {
+  projections: ProjectionsMap,
+): number | null {
   let sum = 0
   for (let i = 0; i < (matchup.starters?.length ?? 0); i++) {
     const pid = matchup.starters[i]
@@ -31,14 +33,10 @@ function starterPointsStillOut(
     const team = starterNflTeam(pid, players)
     if (!team || !openTeams.has(team)) continue
     const scored = matchup.starters_points?.[i] ?? 0
-    const proj = projections?.[pid]
-    if (typeof proj === 'number' && proj > scored) {
-      sum += proj - scored
-    } else if (scored <= 0 && typeof proj === 'number') {
-      sum += proj
-    } else if (scored <= 0) {
-      sum += 8
-    }
+    const proj = projections[pid]
+    if (typeof proj !== 'number' || Number.isNaN(proj)) return null
+    const remaining = Math.max(0, proj - scored)
+    sum += remaining
   }
   return sum
 }
@@ -50,38 +48,44 @@ export function liveFlipForPair(
   nflGames: NflWeekGame[],
   projections: ProjectionsMap | null,
 ): LiveFlipInsight | null {
+  if (!projections || !nflGames.length) return null
   if (isMatchupPairFinal(home, away, players, nflGames)) return null
 
+  const anyStarterScored =
+    (home.starters_points?.some((p) => p > 0) ?? false) ||
+    (away.starters_points?.some((p) => p > 0) ?? false)
+  if (!anyStarterScored && home.points === 0 && away.points === 0) return null
+
   const openTeams = nflTeamsWithOpenGames(nflGames)
+  if (!openTeams.size) return null
+
   const homeStill = starterPointsStillOut(home, players, openTeams, projections)
   const awayStill = starterPointsStillOut(away, players, openTeams, projections)
-  const homeOpen = rosterHasStartersWithGamesRemaining(home, players, openTeams)
-  const awayOpen = rosterHasStartersWithGamesRemaining(away, players, openTeams)
-  if (!homeOpen && !awayOpen) return null
+  if (homeStill === null || awayStill === null) return null
+  if (homeStill <= 0 && awayStill <= 0) return null
 
-  const margin = Math.abs(home.points - away.points)
-  const homeLeads = home.points >= away.points
-  const leaderId = homeLeads ? home.roster_id : away.roster_id
-  const trailerId = homeLeads ? away.roster_id : home.roster_id
-  const leaderPts = homeLeads ? home.points : away.points
-  const trailerPts = homeLeads ? away.points : home.points
-  const trailerStill = homeLeads ? awayStill : homeStill
-  const leaderStill = homeLeads ? homeStill : awayStill
+  const homeLeads = home.points > away.points
+  const tied = home.points === away.points
+  const trailerId = tied
+    ? homeStill >= awayStill
+      ? home.roster_id
+      : away.roster_id
+    : homeLeads
+      ? away.roster_id
+      : home.roster_id
+  const trailerStill = trailerId === home.roster_id ? homeStill : awayStill
+  const leaderStill = trailerId === home.roster_id ? awayStill : homeStill
+  const trailerPts =
+    trailerId === home.roster_id ? home.points : away.points
+  const leaderPts = trailerId === home.roster_id ? away.points : home.points
 
-  const trailerMax = trailerPts + trailerStill
-  const leaderFloor = leaderPts
-  const canFlip = trailerMax > leaderFloor + 0.01
-
-  const pointsStillOut = [
-    { rosterId: home.roster_id, points: homeStill },
-    { rosterId: away.roster_id, points: awayStill },
-  ].filter((x) => x.points > 0.05)
+  const canFlip = trailerPts + trailerStill > leaderPts + 0.01
 
   let summary: string
   if (canFlip) {
     summary = `Can still flip — ~${trailerStill.toFixed(1)} pts still out for the trailing side`
-  } else if (margin < 0.01) {
-    summary = 'Tied with NFL games still on the board'
+  } else if (tied) {
+    summary = `~${homeStill.toFixed(1)} / ~${awayStill.toFixed(1)} pts still out`
   } else {
     summary = `~${leaderStill.toFixed(1)} / ~${trailerStill.toFixed(1)} pts still out — unlikely to flip`
   }
@@ -89,10 +93,9 @@ export function liveFlipForPair(
   return {
     matchupId: home.matchup_id,
     canFlip,
-    leaderRosterId: margin === 0 ? null : leaderId,
-    trailingRosterId: margin === 0 ? null : trailerId,
-    margin,
-    pointsStillOut,
+    trailingRosterId: trailerId,
+    trailingStillOut: trailerStill,
+    leaderStillOut: leaderStill,
     summary,
   }
 }
@@ -100,9 +103,10 @@ export function liveFlipForPair(
 export function liveFlipsForWeek(
   matchups: SleeperMatchup[],
   players: PlayersMap,
-  nflGames: NflWeekGame[],
+  nflGames: NflWeekGame[] | null,
   projections: ProjectionsMap | null,
 ): LiveFlipInsight[] {
+  if (!nflGames?.length || !projections) return []
   const out: LiveFlipInsight[] = []
   for (const { home, away } of groupMatchupPairs(matchups)) {
     const insight = liveFlipForPair(home, away, players, nflGames, projections)

@@ -107,7 +107,9 @@ export async function fetchMatchupsForWeekRange(
   return map
 }
 
-const MAX_PRIOR_LEAGUE_CHAIN = 4
+/** GWB redraft chain runs 2026 → 2019 (`475803598278619136`). */
+const MAX_PRIOR_LEAGUE_CHAIN = 12
+const REGULAR_SEASON_MAX_WEEK = 18
 
 export interface LeagueTradeBundle {
   league: SleeperLeague
@@ -134,17 +136,8 @@ export async function fetchTradeHistoryChain(
         fetchRosters(leagueId),
       ])
       const teams = buildTeamMap(users, rosters)
-      const lastWeek =
-        league.settings.playoff_week_start != null
-          ? league.settings.playoff_week_start - 1
-          : 18
-      const scored =
-        league.settings.last_scored_leg ??
-        league.settings.leg ??
-        lastWeek
-      const through = Math.max(scored, lastWeek)
       const transactions = await fetchTransactionsThroughWeek(
-        Math.min(through, 18),
+        REGULAR_SEASON_MAX_WEEK,
         leagueId,
       )
       bundles.push({ league, teams, transactions })

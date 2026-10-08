@@ -13,7 +13,7 @@ const VIEWS = [
   { tab: 'Managers', id: '#manager-panel', name: 'gwb-managers' },
   { tab: 'Standings', id: '#playoff-odds-panel', name: 'gwb-playoff-odds' },
   { tab: 'Live', id: '#live-scoreboard-panel', name: 'gwb-live-flip' },
-  { tab: 'Graphics', selector: 'section[id^="graphics-week-"]', name: 'gwb-share-cards' },
+  { tab: 'Graphics', week: 5, selector: '#graphics-week-5-matchups', name: 'gwb-share-cards' },
 ]
 
 async function capture(page, name, width) {
@@ -31,6 +31,9 @@ async function main() {
   for (const view of VIEWS) {
     await page.goto(BASE, { waitUntil: 'networkidle', timeout: 120_000 })
     await page.waitForSelector('nav[aria-label="Sections"]', { timeout: 120_000 })
+    if (view.week) {
+      await page.getByLabel('NFL Week').selectOption(String(view.week))
+    }
     await page.getByRole('button', { name: view.tab, exact: true }).click()
     const waitSel = view.id ?? view.selector
     await page.waitForSelector(waitSel, { timeout: 120_000 })

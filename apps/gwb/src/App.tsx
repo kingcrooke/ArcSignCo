@@ -483,6 +483,7 @@ export default function App() {
                 trades={data.tradeLog}
                 priorSeasonsIncluded={data.tradePriorSeasonsIncluded}
                 priorSeasonsFailed={data.tradePriorSeasonsFailed}
+                playersLoading={data.playersLoading || !data.players}
               />
             </section>
           )}
