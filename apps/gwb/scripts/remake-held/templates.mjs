@@ -181,41 +181,81 @@ const cssW4List = `
 }
 `
 
+const cssW4Audit = `
+.slide { position: relative; background: ${COLORS.bg}; }
+.plate { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 130px; z-index: 2; text-align: center; }
+.sub { font-size: 26px; color: ${COLORS.muted}; font-weight: 600; line-height: 1.35; }
+.title { margin-top: 18px; font-size: 72px; line-height: 1.08; color: ${COLORS.white}; }
+.picks { position: absolute; left: 120px; right: 120px; top: 430px; z-index: 2; }
+.pick {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 28px; font-weight: 600; color: ${COLORS.white};
+  padding: 18px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.badge-wrong { color: #fff; background: #c43d3d; padding: 6px 14px; border-radius: 6px; font-size: 22px; }
+.badge-right { color: #111; background: #3dba6a; padding: 6px 14px; border-radius: 6px; font-size: 22px; }
+.stats { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 940px; z-index: 2; text-align: center; font-size: 64px; color: ${COLORS.gold}; }
+.quote { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 1110px; z-index: 2; text-align: center; font-size: 26px; color: #c8d4e0; font-weight: 600; line-height: 1.45; }
+`
+
 export function w4Slide14() {
-  const rows = [
-    ['1', 'Josh Allen', 'Matt'],
-    ['2', 'Lamar', 'Crooke'],
-    ['3', 'Mahomes', 'Manny'],
-    ['4', 'Lawrence', 'Danny'],
-    ['5', 'Hurts', 'Jamil'],
-    ['6', 'Goff', 'Frankie'],
-    ['7', 'Purdy', 'Narking'],
-    ['9', 'Dak', 'Eric'],
-    ['11', 'Bryce', 'Mauricio'],
-    ['14', 'Kyler', 'Hady'],
+  const picks = [
+    ['CROOKE OVER DANNY', 'wrong'],
+    ['ERIC OVER MAURICIO', 'wrong'],
+    ['STEVEN OVER NARKING', 'right'],
+    ['KAYSER OVER FRANKIE', 'wrong'],
+    ['MANNY OVER HADY', 'wrong'],
+    ['MATT OVER JAMIL', 'wrong'],
   ]
-  const rowsHtml = rows
+  const pickHtml = picks
     .map(
-      ([n, p, o]) =>
-        `<div class="row inter-semibold"><span class="n">${n}</span><span class="p">${p}</span><span>- ${o}</span></div>`,
+      ([label, kind]) =>
+        `<div class="pick inter-semibold"><span>${label}</span><span class="badge-${kind}">${kind === 'right' ? 'RIGHT' : 'WRONG'}</span></div>`,
     )
     .join('')
   return wrapHtml(
     `<div class="slide">
   <div class="hdr">
-    <div class="kicker bebas">GWB | WEEK 4 | QB HEAT CHECK</div>
-    <div class="kicker-line"></div>
-    <h1 class="center-title anton">QB HEAT CHECK</h1>
+    <div class="kicker bebas" style="font-size:24px;color:${COLORS.gold}">GWB &nbsp;•&nbsp; WEEK 4 &nbsp;•&nbsp; FINAL REPORT</div>
+    <p class="sub inter-semibold">AI HADY'S WEEK 4 PREDICTION AUDIT</p>
+    <h1 class="title anton">AI HADY GOT COOKED</h1>
   </div>
-  <div class="list">${rowsHtml}</div>
-  <div class="note inter-semibold">
-    <p>Darnold isn't top-tier this week...</p>
-    <p>after 47.89 GWB points, I'm not telling</p>
-    <p>that man what to do.</p>
+  <div class="picks">${pickHtml}</div>
+  <div class="stats bebas">1-5 • 16.7%</div>
+  <div class="quote inter-semibold">
+    <p>If I were an NFL head coach,</p>
+    <p>I'd be fired before lunch.</p>
   </div>
   <div class="footer inter"><span>gwb_fantasy_football</span><span>14/16</span></div>
 </div>`,
-    cssW4List,
+    cssW4Audit,
+  )
+}
+
+export function vsW5M4() {
+  const left = fileUrl(path.join(ASSETS, 'vs-w5-m4-left.png'))
+  const right = fileUrl(path.join(ASSETS, 'vs-w5-m4-right.png'))
+  return wrapHtml(
+    `<div class="slide">
+  <div class="hdr">
+    <div class="kicker bebas">GWB &nbsp;•&nbsp; WEEK 5</div>
+    <div class="kicker-line"></div>
+    <h1 class="hero anton"><span>Hady</span><span class="vs">vs</span><span>FRANKIE</span></h1>
+    <div class="records bebas"><span>Hady (3-1)</span><span>vs</span><span>FRANKIE (1-3)</span></div>
+  </div>
+  <div class="card left"><img src="${left}" alt="" /><span class="badge left bebas">Hady 3-1</span></div>
+  <div class="vs-badge bebas">VS</div>
+  <div class="card right"><img src="${right}" alt="" /><span class="badge right bebas">FRANKIE 1-3</span></div>
+  <div class="sneaky bebas">NO REST FOR THE POOR</div>
+  <div class="poll">
+    <div class="poll-labels bebas"><span class="l">Hady 54%</span><span class="r">Frankie 46%</span></div>
+    <div class="poll-bar"><div class="a" style="width:54%"></div><div class="b" style="width:46%"></div></div>
+  </div>
+  <p class="detail inter">Kyler vs Goff • Frankie's first win came in Week 4</p>
+  <div class="footer inter"><span>gwb_fantasy_football</span><span>VS &nbsp;•&nbsp; M4</span></div>
+</div>`,
+    cssVs,
   )
 }
 
@@ -349,6 +389,7 @@ function resultSlide(cfg) {
 
 export const SLIDES = {
   'vs-m3-hadi-manny': { html: vsM3HadiManny },
+  'vs-w5-m4': { html: vsW5M4 },
   'w4-slide-06': { html: w4Slide06 },
   'w4-slide-10': { html: w4Slide10 },
   'w4-slide-14': { html: w4Slide14 },
@@ -414,6 +455,27 @@ export const SLIDES = {
         tagline: 'EL CAMPEON TO 2-1',
         note: "Danny's negative mulligan — first in GWB history",
         matchup: 'W3M2',
+      }),
+  },
+  'results-w4-m3': {
+    html: () =>
+      resultSlide({
+        week: 4,
+        finalLine: 'FINAL: Hady TAKES IT',
+        scoreline: 'Hady 141.7 — 134.9 MANNY',
+        winnerImg: 'results-w4-m3-winner.png',
+        loserImg: 'results-w4-m3-loser.png',
+        winnerBadge: 'Hady 3-1',
+        loserBadge: 'MANNY 2-2',
+        winner: 'Hady',
+        loser: 'MANNY',
+        wScore: '141.7',
+        lScore: '134.9',
+        barWin: 51,
+        barLose: 49,
+        tagline: 'EL CAMPEON HOLDS',
+        note: 'Hady stays at 3-1 — Manny drops to 2-2',
+        matchup: 'W4M3',
       }),
   },
 }

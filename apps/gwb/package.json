@@ -13,7 +13,7 @@
     "screenshots": "node scripts/capture-artifacts.mjs",
     "publish-static": "node scripts/publish-static-deploy.mjs",
     "optimize-slides": "node scripts/optimize-published-slides.mjs",
-    "repair-hadi-slides": "python3 scripts/repair-hadi-slides.py",
+    "repair-hadi-slides": "python3 scripts/recompose-hadi-slides.py",
     "publish-hashed-slides": "node scripts/publish-hashed-slides.mjs",
     "remake-held-slides": "node scripts/remake-held/render.mjs",
     "prepare-recaps": "node scripts/prepare-commissioner-recaps.mjs"
