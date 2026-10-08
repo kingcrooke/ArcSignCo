@@ -20,6 +20,7 @@ import type {
   SleeperLeague,
   SleeperMatchup,
 } from '../lib/types'
+import { ShareCardButton } from './ShareCardButton'
 import { SlideLightbox } from './SlideLightbox'
 
 const THUMB_WIDTH = 540
@@ -241,13 +242,23 @@ export function WeekGraphicsPanel({
                           : null
                       }
                     />
-                    <button
-                      type="button"
-                      className="min-h-11 w-full text-xs text-[var(--gwb-accent)] underline"
-                      onClick={() => copySlideLink(slide)}
-                    >
-                      Copy link
-                    </button>
+                    <div className="flex gap-2">
+                      {(section.kind === 'results' ||
+                        section.kind === 'matchups') && (
+                        <ShareCardButton
+                          basename={slide.basename}
+                          title={slide.title}
+                          className="flex-1"
+                        />
+                      )}
+                      <button
+                        type="button"
+                        className="min-h-11 flex-1 text-xs text-[var(--gwb-accent)] underline"
+                        onClick={() => copySlideLink(slide)}
+                      >
+                        Copy link
+                      </button>
+                    </div>
                   </li>
                 )
               })}

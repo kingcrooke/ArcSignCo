@@ -9,6 +9,11 @@ export type AppTab =
   | 'mulligans'
   | 'frankie'
   | 'waiver'
+  | 'trades'
+  | 'h2h'
+  | 'awards'
+  | 'timeline'
+  | 'managers'
 
 const TAB_SET = new Set<AppTab>([
   'standings',
@@ -19,6 +24,11 @@ const TAB_SET = new Set<AppTab>([
   'mulligans',
   'frankie',
   'waiver',
+  'trades',
+  'h2h',
+  'awards',
+  'timeline',
+  'managers',
 ])
 
 function readParams(): { week: number | null; tab: AppTab | null; slide: string | null } {

@@ -43,6 +43,14 @@ export interface SleeperMatchup {
   players?: string[]
 }
 
+export interface SleeperDraftPickTrade {
+  season: string
+  round: number
+  roster_id: number
+  previous_owner_id?: number
+  owner_id?: number
+}
+
 export interface SleeperTransaction {
   type: string
   status: string
@@ -52,6 +60,7 @@ export interface SleeperTransaction {
   roster_ids?: number[]
   adds: Record<string, number> | null
   drops: Record<string, number> | null
+  draft_picks?: SleeperDraftPickTrade[] | null
   settings?: {
     waiver_bid?: number
     seq?: number
@@ -67,6 +76,7 @@ export interface SleeperLeague {
   name: string
   season: string
   status: string
+  previous_league_id?: string | null
   settings: {
     leg: number
     last_scored_leg?: number

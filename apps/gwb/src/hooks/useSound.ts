@@ -18,6 +18,11 @@ type TabSound =
   | 'mulligans'
   | 'frankie'
   | 'waiver'
+  | 'trades'
+  | 'h2h'
+  | 'awards'
+  | 'timeline'
+  | 'managers'
 
 const TAB_LOOPS: Record<TabSound, string> = {
   standings: audioSrc('impact-loop.mp3'),
@@ -28,6 +33,11 @@ const TAB_LOOPS: Record<TabSound, string> = {
   mulligans: audioSrc('monkeys-loop.mp3'),
   frankie: audioSrc('sneaky-loop.mp3'),
   waiver: audioSrc('volatile-loop.mp3'),
+  trades: audioSrc('impact-loop.mp3'),
+  h2h: audioSrc('impact-loop.mp3'),
+  awards: audioSrc('impact-loop.mp3'),
+  timeline: audioSrc('impact-loop.mp3'),
+  managers: audioSrc('impact-loop.mp3'),
 }
 
 const DECK_LOOPS: Record<GraphicsSectionKind, string> = {

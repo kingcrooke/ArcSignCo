@@ -15,6 +15,7 @@ import type { ProjectionsMap } from '../lib/projections'
 import { fetchNflWeekScores } from '../lib/sleeperApi'
 import type { NflWeekGame } from '../lib/types'
 import type { NflState, PlayersMap, SleeperLeague, SleeperMatchup, TeamInfo } from '../lib/types'
+import { liveFlipsForWeek } from '../lib/liveFlip'
 import { isWeekLive } from '../lib/weeks'
 import { MatchupDetailSheet } from './MatchupDetailSheet'
 import { TeamAvatar } from './TeamAvatar'
@@ -114,6 +115,15 @@ export function LiveScoreboardPanel({
     () => (matchups ? groupMatchupPairs(matchups) : []),
     [matchups],
   )
+
+  const liveFlips = useMemo(() => {
+    if (!matchups || !players || !nflGames?.length) return new Map<number, string>()
+    if (!isWeekLive(week, league, nflState)) return new Map<number, string>()
+    const insights = liveFlipsForWeek(matchups, players, nflGames, projections)
+    const map = new Map<number, string>()
+    for (const i of insights) map.set(i.matchupId, i.summary)
+    return map
+  }, [matchups, players, nflGames, projections, week, league, nflState])
 
   const detailPair = pairs.find((p) => p.matchupId === detailId)
 
@@ -219,6 +229,14 @@ export function LiveScoreboardPanel({
                 {projLine && (
                   <p className="mt-2 text-center text-[10px] font-semibold tabular-nums tracking-wide text-amber-200/90">
                     {projLine}
+                  </p>
+                )}
+                {liveFlips.get(matchupId) && (
+                  <p
+                    className="mt-2 rounded-md bg-amber-500/15 px-2 py-1 text-center text-[10px] font-medium leading-snug text-amber-100"
+                    role="status"
+                  >
+                    {liveFlips.get(matchupId)}
                   </p>
                 )}
               </button>

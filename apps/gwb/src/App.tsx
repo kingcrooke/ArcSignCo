@@ -11,6 +11,12 @@ import { WeekGraphicsPanel } from './components/WeekGraphicsPanel'
 import { StandingsPanel } from './components/StandingsPanel'
 import { BestGamesPanel } from './components/BestGamesPanel'
 import { LiveScoreboardPanel } from './components/LiveScoreboardPanel'
+import { TradeLogPanel } from './components/TradeLogPanel'
+import { HeadToHeadPanel } from './components/HeadToHeadPanel'
+import { WeeklyAwardsPanel } from './components/WeeklyAwardsPanel'
+import { PlayoffOddsPanel } from './components/PlayoffOddsPanel'
+import { ManagerPanel } from './components/ManagerPanel'
+import { SeasonTimelinePanel } from './components/SeasonTimelinePanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
 import {
@@ -38,6 +44,11 @@ const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'frankie', label: 'Frankie Zone' },
   { id: 'waiver', label: 'Waiver Wire Champion' },
   { id: 'bestgames', label: 'Best Games' },
+  { id: 'trades', label: 'Trades' },
+  { id: 'h2h', label: 'H2H' },
+  { id: 'awards', label: 'Awards' },
+  { id: 'timeline', label: 'Timeline' },
+  { id: 'managers', label: 'Managers' },
 ]
 
 const TAB_IDS: AppTab[] = [
@@ -49,6 +60,11 @@ const TAB_IDS: AppTab[] = [
   'frankie',
   'waiver',
   'bestgames',
+  'trades',
+  'h2h',
+  'awards',
+  'timeline',
+  'managers',
 ]
 
 export default function App() {
@@ -59,6 +75,7 @@ export default function App() {
   const sound = useSound()
   const [deckKind, setDeckKind] = useState<GraphicsSectionKind | null>(null)
   const [bestGamesScope, setBestGamesScope] = useState<BestGamesScope>(1)
+  const [managerRosterId, setManagerRosterId] = useState(1)
   const navRef = useRef<HTMLElement>(null)
   const didInitialTabScroll = useRef(false)
 
@@ -123,6 +140,11 @@ export default function App() {
       if (!Number.isNaN(n)) data.setSelectedWeek(n)
     }
     if (t && TAB_IDS.includes(t)) setTab(t)
+    const mgr = params.get('manager')
+    if (mgr) {
+      const id = Number.parseInt(mgr, 10)
+      if (!Number.isNaN(id)) setManagerRosterId(id)
+    }
     if (slide) setSlideParam(slide)
     // eslint-disable-next-line react-hooks/exhaustive-deps -- hydrate once when data loads
   }, [data?.league.league_id])
@@ -140,13 +162,14 @@ export default function App() {
     }
     params.set('tab', tab)
     if (slideParam) params.set('slide', slideParam)
+    if (tab === 'managers') params.set('manager', String(managerRosterId))
     const qs = params.toString()
     window.history.replaceState(
       null,
       '',
       `${window.location.pathname}?${qs}`,
     )
-  }, [data?.selectedWeek, tab, slideParam, data, bestGamesScope])
+  }, [data?.selectedWeek, tab, slideParam, data, bestGamesScope, managerRosterId])
 
   const scrollActiveTabIntoView = useCallback((behavior: ScrollBehavior) => {
     const nav = navRef.current
@@ -168,7 +191,9 @@ export default function App() {
       tab === 'recaps' ||
       tab === 'waiver' ||
       tab === 'live' ||
-      tab === 'bestgames'
+      tab === 'bestgames' ||
+      tab === 'trades' ||
+      tab === 'managers'
     ) {
       data?.ensurePlayers()
     }
@@ -334,6 +359,10 @@ export default function App() {
                 matchupsByWeek={data.matchupsByWeek}
                 standingsThroughWeek={data.standingsThroughWeek}
               />
+              <div className="mt-8">
+                <h3 className="mb-3 text-base font-semibold">Playoff odds</h3>
+                <PlayoffOddsPanel rows={data.playoffOdds} />
+              </div>
             </section>
           )}
           {tab === 'bestgames' && (
@@ -444,6 +473,59 @@ export default function App() {
                 onOpenRecap={openRecapFromZone}
                 initialSlideId={frankieSlideId}
                 onSlideUrlChange={setSlideParam}
+              />
+            </section>
+          )}
+          {tab === 'trades' && (
+            <section className="min-w-0 w-full">
+              <h2 className="mb-3 text-lg font-semibold">Trade log</h2>
+              <TradeLogPanel
+                trades={data.tradeLog}
+                priorSeasonsIncluded={data.tradePriorSeasonsIncluded}
+                priorSeasonsFailed={data.tradePriorSeasonsFailed}
+              />
+            </section>
+          )}
+          {tab === 'h2h' && (
+            <section className="min-w-0 w-full">
+              <h2 className="mb-3 text-lg font-semibold">Head-to-head</h2>
+              <HeadToHeadPanel
+                teams={data.teams}
+                matchupsByWeek={data.matchupsByWeek}
+                throughWeek={data.standingsThroughWeek}
+              />
+            </section>
+          )}
+          {tab === 'awards' && (
+            <section className="min-w-0 w-full">
+              <h2 className="mb-3 text-lg font-semibold">Weekly awards</h2>
+              <WeeklyAwardsPanel weeks={data.weeklyAwards} />
+            </section>
+          )}
+          {tab === 'timeline' && (
+            <section className="min-w-0 w-full">
+              <h2 className="mb-3 text-lg font-semibold">Season timeline</h2>
+              <p className="mb-3 text-xs text-[var(--gwb-muted)]">
+                Wins, losses, mulligans, and trades in date order ({data.league.season}).
+              </p>
+              <SeasonTimelinePanel events={data.seasonTimeline} />
+            </section>
+          )}
+          {tab === 'managers' && (
+            <section className="min-w-0 w-full">
+              <h2 className="mb-3 text-lg font-semibold">Manager pages</h2>
+              <ManagerPanel
+                rosterId={managerRosterId}
+                onRosterChange={(id) => {
+                  sound.playClick()
+                  setManagerRosterId(id)
+                }}
+                teams={data.teams}
+                rosters={data.rosters}
+                standings={data.standings}
+                trades={data.tradeLog}
+                players={data.players}
+                statusThroughWeek={data.mulliganStatusThroughWeek}
               />
             </section>
           )}

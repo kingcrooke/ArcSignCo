@@ -8,6 +8,7 @@ import {
 } from 'react'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
+import { fetchFullSlideBlob } from '../lib/shareSlide'
 
 type Props = {
   slides: PublishedSlide[]
@@ -20,13 +21,6 @@ type Props = {
 const SWIPE_THRESHOLD_PX = 48
 const FOCUSABLE =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-
-async function fetchFullSlideBlob(basename: string): Promise<Blob> {
-  const jpg = slideAssetUrl(basename, 'full', 'jpg')
-  const res = await fetch(jpg)
-  if (!res.ok) throw new Error('Could not load full slide')
-  return res.blob()
-}
 
 export function SlideLightbox({
   slides,
