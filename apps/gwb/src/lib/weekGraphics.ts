@@ -1,9 +1,6 @@
-import slideBasenames from '../content/slide-basenames.json'
 import type { PublishedSlide } from './publishedSlides'
 import { HELD_BACK_SLIDES } from './publishedSlides'
 import { slideHeadline } from './slideHeadlines'
-
-const SLIDE_BASENAME: Record<string, string> = slideBasenames
 
 export type GraphicsSectionKind = 'matchups' | 'results' | 'report'
 
@@ -66,7 +63,7 @@ function titled(id: string, fallback: string): PublishedSlide {
   return {
     id,
     title: slideHeadline(id, fallback),
-    basename: SLIDE_BASENAME[id] ?? id,
+    basename: id,
     ...SLIDE_SIZE,
   }
 }
