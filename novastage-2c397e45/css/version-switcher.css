@@ -44,34 +44,41 @@
 .version-switcher__tabs {
   display: flex;
   align-items: stretch;
+  flex-wrap: nowrap;
   gap: 2px;
   width: 100%;
+  min-width: 0;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  padding: 0 8px;
+  padding: 0 4px;
 }
 
 .version-switcher__tab {
-  flex: 1 0 auto;
-  min-width: max(88px, 18vw);
-  max-width: 200px;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
   border: 0;
   border-radius: 0;
   margin: 6px 0;
-  padding: 0 12px;
+  padding: 0 6px;
   font-family: var(--caps);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #9eb3c9;
   background: transparent;
   cursor: pointer;
   border-bottom: 2px solid transparent;
+  white-space: nowrap;
   transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.version-switcher__short {
+  display: none;
 }
 
 .version-switcher__tab:hover {
@@ -97,10 +104,32 @@ body.has-version-switcher .skip-link:focus {
   top: calc(var(--version-bar-height) + 8px);
 }
 
-@media (max-width: 520px) {
+@media (max-width: 860px) {
+  .version-switcher__long {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .version-switcher__short {
+    display: inline;
+  }
+
+  .version-switcher__music {
+    padding: 5px 8px;
+    font-size: 0.56rem;
+    letter-spacing: 0.04em;
+  }
+
   .version-switcher__tab {
-    min-width: 96px;
-    font-size: 0.68rem;
-    padding: 0 8px;
+    padding: 0 1px;
+    font-size: 0.66rem;
+    letter-spacing: 0.02em;
   }
 }

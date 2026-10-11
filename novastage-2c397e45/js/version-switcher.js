@@ -35,7 +35,16 @@
     btn.className = "version-switcher__tab";
     btn.setAttribute("role", "tab");
     btn.setAttribute("data-version", String(version.id));
-    btn.textContent = version.tabLabel;
+    btn.setAttribute("aria-label", version.tabLabel);
+    var longLabel = document.createElement("span");
+    longLabel.className = "version-switcher__long";
+    longLabel.textContent = version.tabLabel;
+    var shortLabel = document.createElement("span");
+    shortLabel.className = "version-switcher__short";
+    shortLabel.setAttribute("aria-hidden", "true");
+    shortLabel.textContent = "V" + version.id;
+    btn.appendChild(longLabel);
+    btn.appendChild(shortLabel);
     btn.addEventListener("click", function () {
       apply(version.id, true);
     });

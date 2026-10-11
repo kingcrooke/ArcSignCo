@@ -250,3 +250,143 @@ body[data-palette="d"] .wm-stage {
 .lockup-shot .official-lockup {
   padding-top: 72px;
 }
+
+.lockup-eclipse,
+.lockup-ray {
+  display: none;
+}
+
+body[data-lockup-emphasis="illumination"] .official-lockup {
+  padding-top: clamp(72px, 10vw, 96px);
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-visual {
+  height: clamp(250px, 40vw, 360px);
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-eclipse,
+body[data-lockup-emphasis="illumination"] .lockup-ray {
+  display: block;
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-star {
+  top: 4px;
+  z-index: 3;
+  width: clamp(58px, 9vw, 76px);
+  height: clamp(58px, 9vw, 76px);
+  clip-path: polygon(
+    50% 0%,
+    62% 30%,
+    98% 16%,
+    70% 44%,
+    100% 62%,
+    66% 60%,
+    56% 74%,
+    50% 100%,
+    44% 74%,
+    34% 60%,
+    0% 62%,
+    30% 44%,
+    2% 16%,
+    38% 30%
+  );
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-star::after {
+  display: none;
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-eclipse {
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  width: clamp(124px, 20vw, 176px);
+  height: clamp(124px, 20vw, 176px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    transparent 0 41%,
+    rgba(255, 246, 214, 0.18) 46%,
+    rgba(255, 230, 156, 0.96) 51%,
+    rgba(242, 201, 76, 0.78) 56%,
+    rgba(255, 236, 186, 0.28) 64%,
+    transparent 76%
+  );
+  filter: drop-shadow(0 0 12px rgba(242, 201, 76, 0.7));
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-ray {
+  position: absolute;
+  left: 50%;
+  top: 58px;
+  width: 2px;
+  height: clamp(168px, 26vw, 230px);
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    #fff8dc 0%,
+    #f2c94c 10%,
+    rgba(255, 220, 120, 0.95) 42%,
+    rgba(255, 210, 96, 0.55) 76%,
+    rgba(255, 236, 190, 0) 100%
+  );
+  box-shadow:
+    0 0 8px 1px rgba(255, 236, 180, 0.95),
+    0 0 20px 5px rgba(242, 201, 76, 0.4);
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-beam {
+  opacity: 0;
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-pool {
+  top: auto;
+  bottom: 8%;
+  width: 58%;
+  height: 16%;
+  opacity: 0.95;
+  background: radial-gradient(
+    ellipse at 50% 42%,
+    rgba(255, 250, 232, 0.95) 0%,
+    rgba(242, 201, 76, 0.48) 28%,
+    rgba(242, 201, 76, 0.14) 50%,
+    transparent 74%
+  );
+}
+
+body[data-lockup-emphasis="illumination"] .lockup-wordmark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -8%;
+  width: 26px;
+  height: 120%;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 244, 210, 0) 0%,
+    rgba(255, 226, 140, 0.78) 20%,
+    rgba(255, 206, 90, 0.42) 52%,
+    rgba(255, 226, 150, 0.08) 100%
+  );
+  filter: blur(7px);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 2;
+}
+
+body[data-lockup-emphasis="illumination"] .wm-nova,
+body[data-lockup-emphasis="illumination"] .wm-stage {
+  position: relative;
+  z-index: 1;
+}
+
+body[data-lockup-emphasis="illumination"][data-wordmark-font="primary"] .lockup-wordmark {
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}

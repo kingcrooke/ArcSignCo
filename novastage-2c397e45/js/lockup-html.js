@@ -1,7 +1,9 @@
 /* Shared lockup markup for static template pages (optional). */
 window.NOVASTAGE_LOCKUP_INNER =
   '<div class="lockup-visual" aria-hidden="true">' +
+  '<div class="lockup-eclipse"></div>' +
   '<div class="lockup-star"></div>' +
+  '<div class="lockup-ray"></div>' +
   '<div class="lockup-beam"></div>' +
   '<div class="lockup-pool"></div>' +
   "</div>" +
