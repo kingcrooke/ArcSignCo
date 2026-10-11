@@ -27,18 +27,113 @@ export function isCountableWaiverAcquisition(t: SleeperTransaction): boolean {
   return t.status === 'complete'
 }
 
-export function tradeAndCommissionerAcquisitionKeys(
+type AcquisitionSource = 'waiver' | 'free_agent' | 'trade' | 'commissioner' | 'drop'
+
+interface AcquisitionEvent {
+  time: number
+  source: AcquisitionSource
+  transactionId: string
+  leg: number
+}
+
+function rosterPlayerKey(rosterId: number, playerId: string): string {
+  return `${rosterId}:${playerId}`
+}
+
+function pushAcquisitionEvent(
+  map: Map<string, AcquisitionEvent[]>,
+  rosterId: number,
+  playerId: string,
+  event: AcquisitionEvent,
+): void {
+  const key = rosterPlayerKey(rosterId, playerId)
+  const list = map.get(key)
+  if (list) list.push(event)
+  else map.set(key, [event])
+}
+
+/** Chronological join/leave events for every roster–player pair (all complete txs). */
+export function buildRosterPlayerAcquisitionTimeline(
   transactions: SleeperTransaction[],
-): Set<string> {
-  const keys = new Set<string>()
-  for (const t of transactions) {
-    if (t.status !== 'complete') continue
-    if (!EXCLUDED_ACQUISITION_TYPES.has(t.type)) continue
-    for (const [playerId, rosterId] of Object.entries(t.adds ?? {})) {
-      if (typeof rosterId === 'number') keys.add(`${rosterId}:${playerId}`)
+): Map<string, AcquisitionEvent[]> {
+  const map = new Map<string, AcquisitionEvent[]>()
+
+  transactions.forEach((t, index) => {
+    if (t.status !== 'complete') return
+    const id = t.transaction_id ?? `${t.leg}-${t.status_updated}-${index}`
+    const time = t.status_updated
+    const leg = t.leg
+    const rosterId = txRosterId(t)
+
+    const recordDrop = (playerId: string, dropRosterId: number | null) => {
+      if (dropRosterId == null) return
+      pushAcquisitionEvent(map, dropRosterId, playerId, {
+        time,
+        source: 'drop',
+        transactionId: id,
+        leg,
+      })
     }
+
+    const recordAdd = (playerId: string, source: AcquisitionSource, addRosterId: number | null) => {
+      if (addRosterId == null) return
+      pushAcquisitionEvent(map, addRosterId, playerId, {
+        time,
+        source,
+        transactionId: id,
+        leg,
+      })
+    }
+
+    if (EXCLUDED_ACQUISITION_TYPES.has(t.type)) {
+      for (const playerId of Object.keys(t.adds ?? {})) {
+        recordAdd(
+          playerId,
+          t.type as 'trade' | 'commissioner',
+          rosterIdFromPlayerMap(t.adds, playerId, rosterId),
+        )
+      }
+      for (const playerId of Object.keys(t.drops ?? {})) {
+        recordDrop(playerId, rosterIdFromPlayerMap(t.drops, playerId, rosterId))
+      }
+      return
+    }
+
+    if (!isCountableWaiverAcquisition(t)) return
+    for (const playerId of Object.keys(t.adds ?? {})) {
+      recordAdd(
+        playerId,
+        t.type === 'free_agent' ? 'free_agent' : 'waiver',
+        rosterIdFromPlayerMap(t.adds, playerId, rosterId),
+      )
+    }
+    for (const playerId of Object.keys(t.drops ?? {})) {
+      recordDrop(playerId, rosterIdFromPlayerMap(t.drops, playerId, rosterId))
+    }
+  })
+
+  for (const list of map.values()) {
+    list.sort((a, b) => a.time - b.time || a.leg - b.leg || a.transactionId.localeCompare(b.transactionId))
   }
-  return keys
+  return map
+}
+
+export function latestAcquisitionBefore(
+  events: AcquisitionEvent[],
+  before: number,
+): AcquisitionEvent | null {
+  let last: AcquisitionEvent | null = null
+  for (const e of events) {
+    if (e.time >= before) break
+    last = e
+  }
+  return last
+}
+
+export function isWaiverPickupAcquisition(
+  event: AcquisitionEvent | null,
+): boolean {
+  return event != null && (event.source === 'waiver' || event.source === 'free_agent')
 }
 
 function rosterIdFromPlayerMap(
@@ -225,7 +320,7 @@ export function computeWaiverBoard(input: {
     faabBudget = 100,
   } = input
 
-  const blockedAcquisitions = tradeAndCommissionerAcquisitionKeys(transactions)
+  const acquisitionTimeline = buildRosterPlayerAcquisitionTimeline(transactions)
   const closes = weekCloses(transactions, scoringThrough)
   const horizonClose = closes.get(scoringThrough)
 
@@ -277,7 +372,6 @@ export function computeWaiverBoard(input: {
     for (const playerId of addIds) {
       const addRosterId = rosterIdFromPlayerMap(t.adds, playerId, rosterId)
       if (addRosterId == null) continue
-      if (blockedAcquisitions.has(`${addRosterId}:${playerId}`)) continue
       adds.push({
         playerId,
         rosterId: addRosterId,
@@ -331,7 +425,13 @@ export function computeWaiverBoard(input: {
       if (!rostered(row, playerId) || !row) continue
       const cands = list.filter((a) => a.time < close)
       if (!cands.length) continue
-      const owner = cands[cands.length - 1]
+      const timeline =
+        acquisitionTimeline.get(rosterPlayerKey(rosterId, playerId)) ?? []
+      const latestAcq = latestAcquisitionBefore(timeline, close)
+      if (!isWaiverPickupAcquisition(latestAcq)) continue
+      const owner =
+        cands.find((a) => a.transactionId === latestAcq!.transactionId) ??
+        cands[cands.length - 1]
       const pts = pointsOf(row, playerId)
       owner.weeks.push(week)
       if (started(row, playerId)) {

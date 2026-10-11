@@ -130,11 +130,11 @@ describe('computeWaiverBoard trade exclusion', () => {
     expect(buyer?.bestPickup).toBeNull()
     expect(board.moves.some((m) => m.adds.includes('6786'))).toBe(false)
 
-    const spoofBoard = computeWaiverBoard({
+    const faAfterTradeBoard = computeWaiverBoard({
       transactions: [
         trade,
         {
-          transaction_id: 'spoof-fa',
+          transaction_id: 'real-fa-after-trade',
           type: 'free_agent',
           status: 'complete',
           leg: 2,
@@ -154,7 +154,7 @@ describe('computeWaiverBoard trade exclusion', () => {
       selectedWeek: 3,
       selectedWeekComplete: true,
     })
-    const spoofBuyer = spoofBoard.managers.find((m) => m.rosterId === 6)
-    expect(spoofBuyer?.startedPoints).toBe(0)
+    const faBuyer = faAfterTradeBoard.managers.find((m) => m.rosterId === 6)
+    expect(faBuyer?.startedPoints).toBeCloseTo(41.3, 1)
   })
 })
