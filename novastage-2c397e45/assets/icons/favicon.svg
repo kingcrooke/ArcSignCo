@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="NovaStage">
+  <rect width="120" height="120" rx="22" fill="#141821" />
+  <path fill="#F4EFE6" d="M28 96V24h14l18 38 18-38h14v72H72V58L56 92 40 58v38H28z" />
+  <path fill="none" stroke="#3EC8EF" stroke-width="7" stroke-linecap="round" d="M58 28c18 8 28 22 28 38s-10 30-28 38c-6 2-12 2-18 0" />
+  <path fill="#F2C94C" d="M58 18l2 6 6-2-2 6 6 2-6 2 2 6-6-2-2 6-2-6-6 2 2-6-6-2 6-2-2-6z" />
+</svg>

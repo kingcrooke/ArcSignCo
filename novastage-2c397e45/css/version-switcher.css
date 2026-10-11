@@ -1,0 +1,106 @@
+:root {
+  --version-bar-height: 42px;
+}
+
+.version-switcher {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  height: var(--version-bar-height);
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  padding: 0 6px 0 8px;
+  background: rgba(8, 10, 14, 0.94);
+  border-bottom: 1px solid rgba(244, 239, 230, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.version-switcher__music {
+  flex: 0 0 auto;
+  align-self: center;
+  border: 1px solid rgba(62, 200, 239, 0.45);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-family: var(--caps);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #3ec8ef;
+  background: rgba(62, 200, 239, 0.1);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.version-switcher__music[aria-pressed="true"] {
+  background: rgba(242, 201, 76, 0.18);
+  border-color: rgba(242, 201, 76, 0.55);
+  color: #f2c94c;
+}
+
+.version-switcher__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  padding: 0 8px;
+}
+
+.version-switcher__tab {
+  flex: 1 0 auto;
+  min-width: max(88px, 18vw);
+  max-width: 200px;
+  border: 0;
+  border-radius: 0;
+  margin: 6px 0;
+  padding: 0 12px;
+  font-family: var(--caps);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9eb3c9;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.version-switcher__tab:hover {
+  color: #f4efe6;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.version-switcher__tab.is-active {
+  color: #3ec8ef;
+  background: rgba(62, 200, 239, 0.12);
+  border-bottom-color: #3ec8ef;
+}
+
+body.has-version-switcher {
+  padding-top: var(--version-bar-height);
+}
+
+body.has-version-switcher .topbar {
+  top: var(--version-bar-height);
+}
+
+body.has-version-switcher .skip-link:focus {
+  top: calc(var(--version-bar-height) + 8px);
+}
+
+@media (max-width: 520px) {
+  .version-switcher__tab {
+    min-width: 96px;
+    font-size: 0.68rem;
+    padding: 0 8px;
+  }
+}
