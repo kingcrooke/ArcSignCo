@@ -30,6 +30,7 @@ import {
 } from '../lib/sleeperApi'
 import { computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
+import { faabByRoster, leagueFaabBudget, type FaabSnapshot } from '../lib/faab'
 import { computeWaiverBoard, type WaiverBoard } from '../lib/waiverWire'
 import { computeWeeklyAwards, type WeeklyAwardsWeek } from '../lib/weeklyAwards'
 import {
@@ -90,6 +91,7 @@ export interface LeagueData {
   draftBoards: DraftBoard[]
   tradedPicks: SleeperTradedPick[]
   tradedPickHistory: TradedPickHistoryRow[]
+  faabByRoster: Map<number, FaabSnapshot>
 }
 
 export function useLeagueData(leagueId: string): {
@@ -297,6 +299,7 @@ export function useLeagueData(leagueId: string): {
       scoringThrough: throughForCumulative,
       selectedWeek,
       selectedWeekComplete: !isSelectedWeekLive,
+      faabBudget: leagueFaabBudget(league),
     })
     const waiverDeferralNote = cumulativeDeferralNote(
       selectedWeek,
@@ -321,6 +324,7 @@ export function useLeagueData(leagueId: string): {
       transactions,
       league.season,
     )
+    const faabSnapshot = faabByRoster(league, rosters)
 
     return {
       league,
@@ -354,6 +358,7 @@ export function useLeagueData(leagueId: string): {
       draftBoards,
       tradedPicks,
       tradedPickHistory,
+      faabByRoster: faabSnapshot,
     }
   }, [base, selectedWeek, load, players, playersLoading, ensurePlayers, updateWeekMatchups])
 

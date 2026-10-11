@@ -495,6 +495,8 @@ function SeasonBoard({ board }: { board: WaiverBoard }) {
               <th className="px-3 py-2 text-right">Net</th>
               <th className="px-3 py-2 text-right">Regret</th>
               <th className="px-3 py-2 text-right">Failed</th>
+              <th className="px-3 py-2 text-right">FAAB left</th>
+              <th className="px-3 py-2 text-right">FAAB spent</th>
               <th className="px-3 py-2 text-right">Priority</th>
             </tr>
           </thead>
@@ -534,6 +536,8 @@ function SeasonBoard({ board }: { board: WaiverBoard }) {
                 <td className="px-3 py-2.5 text-right tabular-nums">{pts(r.netWaiverPoints)}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{pts(r.dropRegret)}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{r.failedClaims}</td>
+                <td className="px-3 py-2.5 text-right tabular-nums">${r.faabRemaining}</td>
+                <td className="px-3 py-2.5 text-right tabular-nums">${r.faabSpent}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{r.waiverPriority ?? '—'}</td>
               </tr>
             ))}
@@ -566,7 +570,7 @@ function SeasonCard({ row }: { row: ManagerWaiverRow }) {
       </div>
       <p className="mt-2 text-xs text-[var(--dyn-muted)]">
         Started {pts(row.startedPoints)} · {row.pickupCount} pickups · net {pts(row.netWaiverPoints)} ·{' '}
-        {row.failedClaims} failed
+        {row.failedClaims} failed · FAAB ${row.faabRemaining} left (${row.faabSpent} spent)
       </p>
       <p className="mt-1 text-xs text-[var(--dyn-muted)]">
         Bench {pts(row.benchPoints)} · {pts(row.pointsPerPickup)} / pickup · hit {hitLabel(row)} ·

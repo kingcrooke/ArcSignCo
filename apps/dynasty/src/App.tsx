@@ -320,6 +320,7 @@ export default function App() {
                 playoffTeams={data.league.settings.playoff_teams ?? null}
                 matchupsByWeek={data.matchupsByWeek}
                 standingsThroughWeek={data.standingsThroughWeek}
+                faabByRoster={data.faabByRoster}
               />
               {!data.isHistoricalSeason && (
                 <div className="mt-8">

@@ -11,6 +11,45 @@ export const MIN_ROSTERED_PICKUPS = 3
 export const HIT_LINE = 10
 
 const COUNTED_TYPES = new Set(['waiver', 'free_agent'])
+const EXCLUDED_ACQUISITION_TYPES = new Set(['trade', 'commissioner'])
+
+/** Sleeper moves that belong on the waiver wire tab (not trades / commish). */
+export function isWaiverWireTransaction(t: SleeperTransaction): boolean {
+  if (EXCLUDED_ACQUISITION_TYPES.has(t.type)) return false
+  if (!COUNTED_TYPES.has(t.type)) return false
+  return t.status === 'complete' || t.status === 'failed'
+}
+
+/** Completed FAAB / free-agent adds only — used for scoring pickups. */
+export function isCountableWaiverAcquisition(t: SleeperTransaction): boolean {
+  if (!COUNTED_TYPES.has(t.type)) return false
+  if (EXCLUDED_ACQUISITION_TYPES.has(t.type)) return false
+  return t.status === 'complete'
+}
+
+export function tradeAndCommissionerAcquisitionKeys(
+  transactions: SleeperTransaction[],
+): Set<string> {
+  const keys = new Set<string>()
+  for (const t of transactions) {
+    if (t.status !== 'complete') continue
+    if (!EXCLUDED_ACQUISITION_TYPES.has(t.type)) continue
+    for (const [playerId, rosterId] of Object.entries(t.adds ?? {})) {
+      if (typeof rosterId === 'number') keys.add(`${rosterId}:${playerId}`)
+    }
+  }
+  return keys
+}
+
+function rosterIdFromPlayerMap(
+  map: Record<string, number> | null | undefined,
+  playerId: string,
+  fallback: number | null,
+): number | null {
+  const mapped = map?.[playerId]
+  if (typeof mapped === 'number') return mapped
+  return fallback
+}
 
 export interface WaiverAddResult {
   playerId: string
@@ -54,6 +93,9 @@ export interface ManagerWaiverRow {
   rosterId: number
   displayName: string
   teamName: string
+  faabBudget: number
+  faabSpent: number
+  faabRemaining: number
   waiverPriority: number | null
   pickupCount: number
   rosteredPickups: number
@@ -170,6 +212,7 @@ export function computeWaiverBoard(input: {
   scoringThrough: number
   selectedWeek: number
   selectedWeekComplete: boolean
+  faabBudget?: number
 }): WaiverBoard {
   const {
     transactions,
@@ -179,8 +222,10 @@ export function computeWaiverBoard(input: {
     scoringThrough,
     selectedWeek,
     selectedWeekComplete,
+    faabBudget = 100,
   } = input
 
+  const blockedAcquisitions = tradeAndCommissionerAcquisitionKeys(transactions)
   const closes = weekCloses(transactions, scoringThrough)
   const horizonClose = closes.get(scoringThrough)
 
@@ -197,11 +242,10 @@ export function computeWaiverBoard(input: {
   const moves: WaiverMove[] = []
 
   transactions.forEach((t, index) => {
-    if (!COUNTED_TYPES.has(t.type)) return
+    if (!isWaiverWireTransaction(t)) return
     const rosterId = txRosterId(t)
     if (rosterId == null) return
-    const status = t.status === 'failed' ? 'failed' : t.status === 'complete' ? 'complete' : null
-    if (!status) return
+    const status = t.status === 'failed' ? 'failed' : 'complete'
     const addIds = Object.keys(t.adds ?? {})
     const dropIds = Object.keys(t.drops ?? {})
     const id = t.transaction_id ?? `${t.leg}-${t.status_updated}-${index}`
@@ -229,11 +273,14 @@ export function computeWaiverBoard(input: {
       pending,
     })
 
-    if (status !== 'complete') return
+    if (!isCountableWaiverAcquisition(t)) return
     for (const playerId of addIds) {
+      const addRosterId = rosterIdFromPlayerMap(t.adds, playerId, rosterId)
+      if (addRosterId == null) continue
+      if (blockedAcquisitions.has(`${addRosterId}:${playerId}`)) continue
       adds.push({
         playerId,
-        rosterId,
+        rosterId: addRosterId,
         time: t.status_updated,
         leg: t.leg,
         type: t.type,
@@ -248,9 +295,11 @@ export function computeWaiverBoard(input: {
       })
     }
     for (const playerId of dropIds) {
+      const dropRosterId = rosterIdFromPlayerMap(t.drops, playerId, rosterId)
+      if (dropRosterId == null) continue
       drops.push({
         playerId,
-        rosterId,
+        rosterId: dropRosterId,
         time: t.status_updated,
         leg: t.leg,
         transactionId: id,
@@ -340,9 +389,18 @@ export function computeWaiverBoard(input: {
   }
 
   const priorityByRoster = new Map<number, number | null>()
+  const faabByRosterId = new Map<
+    number,
+    { spent: number; remaining: number }
+  >()
   for (const r of rosters) {
     const pos = r.settings.waiver_position
     priorityByRoster.set(r.roster_id, typeof pos === 'number' ? pos : null)
+    const spent = r.settings.waiver_budget_used ?? 0
+    faabByRosterId.set(r.roster_id, {
+      spent,
+      remaining: faabBudget - spent,
+    })
   }
 
   const rosterIds = new Set<number>([
@@ -404,10 +462,17 @@ export function computeWaiverBoard(input: {
       weeklyNet = weeklyStarted - weeklyRegret
     }
 
+    const faab = faabByRosterId.get(rosterId) ?? {
+      spent: 0,
+      remaining: faabBudget,
+    }
     rows.push({
       rosterId,
       displayName: team?.displayName ?? `Roster ${rosterId}`,
       teamName: team?.teamName ?? `Roster ${rosterId}`,
+      faabBudget,
+      faabSpent: faab.spent,
+      faabRemaining: faab.remaining,
       waiverPriority: priorityByRoster.get(rosterId) ?? null,
       pickupCount: windowAdds.length,
       rosteredPickups: rosteredAdds.length,

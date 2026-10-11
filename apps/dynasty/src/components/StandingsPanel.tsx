@@ -5,6 +5,7 @@ import {
   playoffSeedHint,
 } from '../lib/allPlay'
 import { recordLabel, streakLabel } from '../lib/standings'
+import type { FaabSnapshot } from '../lib/faab'
 import type { SleeperMatchup, StandingRow, TeamInfo } from '../lib/types'
 import { TeamAvatar } from './TeamAvatar'
 
@@ -38,6 +39,11 @@ function StreakBadge({ streak }: { streak: string }) {
   )
 }
 
+function faabLabel(snap: FaabSnapshot | undefined): string {
+  if (!snap) return '—'
+  return `$${snap.remaining}`
+}
+
 export function StandingsPanel({
   rows,
   deferralNote,
@@ -45,6 +51,7 @@ export function StandingsPanel({
   playoffTeams,
   matchupsByWeek,
   standingsThroughWeek,
+  faabByRoster,
 }: {
   rows: StandingRow[]
   deferralNote?: string | null
@@ -52,6 +59,7 @@ export function StandingsPanel({
   playoffTeams?: number | null
   matchupsByWeek: Map<number, SleeperMatchup[]>
   standingsThroughWeek: number
+  faabByRoster: Map<number, FaabSnapshot>
 }) {
   const sacko = rows.length ? rows[rows.length - 1] : null
   const cutoff =
@@ -90,6 +98,7 @@ export function StandingsPanel({
               : null
           const ap = allPlay.get(r.rosterId)
           const allPlayLabel = ap ? formatAllPlayRecord(ap) : '—'
+          const faab = faabByRoster.get(r.rosterId)
 
           return (
             <li key={r.rosterId}>
@@ -128,7 +137,8 @@ export function StandingsPanel({
                       {manager}
                       <span className="text-[var(--dyn-muted)]/80">
                         {' '}
-                        · {pf} PF · {pa} PA · AP {allPlayLabel}
+                        · {pf} PF · {pa} PA · FAAB {faabLabel(faab)} · AP{' '}
+                        {allPlayLabel}
                       </span>
                     </span>
                     <span className="hidden sm:inline">
@@ -149,6 +159,19 @@ export function StandingsPanel({
                 </div>
 
                 <div className="hidden shrink-0 items-center gap-3 sm:flex">
+                  <div className="text-right">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--dyn-muted)]">
+                      FAAB
+                    </p>
+                    <p className="text-sm font-semibold tabular-nums leading-tight">
+                      {faabLabel(faab)}
+                    </p>
+                    {faab && (
+                      <p className="text-[10px] tabular-nums text-[var(--dyn-muted)]">
+                        ${faab.spent} spent
+                      </p>
+                    )}
+                  </div>
                   <div className="text-right">
                     <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--dyn-muted)]">
                       All-play
