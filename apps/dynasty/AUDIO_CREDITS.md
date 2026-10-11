@@ -1,51 +1,45 @@
-# Dynasty tab audio credits
+# Dynasty audio credits
 
-Regenerate shipped loops (downloads CC0 sources to a temp dir — nothing raw is committed):
+Published under `/dynasty-1581d86a/audio/` after `npm run publish-static`. Tab loop files are the same Kevin MacLeod masters shipped in `apps/gwb/public/audio/` (copy from GWB when updating).
 
-```bash
-cd apps/dynasty
-npm run generate-audio
-```
+## Tab beds (Kevin MacLeod — CC BY 4.0)
 
-Published under `/dynasty-1581d86a/audio/` after `npm run publish-static`. Loudness targets: **~−16 LUFS** integrated, **true peak ≤ −1 dBTP** (`ffmpeg loudnorm` two-pass). Post-build measurements: `public/audio/loop-loudness.json`.
+| File | Kevin MacLeod track |
+| --- | --- |
+| `impact-loop.mp3` | Impact Moderato |
+| `volatile-loop.mp3` | Volatile Reaction |
+| `sneaky-loop.mp3` | Sneaky Snitch |
+| `monkeys-loop.mp3` | Monkeys Spinning Monkeys |
 
-## Tab background loops (CC0 — OpenGameArt.org)
+License: [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Credit: incompetech.com.
 
-| Shipped file | App tab | Track | Author | License | Source page |
-| --- | --- | --- | --- | --- | --- |
-| `loop-standings.mp3` | Standings | Just a Minute | iamoneabe | CC0 1.0 | https://opengameart.org/content/just-a-minute |
-| `loop-live.mp3` | Live | StarShooter v2.1 | Centurion_of_war | CC0 1.0 | https://opengameart.org/content/starshooter |
-| `loop-drafts.mp3` | Drafts | Fast fun action techno loop 1 | annandistance | CC0 1.0 | https://opengameart.org/content/fast-fun-action-techno-loop-1 |
-| `loop-gallery.mp3` | Graphics | Ocean Trance | MintoDog | CC0 1.0 | https://opengameart.org/content/ocean-trance |
-| `loop-waiver.mp3` | Waiver Wire Champion | Cynic Battle Loop | Ferk (loop); Alex Smith / cynicmusic | CC0 1.0 | https://opengameart.org/content/cynic-battle-loop |
-| `loop-bestgames.mp3` | Best Games | Jamsi Race 8 | Tozan | CC0 1.0 | https://opengameart.org/content/jamsi-race-8 |
-| `loop-trades.mp3` | Trades | Parasite (looped) | Kistol | CC0 1.0 | https://opengameart.org/content/parasite |
-| `loop-awards.mp3` | Awards | Invincible (Loop) | MintoDog | CC0 1.0 | https://opengameart.org/content/8bit-action-jingle-mini-loop |
-| `loop-managers.mp3` | Managers | Chill lofi inspired (loop edit) | qubodup; omfgdude (original) | CC0 1.0 | https://opengameart.org/content/chill-lofi-inspired-loop-edit |
+### Dynasty tab → loop (shuffled vs GWB)
 
-Direct download URLs used by `scripts/build-tab-loops.mjs` are listed in that script’s `TAB_SOURCES` array (OpenGameArt `sites/default/files/…` paths). Awards track is extracted from the CC0 zip on the 8bit Action page.
+Dynasty reuses the four loops across nine tabs. No Dynasty tab uses the same loop as the **matching GWB tab name** (e.g. Dynasty Standings does not use Impact, which GWB uses for Standings).
 
-## Measured loudness (last build)
-
-| File | Integrated LUFS | True peak (dBTP) |
-| --- | ---: | ---: |
-| `loop-standings.mp3` | −15.20 | −1.01 |
-| `loop-live.mp3` | −16.32 | −1.00 |
-| `loop-drafts.mp3` | −15.73 | −2.76 |
-| `loop-gallery.mp3` | −15.95 | −6.60 |
-| `loop-waiver.mp3` | −15.32 | −3.92 |
-| `loop-bestgames.mp3` | −15.76 | −1.00 |
-| `loop-trades.mp3` | −15.99 | −2.97 |
-| `loop-awards.mp3` | −15.96 | −5.20 |
-| `loop-managers.mp3` | −15.70 | −1.00 |
-
-## UI click
-
-| File | Use | License |
+| Dynasty tab | Loop file | GWB same tab name (reference) |
 | --- | --- | --- |
-| `click.mp3` | Tab / control click | CC0 1.0 — original FFmpeg sine burst (`scripts/generate-ui-sounds.mjs`) |
+| Standings | `volatile-loop.mp3` | GWB Standings → `impact-loop.mp3` |
+| Live | `sneaky-loop.mp3` | GWB Live → `impact-loop.mp3` |
+| Drafts | `monkeys-loop.mp3` | *(no GWB tab)* |
+| Graphics | `volatile-loop.mp3` | GWB Gallery → `impact-loop.mp3` |
+| Waiver Wire Champion | `impact-loop.mp3` | GWB Waiver → `volatile-loop.mp3` |
+| Best Games | `sneaky-loop.mp3` | GWB Best Games → `impact-loop.mp3` |
+| Trades | `monkeys-loop.mp3` | GWB Trades → `impact-loop.mp3` |
+| Awards | `volatile-loop.mp3` | GWB Awards → `impact-loop.mp3` |
+| Managers | `sneaky-loop.mp3` | GWB Managers → `impact-loop.mp3` |
 
-## Player behavior
+GWB-only tabs for reference: Recaps / Frankie / Mulligans use impact, sneaky, or monkeys as documented in `apps/gwb/AUDIO.md`.
 
-- Default **sound on**; first pointer/keyboard tap unlocks autoplay (`useSound`).
-- Bed volume **0.55**; tab change swaps `HTMLAudioElement.src` to that tab’s `loop-*.mp3`.
+## UI sounds
+
+| File | Use | Source |
+| --- | --- | --- |
+| `click.mp3` | Tab / control click | Same file as GWB (`apps/gwb/public/audio/click.mp3`) |
+| `buzzer.mp3` | *(shipped for parity; unused in Dynasty)* | Same file as GWB |
+
+## Behavior (matches GWB)
+
+- Sound defaults **on** (`localStorage` key `dynasty-sound=off` remembers mute).
+- Bed volume **0.35**; stinger volume **0.5**.
+- First user gesture unlocks autoplay; tab change swaps `HTMLAudioElement.src` to that tab’s loop file.

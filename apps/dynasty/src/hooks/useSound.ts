@@ -8,17 +8,21 @@ export function audioSrc(file: string, base = import.meta.env.BASE_URL): string 
   return `${root}audio/${file.replace(/^\//, '')}`
 }
 
-/** Filenames for tab beds — must exist under `public/audio/` (see AUDIO_CREDITS.md). */
+/**
+ * Per-tab MacLeod loop files (same bytes as GWB `public/audio/`).
+ * Mapping is shuffled vs GWB so no Dynasty tab shares the same track as the
+ * matching GWB tab name — see AUDIO_CREDITS.md.
+ */
 export const TAB_LOOP_FILES: Record<AppTab, string> = {
-  standings: 'loop-standings.mp3',
-  live: 'loop-live.mp3',
-  drafts: 'loop-drafts.mp3',
-  gallery: 'loop-gallery.mp3',
-  waiver: 'loop-waiver.mp3',
-  bestgames: 'loop-bestgames.mp3',
-  trades: 'loop-trades.mp3',
-  awards: 'loop-awards.mp3',
-  managers: 'loop-managers.mp3',
+  standings: 'volatile-loop.mp3',
+  live: 'sneaky-loop.mp3',
+  drafts: 'monkeys-loop.mp3',
+  gallery: 'volatile-loop.mp3',
+  waiver: 'impact-loop.mp3',
+  bestgames: 'sneaky-loop.mp3',
+  trades: 'monkeys-loop.mp3',
+  awards: 'volatile-loop.mp3',
+  managers: 'sneaky-loop.mp3',
 }
 
 const TAB_LOOPS: Record<AppTab, string> = Object.fromEntries(
@@ -57,7 +61,7 @@ export function useSound() {
       bedRef.current = new Audio()
       bedRef.current.preload = 'none'
       bedRef.current.loop = true
-      bedRef.current.volume = 0.55
+      bedRef.current.volume = 0.35
       bedRef.current.addEventListener('playing', () => setPlaying(true))
       bedRef.current.addEventListener('pause', () => setPlaying(false))
     }

@@ -1,16 +1,18 @@
 import { expect, test } from '@playwright/test'
 
 const TAB_LOOP_FILES = {
-  standings: 'loop-standings.mp3',
-  live: 'loop-live.mp3',
-  drafts: 'loop-drafts.mp3',
-  gallery: 'loop-gallery.mp3',
-  waiver: 'loop-waiver.mp3',
-  bestgames: 'loop-bestgames.mp3',
-  trades: 'loop-trades.mp3',
-  awards: 'loop-awards.mp3',
-  managers: 'loop-managers.mp3',
+  standings: 'volatile-loop.mp3',
+  live: 'sneaky-loop.mp3',
+  drafts: 'monkeys-loop.mp3',
+  gallery: 'volatile-loop.mp3',
+  waiver: 'impact-loop.mp3',
+  bestgames: 'sneaky-loop.mp3',
+  trades: 'monkeys-loop.mp3',
+  awards: 'volatile-loop.mp3',
+  managers: 'sneaky-loop.mp3',
 } as const
+
+const UNIQUE_LOOPS = [...new Set(Object.values(TAB_LOOP_FILES))]
 
 test.describe('tab audio beds', () => {
   test('loops are reachable and sound unlocks on tap', async ({ page }) => {
@@ -32,7 +34,7 @@ test.describe('tab audio beds', () => {
 
       const audio = new Audio()
       audio.loop = true
-      audio.volume = 0.55
+      audio.volume = 0.35
       audio.src = `${root}audio/${files.standings}`
       let unlocked = false
       try {
@@ -53,10 +55,13 @@ test.describe('tab audio beds', () => {
       const root = new URL('.', window.location.href).href
       const audio = new Audio()
       audio.loop = true
-      audio.volume = 0.55
+      audio.volume = 0.35
       audio.src = `${root}audio/${files.live}`
       await audio.play()
-      return { paused: audio.paused, currentSrc: audio.currentSrc.includes('loop-live') }
+      return {
+        paused: audio.paused,
+        currentSrc: audio.currentSrc.includes('sneaky-loop'),
+      }
     }, TAB_LOOP_FILES)
 
     expect(afterTap.currentSrc).toBe(true)
@@ -69,14 +74,23 @@ test.describe('tab audio beds', () => {
     const heard: string[] = []
     page.on('request', (req) => {
       const u = req.url()
-      if (u.includes('/audio/loop-') && u.endsWith('.mp3')) {
+      if (u.includes('/audio/') && u.endsWith('-loop.mp3')) {
         heard.push(u.split('/').pop() ?? '')
       }
     })
     await page.getByRole('button', { name: 'Live', exact: true }).click()
     await page.getByRole('button', { name: 'Drafts', exact: true }).click()
     await page.waitForTimeout(800)
-    expect(heard.some((f) => f.includes('live'))).toBe(true)
-    expect(heard.some((f) => f.includes('drafts'))).toBe(true)
+    expect(heard.some((f) => f === 'sneaky-loop.mp3')).toBe(true)
+    expect(heard.some((f) => f === 'monkeys-loop.mp3')).toBe(true)
+  })
+
+  test('macLeod loop assets exist', async ({ page }) => {
+    await page.goto('/')
+    const root = new URL('.', page.url()).href
+    for (const file of UNIQUE_LOOPS) {
+      const res = await page.request.get(`${root}audio/${file}`)
+      expect(res.status(), file).toBe(200)
+    }
   })
 })

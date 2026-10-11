@@ -17,4 +17,4 @@ npm run build
 npm run publish-static   # writes ../dynasty-1581d86a/ at repo root
 ```
 
-Tab audio: `npm run generate-audio` (see `AUDIO_CREDITS.md`).
+Tab audio: Kevin MacLeod loops copied from `apps/gwb/public/audio/` (see `AUDIO_CREDITS.md`).

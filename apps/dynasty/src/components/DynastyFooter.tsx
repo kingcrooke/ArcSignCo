@@ -3,10 +3,17 @@ export function DynastyFooter() {
     <footer className="mt-10 border-t border-[var(--dyn-border)] pt-4 text-xs leading-relaxed text-[var(--dyn-muted)]">
       <p className="font-semibold text-[var(--dyn-text)]">Sound</p>
       <p>
-        Tab beds and UI click are original loops generated in this repo (FFmpeg
-        synthesis). CC0 1.0 — see{' '}
-        <span className="text-[var(--dyn-text)]">AUDIO_CREDITS.md</span> in the
-        Dynasty app package.
+        &quot;Impact Moderato&quot;, &quot;Volatile Reaction&quot;, &quot;Sneaky Snitch&quot;, and
+        &quot;Monkeys Spinning Monkeys&quot; Kevin MacLeod (incompetech.com), licensed under
+        Creative Commons: By Attribution 4.0,{' '}
+        <a
+          href="https://creativecommons.org/licenses/by/4.0/"
+          className="text-[var(--dyn-accent)] underline"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          https://creativecommons.org/licenses/by/4.0/
+        </a>
       </p>
     </footer>
   )
