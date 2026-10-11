@@ -163,6 +163,29 @@
   [headers.conditions]
     Status = "200"
 
+# Hidden Corderitos day care draft (URL-only; not linked from the public site).
+[[headers]]
+  for = "/guarderia-dfe200bb/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/guarderia-dfe200bb/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/guarderia-dfe200bb/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/guarderia-dfe200bb/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+  [headers.conditions]
+    Status = "200"
+
 # Vendored libraries carry their version in the filename: never overwrite one, add a new version.
 [[headers]]
   for = "/tools/sign-mockup/vendor/*"
