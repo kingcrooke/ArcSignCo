@@ -10,9 +10,7 @@ export type AppTab =
   | 'frankie'
   | 'waiver'
   | 'trades'
-  | 'h2h'
   | 'awards'
-  | 'timeline'
   | 'managers'
 
 const TAB_SET = new Set<AppTab>([
@@ -25,9 +23,7 @@ const TAB_SET = new Set<AppTab>([
   'frankie',
   'waiver',
   'trades',
-  'h2h',
   'awards',
-  'timeline',
   'managers',
 ])
 

@@ -12,11 +12,9 @@ import { StandingsPanel } from './components/StandingsPanel'
 import { BestGamesPanel } from './components/BestGamesPanel'
 import { LiveScoreboardPanel } from './components/LiveScoreboardPanel'
 import { TradeLogPanel } from './components/TradeLogPanel'
-import { HeadToHeadPanel } from './components/HeadToHeadPanel'
 import { WeeklyAwardsPanel } from './components/WeeklyAwardsPanel'
 import { PlayoffOddsPanel } from './components/PlayoffOddsPanel'
 import { ManagerPanel } from './components/ManagerPanel'
-import { SeasonTimelinePanel } from './components/SeasonTimelinePanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
 import {
@@ -46,9 +44,7 @@ const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'waiver', label: 'Waiver Wire Champion' },
   { id: 'bestgames', label: 'Best Games' },
   { id: 'trades', label: 'Trades' },
-  { id: 'h2h', label: 'H2H' },
   { id: 'awards', label: 'Awards' },
-  { id: 'timeline', label: 'Timeline' },
   { id: 'managers', label: 'Managers' },
 ]
 
@@ -62,9 +58,7 @@ const TAB_IDS: AppTab[] = [
   'waiver',
   'bestgames',
   'trades',
-  'h2h',
   'awards',
-  'timeline',
   'managers',
 ]
 
@@ -259,9 +253,9 @@ export default function App() {
 
   return (
     <div
-      className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col px-4 pb-8 pt-6 ${
-        tab === 'h2h' ? 'overflow-x-visible' : 'overflow-x-clip'
-      } ${tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'}`}
+      className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${
+        tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'
+      }`}
     >
       <header className="mb-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -525,29 +519,10 @@ export default function App() {
               />
             </section>
           )}
-          {tab === 'h2h' && (
-            <section className="-mx-4 min-w-0 w-[calc(100%+2rem)] px-4 sm:mx-0 sm:w-full sm:px-0">
-              <h2 className="mb-3 text-lg font-semibold">Head-to-head</h2>
-              <HeadToHeadPanel
-                teams={data.teams}
-                matchupsByWeek={data.matchupsByWeek}
-                throughWeek={data.standingsThroughWeek}
-              />
-            </section>
-          )}
           {tab === 'awards' && (
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">Weekly awards</h2>
               <WeeklyAwardsPanel weeks={data.weeklyAwards} />
-            </section>
-          )}
-          {tab === 'timeline' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Season timeline</h2>
-              <p className="mb-3 text-xs text-[var(--gwb-muted)]">
-                Wins, losses, mulligans, and trades in date order ({data.league.season}).
-              </p>
-              <SeasonTimelinePanel events={data.seasonTimeline} />
             </section>
           )}
           {tab === 'managers' && (

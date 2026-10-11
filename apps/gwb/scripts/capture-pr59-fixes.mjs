@@ -9,7 +9,6 @@ const VIEWS = [
   { tab: 'Trades', id: '#trade-log-panel', name: 'gwb-trades' },
   { tab: 'Graphics', week: 5, id: '#graphics-week-5-matchups', name: 'gwb-share-cards' },
   { tab: 'Live', week: 5, id: '#live-scoreboard-panel', name: 'gwb-live-flip' },
-  { tab: 'Timeline', id: '#season-timeline-panel', name: 'gwb-timeline' },
 ]
 
 async function main() {

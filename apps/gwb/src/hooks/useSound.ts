@@ -19,9 +19,7 @@ type TabSound =
   | 'frankie'
   | 'waiver'
   | 'trades'
-  | 'h2h'
   | 'awards'
-  | 'timeline'
   | 'managers'
 
 const TAB_LOOPS: Record<TabSound, string> = {
@@ -34,9 +32,7 @@ const TAB_LOOPS: Record<TabSound, string> = {
   frankie: audioSrc('sneaky-loop.mp3'),
   waiver: audioSrc('volatile-loop.mp3'),
   trades: audioSrc('impact-loop.mp3'),
-  h2h: audioSrc('impact-loop.mp3'),
   awards: audioSrc('impact-loop.mp3'),
-  timeline: audioSrc('impact-loop.mp3'),
   managers: audioSrc('impact-loop.mp3'),
 }
 

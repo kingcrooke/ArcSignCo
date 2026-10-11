@@ -3,7 +3,6 @@ import { loadPlayersMap } from '../lib/playersCache'
 import { buildWeekRecaps, weekHasMatchups } from '../lib/recaps'
 import { regularSeasonLastWeek } from '../lib/frankieZone'
 import { computePlayoffOdds, type PlayoffOddsRow } from '../lib/playoffOdds'
-import { buildSeasonTimeline, type TimelineEvent } from '../lib/seasonTimeline'
 import {
   buildLeagueSeasonSummaries,
   type LeagueSeasonSummary,
@@ -26,11 +25,10 @@ import {
 } from '../lib/sleeperApi'
 import { computeWeeklyAwards, type WeeklyAwardsWeek } from '../lib/weeklyAwards'
 import {
-  MULLIGAN_LEDGER_ENTRIES,
   mulliganStatusThroughWeek as ledgerMulliganStatusThroughWeek,
   mulligansDeferralNote as ledgerMulligansDeferralNote,
 } from '../lib/mulligans'
-import { computeWaiverBoard, weekCloses } from '../lib/waiverWire'
+import { computeWaiverBoard } from '../lib/waiverWire'
 import { computeStandings, computeStandingsThroughWeek } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import {
@@ -92,7 +90,6 @@ export interface LeagueData {
   leagueSeasonSummaries: LeagueSeasonSummary[]
   weeklyAwards: WeeklyAwardsWeek[]
   playoffOdds: PlayoffOddsRow[]
-  seasonTimeline: TimelineEvent[]
   regularSeasonLastWeek: number
 }
 
@@ -311,15 +308,6 @@ export function useLeagueData(): {
       playoffTeams: league.settings.playoff_teams ?? 6,
       regularSeasonLastWeek: regLast,
     })
-    const seasonTimeline = buildSeasonTimeline({
-      season: league.season,
-      matchupsByWeek,
-      teams,
-      mulliganEntries: MULLIGAN_LEDGER_ENTRIES,
-      trades: tradeLog.filter((t) => t.season === league.season),
-      weekCloses: weekCloses(transactions, throughForCumulative),
-    })
-
     return {
       league,
       nflState,
@@ -352,7 +340,6 @@ export function useLeagueData(): {
       leagueSeasonSummaries,
       weeklyAwards,
       playoffOdds,
-      seasonTimeline,
       regularSeasonLastWeek: regLast,
     }
   }, [base, selectedWeek, load, players, playersLoading, ensurePlayers, updateWeekMatchups])
