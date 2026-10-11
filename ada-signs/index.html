@@ -21,7 +21,7 @@
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/css/service-page.v5.css">
+<link rel="stylesheet" href="/assets/css/service-page.v6.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -424,8 +424,11 @@ const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("nav-menu");
 function setMenu(open) {
   navMenu.classList.toggle("open", open);
+  document.body.classList.toggle("nav-open", open);
   navToggle.setAttribute("aria-expanded", String(open));
   navToggle.textContent = open ? "Close" : "Menu";
+  const bar = document.getElementById("mobileCta");
+  if (bar && open) bar.classList.remove("show");
 }
 navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
 navMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));

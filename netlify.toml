@@ -88,6 +88,35 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
+# Private league dashboard (URL-only; not linked from the public site).
+[[headers]]
+  for = "/dynasty-1581d86a/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/dynasty-1581d86a/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/dynasty-1581d86a/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow"
+
+# Internal admin and parked quote tooling (not public).
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/quote-engine/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
 [[headers]]
   for = "/gwb-fe006a16/"
   [headers.values]

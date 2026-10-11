@@ -179,6 +179,14 @@ body {
   background: var(--cream);
   line-height: 1.5;
 }
+body.nav-open { overflow: hidden; }
+body.nav-open::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 29, 51, 0.62);
+  z-index: 28;
+}
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
@@ -952,17 +960,21 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
   .navmenu {
     display: none;
-    position: absolute;
-    top: calc(100% + 3px);
+    position: fixed;
     left: 0;
     right: 0;
+    top: var(--nav-shell-height, 108px);
+    bottom: 0;
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    padding: 8px 18px 14px;
+    padding: 8px 18px calc(14px + env(safe-area-inset-bottom));
     background: var(--navy);
-    border-bottom: 3px solid var(--gold);
+    border-bottom: 0;
     box-shadow: 0 18px 30px rgba(0,0,0,.25);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    z-index: 40;
   }
   .navmenu.open { display: flex; }
   .navmenu a { min-height: 48px; font-size: 15px; border-bottom: 1px solid rgba(255,255,255,.08); border-radius: 0; }
@@ -986,7 +998,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .nav-services-sub::before { content: none; }
 }
 @media (max-width: 720px) {
-  html { scroll-padding-top: 75px; }
+  html { scroll-padding-top: 75px; --nav-shell-height: 72px; }
   .nav { height: 72px; gap: 10px; }
   .brand-logo { width: min(168px, 44vw); }
   .hero .wrap { padding: 36px 0 34px; }
@@ -1021,8 +1033,9 @@ footer p { color: #cfd9e6; font-size: 13px; }
     transition: transform .2s ease, visibility .2s;
   }
   .mobile-cta.show { transform: none; visibility: visible; }
+  body.nav-open .mobile-cta { transform: translateY(110%); visibility: hidden; }
   .mobile-cta .btn { min-height: 48px; padding: 12px 8px; font-size: 14px; }
-  footer { padding-bottom: 110px; }
+  footer { padding-bottom: calc(128px + env(safe-area-inset-bottom)); }
 }
 </style>
 </head>
@@ -1085,7 +1098,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <div class="hero-visual" aria-label="Arc Signage package lifecycle infographic">
         <div class="lifecycle-card">
           <img src="/assets/img/signage-package-lifecycle.v1.svg" width="920" height="760" alt="Arc Signage package lifecycle from intake through installation closeout">
-          <span class="lifecycle-logo-overlay" aria-hidden="true"><picture><source type="image/webp" srcset="/assets/img/logo-icon-white-240.v1.webp"><img src="/assets/img/logo-icon-white-240.v1.png" width="240" height="240" loading="lazy" decoding="async" alt=""></picture></span>
+          <span class="lifecycle-logo-overlay" aria-hidden="true"><picture><source type="image/webp" srcset="/assets/img/logo-icon-white-240.v1.webp"><img src="/assets/img/logo-icon-white-240.v1.png" width="240" height="240" loading="lazy" decoding="async" alt="" role="presentation"></picture></span>
         </div>
         <p class="lifecycle-note">Intake, survey, design, permit coordination, fabrication, and install run on one schedule, with one contact.</p>
       </div>
@@ -1318,7 +1331,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
             <div><strong>Email</strong><span><a href="mailto:jc@arcsignco.com" style="color:inherit;text-decoration:underline;">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com" style="color:inherit;text-decoration:underline;">arc@arcsignco.com</a></span></div>
             <div><strong>Service area</strong><span>New York / Tri-State: all five boroughs, plus all of New Jersey and Connecticut</span></div>
             <div><strong>Urgent projects</strong><span>Put URGENT in the subject line for active jobsite requests.</span></div>
-            <div><strong>Insurance</strong><span>COI available on request.</span></div>
+            <div><strong>Insurance</strong><span>COI on request.</span></div>
             <div><strong>Jobsite readiness</strong><span>Arc crews hold OSHA and NYC SST cards.</span></div>
           </div>
         </div>
@@ -1614,8 +1627,10 @@ const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("nav-menu");
 function setMenu(open) {
   navMenu.classList.toggle("open", open);
+  document.body.classList.toggle("nav-open", open);
   navToggle.setAttribute("aria-expanded", String(open));
   navToggle.textContent = open ? "Close" : "Menu";
+  if (mobileCta && open) mobileCta.classList.remove("show");
 }
 navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
 navMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
