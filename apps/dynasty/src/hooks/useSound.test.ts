@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { audioSrc } from './useSound'
+import { audioSrc, TAB_LOOP_FILES } from './useSound'
 
-const FILES = ['impact-loop.mp3', 'volatile-loop.mp3', 'click.mp3']
+const FILES = [...Object.values(TAB_LOOP_FILES), 'click.mp3']
 
 describe('audioSrc', () => {
   it('puts a slash between audio and every file for both base shapes', () => {

@@ -20,6 +20,5 @@ function synth(file, filter) {
 }
 
 synth('click.mp3', 'sine=frequency=1800:duration=0.04')
-synth('buzzer.mp3', 'sine=frequency=180:duration=0.35')
 
-console.log('Wrote click.mp3 and buzzer.mp3 to', outDir)
+console.log('Wrote click.mp3 to', outDir)

@@ -8,17 +8,22 @@ export function audioSrc(file: string, base = import.meta.env.BASE_URL): string 
   return `${root}audio/${file.replace(/^\//, '')}`
 }
 
-const TAB_LOOPS: Record<AppTab, string> = {
-  standings: audioSrc('impact-loop.mp3'),
-  live: audioSrc('impact-loop.mp3'),
-  drafts: audioSrc('impact-loop.mp3'),
-  gallery: audioSrc('impact-loop.mp3'),
-  waiver: audioSrc('volatile-loop.mp3'),
-  bestgames: audioSrc('impact-loop.mp3'),
-  trades: audioSrc('impact-loop.mp3'),
-  awards: audioSrc('impact-loop.mp3'),
-  managers: audioSrc('impact-loop.mp3'),
+/** Filenames for tab beds — must exist under `public/audio/` (see AUDIO_CREDITS.md). */
+export const TAB_LOOP_FILES: Record<AppTab, string> = {
+  standings: 'loop-standings.mp3',
+  live: 'loop-live.mp3',
+  drafts: 'loop-drafts.mp3',
+  gallery: 'loop-gallery.mp3',
+  waiver: 'loop-waiver.mp3',
+  bestgames: 'loop-bestgames.mp3',
+  trades: 'loop-trades.mp3',
+  awards: 'loop-awards.mp3',
+  managers: 'loop-managers.mp3',
 }
+
+const TAB_LOOPS: Record<AppTab, string> = Object.fromEntries(
+  Object.entries(TAB_LOOP_FILES).map(([tab, file]) => [tab, audioSrc(file)]),
+) as Record<AppTab, string>
 
 const CLICK_SRC = audioSrc('click.mp3')
 
