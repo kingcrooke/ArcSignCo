@@ -1,0 +1,146 @@
+[
+  {
+    "file": "vs-w5-m1-left.jpg",
+    "horn_box": [
+      93,
+      154,
+      850,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 757,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m1-right.jpg",
+    "horn_box": [
+      93,
+      154,
+      848,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 755,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m2-left.jpg",
+    "horn_box": [
+      103,
+      154,
+      850,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 747,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m2-right.jpg",
+    "horn_box": [
+      93,
+      178,
+      850,
+      704
+    ],
+    "horn_h": 526,
+    "horn_w": 757,
+    "horn_h_dev_pct": 4.4
+  },
+  {
+    "file": "vs-w5-m3-left.jpg",
+    "horn_box": [
+      107,
+      154,
+      850,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 743,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m3-right.jpg",
+    "horn_box": [
+      93,
+      154,
+      850,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 757,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m4-left.jpg",
+    "horn_box": [
+      97,
+      154,
+      850,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 753,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m4-right.jpg",
+    "horn_box": [
+      135,
+      154,
+      850,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 715,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m5-left.jpg",
+    "horn_box": [
+      93,
+      154,
+      843,
+      704
+    ],
+    "horn_h": 550,
+    "horn_w": 750,
+    "horn_h_dev_pct": 0.0
+  },
+  {
+    "file": "vs-w5-m5-right.jpg",
+    "horn_box": [
+      94,
+      167,
+      850,
+      704
+    ],
+    "horn_h": 537,
+    "horn_w": 756,
+    "horn_h_dev_pct": 2.4
+  },
+  {
+    "file": "vs-w5-m6-left.jpg",
+    "horn_box": [
+      93,
+      164,
+      850,
+      704
+    ],
+    "horn_h": 540,
+    "horn_w": 757,
+    "horn_h_dev_pct": 1.8
+  },
+  {
+    "file": "vs-w5-m6-right.jpg",
+    "horn_box": [
+      98,
+      167,
+      850,
+      704
+    ],
+    "horn_h": 537,
+    "horn_w": 752,
+    "horn_h_dev_pct": 2.4
+  }
+]

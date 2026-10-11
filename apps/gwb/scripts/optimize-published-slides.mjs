@@ -34,6 +34,7 @@ const SLIDE_BASENAMES = [
   'vs-m4-jamil-matt',
   'vs-m5-mauricio-eric',
   'vs-m6-danny-crooke',
+  ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w5-m${m}`),
   ...RESULTS_BASENAMES,
 ]
 
