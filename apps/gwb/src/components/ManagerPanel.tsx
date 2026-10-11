@@ -1,9 +1,20 @@
 import { useMemo, useState } from 'react'
 import {
+  archiveFinishSummaryLine,
+  archiveSeasonRowsForMember,
+  archiveMemberKeyForUserId,
+  bestFinishForUserId,
+  careerRecordLabel,
+  finalsAppearancesForUserId,
+  mergedDisplaySeasons,
+  playoffTripCountForUserId,
+  titleCountForUserId,
+} from '../lib/gwbArchive'
+import { ChampionsWall } from './ChampionsWall'
+import {
   finishedSeasonsForManager,
   finishSummaryLine,
   inProgressSeasonLine,
-  managerCareerStats,
   seasonsForManager,
   type LeagueSeasonSummary,
   type ManagerSeasonFinish,
@@ -115,18 +126,31 @@ export function ManagerPanel({
   const selectedPast =
     pastSeasons.find((s) => s.season === pastSeasonKey) ?? pastSeasons[0] ?? null
 
-  const career = useMemo(
-    () =>
-      managerCareerStats(
-        finishedSeasons,
-        row
-          ? { wins: row.wins, losses: row.losses, ties: row.ties }
-          : null,
-      ),
-    [finishedSeasons, row],
+  const archiveKey = archiveMemberKeyForUserId(userId)
+  const archiveRows = useMemo(
+    () => (archiveKey ? archiveSeasonRowsForMember(archiveKey) : []),
+    [archiveKey],
   )
 
-  const careerRecord = `${career.wins}-${career.losses}${career.ties ? `-${career.ties}` : ''}`
+  const mergedSeasons = useMemo(
+    () => mergedDisplaySeasons(userId, finishedSeasons),
+    [userId, finishedSeasons],
+  )
+
+  const careerRecord = useMemo(
+    () =>
+      careerRecordLabel(
+        userId,
+        finishedSeasons,
+        row ? { wins: row.wins, losses: row.losses, ties: row.ties } : null,
+      ),
+    [userId, finishedSeasons, row],
+  )
+
+  const titleCount = titleCountForUserId(userId)
+  const playoffTrips = playoffTripCountForUserId(userId, finishedSeasons)
+  const finalsApps = finalsAppearancesForUserId(userId)
+  const bestFinish = bestFinishForUserId(userId, finishedSeasons, archiveRows)
 
   const managerTrades = trades.filter(
     (t) => t.sideA.rosterId === rosterId || t.sideB.rosterId === rosterId,
@@ -165,6 +189,8 @@ export function ManagerPanel({
 
   return (
     <div className="space-y-8" id="manager-panel">
+      <ChampionsWall leagueSeasonSummaries={leagueSeasonSummaries} />
+
       <label className="block text-sm">
         <span className="text-[var(--gwb-muted)]">Pick a manager</span>
         <select
@@ -208,11 +234,12 @@ export function ManagerPanel({
                 </p>
               </div>
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
               <StatPill label="Career" value={careerRecord} />
-              <StatPill label="Titles" value={String(career.titles)} />
-              <StatPill label="Playoff trips" value={String(career.playoffTrips)} />
-              <StatPill label="Best finish" value={career.bestFinish} />
+              <StatPill label="Titles" value={String(titleCount)} />
+              <StatPill label="Playoff trips" value={String(playoffTrips)} />
+              <StatPill label="Finals apps" value={String(finalsApps)} />
+              <StatPill label="Best finish" value={bestFinish} />
             </div>
           </div>
 
@@ -272,7 +299,7 @@ export function ManagerPanel({
           Season-by-season
         </h3>
         <p className="mb-3 text-sm text-[var(--gwb-muted)]">
-          Completed seasons in the GWB chain — seed, record, and playoff result.
+          Pre-2019 rows from the verified archive; 2019+ from Sleeper — seed, record, and playoff result.
         </p>
 
         {row && (
@@ -284,17 +311,66 @@ export function ManagerPanel({
           </div>
         )}
 
-        {finishedSeasons.length > 0 ? (
+        {mergedSeasons.length > 0 ? (
           <ul className="space-y-2" role="list">
-            {finishedSeasons.map((s) => {
+            {mergedSeasons.map((entry) => {
+              if (entry.kind === 'archive') {
+                const s = entry.row
+                const isTitle = s.playoffResult === 'Champion'
+                const isRunnerUp = s.playoffResult === 'Runner-up'
+                return (
+                  <li
+                    key={`archive-${s.season}`}
+                    className={`rounded-lg border px-3 py-2 text-sm ${
+                      isTitle
+                        ? 'border-[var(--gwb-accent)] bg-[var(--gwb-accent)]/10'
+                        : isRunnerUp
+                          ? 'border-amber-500/50 bg-amber-500/5'
+                          : 'border-[var(--gwb-border)] bg-[var(--gwb-surface)]'
+                    }`}
+                  >
+                    <p className="font-medium">
+                      {s.season}
+                      {isTitle && (
+                        <span className="ml-2 rounded bg-[var(--gwb-accent)] px-1.5 py-0.5 text-[10px] font-bold uppercase text-[#1a1200]">
+                          Champ
+                        </span>
+                      )}
+                      {isRunnerUp && (
+                        <span className="ml-2 rounded border border-amber-500/60 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-200">
+                          Runner-up
+                        </span>
+                      )}
+                      <span className="font-normal text-[var(--gwb-muted)]">
+                        {' '}
+                        · {s.leagueName}
+                      </span>
+                      <span className="ml-1 text-[10px] uppercase text-[var(--gwb-muted)]">
+                        archive
+                      </span>
+                    </p>
+                    <p className="text-xs text-[var(--gwb-muted)]">
+                      {archiveFinishSummaryLine(s)}
+                    </p>
+                    <p className="text-xs text-[var(--gwb-muted)]">
+                      Champion: {s.championDisplayName}
+                      {s.runnerUpDisplayName && ` · Runner-up: ${s.runnerUpDisplayName}`}
+                    </p>
+                  </li>
+                )
+              }
+              const s = entry.row
               const isTitle = s.playoffResult === 'Champion'
+              const isRunnerUp = s.playoffResult === 'Runner-up'
               return (
                 <li
-                  key={s.season}
+                  key={`sleeper-${s.season}`}
                   className={`rounded-lg border px-3 py-2 text-sm ${
                     isTitle
                       ? 'border-[var(--gwb-accent)] bg-[var(--gwb-accent)]/10'
-                      : 'border-[var(--gwb-border)] bg-[var(--gwb-surface)]'
+                      : isRunnerUp
+                        ? 'border-amber-500/50 bg-amber-500/5'
+                        : 'border-[var(--gwb-border)] bg-[var(--gwb-surface)]'
                   }`}
                 >
                   <p className="font-medium">
@@ -302,6 +378,11 @@ export function ManagerPanel({
                     {isTitle && (
                       <span className="ml-2 rounded bg-[var(--gwb-accent)] px-1.5 py-0.5 text-[10px] font-bold uppercase text-[#1a1200]">
                         Champ
+                      </span>
+                    )}
+                    {isRunnerUp && (
+                      <span className="ml-2 rounded border border-amber-500/60 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-200">
+                        Runner-up
                       </span>
                     )}
                     <span className="font-normal text-[var(--gwb-muted)]">

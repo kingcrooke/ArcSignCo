@@ -32,22 +32,30 @@ async function main() {
   const page = await browser.newPage()
 
   await openManagers(page)
-  await page.getByLabel('Select manager').selectOption({ label: 'Danny' })
-  await page.waitForTimeout(2000)
 
-  const past = page.locator('#manager-past-rosters-section')
-  const pastSelect = page.getByLabel('Select past season roster')
-  if (await pastSelect.count()) {
-    const options = await pastSelect.locator('option').allTextContents()
-    const y2020 = options.find((o) => o.startsWith('2020'))
-    if (y2020) {
-      const val = y2020.split(' · ')[0]
-      await pastSelect.selectOption(val)
-      await page.waitForTimeout(800)
-      for (const w of WIDTHS) {
-        await shotLocator(page, past, 'gwb-managers-past-roster', w)
-      }
-    }
+  const wall = page.locator('#champions-wall')
+  for (const w of WIDTHS) {
+    await shotLocator(page, wall, 'gwb-managers-champions-wall', w)
+  }
+
+  const select = page.getByLabel('Select manager')
+
+  await select.selectOption({ label: 'Crooke' })
+  await page.waitForTimeout(1500)
+  const crookeHero = page.locator('#manager-hero')
+  for (const w of WIDTHS) {
+    await shotLocator(page, crookeHero, 'gwb-managers-crooke-hero', w)
+  }
+  const crookeSeasons = page.locator('#manager-seasons-section')
+  for (const w of WIDTHS) {
+    await shotLocator(page, crookeSeasons, 'gwb-managers-crooke-pre2019-seasons', w)
+  }
+
+  await select.selectOption({ label: 'Danny' })
+  await page.waitForTimeout(1500)
+  const dannyHero = page.locator('#manager-hero')
+  for (const w of WIDTHS) {
+    await shotLocator(page, dannyHero, 'gwb-managers-danny-hero', w)
   }
 
   await browser.close()
