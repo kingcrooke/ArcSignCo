@@ -126,6 +126,43 @@
   [headers.conditions]
     Status = "200"
 
+# Hidden Dynasty of Champions league dashboard (URL-only; not linked from the public site).
+[[headers]]
+  for = "/dynasty-1581d86a/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/dynasty-1581d86a/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/dynasty-1581d86a/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/dynasty-1581d86a/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+  [headers.conditions]
+    Status = "200"
+
+[[headers]]
+  for = "/dynasty-1581d86a/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+  [headers.conditions]
+    Status = "200"
+
+[[headers]]
+  for = "/dynasty-1581d86a/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+  [headers.conditions]
+    Status = "200"
+
 # Vendored libraries carry their version in the filename: never overwrite one, add a new version.
 [[headers]]
   for = "/tools/sign-mockup/vendor/*"

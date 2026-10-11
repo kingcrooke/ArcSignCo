@@ -1,0 +1,15 @@
+{
+  "deploySlug": "dynasty-1581d86a",
+  "leagueName": "Dynasty of Champions",
+  "currentLeagueId": "1312077668782473216",
+  "seasons": [
+    { "season": "2026", "leagueId": "1312077668782473216" },
+    { "season": "2025", "leagueId": "1180204055838461952" },
+    { "season": "2024", "leagueId": "1048295424777469952" },
+    { "season": "2023", "leagueId": "917515079485227008" },
+    { "season": "2022", "leagueId": "784498331282964480" },
+    { "season": "2021", "leagueId": "649966166512578560" },
+    { "season": "2020", "leagueId": "515610340852531200" },
+    { "season": "2019", "leagueId": "421172444590505984" }
+  ]
+}

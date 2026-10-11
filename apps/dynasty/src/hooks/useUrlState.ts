@@ -1,0 +1,10 @@
+export type AppTab =
+  | 'standings'
+  | 'live'
+  | 'drafts'
+  | 'gallery'
+  | 'waiver'
+  | 'bestgames'
+  | 'trades'
+  | 'awards'
+  | 'managers'
