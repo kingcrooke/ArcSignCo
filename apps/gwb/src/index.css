@@ -72,8 +72,8 @@ body {
 nav.gwb-section-tabs button.gwb-section-tab {
   flex: 0 0 auto;
   max-width: 100%;
-  white-space: normal;
-  text-align: left;
+  white-space: nowrap;
+  text-align: center;
   border-radius: 0.5rem;
   padding: 0.625rem 0.75rem;
   font-size: 0.875rem;
@@ -113,9 +113,11 @@ nav.gwb-section-tabs button.gwb-section-tab--active:focus-visible {
   outline-color: var(--gwb-text);
 }
 
-/* Tabs wrap so Standings through Best Games stay on screen. */
+/* Single-row tab strip; horizontal scroll on narrow viewports. */
 nav.gwb-section-tabs {
   position: relative;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 /* Best Games week scope chips (same gold active look as section tabs) */

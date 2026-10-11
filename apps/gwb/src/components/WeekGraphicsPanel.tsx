@@ -29,36 +29,71 @@ const THUMB_HEIGHT = 675
 function GraphicThumb({
   slide,
   onOpen,
-  eager,
+  loadImmediately,
   buttonRef,
   projectionLine,
 }: {
   slide: PublishedSlide
   onOpen: () => void
-  eager: boolean
+  loadImmediately: boolean
   buttonRef?: React.RefObject<HTMLButtonElement | null>
   projectionLine?: string | null
 }) {
   const jpg = slideAssetUrl(slide.basename, 'thumb', 'jpg')
+  const rootRef = useRef<HTMLButtonElement | null>(null)
+  const [inView, setInView] = useState(loadImmediately)
+
+  useEffect(() => {
+    if (loadImmediately || inView) return
+    const node = rootRef.current
+    if (!node || typeof IntersectionObserver === 'undefined') {
+      setInView(true)
+      return
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '240px 0px' },
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [loadImmediately, inView])
+
+  const showImage = loadImmediately || inView
 
   return (
     <button
-      ref={buttonRef}
+      ref={(el) => {
+        rootRef.current = el
+        if (buttonRef && 'current' in buttonRef) {
+          buttonRef.current = el
+        }
+      }}
       type="button"
       className="group block w-full shrink-0 overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] text-left transition hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]"
       onClick={onOpen}
       aria-label={`Open ${slide.title}`}
     >
-      <img
-        src={jpg}
-        alt=""
-        width={THUMB_WIDTH}
-        height={THUMB_HEIGHT}
-        loading={eager ? 'eager' : 'lazy'}
-        fetchPriority={eager ? 'high' : 'auto'}
-        decoding={eager ? 'sync' : 'async'}
-        className="aspect-[4/5] w-full bg-[#0d1319] object-cover object-top transition group-hover:opacity-95"
-      />
+      {showImage ? (
+        <img
+          src={jpg}
+          alt=""
+          width={THUMB_WIDTH}
+          height={THUMB_HEIGHT}
+          loading="lazy"
+          decoding="async"
+          className="aspect-[4/5] w-full bg-[#0d1319] object-cover object-top transition group-hover:opacity-95"
+        />
+      ) : (
+        <div
+          className="aspect-[4/5] w-full bg-[#0d1319]"
+          aria-hidden
+        />
+      )}
       <p className="truncate px-2 py-1.5 text-xs text-[var(--gwb-muted)]">
         {slide.title}
       </p>
@@ -226,7 +261,10 @@ export function WeekGraphicsPanel({
                 const isDeepLinkTarget = initialSlideId === slide.id
                 const showShare =
                   section.kind === 'results' || section.kind === 'matchups'
-                const eager = section.kind === 'matchups'
+                const loadImmediately =
+                  isDeepLinkTarget ||
+                  (section.slides[0]?.id === slide.id &&
+                    section.kind === sections[0]?.kind)
                 return (
                   <li
                     key={slide.id}
@@ -236,7 +274,7 @@ export function WeekGraphicsPanel({
                     <GraphicThumb
                       slide={slide}
                       onOpen={() => open(indexInWeek)}
-                      eager={eager}
+                      loadImmediately={loadImmediately}
                       buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                       projectionLine={
                         section.kind === 'matchups'

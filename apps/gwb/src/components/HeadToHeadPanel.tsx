@@ -22,13 +22,23 @@ export function HeadToHeadPanel({
   )
 
   return (
-    <div className="overflow-x-auto" id="head-to-head-panel">
-      <table className="w-full min-w-[640px] border-collapse text-sm">
+    <div
+      className="overflow-x-auto overscroll-x-contain rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
+      id="head-to-head-panel"
+    >
+      <table className="w-full min-w-[36rem] border-collapse text-sm">
         <thead>
           <tr className="border-b border-[var(--gwb-border)] text-left text-xs uppercase text-[var(--gwb-muted)]">
-            <th className="sticky left-0 bg-[var(--gwb-surface)] px-2 py-2">Mgr</th>
+            <th
+              className="sticky left-0 z-20 min-w-[5.5rem] max-w-[8.5rem] bg-[var(--gwb-surface)] px-2 py-2 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.45)]"
+            >
+              Mgr
+            </th>
             {rosterIds.map((id) => (
-              <th key={id} className="px-2 py-2 text-center font-medium">
+              <th
+                key={id}
+                className="min-w-[2.75rem] whitespace-nowrap px-2 py-2 text-center font-medium"
+              >
                 {managerNickname(id, teams.get(id)?.displayName ?? '').slice(0, 4)}
               </th>
             ))}
@@ -38,8 +48,9 @@ export function HeadToHeadPanel({
           {rosterIds.map((rowId) => (
             <tr key={rowId} className="border-t border-[var(--gwb-border)]">
               <th
-                className="sticky left-0 bg-[var(--gwb-surface)] px-2 py-1.5 text-left font-medium"
+                className="sticky left-0 z-10 min-w-[5.5rem] max-w-[8.5rem] truncate bg-[var(--gwb-surface)] px-2 py-1.5 text-left font-medium shadow-[4px_0_8px_-4px_rgba(0,0,0,0.45)]"
                 scope="row"
+                title={managerNickname(rowId, teams.get(rowId)?.displayName ?? '')}
               >
                 {managerNickname(rowId, teams.get(rowId)?.displayName ?? '')}
               </th>
@@ -61,7 +72,7 @@ export function HeadToHeadPanel({
                 return (
                   <td
                     key={colId}
-                    className="px-2 py-1.5 text-center tabular-nums"
+                    className="min-w-[2.75rem] whitespace-nowrap px-2 py-1.5 text-center tabular-nums"
                     title={label || undefined}
                   >
                     {label || '—'}
