@@ -213,6 +213,34 @@ export function useLeagueData(leagueId: string): {
     load()
   }, [load])
 
+  /** Re-fetch /users + rosters so team_name and avatars stay current (no localStorage cache). */
+  useEffect(() => {
+    if (state !== 'ready' || !base) return
+    const refreshIdentity = async () => {
+      try {
+        const [users, rosters] = await Promise.all([
+          fetchUsers(leagueId),
+          fetchRosters(leagueId),
+        ])
+        const teams = buildTeamMap(users, rosters)
+        setBase((prev) =>
+          prev ? { ...prev, rosters, teams } : prev,
+        )
+      } catch {
+        /* keep last good identity */
+      }
+    }
+    const onVis = () => {
+      if (document.visibilityState === 'visible') refreshIdentity()
+    }
+    document.addEventListener('visibilitychange', onVis)
+    const id = window.setInterval(refreshIdentity, 5 * 60 * 1000)
+    return () => {
+      document.removeEventListener('visibilitychange', onVis)
+      window.clearInterval(id)
+    }
+  }, [state, leagueId, base?.league.league_id])
+
   const ensurePlayers = useCallback(() => {
     if (players || playersLoading) return
     setPlayersLoading(true)

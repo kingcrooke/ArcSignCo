@@ -165,7 +165,13 @@ export interface TeamInfo {
   rosterId: number
   userId: string
   displayName: string
+  /** From Sleeper metadata.team_name, else display_name (per season /users). */
   teamName: string
+  /** League-specific upload URL from metadata.avatar when set. */
+  leagueAvatarUrl: string | null
+  /** Global Sleeper avatar thumb from user.avatar hash. */
+  globalAvatarUrl: string | null
+  /** @deprecated Prefer TeamAvatar cascade; kept for simple img fallbacks. */
   avatarUrl: string | null
 }
 

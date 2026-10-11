@@ -37,14 +37,16 @@ export function buildTeamMap(
   const map = new Map<number, TeamInfo>()
   for (const r of rosters) {
     const user = r.owner_id ? byUser.get(r.owner_id) : undefined
+    const leagueAvatarUrl = sleeperAvatarUrl(user?.metadata?.avatar ?? null)
+    const globalAvatarUrl = sleeperAvatarUrl(user?.avatar ?? null)
     map.set(r.roster_id, {
       rosterId: r.roster_id,
       userId: r.owner_id ?? '',
       displayName: user?.display_name?.trim() ?? `Roster ${r.roster_id}`,
       teamName: getTeamName(user, r.roster_id),
-      avatarUrl: sleeperAvatarUrl(
-        user?.metadata?.avatar ?? user?.avatar ?? null,
-      ),
+      leagueAvatarUrl,
+      globalAvatarUrl,
+      avatarUrl: leagueAvatarUrl ?? globalAvatarUrl,
     })
   }
   return map

@@ -44,7 +44,10 @@ function writeCache(players: PlayersMap): void {
   }
 }
 
-/** Fetch full NFL player dump once; keep only fields we need. */
+/**
+ * Fetch full NFL player dump once; keep only fields we need.
+ * Cached in localStorage (24h) — player IDs/names only, not league /users or avatars.
+ */
 export async function loadPlayersMap(
   forceRefresh = false,
 ): Promise<PlayersMap> {
@@ -53,7 +56,7 @@ export async function loadPlayersMap(
     if (cached) return cached.players
   }
 
-  const res = await fetch(`${SLEEPER_API}/players/nfl`)
+  const res = await fetch(`${SLEEPER_API}/players/nfl`, { cache: 'no-store' })
   if (!res.ok) throw new Error(`Failed to load players (${res.status})`)
   const all = (await res.json()) as Record<string, Record<string, unknown>>
   const players: PlayersMap = {}

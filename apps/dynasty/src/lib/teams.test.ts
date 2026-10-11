@@ -20,6 +20,8 @@ describe('team names', () => {
       userId: 'u1',
       displayName: 'Santagua',
       teamName: 'Dynasty Kings',
+      leagueAvatarUrl: null,
+      globalAvatarUrl: null,
       avatarUrl: null,
     }
     expect(managerLabel(team, 1)).toBe('Dynasty Kings')

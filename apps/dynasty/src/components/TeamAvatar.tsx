@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import managerAvatars from '../data/manager-avatars.json'
 import type { TeamInfo } from '../lib/types'
 
@@ -39,6 +39,20 @@ function resolveCustomUrl(
   return `${root}${path.replace(/^\//, '')}`
 }
 
+/** Custom cartoon → league metadata.avatar → global user.avatar thumb → initials. */
+export function avatarUrlChain(
+  team: TeamInfo | undefined,
+  mood: AvatarMood = 'base',
+): string[] {
+  if (!team) return []
+  const urls: string[] = []
+  const custom = resolveCustomUrl(team.rosterId, mood)
+  if (custom) urls.push(custom)
+  if (team.leagueAvatarUrl) urls.push(team.leagueAvatarUrl)
+  if (team.globalAvatarUrl) urls.push(team.globalAvatarUrl)
+  return urls
+}
+
 export function TeamAvatar({
   team,
   size = 'md',
@@ -51,13 +65,27 @@ export function TeamAvatar({
   const dim =
     size === 'sm' ? 'h-8 w-8' : size === 'lg' ? 'h-24 w-24' : 'h-10 w-10'
   const initials = teamInitials(team)
-  const custom = team ? resolveCustomUrl(team.rosterId, mood) : null
-  const src = custom ?? team?.avatarUrl ?? null
+  const chain = useMemo(() => avatarUrlChain(team, mood), [team, mood])
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    setIndex(0)
+  }, [chain.join('|')])
+
+  const src = chain[index] ?? null
   const [useInitials, setUseInitials] = useState(!src)
 
   useEffect(() => {
     setUseInitials(!src)
   }, [src])
+
+  const tryNext = () => {
+    if (index + 1 < chain.length) {
+      setIndex(index + 1)
+      return
+    }
+    setUseInitials(true)
+  }
 
   if (useInitials || !src) {
     return (
@@ -76,15 +104,15 @@ export function TeamAvatar({
       crossOrigin="anonymous"
       referrerPolicy="no-referrer"
       className={`${dim} shrink-0 rounded-full border border-[var(--dyn-border)] object-cover`}
-      onError={() => setUseInitials(true)}
+      onError={tryNext}
       onLoad={(e) => {
         const img = e.currentTarget
         if (img.naturalWidth < 2 || img.naturalHeight < 2) {
-          setUseInitials(true)
+          tryNext()
           return
         }
         if (imageLooksBlankOrDark(img)) {
-          setUseInitials(true)
+          tryNext()
         }
       }}
     />

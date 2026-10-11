@@ -15,7 +15,7 @@ import type {
 } from './types'
 
 async function getJson<T>(path: string): Promise<T> {
-  const res = await fetch(`${SLEEPER_API}${path}`)
+  const res = await fetch(`${SLEEPER_API}${path}`, { cache: 'no-store' })
   if (!res.ok) {
     throw new Error(`Sleeper API ${path}: ${res.status}`)
   }
