@@ -4,7 +4,6 @@
  */
 import { buildTeamMap } from '../src/lib/teams'
 import { LEAGUE_ID, SLEEPER_API } from '../src/lib/constants'
-import { managerNickname } from '../src/lib/nicknames'
 import { computeWaiverBoard } from '../src/lib/waiverWire'
 import type { SleeperMatchup, SleeperRoster, SleeperTransaction, SleeperUser } from '../src/lib/types'
 
@@ -47,7 +46,7 @@ async function main() {
 
   const managers = board.managers.map((r) => ({
     rosterId: r.rosterId,
-    name: managerNickname(r.rosterId, r.displayName),
+    name: r.teamName || r.displayName,
     wes: r.wes,
     net: r.netWaiverPoints,
     started: r.startedPoints,
@@ -60,13 +59,13 @@ async function main() {
     scoringThrough,
     champion: board.champion
       ? {
-          name: managerNickname(board.champion.rosterId, board.champion.displayName),
+          name: board.champion.teamName || board.champion.displayName,
           wes: board.champion?.wes,
         }
       : null,
     cellar: board.cellar
       ? {
-          name: managerNickname(board.cellar.rosterId, board.cellar.displayName),
+          name: board.cellar.teamName || board.cellar.displayName,
           wes: board.cellar?.wes,
         }
       : null,

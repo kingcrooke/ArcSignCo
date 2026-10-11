@@ -1,6 +1,6 @@
 const ET = 'America/New_York'
 
-/** Parse commissioner recap timestamps; date-only values are noon Eastern. */
+/** Parse posted-at timestamps; date-only values are noon Eastern. */
 export function parsePostedAt(iso: string): number {
   if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
     return Date.parse(`${iso}T12:00:00`)

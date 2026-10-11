@@ -1,5 +1,5 @@
 import { benchPointsTotal, groupMatchupPairs } from './matchupBoard'
-import { managerNickname } from './nicknames'
+import { managerLabel } from './teams'
 import type { SleeperLeague, SleeperMatchup, TeamInfo } from './types'
 import { isWeekComplete } from './weeks'
 import type { NflState } from './types'
@@ -22,7 +22,7 @@ export interface WeeklyAwardsWeek {
 
 function teamName(rosterId: number, teams: Map<number, TeamInfo>): string {
   const t = teams.get(rosterId)
-  return managerNickname(rosterId, t?.displayName ?? '')
+  return managerLabel(t, rosterId)
 }
 
 export function computeWeeklyAwardsForWeek(

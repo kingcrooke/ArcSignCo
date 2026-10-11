@@ -10,7 +10,7 @@ import {
   weekShouldShowProjectedTotals,
 } from '../lib/matchupProjections'
 import { fetchWeekProjections } from '../lib/projections'
-import { weekHasMatchups } from '../lib/recaps'
+import { weekHasMatchups } from '../lib/matchupBoard'
 import type { ProjectionsMap } from '../lib/projections'
 import { fetchNflWeekScores } from '../lib/sleeperApi'
 import type { NflWeekGame } from '../lib/types'
@@ -132,7 +132,7 @@ export function LiveScoreboardPanel({
 
   if (!matchups || !weekHasMatchups(matchups)) {
     return (
-      <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+      <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
         No scored matchups for Week {week} yet. Check back after lineups lock or
         try another week.
       </p>
@@ -141,7 +141,7 @@ export function LiveScoreboardPanel({
 
   if (playersLoading || !players) {
     return (
-      <p className="rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+      <p className="rounded-xl border border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
         Loading player names…
       </p>
     )
@@ -150,15 +150,15 @@ export function LiveScoreboardPanel({
   return (
     <div className="space-y-4" id="live-scoreboard-panel">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-[var(--gwb-muted)]">
+        <p className="text-xs text-[var(--dyn-muted)]">
           Last updated {formatUpdated(lastUpdated)}
           {shouldPoll && (
-            <span className="ml-2 text-[var(--gwb-accent-bright)]/90">· auto-refresh 60s</span>
+            <span className="ml-2 text-[var(--dyn-accent-bright)]/90">· auto-refresh 60s</span>
           )}
         </p>
         <button
           type="button"
-          className="rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-1.5 text-sm font-medium disabled:opacity-50"
+          className="rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-1.5 text-sm font-medium disabled:opacity-50"
           onClick={() => refresh()}
           disabled={refreshing}
         >
@@ -179,14 +179,14 @@ export function LiveScoreboardPanel({
             <li key={matchupId}>
               <button
                 type="button"
-                className="w-full rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-4 text-left transition hover:border-[var(--gwb-accent)]/50"
+                className="w-full rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-4 text-left transition hover:border-[var(--dyn-accent)]/50"
                 onClick={() => setDetailId(matchupId)}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div
                     className={`flex min-w-0 flex-1 items-center gap-2 ${
                       leader === home.roster_id
-                        ? 'rounded-lg ring-1 ring-[var(--gwb-accent)]/60'
+                        ? 'rounded-lg ring-1 ring-[var(--dyn-accent)]/60'
                         : ''
                     }`}
                   >
@@ -197,7 +197,7 @@ export function LiveScoreboardPanel({
                     <span
                       className={`ml-auto shrink-0 text-lg font-bold tabular-nums ${
                         leader === home.roster_id
-                          ? 'text-[var(--gwb-accent)]'
+                          ? 'text-[var(--dyn-accent)]'
                           : ''
                       }`}
                     >
@@ -205,13 +205,13 @@ export function LiveScoreboardPanel({
                     </span>
                   </div>
                 </div>
-                <p className="my-2 text-center text-[10px] font-semibold uppercase tracking-widest text-[var(--gwb-muted)]">
+                <p className="my-2 text-center text-[10px] font-semibold uppercase tracking-widest text-[var(--dyn-muted)]">
                   vs
                 </p>
                 <div
                   className={`flex items-center gap-2 ${
                     leader === away.roster_id
-                      ? 'rounded-lg ring-1 ring-[var(--gwb-accent)]/60'
+                      ? 'rounded-lg ring-1 ring-[var(--dyn-accent)]/60'
                       : ''
                   }`}
                 >
@@ -222,7 +222,7 @@ export function LiveScoreboardPanel({
                   <span
                     className={`ml-auto shrink-0 text-lg font-bold tabular-nums ${
                       leader === away.roster_id
-                        ? 'text-[var(--gwb-accent)]'
+                        ? 'text-[var(--dyn-accent)]'
                         : ''
                     }`}
                   >

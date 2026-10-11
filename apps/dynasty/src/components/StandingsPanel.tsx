@@ -4,7 +4,6 @@ import {
   formatAllPlayRecord,
   playoffSeedHint,
 } from '../lib/allPlay'
-import { managerNickname } from '../lib/nicknames'
 import { recordLabel, streakLabel } from '../lib/standings'
 import type { SleeperMatchup, StandingRow, TeamInfo } from '../lib/types'
 import { TeamAvatar } from './TeamAvatar'
@@ -19,7 +18,7 @@ function pfPa(row: StandingRow): { pf: string; pa: string } {
 function StreakBadge({ streak }: { streak: string }) {
   if (!streak) {
     return (
-      <span className="min-w-[2.25rem] text-center text-xs text-[var(--gwb-muted)]">
+      <span className="min-w-[2.25rem] text-center text-xs text-[var(--dyn-muted)]">
         —
       </span>
     )
@@ -31,7 +30,7 @@ function StreakBadge({ streak }: { streak: string }) {
           ? 'dynasty-positive'
           : streak.startsWith('L')
             ? 'text-rose-400/80'
-            : 'text-[var(--gwb-muted)]'
+            : 'text-[var(--dyn-muted)]'
       }`}
     >
       {streak}
@@ -74,7 +73,7 @@ export function StandingsPanel({
       )}
 
       <ul
-        className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
+        className="overflow-hidden rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)]"
         role="list"
         aria-label="League standings"
       >
@@ -82,7 +81,7 @@ export function StandingsPanel({
           const team = teams.get(r.rosterId)
           const { pf, pa } = pfPa(r)
           const streak = streakLabel(r.streak)
-          const manager = managerNickname(r.rosterId, r.displayName)
+          const manager = r.teamName || r.displayName
           const showPlayoffLine =
             cutoff !== null && r.rank === cutoff && index < rows.length - 1
           const seedLine =
@@ -95,12 +94,12 @@ export function StandingsPanel({
           return (
             <li key={r.rosterId}>
               <div
-                className={`flex items-start gap-2.5 border-t border-[var(--gwb-border)] px-3 py-2.5 first:border-t-0 sm:items-center sm:gap-3 sm:px-4 sm:py-3 ${
+                className={`flex items-start gap-2.5 border-t border-[var(--dyn-border)] px-3 py-2.5 first:border-t-0 sm:items-center sm:gap-3 sm:px-4 sm:py-3 ${
                   index % 2 === 1 ? 'bg-[#0d1319]/60' : ''
                 }`}
               >
                 <span
-                  className="w-5 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)] sm:w-6 sm:pt-0"
+                  className="w-5 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--dyn-muted)] sm:w-6 sm:pt-0"
                   aria-label={`Rank ${r.rank}`}
                 >
                   {r.rank}
@@ -124,10 +123,10 @@ export function StandingsPanel({
                     </div>
                   </div>
 
-                  <p className="mt-0.5 text-xs leading-snug text-[var(--gwb-muted)] sm:truncate">
+                  <p className="mt-0.5 text-xs leading-snug text-[var(--dyn-muted)] sm:truncate">
                     <span className="sm:hidden">
                       {manager}
-                      <span className="text-[var(--gwb-muted)]/80">
+                      <span className="text-[var(--dyn-muted)]/80">
                         {' '}
                         · {pf} PF · {pa} PA · AP {allPlayLabel}
                       </span>
@@ -135,7 +134,7 @@ export function StandingsPanel({
                     <span className="hidden sm:inline">
                       {manager}
                       {r.displayName ? (
-                        <span className="text-[var(--gwb-muted)]/75">
+                        <span className="text-[var(--dyn-muted)]/75">
                           {' '}
                           · @{r.displayName}
                         </span>
@@ -143,7 +142,7 @@ export function StandingsPanel({
                     </span>
                   </p>
                   {seedLine && (
-                    <p className="mt-1 text-[0.65rem] leading-snug text-[var(--gwb-muted)]/90 sm:text-xs">
+                    <p className="mt-1 text-[0.65rem] leading-snug text-[var(--dyn-muted)]/90 sm:text-xs">
                       {seedLine}
                     </p>
                   )}
@@ -151,7 +150,7 @@ export function StandingsPanel({
 
                 <div className="hidden shrink-0 items-center gap-3 sm:flex">
                   <div className="text-right">
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--dyn-muted)]">
                       All-play
                     </p>
                     <p className="text-sm font-semibold tabular-nums leading-tight">
@@ -162,10 +161,10 @@ export function StandingsPanel({
                     <p className="text-sm font-semibold tabular-nums leading-tight">
                       {recordLabel(r)}
                     </p>
-                    <p className="mt-0.5 text-xs leading-tight text-[var(--gwb-muted)]">
+                    <p className="mt-0.5 text-xs leading-tight text-[var(--dyn-muted)]">
                       <span>PF </span>
                       <span className="tabular-nums">{pf}</span>
-                      <span className="mx-1 text-[var(--gwb-border)]">·</span>
+                      <span className="mx-1 text-[var(--dyn-border)]">·</span>
                       <span>PA </span>
                       <span className="tabular-nums">{pa}</span>
                     </p>
@@ -176,15 +175,15 @@ export function StandingsPanel({
 
               {showPlayoffLine && (
                 <div
-                  className="flex items-center gap-2 border-t border-[var(--gwb-accent)]/35 bg-[var(--gwb-accent)]/5 px-3 py-1.5"
+                  className="flex items-center gap-2 border-t border-[var(--dyn-accent)]/35 bg-[var(--dyn-accent)]/5 px-3 py-1.5"
                   role="separator"
                   aria-label="Playoff cutoff"
                 >
-                  <div className="h-px flex-1 bg-[var(--gwb-accent)]/40" />
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--gwb-accent)]">
+                  <div className="h-px flex-1 bg-[var(--dyn-accent)]/40" />
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--dyn-accent)]">
                     Playoffs
                   </span>
-                  <div className="h-px flex-1 bg-[var(--gwb-accent)]/40" />
+                  <div className="h-px flex-1 bg-[var(--dyn-accent)]/40" />
                 </div>
               )}
             </li>
@@ -193,7 +192,7 @@ export function StandingsPanel({
       </ul>
 
       {sacko && (
-        <p className="text-sm text-[var(--gwb-muted)]">
+        <p className="text-sm text-[var(--dyn-muted)]">
           Sacko watch: #{sacko.rank} {sacko.teamName} ({recordLabel(sacko)}, PF{' '}
           {sacko.pointsFor.toFixed(2)}).
         </p>

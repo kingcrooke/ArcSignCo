@@ -7,10 +7,10 @@ interface WeekPickerProps {
 export function WeekPicker({ week, maxWeek, onChange }: WeekPickerProps) {
   const weeks = Array.from({ length: maxWeek }, (_, i) => i + 1)
   return (
-    <label className="flex flex-col gap-1 text-sm text-[var(--gwb-muted)]">
+    <label className="flex flex-col gap-1 text-sm text-[var(--dyn-muted)]">
       <span className="font-medium uppercase tracking-wide text-xs">NFL Week</span>
       <select
-        className="rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-[var(--gwb-text)] text-base"
+        className="rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2.5 text-[var(--dyn-text)] text-base"
         value={week}
         onChange={(e) => onChange(Number(e.target.value))}
       >

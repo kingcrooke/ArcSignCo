@@ -1,5 +1,10 @@
-import { managerNickname } from './nicknames'
+import { managerLabel } from './teams'
 import type { NflWeekGame, PlayersMap, SleeperMatchup, TeamInfo } from './types'
+
+export function weekHasMatchups(matchups: SleeperMatchup[] | undefined): boolean {
+  if (!matchups?.length) return false
+  return matchups.some((m) => m.starters?.length > 0)
+}
 
 export interface MatchupPair {
   matchupId: number
@@ -102,7 +107,7 @@ export function teamLabel(
 ): string {
   const team = teams.get(rosterId)
   if (!team) return `Team ${rosterId}`
-  return managerNickname(rosterId, team.displayName)
+  return managerLabel(team, rosterId)
 }
 
 export function leaderRosterId(

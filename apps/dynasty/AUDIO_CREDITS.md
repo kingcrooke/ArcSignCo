@@ -1,7 +1,5 @@
 # Dynasty tab audio credits
 
-All background loops and UI ticks for `apps/dynasty` are **distinct from the GWB app** (`impact-loop`, `volatile-loop`, `sneaky-loop`, `monkeys-loop`, etc.).
-
 Regenerate assets:
 
 ```bash
@@ -9,11 +7,11 @@ cd apps/dynasty
 npm run generate-audio
 ```
 
-Published under `/dynasty-1581d86a/audio/` after `npm run publish-static`. If you change bytes, use new filenames so CDN immutable cache stays correct.
+Published under `/dynasty-1581d86a/audio/` after `npm run publish-static`.
 
-## Tab background loops (per `useSound` / `TAB_LOOPS`)
+## Tab background loops
 
-Each file is **original audio** synthesized in-repo by `scripts/generate-tab-loops.mjs` (FFmpeg `lavfi` sine layers, optional pink noise, `apulsator` tremolo). No third-party samples.
+Each file is **original audio** synthesized in-repo by `scripts/generate-tab-loops.mjs` (FFmpeg `lavfi` sine layers, optional pink noise, tremolo). No third-party samples.
 
 | File | Tab | License |
 | --- | --- | --- |
@@ -33,14 +31,7 @@ Each file is **original audio** synthesized in-repo by `scripts/generate-tab-loo
 | --- | --- | --- |
 | `click.mp3` | Tab / control click (sound on) | **CC0 1.0** — original work via `scripts/generate-ui-sounds.mjs` (FFmpeg sine burst) |
 
-## Removed / not used
-
-| Item | Status |
-| --- | --- |
-| GWB Kevin MacLeod loops (`impact-loop`, `volatile-loop`, `sneaky-loop`, `monkeys-loop`) | **Not shipped** in Dynasty |
-| `buzzer.mp3` (GWB mulligan stinger) | **Not used** in Dynasty |
-
 ## Verification
 
-- **PASS** — Every shipped loop and `click.mp3` has a documented CC0 original-work provenance above.
+- **PASS** — Every shipped loop and `click.mp3` has documented CC0 original-work provenance above.
 - **FAIL** — Any track without a verified license must not be added; document as FAIL here until replaced.

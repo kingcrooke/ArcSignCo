@@ -1,4 +1,4 @@
-import { managerDisplayName } from './nicknames'
+import { managerLabel } from './teams'
 import type {
   PlayersMap,
   SleeperLeague,
@@ -61,9 +61,7 @@ function pickLabel(
 ): string {
   const yr = pick.season?.slice(-2) ?? '?'
   const owner = teams.get(pick.roster_id)
-  const nick = owner
-    ? managerDisplayName(owner.userId, owner.displayName)
-    : `R${pick.roster_id}`
+  const nick = owner ? managerLabel(owner, pick.roster_id) : `R${pick.roster_id}`
   return `${yr} Rd ${pick.round} (${nick})`
 }
 
@@ -116,11 +114,10 @@ function sideFromRoster(
   const team = teams.get(rosterId)
   const { received, sent } = assetsForRoster(rosterId, tx, players, teams)
   const userId = team?.userId ?? ''
-  const rawName = team?.displayName ?? `Team ${rosterId}`
   return {
     rosterId,
     userId,
-    managerName: managerDisplayName(userId, rawName),
+    managerName: managerLabel(team, rosterId),
     received,
     sent,
   }

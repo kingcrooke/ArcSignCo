@@ -62,7 +62,7 @@ export function TeamAvatar({
   if (useInitials || !src) {
     return (
       <div
-        className={`${dim} flex shrink-0 items-center justify-center rounded-full border border-[var(--gwb-border)] bg-[var(--gwb-border)] text-xs font-semibold text-[var(--gwb-muted)]`}
+        className={`${dim} flex shrink-0 items-center justify-center rounded-full border border-[var(--dyn-border)] bg-[var(--dyn-border)] text-xs font-semibold text-[var(--dyn-muted)]`}
       >
         {initials}
       </div>
@@ -75,7 +75,7 @@ export function TeamAvatar({
       alt=""
       crossOrigin="anonymous"
       referrerPolicy="no-referrer"
-      className={`${dim} shrink-0 rounded-full border border-[var(--gwb-border)] object-cover`}
+      className={`${dim} shrink-0 rounded-full border border-[var(--dyn-border)] object-cover`}
       onError={() => setUseInitials(true)}
       onLoad={(e) => {
         const img = e.currentTarget

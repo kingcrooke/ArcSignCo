@@ -34,7 +34,7 @@ export function WaiverEfficiencyChart({
   const rows = [...managers].sort((a, b) => (b.wes ?? -999) - (a.wes ?? -999))
   if (!rows.length || scoringThrough < 1) {
     return (
-      <p className="text-sm text-[var(--gwb-muted)]">
+      <p className="text-sm text-[var(--dyn-muted)]">
         Efficiency chart appears after a completed week.
       </p>
     )
@@ -68,7 +68,7 @@ export function WaiverEfficiencyChart({
         y1={top}
         x2={zero}
         y2={h - 8}
-        stroke="var(--gwb-text)"
+        stroke="var(--dyn-text)"
         strokeWidth={1.25}
       />
       {rows.map((r, i) => {
@@ -126,7 +126,7 @@ export function WaiverCumulativeChart({
   const [hidden, setHidden] = useState<Set<number>>(new Set())
   if (scoringThrough < 1) {
     return (
-      <p className="text-sm text-[var(--gwb-muted)]">
+      <p className="text-sm text-[var(--dyn-muted)]">
         The week-by-week line appears after a completed week.
       </p>
     )
@@ -220,8 +220,8 @@ export function WaiverCumulativeChart({
               type="button"
               className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs ${
                 off
-                  ? 'border-[var(--gwb-border)] text-[var(--gwb-muted)] opacity-50'
-                  : 'border-[var(--gwb-border)] text-[var(--gwb-text)]'
+                  ? 'border-[var(--dyn-border)] text-[var(--dyn-muted)] opacity-50'
+                  : 'border-[var(--dyn-border)] text-[var(--dyn-text)]'
               }`}
               onClick={() => {
                 setHidden((prev) => {

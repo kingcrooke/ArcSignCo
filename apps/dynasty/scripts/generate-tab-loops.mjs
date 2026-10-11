@@ -1,5 +1,5 @@
 /**
- * Original loopable tab beds for Dynasty (not shared with GWB).
+ * Original loopable tab beds for Dynasty of Champions.
  * Synthesized offline with FFmpeg lavfi (sine layers + tremolo) — see AUDIO_CREDITS.md.
  */
 import { spawnSync } from 'node:child_process'

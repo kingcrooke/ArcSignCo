@@ -1,4 +1,4 @@
-import { managerDisplayName } from './nicknames'
+import { managerLabel } from './teams'
 import type {
   SleeperDraft,
   SleeperDraftPick,
@@ -86,10 +86,10 @@ export function futurePickOwnership(
       originalRosterId: pick.roster_id,
       ownerRosterId: pick.owner_id,
       originalLabel: original
-        ? managerDisplayName(original.userId, original.displayName)
+        ? managerLabel(original, pick.roster_id)
         : `R${pick.roster_id}`,
       ownerLabel: owner
-        ? managerDisplayName(owner.userId, owner.displayName)
+        ? managerLabel(owner, pick.owner_id)
         : `R${pick.owner_id}`,
     })
   }

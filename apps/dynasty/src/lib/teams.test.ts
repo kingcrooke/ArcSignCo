@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { getTeamName, isGarbageTeamName } from './teams'
+import { getTeamName, isGarbageTeamName, managerLabel } from './teams'
+import type { TeamInfo } from './types'
 import type { SleeperUser } from './types'
 
 describe('team names', () => {
@@ -11,6 +12,17 @@ describe('team names', () => {
     }
     expect(isGarbageTeamName('………')).toBe(true)
     expect(getTeamName(user, 9)).toBe('Mnny')
+  })
+
+  it('managerLabel prefers team_name from Sleeper', () => {
+    const team: TeamInfo = {
+      rosterId: 1,
+      userId: 'u1',
+      displayName: 'Santagua',
+      teamName: 'Dynasty Kings',
+      avatarUrl: null,
+    }
+    expect(managerLabel(team, 1)).toBe('Dynasty Kings')
   })
 
   it('trims trailing spaces on team_name', () => {

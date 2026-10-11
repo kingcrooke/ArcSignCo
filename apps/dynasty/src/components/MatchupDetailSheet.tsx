@@ -24,13 +24,13 @@ function TeamAvatar({
       <img
         src={team.avatarUrl}
         alt=""
-        className={`${className} rounded-full border border-[var(--gwb-border)] object-cover`}
+        className={`${className} rounded-full border border-[var(--dyn-border)] object-cover`}
       />
     )
   }
   return (
     <div
-      className={`${className} flex items-center justify-center rounded-full border border-[var(--gwb-border)] bg-[#243040] text-xs font-semibold text-[var(--gwb-muted)]`}
+      className={`${className} flex items-center justify-center rounded-full border border-[var(--dyn-border)] bg-[#243040] text-xs font-semibold text-[var(--dyn-muted)]`}
     >
       {team?.teamName?.slice(0, 1) ?? '?'}
     </div>
@@ -60,7 +60,7 @@ function LineupSide({
 
   return (
     <div
-      className={`min-w-0 flex-1 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-bg)] ${
+      className={`min-w-0 flex-1 rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-bg)] ${
         compact ? 'p-1.5' : 'p-2'
       }`}
     >
@@ -75,7 +75,7 @@ function LineupSide({
             {team?.teamName ?? 'Team'}
           </p>
           <p
-            className={`font-bold tabular-nums text-[var(--gwb-accent)] ${
+            className={`font-bold tabular-nums text-[var(--dyn-accent)] ${
               compact ? 'text-lg' : 'text-2xl'
             }`}
           >
@@ -96,10 +96,10 @@ function LineupSide({
             return (
               <li
                 key={`${slot}-${i}`}
-                className="rounded-md border border-[var(--gwb-border)]/70 bg-[var(--gwb-surface)] px-1.5 py-1"
+                className="rounded-md border border-[var(--dyn-border)]/70 bg-[var(--dyn-surface)] px-1.5 py-1"
               >
                 <div className="flex items-center justify-between gap-1">
-                  <span className="text-[9px] font-semibold uppercase text-[var(--gwb-muted)]">
+                  <span className="text-[9px] font-semibold uppercase text-[var(--dyn-muted)]">
                     {slot}
                   </span>
                   <span className="shrink-0 text-[11px] font-semibold tabular-nums">
@@ -110,7 +110,7 @@ function LineupSide({
                   {playerDisplayName(pid, players)}
                 </p>
                 {proj != null && (
-                  <p className="text-[9px] text-[var(--gwb-muted)] tabular-nums">
+                  <p className="text-[9px] text-[var(--dyn-muted)] tabular-nums">
                     {proj.toFixed(1)} proj
                   </p>
                 )}
@@ -120,23 +120,23 @@ function LineupSide({
           return (
             <li
               key={`${slot}-${i}`}
-              className="grid grid-cols-[2.5rem_1fr_auto] items-center gap-2 rounded-lg border border-[var(--gwb-border)]/60 bg-[var(--gwb-surface)] px-2 py-1.5 text-sm"
+              className="grid grid-cols-[2.5rem_1fr_auto] items-center gap-2 rounded-lg border border-[var(--dyn-border)]/60 bg-[var(--dyn-surface)] px-2 py-1.5 text-sm"
             >
-              <span className="text-[10px] font-semibold uppercase text-[var(--gwb-muted)]">
+              <span className="text-[10px] font-semibold uppercase text-[var(--dyn-muted)]">
                 {slot}
               </span>
               <div className="min-w-0">
                 <p className="truncate font-medium">
                   {playerDisplayName(pid, players)}
                 </p>
-                <p className="truncate text-xs text-[var(--gwb-muted)]">
+                <p className="truncate text-xs text-[var(--dyn-muted)]">
                   {playerMetaLine(pid, players)}
                 </p>
               </div>
               <div className="text-right tabular-nums">
                 <p className="font-semibold">{pts.toFixed(2)}</p>
                 {proj != null && (
-                  <p className="text-[10px] text-[var(--gwb-muted)]">
+                  <p className="text-[10px] text-[var(--dyn-muted)]">
                     {proj.toFixed(1)} proj
                   </p>
                 )}
@@ -149,16 +149,16 @@ function LineupSide({
       <div className="mt-2">
         <button
           type="button"
-          className={`flex w-full items-center justify-between rounded-lg border border-[var(--gwb-border)] bg-[#1a222c] text-left font-medium ${
+          className={`flex w-full items-center justify-between rounded-lg border border-[var(--dyn-border)] bg-[#1a222c] text-left font-medium ${
             compact ? 'px-2 py-1.5 text-[11px]' : 'px-3 py-2 text-sm'
           }`}
           onClick={() => setBenchOpen((o) => !o)}
           aria-expanded={benchOpen}
         >
           <span>Bench</span>
-          <span className="tabular-nums text-[var(--gwb-muted)]">
+          <span className="tabular-nums text-[var(--dyn-muted)]">
             {benchTotal.toFixed(2)}
-            <span className="ml-1 text-[var(--gwb-accent)]">
+            <span className="ml-1 text-[var(--dyn-accent)]">
               {benchOpen ? '▲' : '▼'}
             </span>
           </span>
@@ -166,7 +166,7 @@ function LineupSide({
         {benchOpen && (
           <ul className="mt-1 space-y-1">
             {benchIds.length === 0 && (
-              <li className="px-1 py-1 text-[10px] text-[var(--gwb-muted)]">
+              <li className="px-1 py-1 text-[10px] text-[var(--dyn-muted)]">
                 No bench
               </li>
             )}
@@ -175,7 +175,7 @@ function LineupSide({
               return (
                 <li
                   key={pid}
-                  className="flex items-center justify-between gap-1 rounded-md border border-[var(--gwb-border)]/40 bg-[var(--gwb-surface)] px-1.5 py-1 text-[11px]"
+                  className="flex items-center justify-between gap-1 rounded-md border border-[var(--dyn-border)]/40 bg-[var(--dyn-surface)] px-1.5 py-1 text-[11px]"
                 >
                   <p className="min-w-0 truncate">
                     {playerDisplayName(pid, players)}
@@ -250,15 +250,15 @@ export function MatchupDetailSheet({
 
   const sheet = (
     <div
-      className="fixed inset-0 z-[200] flex min-h-0 flex-col bg-[var(--gwb-bg)] isolate"
+      className="fixed inset-0 z-[200] flex min-h-0 flex-col bg-[var(--dyn-bg)] isolate"
       role="dialog"
       aria-modal="true"
       aria-label={`${teamLabel(left.roster_id, teams)} vs ${teamLabel(right.roster_id, teams)}`}
     >
-      <header className="flex shrink-0 items-center gap-3 border-b border-[var(--gwb-border)] bg-[var(--gwb-bg)] px-3 py-3">
+      <header className="flex shrink-0 items-center gap-3 border-b border-[var(--dyn-border)] bg-[var(--dyn-bg)] px-3 py-3">
         <button
           type="button"
-          className="rounded-lg border border-[var(--gwb-border)] px-3 py-1.5 text-sm font-medium"
+          className="rounded-lg border border-[var(--dyn-border)] px-3 py-1.5 text-sm font-medium"
           onClick={onClose}
         >
           Back
@@ -271,7 +271,7 @@ export function MatchupDetailSheet({
       </header>
 
       <div
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[var(--gwb-bg)] px-2 py-3"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[var(--dyn-bg)] px-2 py-3"
         data-testid="matchup-detail-scroll"
       >
         <div className="mx-auto grid max-w-4xl grid-cols-2 gap-2 sm:gap-3">

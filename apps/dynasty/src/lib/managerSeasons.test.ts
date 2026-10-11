@@ -12,7 +12,7 @@ function miniBundle(
 ): LeagueTradeBundle {
   const league: SleeperLeague = {
     league_id: `league-${season}`,
-    name: 'GWB',
+    name: 'Dynasty of Champions',
     season,
     status: 'complete',
     metadata: { latest_league_winner_roster_id: String(winnerRosterId) },
@@ -114,7 +114,7 @@ describe('buildLeagueSeasonSummaries', () => {
     ]
     const league: SleeperLeague = {
       league_id: 'live',
-      name: 'GWB',
+      name: 'Dynasty of Champions',
       season: '2026',
       status: 'in_season',
       metadata: { latest_league_winner_roster_id: '6' },

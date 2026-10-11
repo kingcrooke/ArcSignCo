@@ -8,7 +8,7 @@ function cell(w: { managerName: string; detail: string } | null) {
 export function WeeklyAwardsPanel({ weeks }: { weeks: WeeklyAwardsWeek[] }) {
   if (!weeks.length) {
     return (
-      <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+      <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
         No scored weeks yet for awards.
       </p>
     )
@@ -18,7 +18,7 @@ export function WeeklyAwardsPanel({ weeks }: { weeks: WeeklyAwardsWeek[] }) {
     <div className="overflow-x-auto" id="weekly-awards-panel">
       <table className="w-full min-w-[520px] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-[var(--gwb-border)] text-left text-xs uppercase text-[var(--gwb-muted)]">
+          <tr className="border-b border-[var(--dyn-border)] text-left text-xs uppercase text-[var(--dyn-muted)]">
             <th className="px-3 py-2">Week</th>
             <th className="px-3 py-2">High score</th>
             <th className="px-3 py-2">Low score</th>
@@ -28,7 +28,7 @@ export function WeeklyAwardsPanel({ weeks }: { weeks: WeeklyAwardsWeek[] }) {
         </thead>
         <tbody>
           {weeks.map((w) => (
-            <tr key={w.week} className="border-t border-[var(--gwb-border)]">
+            <tr key={w.week} className="border-t border-[var(--dyn-border)]">
               <td className="px-3 py-2 font-semibold tabular-nums">{w.week}</td>
               <td className="px-3 py-2">{cell(w.highScore)}</td>
               <td className="px-3 py-2">{cell(w.lowScore)}</td>

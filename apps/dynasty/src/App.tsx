@@ -141,7 +141,7 @@ export default function App() {
     const nav = navRef.current
     if (!nav) return
     nav
-      .querySelector<HTMLElement>('.gwb-section-tab--active')
+      .querySelector<HTMLElement>('.dyn-section-tab--active')
       ?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior })
   }, [])
 
@@ -190,13 +190,13 @@ export default function App() {
     >
       <header className="mb-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--dyn-accent)]">
             Command Center
           </p>
           <h1 className="mt-1 font-['Anton'] text-4xl uppercase leading-tight sm:text-5xl">
             {LEAGUE_NAME}
           </h1>
-          <p className="mt-2 text-sm text-[var(--gwb-muted)]">
+          <p className="mt-2 text-sm text-[var(--dyn-muted)]">
             DYNASTY · Sleeper public data · No tracking
           </p>
         </div>
@@ -209,8 +209,8 @@ export default function App() {
       </header>
 
       {state === 'loading' && (
-        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20 text-[var(--gwb-muted)]">
-          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--gwb-accent)] border-t-transparent" />
+        <div className="flex flex-1 flex-col items-center justify-center gap-3 py-20 text-[var(--dyn-muted)]">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-[var(--dyn-accent)] border-t-transparent" />
           <p>Loading league data…</p>
         </div>
       )}
@@ -244,7 +244,7 @@ export default function App() {
                 onChange={onWeekChange}
               />
             </div>
-            <p className="text-sm text-[var(--gwb-muted)]">
+            <p className="text-sm text-[var(--dyn-muted)]">
               Season {data.league.season}
               {!data.isHistoricalSeason && (
                 <> · NFL Week {data.nflState.week}</>
@@ -257,7 +257,7 @@ export default function App() {
 
           <nav
             ref={navRef}
-            className="gwb-section-tabs mb-6 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+            className="dyn-section-tabs mb-6 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
             aria-label="Sections"
           >
             {BASE_TABS.map((t) => {
@@ -268,8 +268,8 @@ export default function App() {
                   type="button"
                   className={
                     active
-                      ? 'gwb-section-tab gwb-section-tab--active'
-                      : 'gwb-section-tab'
+                      ? 'dyn-section-tab dyn-section-tab--active'
+                      : 'dyn-section-tab'
                   }
                   aria-current={active ? 'page' : undefined}
                   onClick={() => onTabChange(t.id)}
@@ -309,7 +309,7 @@ export default function App() {
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Standings
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                <span className="ml-2 text-sm font-normal text-[var(--dyn-muted)]">
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>
@@ -363,7 +363,7 @@ export default function App() {
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
                 Waiver Wire Champion
-                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                <span className="ml-2 text-sm font-normal text-[var(--dyn-muted)]">
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>

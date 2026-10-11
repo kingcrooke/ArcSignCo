@@ -11,7 +11,7 @@ import {
   pointsForPlayer,
   starterPositions,
 } from '../lib/matchupBoard'
-import { managerNickname } from '../lib/nicknames'
+import { managerLabel } from '../lib/teams'
 import type {
   NflState,
   PlayersMap,
@@ -33,8 +33,8 @@ function Badge({ label }: { label: string }) {
       : label === 'Shootout'
         ? 'border-rose-400/40 bg-rose-950/40 text-rose-100'
         : label === 'Upset'
-          ? 'border-[color-mix(in_srgb,var(--gwb-accent)_45%,transparent)] bg-[color-mix(in_srgb,var(--gwb-accent)_12%,var(--gwb-surface))] text-[var(--gwb-accent-bright)]'
-          : 'border-[var(--gwb-border)] bg-[var(--gwb-bg)] text-[var(--gwb-muted)]'
+          ? 'border-[color-mix(in_srgb,var(--dyn-accent)_45%,transparent)] bg-[color-mix(in_srgb,var(--dyn-accent)_12%,var(--dyn-surface))] text-[var(--dyn-accent-bright)]'
+          : 'border-[var(--dyn-border)] bg-[var(--dyn-bg)] text-[var(--dyn-muted)]'
   return (
     <span
       className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tone}`}
@@ -56,11 +56,11 @@ function ScoreSide({
   winning: boolean
 }) {
   const team = teams.get(rosterId)
-  const manager = managerNickname(rosterId, team?.displayName ?? '')
+  const manager = managerLabel(team, rosterId)
   return (
     <div
       className={`flex min-w-0 flex-1 items-center gap-2 ${
-        winning ? 'rounded-lg ring-1 ring-[var(--gwb-accent)]/50' : ''
+        winning ? 'rounded-lg ring-1 ring-[var(--dyn-accent)]/50' : ''
       }`}
     >
       <TeamAvatar team={team} size="sm" />
@@ -68,11 +68,11 @@ function ScoreSide({
         <p className="truncate text-sm font-semibold leading-tight">
           {team?.teamName ?? `Team ${rosterId}`}
         </p>
-        <p className="truncate text-xs text-[var(--gwb-muted)]">{manager}</p>
+        <p className="truncate text-xs text-[var(--dyn-muted)]">{manager}</p>
       </div>
       <p
         className={`shrink-0 text-lg font-bold tabular-nums ${
-          winning ? 'text-[var(--gwb-accent)]' : 'text-[var(--gwb-text)]'
+          winning ? 'text-[var(--dyn-accent)]' : 'text-[var(--dyn-text)]'
         }`}
       >
         {points.toFixed(1)}
@@ -93,12 +93,12 @@ function ExpandedLineup({
   players: PlayersMap
 }) {
   return (
-    <div className="min-w-0 flex-1 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-bg)] p-2">
+    <div className="min-w-0 flex-1 rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-bg)] p-2">
       <div className="mb-2 flex items-center gap-2">
         <TeamAvatar team={team} size="sm" />
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold">{team?.teamName ?? 'Team'}</p>
-          <p className="text-xs font-bold tabular-nums text-[var(--gwb-accent)]">
+          <p className="text-xs font-bold tabular-nums text-[var(--dyn-accent)]">
             {matchup.points.toFixed(2)} pts
           </p>
         </div>
@@ -110,16 +110,16 @@ function ExpandedLineup({
           return (
             <li
               key={`${slot}-${i}`}
-              className="flex items-center justify-between gap-2 rounded-md border border-[var(--gwb-border)]/70 bg-[var(--gwb-surface)] px-2 py-1"
+              className="flex items-center justify-between gap-2 rounded-md border border-[var(--dyn-border)]/70 bg-[var(--dyn-surface)] px-2 py-1"
             >
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase text-[var(--gwb-muted)]">
+                <p className="text-[10px] font-semibold uppercase text-[var(--dyn-muted)]">
                   {slot}
                 </p>
                 <p className="truncate text-xs font-medium">
                   {playerDisplayName(pid, players)}
                 </p>
-                <p className="text-[10px] text-[var(--gwb-muted)]">
+                <p className="text-[10px] text-[var(--dyn-muted)]">
                   {playerMetaLine(pid, players)}
                 </p>
               </div>
@@ -157,7 +157,7 @@ function GamesList({
 
   return (
     <ul
-      className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
+      className="overflow-hidden rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)]"
       role="list"
       aria-label={listLabel}
     >
@@ -173,7 +173,7 @@ function GamesList({
           <li key={game.matchupKey}>
             <button
               type="button"
-              className={`w-full border-t border-[var(--gwb-border)] px-3 py-3 text-left first:border-t-0 sm:px-4 ${
+              className={`w-full border-t border-[var(--dyn-border)] px-3 py-3 text-left first:border-t-0 sm:px-4 ${
                 index % 2 === 1 ? 'bg-[#0d1319]/60' : ''
               }`}
               aria-expanded={open}
@@ -181,7 +181,7 @@ function GamesList({
             >
               <div className="flex items-start gap-2">
                 <span
-                  className="w-6 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)]"
+                  className="w-6 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--dyn-muted)]"
                   aria-label={`Rank ${game.rank}`}
                 >
                   {game.rank}
@@ -190,7 +190,7 @@ function GamesList({
                   <div className="flex flex-wrap items-center gap-2">
                     {showWeekOnCard ? (
                       <span
-                        className="rounded-md border border-[var(--gwb-accent)]/45 bg-[var(--gwb-accent)]/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--gwb-accent)]"
+                        className="rounded-md border border-[var(--dyn-accent)]/45 bg-[var(--dyn-accent)]/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--dyn-accent)]"
                         aria-label={`NFL week ${game.week}`}
                       >
                         Week {game.week}
@@ -208,7 +208,7 @@ function GamesList({
                       teams={teams}
                       winning={winner === home.roster_id}
                     />
-                    <span className="hidden shrink-0 text-xs font-semibold uppercase text-[var(--gwb-muted)] sm:block">
+                    <span className="hidden shrink-0 text-xs font-semibold uppercase text-[var(--dyn-muted)] sm:block">
                       vs
                     </span>
                     <ScoreSide
@@ -219,16 +219,16 @@ function GamesList({
                     />
                   </div>
 
-                  <p className="mt-2 text-xs text-[var(--gwb-muted)]">
+                  <p className="mt-2 text-xs text-[var(--dyn-muted)]">
                     Score {breakdown.composite.toFixed(1)}
-                    <span className="mx-1 text-[var(--gwb-border)]">·</span>
+                    <span className="mx-1 text-[var(--dyn-border)]">·</span>
                     {breakdown.margin.toFixed(1)} pt margin
-                    <span className="mx-1 text-[var(--gwb-border)]">·</span>
+                    <span className="mx-1 text-[var(--dyn-border)]">·</span>
                     {breakdown.combinedPoints.toFixed(1)} combined
                   </p>
                 </div>
                 <span
-                  className="shrink-0 pt-1 text-[var(--gwb-muted)]"
+                  className="shrink-0 pt-1 text-[var(--dyn-muted)]"
                   aria-hidden
                 >
                   {open ? '▾' : '▸'}
@@ -237,7 +237,7 @@ function GamesList({
             </button>
 
             {open && players && (
-              <div className="border-t border-[var(--gwb-border)] bg-[#0a0e12]/90 px-3 pb-4 pt-3 sm:px-4">
+              <div className="border-t border-[var(--dyn-border)] bg-[#0a0e12]/90 px-3 pb-4 pt-3 sm:px-4">
                 <div className="grid gap-3 sm:grid-cols-2">
                   <ExpandedLineup
                     matchup={home}
@@ -328,7 +328,7 @@ export function BestGamesPanel({
 
   if (!hasContent && scope === 'all' && completedThrough < 1) {
     return (
-      <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+      <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
         No final matchups ranked yet. Check back after the first full scoring week.
       </p>
     )
@@ -353,23 +353,22 @@ export function BestGamesPanel({
         }}
       />
 
-      <p className="text-xs text-[var(--gwb-muted)]">
+      <p className="text-xs text-[var(--dyn-muted)]">
         {scope === 'all' ? (
           <>
             Top {BEST_GAMES_PER_WEEK} final matchups per week, grouped newest
-            week first — ranked by closeness, shootout, upset, and mulligan
-            drama.
+            week first — ranked by closeness, shootout, and upset.
           </>
         ) : (
           <>
             Top {BEST_GAMES_PER_WEEK} matchups in Week {scope}, ranked within
-            the week by closeness, shootout, upset, and mulligan drama.
+            the week by closeness, shootout, and upset.
           </>
         )}
       </p>
 
       {!hasContent ? (
-        <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+        <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
           {typeof scope === 'number' && isWeekLive(scope, league, nflState)
             ? `Week ${scope} is still in progress — rankings appear when scoring is final.`
             : 'No scored matchups for this week yet.'}
@@ -377,7 +376,7 @@ export function BestGamesPanel({
       ) : null}
 
       {playersLoading || !players ? (
-        <p className="rounded-xl border border-[var(--gwb-border)] p-4 text-center text-sm text-[var(--gwb-muted)]">
+        <p className="rounded-xl border border-[var(--dyn-border)] p-4 text-center text-sm text-[var(--dyn-muted)]">
           Loading starter lines…
         </p>
       ) : null}
@@ -388,7 +387,7 @@ export function BestGamesPanel({
             <section key={week} aria-labelledby={`best-games-week-${week}`}>
               <h3
                 id={`best-games-week-${week}`}
-                className="mb-2 font-['Anton'] text-xl uppercase tracking-wide text-[var(--gwb-text)]"
+                className="mb-2 font-['Anton'] text-xl uppercase tracking-wide text-[var(--dyn-text)]"
               >
                 Week {week}
               </h3>

@@ -16,7 +16,7 @@ describe('season NFL teams', () => {
     const finish: ManagerSeasonFinish = {
       season: '2020',
       leagueId: 'x',
-      leagueName: 'GWB',
+      leagueName: 'Dynasty of Champions',
       rosterId: 1,
       userId: 'u',
       displayName: 'Test',

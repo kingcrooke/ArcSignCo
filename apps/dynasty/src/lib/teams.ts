@@ -17,6 +17,18 @@ export function getTeamName(user: SleeperUser | undefined, rosterId: number): st
   return `Team ${rosterId}`
 }
 
+/** Sleeper-facing label: metadata.team_name, else display_name. */
+export function managerLabel(
+  team: TeamInfo | undefined,
+  rosterId: number,
+  fallbackName = '',
+): string {
+  if (team?.teamName?.trim()) return team.teamName.trim()
+  if (team?.displayName?.trim()) return team.displayName.trim()
+  if (fallbackName.trim()) return fallbackName.trim()
+  return `Team ${rosterId}`
+}
+
 export function buildTeamMap(
   users: SleeperUser[],
   rosters: SleeperRoster[],

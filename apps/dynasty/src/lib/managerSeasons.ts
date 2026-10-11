@@ -1,5 +1,5 @@
 import { regularSeasonLastWeek } from './weeks'
-import { managerDisplayName } from './nicknames'
+import { managerLabel } from './teams'
 import type { LeagueTradeBundle } from './sleeperApi'
 import { rosterPointsFor, rosterPointsAgainst } from './teams'
 import { sortStandingRows, recordLabel } from './standings'
@@ -172,7 +172,7 @@ function buildOneSeason(
     const champTeam = teams.get(champRoster)
     championUserId = champTeam?.userId ?? ''
     championDisplayName = champTeam
-      ? managerDisplayName(champTeam.userId, champTeam.displayName)
+      ? managerLabel(champTeam, champRoster)
       : 'unavailable'
   }
 
@@ -189,7 +189,7 @@ function buildOneSeason(
       leagueName: league.name,
       rosterId: r.roster_id,
       userId: t.userId,
-      displayName: managerDisplayName(t.userId, t.displayName),
+      displayName: managerLabel(t, r.roster_id),
       wins: r.settings.wins ?? 0,
       losses: r.settings.losses ?? 0,
       ties: r.settings.ties ?? 0,
@@ -400,6 +400,6 @@ export function lookupTeamDisplay(
   if (!t) return { userId: '', displayName: `Roster ${rosterId}` }
   return {
     userId: t.userId,
-    displayName: managerDisplayName(t.userId, t.displayName),
+    displayName: managerLabel(t, rosterId),
   }
 }

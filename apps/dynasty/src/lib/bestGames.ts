@@ -1,4 +1,3 @@
-import bestGamesJson from '../content/best-games.json'
 import { groupMatchupPairs } from './matchupBoard'
 import type { NflState, SleeperLeague, SleeperMatchup } from './types'
 import { isWeekLive, lastCompletedWeek } from './weeks'
@@ -45,13 +44,7 @@ export interface BestGameContentEntry {
   highlights: string[]
 }
 
-interface BestGamesFile {
-  entries: BestGameContentEntry[]
-}
-
-const content = bestGamesJson as BestGamesFile
-
-export const BEST_GAMES_CONTENT: BestGameContentEntry[] = content.entries
+export const BEST_GAMES_CONTENT: BestGameContentEntry[] = []
 
 export function makeMatchupKey(week: number, matchupId: number): string {
   return `${week}-${matchupId}`

@@ -56,9 +56,9 @@ function row(board: ReturnType<typeof boardThrough>, rosterId: number) {
 describe('computeWaiverBoard', () => {
   it('does not give a Tuesday waiver add the week it was filed under', () => {
     const through1 = boardThrough(1)
-    const frankie = row(through1, 11)
-    expect(frankie.bestPickup?.playerId).not.toBe('11834')
-    expect(frankie.startedPoints).toBeCloseTo(0, 5)
+    const rosterEleven = row(through1, 11)
+    expect(rosterEleven.bestPickup?.playerId).not.toBe('11834')
+    expect(rosterEleven.startedPoints).toBeCloseTo(0, 5)
 
     const through3 = boardThrough(3)
     const veleMove = through3.moves.find(
@@ -161,8 +161,8 @@ describe('computeWaiverBoard', () => {
 
   it('does not score failed claims', () => {
     const board = boardThrough(3)
-    const frankie = row(board, 11)
-    expect(frankie.failedClaims).toBe(8)
+    const rosterEleven = row(board, 11)
+    expect(rosterEleven.failedClaims).toBe(8)
     const failed = board.moves.filter((m) => m.rosterId === 11 && m.status === 'failed')
     expect(failed).toHaveLength(8)
     expect(failed.every((m) => m.startedPoints == null)).toBe(true)

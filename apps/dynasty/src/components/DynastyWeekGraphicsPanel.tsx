@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { groupMatchupPairs, teamLabel } from '../lib/matchupBoard'
-import { weekHasMatchups } from '../lib/recaps'
+import { weekHasMatchups } from '../lib/matchupBoard'
 import { recordLabel } from '../lib/standings'
 import type {
   PlayersMap,
@@ -41,41 +41,41 @@ function MatchupCard({
   const awayRow = standings.find((r) => r.rosterId === awayId)
   return (
     <article
-      className="flex flex-col rounded-2xl border border-[var(--gwb-border)] bg-gradient-to-b from-[var(--gwb-surface)] to-[var(--gwb-bg)] p-4"
+      className="flex flex-col rounded-2xl border border-[var(--dyn-border)] bg-gradient-to-b from-[var(--dyn-surface)] to-[var(--dyn-bg)] p-4"
     >
-      <p className="text-center font-['Anton'] text-2xl uppercase tracking-wide text-[var(--gwb-text)]">
+      <p className="text-center font-['Anton'] text-2xl uppercase tracking-wide text-[var(--dyn-text)]">
         {teamLabel(homeId, teams)}
-        <span className="mx-2 text-[var(--gwb-muted)]">vs</span>
+        <span className="mx-2 text-[var(--dyn-muted)]">vs</span>
         {teamLabel(awayId, teams)}
       </p>
       {subtitle && (
-        <p className="mt-1 text-center text-xs text-[var(--gwb-muted)]">{subtitle}</p>
+        <p className="mt-1 text-center text-xs text-[var(--dyn-muted)]">{subtitle}</p>
       )}
       <div className="mt-4 flex items-end justify-center gap-4">
         <div className="flex flex-col items-center gap-2">
           <TeamAvatar team={home} size="lg" mood={homeMood} />
-          <p className="text-xs text-[var(--gwb-muted)]">
+          <p className="text-xs text-[var(--dyn-muted)]">
             {homeRow ? recordLabel(homeRow) : '—'}
           </p>
           {!neutral && homeScore != null && (
-            <p className="font-['Bebas_Neue'] text-3xl text-[var(--gwb-accent)]">
+            <p className="font-['Bebas_Neue'] text-3xl text-[var(--dyn-accent)]">
               {homeScore.toFixed(2)}
             </p>
           )}
         </div>
         <div
-          className="mb-8 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[var(--gwb-accent)] bg-[var(--gwb-bg)] font-['Bebas_Neue'] text-xl text-[var(--gwb-accent-bright)]"
+          className="mb-8 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[var(--dyn-accent)] bg-[var(--dyn-bg)] font-['Bebas_Neue'] text-xl text-[var(--dyn-accent-bright)]"
           aria-hidden
         >
           VS
         </div>
         <div className="flex flex-col items-center gap-2">
           <TeamAvatar team={away} size="lg" mood={awayMood} />
-          <p className="text-xs text-[var(--gwb-muted)]">
+          <p className="text-xs text-[var(--dyn-muted)]">
             {awayRow ? recordLabel(awayRow) : '—'}
           </p>
           {!neutral && awayScore != null && (
-            <p className="font-['Bebas_Neue'] text-3xl text-[var(--gwb-accent)]">
+            <p className="font-['Bebas_Neue'] text-3xl text-[var(--dyn-accent)]">
               {awayScore.toFixed(2)}
             </p>
           )}
@@ -110,7 +110,7 @@ export function DynastyWeekGraphicsPanel({
 
   if (!matchups?.length || !pairs.length) {
     return (
-      <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
+      <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
         No matchups to illustrate for Week {week} yet.
       </p>
     )
@@ -119,10 +119,10 @@ export function DynastyWeekGraphicsPanel({
   return (
     <div className="space-y-8" id="week-graphics-panel">
       <section>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-accent)]">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]">
           Matchup cards
         </h3>
-        <p className="mb-4 text-xs text-[var(--gwb-muted)]">
+        <p className="mb-4 text-xs text-[var(--dyn-muted)]">
           Neutral preview — no winner marked.
         </p>
         <ul className="grid gap-4 sm:grid-cols-2" role="list">
@@ -145,7 +145,7 @@ export function DynastyWeekGraphicsPanel({
 
       {hasScores && weekFinal && (
         <section>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-accent)]">
+          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]">
             Result cards
           </h3>
           <ul className="grid gap-4 sm:grid-cols-2" role="list">
