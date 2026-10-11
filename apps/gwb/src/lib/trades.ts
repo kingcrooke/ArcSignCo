@@ -1,4 +1,4 @@
-import { managerNickname } from './nicknames'
+import { managerDisplayName } from './nicknames'
 import type {
   PlayersMap,
   SleeperLeague,
@@ -15,6 +15,7 @@ export interface TradeAsset {
 
 export interface TradeSide {
   rosterId: number
+  userId: string
   managerName: string
   received: TradeAsset[]
   sent: TradeAsset[]
@@ -61,7 +62,7 @@ function pickLabel(
   const yr = pick.season?.slice(-2) ?? '?'
   const owner = teams.get(pick.roster_id)
   const nick = owner
-    ? managerNickname(pick.roster_id, owner.displayName)
+    ? managerDisplayName(owner.userId, owner.displayName)
     : `R${pick.roster_id}`
   return `${yr} Rd ${pick.round} (${nick})`
 }
@@ -114,9 +115,12 @@ function sideFromRoster(
 ): TradeSide {
   const team = teams.get(rosterId)
   const { received, sent } = assetsForRoster(rosterId, tx, players, teams)
+  const userId = team?.userId ?? ''
+  const rawName = team?.displayName ?? `Team ${rosterId}`
   return {
     rosterId,
-    managerName: managerNickname(rosterId, team?.displayName ?? `Team ${rosterId}`),
+    userId,
+    managerName: managerDisplayName(userId, rawName),
     received,
     sent,
   }

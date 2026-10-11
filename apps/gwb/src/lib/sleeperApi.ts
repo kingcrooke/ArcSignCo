@@ -113,8 +113,23 @@ const REGULAR_SEASON_MAX_WEEK = 18
 
 export interface LeagueTradeBundle {
   league: SleeperLeague
+  rosters: SleeperRoster[]
   teams: Map<number, TeamInfo>
   transactions: SleeperTransaction[]
+  winnersBracket: import('./types').SleeperBracketMatch[] | null
+  losersBracket: import('./types').SleeperBracketMatch[] | null
+}
+
+export function fetchWinnersBracket(
+  leagueId: string,
+): Promise<import('./types').SleeperBracketMatch[]> {
+  return getJson(`/league/${leagueId}/winners_bracket`)
+}
+
+export function fetchLosersBracket(
+  leagueId: string,
+): Promise<import('./types').SleeperBracketMatch[]> {
+  return getJson(`/league/${leagueId}/losers_bracket`)
 }
 
 export async function fetchTradeHistoryChain(
@@ -136,11 +151,19 @@ export async function fetchTradeHistoryChain(
         fetchRosters(leagueId),
       ])
       const teams = buildTeamMap(users, rosters)
-      const transactions = await fetchTransactionsThroughWeek(
-        REGULAR_SEASON_MAX_WEEK,
-        leagueId,
-      )
-      bundles.push({ league, teams, transactions })
+      const [transactions, winnersBracket, losersBracket] = await Promise.all([
+        fetchTransactionsThroughWeek(REGULAR_SEASON_MAX_WEEK, leagueId),
+        fetchWinnersBracket(leagueId).catch(() => null),
+        fetchLosersBracket(leagueId).catch(() => null),
+      ])
+      bundles.push({
+        league,
+        rosters,
+        teams,
+        transactions,
+        winnersBracket,
+        losersBracket,
+      })
       leagueId = league.previous_league_id ?? null
       depth++
     } catch {
