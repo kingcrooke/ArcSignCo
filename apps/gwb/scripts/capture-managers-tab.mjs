@@ -35,23 +35,13 @@ async function main() {
   await page.getByLabel('Select manager').selectOption({ label: 'Danny' })
   await page.waitForTimeout(2000)
 
-  const hero = page.locator('#manager-hero')
-  const seasons = page.locator('#manager-seasons-section')
-  const trades = page.locator('#manager-trades-section')
   const past = page.locator('#manager-past-rosters-section')
-
-  for (const w of WIDTHS) {
-    await shotLocator(page, hero, 'gwb-managers-hero', w)
-    await shotLocator(page, seasons, 'gwb-managers-seasons', w)
-    await shotLocator(page, trades, 'gwb-managers-trades', w)
-  }
-
   const pastSelect = page.getByLabel('Select past season roster')
   if (await pastSelect.count()) {
     const options = await pastSelect.locator('option').allTextContents()
-    const older = options.find((o) => o.startsWith('2019') || o.startsWith('2020'))
-    if (older) {
-      const val = older.split(' · ')[0]
+    const y2020 = options.find((o) => o.startsWith('2020'))
+    if (y2020) {
+      const val = y2020.split(' · ')[0]
       await pastSelect.selectOption(val)
       await page.waitForTimeout(800)
       for (const w of WIDTHS) {

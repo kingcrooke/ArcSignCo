@@ -15,6 +15,7 @@ import {
 } from '../lib/mulligans'
 import { managerNickname } from '../lib/nicknames'
 import { playerDisplayName } from '../lib/matchupBoard'
+import { buildPastRosterRows } from '../lib/seasonNflTeams'
 import type { TradeLogEntry, TradeAsset } from '../lib/trades'
 import type { PlayersMap, SleeperRoster, StandingRow, TeamInfo } from '../lib/types'
 import { TeamAvatar } from './TeamAvatar'
@@ -27,38 +28,6 @@ function groupTradesBySeason(trades: TradeLogEntry[]): [string, TradeLogEntry[]]
     map.set(t.season, list)
   }
   return [...map.entries()].sort((a, b) => Number(b[0]) - Number(a[0]))
-}
-
-type RosterRow = {
-  id: string
-  name: string
-  pos: string
-  nfl: string
-  starter: boolean
-}
-
-function rosterTableRows(
-  finish: ManagerSeasonFinish,
-  players: PlayersMap | null,
-): RosterRow[] {
-  const roster = finish.roster
-  const starterSet = new Set(roster.starters ?? [])
-  const rows: RosterRow[] = []
-  for (const pid of roster.players ?? []) {
-    const p = players?.[pid]
-    rows.push({
-      id: pid,
-      name: players ? playerDisplayName(pid, players) : pid,
-      pos: p?.position ?? '—',
-      nfl: p?.team ?? '—',
-      starter: starterSet.has(pid),
-    })
-  }
-  rows.sort((a, b) => {
-    if (a.starter !== b.starter) return a.starter ? -1 : 1
-    return a.name.localeCompare(b.name)
-  })
-  return rows
 }
 
 function StatPill({ label, value }: { label: string; value: string }) {
@@ -466,7 +435,7 @@ export function ManagerPanel({
                     </tr>
                   </thead>
                   <tbody>
-                    {rosterTableRows(selectedPast, players).map((r) => (
+                    {buildPastRosterRows(selectedPast, players).map((r) => (
                       <tr
                         key={r.id}
                         className="border-b border-[var(--gwb-border)]/60 last:border-0"
