@@ -11,6 +11,86 @@ export const MIN_ROSTERED_PICKUPS = 3
 export const HIT_LINE = 10
 
 const COUNTED_TYPES = new Set(['waiver', 'free_agent'])
+const WAIVER_ACQUISITION_TYPES = new Set(['waiver', 'free_agent'])
+
+type AcquisitionVia = 'waiver' | 'free_agent' | 'trade' | 'commissioner' | 'other'
+
+interface RosterAcquisition {
+  rosterId: number
+  playerId: string
+  time: number
+  via: AcquisitionVia
+}
+
+function acquisitionVia(type: string): AcquisitionVia {
+  if (type === 'waiver' || type === 'free_agent') return type
+  if (type === 'trade') return 'trade'
+  if (type === 'commissioner') return 'commissioner'
+  return 'other'
+}
+
+/** Every completed add to a roster (waivers, FAs, trades, commissioner). */
+export function collectRosterAcquisitions(
+  transactions: SleeperTransaction[],
+): RosterAcquisition[] {
+  const events: RosterAcquisition[] = []
+  for (const t of transactions) {
+    if (t.status !== 'complete') continue
+    const via = acquisitionVia(t.type)
+    const adds = t.adds ?? {}
+    if (t.type === 'trade') {
+      for (const [playerId, rid] of Object.entries(adds)) {
+        if (typeof rid === 'number') {
+          events.push({
+            rosterId: rid,
+            playerId,
+            time: t.status_updated,
+            via,
+          })
+        }
+      }
+      continue
+    }
+    const rosterId = txRosterId(t)
+    if (rosterId == null) continue
+    for (const playerId of Object.keys(adds)) {
+      events.push({ rosterId, playerId, time: t.status_updated, via })
+    }
+  }
+  return events
+}
+
+function latestRosterAcquisition(
+  acquisitions: RosterAcquisition[],
+  rosterId: number,
+  playerId: string,
+  beforeTime: number,
+): RosterAcquisition | null {
+  let best: RosterAcquisition | null = null
+  for (const a of acquisitions) {
+    if (a.rosterId !== rosterId || a.playerId !== playerId) continue
+    if (a.time >= beforeTime) continue
+    if (!best || a.time > best.time) best = a
+  }
+  return best
+}
+
+function countsAsWaiverPickupAtWeek(
+  acquisitions: RosterAcquisition[],
+  rosterId: number,
+  playerId: string,
+  pickupTime: number,
+  weekClose: number,
+): boolean {
+  const latest = latestRosterAcquisition(
+    acquisitions,
+    rosterId,
+    playerId,
+    weekClose,
+  )
+  if (!latest || !WAIVER_ACQUISITION_TYPES.has(latest.via)) return false
+  return latest.time === pickupTime
+}
 
 export interface WaiverAddResult {
   playerId: string
@@ -183,6 +263,7 @@ export function computeWaiverBoard(input: {
 
   const closes = weekCloses(transactions, scoringThrough)
   const horizonClose = closes.get(scoringThrough)
+  const rosterAcquisitions = collectRosterAcquisitions(transactions)
 
   const matchups = new Map<number, Map<number, SleeperMatchup>>()
   for (let w = 1; w <= scoringThrough; w++) {
@@ -283,6 +364,17 @@ export function computeWaiverBoard(input: {
       const cands = list.filter((a) => a.time < close)
       if (!cands.length) continue
       const owner = cands[cands.length - 1]
+      if (
+        !countsAsWaiverPickupAtWeek(
+          rosterAcquisitions,
+          rosterId,
+          playerId,
+          owner.time,
+          close,
+        )
+      ) {
+        continue
+      }
       const pts = pointsOf(row, playerId)
       owner.weeks.push(week)
       if (started(row, playerId)) {
