@@ -23,6 +23,16 @@ export function lastCompletedWeek(
   return Math.max(1, nfl - 1)
 }
 
+/** Best Games default scope: current NFL week when final, else last finished week. */
+export function defaultBestGamesWeek(
+  league: SleeperLeague,
+  nflState: NflState,
+): number {
+  const current = currentNflWeek(nflState)
+  if (isWeekComplete(current, league, nflState)) return current
+  return lastCompletedWeek(league, nflState)
+}
+
 /** True when NFL is still on this week and Sleeper has not finished scoring it. */
 export function isWeekLive(
   week: number,

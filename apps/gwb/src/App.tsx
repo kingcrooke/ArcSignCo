@@ -29,6 +29,7 @@ import { MULLIGAN_LEDGER_ENTRIES } from './lib/mulligans'
 import type { GraphicsSectionKind } from './lib/weekGraphics'
 import {
   cumulativeDeferralNote,
+  defaultBestGamesWeek,
   lastCompletedWeek,
 } from './lib/weeks'
 import { useLeagueData } from './hooks/useLeagueData'
@@ -74,7 +75,9 @@ export default function App() {
   const [recapFocusId, setRecapFocusId] = useState<string | null>(null)
   const sound = useSound()
   const [deckKind, setDeckKind] = useState<GraphicsSectionKind | null>(null)
-  const [bestGamesScope, setBestGamesScope] = useState<BestGamesScope>(1)
+  const [bestGamesScope, setBestGamesScope] = useState<BestGamesScope | null>(
+    null,
+  )
   const [managerRosterId, setManagerRosterId] = useState(1)
   const navRef = useRef<HTMLElement>(null)
   const didInitialTabScroll = useRef(false)
@@ -120,24 +123,33 @@ export default function App() {
     data?.league.settings.last_scored_leg ?? 18,
   )
 
+  const effectiveBestGamesScope: BestGamesScope =
+    bestGamesScope ??
+    (data ? defaultBestGamesWeek(data.league, data.nflState) : 1)
+
   useEffect(() => {
     if (!data) return
     const params = new URLSearchParams(window.location.search)
     const w = params.get('week')
     const t = params.get('tab') as AppTab | null
     const slide = params.get('slide')
-    const completed = lastCompletedWeek(data.league, data.nflState)
+    const bestDefault = defaultBestGamesWeek(data.league, data.nflState)
     if (t === 'bestgames') {
       if (w === 'all') setBestGamesScope('all')
       else if (w) {
         const n = Number.parseInt(w, 10)
-        setBestGamesScope(!Number.isNaN(n) ? n : completed)
+        setBestGamesScope(!Number.isNaN(n) ? n : bestDefault)
       } else {
-        setBestGamesScope(completed)
+        setBestGamesScope(bestDefault)
       }
-    } else if (w) {
-      const n = Number.parseInt(w, 10)
-      if (!Number.isNaN(n)) data.setSelectedWeek(n)
+    } else {
+      if (bestGamesScope === null) {
+        setBestGamesScope(bestDefault)
+      }
+      if (w) {
+        const n = Number.parseInt(w, 10)
+        if (!Number.isNaN(n)) data.setSelectedWeek(n)
+      }
     }
     if (t && TAB_IDS.includes(t)) setTab(t)
     const mgr = params.get('manager')
@@ -155,7 +167,9 @@ export default function App() {
     if (tab === 'bestgames') {
       params.set(
         'week',
-        bestGamesScope === 'all' ? 'all' : String(bestGamesScope),
+        effectiveBestGamesScope === 'all'
+          ? 'all'
+          : String(effectiveBestGamesScope),
       )
     } else {
       params.set('week', String(data.selectedWeek))
@@ -169,7 +183,14 @@ export default function App() {
       '',
       `${window.location.pathname}?${qs}`,
     )
-  }, [data?.selectedWeek, tab, slideParam, data, bestGamesScope, managerRosterId])
+  }, [
+    data?.selectedWeek,
+    tab,
+    slideParam,
+    data,
+    effectiveBestGamesScope,
+    managerRosterId,
+  ])
 
   const scrollActiveTabIntoView = useCallback((behavior: ScrollBehavior) => {
     const nav = navRef.current
@@ -213,6 +234,16 @@ export default function App() {
     setTab(next)
     if (next !== 'gallery' && next !== 'frankie') setSlideParam(null)
     if (next !== 'gallery') setDeckKind(null)
+    if (next === 'bestgames' && data) {
+      const w = new URLSearchParams(window.location.search).get('week')
+      if (w === 'all') setBestGamesScope('all')
+      else if (w) {
+        const n = Number.parseInt(w, 10)
+        if (!Number.isNaN(n)) setBestGamesScope(n)
+      } else {
+        setBestGamesScope(defaultBestGamesWeek(data.league, data.nflState))
+      }
+    }
   }
 
   const onWeekChange = (w: number) => {
@@ -228,9 +259,9 @@ export default function App() {
 
   return (
     <div
-      className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${
-        tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'
-      }`}
+      className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col px-4 pb-8 pt-6 ${
+        tab === 'h2h' ? 'overflow-x-visible' : 'overflow-x-clip'
+      } ${tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'}`}
     >
       <header className="mb-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -293,7 +324,7 @@ export default function App() {
 
           <nav
             ref={navRef}
-            className="gwb-section-tabs mb-6 flex w-full min-w-0 flex-wrap gap-1 rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+            className="gwb-section-tabs mb-6 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
             aria-label="Sections"
           >
             {tabs.map((t) => {
@@ -379,7 +410,7 @@ export default function App() {
                 playersLoading={data.playersLoading}
                 ensurePlayers={data.ensurePlayers}
                 deferralNote={data.standingsDeferralNote}
-                scope={bestGamesScope}
+                scope={effectiveBestGamesScope}
                 onScopeChange={(next) => {
                   sound.playClick()
                   setBestGamesScope(next)
@@ -429,6 +460,13 @@ export default function App() {
                   isLive={data.isSelectedWeekLive}
                   weekMatchups={data.matchupsByWeek.get(data.selectedWeek)}
                   playersLoading={data.playersLoading}
+                  league={data.league}
+                  nflState={data.nflState}
+                  teams={data.teams}
+                  players={data.players}
+                  matchupsByWeek={data.matchupsByWeek}
+                  onMatchupsUpdated={data.updateWeekMatchups}
+                  recapsTabActive={tab === 'recaps'}
                 />
               </div>
             </section>
@@ -488,7 +526,7 @@ export default function App() {
             </section>
           )}
           {tab === 'h2h' && (
-            <section className="min-w-0 w-full">
+            <section className="-mx-4 min-w-0 w-[calc(100%+2rem)] px-4 sm:mx-0 sm:w-full sm:px-0">
               <h2 className="mb-3 text-lg font-semibold">Head-to-head</h2>
               <HeadToHeadPanel
                 teams={data.teams}
