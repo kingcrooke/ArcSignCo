@@ -26,7 +26,7 @@
     },
     {
       "season": "2014",
-      "champion": "moe",
+      "champion": "mauricio",
       "championRecord": "9-4",
       "championSeed": "3rd",
       "runnerUp": "danny",
@@ -169,11 +169,10 @@
       "finalsLosses": 0,
       "allTimeRecord": { "wins": 79, "losses": 80 }
     },
-    "moe": {
-      "displayName": "Moe",
-      "wallDisplayName": "Moe",
+    "mauricio": {
+      "displayName": "Mauricio",
+      "archiveName": "Moe",
       "userId": "429321092230815744",
-      "sleeperDisplayName": "Mauricio",
       "joined": 2012,
       "currentMember": true,
       "titleYears": [2014],

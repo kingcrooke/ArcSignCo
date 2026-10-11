@@ -33,4 +33,18 @@ describe('gwbArchive', () => {
   it('tracks Danny finals appearances', () => {
     expect(finalsAppearancesForUserId('401754707162333184')).toBe(6)
   })
+
+  it('maps Mauricio to archive history (Moe in STATS)', () => {
+    expect(archiveMemberKeyForUserId('429321092230815744')).toBe('mauricio')
+    expect(wallDisplayName('mauricio')).toBe('Mauricio')
+    expect(titleCountForUserId('429321092230815744')).toBe(1)
+    const board = titlesLeaderboard()
+    expect(board.some((e) => e.displayName === 'Moe')).toBe(false)
+    expect(board.find((e) => e.key === 'mauricio')).toMatchObject({
+      displayName: 'Mauricio',
+      titles: 1,
+      titleYears: [2014],
+      formerMember: false,
+    })
+  })
 })

@@ -51,11 +51,11 @@ async function main() {
     await shotLocator(page, crookeSeasons, 'gwb-managers-crooke-pre2019-seasons', w)
   }
 
-  await select.selectOption({ label: 'Danny' })
+  await select.selectOption({ label: 'Mauricio' })
   await page.waitForTimeout(1500)
-  const dannyHero = page.locator('#manager-hero')
+  const mauricioHero = page.locator('#manager-hero')
   for (const w of WIDTHS) {
-    await shotLocator(page, dannyHero, 'gwb-managers-danny-hero', w)
+    await shotLocator(page, mauricioHero, 'gwb-managers-mauricio-hero', w)
   }
 
   await browser.close()
