@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 130" role="img" aria-labelledby="title desc">
+  <title id="title">NovaStage wordmark</title>
+  <desc id="desc">Display serif wordmark with gold star and soft spotlight glow</desc>
+  <defs>
+    <radialGradient id="spotGlow" cx="50%" cy="0%" r="70%">
+      <stop offset="0%" stop-color="#F2C94C" stop-opacity="0.5"/>
+      <stop offset="50%" stop-color="#2DD4BF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#F2C94C" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="starGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <ellipse cx="240" cy="32" rx="110" ry="48" fill="url(#spotGlow)"/>
+  <path fill="#F2C94C" filter="url(#starGlow)" d="M240 8l2.8 11.2L256 14l-9.2 8.8L262 32l-11.2 2.8L256 50l-9.2-9.2L240 58l-6.8-17.2L224 50l-11.2 2.8L218 32l9.2-9.2L224 14l16 5.2Z"/>
+  <text x="240" y="98" text-anchor="middle" font-family="'Young Serif', Georgia, serif" font-size="54" font-weight="700" fill="#1E9AAB">NovaStage</text>
+  <text x="240" y="118" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="9" font-weight="600" letter-spacing="2" fill="#4A5568">WHERE TALENT GROWS AND CONFIDENCE TAKES THE STAGE.</text>
+</svg>

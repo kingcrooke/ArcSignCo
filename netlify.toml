@@ -215,6 +215,22 @@
   [headers.conditions]
     Status = "200"
 
+# Hidden NovaStage LLC website preview (URL-only; not linked from the public site).
+[[headers]]
+  for = "/novastage-2c397e45/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/novastage-2c397e45/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/novastage-2c397e45/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # Vendored libraries carry their version in the filename: never overwrite one, add a new version.
 [[headers]]
   for = "/tools/sign-mockup/vendor/*"

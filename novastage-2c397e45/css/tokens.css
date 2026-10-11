@@ -1,0 +1,28 @@
+:root {
+  /* Blue-leaning turquoise (not green) */
+  --turquoise-bright: #3ec8ef;
+  --turquoise-deep: #1a8fb5;
+  --gold: #f2c94c;
+  --gold-bright: #ffe08a;
+  --gold-dark: #c9971a;
+  --charcoal: #141821;
+  --charcoal-soft: #1c2330;
+  --cream: #f4efe6;
+  --white: #ffffff;
+  --black: #0a0a0a;
+  --text-on-dark: #f4efe6;
+  --text-muted-dark: #c5cdd8;
+  --text-on-light: #141821;
+  --text-muted-light: #4a5568;
+  --line-dark: rgba(244, 239, 230, 0.14);
+  --line-light: rgba(20, 24, 33, 0.12);
+  --display: "Shantell Sans", system-ui, sans-serif;
+  --display-alt: "Marcellus", Georgia, serif;
+  --caps: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --panel-bg: rgba(20, 24, 33, 0.68);
+  --panel-bg-strong: rgba(20, 24, 33, 0.72);
+  --max-width: 1180px;
+  --shadow-soft: 0 24px 80px rgba(0, 0, 0, 0.28);
+  --focus-ring: 0 0 0 3px rgba(62, 200, 239, 0.45);
+}

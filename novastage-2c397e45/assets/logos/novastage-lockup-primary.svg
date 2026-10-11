@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 380" role="img" aria-labelledby="lockupTitle lockupDesc">
+  <title id="lockupTitle">NovaStage</title>
+  <desc id="lockupDesc">Official lockup: gold star above, stage light pool in front of the name, slogan underneath.</desc>
+  <defs>
+    <linearGradient id="beamGrad" x1="280" y1="52" x2="280" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFE9A8" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#F2C94C" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#F2C94C" stop-opacity="0" />
+    </linearGradient>
+    <radialGradient id="poolGrad" cx="280" cy="298" rx="220" ry="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFF9E8" stop-opacity="1" />
+      <stop offset="35%" stop-color="#F2C94C" stop-opacity="0.8" />
+      <stop offset="65%" stop-color="#3EC8EF" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#F2C94C" stop-opacity="0" />
+    </radialGradient>
+    <filter id="starGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3" result="b" />
+      <feMerge>
+        <feMergeNode in="b" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  <path d="M280 54 L246 182 L314 182 Z" fill="url(#beamGrad)" opacity="0.7" />
+  <ellipse cx="280" cy="298" rx="220" ry="46" fill="url(#poolGrad)" />
+  <ellipse cx="280" cy="298" rx="155" ry="30" fill="#FFF6D6" opacity="0.4" />
+  <g transform="translate(280 44)" filter="url(#starGlow)">
+    <path fill="#F2C94C" d="M0 -38 L4.8 -9 L34 -16 L9 5 L26 34 L0 16 L-26 34 L-9 5 L-34 -16 L-4.8 -9 Z" />
+    <path fill="#FFF8E0" opacity="0.95" d="M0 -20 L2.2 -7 L12 -9 L3.5 0 L9 14 L0 7 L-9 14 L-3.5 0 L-12 -9 L-2.2 -7 Z" />
+    <line x1="0" y1="16" x2="0" y2="48" stroke="#FFE9A8" stroke-width="3" stroke-linecap="round" opacity="0.9" />
+  </g>
+  <text x="280" y="224" text-anchor="middle" font-family="'Shantell Sans', system-ui, sans-serif" font-size="64" font-weight="600" fill="#3EC8EF">NovaStage</text>
+  <text x="280" y="356" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-size="13" font-weight="600" letter-spacing="2.6" fill="#F4EFE6" opacity="0.95">“WHERE TALENT GROWS AND CONFIDENCE TAKES THE STAGE.”</text>
+</svg>
