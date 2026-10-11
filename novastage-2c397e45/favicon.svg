@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512" role="img" aria-labelledby="t">
+  <title id="t">NovaStage</title>
+  <defs>
+    <radialGradient id="ns-mark-glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFE3A0" stop-opacity="1"/>
+      <stop offset="0.35" stop-color="#F2C94C" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#F2C94C" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100" height="100" rx="22" fill="#1F1F1F"/>
+  <circle cx="76.6" cy="21.4" r="20" fill="url(#ns-mark-glow)"/>
+  <circle cx="76.6" cy="21.4" r="3.4" fill="#FFF3CF"/>
+  <g transform="translate(24.79 76.94)"><path fill="#2DD4BF" stroke="#2DD4BF" stroke-width="1.2" stroke-linejoin="round" d="M34.97 0.62 14.76 -46.5H28.24L40.24 -18.91L46.5 -46.5H48.89L38.16 0.62ZM-2.39 0V-2.26H12.62V0ZM3.47 0 13.64 -44.24H7.53V-46.5H16.43L5.89 0ZM39.06 -44.24V-46.5H54.81V-44.24Z"/></g>
+</svg>
