@@ -167,7 +167,192 @@ describe('computeWaiverBoard', () => {
     expect(failed).toHaveLength(8)
     expect(failed.every((m) => m.startedPoints == null)).toBe(true)
   })
+
+  it('does not credit started points after a trade re-acquisition', () => {
+    const board = syntheticBoard({
+      scoringThrough: 1,
+      transactions: [
+        waiverBatch(1, 5000),
+        faAdd(1, 1000, 1, '99'),
+        trade(1, 2000, { '99': 2 }, { '99': 1 }),
+        trade(1, 4000, { '99': 1 }, { '99': 2 }),
+      ],
+      matchups: [
+        matchupWeek(1, 1, {
+          players: ['99'],
+          starters: ['99'],
+          points: { '99': 12.5 },
+        }),
+      ],
+    })
+    expect(row(board, 1).startedPoints).toBe(0)
+    expect(row(board, 1).pickupCount).toBe(1)
+  })
+
+  it('ignores commissioner adds for scoring and move list', () => {
+    const board = syntheticBoard({
+      scoringThrough: 1,
+      transactions: [
+        waiverBatch(1, 5000),
+        {
+          type: 'commissioner',
+          status: 'complete',
+          status_updated: 1500,
+          leg: 1,
+          roster_ids: [1],
+          adds: { '88': 1 },
+          drops: {},
+        },
+        faAdd(1, 2000, 1, '77'),
+      ],
+      matchups: [
+        matchupWeek(1, 1, {
+          players: ['77', '88'],
+          starters: ['77', '88'],
+          points: { '77': 5, '88': 20 },
+        }),
+      ],
+    })
+    expect(row(board, 1).startedPoints).toBe(5)
+    expect(board.moves.every((m) => m.type !== 'commissioner')).toBe(true)
+    expect(board.moves.some((m) => m.adds.includes('88'))).toBe(false)
+  })
+
+  it('excludes pending and failed waiver adds from scoring', () => {
+    const board = syntheticBoard({
+      scoringThrough: 1,
+      transactions: [
+        waiverBatch(1, 5000),
+        {
+          type: 'waiver',
+          status: 'failed',
+          status_updated: 2000,
+          leg: 1,
+          roster_ids: [1],
+          adds: { '55': 1 },
+          drops: {},
+        },
+        {
+          type: 'waiver',
+          status: 'complete',
+          status_updated: 6000,
+          leg: 1,
+          roster_ids: [1],
+          adds: { '66': 1 },
+          drops: {},
+        },
+        faAdd(1, 3000, 1, '44'),
+      ],
+      matchups: [
+        matchupWeek(1, 1, {
+          players: ['44', '55', '66'],
+          starters: ['44', '55', '66'],
+          points: { '44': 8, '55': 30, '66': 40 },
+        }),
+      ],
+    })
+    const r = row(board, 1)
+    expect(r.startedPoints).toBe(8)
+    expect(r.failedClaims).toBe(1)
+    expect(r.pendingPickups).toBe(1)
+    expect(board.moves.find((m) => m.adds.includes('66'))?.pending).toBe(true)
+  })
 })
+
+function waiverBatch(leg: number, closeTime: number): SleeperTransaction {
+  return {
+    type: 'waiver',
+    status: 'complete',
+    status_updated: closeTime,
+    leg,
+    roster_ids: [1],
+    adds: {},
+    drops: {},
+  }
+}
+
+function faAdd(
+  leg: number,
+  time: number,
+  rosterId: number,
+  playerId: string,
+): SleeperTransaction {
+  return {
+    type: 'free_agent',
+    status: 'complete',
+    status_updated: time,
+    leg,
+    roster_ids: [rosterId],
+    adds: { [playerId]: rosterId },
+    drops: {},
+  }
+}
+
+function trade(
+  leg: number,
+  time: number,
+  adds: Record<string, number>,
+  drops: Record<string, number>,
+): SleeperTransaction {
+  const rosterIds = [...new Set([...Object.values(adds), ...Object.values(drops)])]
+  return {
+    type: 'trade',
+    status: 'complete',
+    status_updated: time,
+    leg,
+    roster_ids: rosterIds,
+    adds,
+    drops,
+  }
+}
+
+function matchupWeek(
+  week: number,
+  rosterId: number,
+  spec: {
+    players: string[]
+    starters: string[]
+    points: Record<string, number>
+  },
+): SleeperMatchup {
+  return {
+    roster_id: rosterId,
+    matchup_id: week,
+    points: 0,
+    players: spec.players,
+    starters: spec.starters,
+    players_points: spec.points,
+  }
+}
+
+function syntheticBoard(opts: {
+  scoringThrough: number
+  transactions: SleeperTransaction[]
+  matchups: SleeperMatchup[]
+}) {
+  const users = load<SleeperUser[]>(join(root, 'users.json'))
+  const rosters = load<SleeperRoster[]>(join(root, 'rosters.json'))
+  const teams = buildTeamMap(users, rosters)
+  const matchupsByWeek = new Map<number, SleeperMatchup[]>()
+  for (const m of opts.matchups) {
+    const week = m.matchup_id
+    const list = matchupsByWeek.get(week) ?? []
+    list.push(m)
+    matchupsByWeek.set(week, list)
+  }
+  for (let w = 1; w <= opts.scoringThrough; w++) {
+    if (!matchupsByWeek.has(w)) matchupsByWeek.set(w, [])
+  }
+  return computeWaiverBoard({
+    transactions: opts.transactions,
+    matchupsByWeek,
+    teams,
+    rosters,
+    scoringThrough: opts.scoringThrough,
+    selectedWeek: opts.scoringThrough,
+    selectedWeekComplete: true,
+  })
+}
 
 function loadTx(): SleeperTransaction[] {
   const transactions: SleeperTransaction[] = []
