@@ -1,20 +1,15 @@
 import bestGamesJson from '../content/best-games.json'
-import {
-  resolveMulliganNetImpact,
-  type MulliganLedgerEntry,
-} from './mulligans'
 import { groupMatchupPairs } from './matchupBoard'
 import type { NflState, SleeperLeague, SleeperMatchup } from './types'
 import { isWeekLive, lastCompletedWeek } from './weeks'
 
-export type BestGameBadge = 'Nail-biter' | 'Shootout' | 'Upset' | 'Mulligan'
+export type BestGameBadge = 'Nail-biter' | 'Shootout' | 'Upset'
 
 export interface GameScoreBreakdown {
   closeness: number
   shootout: number
   upsetUnits: number
   upsetBonus: number
-  mulliganBonus: number
   composite: number
   margin: number
   combinedPoints: number
@@ -117,49 +112,11 @@ function recordsBeforeWeek(
   return records
 }
 
-function mulligansInMatchup(
-  week: number,
-  homeRosterId: number,
-  awayRosterId: number,
-  ledger: MulliganLedgerEntry[],
-): MulliganLedgerEntry[] {
-  return ledger.filter(
-    (e) =>
-      e.week === week &&
-      (e.rosterId === homeRosterId || e.rosterId === awayRosterId),
-  )
-}
-
-function swapChangedWinner(entry: MulliganLedgerEntry): boolean {
-  const wouldWin = entry.scoreWithout > entry.opponentScore
-  return wouldWin !== entry.won
-}
-
-export function computeMulliganBonus(
-  margin: number,
-  entries: MulliganLedgerEntry[],
-): number {
-  if (!entries.length) return 0
-  let bonus = 0
-  let closeGameBonus = false
-  for (const entry of entries) {
-    if (entry.flipped) bonus += 30
-    const net = resolveMulliganNetImpact(entry)
-    if (net !== null && margin < Math.abs(net) && swapChangedWinner(entry)) {
-      bonus += 20
-    }
-  }
-  if (margin < 15 && entries.length > 0) closeGameBonus = true
-  if (closeGameBonus) bonus += 10
-  return bonus
-}
-
 export function computeGameBreakdown(
   home: SleeperMatchup,
   away: SleeperMatchup,
-  week: number,
+  _week: number,
   recordsBefore: Map<number, WinLoss>,
-  ledger: MulliganLedgerEntry[],
 ): GameScoreBreakdown {
   const margin = Math.abs(home.points - away.points)
   const combinedPoints = home.points + away.points
@@ -174,22 +131,13 @@ export function computeGameBreakdown(
   const upsetUnits = Math.max(0, winnerRec.losses - loserRec.wins)
   const upsetBonus = 12 * upsetUnits
 
-  const mulliganEntries = mulligansInMatchup(
-    week,
-    home.roster_id,
-    away.roster_id,
-    ledger,
-  )
-  const mulliganBonus = computeMulliganBonus(margin, mulliganEntries)
-
-  const composite = closeness + shootout + upsetBonus + mulliganBonus
+  const composite = closeness + shootout + upsetBonus
 
   return {
     closeness,
     shootout,
     upsetUnits,
     upsetBonus,
-    mulliganBonus,
     composite,
     margin,
     combinedPoints,
@@ -203,7 +151,6 @@ export function badgesForBreakdown(
   if (breakdown.margin <= 10) badges.push('Nail-biter')
   if (breakdown.combinedPoints >= 270) badges.push('Shootout')
   if (breakdown.upsetBonus > 0) badges.push('Upset')
-  if (breakdown.mulliganBonus > 0) badges.push('Mulligan')
   return badges
 }
 
@@ -232,20 +179,13 @@ function rankCandidates(
 function candidatesForWeek(
   week: number,
   matchupsByWeek: Map<number, SleeperMatchup[]>,
-  ledger: MulliganLedgerEntry[],
 ): Omit<RankedBestGame, 'rank'>[] {
   const matchups = matchupsByWeek.get(week)
   if (!matchups?.length) return []
   const recordsBefore = recordsBeforeWeek(matchupsByWeek, week)
   const out: Omit<RankedBestGame, 'rank'>[] = []
   for (const { matchupId, home, away } of groupMatchupPairs(matchups)) {
-    const breakdown = computeGameBreakdown(
-      home,
-      away,
-      week,
-      recordsBefore,
-      ledger,
-    )
+    const breakdown = computeGameBreakdown(home, away, week, recordsBefore)
     const winnerRosterId =
       home.points >= away.points ? home.roster_id : away.roster_id
     const loserRosterId =
@@ -271,11 +211,10 @@ export function rankBestGamesForWeek(
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   league: SleeperLeague,
   nflState: NflState,
-  ledger: MulliganLedgerEntry[],
   limit = BEST_GAMES_PER_WEEK,
 ): RankedBestGame[] {
   if (isWeekLive(week, league, nflState)) return []
-  const candidates = candidatesForWeek(week, matchupsByWeek, ledger)
+  const candidates = candidatesForWeek(week, matchupsByWeek)
   return rankCandidates(candidates, limit)
 }
 
@@ -284,7 +223,6 @@ export function rankBestGamesByWeek(
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   league: SleeperLeague,
   nflState: NflState,
-  ledger: MulliganLedgerEntry[],
 ): BestGamesWeekGroup[] {
   const completedThrough = lastCompletedWeek(league, nflState)
   const groups: BestGamesWeekGroup[] = []
@@ -296,7 +234,6 @@ export function rankBestGamesByWeek(
       matchupsByWeek,
       league,
       nflState,
-      ledger,
     )
     if (games.length) groups.push({ week, games })
   }

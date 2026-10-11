@@ -2,18 +2,18 @@ import { useState } from 'react'
 import type { ManagerWaiverRow } from '../lib/waiverWire'
 
 const PALETTE = [
-  '#e8b923',
-  '#7fd1c7',
-  '#f2a3b3',
+  '#a855f7',
+  '#c084fc',
+  '#d8b4fe',
   '#9bb7ff',
-  '#e08a4f',
-  '#c6e07a',
-  '#d7b4f3',
-  '#8fd0ff',
-  '#f0d38a',
-  '#ff8f8f',
-  '#b8c4ce',
-  '#6ee7b7',
+  '#e879f9',
+  '#f0abfc',
+  '#a78bfa',
+  '#8b5cf6',
+  '#f472b6',
+  '#818cf8',
+  '#a397b5',
+  '#e11d48',
 ]
 
 export function rosterColor(rosterId: number): string {
@@ -68,7 +68,7 @@ export function WaiverEfficiencyChart({
         y1={top}
         x2={zero}
         y2={h - 8}
-        stroke="#f4f7fb"
+        stroke="var(--gwb-text)"
         strokeWidth={1.25}
       />
       {rows.map((r, i) => {
@@ -76,7 +76,7 @@ export function WaiverEfficiencyChart({
         const wes = r.wes ?? 0
         const x0 = Math.min(zero, xOf(wes))
         const x1 = Math.max(zero, xOf(wes))
-        const fill = r.eligible ? rosterColor(r.rosterId) : '#243040'
+        const fill = r.eligible ? rosterColor(r.rosterId) : '#2f2640'
         const labelX = wes >= 0 ? x1 + 6 : x0 - 6
         return (
           <g key={r.rosterId}>
@@ -96,7 +96,7 @@ export function WaiverEfficiencyChart({
               height={18}
               rx={4}
               fill={fill}
-              stroke={r.eligible ? 'none' : '#e8b923'}
+              stroke={r.eligible ? 'none' : '#a855f7'}
               strokeWidth={r.eligible ? 0 : 1.25}
             />
             <text
@@ -168,12 +168,12 @@ export function WaiverCumulativeChart({
               y1={yOf(tick)}
               x2={w - right}
               y2={yOf(tick)}
-              stroke="#243040"
+              stroke="#2f2640"
             />
             <text
               x={left - 6}
               y={yOf(tick) + 4}
-              fill="#8fa3b8"
+              fill="#a397b5"
               fontSize={11}
               textAnchor="end"
               fontFamily="Inter, system-ui, sans-serif"

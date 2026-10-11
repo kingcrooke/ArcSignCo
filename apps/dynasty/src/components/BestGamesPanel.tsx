@@ -5,7 +5,6 @@ import {
   rankBestGamesForWeek,
   type RankedBestGame,
 } from '../lib/bestGames'
-import type { MulliganLedgerEntry } from '../lib/mulligans'
 import {
   playerDisplayName,
   playerMetaLine,
@@ -32,10 +31,10 @@ function Badge({ label }: { label: string }) {
     label === 'Nail-biter'
       ? 'border-rose-400/40 bg-rose-950/40 text-rose-100'
       : label === 'Shootout'
-        ? 'border-amber-400/40 bg-amber-950/40 text-amber-100'
+        ? 'border-rose-400/40 bg-rose-950/40 text-rose-100'
         : label === 'Upset'
-          ? 'border-violet-400/40 bg-violet-950/40 text-violet-100'
-          : 'border-cyan-400/40 bg-cyan-950/40 text-cyan-100'
+          ? 'border-[color-mix(in_srgb,var(--gwb-accent)_45%,transparent)] bg-[color-mix(in_srgb,var(--gwb-accent)_12%,var(--gwb-surface))] text-[var(--gwb-accent-bright)]'
+          : 'border-[var(--gwb-border)] bg-[var(--gwb-bg)] text-[var(--gwb-muted)]'
   return (
     <span
       className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${tone}`}
@@ -267,7 +266,6 @@ export function BestGamesPanel({
   league,
   nflState,
   maxWeek,
-  ledger,
   teams,
   players,
   playersLoading,
@@ -280,7 +278,6 @@ export function BestGamesPanel({
   league: SleeperLeague
   nflState: NflState
   maxWeek: number
-  ledger: MulliganLedgerEntry[]
   teams: Map<number, TeamInfo>
   players: PlayersMap | null
   playersLoading: boolean
@@ -303,19 +300,13 @@ export function BestGamesPanel({
 
   const weekGroups = useMemo(() => {
     if (scope !== 'all') return null
-    return rankBestGamesByWeek(matchupsByWeek, league, nflState, ledger)
-  }, [scope, matchupsByWeek, league, nflState, ledger])
+    return rankBestGamesByWeek(matchupsByWeek, league, nflState)
+  }, [scope, matchupsByWeek, league, nflState])
 
   const weekGames = useMemo(() => {
     if (scope === 'all') return []
-    return rankBestGamesForWeek(
-      scope,
-      matchupsByWeek,
-      league,
-      nflState,
-      ledger,
-    )
-  }, [scope, matchupsByWeek, league, nflState, ledger])
+    return rankBestGamesForWeek(scope, matchupsByWeek, league, nflState)
+  }, [scope, matchupsByWeek, league, nflState])
 
   const hasContent =
     scope === 'all'
@@ -346,7 +337,7 @@ export function BestGamesPanel({
   return (
     <div className="space-y-3" id="best-games-panel">
       {deferralNote && (
-        <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
+        <p className="dynasty-deferral">
           {deferralNote}
         </p>
       )}

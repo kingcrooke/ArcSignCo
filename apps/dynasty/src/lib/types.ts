@@ -13,6 +13,8 @@ export interface SleeperRoster {
   owner_id: string | null
   players: string[]
   starters: string[]
+  taxi?: string[] | null
+  reserve?: string[] | null
   settings: {
     wins: number
     losses: number
@@ -49,6 +51,34 @@ export interface SleeperDraftPickTrade {
   roster_id: number
   previous_owner_id?: number
   owner_id?: number
+}
+
+export interface SleeperDraft {
+  draft_id: string
+  league_id: string
+  season: string
+  status: string
+  type: string
+  settings?: { rounds?: number }
+  metadata?: { name?: string }
+}
+
+export interface SleeperDraftPick {
+  pick_no: number
+  round: number
+  roster_id: number
+  player_id: string | null
+  picked_by: string
+  draft_slot: number
+  metadata?: { years_exp?: string; team?: string; position?: string }
+}
+
+export interface SleeperTradedPick {
+  season: string
+  round: number
+  roster_id: number
+  owner_id: number
+  previous_owner_id: number
 }
 
 export interface SleeperTransaction {

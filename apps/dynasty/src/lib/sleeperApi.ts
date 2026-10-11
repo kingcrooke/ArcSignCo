@@ -3,9 +3,12 @@ import { buildTeamMap } from './teams'
 import type {
   NflState,
   NflWeekGame,
+  SleeperDraft,
+  SleeperDraftPick,
   SleeperLeague,
   SleeperMatchup,
   SleeperRoster,
+  SleeperTradedPick,
   SleeperTransaction,
   SleeperUser,
   TeamInfo,
@@ -107,7 +110,20 @@ export async function fetchMatchupsForWeekRange(
   return map
 }
 
-/** GWB redraft chain runs 2026 → 2019 (`475803598278619136`). */
+export function fetchDrafts(leagueId = LEAGUE_ID): Promise<SleeperDraft[]> {
+  return getJson(`/league/${leagueId}/drafts`)
+}
+
+export function fetchDraftPicks(draftId: string): Promise<SleeperDraftPick[]> {
+  return getJson(`/draft/${draftId}/picks`)
+}
+
+export function fetchTradedPicks(
+  leagueId = LEAGUE_ID,
+): Promise<SleeperTradedPick[]> {
+  return getJson(`/league/${leagueId}/traded_picks`)
+}
+
 const MAX_PRIOR_LEAGUE_CHAIN = 12
 const REGULAR_SEASON_MAX_WEEK = 18
 

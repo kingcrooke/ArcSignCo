@@ -90,7 +90,7 @@ export function WaiverPanel({
         <p className="text-sm text-[var(--gwb-muted)]">Loading player names…</p>
       )}
       {deferralNote && (
-        <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
+        <p className="dynasty-deferral">
           {deferralNote} Moves from Week {board.selectedWeek} are still in the log.
         </p>
       )}
@@ -269,7 +269,7 @@ function WeeklyAddsStrip({
               +{m.adds.map(name).join(', ')}
             </p>
             {showPending && m.pending ? (
-              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-accent-bright)]">
                 Pending
               </p>
             ) : m.startedPoints != null ? (
@@ -601,7 +601,7 @@ function MoveRow({
         {move.status === 'failed' ? (
           <span className="text-xs uppercase tracking-wide text-red-200">Failed</span>
         ) : move.pending ? (
-          <span className="text-xs uppercase tracking-wide text-amber-200">Pending</span>
+          <span className="text-xs uppercase tracking-wide text-[var(--gwb-accent-bright)]">Pending</span>
         ) : (
           <span className="tabular-nums text-[var(--gwb-accent)]">
             {move.startedPoints == null ? '' : `${pts(move.startedPoints)} started`}

@@ -1,6 +1,7 @@
 import deployConfig from '../../deploy.config.json' with { type: 'json' }
 
 export const LEAGUE_ID = deployConfig.currentLeagueId
+export const CURRENT_LEAGUE_ID = deployConfig.currentLeagueId
 export const LEAGUE_NAME = deployConfig.leagueName
 export const DEPLOY_SLUG = deployConfig.deploySlug
 export const SLEEPER_API = 'https://api.sleeper.app/v1'

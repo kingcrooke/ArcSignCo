@@ -2,27 +2,56 @@ import { useEffect, useState } from 'react'
 import managerAvatars from '../data/manager-avatars.json'
 import type { TeamInfo } from '../lib/types'
 
-const customByRoster = managerAvatars as Record<string, string>
+export type AvatarMood = 'base' | 'hype' | 'excited' | 'loss'
 
-function customAvatarUrl(rosterId: number): string | null {
-  const entry = customByRoster[String(rosterId)]?.trim()
+type AvatarEntry =
+  | string
+  | { base?: string; hype?: string; excited?: string; loss?: string }
+
+const customByRoster = managerAvatars as Record<string, AvatarEntry>
+
+function resolveCustomUrl(
+  rosterId: number,
+  mood: AvatarMood,
+): string | null {
+  const entry = customByRoster[String(rosterId)]
   if (!entry) return null
-  if (entry.startsWith('http') || entry.startsWith('/')) return entry
+  let path = ''
+  if (typeof entry === 'string') {
+    path = entry.trim()
+  } else {
+    path =
+      (mood === 'hype'
+        ? entry.hype
+        : mood === 'excited'
+          ? entry.excited
+          : mood === 'loss'
+            ? entry.loss
+            : entry.base)?.trim() ?? ''
+    if (!path && mood !== 'base') {
+      path = entry.base?.trim() ?? ''
+    }
+  }
+  if (!path) return null
+  if (path.startsWith('http') || path.startsWith('/')) return path
   const base = import.meta.env.BASE_URL
   const root = base.endsWith('/') ? base : `${base}/`
-  return `${root}${entry.replace(/^\//, '')}`
+  return `${root}${path.replace(/^\//, '')}`
 }
 
 export function TeamAvatar({
   team,
   size = 'md',
+  mood = 'base',
 }: {
   team: TeamInfo | undefined
-  size?: 'sm' | 'md'
+  size?: 'sm' | 'md' | 'lg'
+  mood?: AvatarMood
 }) {
-  const dim = size === 'sm' ? 'h-8 w-8' : 'h-10 w-10'
+  const dim =
+    size === 'sm' ? 'h-8 w-8' : size === 'lg' ? 'h-24 w-24' : 'h-10 w-10'
   const initials = teamInitials(team)
-  const custom = team ? customAvatarUrl(team.rosterId) : null
+  const custom = team ? resolveCustomUrl(team.rosterId, mood) : null
   const src = custom ?? team?.avatarUrl ?? null
   const [useInitials, setUseInitials] = useState(!src)
 

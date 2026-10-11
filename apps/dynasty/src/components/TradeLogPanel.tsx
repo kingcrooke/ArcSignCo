@@ -1,39 +1,77 @@
-import { formatTradeAssetList, type TradeLogEntry } from '../lib/trades'
+import { formatTradeAssetList, type TradeAsset, type TradeLogEntry } from '../lib/trades'
+
+function isPickAsset(label: string): boolean {
+  return /\bRd\s+\d/i.test(label) || /round/i.test(label)
+}
+
+function AssetList({
+  assets,
+  highlightDraftPicks,
+}: {
+  assets: TradeAsset[]
+  highlightDraftPicks?: boolean
+}) {
+  if (!assets.length) return <>—</>
+  return (
+    <>
+      {assets.map((a, i) => {
+        const pick = highlightDraftPicks && isPickAsset(a.label)
+        return (
+          <span key={`${a.label}-${i}`}>
+            {i > 0 ? ', ' : ''}
+            <span
+              className={
+                pick
+                  ? 'font-semibold text-[var(--gwb-accent-bright)]'
+                  : undefined
+              }
+            >
+              {a.label}
+            </span>
+          </span>
+        )
+      })}
+    </>
+  )
+}
 
 export function TradeLogPanel({
   trades,
   priorSeasonsIncluded,
   priorSeasonsFailed,
   playersLoading,
+  highlightDraftPicks,
+  seasonOnly,
 }: {
   trades: TradeLogEntry[]
   priorSeasonsIncluded: string[]
   priorSeasonsFailed: boolean
   playersLoading: boolean
+  highlightDraftPicks?: boolean
+  seasonOnly?: string
 }) {
+  const filtered = seasonOnly
+    ? trades.filter((t) => t.season === seasonOnly)
+    : trades
+
   return (
     <div className="space-y-3" id="trade-log-panel">
       {priorSeasonsFailed && (
-        <p className="rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100">
-          Prior-season trade history did not load cleanly — showing current season
-          only. (FAIL)
+        <p className="dynasty-deferral text-sm">
+          Prior-season trade history did not load cleanly — some seasons may be
+          missing. (FAIL)
         </p>
       )}
-      {(() => {
-        const seasons = [
-          ...new Set([...priorSeasonsIncluded, ...trades.map((t) => t.season)]),
-        ].sort()
-        return seasons.length > 0 ? (
-          <p className="text-xs text-[var(--gwb-muted)]">
-            Includes seasons: {seasons.join(', ')} ({trades.length} trades)
-          </p>
-        ) : null
-      })()}
+      {priorSeasonsIncluded.length > 0 && (
+        <p className="text-xs text-[var(--gwb-muted)]">
+          Includes prior seasons: {priorSeasonsIncluded.join(', ')}
+        </p>
+      )}
       {playersLoading ? (
         <p className="rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
           Loading trade history…
         </p>
-      ) : !trades.length ? (
+      ) : !filtered.length ? (
         <p className="rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]">
           No completed trades yet.
         </p>
@@ -42,7 +80,7 @@ export function TradeLogPanel({
           className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
           role="list"
         >
-          {trades.map((t) => (
+          {filtered.map((t) => (
             <li
               key={t.transactionId}
               className="border-t border-[var(--gwb-border)] px-4 py-3 first:border-t-0"
@@ -60,18 +98,36 @@ export function TradeLogPanel({
                   <p className="text-xs font-semibold uppercase text-[var(--gwb-muted)]">
                     {t.sideA.managerName} received
                   </p>
-                  <p>{formatTradeAssetList(t.sideA.received)}</p>
+                  <p>
+                    <AssetList
+                      assets={t.sideA.received}
+                      highlightDraftPicks={highlightDraftPicks}
+                    />
+                  </p>
                   <p className="mt-1 text-xs text-[var(--gwb-muted)]">
-                    Sent {formatTradeAssetList(t.sideA.sent)}
+                    Sent{' '}
+                    <AssetList
+                      assets={t.sideA.sent}
+                      highlightDraftPicks={highlightDraftPicks}
+                    />
                   </p>
                 </div>
                 <div>
                   <p className="text-xs font-semibold uppercase text-[var(--gwb-muted)]">
                     {t.sideB.managerName} received
                   </p>
-                  <p>{formatTradeAssetList(t.sideB.received)}</p>
+                  <p>
+                    <AssetList
+                      assets={t.sideB.received}
+                      highlightDraftPicks={highlightDraftPicks}
+                    />
+                  </p>
                   <p className="mt-1 text-xs text-[var(--gwb-muted)]">
-                    Sent {formatTradeAssetList(t.sideB.sent)}
+                    Sent{' '}
+                    <AssetList
+                      assets={t.sideB.sent}
+                      highlightDraftPicks={highlightDraftPicks}
+                    />
                   </p>
                 </div>
               </div>
@@ -82,3 +138,5 @@ export function TradeLogPanel({
     </div>
   )
 }
+
+export { formatTradeAssetList }
