@@ -7,9 +7,7 @@ const BASE = process.env.PREVIEW_URL || 'http://127.0.0.1:4317/gwb-fe006a16/'
 
 const VIEWS = [
   { tab: 'Trades', id: '#trade-log-panel', name: 'gwb-trades' },
-  { tab: 'H2H', id: '#head-to-head-panel', name: 'gwb-h2h' },
   { tab: 'Awards', id: '#weekly-awards-panel', name: 'gwb-awards' },
-  { tab: 'Timeline', id: '#season-timeline-panel', name: 'gwb-timeline' },
   { tab: 'Managers', id: '#manager-panel', name: 'gwb-managers' },
   { tab: 'Standings', id: '#playoff-odds-panel', name: 'gwb-playoff-odds' },
   { tab: 'Live', id: '#live-scoreboard-panel', name: 'gwb-live-flip' },
