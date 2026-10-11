@@ -57,7 +57,7 @@ export function useSound() {
       bedRef.current = new Audio()
       bedRef.current.preload = 'none'
       bedRef.current.loop = true
-      bedRef.current.volume = 0.35
+      bedRef.current.volume = 0.55
       bedRef.current.addEventListener('playing', () => setPlaying(true))
       bedRef.current.addEventListener('pause', () => setPlaying(false))
     }

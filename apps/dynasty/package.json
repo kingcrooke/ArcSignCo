@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "generate-audio": "node scripts/generate-ui-sounds.mjs && node scripts/generate-tab-loops.mjs",
+    "generate-audio": "node scripts/generate-ui-sounds.mjs && node scripts/build-tab-loops.mjs",
     "publish-static": "node scripts/publish-static-deploy.mjs"
   },
   "dependencies": {
