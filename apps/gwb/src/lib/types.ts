@@ -71,12 +71,27 @@ export interface SleeperTransaction {
   transaction_id?: string
 }
 
+export interface SleeperBracketMatch {
+  m: number
+  r: number
+  l?: number
+  w?: number
+  t1: number
+  t2: number
+  p?: number
+  t1_from?: { w?: number; l?: number }
+  t2_from?: { w?: number; l?: number }
+}
+
 export interface SleeperLeague {
   league_id: string
   name: string
   season: string
   status: string
   previous_league_id?: string | null
+  metadata?: {
+    latest_league_winner_roster_id?: string
+  }
   settings: {
     leg: number
     last_scored_leg?: number

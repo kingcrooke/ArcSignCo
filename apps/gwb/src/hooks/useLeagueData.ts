@@ -5,6 +5,10 @@ import { regularSeasonLastWeek } from '../lib/frankieZone'
 import { computePlayoffOdds, type PlayoffOddsRow } from '../lib/playoffOdds'
 import { buildSeasonTimeline, type TimelineEvent } from '../lib/seasonTimeline'
 import {
+  buildLeagueSeasonSummaries,
+  type LeagueSeasonSummary,
+} from '../lib/managerSeasons'
+import {
   buildTradeLogEntry,
   mergeTradeLogs,
   type TradeLogEntry,
@@ -85,6 +89,7 @@ export interface LeagueData {
   tradeLog: TradeLogEntry[]
   tradePriorSeasonsIncluded: string[]
   tradePriorSeasonsFailed: boolean
+  leagueSeasonSummaries: LeagueSeasonSummary[]
   weeklyAwards: WeeklyAwardsWeek[]
   playoffOdds: PlayoffOddsRow[]
   seasonTimeline: TimelineEvent[]
@@ -289,6 +294,7 @@ export function useLeagueData(): {
       }
     }
     const tradeLog = mergeTradeLogs(tradeEntries)
+    const leagueSeasonSummaries = buildLeagueSeasonSummaries(tradeBundles)
     const weeklyAwards = computeWeeklyAwards(
       matchupsByWeek,
       teams,
@@ -343,6 +349,7 @@ export function useLeagueData(): {
       tradeLog,
       tradePriorSeasonsIncluded: priorSeasonsIncluded,
       tradePriorSeasonsFailed,
+      leagueSeasonSummaries,
       weeklyAwards,
       playoffOdds,
       seasonTimeline,

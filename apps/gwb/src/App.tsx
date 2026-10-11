@@ -552,7 +552,10 @@ export default function App() {
           )}
           {tab === 'managers' && (
             <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Manager pages</h2>
+              <h2 className="mb-3 text-lg font-semibold">Managers</h2>
+              <p className="mb-4 text-sm text-[var(--gwb-muted)]">
+                Profiles, history, trades, and archived rosters — one stop for league lore.
+              </p>
               <ManagerPanel
                 rosterId={managerRosterId}
                 onRosterChange={(id) => {
@@ -565,6 +568,9 @@ export default function App() {
                 trades={data.tradeLog}
                 players={data.players}
                 statusThroughWeek={data.mulliganStatusThroughWeek}
+                leagueSeasonSummaries={data.leagueSeasonSummaries}
+                currentSeason={data.league.season}
+                tradePriorSeasonsFailed={data.tradePriorSeasonsFailed}
               />
             </section>
           )}

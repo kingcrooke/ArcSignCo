@@ -23,6 +23,7 @@ async function emptyDir(dir) {
   }
 }
 
+run('node', ['scripts/build-season-nfl-teams.mjs'], appRoot)
 run('npm', ['run', 'build'], appRoot)
 
 await emptyDir(target)
