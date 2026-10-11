@@ -25,6 +25,7 @@ import { maxSelectableWeek } from './lib/seasonContext'
 import { defaultBestGamesWeek } from './lib/weeks'
 import { useLeagueChain } from './hooks/useLeagueChain'
 import { useLeagueData } from './hooks/useLeagueData'
+import { trackDynastyTab } from './lib/goatcounter'
 import { useSound } from './hooks/useSound'
 import type { AppTab } from './hooks/useUrlState'
 
@@ -70,6 +71,7 @@ export default function App() {
   const sound = useSound()
   const navRef = useRef<HTMLElement>(null)
   const didInitialTabScroll = useRef(false)
+  const skipGoatcounterTab = useRef(true)
 
   const maxWeek = data
     ? maxSelectableWeek(
@@ -161,6 +163,14 @@ export default function App() {
     sound.setTabBed(tab)
   }, [tab, sound])
 
+  useEffect(() => {
+    if (skipGoatcounterTab.current) {
+      skipGoatcounterTab.current = false
+      return
+    }
+    trackDynastyTab(tab)
+  }, [tab])
+
   const onTabChange = (next: AppTab) => {
     sound.playClick()
     setTab(next)
@@ -197,7 +207,7 @@ export default function App() {
             {LEAGUE_NAME}
           </h1>
           <p className="mt-2 text-sm text-[var(--dyn-muted)]">
-            DYNASTY · Sleeper public data · No tracking
+            DYNASTY · Sleeper public data
           </p>
         </div>
         <SoundToggle
