@@ -32,6 +32,7 @@ import {
 } from './lib/weeks'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useSound } from './hooks/useSound'
+import { trackGwbTab } from './lib/goatcounter'
 import { type AppTab } from './hooks/useUrlState'
 
 const BASE_TABS: { id: AppTab; label: string }[] = [
@@ -75,6 +76,7 @@ export default function App() {
   const [managerRosterId, setManagerRosterId] = useState(1)
   const navRef = useRef<HTMLElement>(null)
   const didInitialTabScroll = useRef(false)
+  const skipGoatcounterTab = useRef(true)
 
   const openRecapFromZone = useCallback(
     (week: number, recapId: string) => {
@@ -200,6 +202,14 @@ export default function App() {
     didInitialTabScroll.current = true
     requestAnimationFrame(() => scrollActiveTabIntoView(behavior))
   }, [tab, state, data, scrollActiveTabIntoView])
+
+  useEffect(() => {
+    if (skipGoatcounterTab.current) {
+      skipGoatcounterTab.current = false
+      return
+    }
+    trackGwbTab(tab)
+  }, [tab])
 
   useEffect(() => {
     if (
