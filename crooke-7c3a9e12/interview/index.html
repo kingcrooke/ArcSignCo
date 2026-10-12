@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#1a5c4a" />
-    <meta name="description" content="Private Crooke family oral history form — not indexed." />
-    <title>Share your story — Crooke family</title>
+    <meta name="description" content="Formulario privado de historia oral — familia Crooke." />
+    <title>Comparte tu historia — Crooke</title>
     <link rel="icon" type="image/svg+xml" href="/crooke-7c3a9e12/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,254 +17,94 @@
     <link rel="stylesheet" href="/crooke-7c3a9e12/styles.css" />
     <link rel="stylesheet" href="/crooke-7c3a9e12/interview/interview.css" />
   </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to form</a>
-    <div class="private-banner" role="status" data-i18n="draft.banner">PRIVATE FAMILY SITE — share link only · not indexed</div>
+  <body class="interview-wizard-body">
+    <a class="skip-link" href="#main">Saltar al formulario</a>
+    <div id="private-banner" class="private-banner" role="status"></div>
+    <div id="in-app-banner" class="in-app-banner" role="alert" hidden>
+      <p>
+        Parece que abriste esto dentro de WhatsApp u otra app. Para grabar voz aquí, abre este enlace en Safari o
+        Chrome (ícono ⋮ → Abrir en navegador).
+      </p>
+      <p class="in-app-en">
+        Looks like you opened this inside WhatsApp or another app. To record voice here, open this link in Safari or
+        Chrome (⋮ → Open in browser).
+      </p>
+    </div>
 
-    <header class="site-header">
+    <header class="site-header wizard-header">
       <div class="header-inner">
         <a class="brand" href="/crooke-7c3a9e12/">
           <div class="brand-mark" aria-hidden="true">Build</div>
           <div class="brand-text">
             <h1>Crooke</h1>
-            <p data-i18n="nav.interview">Share your story</p>
+            <p>Comparte tu historia</p>
           </div>
         </a>
         <nav class="nav-scroll" aria-label="Primary">
           <ul class="nav-tabs">
-            <li>
-              <a class="nav-external" href="/crooke-7c3a9e12/interview/" aria-current="page" data-i18n="nav.interview"
-                >Share your story</a
-              >
-            </li>
-            <li><a href="/crooke-7c3a9e12/">Book home</a></li>
+            <li><a class="nav-external" href="/crooke-7c3a9e12/interview/" aria-current="page">Entrevista</a></li>
+            <li><a href="/crooke-7c3a9e12/">Libro</a></li>
           </ul>
         </nav>
-        <div class="header-actions">
-          <div class="lang-toggle" role="group" aria-label="Language">
-            <button type="button" data-lang-btn="en" aria-pressed="true" data-i18n="lang.en">EN</button>
-            <button type="button" data-lang-btn="es" aria-pressed="false" data-i18n="lang.es">ES</button>
-          </div>
-        </div>
       </div>
     </header>
 
-    <main id="main" class="page interview-main">
-      <h2 style="font-family: var(--font-serif); margin-top: 0" data-i18n="title">Share your story</h2>
-      <p class="interview-intro" data-i18n="intro">
-        Answer in writing below, or attach a short voice recording. Jesus reviews every submission before anything
-        appears on the family site. Skip any question you prefer not to answer.
-      </p>
-      <p class="review-notice" data-i18n="review">
-        Your answers are not published automatically. Jesus will review them and may follow up before adding text to the
-        Book of the Crookes.
-      </p>
-
-      <div class="privacy bilingual" style="margin: 1rem 0">
-        <h3 style="font-family: var(--font-serif); font-size: 1rem; margin: 0 0 0.5rem" data-i18n="privacy.title">
-          Privacy — do not include in your answers
-        </h3>
-        <p style="margin: 0" data-i18n="privacy.body">
-          Never type or record: Social Security numbers; passport, national ID, or immigration document numbers; bank or
-          credit-card details; full birthdates of living people; or anyone’s current street address.
-        </p>
-      </div>
-
-      <form
-        class="interview-form section-card"
-        id="crookeInterviewForm"
-        name="crooke-interview"
-        method="POST"
-        action="/crooke-7c3a9e12/interview/thank-you.html"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        enctype="multipart/form-data"
-      >
-        <input type="hidden" name="form-name" value="crooke-interview" />
-        <p class="hp-field" aria-hidden="true">
-          <label>Leave empty <input name="bot-field" tabindex="-1" autocomplete="off" /></label>
-        </p>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="field.name">Your name</span>
-            <span class="legend-es" data-i18n="field.name">Tu nombre</span>
-          </legend>
-          <input type="text" name="your_name" id="your_name" autocomplete="name" required />
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="field.relationship">Relationship to the family</span>
-            <span class="legend-es" data-i18n="field.relationship">Parentesco con la familia</span>
-          </legend>
-          <input
-            type="text"
-            name="relationship"
-            id="relationship"
-            placeholder="e.g. daughter, cousin, aunt / hija, prima, tía"
-            required
-          />
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="field.phone">Phone for follow-up</span>
-            <span class="legend-es" data-i18n="field.phone">Teléfono</span>
-            <span class="opt" data-i18n="opt">(optional)</span>
-          </legend>
-          <input type="tel" name="phone" id="phone" autocomplete="tel" />
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="field.email">Email for follow-up</span>
-            <span class="legend-es" data-i18n="field.email">Correo</span>
-            <span class="opt" data-i18n="opt">(optional)</span>
-          </legend>
-          <input type="email" name="email" id="email" autocomplete="email" />
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.about">About you and your childhood</span>
-            <span class="legend-es" data-i18n="sec.about">Sobre ti y tu niñez</span>
-          </legend>
-          <p class="hint" data-hint="about_you"></p>
-          <textarea name="about_you" id="about_you" aria-label="About you and childhood"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.parents">Parents</span>
-            <span class="legend-es" data-i18n="sec.parents">Padres</span>
-          </legend>
-          <p class="hint" data-hint="parents"></p>
-          <textarea name="parents" id="parents"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.grandparents">Grandparents and older generations</span>
-            <span class="legend-es" data-i18n="sec.grandparents">Abuelos y generaciones mayores</span>
-          </legend>
-          <p class="hint" data-hint="grandparents"></p>
-          <textarea name="grandparents" id="grandparents"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.places">Places and origins (Morel &amp; Crooke)</span>
-            <span class="legend-es" data-i18n="sec.places">Lugares y orígenes (Morel y Crooke)</span>
-          </legend>
-          <p class="hint" data-hint="places_origins"></p>
-          <textarea name="places_origins" id="places_origins"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.charles">Charles Crooke — memorial memories</span>
-            <span class="legend-es" data-i18n="sec.charles">Charles Crooke — recuerdos para el memorial</span>
-          </legend>
-          <p class="hint" data-hint="charles_memorial"></p>
-          <textarea name="charles_memorial" id="charles_memorial"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.mami">Mami and Charles’s story</span>
-            <span class="legend-es" data-i18n="sec.mami">La historia de Mami y Charles</span>
-          </legend>
-          <p class="hint" data-hint="mami_charles_story"></p>
-          <textarea name="mami_charles_story" id="mami_charles_story"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.traditions">Traditions, faith, holidays</span>
-            <span class="legend-es" data-i18n="sec.traditions">Tradiciones, fe, fiestas</span>
-          </legend>
-          <p class="hint" data-hint="traditions_faith"></p>
-          <textarea name="traditions_faith" id="traditions_faith"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.food">Food and family recipes</span>
-            <span class="legend-es" data-i18n="sec.food">Comida y recetas familiares</span>
-          </legend>
-          <p class="hint" data-hint="food_recipes"></p>
-          <textarea name="food_recipes" id="food_recipes"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.work">Work and skills passed down</span>
-            <span class="legend-es" data-i18n="sec.work">Trabajo y oficios heredados</span>
-          </legend>
-          <p class="hint" data-hint="work_skills"></p>
-          <textarea name="work_skills" id="work_skills"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.sayings">Sayings, nicknames, songs, stories</span>
-            <span class="legend-es" data-i18n="sec.sayings">Dichos, apodos, canciones, cuentos</span>
-          </legend>
-          <p class="hint" data-hint="sayings_stories"></p>
-          <textarea name="sayings_stories" id="sayings_stories"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.photos">Photos and papers (describe only — no ID scans)</span>
-            <span class="legend-es" data-i18n="sec.photos">Fotos y papeles (solo describir — sin escaneos de IDs)</span>
-          </legend>
-          <p class="hint" data-hint="photos_papers"></p>
-          <textarea name="photos_papers" id="photos_papers"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="sec.who">Who else should we talk to</span>
-            <span class="legend-es" data-i18n="sec.who">Con quién más debemos hablar</span>
-          </legend>
-          <p class="hint" data-hint="who_else"></p>
-          <textarea name="who_else" id="who_else"></textarea>
-        </fieldset>
-
-        <fieldset>
-          <legend>
-            <span class="legend-en" data-i18n="field.voice">Voice recording (optional)</span>
-            <span class="legend-es" data-i18n="field.voice">Grabación de voz (opcional)</span>
-          </legend>
-          <p class="hint" data-i18n="field.voice.hint">
-            One file, about 10 MB max (MP3, M4A, WAV, OGG). Say your name and today’s date at the start.
-          </p>
-          <input
-            type="file"
-            name="voice_recording"
-            id="voice_recording"
-            accept="audio/*,.m4a,.mp3,.wav,.ogg,.webm,audio/mpeg,audio/mp4"
-          />
-          <p class="audio-fallback">
-            <span data-i18n="field.voice.fallback">Or record a voice note and email it to</span>
-            <a href="mailto:jesus.crooke@gmail.com?subject=Crooke%20family%20oral%20history%20recording"
-              >jesus.crooke@gmail.com</a
-            >
-          </p>
-        </fieldset>
-
-        <button type="submit" class="btn-submit" data-i18n="submit">Send to Jesus for review</button>
-      </form>
+    <main id="main" class="page interview-main wizard-main">
+      <div id="wizard-mount" class="wizard-mount" aria-live="polite"></div>
     </main>
 
     <footer class="site-footer">
-      <p>
-        <a href="/crooke-7c3a9e12/" data-i18n="nav.back">← Book of the Crookes</a>
-      </p>
+      <p><a href="/crooke-7c3a9e12/">← Libro de los Crooke</a></p>
     </footer>
 
-    <script src="/crooke-7c3a9e12/interview/interview.js" defer></script>
+    <!-- Netlify form registration (fields detected at build). Submissions via JS FormData POST. -->
+    <form
+      id="netlify-form-register"
+      name="crooke-interview"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="bot-field"
+      enctype="multipart/form-data"
+      hidden
+      aria-hidden="true"
+    >
+      <input type="hidden" name="form-name" value="crooke-interview" />
+      <input name="bot-field" />
+      <input name="your_name" />
+      <input name="relationship" />
+      <input name="phone" />
+      <input name="email" />
+      <input name="para" />
+      <textarea name="about_you"></textarea>
+      <textarea name="parents"></textarea>
+      <textarea name="grandparents"></textarea>
+      <textarea name="places_origins"></textarea>
+      <textarea name="charles_memorial"></textarea>
+      <textarea name="mami_charles_story"></textarea>
+      <textarea name="more_stories"></textarea>
+      <input type="file" name="voice_about_you" />
+      <input type="file" name="voice_parents" />
+      <input type="file" name="voice_grandparents" />
+      <input type="file" name="voice_places_origins" />
+      <input type="file" name="voice_charles_memorial" />
+      <input type="file" name="voice_mami_charles_story" />
+      <input type="file" name="voice_more_stories" />
+      <input type="file" name="old_photo" />
+      <input name="relative_1_name" />
+      <input name="relative_1_relation" />
+      <input name="relative_1_note" />
+      <input name="relative_2_name" />
+      <input name="relative_2_relation" />
+      <input name="relative_2_note" />
+      <input name="relative_3_name" />
+      <input name="relative_3_relation" />
+      <input name="relative_3_note" />
+      <p class="audio-fallback">
+        Voice fallback:
+        <a href="mailto:jesus.crooke@gmail.com?subject=Crooke%20family%20voice%20note">jesus.crooke@gmail.com</a>
+      </p>
+    </form>
+
+    <script type="module" src="/crooke-7c3a9e12/interview/interview-wizard.js"></script>
   </body>
 </html>
