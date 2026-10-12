@@ -1,0 +1,19 @@
+/* Self-hosted for the Canva lockup (versions 1, 3, 4, 6).
+   Glacial Indifference — SIL OFL 1.1, Hanken Design Co. / marcologous mirror.
+   Great Vibes — SIL OFL 1.1, TypeSETit. License texts live beside the files. */
+
+@font-face {
+  font-family: "Glacial Indifference";
+  src: url("../fonts/GlacialIndifference-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Great Vibes";
+  src: url("../fonts/GreatVibes-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}

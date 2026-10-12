@@ -1,0 +1,330 @@
+/* Light counterparts for Versions 2, 5, and 7. Loaded after main.css. */
+
+body,
+.nav-shell,
+.section-panel,
+.program-card,
+.school-point,
+.production-list div,
+.manifesto,
+footer,
+.wm-nova,
+.wm-stage,
+.lockup-slogan,
+.button,
+.lang-toggle button {
+  transition:
+    background-color 0.45s ease,
+    color 0.45s ease,
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .nav-shell,
+  .section-panel,
+  .program-card,
+  .school-point,
+  .production-list div,
+  .manifesto,
+  footer,
+  .wm-nova,
+  .wm-stage,
+  .lockup-slogan,
+  .button,
+  .lang-toggle button {
+    transition: none;
+  }
+}
+
+/* Version 2 — cream/white field, turquoise Nova, charcoal Stage */
+body[data-palette="b"][data-invert="1"] {
+  --palette-bg: #f7f4ee;
+  --palette-bg-soft: #fffdf8;
+  --palette-nova: #1a8fb5;
+  --palette-stage: #141821;
+  --palette-wordmark: #141821;
+  --palette-wordmark-split: 1;
+  --palette-slogan: #2c3544;
+  --palette-text: #141821;
+  --palette-text-muted: #3a4452;
+  --palette-panel: rgba(255, 255, 255, 0.74);
+  --palette-panel-hero: rgba(255, 252, 247, 0.58);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #fffdf8 86%, transparent);
+  color-scheme: light;
+}
+
+body[data-palette="b"][data-invert="1"] .wm-nova {
+  color: #1a8fb5;
+}
+
+body[data-palette="b"][data-invert="1"] .wm-stage {
+  color: #141821;
+}
+
+/* Version 5 — light sky/cream, navy + antique gold */
+body[data-palette="e"][data-invert="1"] {
+  --palette-bg: #e7f3f8;
+  --palette-bg-soft: #f7f4ee;
+  --palette-nova: #8d6b16;
+  --palette-stage: #0a1628;
+  --palette-wordmark: #0a1628;
+  --palette-wordmark-split: 1;
+  --palette-slogan: #1a3048;
+  --palette-text: #0a1628;
+  --palette-text-muted: #24384c;
+  --palette-panel: rgba(255, 252, 247, 0.78);
+  --palette-panel-hero: rgba(255, 252, 247, 0.55);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #f7f4ee 88%, transparent);
+  color-scheme: light;
+}
+
+/* Version 7 — white field, black wordmark; gold lockup stays in lockup.css */
+body[data-palette="g"][data-invert="1"] {
+  --palette-bg: #fbfbfb;
+  --palette-bg-soft: #f3f1ec;
+  --palette-nova: #111111;
+  --palette-stage: #111111;
+  --palette-wordmark: #111111;
+  --palette-slogan: #2a2a2a;
+  --palette-text: #161616;
+  --palette-text-muted: #3a3a3a;
+  --palette-panel: rgba(255, 255, 255, 0.78);
+  --palette-panel-hero: rgba(255, 255, 255, 0.62);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #ffffff 88%, transparent);
+  color-scheme: light;
+}
+
+body[data-invert="1"] .site-backdrop-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(244, 239, 230, 0.16) 48%,
+    rgba(255, 255, 255, 0.28) 100%
+  );
+}
+
+/* Soft glow Elizabeth likes on 2 and 5, tuned so it still reads on a light field */
+body[data-palette="b"][data-invert="1"] .wm-nova,
+body[data-palette="b"][data-invert="1"] .wm-stage,
+body[data-palette="e"][data-invert="1"] .wm-nova,
+body[data-palette="e"][data-invert="1"] .wm-stage {
+  text-shadow:
+    0 0 18px rgba(62, 200, 239, 0.42),
+    0 0 36px rgba(242, 201, 76, 0.32),
+    0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+body[data-invert="1"][data-lockup-emphasis="illumination"] .lockup-wordmark::after {
+  mix-blend-mode: multiply;
+  background: linear-gradient(
+    180deg,
+    rgba(242, 201, 76, 0) 0%,
+    rgba(184, 132, 20, 0.9) 24%,
+    rgba(242, 201, 76, 0.62) 54%,
+    rgba(184, 132, 20, 0.12) 100%
+  );
+  filter: blur(7px);
+}
+
+body[data-invert="1"] .nav-shell {
+  background: var(--palette-nav-bg);
+  border-color: rgba(20, 24, 33, 0.12);
+  box-shadow: 0 12px 32px rgba(20, 24, 33, 0.08);
+}
+
+body[data-invert="1"] .nav-shell a {
+  color: #3a4452;
+}
+
+body[data-invert="1"] .nav-shell a:hover,
+body[data-invert="1"] .nav-shell a:focus-visible {
+  color: #141821;
+  background: rgba(20, 24, 33, 0.05);
+}
+
+body[data-invert="1"] .nav-shell a.nav-cta,
+body[data-invert="1"] .nav-shell a.nav-cta:hover,
+body[data-invert="1"] .button-primary,
+body[data-invert="1"] .button-primary:hover {
+  background: var(--palette-accent);
+  border-color: var(--palette-accent);
+  color: var(--palette-accent-ink);
+}
+
+body[data-invert="1"] .button {
+  color: #141821;
+  border-color: rgba(20, 24, 33, 0.2);
+}
+
+body[data-invert="1"] .button:hover {
+  border-color: var(--palette-accent);
+  color: #0e7494;
+}
+
+body[data-invert="1"] .lang-toggle {
+  border-color: rgba(20, 24, 33, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+body[data-invert="1"] .lang-toggle button {
+  color: #3a4452;
+}
+
+body[data-invert="1"] .menu-button {
+  color: #141821;
+}
+
+body[data-invert="1"] .mobile-menu {
+  background: #fffdf8;
+  border-color: rgba(20, 24, 33, 0.12);
+}
+
+body[data-invert="1"] .mobile-menu a {
+  color: #24303c;
+}
+
+body[data-invert="1"] .mobile-menu a:hover,
+body[data-invert="1"] .mobile-menu a:focus-visible {
+  color: #141821;
+  background: rgba(20, 24, 33, 0.05);
+}
+
+body[data-invert="1"] .section-panel {
+  background: var(--palette-panel);
+  border-color: rgba(20, 24, 33, 0.1);
+  box-shadow: 0 18px 48px rgba(20, 24, 33, 0.08);
+}
+
+body[data-invert="1"] .section-panel--hero {
+  background: var(--palette-panel-hero);
+}
+
+body[data-invert="1"] .draft-note,
+body[data-invert="1"] .program-card p,
+body[data-invert="1"] .school-point p,
+body[data-invert="1"] .production-list span,
+body[data-invert="1"] .styles-list span,
+body[data-invert="1"] .form-note,
+body[data-invert="1"] .footer-inner,
+body[data-invert="1"] .footer-links a,
+body[data-invert="1"] .footer-music-credit {
+  color: var(--palette-text-muted);
+}
+
+body[data-invert="1"] .manifesto,
+body[data-invert="1"] .program-card,
+body[data-invert="1"] .school-point,
+body[data-invert="1"] .production-list div {
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--palette-text);
+  border-color: rgba(20, 24, 33, 0.1);
+}
+
+body[data-invert="1"] .orbit,
+body[data-invert="1"] .school-points,
+body[data-invert="1"] .production-list,
+body[data-invert="1"] .styles-list span,
+body[data-invert="1"] footer {
+  border-color: rgba(20, 24, 33, 0.1);
+}
+
+body[data-invert="1"] .program-card .workshop-note {
+  color: var(--palette-text);
+  border-top-color: rgba(20, 24, 33, 0.1);
+}
+
+body[data-invert="1"] .program-card .age,
+body[data-invert="1"] .field label,
+body[data-invert="1"] .contact-meta a {
+  color: #0e7494;
+}
+
+body[data-invert="1"] .orbit-copy span,
+body[data-invert="1"] .coming,
+body[data-invert="1"] .school-point .num,
+body[data-invert="1"] .contact-meta .placeholder,
+body[data-invert="1"] #form-status {
+  color: #7a5a0e;
+}
+
+body[data-invert="1"] input,
+body[data-invert="1"] textarea,
+body[data-invert="1"] select {
+  background: #ffffff;
+  color: #141821;
+  border-color: rgba(20, 24, 33, 0.16);
+}
+
+body[data-invert="1"] footer {
+  background: rgba(255, 252, 247, 0.92);
+}
+
+body[data-invert="1"] .production-list {
+  background: rgba(20, 24, 33, 0.08);
+}
+
+/* Versions 1 and 3 — cream field, both letters dark. Star and ring stay in bethlehem.css. */
+body[data-palette="h"][data-invert="1"],
+body[data-palette="i"][data-invert="1"] {
+  --palette-bg: #f7f4ee;
+  --palette-bg-soft: #fffdf8;
+  --palette-nova: #141821;
+  --palette-stage: #141821;
+  --palette-wordmark: #141821;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #141821;
+  --palette-text-muted: #3a4452;
+  --palette-panel: rgba(255, 255, 255, 0.74);
+  --palette-panel-hero: rgba(255, 252, 247, 0.58);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #fffdf8 86%, transparent);
+  color-scheme: light;
+}
+
+/* Version 4 — light sky, both letters navy */
+body[data-palette="j"][data-invert="1"] {
+  --palette-bg: #e7f3f8;
+  --palette-bg-soft: #f7f4ee;
+  --palette-nova: #0a1628;
+  --palette-stage: #0a1628;
+  --palette-wordmark: #0a1628;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #0a1628;
+  --palette-text-muted: #24384c;
+  --palette-panel: rgba(255, 252, 247, 0.78);
+  --palette-panel-hero: rgba(255, 252, 247, 0.55);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #f7f4ee 88%, transparent);
+  color-scheme: light;
+}
+
+/* Version 6 — white field, black wordmark */
+body[data-palette="k"][data-invert="1"] {
+  --palette-bg: #fbfbfb;
+  --palette-bg-soft: #f3f1ec;
+  --palette-nova: #111111;
+  --palette-stage: #111111;
+  --palette-wordmark: #111111;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #161616;
+  --palette-text-muted: #3a3a3a;
+  --palette-panel: rgba(255, 255, 255, 0.78);
+  --palette-panel-hero: rgba(255, 255, 255, 0.62);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #ffffff 88%, transparent);
+  color-scheme: light;
+}

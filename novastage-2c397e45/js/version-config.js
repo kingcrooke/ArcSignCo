@@ -1,19 +1,25 @@
 /**
  * NovaStage site version tokens — single file to remove when preview mode is retired.
- * Map: Version 1–5 → palette A–E. Versions 6–7 use the illumination lockup.
+ *
+ * Versions 2, 5, and 7 keep the looks Elizabeth chose (charcoal, navy, black-and-white).
+ * Versions 1, 3, 4, and 6 are her Canva Bethlehem lockup in those site frames.
+ * The previous 1/3/4/6 designs live only in git tag novastage-all-7-versions.
+ * Do not renumber the ids.
  */
 window.NOVASTAGE_VERSION_CONFIG = {
   storageKey: "novastage-site-version",
-  defaultVersion: 1,
+  defaultVersion: 2,
   audioVolume: 0.4,
   audioFadeMs: 900,
   versions: [
     {
       id: 1,
-      palette: "a",
+      enabled: true,
+      isNew: true,
+      palette: "h",
       tabLabel: "Version 1",
-      wordmarkFont: "primary",
-      lockupEmphasis: "normal",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-1.mp3",
         ogg: "audio/version-1.ogg",
@@ -27,6 +33,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 2,
+      enabled: true,
       palette: "b",
       tabLabel: "Version 2",
       wordmarkFont: "alternate",
@@ -44,10 +51,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 3,
-      palette: "c",
+      enabled: true,
+      isNew: true,
+      palette: "i",
       tabLabel: "Version 3",
-      wordmarkFont: "primary",
-      lockupEmphasis: "normal",
+      wordmarkFont: "script",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-3.mp3",
         ogg: "audio/version-3.ogg",
@@ -60,10 +69,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 4,
-      palette: "d",
+      enabled: true,
+      isNew: true,
+      palette: "j",
       tabLabel: "Version 4",
-      wordmarkFont: "primary",
-      lockupEmphasis: "bold",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-4.mp3",
         ogg: "audio/version-4.ogg",
@@ -77,6 +88,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 5,
+      enabled: true,
       palette: "e",
       tabLabel: "Version 5",
       wordmarkFont: "alternate",
@@ -93,10 +105,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 6,
-      palette: "f",
+      enabled: true,
+      isNew: true,
+      palette: "k",
       tabLabel: "Version 6",
-      wordmarkFont: "primary",
-      lockupEmphasis: "illumination",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-6.mp3",
         ogg: "audio/version-6.ogg",
@@ -110,6 +124,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 7,
+      enabled: true,
       palette: "g",
       tabLabel: "Version 7",
       wordmarkFont: "alternate",

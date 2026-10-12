@@ -7,5 +7,5 @@ window.NOVASTAGE_LOCKUP_INNER =
   '<div class="lockup-beam"></div>' +
   '<div class="lockup-pool"></div>' +
   "</div>" +
-  '<p class="lockup-wordmark"><span class="wm-nova">Nova</span><span class="wm-stage">Stage</span></p>' +
+  '<p class="lockup-wordmark"><span class="wm-nova">Nova</span><span class="wm-join" aria-hidden="true"><span class="lockup-bethlehem"><span class="beth-back"><span class="beth-ring"></span><span class="beth-ray-h"></span><span class="beth-star"></span></span><span class="beth-front"><span class="beth-ray-v"></span><span class="beth-floor"></span></span></span></span><span class="wm-stage">Stage</span></p>' +
   '<p class="lockup-slogan">“Where talent grows and confidence takes the stage.”</p>';

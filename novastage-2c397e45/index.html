@@ -17,15 +17,18 @@
       href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Marcellus&family=Shantell+Sans:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="css/fonts.css" />
     <link rel="stylesheet" href="css/palettes.css" />
     <link rel="stylesheet" href="css/lockup.css" />
     <link rel="stylesheet" href="css/version-switcher.css" />
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/invert.css" />
+    <link rel="stylesheet" href="css/bethlehem.css" />
     <script src="js/version-config.js"></script>
     <script src="js/version-init.js"></script>
     <title>NovaStage — Performing Arts in New York</title>
   </head>
-  <body data-version="1" data-palette="a" data-wordmark-font="primary" data-lockup-emphasis="normal">
+  <body data-version="2" data-palette="b" data-wordmark-font="alternate" data-lockup-emphasis="normal">
     <div class="version-switcher" id="version-switcher" data-preview-ui></div>
     <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
 
@@ -39,7 +42,7 @@
           <div class="lockup-pool"></div>
         </div>
         <p class="lockup-wordmark" aria-hidden="true">
-          <span class="wm-nova">Nova</span><span class="wm-stage">Stage</span>
+          <span class="wm-nova">Nova</span><span class="wm-join" aria-hidden="true"><span class="lockup-bethlehem"><span class="beth-back"><span class="beth-ring"></span><span class="beth-ray-h"></span><span class="beth-star"></span></span><span class="beth-front"><span class="beth-ray-v"></span><span class="beth-floor"></span></span></span></span><span class="wm-stage">Stage</span>
         </p>
         <p class="lockup-slogan" aria-hidden="true" data-i18n="slogan">“Where talent grows and confidence takes the stage.”</p>
       </div>
@@ -91,7 +94,7 @@
               <div class="lockup-pool"></div>
             </div>
             <h1 class="lockup-wordmark">
-              <span class="wm-nova">Nova</span><span class="wm-stage">Stage</span>
+              <span class="wm-nova">Nova</span><span class="wm-join" aria-hidden="true"><span class="lockup-bethlehem"><span class="beth-back"><span class="beth-ring"></span><span class="beth-ray-h"></span><span class="beth-star"></span></span><span class="beth-front"><span class="beth-ray-v"></span><span class="beth-floor"></span></span></span></span><span class="wm-stage">Stage</span>
             </h1>
             <p class="lockup-slogan" data-i18n="slogan">“Where talent grows and confidence takes the stage.”</p>
           </div>
@@ -332,6 +335,7 @@
     <script src="js/i18n.js" defer></script>
     <script src="js/version-audio.js" defer></script>
     <script src="js/version-switcher.js" defer></script>
+    <script src="js/invert.js" defer></script>
     <script src="js/main.js" defer></script>
   </body>
 </html>

@@ -9,10 +9,15 @@
     return map[letter] || config.defaultVersion;
   }
 
-  function maxVersionId() {
-    return config.versions.reduce(function (max, version) {
-      return version.id > max ? version.id : max;
-    }, 1);
+  function findVersion(id) {
+    return config.versions.find(function (v) {
+      return v.id === id;
+    });
+  }
+
+  function isEnabled(id) {
+    var version = findVersion(id);
+    return !!(version && version.enabled !== false);
   }
 
   function resolveVersionId() {
@@ -20,21 +25,27 @@
     var vParam = params.get("v");
     if (vParam) {
       var n = parseInt(vParam, 10);
-      if (n >= 1 && n <= maxVersionId()) {
+      if (isEnabled(n)) {
         return n;
       }
+      return config.defaultVersion;
     }
     var paletteParam = params.get("palette");
     if (paletteParam && /^[a-e]$/.test(paletteParam.toLowerCase())) {
-      return paletteToVersion(paletteParam.toLowerCase());
+      var mapped = paletteToVersion(paletteParam.toLowerCase());
+      if (isEnabled(mapped)) {
+        return mapped;
+      }
+      return config.defaultVersion;
     }
     try {
       var stored = localStorage.getItem(config.storageKey);
       if (stored) {
         var s = parseInt(stored, 10);
-        if (s >= 1 && s <= maxVersionId()) {
+        if (isEnabled(s)) {
           return s;
         }
+        localStorage.setItem(config.storageKey, String(config.defaultVersion));
       }
     } catch (e) {
       /* ignore */
@@ -42,14 +53,32 @@
     return config.defaultVersion;
   }
 
-  function findVersion(id) {
-    return config.versions.find(function (v) {
-      return v.id === id;
-    });
+  function rewriteRetiredVersion() {
+    var url = new URL(window.location.href);
+    var vParam = url.searchParams.get("v");
+    var paletteParam = url.searchParams.get("palette");
+    var retired = false;
+    if (vParam && !isEnabled(parseInt(vParam, 10))) {
+      retired = true;
+    }
+    if (!vParam && paletteParam && /^[a-e]$/.test(paletteParam.toLowerCase())) {
+      if (!isEnabled(paletteToVersion(paletteParam.toLowerCase()))) {
+        retired = true;
+      }
+    }
+    if (!retired) {
+      return;
+    }
+    url.searchParams.set("v", String(config.defaultVersion));
+    url.searchParams.delete("palette");
+    window.history.replaceState({}, "", url.toString());
   }
 
   function applyVersion(id, persist) {
-    var version = findVersion(id) || findVersion(config.defaultVersion);
+    var version = findVersion(id);
+    if (!version || version.enabled === false) {
+      version = findVersion(config.defaultVersion);
+    }
     var body = document.body;
     if (!body) {
       return version;
@@ -93,9 +122,11 @@
 
   if (document.body) {
     applyVersion(initialId, false);
+    rewriteRetiredVersion();
   } else {
     document.addEventListener("DOMContentLoaded", function () {
       applyVersion(resolveVersionId(), false);
+      rewriteRetiredVersion();
     });
   }
 })();
