@@ -1,18 +1,4 @@
-const SITE = {
-  name: { es: 'Corderitos', en: 'Corderitos' },
-  descriptor: { es: 'Guardería Cristiana', en: 'Christian Day Care' },
-  logo: 'logo-corderitos.jpg',
-  verse: {
-    es: 'Isaías 40:11 — «en su brazo llevará los corderos»',
-    en: 'Isaiah 40:11 — “He will carry the lambs in his arms”',
-  },
-  tagline: {
-    es: 'Guardería Cristiana — zona Crotona, Bronx 10457',
-    en: 'Christian Day Care — Crotona area, Bronx 10457',
-  },
-};
-
-const COPY = {
+window.GUARDERIA_COPY = {
   es: {
     'meta.title': 'Corderitos — Guardería Cristiana (borrador)',
     'draft.banner': 'Borrador privado — no publicar',
@@ -142,6 +128,7 @@ const COPY = {
     'mobile.wa': 'WhatsApp',
     'mobile.call': 'Llamar',
     'mobile.visit': 'Visita',
+    'music.label': 'Música',
   },
   en: {
     'meta.title': 'Corderitos — Christian Day Care (draft)',
@@ -271,64 +258,6 @@ const COPY = {
     'mobile.wa': 'WhatsApp',
     'mobile.call': 'Call',
     'mobile.visit': 'Visit',
+    'music.label': 'Music',
   },
 };
-
-let currentLang = 'es';
-
-function setLanguage(lang) {
-  if (!COPY[lang]) return;
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  const dict = COPY[lang];
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
-    if (dict[key] !== undefined) el.textContent = dict[key];
-  });
-  document.title = dict['meta.title'];
-  document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
-    btn.setAttribute('aria-pressed', btn.getAttribute('data-lang-btn') === lang ? 'true' : 'false');
-  });
-  const verseEl = document.getElementById('verse-text');
-  if (verseEl) verseEl.textContent = SITE.verse[lang];
-  const descriptorEl = document.getElementById('brand-descriptor');
-  if (descriptorEl) descriptorEl.textContent = SITE.descriptor[lang];
-  try {
-    localStorage.setItem('guarderia-lang', lang);
-  } catch {
-    /* ignore */
-  }
-}
-
-function initForm() {
-  const form = document.getElementById('inquiry-form');
-  const notice = document.getElementById('form-notice');
-  if (!form || !notice) return;
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    notice.classList.add('is-visible');
-    notice.focus();
-  });
-}
-
-function initLang() {
-  let lang = 'es';
-  try {
-    const stored = localStorage.getItem('guarderia-lang');
-    if (stored === 'en' || stored === 'es') lang = stored;
-  } catch {
-    /* ignore */
-  }
-  const params = new URLSearchParams(window.location.search);
-  if (params.get('lang') === 'en') lang = 'en';
-  if (params.get('lang') === 'es') lang = 'es';
-  setLanguage(lang);
-  document.querySelectorAll('[data-lang-btn]').forEach((btn) => {
-    btn.addEventListener('click', () => setLanguage(btn.getAttribute('data-lang-btn')));
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  initLang();
-  initForm();
-});

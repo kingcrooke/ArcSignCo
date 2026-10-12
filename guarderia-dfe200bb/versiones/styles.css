@@ -1,0 +1,129 @@
+:root {
+  --dr-blue: #002d62;
+  --dr-red: #ce1126;
+  --cream: #f7f0e6;
+  --ink: #1a2332;
+  --muted: #4a5568;
+  --max: 56rem;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.picker-header {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1.25rem 1rem 0.5rem;
+  text-align: center;
+}
+
+.draft-tag {
+  display: inline-block;
+  background: var(--dr-red);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin: 0 0 0.75rem;
+}
+
+.picker-header h1 {
+  margin: 0;
+  color: var(--dr-blue);
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+}
+
+.lead {
+  color: var(--muted);
+  margin: 0.5rem 0 0;
+}
+
+.picker-grid {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+}
+
+.picker-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid #ddd0c0;
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 45, 98, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.picker-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(0, 45, 98, 0.12);
+}
+
+.picker-card img {
+  width: 8.5rem;
+  height: 8.5rem;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.picker-card h2 {
+  margin: 0.75rem 0 0.25rem;
+  font-size: 1.05rem;
+  color: var(--dr-blue);
+}
+
+.picker-card h2 small {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--dr-red);
+}
+
+.verse {
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.music {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--dr-blue);
+}
+
+.path {
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.picker-footer {
+  text-align: center;
+  padding: 1.5rem 1rem 2rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}

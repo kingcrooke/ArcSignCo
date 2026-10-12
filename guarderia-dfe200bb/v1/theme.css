@@ -1,0 +1,25 @@
+/* Pasitos de Fe — Biblia (v1) */
+:root {
+  --dr-blue: #002d72;
+  --dr-red: #ce1126;
+  --larimar: #5ba4d9;
+  --accent: #5ba4d9;
+  --gold: #002d72;
+  --cream-wool: #f4f7fb;
+  --cream: #fafcff;
+  --shadow: 0 8px 24px rgba(0, 45, 114, 0.14);
+}
+
+body.version-v1 .hero {
+  background: linear-gradient(160deg, #ffffff 0%, #eef4fc 55%, rgba(206, 17, 38, 0.06) 100%);
+  border-color: rgba(0, 45, 114, 0.15);
+}
+
+body.version-v1 .verse-block {
+  border-left-color: var(--dr-red);
+  background: rgba(91, 164, 217, 0.12);
+}
+
+body.version-v1 .section h2 {
+  border-bottom-color: var(--dr-red);
+}

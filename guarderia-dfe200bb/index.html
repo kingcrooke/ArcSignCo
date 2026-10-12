@@ -7,9 +7,10 @@
     <meta name="theme-color" content="#002D62" />
     <title>Corderitos — Guardería Cristiana (borrador)</title>
     <link rel="icon" type="image/svg+xml" href="/guarderia-dfe200bb/favicon.svg" />
-    <link rel="stylesheet" href="/guarderia-dfe200bb/styles.css" />
+    <link rel="stylesheet" href="/guarderia-dfe200bb/shared/base.css" />
+    <link rel="stylesheet" href="/guarderia-dfe200bb/theme.css" />
   </head>
-  <body>
+  <body class="version-corderitos">
     <a class="skip-link" href="#contenido" data-i18n="nav.hero">Inicio</a>
 
     <div class="draft-banner" role="status" data-i18n="draft.banner">BORRADOR PRIVADO — no publicar</div>
@@ -343,12 +344,16 @@
     </main>
 
     <footer class="site-footer">
-      <p data-i18n="footer.provider">Yodernis Crooke — Corderitos Guardería Cristiana (borrador)</p>
+      <p data-i18n="footer.provider">Yodernis Crooke — Guardería Cristiana (borrador)</p>
       <p class="legal-name">
-        <small data-i18n="legal.name">[NOMBRE LEGAL — p. ej. Corderitos Family Day Care LLC, PENDIENTE]</small>
+        <small data-i18n="legal.name">[NOMBRE LEGAL — PENDIENTE]</small>
       </p>
+      <p id="music-credit" class="music-credit" lang="es"></p>
       <p data-i18n="footer.note">Página privada para revisión. No indexada en buscadores.</p>
     </footer>
+
+    <button type="button" id="music-toggle" class="music-fab" aria-pressed="false" data-i18n="music.label">Música</button>
+    <audio id="bg-music" preload="none"></audio>
 
     <div class="mobile-bar" aria-label="Acciones rápidas">
       <a class="btn btn-accent is-placeholder" href="#" aria-disabled="true" data-i18n="mobile.wa">WhatsApp</a>
@@ -369,6 +374,8 @@
         border: 0;
       }
     </style>
-    <script src="/guarderia-dfe200bb/main.js" defer></script>
+    <script src="/guarderia-dfe200bb/site.js" defer></script>
+    <script src="/guarderia-dfe200bb/shared/copy.js" defer></script>
+    <script src="/guarderia-dfe200bb/shared/core.js" defer></script>
   </body>
 </html>

@@ -1,0 +1,27 @@
+/* Pasitos de Fe — Paloma (v3) seal */
+:root {
+  --dr-blue: #001f54;
+  --dr-red: #ce1126;
+  --larimar: #4ecdc4;
+  --accent: #4ecdc4;
+  --gold: #ce1126;
+  --cream-wool: #f5f9ff;
+  --cream: #f8fbff;
+}
+
+body.version-v3 .hero {
+  background: radial-gradient(circle at 30% 20%, rgba(78, 205, 196, 0.15), transparent 45%),
+    linear-gradient(180deg, #ffffff 0%, #eef5ff 100%);
+}
+
+body.version-v3 .brand-logo,
+body.version-v3 .hero-logo-large {
+  border-radius: 50%;
+  border-width: 3px;
+  border-color: var(--dr-blue);
+  box-shadow: 0 0 0 4px var(--dr-red), var(--shadow);
+}
+
+body.version-v3 .site-header {
+  border-bottom-color: var(--dr-red);
+}
