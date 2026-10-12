@@ -65,6 +65,51 @@ for (const ent of files) {
 }
 pass("no photo/document scans in crooke folder");
 
+const interviewPath = path.join(base, "interview", "index.html");
+if (!fs.existsSync(interviewPath)) fail("missing interview/index.html");
+else {
+  const interviewHtml = fs.readFileSync(interviewPath, "utf8");
+  const interviewDom = new JSDOM(interviewHtml).window.document;
+  if (!/noindex/i.test(interviewHtml)) fail("interview page must be noindex");
+  else pass("interview noindex");
+  if (
+    !/<form[^>]*name="crooke-interview"[^>]*data-netlify="true"[^>]*netlify-honeypot="bot-field"/.test(
+      interviewHtml.replace(/\s+/g, " "),
+    )
+  ) {
+    fail("crooke-interview form must use Netlify Forms with honeypot");
+  } else pass("crooke-interview Netlify form");
+  if (!/enctype="multipart\/form-data"/.test(interviewHtml)) fail("interview form needs multipart for audio");
+  else pass("interview multipart upload");
+  if (!interviewHtml.includes("jesus.crooke@gmail.com")) fail("interview voice fallback mailto");
+  else pass("interview voice mailto fallback");
+  if (!interviewHtml.includes("interview-wizard.js")) fail("interview must load interview-wizard.js");
+  else pass("interview wizard script");
+  if (!interviewHtml.includes('type="module"')) fail("interview wizard must use module script");
+  else pass("interview module script");
+  const configPath = path.join(base, "interview", "interview-config.js");
+  if (!fs.existsSync(configPath)) fail("missing interview-config.js");
+  else {
+    const configSrc = fs.readFileSync(configPath, "utf8");
+    if (!/JESUS_WHATSAPP_E164\s*=\s*""/.test(configSrc)) {
+      fail("JESUS_WHATSAPP_E164 must remain empty placeholder until Jesus sets it");
+    } else pass("JESUS_WHATSAPP_E164 placeholder");
+  }
+  for (const field of [
+    "voice_about_you",
+    "old_photo",
+    "relative_1_name",
+    "more_stories",
+    "para",
+  ]) {
+    if (!interviewHtml.includes(`name="${field}"`)) fail(`interview Netlify register missing field ${field}`);
+  }
+  pass("interview wizard field registration");
+  const mainHtml = fs.readFileSync(indexPath, "utf8");
+  if (!mainHtml.includes("/crooke-7c3a9e12/interview/")) fail("main crooke nav must link interview");
+  else pass("main site links interview form");
+}
+
 for (const name of ["Charles Crooke", "Mary Thelma Morel", "Elizabeth Crooke", "Yodernis Crooke", "Jesus Crooke"]) {
   if (!text.includes(name.split(" ")[0]) && !html.includes(name)) {
     /* Jesus / Mary partial ok */
