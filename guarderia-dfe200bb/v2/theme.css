@@ -1,0 +1,32 @@
+/* Pasitos de Fe — Pastor (v2) */
+:root {
+  --dr-blue: #0a2a5e;
+  --dr-red: #ce1126;
+  --larimar: #2db8a8;
+  --accent: #2db8a8;
+  --gold: #ce1126;
+  --cream-wool: #f3f8f7;
+  --cream: #f8fbfa;
+}
+
+body.version-v2 .hero {
+  background: linear-gradient(145deg, #ffffff 0%, #eef6f4 50%, rgba(10, 42, 94, 0.05) 100%);
+}
+
+body.version-v2 .brand-logo,
+body.version-v2 .hero-logo-large {
+  border-radius: 16px;
+  border-color: var(--larimar);
+}
+
+body.version-v2 .hero-kicker {
+  color: var(--larimar);
+}
+
+body.version-v2 .btn-primary {
+  background: var(--dr-red);
+}
+
+body.version-v2 .btn-primary:hover {
+  background: #a80e1f;
+}

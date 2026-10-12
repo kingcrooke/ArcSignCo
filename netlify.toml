@@ -215,6 +215,20 @@
   [headers.conditions]
     Status = "200"
 
+[[headers]]
+  for = "/guarderia-dfe200bb/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+  [headers.conditions]
+    Status = "200"
+
+[[headers]]
+  for = "/guarderia-dfe200bb/*/audio/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+  [headers.conditions]
+    Status = "200"
+
 # Hidden NovaStage LLC website preview (URL-only; not linked from the public site).
 [[headers]]
   for = "/novastage-2c397e45/*"
