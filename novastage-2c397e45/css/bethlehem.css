@@ -1,0 +1,257 @@
+/* Elizabeth's Canva lockup. Active only on data-lockup-emphasis="bethlehem"
+   (versions 1, 3, 4, 6). Versions 2, 5, and 7 keep the star-above / illumination mark. */
+
+.wm-join {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+  vertical-align: baseline;
+  line-height: 0;
+}
+
+.lockup-bethlehem {
+  display: none;
+}
+
+body[data-lockup-emphasis="bethlehem"] {
+  --beth-cy: -0.46em;
+  --beth-ring: 1.02em;
+  --beth-star-w: 2.22em;
+  --beth-star-h: 1.58em;
+  --beth-ray-w: 2.55em;
+  --beth-ray-top: -1.08em;
+  --beth-ray-h: 1.34em;
+  --beth-floor: 0.18em;
+}
+
+body[data-lockup-emphasis="bethlehem"][data-wordmark-font="script"] {
+  --beth-cy: -0.32em;
+  --beth-ring: 1.15em;
+  --beth-star-w: 2.35em;
+  --beth-star-h: 1.7em;
+  --beth-ray-w: 2.7em;
+  --beth-ray-top: -1.12em;
+  --beth-ray-h: 1.78em;
+  --beth-floor: 0.58em;
+}
+
+body[data-lockup-emphasis="bethlehem"] .lockup-visual {
+  display: none;
+}
+
+body[data-lockup-emphasis="bethlehem"] .official-lockup {
+  padding-top: clamp(16px, 2.2vw, 28px);
+}
+
+body[data-lockup-emphasis="bethlehem"] .lockup-wordmark {
+  margin: 0.12em 0 0.4rem;
+}
+
+body[data-lockup-emphasis="bethlehem"] .lockup-bethlehem {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-back,
+body[data-lockup-emphasis="bethlehem"] .beth-front {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-back {
+  z-index: 0;
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-front {
+  z-index: 4;
+}
+
+body[data-lockup-emphasis="bethlehem"] .wm-nova,
+body[data-lockup-emphasis="bethlehem"] .wm-stage {
+  position: relative;
+  z-index: 2;
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-ring {
+  position: absolute;
+  left: 0;
+  top: var(--beth-cy);
+  width: var(--beth-ring);
+  height: var(--beth-ring);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 0 56%,
+    rgba(31, 208, 214, 0.25) 62%,
+    #1fd0d6 70%,
+    #007880 80%,
+    rgba(0, 120, 128, 0.28) 88%,
+    transparent 97%
+  );
+  filter: drop-shadow(0 0 5px rgba(31, 208, 214, 0.8)) drop-shadow(0 0 14px rgba(0, 120, 128, 0.55));
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-ray-h {
+  position: absolute;
+  left: 0;
+  top: var(--beth-cy);
+  width: var(--beth-ray-w);
+  height: 2px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(208, 168, 64, 0.05) 6%,
+    #d0a840 16%,
+    #f2d27a 50%,
+    #d0a840 84%,
+    rgba(208, 168, 64, 0.05) 94%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px 1px rgba(242, 210, 122, 0.7);
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-star {
+  position: absolute;
+  left: 0;
+  top: var(--beth-cy);
+  width: var(--beth-star-w);
+  height: var(--beth-star-h);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    #fffef6 0 7%,
+    #f2d27a 26%,
+    #e2bc62 46%,
+    #d0a840 68%,
+    #c4922a 100%
+  );
+  clip-path: polygon(
+    50% 4%,
+    54.21% 39.84%,
+    66.97% 33.03%,
+    60.16% 45.79%,
+    96% 50%,
+    60.16% 54.21%,
+    66.97% 66.97%,
+    54.21% 60.16%,
+    50% 96%,
+    45.79% 60.16%,
+    33.03% 66.97%,
+    39.84% 54.21%,
+    4% 50%,
+    39.84% 45.79%,
+    33.03% 33.03%,
+    45.79% 39.84%
+  );
+  filter: drop-shadow(0 0 0.06em rgba(255, 248, 220, 0.95)) drop-shadow(0 0 0.2em rgba(208, 168, 64, 0.8));
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-ray-v {
+  position: absolute;
+  left: 0;
+  top: var(--beth-ray-top);
+  width: 2px;
+  height: var(--beth-ray-h);
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(242, 210, 122, 0) 0%,
+    #f2d27a 14%,
+    #fffef6 46%,
+    #f2d27a 78%,
+    rgba(208, 168, 64, 0.2) 100%
+  );
+  box-shadow:
+    0 0 6px 1px rgba(255, 246, 214, 0.9),
+    0 0 14px 3px rgba(208, 168, 64, 0.45);
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-floor {
+  position: absolute;
+  left: 0;
+  top: var(--beth-floor);
+  width: 2.85em;
+  height: 0.36em;
+  transform: translate(-50%, -42%);
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    #f7ffff 0%,
+    #d9ffff 10%,
+    #1fd0d6 24%,
+    #088080 48%,
+    rgba(8, 128, 128, 0.28) 64%,
+    transparent 78%
+  );
+}
+
+body[data-lockup-emphasis="bethlehem"] .beth-floor::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 0.12em;
+  height: 0.12em;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 5px 2px rgba(217, 255, 255, 0.95),
+    0 0 12px 4px rgba(31, 208, 214, 0.8);
+}
+
+body[data-wordmark-font="glacial"] .lockup-wordmark {
+  font-family: "Glacial Indifference", "Nunito", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.012em;
+}
+
+body[data-wordmark-font="script"] .lockup-wordmark {
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+  letter-spacing: 0;
+  font-size: clamp(3.5rem, 12.5vw, 6.8rem);
+  line-height: 0.82;
+}
+
+body[data-wordmark-font="glacial"] .display-title,
+body[data-wordmark-font="script"] .display-title {
+  font-family: var(--display-alt);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+body[data-lockup-emphasis="bethlehem"] .lockup-slogan {
+  text-transform: none;
+  font-family: var(--sans);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  font-size: clamp(0.78rem, 1.7vw, 0.98rem);
+  color: #e8d37a;
+  max-width: 40em;
+  margin-top: 1.15rem;
+}
+
+body[data-lockup-emphasis="bethlehem"] .hero .lockup-slogan {
+  white-space: normal;
+  letter-spacing: 0.012em;
+}
+
+body[data-lockup-emphasis="bethlehem"][data-invert="1"] .lockup-slogan {
+  color: #7a5a0e;
+}
+
+body[data-lockup-emphasis="bethlehem"][data-invert="1"] .wm-nova,
+body[data-lockup-emphasis="bethlehem"][data-invert="1"] .wm-stage {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}

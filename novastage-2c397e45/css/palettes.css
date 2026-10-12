@@ -126,6 +126,81 @@ body[data-palette="g"] {
   --palette-nav-bg: color-mix(in srgb, #070707 90%, transparent);
 }
 
+/* Versions 1 and 3 — Version 2's charcoal site, Canva wordmark colors */
+[data-palette="h"],
+body[data-palette="h"] {
+  --palette-bg: #141821;
+  --palette-bg-soft: #1c2330;
+  --palette-nova: #ffffff;
+  --palette-stage: #ffffff;
+  --palette-wordmark: #ffffff;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #e8d37a;
+  --palette-text: #f4efe6;
+  --palette-text-muted: #c5cdd8;
+  --palette-panel: rgba(20, 24, 33, 0.68);
+  --palette-panel-hero: rgba(20, 24, 33, 0.55);
+  --palette-accent: #3ec8ef;
+  --palette-accent-ink: #141821;
+  --palette-nav-bg: color-mix(in srgb, #141821 88%, transparent);
+}
+
+[data-palette="i"],
+body[data-palette="i"] {
+  --palette-bg: #141821;
+  --palette-bg-soft: #1c2330;
+  --palette-nova: #1fd0d6;
+  --palette-stage: #1fd0d6;
+  --palette-wordmark: #1fd0d6;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #e8d37a;
+  --palette-text: #f4efe6;
+  --palette-text-muted: #c5cdd8;
+  --palette-panel: rgba(20, 24, 33, 0.68);
+  --palette-panel-hero: rgba(20, 24, 33, 0.55);
+  --palette-accent: #3ec8ef;
+  --palette-accent-ink: #141821;
+  --palette-nav-bg: color-mix(in srgb, #141821 88%, transparent);
+}
+
+/* Version 4 — Version 5's navy night, white Nova + turquoise Stage */
+[data-palette="j"],
+body[data-palette="j"] {
+  --palette-bg: #0a1628;
+  --palette-bg-soft: #0f1f38;
+  --palette-nova: #ffffff;
+  --palette-stage: #1fd0d6;
+  --palette-wordmark: #1fd0d6;
+  --palette-wordmark-split: 1;
+  --palette-slogan: #e8d37a;
+  --palette-text: #f4efe6;
+  --palette-text-muted: #9eb3c9;
+  --palette-panel: rgba(10, 22, 40, 0.72);
+  --palette-panel-hero: rgba(10, 22, 40, 0.58);
+  --palette-accent: #3ec8ef;
+  --palette-accent-ink: #0a1628;
+  --palette-nav-bg: color-mix(in srgb, #0a1628 88%, transparent);
+}
+
+/* Version 6 — Version 7's black-and-white site */
+[data-palette="k"],
+body[data-palette="k"] {
+  --palette-bg: #070707;
+  --palette-bg-soft: #121212;
+  --palette-nova: #ffffff;
+  --palette-stage: #ffffff;
+  --palette-wordmark: #ffffff;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #e8d37a;
+  --palette-text: #f7f7f7;
+  --palette-text-muted: #c8c8c8;
+  --palette-panel: rgba(0, 0, 0, 0.62);
+  --palette-panel-hero: rgba(0, 0, 0, 0.48);
+  --palette-accent: #f4efe6;
+  --palette-accent-ink: #070707;
+  --palette-nav-bg: color-mix(in srgb, #070707 90%, transparent);
+}
+
 body {
   background: var(--palette-bg);
   color: var(--palette-text);

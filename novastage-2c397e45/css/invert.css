@@ -270,3 +270,61 @@ body[data-invert="1"] footer {
 body[data-invert="1"] .production-list {
   background: rgba(20, 24, 33, 0.08);
 }
+
+/* Versions 1 and 3 — cream field, both letters dark. Star and ring stay in bethlehem.css. */
+body[data-palette="h"][data-invert="1"],
+body[data-palette="i"][data-invert="1"] {
+  --palette-bg: #f7f4ee;
+  --palette-bg-soft: #fffdf8;
+  --palette-nova: #141821;
+  --palette-stage: #141821;
+  --palette-wordmark: #141821;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #141821;
+  --palette-text-muted: #3a4452;
+  --palette-panel: rgba(255, 255, 255, 0.74);
+  --palette-panel-hero: rgba(255, 252, 247, 0.58);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #fffdf8 86%, transparent);
+  color-scheme: light;
+}
+
+/* Version 4 — light sky, both letters navy */
+body[data-palette="j"][data-invert="1"] {
+  --palette-bg: #e7f3f8;
+  --palette-bg-soft: #f7f4ee;
+  --palette-nova: #0a1628;
+  --palette-stage: #0a1628;
+  --palette-wordmark: #0a1628;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #0a1628;
+  --palette-text-muted: #24384c;
+  --palette-panel: rgba(255, 252, 247, 0.78);
+  --palette-panel-hero: rgba(255, 252, 247, 0.55);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #f7f4ee 88%, transparent);
+  color-scheme: light;
+}
+
+/* Version 6 — white field, black wordmark */
+body[data-palette="k"][data-invert="1"] {
+  --palette-bg: #fbfbfb;
+  --palette-bg-soft: #f3f1ec;
+  --palette-nova: #111111;
+  --palette-stage: #111111;
+  --palette-wordmark: #111111;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #161616;
+  --palette-text-muted: #3a3a3a;
+  --palette-panel: rgba(255, 255, 255, 0.78);
+  --palette-panel-hero: rgba(255, 255, 255, 0.62);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #ffffff 88%, transparent);
+  color-scheme: light;
+}

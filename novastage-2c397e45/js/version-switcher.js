@@ -86,6 +86,13 @@
     shortLabel.textContent = "V" + version.id;
     btn.appendChild(longLabel);
     btn.appendChild(shortLabel);
+    if (version.isNew) {
+      btn.classList.add("is-new");
+      var dot = document.createElement("span");
+      dot.className = "version-switcher__new";
+      dot.setAttribute("aria-hidden", "true");
+      btn.appendChild(dot);
+    }
     btn.addEventListener("click", function () {
       apply(version.id, true);
     });

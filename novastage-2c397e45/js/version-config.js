@@ -1,10 +1,10 @@
 /**
  * NovaStage site version tokens — single file to remove when preview mode is retired.
- * Map: Version 1–5 → palette A–E. Versions 6–7 use the illumination lockup.
  *
- * The live preview shows Versions 2, 5, and 7 only. Versions 1, 3, 4, and 6
- * stay here with enabled:false (palette, font, lockup, and music intact).
- * Restore one by setting enabled:true — do not renumber the ids.
+ * Versions 2, 5, and 7 keep the looks Elizabeth chose (charcoal, navy, black-and-white).
+ * Versions 1, 3, 4, and 6 are her Canva Bethlehem lockup in those site frames.
+ * The previous 1/3/4/6 designs live only in git tag novastage-all-7-versions.
+ * Do not renumber the ids.
  */
 window.NOVASTAGE_VERSION_CONFIG = {
   storageKey: "novastage-site-version",
@@ -14,11 +14,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
   versions: [
     {
       id: 1,
-      enabled: false,
-      palette: "a",
+      enabled: true,
+      isNew: true,
+      palette: "h",
       tabLabel: "Version 1",
-      wordmarkFont: "primary",
-      lockupEmphasis: "normal",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-1.mp3",
         ogg: "audio/version-1.ogg",
@@ -50,11 +51,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 3,
-      enabled: false,
-      palette: "c",
+      enabled: true,
+      isNew: true,
+      palette: "i",
       tabLabel: "Version 3",
-      wordmarkFont: "primary",
-      lockupEmphasis: "normal",
+      wordmarkFont: "script",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-3.mp3",
         ogg: "audio/version-3.ogg",
@@ -67,11 +69,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 4,
-      enabled: false,
-      palette: "d",
+      enabled: true,
+      isNew: true,
+      palette: "j",
       tabLabel: "Version 4",
-      wordmarkFont: "primary",
-      lockupEmphasis: "bold",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-4.mp3",
         ogg: "audio/version-4.ogg",
@@ -102,11 +105,12 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 6,
-      enabled: false,
-      palette: "f",
+      enabled: true,
+      isNew: true,
+      palette: "k",
       tabLabel: "Version 6",
-      wordmarkFont: "primary",
-      lockupEmphasis: "illumination",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-6.mp3",
         ogg: "audio/version-6.ogg",
