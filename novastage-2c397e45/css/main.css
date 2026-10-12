@@ -114,7 +114,7 @@ select {
 
 .nav-shell {
   pointer-events: auto;
-  width: min(100%, 780px);
+  width: min(100%, 880px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -154,6 +154,38 @@ select {
 .nav-shell a.nav-cta:hover {
   background: #3de8d0;
   color: var(--charcoal);
+}
+
+.lang-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  margin-left: 4px;
+  border: 1px solid var(--line-dark);
+  border-radius: 999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--palette-bg, #141821) 70%, transparent);
+}
+
+.lang-toggle button {
+  border: 0;
+  background: transparent;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--caps);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  color: #c5cdd8;
+}
+
+.lang-toggle button[aria-pressed="true"] {
+  background: var(--palette-accent, #3ec8ef);
+  color: var(--palette-accent-ink, #141821);
+}
+
+.lang-toggle button:focus-visible {
+  outline: 2px solid var(--palette-accent, #3ec8ef);
+  outline-offset: -2px;
 }
 
 .menu-button,
@@ -730,11 +762,23 @@ html.js-reveal [data-reveal].reveal-pending.is-visible {
 @media (max-width: 720px) {
   .nav-shell {
     position: relative;
-    justify-content: space-between;
+    justify-content: flex-start;
+  }
+
+  .nav-shell > a.nav-cta {
+    margin-left: auto;
   }
 
   .nav-shell > a:not(.nav-cta) {
     display: none;
+  }
+
+  .lang-toggle {
+    margin-left: 0;
+  }
+
+  .lang-toggle button {
+    padding: 0.32rem 0.55rem;
   }
 
   .menu-button {

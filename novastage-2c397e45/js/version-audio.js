@@ -58,14 +58,25 @@
     }
   }
 
+  function tr(key, vars) {
+    if (window.NOVASTAGE_t) {
+      return window.NOVASTAGE_t(key, vars);
+    }
+    return "";
+  }
+
   function syncButton() {
     var btn = document.getElementById("version-music-toggle");
     if (!btn) {
       return;
     }
     btn.setAttribute("aria-pressed", playing ? "true" : "false");
-    btn.textContent = playing ? "Pause music" : "Play music";
-    btn.setAttribute("aria-label", playing ? "Pause version music" : "Play version music");
+    var playLabel = tr("music.play") || "Play music";
+    var pauseLabel = tr("music.pause") || "Pause music";
+    var playAria = tr("music.play.aria") || "Play version music";
+    var pauseAria = tr("music.pause.aria") || "Pause version music";
+    btn.textContent = playing ? pauseLabel : playLabel;
+    btn.setAttribute("aria-label", playing ? pauseAria : playAria);
   }
 
   function setFooterCredit(version) {
@@ -74,17 +85,35 @@
       return;
     }
     var a = version.audio;
+    var piece = tr("music.piece." + version.id) || a.piece;
+    var performer = tr("music.performer." + version.id) || a.performer;
+    var license = tr("music.license." + version.id) || a.license;
+    var line = tr("music.credit", {
+      version: version.id,
+      piece: piece,
+      composer: a.composer,
+      performer: performer,
+      license: license,
+    });
     el.textContent =
+      line ||
       "Music (Version " +
-      version.id +
-      "): " +
-      a.piece +
-      " — " +
-      a.composer +
-      " · " +
-      a.performer +
-      " · " +
-      a.license;
+        version.id +
+        "): " +
+        a.piece +
+        " — " +
+        a.composer +
+        " · " +
+        a.performer +
+        " · " +
+        a.license;
+  }
+
+  function syncLabels() {
+    syncButton();
+    if (currentVersionId) {
+      setFooterCredit(findVersion(currentVersionId));
+    }
   }
 
   function fadeTo(targetVol, el, done) {
@@ -257,6 +286,7 @@
   window.NOVASTAGE_audio = {
     togglePlay: togglePlay,
     onVersionChange: onVersionChange,
+    syncLabels: syncLabels,
     isPlaying: function () {
       return playing;
     },
