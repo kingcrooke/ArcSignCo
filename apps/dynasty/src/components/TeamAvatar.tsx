@@ -4,39 +4,64 @@ import type { TeamInfo } from '../lib/types'
 
 export type AvatarMood = 'base' | 'hype' | 'excited' | 'loss'
 
-type AvatarEntry =
+type AvatarFileRef =
   | string
-  | { base?: string; hype?: string; excited?: string; loss?: string }
+  | { webp?: string; png?: string; fallback?: string }
+
+type AvatarEntry =
+  | AvatarFileRef
+  | {
+      base?: AvatarFileRef
+      hype?: AvatarFileRef
+      excited?: AvatarFileRef
+      loss?: AvatarFileRef
+    }
 
 const customByRoster = managerAvatars as Record<string, AvatarEntry>
 
-function resolveCustomUrl(
-  rosterId: number,
-  mood: AvatarMood,
-): string | null {
-  const entry = customByRoster[String(rosterId)]
-  if (!entry) return null
-  let path = ''
-  if (typeof entry === 'string') {
-    path = entry.trim()
-  } else {
-    path =
-      (mood === 'hype'
-        ? entry.hype
-        : mood === 'excited'
-          ? entry.excited
-          : mood === 'loss'
-            ? entry.loss
-            : entry.base)?.trim() ?? ''
-    if (!path && mood !== 'base') {
-      path = entry.base?.trim() ?? ''
-    }
-  }
-  if (!path) return null
+function publicAssetUrl(path: string): string {
   if (path.startsWith('http') || path.startsWith('/')) return path
   const base = import.meta.env.BASE_URL
   const root = base.endsWith('/') ? base : `${base}/`
   return `${root}${path.replace(/^\//, '')}`
+}
+
+function pathsFromRef(ref: AvatarFileRef | undefined): string[] {
+  if (!ref) return []
+  if (typeof ref === 'string') {
+    const trimmed = ref.trim()
+    return trimmed ? [publicAssetUrl(trimmed)] : []
+  }
+  const urls: string[] = []
+  const webp = ref.webp?.trim()
+  if (webp) urls.push(publicAssetUrl(webp))
+  const fallback = (ref.fallback ?? ref.png)?.trim()
+  if (fallback) urls.push(publicAssetUrl(fallback))
+  return urls
+}
+
+function resolveCustomUrls(rosterId: number, mood: AvatarMood): string[] {
+  const entry = customByRoster[String(rosterId)]
+  if (!entry) return []
+  if (typeof entry === 'string' || 'webp' in entry || 'png' in entry || 'fallback' in entry) {
+    return pathsFromRef(entry as AvatarFileRef)
+  }
+  const record = entry as {
+    base?: AvatarFileRef
+    hype?: AvatarFileRef
+    excited?: AvatarFileRef
+    loss?: AvatarFileRef
+  }
+  let ref: AvatarFileRef | undefined =
+    mood === 'hype'
+      ? record.hype
+      : mood === 'excited'
+        ? record.excited
+        : mood === 'loss'
+          ? record.loss
+          : record.base
+  if (!ref && mood !== 'base') ref = record.base
+  return pathsFromRef(ref)
 }
 
 /** Custom cartoon → league metadata.avatar → global user.avatar thumb → initials. */
@@ -46,8 +71,7 @@ export function avatarUrlChain(
 ): string[] {
   if (!team) return []
   const urls: string[] = []
-  const custom = resolveCustomUrl(team.rosterId, mood)
-  if (custom) urls.push(custom)
+  urls.push(...resolveCustomUrls(team.rosterId, mood))
   if (team.leagueAvatarUrl) urls.push(team.leagueAvatarUrl)
   if (team.globalAvatarUrl) urls.push(team.globalAvatarUrl)
   return urls
