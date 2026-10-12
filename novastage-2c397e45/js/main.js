@@ -115,8 +115,10 @@
       if (!form.reportValidity()) {
         return;
       }
-      status.textContent =
-        "Thank you — your message is ready to send once the contact form is connected. (TODO: wire up form handler.)";
+      status.textContent = window.NOVASTAGE_t
+        ? window.NOVASTAGE_t("form.status")
+        : "Thank you — your message is ready to send once the contact form is connected. (TODO: wire up form handler.)";
+      status.setAttribute("data-filled", "1");
     });
   }
 })();

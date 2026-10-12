@@ -27,24 +27,26 @@
   </head>
   <body data-version="1" data-palette="a" data-wordmark-font="primary" data-lockup-emphasis="normal">
     <div class="version-switcher" id="version-switcher" data-preview-ui></div>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
 
     <div class="site-backdrop" aria-hidden="true">
       <div class="official-lockup official-lockup--backdrop">
         <div class="lockup-visual">
+          <div class="lockup-eclipse"></div>
           <div class="lockup-star"></div>
+          <div class="lockup-ray"></div>
           <div class="lockup-beam"></div>
           <div class="lockup-pool"></div>
         </div>
         <p class="lockup-wordmark" aria-hidden="true">
           <span class="wm-nova">Nova</span><span class="wm-stage">Stage</span>
         </p>
-        <p class="lockup-slogan" aria-hidden="true">“Where talent grows and confidence takes the stage.”</p>
+        <p class="lockup-slogan" aria-hidden="true" data-i18n="slogan">“Where talent grows and confidence takes the stage.”</p>
       </div>
       <div class="site-backdrop-scrim"></div>
     </div>
 
-    <header class="topbar" aria-label="Site navigation">
+    <header class="topbar" data-i18n-aria="nav.aria" aria-label="Site navigation">
       <nav class="nav-shell">
         <button
           class="menu-button"
@@ -56,19 +58,23 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
           </svg>
-          Menu
+          <span data-i18n="nav.menu">Menu</span>
         </button>
-        <a href="#company">Company</a>
-        <a href="#programs">Programs</a>
-        <a href="#schools">For Schools</a>
-        <a href="#production">Production</a>
-        <a href="#contact" class="nav-cta">Contact</a>
+        <a href="#company" data-i18n="nav.company">Company</a>
+        <a href="#programs" data-i18n="nav.programs">Programs</a>
+        <a href="#schools" data-i18n="nav.schools">For Schools</a>
+        <a href="#production" data-i18n="nav.production">Production</a>
+        <a href="#contact" class="nav-cta" data-i18n="nav.contact">Contact</a>
+        <div class="lang-toggle" role="group" data-i18n-aria="lang.group" aria-label="Language">
+          <button type="button" data-lang-btn="en" aria-pressed="true" data-i18n="lang.en">EN</button>
+          <button type="button" data-lang-btn="es" aria-pressed="false" data-i18n="lang.es">ES</button>
+        </div>
         <div class="mobile-menu" id="mobile-menu">
-          <a href="#company">Company</a>
-          <a href="#programs">Programs</a>
-          <a href="#schools">For Schools</a>
-          <a href="#production">Production</a>
-          <a href="#contact">Contact</a>
+          <a href="#company" data-i18n="nav.company">Company</a>
+          <a href="#programs" data-i18n="nav.programs">Programs</a>
+          <a href="#schools" data-i18n="nav.schools">For Schools</a>
+          <a href="#production" data-i18n="nav.production">Production</a>
+          <a href="#contact" data-i18n="nav.contact">Contact</a>
         </div>
       </nav>
     </header>
@@ -78,21 +84,23 @@
         <div class="hero-inner section-panel section-panel--hero" data-parallax="0.04">
           <div class="official-lockup" id="hero-title">
             <div class="lockup-visual" aria-hidden="true">
+              <div class="lockup-eclipse"></div>
               <div class="lockup-star"></div>
+              <div class="lockup-ray"></div>
               <div class="lockup-beam"></div>
               <div class="lockup-pool"></div>
             </div>
             <h1 class="lockup-wordmark">
               <span class="wm-nova">Nova</span><span class="wm-stage">Stage</span>
             </h1>
-            <p class="lockup-slogan">“Where talent grows and confidence takes the stage.”</p>
+            <p class="lockup-slogan" data-i18n="slogan">“Where talent grows and confidence takes the stage.”</p>
           </div>
-          <p class="hero-copy">
+          <p class="hero-copy" data-i18n="hero.copy">
             Performing arts education and production designed to help every artist discover the light they carry.
           </p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#programs">Explore programs</a>
-            <a class="button" href="#contact">Contact us</a>
+            <a class="button button-primary" href="#programs" data-i18n="hero.programs">Explore programs</a>
+            <a class="button" href="#contact" data-i18n="hero.contact">Contact us</a>
           </div>
         </div>
       </section>
@@ -100,22 +108,22 @@
       <section class="section about" id="company">
         <div class="section-inner section-panel about-grid" data-parallax="0.02">
           <div data-reveal>
-            <p class="section-kicker">The company</p>
-            <h2 class="display-title">Education meets the <em>electricity</em> of live performance.</h2>
-            <p class="lead">
+            <p class="section-kicker" data-i18n="about.kicker">The company</p>
+            <h2 class="display-title" data-i18n-html="about.title">Education meets the <em>electricity</em> of live performance.</h2>
+            <p class="lead" data-i18n="about.lead">
               NovaStage LLC is a New York performing arts company bridging arts education and professional production. We
               create spaces where movement, identity and imagination become confidence onstage and beyond.
             </p>
-            <p class="draft-note">
+            <p class="draft-note" data-i18n="about.note">
               This introductory statement is a working direction while the company’s complete mission and vision are being
               developed.
             </p>
           </div>
-          <div class="manifesto" data-reveal aria-label="NovaStage creative principles">
+          <div class="manifesto" data-reveal data-i18n-aria="about.aria" aria-label="NovaStage creative principles">
             <div class="orbit" aria-hidden="true"></div>
             <div class="orbit second" aria-hidden="true"></div>
             <div class="orbit third" aria-hidden="true"></div>
-            <div class="orbit-copy"><span>Our creative center</span>Identity.<br />Movement.<br />Possibility.</div>
+            <div class="orbit-copy" data-i18n-html="about.orbit"><span>Our creative center</span>Identity.<br />Movement.<br />Possibility.</div>
           </div>
         </div>
       </section>
@@ -124,10 +132,10 @@
         <div class="section-inner section-panel" data-parallax="0.025">
           <div class="programs-header">
             <div data-reveal>
-              <p class="section-kicker">Programs</p>
-              <h2 class="display-title">A pathway for every <em>age</em> and every story.</h2>
+              <p class="section-kicker" data-i18n="programs.kicker">Programs</p>
+              <h2 class="display-title" data-i18n-html="programs.title">A pathway for every <em>age</em> and every story.</h2>
             </div>
-            <p class="lead" data-reveal>
+            <p class="lead" data-reveal data-i18n="programs.lead">
               Adaptable workshop tracks pair expressive movement with intentional learning goals. Short programs are
               typically structured across five weeks, with clear class plans from opening session to final sharing.
             </p>
@@ -135,13 +143,13 @@
 
           <div class="program-grid">
             <article class="program-card featured" data-reveal>
-              <span class="age">Signature curriculum</span>
-              <h3>World Identity</h3>
-              <p>
+              <span class="age" data-i18n="programs.world.age">Signature curriculum</span>
+              <h3 data-i18n="programs.world.title">World Identity</h3>
+              <p data-i18n="programs.world.body">
                 A movement-centered exploration of culture, self-expression and belonging—adapted to the age group,
                 school community and program length.
               </p>
-              <p class="workshop-note">
+              <p class="workshop-note" data-i18n-html="programs.world.note">
                 <strong>Mundos en Escena / Worlds on Stage:</strong> Students explore cultural myths, music, and
                 traditional dance through theater and rhythm, building empathy and pride in identity—culminating in a
                 school showcase that celebrates diversity.
@@ -149,34 +157,34 @@
             </article>
 
             <article class="program-card" data-reveal>
-              <span class="age">Ages 3–8</span>
-              <h3>First Movements</h3>
-              <p>Playful foundations in rhythm, creative movement, coordination and imagination.</p>
+              <span class="age" data-i18n="programs.first.age">Ages 3–8</span>
+              <h3 data-i18n="programs.first.title">First Movements</h3>
+              <p data-i18n="programs.first.body">Playful foundations in rhythm, creative movement, coordination and imagination.</p>
             </article>
 
             <article class="program-card" data-reveal>
-              <span class="age">Ages 9–13</span>
-              <h3>Young Artists</h3>
-              <p>Technique, collaboration and creative voice for students building confidence through movement.</p>
+              <span class="age" data-i18n="programs.young.age">Ages 9–13</span>
+              <h3 data-i18n="programs.young.title">Young Artists</h3>
+              <p data-i18n="programs.young.body">Technique, collaboration and creative voice for students building confidence through movement.</p>
             </article>
 
             <article class="program-card" data-reveal>
-              <span class="age">Ages 14–17</span>
-              <h3>Teen Ensemble</h3>
-              <p>Focused artistic development, choreography and performance practice for emerging artists.</p>
+              <span class="age" data-i18n="programs.teen.age">Ages 14–17</span>
+              <h3 data-i18n="programs.teen.title">Teen Ensemble</h3>
+              <p data-i18n="programs.teen.body">Focused artistic development, choreography and performance practice for emerging artists.</p>
             </article>
 
             <article class="program-card" data-reveal>
-              <span class="age">Community · all ages</span>
-              <h3>Movement Together</h3>
-              <p>Accessible programs that invite families and communities to move, create and celebrate shared stories.</p>
-              <div class="styles-list" aria-label="Available dance styles">
-                <span>African Caribbean</span>
-                <span>Creative movement</span>
-                <span>Ballet</span>
-                <span>Contemporary</span>
-                <span>Latin dance</span>
-                <span>American folk</span>
+              <span class="age" data-i18n="programs.community.age">Community · all ages</span>
+              <h3 data-i18n="programs.community.title">Movement Together</h3>
+              <p data-i18n="programs.community.body">Accessible programs that invite families and communities to move, create and celebrate shared stories.</p>
+              <div class="styles-list" data-i18n-aria="programs.styles.aria" aria-label="Available dance styles">
+                <span data-i18n="programs.style.1">African Caribbean</span>
+                <span data-i18n="programs.style.2">Creative movement</span>
+                <span data-i18n="programs.style.3">Ballet</span>
+                <span data-i18n="programs.style.4">Contemporary</span>
+                <span data-i18n="programs.style.5">Latin dance</span>
+                <span data-i18n="programs.style.6">American folk</span>
               </div>
             </article>
           </div>
@@ -186,41 +194,41 @@
       <section class="section schools" id="schools">
         <div class="section-inner section-panel schools-grid" data-parallax="0.02">
           <div data-reveal>
-            <p class="section-kicker">For schools</p>
-            <h2 class="display-title">A creative partner, built for the <em>school day.</em></h2>
-            <p class="lead">
+            <p class="section-kicker" data-i18n="schools.kicker">For schools</p>
+            <h2 class="display-title" data-i18n-html="schools.title">A creative partner, built for the <em>school day.</em></h2>
+            <p class="lead" data-i18n="schools.lead">
               Programs are shaped for school directors, coordinators and DOE after-school teams—balancing artistic
               discovery with practical structure.
             </p>
-            <a class="button button-primary" href="#contact">Request program information</a>
+            <a class="button button-primary" href="#contact" data-i18n="schools.cta">Request program information</a>
           </div>
           <div class="school-points" data-reveal>
             <div class="school-point">
               <span class="num">01</span>
               <div>
-                <h3>Structured curriculum</h3>
-                <p>Clear objectives and content shaped for each school, age range and program focus.</p>
+                <h3 data-i18n="schools.1.title">Structured curriculum</h3>
+                <p data-i18n="schools.1.body">Clear objectives and content shaped for each school, age range and program focus.</p>
               </div>
             </div>
             <div class="school-point">
               <span class="num">02</span>
               <div>
-                <h3>Week-by-week plans</h3>
-                <p>A practical sequence that shows how learning develops from session to session.</p>
+                <h3 data-i18n="schools.2.title">Week-by-week plans</h3>
+                <p data-i18n="schools.2.body">A practical sequence that shows how learning develops from session to session.</p>
               </div>
             </div>
             <div class="school-point">
               <span class="num">03</span>
               <div>
-                <h3>Professional teaching artists</h3>
-                <p>Experienced artists who bring craft, care and an active professional perspective.</p>
+                <h3 data-i18n="schools.3.title">Professional teaching artists</h3>
+                <p data-i18n="schools.3.body">Experienced artists who bring craft, care and an active professional perspective.</p>
               </div>
             </div>
             <div class="school-point">
               <span class="num">04</span>
               <div>
-                <h3>Adaptable delivery</h3>
-                <p>Five-week workshops, multi-month residencies and custom formats for specific communities.</p>
+                <h3 data-i18n="schools.4.title">Adaptable delivery</h3>
+                <p data-i18n="schools.4.body">Five-week workshops, multi-month residencies and custom formats for specific communities.</p>
               </div>
             </div>
           </div>
@@ -230,19 +238,19 @@
       <section class="section production" id="production">
         <div class="section-inner section-panel production-grid" data-parallax="0.02">
           <div data-reveal>
-            <p class="section-kicker">Production</p>
-            <h2 class="display-title">From the studio to the <em>spotlight.</em></h2>
-            <p class="lead">
+            <p class="section-kicker" data-i18n="production.kicker">Production</p>
+            <h2 class="display-title" data-i18n-html="production.title">From the studio to the <em>spotlight.</em></h2>
+            <p class="lead" data-i18n="production.lead">
               NovaStage’s production arm develops performances, artist showcases and live experiences that carry the
               company’s educational spirit onto the professional stage.
             </p>
-            <span class="coming">Production slate coming soon</span>
+            <span class="coming" data-i18n="production.soon">Production slate coming soon</span>
           </div>
           <div class="production-list" data-reveal>
-            <div><strong>Performances</strong><span>Original and collaborative works</span></div>
-            <div><strong>Showcases</strong><span>Platforms for emerging voices</span></div>
-            <div><strong>Events</strong><span>Arts-led community experiences</span></div>
-            <div><strong>Partnerships</strong><span>Programs made with institutions</span></div>
+            <div><strong data-i18n="production.1.title">Performances</strong><span data-i18n="production.1.body">Original and collaborative works</span></div>
+            <div><strong data-i18n="production.2.title">Showcases</strong><span data-i18n="production.2.body">Platforms for emerging voices</span></div>
+            <div><strong data-i18n="production.3.title">Events</strong><span data-i18n="production.3.body">Arts-led community experiences</span></div>
+            <div><strong data-i18n="production.4.title">Partnerships</strong><span data-i18n="production.4.body">Programs made with institutions</span></div>
           </div>
         </div>
       </section>
@@ -250,43 +258,43 @@
       <section class="section contact" id="contact">
         <div class="section-inner section-panel contact-grid" data-parallax="0.015">
           <div data-reveal>
-            <p class="section-kicker">Contact</p>
-            <h2 class="display-title">Let’s make room for what comes <em>next.</em></h2>
-            <p class="lead">Tell us about your school, community, program idea or production inquiry.</p>
+            <p class="section-kicker" data-i18n="contact.kicker">Contact</p>
+            <h2 class="display-title" data-i18n-html="contact.title">Let’s make room for what comes <em>next.</em></h2>
+            <p class="lead" data-i18n="contact.lead">Tell us about your school, community, program idea or production inquiry.</p>
             <div class="contact-meta">
               <p>
                 <a href="mailto:hello@yourdomain.com">hello@yourdomain.com</a>
-                <span class="placeholder"> — placeholder until your email domain is confirmed</span>
+                <span class="placeholder" data-i18n="contact.emailNote"> — placeholder until your email domain is confirmed</span>
               </p>
-              <p>New York, NY</p>
+              <p data-i18n="contact.place">New York, NY</p>
             </div>
           </div>
           <form class="form" id="contact-form" data-reveal novalidate>
             <div class="field-row">
               <div class="field">
-                <label for="name">Name</label>
+                <label for="name" data-i18n="form.name">Name</label>
                 <input id="name" name="name" autocomplete="name" required />
               </div>
               <div class="field">
-                <label for="email">Email</label>
+                <label for="email" data-i18n="form.email">Email</label>
                 <input id="email" name="email" type="email" autocomplete="email" required />
               </div>
             </div>
             <div class="field">
-              <label for="interest">I’m interested in</label>
+              <label for="interest" data-i18n="form.interest">I’m interested in</label>
               <select id="interest" name="interest">
-                <option value="school">School programs</option>
-                <option value="community">Community workshops</option>
-                <option value="production">Production and events</option>
-                <option value="general">General inquiry</option>
+                <option value="school" data-i18n="form.opt.school">School programs</option>
+                <option value="community" data-i18n="form.opt.community">Community workshops</option>
+                <option value="production" data-i18n="form.opt.production">Production and events</option>
+                <option value="general" data-i18n="form.opt.general">General inquiry</option>
               </select>
             </div>
             <div class="field">
-              <label for="message">Tell us a little more</label>
+              <label for="message" data-i18n="form.message">Tell us a little more</label>
               <textarea id="message" name="message" required></textarea>
             </div>
-            <button class="button button-primary" type="submit">Send message</button>
-            <p class="form-note">Form preview only — submissions are not sent yet. (TODO: connect Netlify Forms or your preferred handler.)</p>
+            <button class="button button-primary" type="submit" data-i18n="form.submit">Send message</button>
+            <p class="form-note" data-i18n="form.note">Form preview only — submissions are not sent yet. (TODO: connect Netlify Forms or your preferred handler.)</p>
             <p id="form-status" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -297,13 +305,13 @@
       <div class="footer-inner">
         <div style="display: flex; align-items: center; gap: 10px">
           <img class="footer-monogram" src="assets/icons/monogram.svg" width="28" height="28" alt="" />
-          <span>© <span id="copyright-year"></span> NovaStage LLC · New York, NY</span>
+          <span>© <span id="copyright-year"></span> <span data-i18n="footer.entity">NovaStage LLC · New York, NY</span></span>
         </div>
         <div class="footer-links">
-          <a href="audio/AUDIO_CREDITS.md">Music credits</a>
+          <a href="audio/AUDIO_CREDITS.md" data-i18n="footer.credits">Music credits</a>
         </div>
       </div>
-      <p class="footer-music-credit" id="music-credit-line">
+      <p class="footer-music-credit" id="music-credit-line" data-i18n="music.fallback">
         Music: tap Play music in the version bar for a classical preview track (licensed; see audio credits).
       </p>
     </footer>
@@ -321,6 +329,7 @@
         border: 0;
       }
     </style>
+    <script src="js/i18n.js" defer></script>
     <script src="js/version-audio.js" defer></script>
     <script src="js/version-switcher.js" defer></script>
     <script src="js/main.js" defer></script>

@@ -1,0 +1,28 @@
+/* Semillas de Fe (v4) — tree & handprints */
+:root {
+  --dr-blue: #0b2d5c;
+  --dr-red: #d62828;
+  --larimar: #52b788;
+  --accent: #52b788;
+  --gold: #2e7d32;
+  --cream-wool: #f6f3ec;
+  --cream: #faf8f2;
+}
+
+body.version-v4 .hero {
+  background: linear-gradient(160deg, #ffffff 0%, #f0f7f2 45%, rgba(214, 40, 40, 0.05) 100%);
+}
+
+body.version-v4 .brand-logo,
+body.version-v4 .hero-logo-large {
+  border-radius: 20px;
+  border-color: var(--gold);
+}
+
+body.version-v4 .pillar-card {
+  border-top: 3px solid var(--larimar);
+}
+
+body.version-v4 .schedule-item time {
+  color: var(--gold);
+}

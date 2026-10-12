@@ -1,0 +1,19 @@
+/* Corderitos (v6 / root) — wool cream, larimar & gold accents */
+:root {
+  --dr-blue: #002d62;
+  --dr-red: #ce1126;
+  --larimar: #3db8b8;
+  --accent: #3db8b8;
+  --gold: #c9a227;
+  --cream-wool: #f7f0e6;
+  --cream: #f7f0e6;
+}
+
+body.version-corderitos .hero {
+  background: linear-gradient(145deg, var(--surface) 0%, var(--cream-wool) 45%, rgba(61, 184, 184, 0.12) 100%);
+}
+
+body.version-corderitos .brand-logo,
+body.version-corderitos .hero-logo-large {
+  border-color: var(--gold);
+}

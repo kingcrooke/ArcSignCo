@@ -1,0 +1,39 @@
+/* Luz del Hogar (v5) — sun & golden window */
+:root {
+  --dr-blue: #0a2a5c;
+  --dr-red: #ce1126;
+  --larimar: #3ec6e0;
+  --accent: #f4c430;
+  --gold: #f4c430;
+  --cream-wool: #fff9eb;
+  --cream: #fffdf5;
+}
+
+body.version-v5 .hero {
+  background: linear-gradient(165deg, #fffef8 0%, #fff4cc 35%, rgba(62, 198, 224, 0.12) 100%);
+}
+
+body.version-v5 .brand-logo,
+body.version-v5 .hero-logo-large {
+  border-radius: 12px;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--dr-blue), 0 8px 20px rgba(244, 196, 48, 0.35);
+}
+
+body.version-v5 .btn-primary {
+  background: var(--dr-blue);
+  box-shadow: 0 0 0 0 rgba(244, 196, 48, 0.4);
+}
+
+body.version-v5 .btn-primary:hover {
+  background: #003d85;
+  box-shadow: 0 0 12px rgba(244, 196, 48, 0.55);
+}
+
+body.version-v5 .hero-kicker {
+  color: var(--dr-blue);
+}
+
+body.version-v5 .brand-descriptor {
+  color: var(--larimar);
+}

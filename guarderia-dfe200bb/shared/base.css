@@ -148,6 +148,15 @@ summary:focus-visible {
   line-height: 1.3;
 }
 
+.brand-motto {
+  margin: 0.15rem 0 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--accent, var(--larimar));
+  font-style: italic;
+  line-height: 1.25;
+}
+
 .header-actions {
   display: flex;
   align-items: center;
@@ -626,6 +635,41 @@ main {
     padding-bottom: 2rem;
   }
 
+}
+
+.music-fab {
+  position: fixed;
+  right: 0.75rem;
+  bottom: 4.25rem;
+  z-index: 55;
+  border: 2px solid var(--dr-blue);
+  background: #fff;
+  color: var(--dr-blue);
+  border-radius: 999px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 45, 98, 0.18);
+  font-family: inherit;
+}
+
+.music-fab[aria-pressed="true"] {
+  background: var(--dr-blue);
+  color: #fff;
+}
+
+.music-credit {
+  margin: 0.75rem 0 0;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+@media (min-width: 768px) {
+  .music-fab {
+    bottom: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
