@@ -1,14 +1,38 @@
 {
-  "1": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "2": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "3": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "4": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "5": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "6": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "7": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "8": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "9": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "10": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "11": { "base": "", "hype": "", "excited": "", "loss": "" },
-  "12": { "base": "", "hype": "", "excited": "", "loss": "" }
+  "1": {
+    "base": { "webp": "avatars/roster-01.webp", "png": "avatars/roster-01.png" }
+  },
+  "2": {
+    "base": { "webp": "avatars/roster-02.webp", "png": "avatars/roster-02.png" }
+  },
+  "3": {
+    "base": { "webp": "avatars/roster-03.webp", "png": "avatars/roster-03.png" }
+  },
+  "4": {
+    "base": { "webp": "avatars/roster-04.webp", "png": "avatars/roster-04.png" }
+  },
+  "5": {
+    "base": { "webp": "avatars/roster-05.webp", "png": "avatars/roster-05.png" }
+  },
+  "6": {
+    "base": { "webp": "avatars/roster-06.webp", "png": "avatars/roster-06.png" }
+  },
+  "7": {
+    "base": { "webp": "avatars/roster-07.webp", "png": "avatars/roster-07.png" }
+  },
+  "8": {
+    "base": { "webp": "avatars/roster-08.webp", "png": "avatars/roster-08.png" }
+  },
+  "9": {
+    "base": { "webp": "avatars/roster-09.webp", "png": "avatars/roster-09.png" }
+  },
+  "10": {
+    "base": { "webp": "avatars/roster-10.webp", "png": "avatars/roster-10.png" }
+  },
+  "11": {
+    "base": { "webp": "avatars/roster-11.webp", "png": "avatars/roster-11.png" }
+  },
+  "12": {
+    "base": { "webp": "avatars/roster-12.webp", "png": "avatars/roster-12.png" }
+  }
 }

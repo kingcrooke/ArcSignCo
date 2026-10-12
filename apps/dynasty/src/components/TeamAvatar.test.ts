@@ -3,7 +3,7 @@ import { avatarUrlChain } from './TeamAvatar'
 import type { TeamInfo } from '../lib/types'
 
 describe('avatarUrlChain', () => {
-  it('orders custom, league, then global URLs', () => {
+  it('prefers custom webp and png before Sleeper URLs', () => {
     const team: TeamInfo = {
       rosterId: 6,
       userId: 'u6',
@@ -17,7 +17,23 @@ describe('avatarUrlChain', () => {
         'https://sleepercdn.com/uploads/a424f67048ec1529090467248862e347.jpg',
     }
     const chain = avatarUrlChain(team)
-    expect(chain[0]).toBe(team.leagueAvatarUrl)
-    expect(chain[1]).toBe(team.globalAvatarUrl)
+    expect(chain[0]).toContain('avatars/roster-06.webp')
+    expect(chain[1]).toContain('avatars/roster-06.png')
+    expect(chain[2]).toBe(team.leagueAvatarUrl)
+    expect(chain[3]).toBe(team.globalAvatarUrl)
+  })
+
+  it('falls back to base mood asset when hype is unset', () => {
+    const team: TeamInfo = {
+      rosterId: 1,
+      userId: 'u1',
+      displayName: 'Santagua',
+      teamName: 'Saints & Sinners',
+      leagueAvatarUrl: null,
+      globalAvatarUrl: null,
+      avatarUrl: null,
+    }
+    const chain = avatarUrlChain(team, 'hype')
+    expect(chain[0]).toContain('avatars/roster-01.webp')
   })
 })
