@@ -231,6 +231,24 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# Hidden Crooke family heritage site (URL-only; not linked from the public site).
+[[headers]]
+  for = "/crooke-7c3a9e12/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/crooke-7c3a9e12/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/crooke-7c3a9e12/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow"
+
 # Vendored libraries carry their version in the filename: never overwrite one, add a new version.
 [[headers]]
   for = "/tools/sign-mockup/vendor/*"
