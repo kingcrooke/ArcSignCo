@@ -21,8 +21,8 @@ body[data-lockup-emphasis="bethlehem"] {
   --beth-star-h: 1.58em;
   --beth-ray-w: 2.55em;
   --beth-ray-top: -1.08em;
-  --beth-ray-h: 1.34em;
-  --beth-floor: 0.18em;
+  --beth-ray-h: 1.22em;
+  --beth-floor: 0.08em;
 }
 
 body[data-lockup-emphasis="bethlehem"][data-wordmark-font="script"] {
@@ -45,7 +45,8 @@ body[data-lockup-emphasis="bethlehem"] .official-lockup {
 }
 
 body[data-lockup-emphasis="bethlehem"] .lockup-wordmark {
-  margin: 0.12em 0 0.4rem;
+  margin: 0.12em 0 0;
+  padding-bottom: clamp(36px, 0.85em, 72px);
 }
 
 body[data-lockup-emphasis="bethlehem"] .lockup-bethlehem {

@@ -22,9 +22,9 @@ body:not([data-palette]) {
 body[data-palette="b"] {
   --palette-bg: #141821;
   --palette-bg-soft: #1c2330;
-  --palette-nova: #3ec8ef;
-  --palette-stage: #3ec8ef;
-  --palette-wordmark: #3ec8ef;
+  --palette-nova: #1fd0d6;
+  --palette-stage: #1fd0d6;
+  --palette-wordmark: #1fd0d6;
   --palette-wordmark-split: 0;
   --palette-slogan: #9edcf3;
   --palette-text: #f4efe6;
@@ -199,6 +199,25 @@ body[data-palette="k"] {
   --palette-accent: #f4efe6;
   --palette-accent-ink: #070707;
   --palette-nav-bg: color-mix(in srgb, #070707 90%, transparent);
+}
+
+/* Version 8 — Version 1's charcoal site, gold Nova + turquoise Stage */
+[data-palette="l"],
+body[data-palette="l"] {
+  --palette-bg: #141821;
+  --palette-bg-soft: #1c2330;
+  --palette-nova: #f2c94c;
+  --palette-stage: #1fd0d6;
+  --palette-wordmark: #1fd0d6;
+  --palette-wordmark-split: 1;
+  --palette-slogan: #e8d37a;
+  --palette-text: #f4efe6;
+  --palette-text-muted: #c5cdd8;
+  --palette-panel: rgba(20, 24, 33, 0.68);
+  --palette-panel-hero: rgba(20, 24, 33, 0.55);
+  --palette-accent: #3ec8ef;
+  --palette-accent-ink: #141821;
+  --palette-nav-bg: color-mix(in srgb, #141821 88%, transparent);
 }
 
 body {

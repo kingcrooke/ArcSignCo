@@ -125,6 +125,7 @@
       "music.piece.5": "Waltz in A minor, B.150",
       "music.piece.6": "Arabesque No. 1 (Deux arabesques)",
       "music.piece.7": "Eine kleine Nachtmusik, K. 525 — II. Romanze",
+      "music.piece.8": "Clair de lune (Suite bergamasque)",
       "music.performer.1": "Recording via Free Classical Music (YouTube upload to Commons)",
       "music.performer.2": "Laurens Goedhart",
       "music.performer.3": "Teknopazzo",
@@ -132,6 +133,7 @@
       "music.performer.5": "Musopen recording (via Wikimedia Commons)",
       "music.performer.6": "Patrizia Prati, piano",
       "music.performer.7": "Musopen recording (via Wikimedia Commons)",
+      "music.performer.8": "Laurens Goedhart",
       "music.license.1": "CC BY 3.0",
       "music.license.2": "Public domain",
       "music.license.3": "CC0 1.0",
@@ -139,6 +141,7 @@
       "music.license.5": "Public domain",
       "music.license.6": "CC BY-SA 4.0",
       "music.license.7": "Public domain",
+      "music.license.8": "Public domain",
     },
     es: {
       "meta.title": "NovaStage — Artes escénicas en Nueva York",
@@ -264,6 +267,7 @@
       "music.piece.5": "Vals en la menor, B.150",
       "music.piece.6": "Arabesca n.º 1 (Deux arabesques)",
       "music.piece.7": "Una pequeña serenata nocturna, K. 525 — II. Romanza",
+      "music.piece.8": "Claro de luna (Suite bergamasque)",
       "music.performer.1": "Grabación de Free Classical Music (publicada en Commons desde YouTube)",
       "music.performer.2": "Laurens Goedhart",
       "music.performer.3": "Teknopazzo",
@@ -271,6 +275,7 @@
       "music.performer.5": "Grabación de Musopen (vía Wikimedia Commons)",
       "music.performer.6": "Patrizia Prati, piano",
       "music.performer.7": "Grabación de Musopen (vía Wikimedia Commons)",
+      "music.performer.8": "Laurens Goedhart",
       "music.license.1": "CC BY 3.0",
       "music.license.2": "Dominio público",
       "music.license.3": "CC0 1.0",
@@ -278,6 +283,7 @@
       "music.license.5": "Dominio público",
       "music.license.6": "CC BY-SA 4.0",
       "music.license.7": "Dominio público",
+      "music.license.8": "Dominio público",
     },
   };
 

@@ -1,8 +1,9 @@
 /**
  * NovaStage site version tokens — single file to remove when preview mode is retired.
  *
- * Versions 2, 5, and 7 keep the looks Elizabeth chose (charcoal, navy, black-and-white).
- * Versions 1, 3, 4, and 6 are her Canva Bethlehem lockup in those site frames.
+ * Every wordmark uses Glacial Indifference. Versions 1, 3, 4, 6, and 8 use the
+ * Canva Bethlehem lockup. Version 8 is that lockup with gold Nova and turquoise Stage.
+ * Versions 2, 5, and 7 keep their sites, with the star kept clear of the type.
  * The previous 1/3/4/6 designs live only in git tag novastage-all-7-versions.
  * Do not renumber the ids.
  */
@@ -36,7 +37,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
       enabled: true,
       palette: "b",
       tabLabel: "Version 2",
-      wordmarkFont: "alternate",
+      wordmarkFont: "glacial",
       lockupEmphasis: "normal",
       audio: {
         mp3: "audio/version-2.mp3",
@@ -55,7 +56,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
       isNew: true,
       palette: "i",
       tabLabel: "Version 3",
-      wordmarkFont: "script",
+      wordmarkFont: "glacial",
       lockupEmphasis: "bethlehem",
       audio: {
         mp3: "audio/version-3.mp3",
@@ -91,8 +92,8 @@ window.NOVASTAGE_VERSION_CONFIG = {
       enabled: true,
       palette: "e",
       tabLabel: "Version 5",
-      wordmarkFont: "alternate",
-      lockupEmphasis: "normal",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "crest",
       audio: {
         mp3: "audio/version-5.mp3",
         ogg: "audio/version-5.ogg",
@@ -127,8 +128,8 @@ window.NOVASTAGE_VERSION_CONFIG = {
       enabled: true,
       palette: "g",
       tabLabel: "Version 7",
-      wordmarkFont: "alternate",
-      lockupEmphasis: "illumination",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "eclipse",
       audio: {
         mp3: "audio/version-7.mp3",
         ogg: "audio/version-7.ogg",
@@ -138,6 +139,25 @@ window.NOVASTAGE_VERSION_CONFIG = {
         license: "Public domain",
         sourceUrl:
           "https://commons.wikimedia.org/wiki/File:Mozart_-_Serenade_No._13_for_strings_in_G_major,_K._525_-_Romanze.ogg",
+      },
+    },
+    {
+      id: 8,
+      enabled: true,
+      isNew: true,
+      palette: "l",
+      tabLabel: "Version 8",
+      wordmarkFont: "glacial",
+      lockupEmphasis: "bethlehem",
+      audio: {
+        mp3: "audio/version-2.mp3",
+        ogg: "audio/version-2.ogg",
+        piece: "Clair de lune (Suite bergamasque)",
+        composer: "Claude Debussy",
+        performer: "Laurens Goedhart",
+        license: "Public domain",
+        sourceUrl:
+          "https://commons.wikimedia.org/wiki/File:Clair_de_lune_(Claude_Debussy)_Suite_bergamasque.ogg",
       },
     },
   ],

@@ -328,3 +328,22 @@ body[data-palette="k"][data-invert="1"] {
   --palette-nav-bg: color-mix(in srgb, #ffffff 88%, transparent);
   color-scheme: light;
 }
+
+/* Version 8 — cream field, both letters dark. Star and ring stay gold and turquoise. */
+body[data-palette="l"][data-invert="1"] {
+  --palette-bg: #f7f4ee;
+  --palette-bg-soft: #fffdf8;
+  --palette-nova: #141821;
+  --palette-stage: #141821;
+  --palette-wordmark: #141821;
+  --palette-wordmark-split: 0;
+  --palette-slogan: #7a5a0e;
+  --palette-text: #141821;
+  --palette-text-muted: #3a4452;
+  --palette-panel: rgba(255, 255, 255, 0.74);
+  --palette-panel-hero: rgba(255, 252, 247, 0.58);
+  --palette-accent: #0e7494;
+  --palette-accent-ink: #ffffff;
+  --palette-nav-bg: color-mix(in srgb, #fffdf8 86%, transparent);
+  color-scheme: light;
+}
