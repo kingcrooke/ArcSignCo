@@ -9,12 +9,18 @@
     return map[letter] || config.defaultVersion;
   }
 
+  function maxVersionId() {
+    return config.versions.reduce(function (max, version) {
+      return version.id > max ? version.id : max;
+    }, 1);
+  }
+
   function resolveVersionId() {
     var params = new URLSearchParams(window.location.search);
     var vParam = params.get("v");
     if (vParam) {
       var n = parseInt(vParam, 10);
-      if (n >= 1 && n <= 5) {
+      if (n >= 1 && n <= maxVersionId()) {
         return n;
       }
     }
@@ -26,7 +32,7 @@
       var stored = localStorage.getItem(config.storageKey);
       if (stored) {
         var s = parseInt(stored, 10);
-        if (s >= 1 && s <= 5) {
+        if (s >= 1 && s <= maxVersionId()) {
           return s;
         }
       }

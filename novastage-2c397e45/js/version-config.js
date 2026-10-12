@@ -1,6 +1,6 @@
 /**
  * NovaStage site version tokens — single file to remove when preview mode is retired.
- * Map: Version 1–5 → palette A–E + logo typography / star emphasis tweaks.
+ * Map: Version 1–5 → palette A–E. Versions 6–7 use the illumination lockup.
  */
 window.NOVASTAGE_VERSION_CONFIG = {
   storageKey: "novastage-site-version",
@@ -89,6 +89,40 @@ window.NOVASTAGE_VERSION_CONFIG = {
         performer: "Musopen recording (via Wikimedia Commons)",
         license: "Public domain",
         sourceUrl: "https://commons.wikimedia.org/wiki/File:Chopin_-_Waltz_in_A_minor,_B_150.ogg",
+      },
+    },
+    {
+      id: 6,
+      palette: "f",
+      tabLabel: "Version 6",
+      wordmarkFont: "primary",
+      lockupEmphasis: "illumination",
+      audio: {
+        mp3: "audio/version-6.mp3",
+        ogg: "audio/version-6.ogg",
+        piece: "Arabesque No. 1 (Deux arabesques)",
+        composer: "Claude Debussy",
+        performer: "Patrizia Prati, piano",
+        license: "CC BY-SA 4.0",
+        sourceUrl:
+          "https://commons.wikimedia.org/wiki/File:Claude_Debussy_-_Premi%C3%A8re_Arabesque_-_Patrizia_Prati.ogg",
+      },
+    },
+    {
+      id: 7,
+      palette: "g",
+      tabLabel: "Version 7",
+      wordmarkFont: "alternate",
+      lockupEmphasis: "illumination",
+      audio: {
+        mp3: "audio/version-7.mp3",
+        ogg: "audio/version-7.ogg",
+        piece: "Eine kleine Nachtmusik, K. 525 — II. Romanze",
+        composer: "Wolfgang Amadeus Mozart",
+        performer: "Musopen recording (via Wikimedia Commons)",
+        license: "Public domain",
+        sourceUrl:
+          "https://commons.wikimedia.org/wiki/File:Mozart_-_Serenade_No._13_for_strings_in_G_major,_K._525_-_Romanze.ogg",
       },
     },
   ],
