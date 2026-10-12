@@ -1,0 +1,168 @@
+/* Elizabeth's 9:18 note. Loaded last.
+   Every slogan is the same sentence-case line, clear of rays and pools.
+   Version 2 keeps the star above with a soft glow that stops before the type.
+   Version 5 is a star with a short fade. Version 7 is the star and eclipse only. */
+
+.lockup-slogan {
+  position: relative;
+  z-index: 6;
+  text-transform: none;
+  font-family: var(--sans);
+  font-weight: 400;
+  letter-spacing: 0.012em;
+  font-size: clamp(0.78rem, 1.7vw, 0.98rem);
+  color: #e8d37a;
+  max-width: 36em;
+  margin-top: 0.65rem;
+}
+
+.hero .lockup-slogan {
+  white-space: normal;
+  letter-spacing: 0.012em;
+}
+
+body[data-invert="1"] .lockup-slogan {
+  color: #7a5a0e;
+}
+
+/* Version 2 — star and fuzzy glow live in the space above the wordmark. */
+body[data-lockup-emphasis="normal"] .official-lockup {
+  padding-top: clamp(158px, 22vw, 210px);
+}
+
+body[data-lockup-emphasis="normal"] .lockup-visual {
+  height: clamp(132px, 18vw, 176px);
+}
+
+body[data-lockup-emphasis="normal"] .lockup-wordmark {
+  margin-top: 0;
+}
+
+body[data-lockup-emphasis="normal"] .lockup-eclipse,
+body[data-lockup-emphasis="normal"] .lockup-ray {
+  display: none;
+}
+
+body[data-lockup-emphasis="normal"] .lockup-beam {
+  top: 10%;
+  height: 34%;
+  opacity: 0.55;
+}
+
+body[data-lockup-emphasis="normal"] .lockup-pool {
+  top: 46%;
+  bottom: auto;
+  height: 34%;
+  width: 72%;
+  opacity: 0.72;
+}
+
+body[data-lockup-emphasis="normal"] .lockup-star::after {
+  height: 28%;
+  background: linear-gradient(180deg, rgba(255, 233, 168, 0.8), transparent);
+}
+
+/* Version 5 — simple star, short downward light, no pool over the type. */
+body[data-lockup-emphasis="crest"] .official-lockup {
+  padding-top: clamp(118px, 16vw, 156px);
+}
+
+body[data-lockup-emphasis="crest"] .lockup-visual {
+  height: clamp(96px, 13vw, 124px);
+}
+
+body[data-lockup-emphasis="crest"] .lockup-wordmark {
+  margin-top: 0;
+}
+
+body[data-lockup-emphasis="crest"] .lockup-eclipse,
+body[data-lockup-emphasis="crest"] .lockup-beam,
+body[data-lockup-emphasis="crest"] .lockup-pool,
+body[data-lockup-emphasis="crest"] .lockup-star::after {
+  display: none;
+}
+
+body[data-lockup-emphasis="crest"] .lockup-ray {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 68px;
+  width: 3px;
+  height: 34px;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 246, 214, 0.95) 0%,
+    rgba(242, 201, 76, 0.55) 45%,
+    rgba(242, 201, 76, 0) 100%
+  );
+}
+
+/* Version 7 — star and eclipse ring, no downward ray and no pool. */
+body[data-lockup-emphasis="eclipse"] .official-lockup {
+  padding-top: clamp(176px, 24vw, 220px);
+}
+
+body[data-lockup-emphasis="eclipse"] .lockup-visual {
+  height: clamp(150px, 20vw, 188px);
+}
+
+body[data-lockup-emphasis="eclipse"] .lockup-wordmark {
+  margin-top: 0;
+}
+
+body[data-lockup-emphasis="eclipse"] .lockup-ray,
+body[data-lockup-emphasis="eclipse"] .lockup-beam,
+body[data-lockup-emphasis="eclipse"] .lockup-pool,
+body[data-lockup-emphasis="eclipse"] .lockup-star::after,
+body[data-lockup-emphasis="eclipse"] .lockup-wordmark::after {
+  display: none;
+}
+
+body[data-lockup-emphasis="eclipse"] .lockup-eclipse {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: clamp(124px, 20vw, 176px);
+  height: clamp(124px, 20vw, 176px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    transparent 0 41%,
+    rgba(255, 246, 214, 0.18) 46%,
+    rgba(255, 230, 156, 0.96) 51%,
+    rgba(242, 201, 76, 0.78) 56%,
+    rgba(255, 236, 186, 0.28) 64%,
+    transparent 76%
+  );
+  filter: drop-shadow(0 0 12px rgba(242, 201, 76, 0.7));
+}
+
+body[data-lockup-emphasis="eclipse"] .lockup-star {
+  top: 28px;
+  z-index: 3;
+  width: clamp(58px, 9vw, 76px);
+  height: clamp(58px, 9vw, 76px);
+  clip-path: polygon(
+    50% 0%,
+    62% 30%,
+    98% 16%,
+    70% 44%,
+    100% 62%,
+    66% 60%,
+    56% 74%,
+    50% 100%,
+    44% 74%,
+    34% 60%,
+    0% 62%,
+    30% 44%,
+    2% 16%,
+    38% 30%
+  );
+}

@@ -1,6 +1,6 @@
 # NovaStage version preview — music credits
 
-Each website version (1–7) uses a different classical recording, trimmed to ~2:30 and compressed for web preview. Sources were verified on Wikimedia Commons file pages (October 2026).
+Each website version uses a classical recording, trimmed to ~2:30 and compressed for web preview. Sources were verified on Wikimedia Commons file pages (October 2026). Version 8 reuses the public-domain Clair de lune recording from Version 2.
 
 | Ver. | Piece | Composer | Performer / source | License | Commons file |
 |------|-------|----------|-------------------|---------|--------------|
@@ -11,6 +11,7 @@ Each website version (1–7) uses a different classical recording, trimmed to ~2
 | 5 | Waltz in A minor, B.150 | Frédéric Chopin | Musopen (via Commons) | Public domain | [File:Chopin - Waltz in A minor, B 150.ogg](https://commons.wikimedia.org/wiki/File:Chopin_-_Waltz_in_A_minor,_B_150.ogg) |
 | 6 | Arabesque No. 1 (*Deux arabesques*) | Claude Debussy | Patrizia Prati, piano (live, Museo del Romanticismo, Madrid, 2016) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [File:Claude Debussy - Première Arabesque - Patrizia Prati.ogg](https://commons.wikimedia.org/wiki/File:Claude_Debussy_-_Premi%C3%A8re_Arabesque_-_Patrizia_Prati.ogg) |
 | 7 | *Eine kleine Nachtmusik*, K. 525 — II. Romanze | Wolfgang Amadeus Mozart | Musopen (via Commons) | Public domain | [File:Mozart - Serenade No. 13 for strings in G major, K. 525 - Romanze.ogg](https://commons.wikimedia.org/wiki/File:Mozart_-_Serenade_No._13_for_strings_in_G_major,_K._525_-_Romanze.ogg) |
+| 8 | Clair de lune (*Suite bergamasque*) | Claude Debussy | Laurens Goedhart | Public domain | Same file as Version 2 |
 
 ## Local files
 
