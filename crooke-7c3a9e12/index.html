@@ -58,7 +58,10 @@
         <div class="hero-cover">
           <div class="crest-frame" aria-labelledby="crest-label">
             <p class="art-label" id="crest-label">art coming from Build</p>
-            <div class="shield-placeholder" aria-hidden="true">Crest &amp; arms</div>
+            <div class="shield-placeholder" aria-hidden="true">Household emblem</div>
+            <p class="emblem-caption" data-i18n="home.emblem.caption">
+              A household emblem made for the Crooke family, not a historic grant of arms.
+            </p>
             <p class="motto-scroll">
               <span data-i18n="home.motto.label">Family motto (placeholder)</span><br />
               <strong data-i18n="home.motto.val">[MOTTO — FAMILY TO CHOOSE]</strong>
@@ -71,17 +74,23 @@
               <span class="pill">Phase 1</span>
             </div>
             <h2 id="home-heading" data-i18n="home.title">The Crooke family heritage archive</h2>
-            <p class="lead" data-i18n="home.lead">
-              A Caribbean Archive shell and Great Book chapters for the Morel and Crooke lines. Facts appear only when
-              the family adds and approves them.
-            </p>
-            <p class="placeholder" data-i18n="home.blazon">
-              Assumed arms — symbolism and blazon: [BLAZON — TO BE ADDED]
-            </p>
-            <p data-i18n="home.disclaimer">
-              Assumed arms adopted by the family (not a grant from a heraldic authority). Art and crest: art coming from
-              Build.
-            </p>
+            <div class="fact-block">
+              <span class="archive-source" data-source="told" data-source-name="Jesus Crooke">Told by Jesus Crooke</span>
+              <p class="lead" data-i18n="home.lead">
+                A Caribbean Archive shell and Great Book chapters for the Morel and Crooke lines. Facts appear only when
+                the family adds and approves them.
+              </p>
+            </div>
+            <div class="fact-block">
+              <span class="archive-source" data-source="not-asked">Not yet asked</span>
+              <p class="placeholder" data-i18n="home.blazon">Emblem symbolism and blazon: [BLAZON — TO BE ADDED]</p>
+            </div>
+            <div class="fact-block">
+              <span class="archive-source" data-source="paper">Paper we hold</span>
+              <p data-i18n="home.disclaimer">
+                Crest artwork: art coming from Build. Every fact on this site carries an archive source label.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -89,27 +98,76 @@
       <section id="panel-book" class="panel" aria-labelledby="book-heading">
         <article class="section-card book-chapter">
           <h3 id="book-heading" data-i18n="book.title">The Book of the Crookes</h3>
-          <p data-i18n="book.intro">
-            Chapters read like a family volume. Unknown passages stay clearly marked until interviews and scans are ready.
-          </p>
+          <div class="fact-block">
+            <span class="archive-source" data-source="paper">Paper we hold</span>
+            <p data-i18n="book.intro">
+              Chapters read like a family volume. Unknown passages stay clearly marked until interviews and scans are ready.
+            </p>
+          </div>
           <ul class="book-list">
-            <li><a href="#book">I. <span data-i18n="book.ch1">Prologue — why this archive exists</span></a></li>
-            <li><a href="#book">II. <span data-i18n="book.ch2">Mary Thelma Morel de Crooke (Mami)</span></a></li>
-            <li><a href="#book">III. <span data-i18n="book.ch3">Charles Crooke — remembrance</span></a></li>
-            <li><a href="#book">IV. <span data-i18n="book.ch4">Siblings — Elizabeth &amp; Yodernis</span></a></li>
-            <li><a href="#book">V. <span data-i18n="book.ch5">Morel roots (Dominican line)</span></a></li>
-            <li><a href="#book">VI. <span data-i18n="book.ch6">Crooke roots</span></a></li>
-            <li><a href="#book">VII. <span data-i18n="book.ch7">Migration stories</span></a></li>
-            <li><a href="#book">VIII. <span data-i18n="book.ch8">Kitchen &amp; table</span></a></li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="told" data-source-name="Jesus Crooke">Told by Jesus Crooke</span>
+                <a href="#book">I. <span data-i18n="book.ch1">Prologue — why this archive exists</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">II. <span data-i18n="book.ch2">Mary Thelma Morel de Crooke (Mami)</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">III. <span data-i18n="book.ch3">Charles Crooke — remembrance</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">IV. <span data-i18n="book.ch4">Siblings — Elizabeth &amp; Yodernis</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">V. <span data-i18n="book.ch5">Morel roots (Dominican line)</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">VI. <span data-i18n="book.ch6">Crooke roots</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">VII. <span data-i18n="book.ch7">Migration stories</span></a>
+              </div>
+            </li>
+            <li>
+              <div class="fact-block">
+                <span class="archive-source" data-source="not-asked">Not yet asked</span>
+                <a href="#book">VIII. <span data-i18n="book.ch8">Kitchen &amp; table</span></a>
+              </div>
+            </li>
           </ul>
-          <p class="epigraph" data-i18n="book.body.placeholder">[CHAPTER TEXT — TO BE ADDED]</p>
+          <div class="fact-block epigraph">
+            <span class="archive-source" data-source="not-asked">Not yet asked</span>
+            <p data-i18n="book.body.placeholder">[CHAPTER TEXT — TO BE ADDED]</p>
+          </div>
         </article>
       </section>
 
       <section id="panel-tree" class="panel" aria-labelledby="tree-heading">
         <div class="section-card">
           <h3 id="tree-heading" data-i18n="tree.title">Interactive family tree</h3>
-          <p data-i18n="tree.hint">Tap a name to see notes. Ancestors above Charles and Mami are placeholders only.</p>
+          <div class="fact-block">
+            <span class="archive-source" data-source="paper">Paper we hold</span>
+            <p data-i18n="tree.hint">Tap a name to see notes. Ancestors above Charles and Mami are placeholders only.</p>
+          </div>
           <div class="tree-layout" id="tree-mount" aria-live="polite"></div>
           <div class="tree-detail" aria-labelledby="tree-detail-title">
             <h4 id="tree-detail-title" data-i18n="tree.detail.title">Profile notes</h4>
@@ -119,50 +177,87 @@
       </section>
 
       <section id="panel-origins" class="panel" aria-labelledby="origins-heading">
-        <h3 id="origins-heading" class="placeholder" style="font-family: var(--font-serif); margin-bottom: 1rem" data-i18n="origins.title">
+        <h3 id="origins-heading" style="font-family: var(--font-serif); margin-bottom: 1rem" data-i18n="origins.title">
           Two origin tracks
         </h3>
         <div class="origin-tracks">
           <article class="section-card track-morel">
             <h4 data-i18n="origins.morel.title">Morel track</h4>
-            <p data-i18n="origins.morel.body">
-              Dominican family line through Mary Thelma Morel de Crooke. Places, names, and stories: [MOREL ORIGINS —
-              TO BE RESEARCHED].
-            </p>
+            <div class="fact-block">
+              <span class="archive-source" data-source="not-asked">Not yet asked</span>
+              <p data-i18n="origins.morel.body">
+                Dominican family line through Mary Thelma Morel de Crooke. Places, names, and stories: [MOREL ORIGINS —
+                TO BE RESEARCHED].
+              </p>
+            </div>
           </article>
           <article class="section-card track-crooke">
             <h4 data-i18n="origins.crooke.title">Crooke track</h4>
-            <p data-i18n="origins.crooke.body">
-              Crooke family line through Charles Crooke. Places, names, and stories: [CROOKE ORIGINS — TO BE
-              RESEARCHED].
-            </p>
+            <div class="fact-block">
+              <span class="archive-source" data-source="not-asked">Not yet asked</span>
+              <p data-i18n="origins.crooke.body">
+                Crooke family line through Charles Crooke. Places, names, and stories: [CROOKE ORIGINS — TO BE
+                RESEARCHED].
+              </p>
+            </div>
           </article>
         </div>
-        <p class="section-card placeholder" data-i18n="origins.map">
-          Migration map: [ROUTES — TO BE ADDED] (no coordinates until verified).
-        </p>
+        <div class="section-card fact-block">
+          <span class="archive-source" data-source="not-asked">Not yet asked</span>
+          <p class="placeholder" data-i18n="origins.map">
+            Migration map: [ROUTES — TO BE ADDED] (no coordinates until verified).
+          </p>
+        </div>
       </section>
 
       <section id="panel-memorial" class="panel" aria-labelledby="memorial-heading">
         <article class="section-card memorial-hero">
           <h3 id="memorial-heading" data-i18n="memorial.title">In memory of Charles Crooke</h3>
-          <p data-i18n="memorial.lead">
-            A quiet room for photos, letters, and what he taught us. Submitted only by family.
-          </p>
-          <p class="placeholder" data-i18n="memorial.gallery">Photo mosaic: art coming from Build · [PHOTOS — TO BE ADDED]</p>
-          <p class="placeholder" data-i18n="memorial.timeline">Life timeline: [EVENTS — TO BE ADDED]</p>
-          <p class="placeholder" data-i18n="memorial.tribute">Family tributes: [TRIBUTES — TO BE ADDED]</p>
+          <div class="fact-block">
+            <span class="archive-source" data-source="paper">Paper we hold</span>
+            <p data-i18n="memorial.lead">
+              A quiet room for photos, letters, and what he taught us. Submitted only by family.
+            </p>
+          </div>
+          <div class="fact-block">
+            <span class="archive-source" data-source="not-asked">Not yet asked</span>
+            <p class="placeholder" data-i18n="memorial.gallery">
+              Photo mosaic: art coming from Build · [PHOTOS — TO BE ADDED] (no family scans on this shareable page)
+            </p>
+          </div>
+          <div class="fact-block">
+            <span class="archive-source" data-source="not-asked">Not yet asked</span>
+            <p class="placeholder" data-i18n="memorial.timeline">Life timeline: [EVENTS — TO BE ADDED]</p>
+          </div>
+          <div class="fact-block">
+            <span class="archive-source" data-source="not-asked">Not yet asked</span>
+            <p class="placeholder" data-i18n="memorial.tribute">Family tributes: [TRIBUTES — TO BE ADDED]</p>
+          </div>
         </article>
       </section>
 
       <section id="panel-recipes" class="panel" aria-labelledby="recipes-heading">
         <div class="section-card">
           <h3 id="recipes-heading" data-i18n="recipes.title">Recipes &amp; stories</h3>
-          <p data-i18n="recipes.lead">Kitchen chapter excerpts and short oral-history clips (transcripts required).</p>
+          <div class="fact-block">
+            <span class="archive-source" data-source="paper">Paper we hold</span>
+            <p data-i18n="recipes.lead">Kitchen chapter excerpts and short oral-history clips (transcripts required).</p>
+          </div>
           <div class="recipe-grid">
-            <div class="recipe-card placeholder" data-i18n="recipes.r1">[RECIPE NAME — TO BE ADDED]</div>
-            <div class="recipe-card placeholder" data-i18n="recipes.r2">[STORY TITLE — TO BE ADDED]</div>
-            <div class="recipe-card placeholder" data-i18n="recipes.r3">[RECIPE NAME — TO BE ADDED]</div>
+            <div class="fact-block">
+              <span class="archive-source" data-source="not-asked">Not yet asked</span>
+              <div class="recipe-card placeholder" data-i18n="recipes.r1">[RECIPE NAME — TO BE ADDED]</div>
+            </div>
+            <div class="fact-block">
+              <span class="archive-source" data-source="not-asked">Not yet asked</span>
+              <div class="recipe-card placeholder" data-i18n="recipes.r2">[STORY TITLE — TO BE ADDED]</div>
+            </div>
+            <div class="fact-block">
+              <span class="archive-source" data-source="told" data-source-name="Mary Thelma Morel de Crooke">
+                Told by Mary Thelma Morel de Crooke
+              </span>
+              <div class="recipe-card placeholder" data-i18n="recipes.r3">[RECIPE NAME — TO BE ADDED]</div>
+            </div>
           </div>
         </div>
       </section>
@@ -170,9 +265,20 @@
       <section id="panel-vault" class="panel" aria-labelledby="vault-heading">
         <div class="section-card vault-lock">
           <h3 id="vault-heading" data-i18n="vault.title">Document vault</h3>
-          <p data-i18n="vault.lead">
-            Scans, audio, and albums will live here. Password protection is planned for a later phase.
-          </p>
+          <div class="fact-block">
+            <span class="archive-source" data-source="paper">Paper we hold</span>
+            <p data-i18n="vault.lead">
+              Scans, audio, and albums will be linked here when ready — never committed to the public git repo.
+              Password protection is planned for a later phase.
+            </p>
+          </div>
+          <div class="fact-block">
+            <span class="archive-source" data-source="paper">Paper we hold</span>
+            <p data-i18n="vault.policy">
+              No birthdates, street addresses, document numbers, DNA results, or photo scans on shareable pages. Originals
+              stay offline or in a future private vault.
+            </p>
+          </div>
           <p><strong data-i18n="vault.status">[VAULT — COMING SOON]</strong></p>
         </div>
       </section>
@@ -180,7 +286,8 @@
 
     <footer class="site-footer">
       <p data-i18n="footer.privacy">
-        Living relatives: no birthdates, addresses, or government IDs on this site. Do not share this URL publicly.
+        Privacy: no birthdates, addresses, document numbers, DNA, or photo scans on these pages; family photos and scans
+        are not stored in the public repository. Do not share this URL publicly.
       </p>
       <p data-i18n="footer.steward">Family steward: Jesus Crooke</p>
     </footer>

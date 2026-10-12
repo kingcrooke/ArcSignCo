@@ -247,7 +247,7 @@ main {
 .crest-frame .shield-placeholder {
   width: 120px;
   height: 140px;
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem;
   border: 2px dashed var(--line);
   border-radius: 4px 4px 40% 40%;
   display: grid;
@@ -293,6 +293,66 @@ main {
   border-radius: 999px;
   background: rgba(26, 92, 74, 0.1);
   color: var(--accent);
+}
+
+/* Archive source labels (Grok / PR #74) */
+.fact-block {
+  margin: 0 0 1rem;
+}
+
+.fact-block > p,
+.fact-block > .recipe-card {
+  margin: 0.35rem 0 0;
+}
+
+.archive-source {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+  background: #f0ebe0;
+  color: #5c4a32;
+  font-family: var(--font-sans);
+  vertical-align: baseline;
+}
+
+.archive-source--told {
+  background: #e8f0ea;
+  border-color: #a8c4b0;
+  color: #1a4d3a;
+}
+
+.archive-source--paper {
+  background: #ebe8f4;
+  border-color: #b8b0d0;
+  color: #3d3560;
+}
+
+.archive-source--not-asked {
+  background: #f5f0e6;
+  border-color: #d4c4a8;
+  color: #6b5a40;
+}
+
+.emblem-caption {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: center;
+  margin: 0.5rem 0 0;
+  max-width: 16rem;
+}
+
+.book-list .fact-block {
+  padding: 0.15rem 0;
+}
+
+.book-list .archive-source {
+  margin-bottom: 0.25rem;
 }
 
 .section-card {

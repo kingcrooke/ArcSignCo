@@ -46,6 +46,25 @@ pass("no obvious sensitive patterns in static copy");
 if (!/art coming from Build/i.test(html)) fail('crest area must mention "art coming from Build"');
 else pass("Build art placeholder labeled");
 
+if (!/household emblem made for the Crooke family/i.test(html)) {
+  fail("crest must caption household emblem (not historic grant)");
+} else pass("household emblem caption present");
+
+if (!document.querySelector(".archive-source[data-source]")) {
+  fail("archive source tags required");
+} else pass("archive source tags present");
+
+function rasterExt(name) {
+  return /\.(jpe?g|png|webp|heic|pdf)$/i.test(name);
+}
+const files = fs.readdirSync(base, { recursive: true, withFileTypes: true });
+for (const ent of files) {
+  if (ent.isFile() && rasterExt(ent.name) && ent.name !== "CONTENT-POLICY.md") {
+    fail(`no raster scans in ${SLUG}: ${ent.name}`);
+  }
+}
+pass("no photo/document scans in crooke folder");
+
 for (const name of ["Charles Crooke", "Mary Thelma Morel", "Elizabeth Crooke", "Yodernis Crooke", "Jesus Crooke"]) {
   if (!text.includes(name.split(" ")[0]) && !html.includes(name)) {
     /* Jesus / Mary partial ok */

@@ -8,6 +8,7 @@ const PEOPLE = [
     nameEs: '[ANTEPASADO MOREL — POR AÑADIR]',
     noteEn: 'Placeholder branch above Mary Thelma Morel de Crooke.',
     noteEs: 'Rama provisional sobre Mary Thelma Morel de Crooke.',
+    source: 'not-asked',
   },
   {
     id: 'crooke-ancestor',
@@ -16,6 +17,7 @@ const PEOPLE = [
     nameEs: '[ANTEPASADO CROOKE — POR AÑADIR]',
     noteEn: 'Placeholder branch above Charles Crooke.',
     noteEs: 'Rama provisional sobre Charles Crooke.',
+    source: 'not-asked',
   },
   {
     id: 'charles',
@@ -27,6 +29,7 @@ const PEOPLE = [
     tagEs: 'En memoria',
     noteEn: 'Memorial chapter holds tributes. Dates: [DATES — TO BE ADDED].',
     noteEs: 'El capítulo memorial guarda tributos. Fechas: [FECHAS — POR AÑADIR].',
+    source: 'not-asked',
   },
   {
     id: 'mami',
@@ -37,6 +40,7 @@ const PEOPLE = [
     tagEs: 'Viva — sin datos sensibles',
     noteEn: 'Oral history and recipes to be gathered with her consent.',
     noteEs: 'Historias y recetas por recoger con su consentimiento.',
+    source: 'not-asked',
   },
   {
     id: 'jesus',
@@ -47,6 +51,7 @@ const PEOPLE = [
     tagEs: 'Vivo — custodio del sitio',
     noteEn: '[BIO — TO BE ADDED]',
     noteEs: '[BIOGRAFÍA — POR AÑADIR]',
+    source: 'not-asked',
   },
   {
     id: 'elizabeth',
@@ -57,6 +62,7 @@ const PEOPLE = [
     tagEs: 'Viva — sin datos sensibles',
     noteEn: '[BIO — TO BE ADDED]',
     noteEs: '[BIOGRAFÍA — POR AÑADIR]',
+    source: 'not-asked',
   },
   {
     id: 'yodernis',
@@ -67,6 +73,7 @@ const PEOPLE = [
     tagEs: 'Viva — sin datos sensibles',
     noteEn: '[BIO — TO BE ADDED]',
     noteEs: '[BIOGRAFÍA — POR AÑADIR]',
+    source: 'not-asked',
   },
 ];
 
@@ -86,11 +93,16 @@ const I18N = {
     'home.title': 'The Crooke family heritage archive',
     'home.lead':
       'A Caribbean Archive shell and Great Book chapters for the Morel and Crooke lines. Facts appear only when the family adds and approves them.',
+    'home.emblem.caption':
+      'A household emblem made for the Crooke family, not a historic grant of arms.',
     'home.motto.label': 'Family motto (placeholder)',
     'home.motto.val': '[MOTTO — FAMILY TO CHOOSE]',
-    'home.blazon': 'Assumed arms — symbolism and blazon: [BLAZON — TO BE ADDED]',
+    'home.blazon': 'Emblem symbolism and blazon: [BLAZON — TO BE ADDED]',
     'home.disclaimer':
-      'Assumed arms adopted by the family (not a grant from a heraldic authority). Art and crest: art coming from Build.',
+      'Crest artwork: art coming from Build. Every fact on this site carries an archive source label.',
+    'source.told': 'Told by {name}',
+    'source.paper': 'Paper we hold',
+    'source.notAsked': 'Not yet asked',
     'book.title': 'The Book of the Crookes',
     'book.intro':
       'Chapters read like a family volume. Unknown passages stay clearly marked until interviews and scans are ready.',
@@ -118,7 +130,8 @@ const I18N = {
     'memorial.title': 'In memory of Charles Crooke',
     'memorial.lead':
       'A quiet room for photos, letters, and what he taught us. Submitted only by family.',
-    'memorial.gallery': 'Photo mosaic: art coming from Build · [PHOTOS — TO BE ADDED]',
+    'memorial.gallery':
+      'Photo mosaic: art coming from Build · [PHOTOS — TO BE ADDED] (no family scans on this shareable page)',
     'memorial.timeline': 'Life timeline: [EVENTS — TO BE ADDED]',
     'memorial.tribute': 'Family tributes: [TRIBUTES — TO BE ADDED]',
     'recipes.title': 'Recipes & stories',
@@ -128,10 +141,12 @@ const I18N = {
     'recipes.r3': '[RECIPE NAME — TO BE ADDED]',
     'vault.title': 'Document vault',
     'vault.lead':
-      'Scans, audio, and albums will live here. Password protection is planned for a later phase.',
+      'Scans, audio, and albums will be linked here when ready — never committed to the public git repo. Password protection is planned for a later phase.',
     'vault.status': '[VAULT — COMING SOON]',
+    'vault.policy':
+      'No birthdates, street addresses, document numbers, DNA results, or photo scans on shareable pages. Originals stay offline or in a future private vault.',
     'footer.privacy':
-      'Living relatives: no birthdates, addresses, or government IDs on this site. Do not share this URL publicly.',
+      'Privacy: no birthdates, addresses, document numbers, DNA, or photo scans on these pages; family photos and scans are not stored in the public repository. Do not share this URL publicly.',
     'footer.steward': 'Family steward: Jesus Crooke',
   },
   es: {
@@ -149,11 +164,16 @@ const I18N = {
     'home.title': 'Archivo patrimonial de la familia Crooke',
     'home.lead':
       'Un archivo caribeño con capítulos de gran libro para las líneas Morel y Crooke. Los hechos aparecen solo cuando la familia los añade y aprueba.',
+    'home.emblem.caption':
+      'Un emblema familiar hecho para la familia Crooke, no un escudo de armas histórico concedido.',
     'home.motto.label': 'Lema familiar (provisional)',
     'home.motto.val': '[LEMA — LA FAMILIA ELIGE]',
-    'home.blazon': 'Armas asumidas — simbolismo y blasón: [BLASÓN — POR AÑADIR]',
+    'home.blazon': 'Simbolismo del emblema y blasón: [BLASÓN — POR AÑADIR]',
     'home.disclaimer':
-      'Armas asumidas por la familia (no concesión de autoridad heráldica). Arte y escudo: art coming from Build.',
+      'Arte del escudo: art coming from Build. Cada dato en el sitio lleva una etiqueta de fuente de archivo.',
+    'source.told': 'Lo contó {name}',
+    'source.paper': 'Documento en familia',
+    'source.notAsked': 'Aún no preguntado',
     'book.title': 'El Libro de los Crooke',
     'book.intro':
       'Capítulos con tono de volumen familiar. Lo desconocido queda marcado hasta las entrevistas y digitalizaciones.',
@@ -181,7 +201,8 @@ const I18N = {
     'memorial.title': 'En memoria de Charles Crooke',
     'memorial.lead':
       'Un espacio para fotos, cartas y lo que nos enseñó. Solo contenido de la familia.',
-    'memorial.gallery': 'Mosaico de fotos: art coming from Build · [FOTOS — POR AÑADIR]',
+    'memorial.gallery':
+      'Mosaico de fotos: art coming from Build · [FOTOS — POR AÑADIR] (sin escaneos familiares en esta página compartible)',
     'memorial.timeline': 'Línea de vida: [EVENTOS — POR AÑADIR]',
     'memorial.tribute': 'Tributos familiares: [TRIBUTOS — POR AÑADIR]',
     'recipes.title': 'Recetas e historias',
@@ -191,10 +212,12 @@ const I18N = {
     'recipes.r3': '[NOMBRE DE RECETA — POR AÑADIR]',
     'vault.title': 'Archivo documental',
     'vault.lead':
-      'Aquí vivirán escaneos, audio y álbumes. Contraseña en una fase posterior.',
+      'Aquí enlazaremos escaneos, audio y álbumes cuando estén listos — nunca en el repositorio git público. Contraseña en una fase posterior.',
     'vault.status': '[ARCHIVO — PRÓXIMAMENTE]',
+    'vault.policy':
+      'Sin fechas de nacimiento, direcciones, números de documento, ADN ni escaneos de fotos en páginas compartibles. Los originales quedan fuera de línea o en un archivo privado futuro.',
     'footer.privacy':
-      'Personas vivas: sin fechas de nacimiento, direcciones ni identificadores. No compartas esta URL en público.',
+      'Privacidad: sin fechas de nacimiento, direcciones, números de documento, ADN ni escaneos en estas páginas; fotos y escaneos familiares no se guardan en el repositorio público. No compartas esta URL en público.',
     'footer.steward': 'Custodio familiar: Jesus Crooke',
   },
 };
@@ -208,12 +231,36 @@ function t(key) {
   return I18N[lang][key] ?? I18N.en[key] ?? key;
 }
 
+function sourceLabel(kind, name = '') {
+  if (kind === 'told') {
+    return t('source.told').replace('{name}', name || '[NAME — TO BE ADDED]');
+  }
+  if (kind === 'paper') return t('source.paper');
+  return t('source.notAsked');
+}
+
+function sourceTagHtml(kind, name = '') {
+  const safeKind = kind === 'told' || kind === 'paper' ? kind : 'not-asked';
+  const label = sourceLabel(safeKind, name);
+  return `<span class="archive-source archive-source--${safeKind}" data-source="${safeKind}"${name ? ` data-source-name="${name}"` : ''}>${label}</span>`;
+}
+
+function applySourceTags() {
+  document.querySelectorAll('[data-source]').forEach(el => {
+    const kind = el.getAttribute('data-source') || 'not-asked';
+    const name = el.getAttribute('data-source-name') || '';
+    el.textContent = sourceLabel(kind, name);
+    el.className = `archive-source archive-source--${kind === 'told' || kind === 'paper' ? kind : 'not-asked'}`;
+  });
+}
+
 function applyI18n() {
   document.documentElement.lang = lang === 'es' ? 'es' : 'en';
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     el.textContent = t(key);
   });
+  applySourceTags();
   document.querySelectorAll('[data-lang-btn]').forEach(btn => {
     const on = btn.getAttribute('data-lang-btn') === lang;
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
@@ -286,7 +333,9 @@ function showPersonDetail(id) {
   const box = document.getElementById('tree-detail-body');
   if (!box || !p) return;
   const note = lang === 'es' ? p.noteEs : p.noteEn;
-  box.innerHTML = `<strong>${personLabel(p)}</strong><p>${note}</p>`;
+  const src = p.source || 'not-asked';
+  const who = p.sourceWho || '';
+  box.innerHTML = `${sourceTagHtml(src, who)}<p><strong>${personLabel(p)}</strong></p><p>${note}</p>`;
   renderTree();
 }
 
