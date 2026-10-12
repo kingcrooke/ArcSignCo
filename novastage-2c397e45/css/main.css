@@ -762,7 +762,11 @@ html.js-reveal [data-reveal].reveal-pending.is-visible {
 @media (max-width: 720px) {
   .nav-shell {
     position: relative;
-    justify-content: space-between;
+    justify-content: flex-start;
+  }
+
+  .nav-shell > a.nav-cta {
+    margin-left: auto;
   }
 
   .nav-shell > a:not(.nav-cta) {
