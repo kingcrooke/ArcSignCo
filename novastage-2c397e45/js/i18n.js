@@ -9,6 +9,7 @@
       "lang.group": "Language",
       "lang.en": "EN",
       "lang.es": "ES",
+      "invert.label": "Invert colors",
       "skip": "Skip to content",
       "nav.aria": "Site navigation",
       "nav.menu": "Menu",
@@ -146,6 +147,7 @@
       "lang.group": "Idioma",
       "lang.en": "EN",
       "lang.es": "ES",
+      "invert.label": "Invertir colores",
       "skip": "Saltar al contenido",
       "nav.aria": "Navegación del sitio",
       "nav.menu": "Menú",
@@ -356,6 +358,9 @@
     }
     if (window.NOVASTAGE_audio && window.NOVASTAGE_audio.syncLabels) {
       window.NOVASTAGE_audio.syncLabels();
+    }
+    if (window.NOVASTAGE_refreshInvertLabel) {
+      window.NOVASTAGE_refreshInvertLabel();
     }
   }
 

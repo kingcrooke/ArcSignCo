@@ -1,15 +1,20 @@
 /**
  * NovaStage site version tokens — single file to remove when preview mode is retired.
  * Map: Version 1–5 → palette A–E. Versions 6–7 use the illumination lockup.
+ *
+ * The live preview shows Versions 2, 5, and 7 only. Versions 1, 3, 4, and 6
+ * stay here with enabled:false (palette, font, lockup, and music intact).
+ * Restore one by setting enabled:true — do not renumber the ids.
  */
 window.NOVASTAGE_VERSION_CONFIG = {
   storageKey: "novastage-site-version",
-  defaultVersion: 1,
+  defaultVersion: 2,
   audioVolume: 0.4,
   audioFadeMs: 900,
   versions: [
     {
       id: 1,
+      enabled: false,
       palette: "a",
       tabLabel: "Version 1",
       wordmarkFont: "primary",
@@ -27,6 +32,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 2,
+      enabled: true,
       palette: "b",
       tabLabel: "Version 2",
       wordmarkFont: "alternate",
@@ -44,6 +50,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 3,
+      enabled: false,
       palette: "c",
       tabLabel: "Version 3",
       wordmarkFont: "primary",
@@ -60,6 +67,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 4,
+      enabled: false,
       palette: "d",
       tabLabel: "Version 4",
       wordmarkFont: "primary",
@@ -77,6 +85,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 5,
+      enabled: true,
       palette: "e",
       tabLabel: "Version 5",
       wordmarkFont: "alternate",
@@ -93,6 +102,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 6,
+      enabled: false,
       palette: "f",
       tabLabel: "Version 6",
       wordmarkFont: "primary",
@@ -110,6 +120,7 @@ window.NOVASTAGE_VERSION_CONFIG = {
     },
     {
       id: 7,
+      enabled: true,
       palette: "g",
       tabLabel: "Version 7",
       wordmarkFont: "alternate",

@@ -41,6 +41,34 @@
   color: #f2c94c;
 }
 
+.version-switcher__invert {
+  flex: 0 0 auto;
+  align-self: center;
+  border: 1px solid rgba(244, 239, 230, 0.38);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-family: var(--caps);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #f4efe6;
+  background: transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.version-switcher__invert[aria-pressed="true"] {
+  background: #f4efe6;
+  border-color: #f4efe6;
+  color: #141821;
+}
+
+.version-switcher__invert:focus-visible {
+  outline: 2px solid #3ec8ef;
+  outline-offset: 2px;
+}
+
 .version-switcher__tabs {
   display: flex;
   align-items: stretch;
@@ -121,10 +149,11 @@ body.has-version-switcher .skip-link:focus {
     display: inline;
   }
 
-  .version-switcher__music {
+  .version-switcher__music,
+  .version-switcher__invert {
     padding: 5px 8px;
     font-size: 0.56rem;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
   }
 
   .version-switcher__tab {

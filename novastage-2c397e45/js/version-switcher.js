@@ -27,6 +27,15 @@
   });
   bar.appendChild(musicBtn);
 
+  var invertBtn = document.createElement("button");
+  invertBtn.type = "button";
+  invertBtn.id = "version-invert-toggle";
+  invertBtn.className = "version-switcher__invert";
+  invertBtn.setAttribute("aria-pressed", "false");
+  invertBtn.textContent = window.NOVASTAGE_t ? window.NOVASTAGE_t("invert.label") : "Invert colors";
+  invertBtn.setAttribute("aria-label", invertBtn.textContent);
+  bar.appendChild(invertBtn);
+
   var list = document.createElement("div");
   list.className = "version-switcher__tabs";
   list.setAttribute("role", "tablist");
@@ -58,6 +67,9 @@
   }
 
   config.versions.forEach(function (version) {
+    if (version.enabled === false) {
+      return;
+    }
     var btn = document.createElement("button");
     btn.type = "button";
     btn.className = "version-switcher__tab";
