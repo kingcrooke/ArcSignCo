@@ -12,7 +12,7 @@ const require = createRequire(import.meta.url);
 const { JSDOM } = require("jsdom");
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "awnings"];
+const SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "digital-signage", "awnings"];
 const norm = s => s.replace(/\s+/g, " ").trim();
 
 function inline(node) {

@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 const { JSDOM } = require("jsdom");
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-export const SERVICE_SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "awnings"];
+export const SERVICE_SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "digital-signage", "awnings"];
 const pages = [{ slug: "", file: "index.html" }, ...SERVICE_SLUGS.map(slug => ({ slug, file: `${slug}/index.html` }))];
 
 const BUSINESS_ID = "https://arcsignco.com/#business";
@@ -149,7 +149,7 @@ for (const { slug, file } of pages) {
     else {
       if (service.url !== url) fail(label, `Service url is ${service.url}`);
       if (service.provider?.["@id"] !== BUSINESS_ID) fail(label, "Service provider @id does not point at the homepage business");
-      if ((slug === "wayfinding-signs" || slug === "awnings") && service.provider?.email !== "jc@arcsignco.com") {
+      if ((slug === "wayfinding-signs" || slug === "digital-signage" || slug === "awnings") && service.provider?.email !== "jc@arcsignco.com") {
         fail(label, `Service provider email should be jc@arcsignco.com, got ${service.provider?.email}`);
       }
       pass(label, `Service "${service.name}"`);
@@ -181,14 +181,16 @@ for (const { slug, file } of pages) {
     if (extLinks.some(a => !(a.rel || "").includes("noopener"))) fail(label, 'a target="_blank" link lacks rel="noopener"');
   }
 
-  if (slug === "wayfinding-signs" || slug === "awnings") {
+  if (slug === "wayfinding-signs" || slug === "digital-signage" || slug === "awnings") {
     if (/awning permit nyc/i.test(visible) || /awning permit nyc/i.test(html)) {
       fail(label, 'page targets the keyword "awning permit NYC"');
     } else pass(label, 'does not target "awning permit NYC"');
     const hrefs = new Set([...document.querySelectorAll("a")].map(a => a.getAttribute("href")));
     const required = slug === "awnings"
-      ? ["/sign-permits-shop-drawings/", "/channel-letters/", "/ada-signs/", "/wayfinding-signs/", "/construction-signs/", "/#quote", "/tools/sign-mockup/"]
-      : ["/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/awnings/", "/construction-signs/", "/#quote"];
+      ? ["/sign-permits-shop-drawings/", "/channel-letters/", "/ada-signs/", "/wayfinding-signs/", "/digital-signage/", "/construction-signs/", "/#quote", "/tools/sign-mockup/"]
+      : slug === "digital-signage"
+        ? ["/wayfinding-signs/", "/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/construction-signs/", "/awnings/", "/#quote"]
+        : ["/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/awnings/", "/construction-signs/", "/#quote"];
     const missing = required.filter(href => !hrefs.has(href));
     if (missing.length) fail(label, `missing internal links: ${missing.join(", ")}`);
     else pass(label, "required internal links are present");
@@ -197,6 +199,11 @@ for (const { slug, file } of pages) {
         title: "Interior Wayfinding NYC | Arc Signage Co",
         description: "Interior wayfinding signs for New York buildouts: lobby directories, floor IDs, room signs, and directional packages. Send plans or a schedule for a quote.",
         h1: "Interior wayfinding and directory packages for New York buildings",
+      },
+      "digital-signage": {
+        title: "Digital Signage NYC | Arc Signage Co",
+        description: "Digital signage for NY and tri-state: touch directories, wayfinding, event boards, donor walls, CMS, integrations, and remote support. Get a quote.",
+        h1: "Digital signage for touch directories, wayfinding, and video walls",
       },
       awnings: {
         title: "Storefront Awnings NYC | Arc Signage Co",
@@ -215,10 +222,10 @@ for (const { slug, file } of pages) {
 if (sitemap.includes("sign-mockup/proof")) fail("sitemap", "proof pages are listed");
 else pass("sitemap", "proof pages are not listed");
 const homeNav = fs.readFileSync(path.join(root, "index.html"), "utf8");
-for (const href of ["/wayfinding-signs/", "/awnings/"]) {
+for (const href of ["/wayfinding-signs/", "/digital-signage/", "/awnings/"]) {
   if (!homeNav.includes(`href="${href}"`)) fail("/", `homepage missing link to ${href}`);
 }
-pass("/", "homepage links to both new service pages");
+pass("/", "homepage links to service pages");
 
 console.log(failures ? `\n${failures} check(s) failed` : "\nAll checks passed");
 process.exit(failures ? 1 : 0);
