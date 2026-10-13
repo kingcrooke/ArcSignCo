@@ -1,5 +1,5 @@
 /**
- * Replay computeWaiverBoard against live Sleeper data (weeks 1–4).
+ * Replay computeWaiverBoard against live Sleeper data through last_scored_leg.
  * Usage: npx tsx scripts/verify-waiver-live.ts
  */
 import { buildTeamMap } from '../src/lib/teams'
@@ -17,7 +17,10 @@ async function main() {
   const league = await getJson<{ settings: { last_scored_leg?: number } }>(
     `/league/${LEAGUE_ID}`,
   )
-  const scoringThrough = league.settings?.last_scored_leg ?? 4
+  const scoringThrough = league.settings?.last_scored_leg
+  if (!scoringThrough || scoringThrough < 1) {
+    throw new Error('league.settings.last_scored_leg missing or invalid')
+  }
   const users = await getJson<SleeperUser[]>(`/league/${LEAGUE_ID}/users`)
   const rosters = await getJson<SleeperRoster[]>(`/league/${LEAGUE_ID}/rosters`)
   const teams = buildTeamMap(users, rosters)
