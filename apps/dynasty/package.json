@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "publish-static": "node scripts/publish-static-deploy.mjs"
+    "publish-static": "node scripts/publish-static-deploy.mjs",
+    "render-slides": "node scripts/render-week-slides/render.mjs",
+    "optimize-slides": "node scripts/optimize-published-slides.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

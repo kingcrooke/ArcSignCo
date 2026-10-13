@@ -68,6 +68,7 @@ export default function App() {
   const [bestGamesScope, setBestGamesScope] = useState<BestGamesScope | null>(
     null,
   )
+  const [gallerySlideId, setGallerySlideId] = useState<string | null>(null)
   const sound = useSound()
   const navRef = useRef<HTMLElement>(null)
   const didInitialTabScroll = useRef(false)
@@ -102,6 +103,8 @@ export default function App() {
       const id = Number.parseInt(mgr, 10)
       if (!Number.isNaN(id)) setManagerRosterId(id)
     }
+    const slide = params.get('slide')
+    if (slide) setGallerySlideId(slide)
     if (t === 'bestgames') {
       if (w === 'all') setBestGamesScope('all')
       else if (w) {
@@ -361,12 +364,7 @@ export default function App() {
               </h2>
               <DynastyWeekGraphicsPanel
                 week={data.selectedWeek}
-                matchups={data.matchupsByWeek.get(data.selectedWeek)}
-                teams={data.teams}
-                standings={data.standings}
-                league={data.league}
-                nflState={data.nflState}
-                players={data.players}
+                initialSlideId={gallerySlideId}
               />
             </section>
           )}

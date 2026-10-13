@@ -1,176 +1,198 @@
-import { useMemo } from 'react'
-import { groupMatchupPairs, teamLabel } from '../lib/matchupBoard'
-import { weekHasMatchups } from '../lib/matchupBoard'
-import { recordLabel } from '../lib/standings'
-import type {
-  PlayersMap,
-  SleeperMatchup,
-  StandingRow,
-  TeamInfo,
-} from '../lib/types'
-import { isWeekComplete } from '../lib/weeks'
-import type { NflState, SleeperLeague } from '../lib/types'
-import { TeamAvatar, type AvatarMood } from './TeamAvatar'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  getWeekGraphicsSections,
+  getWeekGraphicsSlides,
+} from '../lib/weekGraphics'
+import type { PublishedSlide } from '../lib/publishedSlides'
+import { slideAssetUrl } from '../lib/publishedSlides'
+import { SlideLightbox } from './SlideLightbox'
 
-function MatchupCard({
-  homeId,
-  awayId,
-  teams,
-  standings,
-  homeMood,
-  awayMood,
-  subtitle,
-  neutral,
-  homeScore,
-  awayScore,
+const THUMB_WIDTH = 540
+const THUMB_HEIGHT = 675
+
+function GraphicThumb({
+  slide,
+  onOpen,
+  loadImmediately,
+  buttonRef,
 }: {
-  homeId: number
-  awayId: number
-  teams: Map<number, TeamInfo>
-  standings: StandingRow[]
-  homeMood: AvatarMood
-  awayMood: AvatarMood
-  subtitle?: string
-  neutral?: boolean
-  homeScore?: number
-  awayScore?: number
+  slide: PublishedSlide
+  onOpen: () => void
+  loadImmediately: boolean
+  buttonRef?: React.RefObject<HTMLButtonElement | null>
 }) {
-  const home = teams.get(homeId)
-  const away = teams.get(awayId)
-  const homeRow = standings.find((r) => r.rosterId === homeId)
-  const awayRow = standings.find((r) => r.rosterId === awayId)
+  const jpg = slideAssetUrl(slide.basename, 'thumb', 'jpg')
+  const rootRef = useRef<HTMLButtonElement | null>(null)
+  const [inView, setInView] = useState(loadImmediately)
+
+  useEffect(() => {
+    if (loadImmediately || inView) return
+    const node = rootRef.current
+    if (!node || typeof IntersectionObserver === 'undefined') {
+      setInView(true)
+      return
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '240px 0px' },
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [loadImmediately, inView])
+
+  const showImage = loadImmediately || inView
+
   return (
-    <article
-      className="flex flex-col rounded-2xl border border-[var(--dyn-border)] bg-gradient-to-b from-[var(--dyn-surface)] to-[var(--dyn-bg)] p-4"
+    <button
+      ref={(el) => {
+        rootRef.current = el
+        if (buttonRef && 'current' in buttonRef) buttonRef.current = el
+      }}
+      type="button"
+      className="group block w-full shrink-0 overflow-hidden rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] text-left transition hover:border-[var(--dyn-accent)]"
+      onClick={onOpen}
+      aria-label={`Open ${slide.title}`}
     >
-      <p className="text-center font-['Anton'] text-2xl uppercase tracking-wide text-[var(--dyn-text)]">
-        {teamLabel(homeId, teams)}
-        <span className="mx-2 text-[var(--dyn-muted)]">vs</span>
-        {teamLabel(awayId, teams)}
-      </p>
-      {subtitle && (
-        <p className="mt-1 text-center text-xs text-[var(--dyn-muted)]">{subtitle}</p>
+      {showImage ? (
+        <img
+          src={jpg}
+          alt=""
+          width={THUMB_WIDTH}
+          height={THUMB_HEIGHT}
+          loading="lazy"
+          decoding="async"
+          className="aspect-[4/5] w-full bg-[var(--dyn-bg)] object-cover object-top"
+        />
+      ) : (
+        <div className="aspect-[4/5] w-full bg-[var(--dyn-bg)]" aria-hidden />
       )}
-      <div className="mt-4 flex items-end justify-center gap-4">
-        <div className="flex flex-col items-center gap-2">
-          <TeamAvatar team={home} size="lg" mood={homeMood} />
-          <p className="text-xs text-[var(--dyn-muted)]">
-            {homeRow ? recordLabel(homeRow) : '—'}
-          </p>
-          {!neutral && homeScore != null && (
-            <p className="font-['Bebas_Neue'] text-3xl text-[var(--dyn-accent)]">
-              {homeScore.toFixed(2)}
-            </p>
-          )}
-        </div>
-        <div
-          className="mb-8 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[var(--dyn-accent)] bg-[var(--dyn-bg)] font-['Bebas_Neue'] text-xl text-[var(--dyn-accent-bright)]"
-          aria-hidden
-        >
-          VS
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <TeamAvatar team={away} size="lg" mood={awayMood} />
-          <p className="text-xs text-[var(--dyn-muted)]">
-            {awayRow ? recordLabel(awayRow) : '—'}
-          </p>
-          {!neutral && awayScore != null && (
-            <p className="font-['Bebas_Neue'] text-3xl text-[var(--dyn-accent)]">
-              {awayScore.toFixed(2)}
-            </p>
-          )}
-        </div>
-      </div>
-    </article>
+      <p className="truncate px-2 py-1.5 text-xs text-[var(--dyn-muted)]">
+        {slide.title}
+      </p>
+    </button>
   )
 }
 
 export function DynastyWeekGraphicsPanel({
   week,
-  matchups,
-  teams,
-  standings,
-  league,
-  nflState,
+  initialSlideId,
 }: {
   week: number
-  matchups?: SleeperMatchup[]
-  teams: Map<number, TeamInfo>
-  standings: StandingRow[]
-  league: SleeperLeague
-  nflState: NflState
-  players?: PlayersMap | null
+  initialSlideId?: string | null
 }) {
-  const pairs = useMemo(
-    () => (matchups ? groupMatchupPairs(matchups) : []),
-    [matchups],
-  )
-  const weekFinal = isWeekComplete(week, league, nflState)
-  const hasScores = weekHasMatchups(matchups)
+  const sections = useMemo(() => getWeekGraphicsSections(week), [week])
+  const weekSlides = useMemo(() => getWeekGraphicsSlides(week), [week])
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const openButtonRef = useRef<HTMLButtonElement | null>(null)
 
-  if (!matchups?.length || !pairs.length) {
+  const indexById = useMemo(() => {
+    const map = new Map<string, number>()
+    weekSlides.forEach((s, i) => map.set(s.id, i))
+    return map
+  }, [weekSlides])
+
+  const open = useCallback(
+    (indexInWeek: number) => {
+      setLightboxIndex(indexInWeek)
+    },
+    [],
+  )
+
+  const close = useCallback(() => {
+    setLightboxIndex(null)
+  }, [])
+
+  useEffect(() => {
+    if (!initialSlideId) return
+    const idx = indexById.get(initialSlideId)
+    if (idx != null) open(idx)
+  }, [initialSlideId, indexById, open])
+
+  const copySlideLink = (slide: PublishedSlide) => {
+    const params = new URLSearchParams(window.location.search)
+    params.set('week', String(week))
+    params.set('tab', 'gallery')
+    params.set('slide', slide.id)
+    const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`
+    void navigator.clipboard?.writeText(url)
+  }
+
+  if (!sections.length) {
     return (
       <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
-        No matchups to illustrate for Week {week} yet.
+        No published graphics for Week {week} yet. Try another week.
       </p>
     )
   }
 
   return (
-    <div className="space-y-8" id="week-graphics-panel">
-      <section>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]">
-          Matchup cards
-        </h3>
-        <p className="mb-4 text-xs text-[var(--dyn-muted)]">
-          Neutral preview — no winner marked.
-        </p>
-        <ul className="grid gap-4 sm:grid-cols-2" role="list">
-          {pairs.map(({ matchupId, home, away }) => (
-            <li key={matchupId}>
-              <MatchupCard
-                homeId={home.roster_id}
-                awayId={away.roster_id}
-                teams={teams}
-                standings={standings}
-                homeMood="base"
-                awayMood="base"
-                neutral
-                subtitle={`Week ${week}`}
-              />
-            </li>
-          ))}
-        </ul>
-      </section>
+    <div className="space-y-6" id="week-graphics-panel">
+      <p className="text-sm text-[var(--dyn-muted)]">
+        Week {week} feed graphics (1080×1350). Tap a card for full size.
+      </p>
 
-      {hasScores && weekFinal && (
-        <section>
-          <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]">
-            Result cards
-          </h3>
-          <ul className="grid gap-4 sm:grid-cols-2" role="list">
-            {pairs.map(({ matchupId, home, away }) => {
-              const homeWon = home.points >= away.points
-              return (
-                <li key={`result-${matchupId}`}>
-                  <div className="space-y-2">
-                    <MatchupCard
-                      homeId={home.roster_id}
-                      awayId={away.roster_id}
-                      teams={teams}
-                      standings={standings}
-                      homeMood={homeWon ? 'hype' : 'loss'}
-                      awayMood={homeWon ? 'loss' : 'hype'}
-                      homeScore={home.points}
-                      awayScore={away.points}
-                      subtitle={`Final · ${home.points.toFixed(2)} – ${away.points.toFixed(2)}`}
+      <div className="flex flex-col gap-8">
+        {sections.map((section) => (
+          <section
+            key={section.kind}
+            id={`graphics-week-${week}-${section.kind}`}
+            aria-labelledby={`graphics-heading-${week}-${section.kind}`}
+          >
+            <h3
+              id={`graphics-heading-${week}-${section.kind}`}
+              className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]"
+            >
+              {section.heading}
+            </h3>
+            {section.kind === 'matchups' && (
+              <p className="mb-4 text-xs text-[var(--dyn-muted)]">
+                Neutral preview — no winner marked.
+              </p>
+            )}
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2" role="list">
+              {section.slides.map((slide) => {
+                const indexInWeek = indexById.get(slide.id) ?? 0
+                const isDeepLinkTarget = initialSlideId === slide.id
+                const loadImmediately =
+                  isDeepLinkTarget ||
+                  (section.slides[0]?.id === slide.id &&
+                    section.kind === sections[0]?.kind)
+                return (
+                  <li key={slide.id} className="flex min-w-0 flex-col gap-2">
+                    <GraphicThumb
+                      slide={slide}
+                      onOpen={() => open(indexInWeek)}
+                      loadImmediately={loadImmediately}
+                      buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                     />
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
+                    <button
+                      type="button"
+                      className="min-h-11 w-full rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-2 text-xs font-semibold text-[var(--dyn-accent)]"
+                      onClick={() => copySlideLink(slide)}
+                    >
+                      Copy link
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </section>
+        ))}
+      </div>
+
+      {lightboxIndex !== null && (
+        <SlideLightbox
+          slides={weekSlides}
+          index={lightboxIndex}
+          onClose={close}
+          onIndexChange={setLightboxIndex}
+          returnFocusRef={openButtonRef}
+        />
       )}
     </div>
   )

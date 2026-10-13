@@ -95,21 +95,18 @@ describe('computeWaiverBoard', () => {
     expect(row(board, 7).eligible).toBe(false)
   })
 
-  it('ranks the championship pool through week 3 and ignores week 4 points', () => {
+  it('ranks waiver champion by completed pickups through week 3', () => {
     const board = boardThrough(3)
-    expect(board.champion?.rosterId).toBe(3)
-    expect(board.champion?.displayName).toBe('NarkingR')
-    expect(board.champion?.wes).toBeCloseTo(11.8175, 2)
-    expect(board.champion?.rosteredPickups).toBe(4)
-    expect(board.cellar?.rosterId).toBe(10)
-    expect(board.cellar?.displayName).toBe('BigBlue01')
-    expect(board.cellar?.wes).toBeCloseTo(-14.1967, 2)
-    expect(board.cellar?.poolRank).toBe(9)
+    expect(board.champion?.rosterId).toBe(2)
+    expect(board.champion?.displayName).toBe('NutCrusher')
+    expect(board.champion?.pickupCount).toBe(14)
+    expect(board.cellar?.rosterId).toBe(6)
+    expect(board.cellar?.pickupCount).toBe(1)
+    expect(board.champion?.poolRank).toBe(1)
+    expect(row(board, 3).wes).toBeCloseTo(11.8175, 2)
 
     const withoutWeek4 = computeWaiverBoard({
-      transactions: board.moves.length
-        ? loadTx()
-        : [],
+      transactions: loadTx(),
       matchupsByWeek: loadMatchups(3),
       teams: loadTeams(),
       rosters: loadRosters(),
@@ -117,10 +114,7 @@ describe('computeWaiverBoard', () => {
       selectedWeek: 3,
       selectedWeekComplete: true,
     })
-    expect(withoutWeek4.champion?.startedPoints).toBeCloseTo(
-      board.champion?.startedPoints ?? 0,
-      5,
-    )
+    expect(withoutWeek4.champion?.pickupCount).toBe(14)
     expect(row(board, 10).startedPoints).toBeCloseTo(
       row(withoutWeek4, 10).startedPoints,
       5,
@@ -152,7 +146,7 @@ describe('computeWaiverBoard', () => {
     expect(board.pickupOfWeek).toBeNull()
     expect(board.worstDropOfWeek).toBeNull()
     expect(board.weeklyRanking).toHaveLength(0)
-    expect(board.champion?.rosterId).toBe(3)
+    expect(board.champion?.rosterId).toBe(2)
     expect(board.scoringThrough).toBe(3)
     const week4Adds = board.moves.filter((m) => m.leg === 4 && m.adds.length)
     expect(week4Adds.length).toBeGreaterThan(0)

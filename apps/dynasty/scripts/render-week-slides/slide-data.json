@@ -1,0 +1,135 @@
+{
+  "source": "computed_505e.json + Sleeper API week 6 matchups 2026-10-13",
+  "standingsAfterWeek5": {
+    "1": [4, 1, 0],
+    "2": [4, 1, 0],
+    "3": [4, 1, 0],
+    "4": [0, 5, 0],
+    "5": [4, 1, 0],
+    "6": [3, 2, 0],
+    "7": [1, 4, 0],
+    "8": [2, 3, 0],
+    "9": [1, 4, 0],
+    "10": [3, 2, 0],
+    "11": [2, 3, 0],
+    "12": [2, 3, 0]
+  },
+  "resultsWeek5": [
+    {
+      "id": "results-w5-m1",
+      "match": 1,
+      "homeRoster": 4,
+      "awayRoster": 5,
+      "homeName": "BigBlue",
+      "awayName": "Chase\u2019n Dubs",
+      "homePts": 104.96,
+      "awayPts": 121.78,
+      "winnerRoster": 5
+    },
+    {
+      "id": "results-w5-m2",
+      "match": 2,
+      "homeRoster": 1,
+      "awayRoster": 12,
+      "homeName": "Saints & Sinners",
+      "awayName": "Rubuilding",
+      "homePts": 172.38,
+      "awayPts": 134.94,
+      "winnerRoster": 1
+    },
+    {
+      "id": "results-w5-m3",
+      "match": 3,
+      "homeRoster": 2,
+      "awayRoster": 3,
+      "homeName": "Nix in 5",
+      "awayName": "Wolf Pack",
+      "homePts": 161.66,
+      "awayPts": 178.4,
+      "winnerRoster": 3
+    },
+    {
+      "id": "results-w5-m4",
+      "match": 4,
+      "homeRoster": 8,
+      "awayRoster": 9,
+      "homeName": "Chalupa Batman",
+      "awayName": "Team Name Hoes",
+      "homePts": 115.44,
+      "awayPts": 154.22,
+      "winnerRoster": 9
+    },
+    {
+      "id": "results-w5-m5",
+      "match": 5,
+      "homeRoster": 7,
+      "awayRoster": 11,
+      "homeName": "Love Thy Nabers",
+      "awayName": "MahomiesRidley4MooreJeffe",
+      "homePts": 132.44,
+      "awayPts": 117.06,
+      "winnerRoster": 7
+    },
+    {
+      "id": "results-w5-m6",
+      "match": 6,
+      "homeRoster": 6,
+      "awayRoster": 10,
+      "homeName": "A-Lamb-e que tengo hambre",
+      "awayName": "ramonguaraguao",
+      "homePts": 86.94,
+      "awayPts": 122.4,
+      "winnerRoster": 10
+    }
+  ],
+  "matchupsWeek6": [
+    {
+      "id": "vs-w6-m1",
+      "match": 1,
+      "homeRoster": 5,
+      "awayRoster": 11,
+      "homeName": "Chase\u2019n Dubs",
+      "awayName": "MahomiesRidley4MooreJeffe"
+    },
+    {
+      "id": "vs-w6-m2",
+      "match": 2,
+      "homeRoster": 6,
+      "awayRoster": 12,
+      "homeName": "A-Lamb-e que tengo hambre",
+      "awayName": "Rubuilding"
+    },
+    {
+      "id": "vs-w6-m3",
+      "match": 3,
+      "homeRoster": 3,
+      "awayRoster": 10,
+      "homeName": "Wolf Pack",
+      "awayName": "ramonguaraguao"
+    },
+    {
+      "id": "vs-w6-m4",
+      "match": 4,
+      "homeRoster": 7,
+      "awayRoster": 9,
+      "homeName": "Love Thy Nabers",
+      "awayName": "Team Name Hoes"
+    },
+    {
+      "id": "vs-w6-m5",
+      "match": 5,
+      "homeRoster": 1,
+      "awayRoster": 8,
+      "homeName": "Saints & Sinners",
+      "awayName": "Chalupa Batman"
+    },
+    {
+      "id": "vs-w6-m6",
+      "match": 6,
+      "homeRoster": 2,
+      "awayRoster": 4,
+      "homeName": "Nix in 5",
+      "awayName": "BigBlue"
+    }
+  ]
+}

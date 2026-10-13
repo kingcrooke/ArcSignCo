@@ -4,7 +4,7 @@ import type { ManagerWaiverRow, WaiverBoard, WaiverMove } from '../lib/waiverWir
 import {
   HIT_LINE,
   MIN_ROSTERED_PICKUPS,
-  waiverSeasonStory,
+  pickupChampionStory,
 } from '../lib/waiverWire'
 import type { PlayersMap } from '../lib/types'
 import { WaiverCumulativeChart, WaiverEfficiencyChart } from './WaiverCharts'
@@ -127,9 +127,11 @@ export function WaiverPanel({
             Season through Week {board.scoringThrough}
           </h3>
           <p className="mt-1 text-xs text-[var(--dyn-muted)]">
-            Waiver Efficiency Score is net started points divided by rostered pickups.
-            The badge needs {MIN_ROSTERED_PICKUPS} rostered pickups. A hit is a start of{' '}
-            {HIT_LINE}+ points. Kickers and defenses count.
+            Waiver Wire Champion is the manager with the most completed waiver and
+            free-agent adds (trades and commissioner moves excluded). Tiebreak: FAAB
+            spent, then name. WES below is net started points divided by rostered
+            pickups ({MIN_ROSTERED_PICKUPS}+ for the efficiency pool). A hit is a start
+            of {HIT_LINE}+ points.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -142,8 +144,8 @@ export function WaiverPanel({
               scoringThrough={board.scoringThrough}
             />
             <p className="mt-2 text-xs text-[var(--dyn-muted)]">
-              Filled bars are in the championship pool. Hollow bars are under{' '}
-              {MIN_ROSTERED_PICKUPS} rostered pickups.
+              Filled bars are managers with {MIN_ROSTERED_PICKUPS}+ rostered pickups
+              (WES pool). Hollow bars are below that sample size.
             </p>
           </figure>
           <figure className="rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-3">
@@ -297,16 +299,16 @@ function ChampionCard({ board }: { board: WaiverBoard }) {
           </h3>
           <p className="mt-1 text-sm text-[var(--dyn-muted)]">{c.teamName}</p>
           <p className="mt-3 font-['Anton'] text-4xl tabular-nums text-[var(--dyn-accent)]">
-            {pts(c.wes)}
+            {c.pickupCount}
           </p>
-          <p className="mt-1 text-xs text-[var(--dyn-muted)]">
-            {waiverSeasonStory(c)} · through Week {board.scoringThrough}
+          <p className="mt-1 text-sm text-[var(--dyn-muted)]">completed pickups</p>
+          <p className="mt-2 text-xs text-[var(--dyn-muted)]">
+            {pickupChampionStory(c)} · through Week {board.scoringThrough}
           </p>
         </>
       ) : (
         <p className="mt-2 text-sm text-[var(--dyn-muted)]">
-          No manager has {MIN_ROSTERED_PICKUPS} rostered pickups through Week{' '}
-          {board.scoringThrough}.
+          No waiver or free-agent pickups through Week {board.scoringThrough}.
         </p>
       )}
     </article>
@@ -327,16 +329,17 @@ function CellarCard({ board }: { board: WaiverBoard }) {
           </h3>
           <p className="mt-1 text-sm text-red-200/80">{c.teamName}</p>
           <p className="mt-3 font-['Anton'] text-4xl tabular-nums text-red-200">
-            {pts(c.wes)}
+            {c.pickupCount}
           </p>
+          <p className="mt-1 text-sm text-red-200/80">completed pickups</p>
           <p className="mt-1 text-xs text-red-200/70">
-            Last in the pool · {waiverSeasonStory(c)} · through Week{' '}
+            Fewest pickups · {pickupChampionStory(c)} · through Week{' '}
             {board.scoringThrough}
           </p>
         </>
       ) : (
         <p className="mt-2 text-sm text-red-200/80">
-          The cellar chip appears once two managers are in the pool.
+          The cellar chip appears once at least two managers have pickups.
         </p>
       )}
     </article>
