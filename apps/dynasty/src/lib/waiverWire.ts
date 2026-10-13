@@ -268,6 +268,10 @@ export function waiverSeasonStory(row: ManagerWaiverRow): string {
   return `${row.rosteredPickups} rostered pickups · net ${sign}${Math.abs(net).toFixed(2)} points`
 }
 
+export function pickupChampionStory(row: ManagerWaiverRow): string {
+  return `${row.pickupCount} pickups · $${row.faabRemaining} FAAB left · $${row.faabSpent} spent`
+}
+
 export function weekCloses(
   transactions: SleeperTransaction[],
   scoringThrough: number,
@@ -286,17 +290,35 @@ export function weekCloses(
   return closes
 }
 
-function comparePool(a: ManagerWaiverRow, b: ManagerWaiverRow): number {
-  const aw = a.wes ?? Number.NEGATIVE_INFINITY
-  const bw = b.wes ?? Number.NEGATIVE_INFINITY
-  if (bw !== aw) return bw - aw
-  if (b.netWaiverPoints !== a.netWaiverPoints) {
-    return b.netWaiverPoints - a.netWaiverPoints
+/** Completed waiver + free-agent adds per roster through `scoringThrough` (each add counts). */
+export function countCompletedPickupsByRoster(
+  transactions: SleeperTransaction[],
+  scoringThrough: number,
+): Map<number, number> {
+  const totals = new Map<number, number>()
+  for (const t of transactions) {
+    if (t.leg > scoringThrough) continue
+    if (!isCountableWaiverAcquisition(t)) continue
+    const fallback = txRosterId(t)
+    for (const playerId of Object.keys(t.adds ?? {})) {
+      const rosterId = rosterIdFromPlayerMap(t.adds, playerId, fallback)
+      if (rosterId == null) continue
+      totals.set(rosterId, (totals.get(rosterId) ?? 0) + 1)
+    }
   }
-  const ah = a.hitRate ?? -1
-  const bh = b.hitRate ?? -1
-  if (bh !== ah) return bh - ah
-  return a.failedClaims - b.failedClaims
+  return totals
+}
+
+/** Waiver Wire Champion: most pickups, then FAAB spent, then display name. */
+export function comparePickupChampionRank(
+  a: ManagerWaiverRow,
+  b: ManagerWaiverRow,
+): number {
+  if (b.pickupCount !== a.pickupCount) return b.pickupCount - a.pickupCount
+  if (b.faabSpent !== a.faabSpent) return b.faabSpent - a.faabSpent
+  const an = (a.teamName || a.displayName).toLowerCase()
+  const bn = (b.teamName || b.displayName).toLowerCase()
+  return an.localeCompare(bn)
 }
 
 export function computeWaiverBoard(input: {
@@ -323,6 +345,10 @@ export function computeWaiverBoard(input: {
   const acquisitionTimeline = buildRosterPlayerAcquisitionTimeline(transactions)
   const closes = weekCloses(transactions, scoringThrough)
   const horizonClose = closes.get(scoringThrough)
+  const completedPickupTotals = countCompletedPickupsByRoster(
+    transactions,
+    scoringThrough,
+  )
 
   const matchups = new Map<number, Map<number, SleeperMatchup>>()
   for (let w = 1; w <= scoringThrough; w++) {
@@ -574,7 +600,7 @@ export function computeWaiverBoard(input: {
       faabSpent: faab.spent,
       faabRemaining: faab.remaining,
       waiverPriority: priorityByRoster.get(rosterId) ?? null,
-      pickupCount: windowAdds.length,
+      pickupCount: completedPickupTotals.get(rosterId) ?? 0,
       rosteredPickups: rosteredAdds.length,
       pendingPickups,
       startedPoints,
@@ -597,12 +623,10 @@ export function computeWaiverBoard(input: {
     })
   }
 
-  const eligible = rows.filter((r) => r.eligible).sort(comparePool)
-  eligible.forEach((r, i) => {
+  const managers = [...rows].sort(comparePickupChampionRank)
+  managers.forEach((r, i) => {
     r.poolRank = i + 1
   })
-  const ineligible = rows.filter((r) => !r.eligible).sort(comparePool)
-  const managers = [...eligible, ...ineligible]
 
   const weeklyRanking =
     selectedWeekComplete && selectedWeek >= 1 && selectedWeek <= scoringThrough
@@ -633,8 +657,8 @@ export function computeWaiverBoard(input: {
     selectedWeek,
     selectedWeekComplete,
     managers,
-    champion: eligible[0] ?? null,
-    cellar: eligible.length >= 2 ? eligible[eligible.length - 1] : null,
+    champion: managers[0] ?? null,
+    cellar: managers.length >= 2 ? managers[managers.length - 1] : null,
     pickupOfWeek,
     worstDropOfWeek,
     moves,

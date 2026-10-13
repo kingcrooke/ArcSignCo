@@ -18,8 +18,8 @@ async function main() {
   await page.screenshot({ path: path.join(OUT, 'live-week5.png'), fullPage: true })
 
   await page.goto(`${BASE}?week=5&tab=waiver`, { waitUntil: 'domcontentloaded' })
-  await page.waitForTimeout(10000)
-  await page.screenshot({ path: path.join(OUT, 'waiver-week5.png'), fullPage: true })
+  await page.waitForTimeout(12000)
+  await page.screenshot({ path: path.join(OUT, 'waiver-week5-champion.png'), fullPage: true })
 
   await page.goto(`${BASE}?week=5&tab=gallery`, { waitUntil: 'domcontentloaded' })
   await page.waitForTimeout(5000)
