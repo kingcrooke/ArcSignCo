@@ -92,7 +92,8 @@ export default function App() {
     const w = params.get('week')
     const t = params.get('tab') as AppTab | null
     const s = params.get('season')
-    const mgr = params.get('manager')
+    const mgr =
+      params.get('manager') ?? params.get('roster')
     if (s && leagueIdForSeason(s)) setSeason(s)
     if (w) {
       const n = Number.parseInt(w, 10)
@@ -101,7 +102,7 @@ export default function App() {
     if (t && TAB_IDS.includes(t)) setTab(t)
     if (mgr) {
       const id = Number.parseInt(mgr, 10)
-      if (!Number.isNaN(id)) setManagerRosterId(id)
+      if (!Number.isNaN(id) && id >= 1 && id <= 12) setManagerRosterId(id)
     }
     const slide = params.get('slide')
     if (slide) setGallerySlideId(slide)
@@ -130,7 +131,10 @@ export default function App() {
       params.set('week', String(data.selectedWeek))
     }
     params.set('tab', tab)
-    if (tab === 'managers') params.set('manager', String(managerRosterId))
+    if (tab === 'managers') {
+      params.set('manager', String(managerRosterId))
+      params.set('roster', String(managerRosterId))
+    }
     const qs = params.toString()
     window.history.replaceState(null, '', `${window.location.pathname}?${qs}`)
   }, [
@@ -293,6 +297,10 @@ export default function App() {
             })}
           </nav>
 
+          <div className="sr-only" aria-hidden="true">
+            {' '}
+          </div>
+
           {tab === 'live' && (
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
@@ -323,6 +331,7 @@ export default function App() {
               <h2 className="mb-3 text-lg font-semibold">
                 Standings
                 <span className="ml-2 text-sm font-normal text-[var(--dyn-muted)]">
+                  {' '}
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>
@@ -373,11 +382,13 @@ export default function App() {
               <h2 className="mb-3 text-lg font-semibold">
                 Waiver Wire Champion
                 <span className="ml-2 text-sm font-normal text-[var(--dyn-muted)]">
+                  {' '}
                   through Week {data.standingsThroughWeek}
                 </span>
               </h2>
               <WaiverPanel
                 board={data.waiverBoard}
+                teams={data.teams}
                 players={data.players}
                 deferralNote={data.waiverDeferralNote}
                 loadError={data.waiverLoadError}
@@ -410,6 +421,7 @@ export default function App() {
               <h2 className="mb-3 text-lg font-semibold">Trade log</h2>
               <TradeLogPanel
                 trades={data.tradeLog}
+                teams={data.teams}
                 priorSeasonsIncluded={[]}
                 priorSeasonsFailed={false}
                 playersLoading={data.playersLoading || !data.players}
@@ -421,7 +433,7 @@ export default function App() {
           {tab === 'awards' && (
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">Weekly awards</h2>
-              <WeeklyAwardsPanel weeks={data.weeklyAwards} />
+              <WeeklyAwardsPanel weeks={data.weeklyAwards} teams={data.teams} />
             </section>
           )}
           {tab === 'managers' && (

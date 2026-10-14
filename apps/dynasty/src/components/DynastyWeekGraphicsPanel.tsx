@@ -69,7 +69,15 @@ function GraphicThumb({
           className="aspect-[4/5] w-full bg-[var(--dyn-bg)] object-cover object-top"
         />
       ) : (
-        <div className="aspect-[4/5] w-full bg-[var(--dyn-bg)]" aria-hidden />
+        <div
+          className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-2 bg-[var(--dyn-surface)] px-3 text-center"
+          aria-hidden
+        >
+          <div className="h-8 w-8 animate-pulse rounded-full border-2 border-[var(--dyn-border)] border-t-[var(--dyn-accent)]" />
+          <p className="line-clamp-3 text-[10px] font-medium leading-snug text-[var(--dyn-muted)]">
+            {slide.title}
+          </p>
+        </div>
       )}
       <p className="truncate px-2 py-1.5 text-xs text-[var(--dyn-muted)]">
         {slide.title}
@@ -137,21 +145,23 @@ export function DynastyWeekGraphicsPanel({
       </p>
 
       <div className="flex flex-col gap-8">
-        {sections.map((section) => (
+        {sections.map((section, sectionIndex) => (
           <section
-            key={section.kind}
-            id={`graphics-week-${week}-${section.kind}`}
-            aria-labelledby={`graphics-heading-${week}-${section.kind}`}
+            key={`${section.kind}-${section.previewWeek ?? week}`}
+            id={`graphics-week-${week}-${section.kind}${section.previewWeek ? `-preview-${section.previewWeek}` : ''}`}
+            aria-labelledby={`graphics-heading-${week}-${section.kind}${section.previewWeek ? `-preview-${section.previewWeek}` : ''}`}
           >
             <h3
-              id={`graphics-heading-${week}-${section.kind}`}
+              id={`graphics-heading-${week}-${section.kind}${section.previewWeek ? `-preview-${section.previewWeek}` : ''}`}
               className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]"
             >
               {section.heading}
             </h3>
             {section.kind === 'matchups' && (
               <p className="mb-4 text-xs text-[var(--dyn-muted)]">
-                Neutral preview — no winner marked.
+                {section.previewWeek
+                  ? `Week ${section.previewWeek} pairing graphics — neutral preview, no winner marked.`
+                  : 'Neutral preview — no winner marked.'}
               </p>
             )}
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2" role="list">
@@ -159,9 +169,7 @@ export function DynastyWeekGraphicsPanel({
                 const indexInWeek = indexById.get(slide.id) ?? 0
                 const isDeepLinkTarget = initialSlideId === slide.id
                 const loadImmediately =
-                  isDeepLinkTarget ||
-                  (section.slides[0]?.id === slide.id &&
-                    section.kind === sections[0]?.kind)
+                  isDeepLinkTarget || sectionIndex === 0
                 return (
                   <li key={slide.id} className="flex min-w-0 flex-col gap-2">
                     <GraphicThumb

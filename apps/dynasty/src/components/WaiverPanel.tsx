@@ -6,8 +6,9 @@ import {
   MIN_ROSTERED_PICKUPS,
   pickupChampionStory,
 } from '../lib/waiverWire'
-import type { PlayersMap } from '../lib/types'
+import type { PlayersMap, TeamInfo } from '../lib/types'
 import { WaiverCumulativeChart, WaiverEfficiencyChart } from './WaiverCharts'
+import { TeamAvatar } from './TeamAvatar'
 
 const TIME = new Intl.DateTimeFormat('en-US', {
   timeZone: 'America/New_York',
@@ -51,11 +52,13 @@ function managerName(board: WaiverBoard, rosterId: number): string {
 
 export function WaiverPanel({
   board: sourceBoard,
+  teams,
   players,
   deferralNote,
   loadError,
 }: {
   board: WaiverBoard
+  teams: Map<number, TeamInfo>
   players: PlayersMap | null
   deferralNote: string | null
   loadError: string | null
@@ -96,13 +99,14 @@ export function WaiverPanel({
 
       <WeeklyAddsStrip
         board={board}
+        teams={teams}
         name={name}
         managerName={(id) => managerName(board, id)}
       />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <ChampionCard board={board} />
-        <CellarCard board={board} />
+        <ChampionCard board={board} teams={teams} />
+        <CellarCard board={board} teams={teams} />
         <PickupCard board={board} name={name} managerName={(id) => managerName(board, id)} />
         <DropCard board={board} name={name} managerName={(id) => managerName(board, id)} />
       </div>
@@ -112,7 +116,7 @@ export function WaiverPanel({
           Week {board.selectedWeek} on the wire
         </h3>
         {board.selectedWeekComplete ? (
-          <WeeklyBoard board={board} />
+          <WeeklyBoard board={board} teams={teams} />
         ) : (
           <p className="text-sm text-[var(--dyn-muted)]">
             Week {board.selectedWeek} is still scoring. Weekly started points, Pickup of
@@ -158,7 +162,7 @@ export function WaiverPanel({
             />
           </figure>
         </div>
-        <SeasonBoard board={board} />
+        <SeasonBoard board={board} teams={teams} />
       </section>
 
       <section>
@@ -234,10 +238,12 @@ export function WaiverPanel({
 
 function WeeklyAddsStrip({
   board,
+  teams,
   name,
   managerName,
 }: {
   board: WaiverBoard
+  teams: Map<number, TeamInfo>
   name: (id: string) => string
   managerName: (id: number) => string
 }) {
@@ -265,7 +271,12 @@ function WeeklyAddsStrip({
             key={m.id}
             className="min-w-[9.5rem] shrink-0 rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2 text-xs"
           >
-            <p className="font-medium">{managerName(m.rosterId)}</p>
+            <div className="flex items-center gap-2">
+              {teams.get(m.rosterId) && (
+                <TeamAvatar team={teams.get(m.rosterId)!} size="sm" />
+              )}
+              <p className="font-medium">{managerName(m.rosterId)}</p>
+            </div>
             <p className="mt-0.5 text-[var(--dyn-muted)]">
               +{m.adds.map(name).join(', ')}
             </p>
@@ -285,8 +296,15 @@ function WeeklyAddsStrip({
   )
 }
 
-function ChampionCard({ board }: { board: WaiverBoard }) {
+function ChampionCard({
+  board,
+  teams,
+}: {
+  board: WaiverBoard
+  teams: Map<number, TeamInfo>
+}) {
   const c = board.champion
+  const team = c ? teams.get(c.rosterId) : undefined
   return (
     <article className="rounded-xl border border-[var(--dyn-accent)] bg-[var(--dyn-surface)] p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--dyn-accent)]">
@@ -294,6 +312,11 @@ function ChampionCard({ board }: { board: WaiverBoard }) {
       </p>
       {c ? (
         <>
+          {team && (
+            <div className="mt-2">
+              <TeamAvatar team={team} size="md" />
+            </div>
+          )}
           <h3 className="mt-1 font-['Anton'] text-3xl uppercase leading-none">
             {c.displayName}
           </h3>
@@ -315,8 +338,15 @@ function ChampionCard({ board }: { board: WaiverBoard }) {
   )
 }
 
-function CellarCard({ board }: { board: WaiverBoard }) {
+function CellarCard({
+  board,
+  teams,
+}: {
+  board: WaiverBoard
+  teams: Map<number, TeamInfo>
+}) {
   const c = board.cellar
+  const team = c ? teams.get(c.rosterId) : undefined
   return (
     <article className="rounded-xl border border-red-900/50 bg-red-950/30 p-4">
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-red-200">
@@ -324,6 +354,11 @@ function CellarCard({ board }: { board: WaiverBoard }) {
       </p>
       {c ? (
         <>
+          {team && (
+            <div className="mt-2">
+              <TeamAvatar team={team} size="md" />
+            </div>
+          )}
           <h3 className="mt-1 font-['Anton'] text-3xl uppercase leading-none text-red-100">
             {c.displayName}
           </h3>
@@ -421,7 +456,13 @@ function DropCard({
   )
 }
 
-function WeeklyBoard({ board }: { board: WaiverBoard }) {
+function WeeklyBoard({
+  board,
+  teams,
+}: {
+  board: WaiverBoard
+  teams: Map<number, TeamInfo>
+}) {
   return (
     <>
       <div className="space-y-2 sm:hidden">
@@ -431,8 +472,11 @@ function WeeklyBoard({ board }: { board: WaiverBoard }) {
             className="rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2.5"
           >
             <div className="flex items-baseline justify-between gap-3">
-              <p className="font-medium">
-                <span className="mr-2 text-[var(--dyn-accent)]">{i + 1}</span>
+              <p className="flex items-center gap-2 font-medium">
+                <span className="text-[var(--dyn-accent)]">{i + 1}</span>
+                {teams.get(r.rosterId) && (
+                  <TeamAvatar team={teams.get(r.rosterId)!} size="sm" />
+                )}
                 {r.displayName}
               </p>
               <p className="tabular-nums font-semibold">{pts(r.weeklyNet)}</p>
@@ -459,8 +503,15 @@ function WeeklyBoard({ board }: { board: WaiverBoard }) {
               <tr key={r.rosterId} className="border-t border-[var(--dyn-border)] odd:bg-[#0d1319]">
                 <td className="px-3 py-2.5 font-semibold text-[var(--dyn-accent)]">{i + 1}</td>
                 <td className="px-3 py-2.5">
-                  <div className="font-medium">{r.displayName}</div>
-                  <div className="text-xs text-[var(--dyn-muted)]">{r.teamName}</div>
+                  <div className="flex items-center gap-2">
+                    {teams.get(r.rosterId) && (
+                      <TeamAvatar team={teams.get(r.rosterId)!} size="sm" />
+                    )}
+                    <div>
+                      <div className="font-medium">{r.displayName}</div>
+                      <div className="text-xs text-[var(--dyn-muted)]">{r.teamName}</div>
+                    </div>
+                  </div>
                 </td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{pts(r.weeklyStarted)}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{pts(r.weeklyRegret)}</td>
@@ -474,12 +525,18 @@ function WeeklyBoard({ board }: { board: WaiverBoard }) {
   )
 }
 
-function SeasonBoard({ board }: { board: WaiverBoard }) {
+function SeasonBoard({
+  board,
+  teams,
+}: {
+  board: WaiverBoard
+  teams: Map<number, TeamInfo>
+}) {
   return (
     <>
       <div className="space-y-2 sm:hidden">
         {board.managers.map((r) => (
-          <SeasonCard key={r.rosterId} row={r} />
+          <SeasonCard key={r.rosterId} row={r} teams={teams} />
         ))}
       </div>
       <div className="hidden overflow-x-auto rounded-xl border border-[var(--dyn-border)] sm:block">
@@ -519,15 +576,22 @@ function SeasonBoard({ board }: { board: WaiverBoard }) {
                   {r.poolRank ?? '—'}
                 </td>
                 <td className="px-3 py-2.5">
-                  <div className="font-medium">
-                    {r.displayName}{' '}
-                    {!r.eligible && (
-                      <span className="ml-1 rounded bg-[var(--dyn-border)] px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--dyn-muted)]">
-                        Small sample
-                      </span>
+                  <div className="flex items-center gap-2">
+                    {teams.get(r.rosterId) && (
+                      <TeamAvatar team={teams.get(r.rosterId)!} size="sm" />
                     )}
+                    <div>
+                      <div className="font-medium">
+                        {r.displayName}{' '}
+                        {!r.eligible && (
+                          <span className="ml-1 rounded bg-[var(--dyn-border)] px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--dyn-muted)]">
+                            Small sample
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-xs text-[var(--dyn-muted)]">{r.teamName}</div>
+                    </div>
                   </div>
-                  <div className="text-xs text-[var(--dyn-muted)]">{r.teamName}</div>
                 </td>
                 <td className="px-3 py-2.5 text-right tabular-nums font-semibold">{pts(r.wes)}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{pts(r.startedPoints)}</td>
@@ -551,11 +615,20 @@ function SeasonBoard({ board }: { board: WaiverBoard }) {
   )
 }
 
-function SeasonCard({ row }: { row: ManagerWaiverRow }) {
+function SeasonCard({
+  row,
+  teams,
+}: {
+  row: ManagerWaiverRow
+  teams: Map<number, TeamInfo>
+}) {
+  const team = teams.get(row.rosterId)
   return (
     <article className="rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2.5">
       <div className="flex items-start justify-between gap-3">
-        <div>
+        <div className="flex gap-2">
+          {team && <TeamAvatar team={team} size="sm" />}
+          <div>
           <p className="font-medium">
             {row.poolRank != null && (
               <span className="mr-2 text-[var(--dyn-accent)]">{row.poolRank}</span>
@@ -568,6 +641,7 @@ function SeasonCard({ row }: { row: ManagerWaiverRow }) {
               Small sample
             </p>
           )}
+          </div>
         </div>
         <p className="font-['Anton'] text-2xl tabular-nums text-[var(--dyn-accent)]">{pts(row.wes)}</p>
       </div>

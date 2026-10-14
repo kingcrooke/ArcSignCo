@@ -1,11 +1,33 @@
-import type { WeeklyAwardsWeek } from '../lib/weeklyAwards'
+import type { WeeklyAwardWinner, WeeklyAwardsWeek } from '../lib/weeklyAwards'
+import type { TeamInfo } from '../lib/types'
+import { TeamAvatar } from './TeamAvatar'
 
-function cell(w: { managerName: string; detail: string } | null) {
-  if (!w) return '—'
-  return `${w.managerName} (${w.detail})`
+function AwardCell({
+  winner,
+  teams,
+}: {
+  winner: WeeklyAwardWinner | null
+  teams: Map<number, TeamInfo>
+}) {
+  if (!winner) return <>—</>
+  const team = teams.get(winner.rosterId)
+  return (
+    <span className="inline-flex items-center gap-2">
+      {team && <TeamAvatar team={team} size="sm" />}
+      <span>
+        {winner.managerName} ({winner.detail})
+      </span>
+    </span>
+  )
 }
 
-export function WeeklyAwardsPanel({ weeks }: { weeks: WeeklyAwardsWeek[] }) {
+export function WeeklyAwardsPanel({
+  weeks,
+  teams,
+}: {
+  weeks: WeeklyAwardsWeek[]
+  teams: Map<number, TeamInfo>
+}) {
   if (!weeks.length) {
     return (
       <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
@@ -30,10 +52,18 @@ export function WeeklyAwardsPanel({ weeks }: { weeks: WeeklyAwardsWeek[] }) {
           {weeks.map((w) => (
             <tr key={w.week} className="border-t border-[var(--dyn-border)]">
               <td className="px-3 py-2 font-semibold tabular-nums">{w.week}</td>
-              <td className="px-3 py-2">{cell(w.highScore)}</td>
-              <td className="px-3 py-2">{cell(w.lowScore)}</td>
-              <td className="px-3 py-2">{cell(w.closestWin)}</td>
-              <td className="px-3 py-2">{cell(w.mostBench)}</td>
+              <td className="px-3 py-2">
+                <AwardCell winner={w.highScore} teams={teams} />
+              </td>
+              <td className="px-3 py-2">
+                <AwardCell winner={w.lowScore} teams={teams} />
+              </td>
+              <td className="px-3 py-2">
+                <AwardCell winner={w.closestWin} teams={teams} />
+              </td>
+              <td className="px-3 py-2">
+                <AwardCell winner={w.mostBench} teams={teams} />
+              </td>
             </tr>
           ))}
         </tbody>

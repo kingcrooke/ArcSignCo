@@ -243,6 +243,7 @@ export function DynastyManagerPanel({
         <h3 className="mb-2 text-lg font-semibold">Trade history</h3>
         <TradeLogPanel
           trades={managerTrades}
+          teams={teams}
           priorSeasonsIncluded={[]}
           priorSeasonsFailed={tradePriorSeasonsFailed}
           playersLoading={playersLoading}

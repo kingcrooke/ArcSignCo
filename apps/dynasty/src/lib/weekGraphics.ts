@@ -7,6 +7,8 @@ export type WeekGraphicsSection = {
   kind: GraphicsSectionKind
   heading: string
   slides: PublishedSlide[]
+  /** When set, this section previews a future NFL week (e.g. Week 6 on the Week 5 page). */
+  previewWeek?: number
 }
 
 const HELD = new Set(HELD_BACK_SLIDES.map((s) => s.id))
@@ -44,7 +46,12 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
 
   if (week === 5) {
     sections.push({ kind: 'results', heading: 'Results', slides: publish(RESULTS_W5) })
-    sections.push({ kind: 'matchups', heading: 'Matchups', slides: publish(VS_W6) })
+    sections.push({
+      kind: 'matchups',
+      heading: 'Week 6 matchup previews',
+      previewWeek: 6,
+      slides: publish(VS_W6),
+    })
   } else if (week === 6) {
     sections.push({ kind: 'matchups', heading: 'Matchups', slides: publish(VS_W6) })
   }

@@ -23,6 +23,11 @@ export function useLiveWeekPolling(
 
   useEffect(() => {
     setMatchups(initial)
+    if (initial?.length) {
+      setLastUpdated(new Date())
+    } else {
+      setLastUpdated(null)
+    }
   }, [week, initial])
 
   const pull = useCallback(async () => {
