@@ -39,6 +39,7 @@ function setLanguage(lang) {
   const creditEl = document.getElementById('music-credit');
   if (creditEl && site.music && site.music.credit) {
     creditEl.textContent = site.music.credit[lang] || site.music.credit.es;
+    creditEl.setAttribute('lang', lang);
   }
   updateMusicButtonLabel();
   try {
@@ -57,6 +58,8 @@ function updateMusicButtonLabel() {
   const playing = !audio.paused;
   const base = dict['music.label'] || 'Música';
   btn.textContent = playing ? `${base} ▮▮` : `${base} ▶`;
+  const ariaKey = playing ? 'music.aria.pause' : 'music.aria.play';
+  btn.setAttribute('aria-label', dict[ariaKey] || (playing ? 'Pause music' : 'Play music'));
 }
 
 function initForm() {

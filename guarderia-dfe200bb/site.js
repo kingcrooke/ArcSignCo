@@ -5,7 +5,7 @@ window.GUARDERIA_SITE = {
   descriptor: { es: 'Guardería Cristiana', en: 'Christian Day Care' },
   verse: {
     es: 'Isaías 40:11 — «en su brazo llevará los corderos»',
-    en: 'Isaiah 40:11 — “He will carry the lambs in his arms”',
+    en: 'Isaiah 40:11 — “He shall gather the lambs with his arm, and carry them in his bosom”',
   },
   music: {
     src: '/guarderia-dfe200bb/audio/music.mp3',
@@ -28,9 +28,10 @@ window.GUARDERIA_COPY_OVERRIDES = {
   },
   en: {
     'meta.title': 'Corderitos — Christian Day Care (draft)',
-    'legal.name': '[NOMBRE LEGAL — p. ej. Corderitos Family Day Care LLC, PENDIENTE]',
-    'hero.verse.quote': '“He will carry the lambs in his arms”',
-    'hero.verse.cite': 'Isaiah 40:11 (Reina-Valera 1960)',
+    'legal.name': '[LEGAL NAME — e.g. Corderitos Family Day Care LLC, PENDING]',
+    'hero.verse.quote':
+      '“He shall gather the lambs with his arm, and carry them in his bosom”',
+    'hero.verse.cite': 'Isaiah 40:11 (King James Version)',
     'footer.provider': 'Yodernis Crooke — Corderitos Christian Day Care (draft)',
   },
 };
