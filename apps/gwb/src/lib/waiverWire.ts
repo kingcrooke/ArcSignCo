@@ -142,7 +142,8 @@ export interface ManagerWaiverRow {
   benchPoints: number
   pointsPerPickup: number | null
   hitHits: number
-  hitWeeks: number
+  /** Pickups with at least one started week at or above HIT_LINE. */
+  hitPickups: number
   hitRate: number | null
   netWaiverPoints: number
   dropRegret: number
@@ -459,8 +460,8 @@ export function computeWaiverBoard(input: {
     ).length
     const startedPoints = windowAdds.reduce((s, a) => s + a.started, 0)
     const benchPoints = windowAdds.reduce((s, a) => s + a.bench, 0)
-    const hitHits = windowAdds.reduce((s, a) => s + a.hit10, 0)
-    const hitWeeks = windowAdds.reduce((s, a) => s + a.startWeeks, 0)
+    const hitPickups = windowAdds.filter((a) => a.hit10 > 0).length
+    const hitHits = hitPickups
     const myDrops = drops.filter((d) => d.rosterId === rosterId)
     const dropRegret = myDrops.reduce((s, d) => {
       let n = 0
@@ -508,8 +509,8 @@ export function computeWaiverBoard(input: {
       benchPoints,
       pointsPerPickup: windowAdds.length ? startedPoints / windowAdds.length : null,
       hitHits,
-      hitWeeks,
-      hitRate: hitWeeks ? hitHits / hitWeeks : null,
+      hitPickups,
+      hitRate: windowAdds.length ? hitPickups / windowAdds.length : null,
       netWaiverPoints: net,
       dropRegret,
       failedClaims: failedByRoster.get(rosterId) ?? 0,

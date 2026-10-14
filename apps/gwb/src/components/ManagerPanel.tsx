@@ -87,6 +87,7 @@ export function ManagerPanel({
   leagueSeasonSummaries,
   currentSeason,
   tradePriorSeasonsFailed,
+  tradeHistoryLoading = false,
 }: {
   rosterId: number
   onRosterChange: (id: number) => void
@@ -99,6 +100,7 @@ export function ManagerPanel({
   leagueSeasonSummaries: LeagueSeasonSummary[]
   currentSeason: string
   tradePriorSeasonsFailed: boolean
+  tradeHistoryLoading?: boolean
 }) {
   const rosterIds = useMemo(
     () => [...teams.keys()].sort((a, b) => a - b),
@@ -413,6 +415,11 @@ export function ManagerPanel({
         <p className="mb-3 text-sm text-[var(--gwb-muted)]">
           All-time receipts from Sleeper, tagged by season and NFL week.
         </p>
+        {tradeHistoryLoading && (
+          <p className="mb-2 text-sm text-[var(--gwb-muted)]">
+            Loading trade history from prior seasons…
+          </p>
+        )}
         {tradePriorSeasonsFailed && (
           <p className="mb-2 text-sm text-amber-400">
             Some prior-season trade data is unavailable.

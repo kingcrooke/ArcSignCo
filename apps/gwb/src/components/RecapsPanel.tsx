@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useLiveWeekPolling } from '../hooks/useLiveWeekPolling'
 import { allPlayLine } from '../lib/allPlay'
 import { groupMatchupPairs, teamLabel } from '../lib/matchupBoard'
-import { buildWeekRecaps, weekHasMatchups } from '../lib/recaps'
+import { buildWeekRecaps, isMatchupNotStarted, weekHasMatchups } from '../lib/recaps'
 import { buildWeekReceipt } from '../lib/receiptOfWeek'
 import { computeStandingsThroughWeek } from '../lib/standings'
 import type {
@@ -81,11 +81,12 @@ function LiveScoresFallback({
         const awayTeam = teams.get(away.roster_id)
         const homeName = homeTeam?.teamName ?? teamLabel(home.roster_id, teams)
         const awayName = awayTeam?.teamName ?? teamLabel(away.roster_id, teams)
-        const leader =
-          home.points >= away.points
-            ? `${homeName} is leading ${awayName}`
-            : `${awayName} is leading ${homeName}`
         const margin = Math.abs(home.points - away.points).toFixed(1)
+        const statusLine = isMatchupNotStarted(home.points, away.points)
+          ? 'Not started'
+          : home.points >= away.points
+            ? `${homeName} is leading ${awayName} by ${margin} points.`
+            : `${awayName} is leading ${homeName} by ${margin} points.`
         return (
           <article
             key={matchupId}
@@ -105,9 +106,7 @@ function LiveScoresFallback({
                 {away.points.toFixed(1)}
               </span>
             </h3>
-            <p className="mt-2 text-sm text-[var(--gwb-muted)]">
-              {leader} by {margin} points.
-            </p>
+            <p className="mt-2 text-sm text-[var(--gwb-muted)]">{statusLine}</p>
           </article>
         )
       })}
@@ -171,6 +170,7 @@ export function RecapsPanel({
       rosterPositions: league.roster_positions,
       preWeekStandings,
       isWeekFinal: false,
+      week,
     })
   }, [
     isLive,

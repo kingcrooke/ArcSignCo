@@ -301,7 +301,12 @@ export function FrankieZonePanel({
       {view.isEmpty ? (
         <div className="rounded-xl border border-dashed border-[var(--gwb-border)] p-8 text-center">
           <p className="font-['Bebas Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]">
-            ZONE EMPTY · FRANKIE&apos;S 0-{FRANKIE_ZONE_RECORD.lossesWithoutWin} RECORD STANDS
+            ZONE EMPTY
+          </p>
+          <p className="mt-2 text-sm text-[var(--gwb-muted)]">
+            {view.frankieRecordLabel
+              ? `Frankie is ${view.frankieRecordLabel} this season. The 0-${FRANKIE_ZONE_RECORD.lossesWithoutWin} mark from 2015 still stands in league lore.`
+              : `Frankie's 0-${FRANKIE_ZONE_RECORD.lossesWithoutWin} record from 2015 still stands in league lore.`}
           </p>
         </div>
       ) : (
