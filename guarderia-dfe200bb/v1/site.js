@@ -5,7 +5,7 @@ window.GUARDERIA_SITE = {
   descriptor: { es: 'Guardería Cristiana', en: 'Christian Day Care' },
   verse: {
     es: 'Salmo 119:105 — «Lámpara es a mis pies tu palabra»',
-    en: 'Psalm 119:105 — “Your word is a lamp to my feet”',
+    en: 'Psalm 119:105 — “Thy word is a lamp unto my feet, and a light unto my path.”',
   },
   music: {
     src: '/guarderia-dfe200bb/v1/audio/music.mp3',
@@ -28,9 +28,9 @@ window.GUARDERIA_COPY_OVERRIDES = {
   },
   en: {
     'meta.title': 'Pasitos de Fe — Christian Day Care (draft v1)',
-    'legal.name': '[NOMBRE LEGAL — p. ej. Pasitos de Fe Family Day Care LLC, PENDIENTE]',
-    'hero.verse.quote': '“Your word is a lamp to my feet and a light to my path.”',
-    'hero.verse.cite': 'Psalm 119:105 (Reina-Valera 1960)',
+    'legal.name': '[LEGAL NAME — e.g. Pasitos de Fe Family Day Care LLC, PENDING]',
+    'hero.verse.quote': '“Thy word is a lamp unto my feet, and a light unto my path.”',
+    'hero.verse.cite': 'Psalm 119:105 (King James Version)',
     'footer.provider': 'Yodernis Crooke — Pasitos de Fe Christian Day Care (draft v1)',
   },
 };

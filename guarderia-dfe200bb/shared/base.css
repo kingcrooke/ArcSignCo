@@ -601,8 +601,9 @@ main {
 }
 
 .mobile-bar .btn {
-  padding: 0.55rem 0.35rem;
-  font-size: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.35rem;
+  font-size: 0.8125rem;
 }
 
 .official-links {

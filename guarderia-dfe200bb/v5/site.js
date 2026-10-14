@@ -5,7 +5,7 @@ window.GUARDERIA_SITE = {
   descriptor: { es: 'Guardería Cristiana', en: 'Christian Day Care' },
   verse: {
     es: 'Mateo 5:14 — «Vosotros sois la luz del mundo»',
-    en: 'Matthew 5:14 — “You are the light of the world”',
+    en: 'Matthew 5:14 — “Ye are the light of the world”',
   },
   music: {
     src: '/guarderia-dfe200bb/v5/audio/music.mp3',
@@ -28,9 +28,9 @@ window.GUARDERIA_COPY_OVERRIDES = {
   },
   en: {
     'meta.title': 'Luz del Hogar — Christian Day Care (draft v5)',
-    'legal.name': '[NOMBRE LEGAL — p. ej. Luz del Hogar Family Day Care LLC, PENDIENTE]',
-    'hero.verse.quote': '“You are the light of the world. A city set on a hill cannot be hidden.”',
-    'hero.verse.cite': 'Matthew 5:14 (Reina-Valera 1960)',
+    'legal.name': '[LEGAL NAME — e.g. Luz del Hogar Family Day Care LLC, PENDING]',
+    'hero.verse.quote': '“Ye are the light of the world. A city that is set on an hill cannot be hid.”',
+    'hero.verse.cite': 'Matthew 5:14 (King James Version)',
     'footer.provider': 'Yodernis Crooke — Luz del Hogar Christian Day Care (draft v5)',
   },
 };

@@ -69,7 +69,7 @@ window.GUARDERIA_COPY = {
       'Creemos en un Jesús que acoge a los niños. Compartimos historias de la Biblia, agradecemos antes de comer y modelamos perdón, gratitud y servicio — sin presionar a ninguna familia.',
     'faith.p2':
       'Celebramos nuestra herencia dominicana: merengue suave, cuentos en español, sancocho en días especiales, Día de Reyes y el orgullo de criar bilingües en Nueva York.',
-    'safety.title': 'Seguridad y licencia',
+    'safety.title': 'Seguridad y registro',
     'safety.p1':
       'Programa Family Day Care de NYS OCFS (hasta ~6 niños). El registro está en proceso; no afirmamos estar registrados hasta que el número oficial esté publicado.',
     'safety.reg': 'Registro OCFS',
@@ -88,6 +88,8 @@ window.GUARDERIA_COPY = {
     'gallery.title': 'Galería',
     'gallery.note':
       'Solo espacios del hogar por ahora. No publicamos rostros de niños sin consentimiento firmado de los padres.',
+    'testimonials.title': '[TESTIMONIOS]',
+    'testimonials.body': '[TESTIMONIOS]',
     'faq.title': 'Preguntas frecuentes',
     'faq.q1': '¿Cómo solicito una visita?',
     'faq.a1':
@@ -105,6 +107,10 @@ window.GUARDERIA_COPY = {
       'Lista personalizada al inscribirse: pañales, cambio de ropa, biberones etiquetados, etc.',
     'contact.title': 'Contacto',
     'contact.intro': 'Cuéntenos sobre su familia. Este formulario es solo borrador y no envía datos todavía.',
+    'contact.placeholder.email': '[CORREO]',
+    'contact.placeholder.phone': '[TELÉFONO]',
+    'contact.placeholder.whatsapp': '[WHATSAPP]',
+    'contact.placeholder.address': '[DIRECCIÓN EXACTA — se comparte al agendar visita]',
     'form.name': 'Nombre del padre/madre',
     'form.age': 'Edad del niño/a',
     'form.start': 'Fecha deseada de inicio',
@@ -129,12 +135,14 @@ window.GUARDERIA_COPY = {
     'mobile.call': 'Llamar',
     'mobile.visit': 'Visita',
     'music.label': 'Música',
+    'music.aria.play': 'Reproducir música',
+    'music.aria.pause': 'Pausar música',
   },
   en: {
     'meta.title': 'Corderitos — Christian Day Care (draft)',
     'draft.banner': 'Private draft — do not publish',
     'brand.descriptor': 'Christian Day Care',
-    'legal.name': '[NOMBRE LEGAL — p. ej. Corderitos Family Day Care LLC, PENDIENTE]',
+    'legal.name': '[LEGAL NAME — e.g. Corderitos Family Day Care LLC, PENDING]',
     'nav.hero': 'Home',
     'nav.about': 'About',
     'nav.program': 'Program',
@@ -162,8 +170,9 @@ window.GUARDERIA_COPY = {
     'hero.cta.wa': 'WhatsApp',
     'hero.cta.call': 'Call',
     'hero.cta.visit': 'Request a visit',
-    'hero.verse.quote': '“He will carry the lambs in his arms”',
-    'hero.verse.cite': 'Isaiah 40:11 (Reina-Valera 1960)',
+    'hero.verse.quote':
+      '“He shall gather the lambs with his arm, and carry them in his bosom”',
+    'hero.verse.cite': 'Isaiah 40:11 (King James Version)',
     'pillar.1.title': 'Safe home',
     'pillar.1.body':
       'OCFS registration in progress. Up to ~6 children in a family setting with clear routines and close supervision.',
@@ -200,7 +209,7 @@ window.GUARDERIA_COPY = {
       'We believe in a Jesus who welcomes children. We share Bible stories, give thanks before meals, and model forgiveness and gratitude — without pressuring any family.',
     'faith.p2':
       'We celebrate Dominican heritage: gentle merengue, stories in Spanish, special-day meals, Three Kings Day, and raising bilingual children in New York.',
-    'safety.title': 'Safety & licensing',
+    'safety.title': 'Safety & registration',
     'safety.p1':
       'NYS OCFS Family Day Care program (up to ~6 children). Registration is in progress; we do not claim to be registered until an official number is published.',
     'safety.reg': 'OCFS registration',
@@ -219,10 +228,12 @@ window.GUARDERIA_COPY = {
     'gallery.title': 'Gallery',
     'gallery.note':
       'Home spaces only for now. We do not publish identifiable photos of children without signed parent consent.',
+    'testimonials.title': '[TESTIMONIALS]',
+    'testimonials.body': '[TESTIMONIALS]',
     'faq.title': 'Frequently asked questions',
     'faq.q1': 'How do I request a visit?',
     'faq.a1':
-      'Message us on WhatsApp or call [TELÉFONO]. The exact address is shared when the visit is confirmed: [DIRECCIÓN EXACTA — se comparte al agendar visita].',
+      'Message us on WhatsApp or call [PHONE]. The exact address is shared when the visit is confirmed: [EXACT ADDRESS — shared when you schedule a visit].',
     'faq.q2': 'What ages do you serve?',
     'faq.a2': 'Approximately 6 weeks through 5 years, up to 6 children total.',
     'faq.q3': 'Is this a Christian program?',
@@ -235,6 +246,10 @@ window.GUARDERIA_COPY = {
     'faq.a5': 'A personalized list at enrollment: diapers, spare clothes, labeled bottles, etc.',
     'contact.title': 'Contact',
     'contact.intro': 'Tell us about your family. This form is draft-only and does not submit data yet.',
+    'contact.placeholder.email': '[EMAIL]',
+    'contact.placeholder.phone': '[PHONE]',
+    'contact.placeholder.whatsapp': '[WHATSAPP]',
+    'contact.placeholder.address': '[EXACT ADDRESS — shared when you schedule a visit]',
     'form.name': 'Parent name',
     'form.age': "Child's age",
     'form.start': 'Desired start date',
@@ -259,5 +274,7 @@ window.GUARDERIA_COPY = {
     'mobile.call': 'Call',
     'mobile.visit': 'Visit',
     'music.label': 'Music',
+    'music.aria.play': 'Play music',
+    'music.aria.pause': 'Pause music',
   },
 };
