@@ -33,6 +33,7 @@ describe('buildWeekRecaps', () => {
     const teams = buildTeamMap(users, rosters)
     const standings = computeStandings(rosters, teams)
     const recaps = buildWeekRecaps(matchups, teams, players, {
+      week: 1,
       rosterPositions: load('league.json').roster_positions,
       preWeekStandings: standings,
       isWeekFinal: true,

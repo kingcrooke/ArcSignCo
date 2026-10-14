@@ -103,6 +103,8 @@ export type FrankieZoneView = {
   collisions: ZoneCollision[]
   moreCollisionsCount: number
   isEmpty: boolean
+  /** Frankie's live W-L when the zone has no winless residents. */
+  frankieRecordLabel: string | null
   throughWeek: number
 }
 
@@ -628,6 +630,16 @@ export function computeFrankieZoneView(input: {
   const collisionCurrentWeek = hasPartialWeek
     ? (outcomeContext.partialWeek ?? selectedWeek)
     : completedThroughWeek
+  const frankieRosterId = [...teams.values()].find(
+    (t) => t.userId === FRANKIE_ZONE_RECORD.holderUserId,
+  )?.rosterId
+  const frankieStanding = frankieRosterId
+    ? standings.find((s) => s.rosterId === frankieRosterId)
+    : undefined
+  const frankieRecordLabel = frankieStanding
+    ? recordLabel(frankieStanding)
+    : null
+
   const residentIds = new Set(residents.map((r) => r.rosterId))
 
   const residentViews: ZoneResident[] = residents.map((row) => ({
@@ -678,6 +690,7 @@ export function computeFrankieZoneView(input: {
     collisions,
     moreCollisionsCount: moreCount,
     isEmpty: residents.length === 0,
+    frankieRecordLabel,
     throughWeek: hasPartialWeek
       ? (outcomeContext.partialWeek ?? throughWeek)
       : throughWeek,

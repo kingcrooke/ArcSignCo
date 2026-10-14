@@ -1,5 +1,6 @@
 import { biggestBenchMiss } from './benchMiss'
 import { parsePostedAt } from './datetime'
+import { chooseMatchupOfTheWeek } from './matchupOfTheWeek'
 import type {
   MatchupRecap,
   PlayersMap,
@@ -68,6 +69,10 @@ function displayMargin(aPts: number, bPts: number): string {
   return Math.abs(a - b).toFixed(1)
 }
 
+export function isMatchupNotStarted(aPts: number, bPts: number): boolean {
+  return aPts === 0 && bPts === 0
+}
+
 function buildNarrative(
   aName: string,
   bName: string,
@@ -80,6 +85,7 @@ function buildNarrative(
   const trailer = aPts >= bPts ? bName : aName
   const margin = displayMargin(aPts, bPts)
   if (isLive) {
+    if (isMatchupNotStarted(aPts, bPts)) return 'Not started'
     return `${leader} is leading ${trailer} by ${margin} points.`
   }
   const tagLine = tags.length ? ` ${tags.join(' · ')}.` : ''
@@ -96,9 +102,9 @@ export function buildWeekRecaps(
   matchups: SleeperMatchup[],
   teams: Map<number, TeamInfo>,
   players: PlayersMap,
-  options: BuildWeekRecapsOptions,
+  options: BuildWeekRecapsOptions & { week?: number },
 ): MatchupRecap[] {
-  const { rosterPositions, preWeekStandings, isWeekFinal } = options
+  const { rosterPositions, preWeekStandings, isWeekFinal, week = 0 } = options
   const byMatch = new Map<number, SleeperMatchup[]>()
   for (const m of matchups) {
     const list = byMatch.get(m.matchup_id) ?? []
@@ -169,10 +175,9 @@ export function buildWeekRecaps(
   }
 
   if (recaps.length) {
-    const motw = recaps.reduce((best, r) =>
-      r.margin > best.margin ? r : best,
-    )
-    motw.isMatchupOfTheWeek = true
+    const motwId = chooseMatchupOfTheWeek(recaps, preWeekStandings, week)
+    const motw = recaps.find((r) => r.matchupId === motwId)
+    if (motw) motw.isMatchupOfTheWeek = true
   }
 
   return recaps.sort((x, y) => x.matchupId - y.matchupId)

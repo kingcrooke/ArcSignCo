@@ -19,10 +19,11 @@ import {
   fetchMatchupsForWeekRange,
   fetchNflState,
   fetchRosters,
-  fetchTradeHistoryChain,
   fetchTransactionsThroughWeek,
   fetchUsers,
 } from '../lib/sleeperApi'
+import { loadTradeHistoryChain } from '../lib/tradeHistoryCache'
+import type { LeagueTradeBundle } from '../lib/sleeperApi'
 import { computeWeeklyAwards, type WeeklyAwardsWeek } from '../lib/weeklyAwards'
 import {
   mulliganStatusThroughWeek as ledgerMulliganStatusThroughWeek,
@@ -87,6 +88,8 @@ export interface LeagueData {
   tradeLog: TradeLogEntry[]
   tradePriorSeasonsIncluded: string[]
   tradePriorSeasonsFailed: boolean
+  tradeHistoryLoading: boolean
+  ensureTradeHistory: () => void
   leagueSeasonSummaries: LeagueSeasonSummary[]
   weeklyAwards: WeeklyAwardsWeek[]
   playoffOdds: PlayoffOddsRow[]
@@ -113,9 +116,11 @@ export function useLeagueData(): {
     seasonStandings: StandingRow[]
     transactions: SleeperTransaction[]
     waiverLoadError: string | null
-    tradeBundles: Awaited<ReturnType<typeof fetchTradeHistoryChain>>['bundles']
+    tradeBundles: LeagueTradeBundle[]
     tradePriorSeasonsFailed: boolean
+    tradeHistoryLoaded: boolean
   } | null>(null)
+  const [tradeHistoryLoading, setTradeHistoryLoading] = useState(false)
   const [selectedWeek, setSelectedWeek] = useState(1)
 
   const updateWeekMatchups = useCallback((week: number, rows: SleeperMatchup[]) => {
@@ -143,8 +148,7 @@ export function useLeagueData(): {
       const regLast = regularSeasonLastWeek(
         league.settings.playoff_week_start ?? 15,
       )
-      const [matchupsScored, futureMatchups, txResult, tradeChain] =
-        await Promise.all([
+      const [matchupsScored, futureMatchups, txResult] = await Promise.all([
           fetchAllMatchupsThroughWeek(through),
           through < regLast
             ? fetchMatchupsForWeekRange(through + 1, regLast)
@@ -160,7 +164,6 @@ export function useLeagueData(): {
                 e instanceof Error ? e.message : 'Waiver moves did not load',
             }),
           ),
-          fetchTradeHistoryChain(league.league_id),
         ])
       const matchupsByWeek = new Map(matchupsScored)
       for (const [w, rows] of futureMatchups) {
@@ -181,8 +184,9 @@ export function useLeagueData(): {
         seasonStandings,
         transactions: txResult.transactions,
         waiverLoadError: txResult.waiverLoadError,
-        tradeBundles: tradeChain.bundles,
-        tradePriorSeasonsFailed: tradeChain.priorSeasonsFailed,
+        tradeBundles: [],
+        tradePriorSeasonsFailed: false,
+        tradeHistoryLoaded: false,
       })
       setState('ready')
     } catch (e) {
@@ -194,6 +198,36 @@ export function useLeagueData(): {
   useEffect(() => {
     load()
   }, [load])
+
+  const ensureTradeHistory = useCallback(() => {
+    if (!base || base.tradeHistoryLoaded || tradeHistoryLoading) return
+    setTradeHistoryLoading(true)
+    void loadTradeHistoryChain(base.league.league_id)
+      .then(({ bundles, priorSeasonsFailed }) => {
+        setBase((prev) =>
+          prev
+            ? {
+                ...prev,
+                tradeBundles: bundles,
+                tradePriorSeasonsFailed: priorSeasonsFailed,
+                tradeHistoryLoaded: true,
+              }
+            : prev,
+        )
+      })
+      .catch(() => {
+        setBase((prev) =>
+          prev
+            ? {
+                ...prev,
+                tradePriorSeasonsFailed: true,
+                tradeHistoryLoaded: true,
+              }
+            : prev,
+        )
+      })
+      .finally(() => setTradeHistoryLoading(false))
+  }, [base, tradeHistoryLoading])
 
   const ensurePlayers = useCallback(() => {
     if (players || playersLoading) return
@@ -249,6 +283,7 @@ export function useLeagueData(): {
             rosterPositions: league.roster_positions,
             preWeekStandings,
             isWeekFinal: isWeekComplete(selectedWeek, league, nflState),
+            week: selectedWeek,
           })
         : []
 
@@ -337,12 +372,24 @@ export function useLeagueData(): {
       tradeLog,
       tradePriorSeasonsIncluded: priorSeasonsIncluded,
       tradePriorSeasonsFailed,
+      tradeHistoryLoading,
+      ensureTradeHistory,
       leagueSeasonSummaries,
       weeklyAwards,
       playoffOdds,
       regularSeasonLastWeek: regLast,
     }
-  }, [base, selectedWeek, load, players, playersLoading, ensurePlayers, updateWeekMatchups])
+  }, [
+    base,
+    selectedWeek,
+    load,
+    players,
+    playersLoading,
+    ensurePlayers,
+    ensureTradeHistory,
+    tradeHistoryLoading,
+    updateWeekMatchups,
+  ])
 
   return { state, error, data, refresh: load }
 }

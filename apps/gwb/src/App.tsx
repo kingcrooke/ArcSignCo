@@ -32,6 +32,7 @@ import {
 } from './lib/weeks'
 import { useLeagueData } from './hooks/useLeagueData'
 import { useSound } from './hooks/useSound'
+import { GoatCounterVisitor } from './components/GoatCounterVisitor'
 import { trackGwbTab } from './lib/goatcounter'
 import { type AppTab } from './hooks/useUrlState'
 
@@ -222,6 +223,9 @@ export default function App() {
     ) {
       data?.ensurePlayers()
     }
+    if (tab === 'trades' || tab === 'managers') {
+      data?.ensureTradeHistory()
+    }
   }, [tab, data])
 
   useEffect(() => {
@@ -276,8 +280,9 @@ export default function App() {
             {LEAGUE_NAME} League
           </h1>
           <p className="mt-2 text-sm text-[var(--gwb-muted)]">
-            REDRAFT · Sleeper public data · No tracking
+            REDRAFT · Sleeper public data · Privacy-friendly analytics
           </p>
+          <GoatCounterVisitor />
         </div>
         <SoundToggle
           label={sound.label}
@@ -525,7 +530,11 @@ export default function App() {
                 trades={data.tradeLog}
                 priorSeasonsIncluded={data.tradePriorSeasonsIncluded}
                 priorSeasonsFailed={data.tradePriorSeasonsFailed}
-                playersLoading={data.playersLoading || !data.players}
+                playersLoading={
+                  data.tradeHistoryLoading ||
+                  data.playersLoading ||
+                  !data.players
+                }
               />
             </section>
           )}
@@ -556,6 +565,7 @@ export default function App() {
                 leagueSeasonSummaries={data.leagueSeasonSummaries}
                 currentSeason={data.league.season}
                 tradePriorSeasonsFailed={data.tradePriorSeasonsFailed}
+                tradeHistoryLoading={data.tradeHistoryLoading}
               />
             </section>
           )}

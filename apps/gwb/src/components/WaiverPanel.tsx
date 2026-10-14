@@ -24,8 +24,8 @@ function pts(n: number | null | undefined): string {
 }
 
 function hitLabel(row: ManagerWaiverRow): string {
-  if (!row.hitWeeks) return '—'
-  return `${row.hitHits}/${row.hitWeeks}`
+  if (!row.pickupCount) return '—'
+  return `${row.hitPickups}/${row.pickupCount}`
 }
 
 function nicknameRow(row: ManagerWaiverRow): ManagerWaiverRow {
@@ -129,8 +129,9 @@ export function WaiverPanel({
           </h3>
           <p className="mt-1 text-xs text-[var(--gwb-muted)]">
             Waiver Efficiency Score is net started points divided by rostered pickups.
-            The badge needs {MIN_ROSTERED_PICKUPS} rostered pickups. A hit is a start of{' '}
-            {HIT_LINE}+ points. Kickers and defenses count.
+            The badge needs {MIN_ROSTERED_PICKUPS} rostered pickups.             A hit is a waiver/FA pickup with at least one start of {HIT_LINE}+
+            points. Hit rate uses the same pickup count as the Pickups column.
+            Kickers and defenses count.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
