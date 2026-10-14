@@ -9,6 +9,8 @@ describe('weekGraphics', () => {
     expect(sections[1].slides).toHaveLength(6)
     expect(sections[0].slides[0].id).toBe('results-w5-m1')
     expect(sections[1].slides[0].id).toBe('vs-w6-m1')
+    expect(sections[1].heading).toBe('Week 6 matchup previews')
+    expect(sections[1].previewWeek).toBe(6)
   })
 
   it('week 6 shows matchup previews only', () => {

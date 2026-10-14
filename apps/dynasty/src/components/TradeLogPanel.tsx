@@ -1,4 +1,6 @@
 import { formatTradeAssetList, type TradeAsset, type TradeLogEntry } from '../lib/trades'
+import type { TeamInfo } from '../lib/types'
+import { TeamAvatar } from './TeamAvatar'
 
 function isPickAsset(label: string): boolean {
   return /\bRd\s+\d/i.test(label) || /round/i.test(label)
@@ -35,8 +37,27 @@ function AssetList({
   )
 }
 
+function TradePartyLabel({
+  rosterId,
+  managerName,
+  teams,
+}: {
+  rosterId: number
+  managerName: string
+  teams: Map<number, TeamInfo>
+}) {
+  const team = teams.get(rosterId)
+  return (
+    <span className="inline-flex items-center gap-2">
+      {team && <TeamAvatar team={team} size="sm" />}
+      <span>{managerName}</span>
+    </span>
+  )
+}
+
 export function TradeLogPanel({
   trades,
+  teams,
   priorSeasonsIncluded,
   priorSeasonsFailed,
   playersLoading,
@@ -44,6 +65,7 @@ export function TradeLogPanel({
   seasonOnly,
 }: {
   trades: TradeLogEntry[]
+  teams: Map<number, TeamInfo>
   priorSeasonsIncluded: string[]
   priorSeasonsFailed: boolean
   playersLoading: boolean
@@ -86,8 +108,18 @@ export function TradeLogPanel({
               className="border-t border-[var(--dyn-border)] px-4 py-3 first:border-t-0"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <p className="font-semibold">
-                  {t.sideA.managerName} ↔ {t.sideB.managerName}
+                <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold">
+                  <TradePartyLabel
+                    rosterId={t.sideA.rosterId}
+                    managerName={t.sideA.managerName}
+                    teams={teams}
+                  />
+                  <span className="text-[var(--dyn-muted)]">↔</span>
+                  <TradePartyLabel
+                    rosterId={t.sideB.rosterId}
+                    managerName={t.sideB.managerName}
+                    teams={teams}
+                  />
                 </p>
                 <p className="text-xs text-[var(--dyn-muted)]">
                   {t.dateLabel || '—'} · {t.season} · Week {t.week}

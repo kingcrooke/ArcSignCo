@@ -20,9 +20,13 @@ import { isWeekLive } from '../lib/weeks'
 import { MatchupDetailSheet } from './MatchupDetailSheet'
 import { TeamAvatar } from './TeamAvatar'
 
-function formatUpdated(d: Date | null): string {
-  if (!d) return '—'
-  return d.toLocaleTimeString('en-US', {
+const ET = 'America/New_York'
+
+function formatUpdatedEt(d: Date): string {
+  return d.toLocaleString('en-US', {
+    timeZone: ET,
+    month: 'short',
+    day: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
   })
@@ -150,12 +154,16 @@ export function LiveScoreboardPanel({
   return (
     <div className="space-y-4" id="live-scoreboard-panel">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-[var(--dyn-muted)]">
-          Last updated {formatUpdated(lastUpdated)}
-          {shouldPoll && (
-            <span className="ml-2 text-[var(--dyn-accent-bright)]/90">· auto-refresh 60s</span>
-          )}
-        </p>
+        {lastUpdated && (
+          <p className="text-xs text-[var(--dyn-muted)]">
+            Last updated {formatUpdatedEt(lastUpdated)} ET
+            {shouldPoll && (
+              <span className="ml-2 text-[var(--dyn-accent-bright)]/90">
+                · auto-refresh 60s
+              </span>
+            )}
+          </p>
+        )}
         <button
           type="button"
           className="rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-1.5 text-sm font-medium disabled:opacity-50"
