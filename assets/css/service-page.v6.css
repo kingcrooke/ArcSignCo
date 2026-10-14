@@ -681,3 +681,30 @@ footer p { color: #cfd9e6; font-size: 13px; }
 @media (max-width: 560px) {
   .photo-gallery { grid-template-columns: 1fr; }
 }
+
+.ds-wireframe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.ds-wireframe {
+  margin: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--soft);
+  overflow: hidden;
+}
+.ds-wireframe svg { display: block; width: 100%; height: auto; }
+.ds-wireframe figcaption {
+  padding: 12px 14px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--navy);
+  text-align: center;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+@media (max-width: 900px) {
+  .ds-wireframe-grid { grid-template-columns: 1fr; max-width: 360px; margin: 0 auto; }
+}

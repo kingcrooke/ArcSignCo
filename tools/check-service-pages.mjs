@@ -202,7 +202,7 @@ for (const { slug, file } of pages) {
       },
       "digital-signage": {
         title: "Digital Signage NYC | Arc Signage Co",
-        description: "Digital signage for NY and tri-state: touch directories, wayfinding, event boards, donor walls, CMS, integrations, and remote support. Get a quote.",
+        description: "Digital signage for NY and tri-state: touch directories, kiosks, wayfinding, room and event boards, donor walls, and video walls. Get a quote.",
         h1: "Digital signage for touch directories, wayfinding, and video walls",
       },
       awnings: {
