@@ -769,6 +769,42 @@ h1 {
   color: var(--muted);
   font-size: 14px;
 }
+.arc-feature {
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: var(--soft);
+}
+.arc-feature-media { background: var(--paper); }
+.arc-feature-media a { display: block; }
+.arc-feature-media img {
+  width: 100%;
+  min-height: 300px;
+  max-height: 420px;
+  object-fit: cover;
+  object-position: center top;
+}
+.arc-feature-body { padding: 22px 24px; align-self: center; }
+.arc-feature-tag {
+  display: inline-flex;
+  border-radius: 999px;
+  background: #fbf3df;
+  color: var(--gold-ink);
+  border: 1px solid rgba(212, 168, 67, .55);
+  padding: 4px 9px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.arc-feature h3 { color: var(--navy); font-size: 20px; margin: 10px 0 8px; line-height: 1.25; }
+.arc-feature h3 a:hover { color: var(--navy-3); }
+.arc-feature p { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+.arc-feature-link { font-weight: 900; color: var(--navy); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
 .specs { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .specs div { display: flex; justify-content: space-between; gap: 14px; font-size: 12px; }
 .specs span:first-child { color: var(--muted); font-weight: 800; }
@@ -1005,6 +1041,8 @@ footer p { color: #cfd9e6; font-size: 13px; }
   .hero .wrap { padding: 36px 0 34px; }
   .hero-proof { grid-template-columns: 1fr 1fr; }
   .asset-grid, .portfolio, .revision-list, .services, .process, .formgrid, .experience-showcase { grid-template-columns: 1fr; }
+  .arc-feature { grid-template-columns: 1fr; }
+  .arc-feature-media img { max-height: none; min-height: 240px; }
   .project-collage img { min-height: 0; aspect-ratio: 2 / 1; height: auto; }
   .hero-visual { display: none; }
   .section { padding: 56px 0; }
@@ -1201,8 +1239,19 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Scope examples</span>
           <h2>Typical project scopes</h2>
         </div>
-        <p class="lead">Illustrative images of the signage scopes Arc takes on across New York and the tri-state area, from permanent code packages to temporary jobsite visibility.</p>
+        <p class="lead">Signage scopes Arc takes on across New York and the tri-state area. The Cyclone Bagels window graphic below is a completed Arc job; the collage under it uses illustrative stock imagery for typical scopes.</p>
       </div>
+      <article class="arc-feature" aria-labelledby="arc-feature-title">
+        <div class="arc-feature-media">
+          <a href="/window-graphics/"><img src="/assets/portfolio/cyclone-bagels-dimensional-sign-shop-800.v2.jpg" srcset="/assets/portfolio/cyclone-bagels-dimensional-sign-shop-480.v2.jpg 480w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-800.v2.jpg 800w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-1200.v2.jpg 1200w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-1600.v2.jpg 1600w" sizes="(max-width: 720px) 100vw, min(55vw, 640px)" width="810" height="1800" loading="lazy" decoding="async" alt="Cyclone Bagels window graphic in Coney Island."></a>
+        </div>
+        <div class="arc-feature-body">
+          <span class="arc-feature-tag">Completed Arc job</span>
+          <h3 id="arc-feature-title"><a href="/window-graphics/">Cyclone Bagels — Coney Island window graphic</a></h3>
+          <p>A completed Arc Signage Co job: a Coney Island window graphic for Cyclone Bagels.</p>
+          <a class="arc-feature-link" href="/window-graphics/">View project</a>
+        </div>
+      </article>
       <div class="experience-showcase">
         <figure class="project-collage">
           <picture>
@@ -1210,7 +1259,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
             <source type="image/webp" srcset="/assets/img/scope-collage-800.v1.webp 800w, /assets/img/scope-collage-1200.v1.webp 1200w, /assets/img/scope-collage-1774.v1.webp 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px">
             <img src="/assets/img/scope-collage-1200.v1.jpg" srcset="/assets/img/scope-collage-800.v1.jpg 800w, /assets/img/scope-collage-1200.v1.jpg 1200w, /assets/img/scope-collage-1774.v1.jpg 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px" width="1774" height="887" loading="lazy" decoding="async" alt="Collage of storefront signage, wayfinding, ADA signage, illuminated letters, permit drawings, awnings, construction signs, and orientation decals">
           </picture>
-          <figcaption>Illustrative images of typical scopes, not photos of completed Arc Signage Co projects.</figcaption>
+          <figcaption>Illustrative scope collage — stock imagery, not photos of completed Arc projects.</figcaption>
         </figure>
         <div class="experience-notes" aria-label="Project experience categories">
           <article class="experience-note">
