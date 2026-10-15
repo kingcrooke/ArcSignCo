@@ -19,9 +19,10 @@
       "nav.production": "Production",
       "nav.portfolio": "Portfolio",
       "nav.contact": "Contact",
-      "meta.portfolio.title": "Elizabeth Crooke — Choreographer · Director · Dancer | NovaStage",
+      "meta.portfolio.title": "Elizabeth Crooke Morel — Choreographer · Director · Dancer | NovaStage",
       "meta.portfolio.description":
-        "Source-backed portfolio for Elizabeth Crooke — Ballet Folklórico Nacional Dominicano leadership, Dominican and NYC career, and NovaStage booking.",
+        "Source-backed portfolio for Elizabeth Crooke Morel — Ballet Folklórico Nacional Dominicano leadership, Dominican and NYC career, and NovaStage booking.",
+      "portfolio.name": "Elizabeth Crooke Morel",
       "portfolio.eyebrow": "NovaStage artist portfolio",
       "portfolio.roles": "Choreographer · Director · Dancer",
       "portfolio.tagline":
@@ -32,9 +33,9 @@
       "portfolio.bio.kicker": "Biography",
       "portfolio.bio.title": "A life in <em>movement</em> across two shores.",
       "portfolio.bio.lead":
-        "Elizabeth Crooke is a choreographer, director, and dancer whose career spans the Dominican Republic’s flagship folk and ballet institutions and New York arts education. Hispanic Culture Arts describes 25+ years in choreography and teaching, with specialties in ballet, contemporary, musical theater, Afro-Caribbean dance, Dominican folk, and Latin social dances.",
+        "Elizabeth Crooke Morel is a choreographer, director, and dancer whose career spans the Dominican Republic’s flagship folk and ballet institutions and New York arts education. Hispanic Culture Arts describes 25+ years in choreography and teaching, with specialties in ballet, contemporary, musical theater, Afro-Caribbean dance, Dominican folk, and Latin social dances.",
       "portfolio.bio.lead2":
-        "She holds a BA in Dance Pedagogy (2010) and an MA in Performing Arts from Rey Juan Carlos University, Madrid (HCA). Press and institutional records document leadership of the Ballet Folklórico Nacional Dominicano, cultural programming for Dominican foreign affairs, and independent teaching for NYC public schools since 2022.",
+        "She holds a BA in Dance Pedagogy (2010) and an MA in Performing Arts from Rey Juan Carlos University, Madrid (HCA). From 2012 to 2016 she directed the Ballet Folklórico Nacional Dominicano, representing the Dominican Republic’s music and performing arts nationally and internationally in that role. She continues her teaching work in New York (HCA).",
       "portfolio.timeline.kicker": "Career timeline",
       "portfolio.timeline.title": "Dominican Republic to <em>New York.</em>",
       "portfolio.timeline.lead":
@@ -50,23 +51,19 @@
       "portfolio.timeline.t3.year": "2012–2016",
       "portfolio.timeline.t3.title": "Artistic Director, Ballet Folklórico Nacional Dominicano",
       "portfolio.timeline.t3.body":
-        "Directed the national folkloric ballet of the Dominican Republic (BFND). HCA lists 2012–2016; El Nacional covered her as director in 2013 (“Somos Dominicana!”) and 2016 (folklore identity interview).",
+        "Artistic Director of the Ballet Folklórico Nacional Dominicano (BFND), 2012–2016. As director of the national folkloric ballet, she represented the Dominican Republic’s arts—specifically music and performing arts—nationally and internationally. El Nacional covered her leadership in 2013 (“Somos Dominicana!”) and 2016 (folklore identity interview).",
       "portfolio.timeline.t4.year": "2013",
       "portfolio.timeline.t4.title": "MOMENTOS · Restauración & Premios Soberano",
       "portfolio.timeline.t4.body":
         "Choreographed the Restauración piece in patriotic ballet MOMENTOS (El Nacional, May 2013). Led choreography and casting for Premios Soberano 2013 at Teatro Nacional (Ensegundos / Listín, Jan 2013).",
-      "portfolio.timeline.t5.year": "2016–2020",
-      "portfolio.timeline.t5.title": "Ministry of Foreign Affairs — cultural promotion",
-      "portfolio.timeline.t5.body":
-        "Head of Cultural Promotion and artistic director of the Popular and Contemporary Folk Dance Company, Ministry of Foreign Affairs (HCA). Open letter (Aug 2020) describes Encargada de Difusión Cultural and directing the MIREX artistic corps.",
       "portfolio.timeline.t6.year": "2022",
       "portfolio.timeline.t6.title": "Fundación Mov Arte · Ballet Sinergia · Colombia",
       "portfolio.timeline.t6.body":
         "As director of Fundación Mov Arte, led Ballet Sinergia to the Ibero-American Festival in Bucaramanga, Colombia, with “República Dominicana Soy” (Diario Hispaniola & El Día, April 2022).",
-      "portfolio.timeline.t7.year": "2022–present",
-      "portfolio.timeline.t7.title": "New York — teaching artist & independent vendor",
+      "portfolio.timeline.t7.year": "New York",
+      "portfolio.timeline.t7.title": "Teaching artist — schools & community",
       "portfolio.timeline.t7.body":
-        "Teaching artist with Hispanic Culture Arts (Bronx). HCA states she has taught dance education programs for NYC public schools as an independent vendor since 2022.",
+        "Teaching artist with Hispanic Culture Arts (Bronx), offering dance education in New York school and community settings (HCA).",
       "portfolio.work.kicker": "Featured productions",
       "portfolio.work.title": "Stages, spectacles & <em>cultural diplomacy.</em>",
       "portfolio.work.w1.meta": "BFND · Teatro Nacional · 2013",
@@ -104,13 +101,12 @@
       "portfolio.orgs.kicker": "Companies & institutions",
       "portfolio.orgs.title": "Affiliations & <em>leadership.</em>",
       "portfolio.orgs.o1.name": "Ballet Folklórico Nacional Dominicano (BFND)",
-      "portfolio.orgs.o1.role": "Artistic Director (published 2012–2016, HCA)",
+      "portfolio.orgs.o1.role":
+        "Artistic Director, 2012–2016 — national & international representation of Dominican music and performing arts",
       "portfolio.orgs.o2.name": "Ballet Nacional Dominicano",
       "portfolio.orgs.o2.role": "Former company dancer (2020 open letter)",
       "portfolio.orgs.o3.name": "Fundación Mov Arte · Ballet Sinergia",
       "portfolio.orgs.o3.role": "Director / choreographer (2022 press)",
-      "portfolio.orgs.o4.name": "Ministerio de Relaciones Exteriores (MIREX)",
-      "portfolio.orgs.o4.role": "Cultural promotion & artistic corps (HCA; 2020 press)",
       "portfolio.orgs.o5.name": "Hispanic Culture Arts",
       "portfolio.orgs.o5.role": "Teaching artist — Bronx, NY (HCA About)",
       "portfolio.orgs.o6.name": "Danzart Studio",
@@ -118,9 +114,9 @@
       "portfolio.teaching.kicker": "Teaching",
       "portfolio.teaching.title": "Classrooms, ensembles & <em>community.</em>",
       "portfolio.teaching.lead":
-        "HCA lists ballet, contemporary, musical theater, Afro-Caribbean, Dominican folk, and Latin social dances for K–12 and community settings. Since 2022 she has taught NYC public school programs as an independent vendor (HCA).",
+        "HCA lists ballet, contemporary, musical theater, Afro-Caribbean, Dominican folk, and Latin social dances for K–12 and community settings. She teaches through Hispanic Culture Arts in New York.",
       "portfolio.teaching.note":
-        "Collaborator bio on HCA also references co-led workshops with Isidro Bobadilla for Jazz Power Inc. (dates and venues not listed on the public page).",
+        "HCA materials also reference collaborative workshop work with community arts partners; specific programs and dates are pending confirmation.",
       "portfolio.teaching.placeholder": "Classroom photo placeholder — usage rights pending",
       "portfolio.press.kicker": "Press & recognition",
       "portfolio.press.title": "Documented <em>coverage.</em>",
@@ -301,9 +297,10 @@
       "nav.production": "Producción",
       "nav.portfolio": "Portafolio",
       "nav.contact": "Contacto",
-      "meta.portfolio.title": "Elizabeth Crooke — Coreógrafa · Directora · Bailarina | NovaStage",
+      "meta.portfolio.title": "Elizabeth Crooke Morel — Coreógrafa · Directora · Bailarina | NovaStage",
       "meta.portfolio.description":
-        "Portafolio documentado de Elizabeth Crooke — dirección del Ballet Folklórico Nacional Dominicano, trayectoria en RD y NYC, y reservas con NovaStage.",
+        "Portafolio documentado de Elizabeth Crooke Morel — dirección del Ballet Folklórico Nacional Dominicano, trayectoria en RD y NYC, y reservas con NovaStage.",
+      "portfolio.name": "Elizabeth Crooke Morel",
       "portfolio.eyebrow": "Portafolio de artista NovaStage",
       "portfolio.roles": "Coreógrafa · Directora · Bailarina",
       "portfolio.tagline":
@@ -314,9 +311,9 @@
       "portfolio.bio.kicker": "Biografía",
       "portfolio.bio.title": "Una vida en <em>movimiento</em> entre dos orillas.",
       "portfolio.bio.lead":
-        "Elizabeth Crooke es coreógrafa, directora y bailarina cuya carrera abarca las principales instituciones folclóricas y de ballet de la República Dominicana y la educación artística en Nueva York. Hispanic Culture Arts describe más de 25 años en coreografía y docencia, con especialidades en ballet, contemporáneo, teatro musical, danza afrocaribeña, folclor dominicano y danzas sociales latinas.",
+        "Elizabeth Crooke Morel es coreógrafa, directora y bailarina cuya carrera abarca las principales instituciones folclóricas y de ballet de la República Dominicana y la educación artística en Nueva York. Hispanic Culture Arts describe más de 25 años en coreografía y docencia, con especialidades en ballet, contemporáneo, teatro musical, danza afrocaribeña, folclor dominicano y danzas sociales latinas.",
       "portfolio.bio.lead2":
-        "Tiene licenciatura en Pedagogía de la Danza (2010) y maestría en Artes Escénicas de la Universidad Rey Juan Carlos, Madrid (HCA). Prensa e instituciones documentan su dirección del Ballet Folklórico Nacional Dominicano, programación cultural para la cancillería dominicana y docencia independiente en escuelas públicas de NYC desde 2022.",
+        "Tiene licenciatura en Pedagogía de la Danza (2010) y maestría en Artes Escénicas de la Universidad Rey Juan Carlos, Madrid (HCA). De 2012 a 2016 dirigió el Ballet Folklórico Nacional Dominicano, representando la música y las artes escénicas de la República Dominicana a nivel nacional e internacional en ese cargo. Continúa su labor docente en Nueva York (HCA).",
       "portfolio.timeline.kicker": "Línea de tiempo",
       "portfolio.timeline.title": "De República Dominicana a <em>Nueva York.</em>",
       "portfolio.timeline.lead":
@@ -332,23 +329,19 @@
       "portfolio.timeline.t3.year": "2012–2016",
       "portfolio.timeline.t3.title": "Directora artística, Ballet Folklórico Nacional Dominicano",
       "portfolio.timeline.t3.body":
-        "Dirigió el ballet folclórico nacional de la República Dominicana (BFND). HCA indica 2012–2016; El Nacional la cubrió como directora en 2013 («Somos Dominicana!») y 2016 (entrevista sobre identidad folclórica).",
+        "Directora artística del Ballet Folklórico Nacional Dominicano (BFND), 2012–2016. Como directora del ballet folclórico nacional, representó las artes de la República Dominicana — en particular la música y las artes escénicas — a nivel nacional e internacional. El Nacional cubrió su liderazgo en 2013 («Somos Dominicana!») y 2016 (entrevista sobre identidad folclórica).",
       "portfolio.timeline.t4.year": "2013",
       "portfolio.timeline.t4.title": "MOMENTOS · Restauración y Premios Soberano",
       "portfolio.timeline.t4.body":
         "Coreografía de la pieza de Restauración en el ballet patriótico MOMENTOS (El Nacional, mayo 2013). Lideró coreografía y casting de Premios Soberano 2013 en el Teatro Nacional (Ensegundos / Listín, ene. 2013).",
-      "portfolio.timeline.t5.year": "2016–2020",
-      "portfolio.timeline.t5.title": "Ministerio de Relaciones Exteriores — promoción cultural",
-      "portfolio.timeline.t5.body":
-        "Jefa de Promoción Cultural y directora artística de la Compañía de Danza Popular y Contemporánea, Ministerio de Relaciones Exteriores (HCA). Carta abierta (ago. 2020) describe el cargo de Encargada de Difusión Cultural y la dirección del cuerpo artístico del MIREX.",
       "portfolio.timeline.t6.year": "2022",
       "portfolio.timeline.t6.title": "Fundación Mov Arte · Ballet Sinergia · Colombia",
       "portfolio.timeline.t6.body":
         "Como directora de Fundación Mov Arte, llevó Ballet Sinergia al Festival Iberoamericano en Bucaramanga, Colombia, con «República Dominicana Soy» (Diario Hispaniola y El Día, abril 2022).",
-      "portfolio.timeline.t7.year": "2022–actualidad",
-      "portfolio.timeline.t7.title": "Nueva York — artista docente y proveedora independiente",
+      "portfolio.timeline.t7.year": "Nueva York",
+      "portfolio.timeline.t7.title": "Artista docente — escuelas y comunidad",
       "portfolio.timeline.t7.body":
-        "Artista docente con Hispanic Culture Arts (Bronx). HCA indica que imparte programas de educación en danza en escuelas públicas de NYC como proveedora independiente desde 2022.",
+        "Artista docente con Hispanic Culture Arts (Bronx), con programas de educación en danza en entornos escolares y comunitarios de Nueva York (HCA).",
       "portfolio.work.kicker": "Producciones destacadas",
       "portfolio.work.title": "Escenarios, espectáculos y <em>diplomacia cultural.</em>",
       "portfolio.work.w1.meta": "BFND · Teatro Nacional · 2013",
@@ -386,13 +379,12 @@
       "portfolio.orgs.kicker": "Compañías e instituciones",
       "portfolio.orgs.title": "Afiliaciones y <em>liderazgo.</em>",
       "portfolio.orgs.o1.name": "Ballet Folklórico Nacional Dominicano (BFND)",
-      "portfolio.orgs.o1.role": "Directora artística (publicado 2012–2016, HCA)",
+      "portfolio.orgs.o1.role":
+        "Directora artística, 2012–2016 — representación nacional e internacional de la música y las artes escénicas dominicanas",
       "portfolio.orgs.o2.name": "Ballet Nacional Dominicano",
       "portfolio.orgs.o2.role": "Ex bailarina de compañía (carta abierta 2020)",
       "portfolio.orgs.o3.name": "Fundación Mov Arte · Ballet Sinergia",
       "portfolio.orgs.o3.role": "Directora / coreógrafa (prensa 2022)",
-      "portfolio.orgs.o4.name": "Ministerio de Relaciones Exteriores (MIREX)",
-      "portfolio.orgs.o4.role": "Promoción cultural y cuerpo artístico (HCA; prensa 2020)",
       "portfolio.orgs.o5.name": "Hispanic Culture Arts",
       "portfolio.orgs.o5.role": "Artista docente — Bronx, NY (HCA About)",
       "portfolio.orgs.o6.name": "Danzart Studio",
@@ -400,9 +392,9 @@
       "portfolio.teaching.kicker": "Docencia",
       "portfolio.teaching.title": "Aulas, ensembles y <em>comunidad.</em>",
       "portfolio.teaching.lead":
-        "HCA enumera ballet, contemporáneo, teatro musical, afrocaribeño, folclor dominicano y danzas sociales latinas para K–12 y comunidad. Desde 2022 imparte programas en escuelas públicas de NYC como proveedora independiente (HCA).",
+        "HCA enumera ballet, contemporáneo, teatro musical, afrocaribeño, folclor dominicano y danzas sociales latinas para K–12 y comunidad. Imparte clases a través de Hispanic Culture Arts en Nueva York.",
       "portfolio.teaching.note":
-        "La biografía de un colaborador en HCA también menciona talleres co-dirigidos con Isidro Bobadilla para Jazz Power Inc. (fechas y sedes no figuran en la página pública).",
+        "Los materiales de HCA también mencionan trabajo colaborativo en talleres con organizaciones artísticas comunitarias; programas y fechas específicas están pendientes de confirmación.",
       "portfolio.teaching.placeholder": "Marcador de foto en aula — derechos de uso pendientes",
       "portfolio.press.kicker": "Prensa y reconocimiento",
       "portfolio.press.title": "Cobertura <em>documentada.</em>",
