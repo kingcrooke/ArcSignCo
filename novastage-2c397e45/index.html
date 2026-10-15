@@ -25,11 +25,12 @@
     <link rel="stylesheet" href="css/invert.css" />
     <link rel="stylesheet" href="css/bethlehem.css" />
     <link rel="stylesheet" href="css/voice-note.css" />
+    <link rel="stylesheet" href="css/portfolio.css" />
     <script src="js/version-config.js"></script>
     <script src="js/version-init.js"></script>
     <title>NovaStage — Performing Arts in New York</title>
   </head>
-  <body data-version="2" data-palette="b" data-wordmark-font="alternate" data-lockup-emphasis="normal">
+  <body data-version="2" data-palette="b" data-wordmark-font="alternate" data-lockup-emphasis="normal" data-active-page="home">
     <div class="version-switcher" id="version-switcher" data-preview-ui></div>
     <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
 
@@ -64,26 +65,29 @@
           </svg>
           <span data-i18n="nav.menu">Menu</span>
         </button>
-        <a href="#company" data-i18n="nav.company">Company</a>
-        <a href="#programs" data-i18n="nav.programs">Programs</a>
-        <a href="#schools" data-i18n="nav.schools">For Schools</a>
-        <a href="#production" data-i18n="nav.production">Production</a>
-        <a href="#contact" class="nav-cta" data-i18n="nav.contact">Contact</a>
+        <a href="#company" data-page-link="home" data-page-hash="#company" data-nav-page="home" data-i18n="nav.company">Company</a>
+        <a href="#programs" data-page-link="home" data-page-hash="#programs" data-nav-page="home" data-i18n="nav.programs">Programs</a>
+        <a href="#schools" data-page-link="home" data-page-hash="#schools" data-nav-page="home" data-i18n="nav.schools">For Schools</a>
+        <a href="#production" data-page-link="home" data-page-hash="#production" data-nav-page="home" data-i18n="nav.production">Production</a>
+        <a href="?page=portfolio" data-page-link="portfolio" data-nav-page="portfolio" data-i18n="nav.portfolio">Portfolio</a>
+        <a href="#contact" class="nav-cta" data-page-link="home" data-page-hash="#contact" data-nav-page="home" data-i18n="nav.contact">Contact</a>
         <div class="lang-toggle" role="group" data-i18n-aria="lang.group" aria-label="Language">
           <button type="button" data-lang-btn="en" aria-pressed="true" data-i18n="lang.en">EN</button>
           <button type="button" data-lang-btn="es" aria-pressed="false" data-i18n="lang.es">ES</button>
         </div>
         <div class="mobile-menu" id="mobile-menu">
-          <a href="#company" data-i18n="nav.company">Company</a>
-          <a href="#programs" data-i18n="nav.programs">Programs</a>
-          <a href="#schools" data-i18n="nav.schools">For Schools</a>
-          <a href="#production" data-i18n="nav.production">Production</a>
-          <a href="#contact" data-i18n="nav.contact">Contact</a>
+          <a href="#company" data-page-link="home" data-page-hash="#company" data-i18n="nav.company">Company</a>
+          <a href="#programs" data-page-link="home" data-page-hash="#programs" data-i18n="nav.programs">Programs</a>
+          <a href="#schools" data-page-link="home" data-page-hash="#schools" data-i18n="nav.schools">For Schools</a>
+          <a href="#production" data-page-link="home" data-page-hash="#production" data-i18n="nav.production">Production</a>
+          <a href="?page=portfolio" data-page-link="portfolio" data-i18n="nav.portfolio">Portfolio</a>
+          <a href="#contact" data-page-link="home" data-page-hash="#contact" data-i18n="nav.contact">Contact</a>
         </div>
       </nav>
     </header>
 
     <main id="main">
+      <div id="view-home" class="site-view" data-site-view="home">
       <section class="hero hero--motion" id="hero" aria-labelledby="hero-title">
         <div class="hero-inner section-panel section-panel--hero" data-parallax="0.04">
           <div class="official-lockup" id="hero-title">
@@ -303,6 +307,383 @@
           </form>
         </div>
       </section>
+      </div>
+
+      <div id="view-portfolio" class="site-view" data-site-view="portfolio" hidden>
+        <section class="portfolio-hero" id="portfolio-hero" aria-labelledby="portfolio-name">
+          <div class="portfolio-hero-inner">
+            <div class="portfolio-hero-panel" data-reveal>
+              <p class="portfolio-eyebrow" data-i18n="portfolio.eyebrow">NovaStage artist portfolio</p>
+              <h1 class="portfolio-name" id="portfolio-name">Elizabeth Crooke</h1>
+              <p class="portfolio-roles" data-i18n="portfolio.roles">Choreographer · Director · Dancer</p>
+              <p class="portfolio-tagline" data-i18n="portfolio.tagline">
+                From Dominican national stages to New York classrooms — movement rooted in folklore, classical craft, and
+                cultural storytelling.
+              </p>
+              <div class="portfolio-hero-actions">
+                <a class="button button-primary" href="#portfolio-booking" data-i18n="portfolio.cta.book">Book via NovaStage</a>
+                <a class="button" href="#portfolio-work" data-i18n="portfolio.cta.work">View productions</a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-bio">
+          <div class="portfolio-section-inner portfolio-split section-panel" data-parallax="0.02">
+            <div class="portfolio-media-placeholder" data-reveal aria-hidden="true">
+              <span data-i18n="portfolio.photo.placeholder">Photo placeholder — licensed headshot pending</span>
+            </div>
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.bio.kicker">Biography</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.bio.title">A life in <em>movement</em> across two shores.</h2>
+              <p class="lead" data-i18n="portfolio.bio.lead">
+                Elizabeth Crooke is a choreographer, director, and dancer whose career spans the Dominican Republic’s
+                flagship folk and ballet institutions and New York arts education. Hispanic Culture Arts describes 25+
+                years in choreography and teaching, with specialties in ballet, contemporary, musical theater,
+                Afro-Caribbean dance, Dominican folk, and Latin social dances.
+              </p>
+              <p class="lead" style="margin-top: 1rem" data-i18n="portfolio.bio.lead2">
+                She holds a BA in Dance Pedagogy (2010) and an MA in Performing Arts from Rey Juan Carlos University,
+                Madrid (HCA). Press and institutional records document leadership of the Ballet Folklórico Nacional
+                Dominicano, cultural programming for Dominican foreign affairs, and independent teaching for NYC public
+                schools since 2022.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-timeline">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.015">
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.timeline.kicker">Career timeline</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.timeline.title">Dominican Republic to <em>New York.</em></h2>
+              <p class="lead" data-i18n="portfolio.timeline.lead">
+                Milestones drawn from Hispanic Culture Arts, Dominican national press, and documented institutional
+                credits. Dates reflect published sources unless noted.
+              </p>
+            </div>
+            <div class="portfolio-timeline" style="margin-top: 2rem" data-reveal>
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t1.year">2010 · Education</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t1.title">Dance pedagogy &amp; performing arts studies</h3>
+                  <p data-i18n="portfolio.timeline.t1.body">
+                    BA in Dance Pedagogy (2010); MA in Performing Arts, Rey Juan Carlos University, Madrid — as listed on
+                    Hispanic Culture Arts.
+                  </p>
+                </div>
+              </article>
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t2.year">2012</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t2.title">Premios Casandra — Coreógrafo clásico</h3>
+                  <p data-i18n="portfolio.timeline.t2.body">
+                    Winner, classical choreographer category (Premios Casandra 2012), listed in El Nacional and
+                    acknowledged in Ensegundos, March 2012.
+                  </p>
+                </div>
+              </article>
+              <!-- TODO(Jesus): Confirm exact BFND director start/end months — HCA lists 2012–2016; El Nacional “nueva directora” Nov 2013; still director May 2016. -->
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t3.year">2012–2016</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t3.title">Artistic Director, Ballet Folklórico Nacional Dominicano</h3>
+                  <p data-i18n="portfolio.timeline.t3.body">
+                    Directed the national folkloric ballet of the Dominican Republic (BFND). HCA lists 2012–2016; El
+                    Nacional covered her as director in 2013 (“Somos Dominicana!”) and 2016 (folklore identity
+                    interview).
+                  </p>
+                </div>
+              </article>
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t4.year">2013</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t4.title">MOMENTOS · Restauración &amp; Premios Soberano</h3>
+                  <p data-i18n="portfolio.timeline.t4.body">
+                    Choreographed the Restauración piece in patriotic ballet MOMENTOS (El Nacional, May 2013). Led
+                    choreography and casting for Premios Soberano 2013 at Teatro Nacional (Ensegundos / Listín, Jan
+                    2013).
+                  </p>
+                </div>
+              </article>
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t5.year">2016–2020</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t5.title">Ministry of Foreign Affairs — cultural promotion</h3>
+                  <p data-i18n="portfolio.timeline.t5.body">
+                    Head of Cultural Promotion and artistic director of the Popular and Contemporary Folk Dance Company,
+                    Ministry of Foreign Affairs (HCA). Open letter (Aug 2020) describes Encargada de Difusión Cultural
+                    and directing the MIREX artistic corps.
+                  </p>
+                </div>
+              </article>
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t6.year">2022</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t6.title">Fundación Mov Arte · Ballet Sinergia · Colombia</h3>
+                  <p data-i18n="portfolio.timeline.t6.body">
+                    As director of Fundación Mov Arte, led Ballet Sinergia to the Ibero-American Festival in Bucaramanga,
+                    Colombia, with “República Dominicana Soy” (Diario Hispaniola &amp; El Día, April 2022).
+                  </p>
+                </div>
+              </article>
+              <article class="portfolio-timeline-item">
+                <div class="year" data-i18n="portfolio.timeline.t7.year">2022–present</div>
+                <div>
+                  <h3 data-i18n="portfolio.timeline.t7.title">New York — teaching artist &amp; independent vendor</h3>
+                  <p data-i18n="portfolio.timeline.t7.body">
+                    Teaching artist with Hispanic Culture Arts (Bronx). HCA states she has taught dance education programs
+                    for NYC public schools as an independent vendor since 2022.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-work">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.02">
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.work.kicker">Featured productions</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.work.title">Stages, spectacles &amp; <em>cultural diplomacy.</em></h2>
+            </div>
+            <div class="portfolio-grid" style="margin-top: 2rem">
+              <article class="portfolio-card featured" data-reveal>
+                <span class="meta" data-i18n="portfolio.work.w1.meta">BFND · Teatro Nacional · 2013</span>
+                <h3 data-i18n="portfolio.work.w1.title">Somos Dominicana!</h3>
+                <p data-i18n="portfolio.work.w1.body">
+                  Updated BFND profile presented at Teatro Nacional, Sala Carlos Piantini; musical collaboration with
+                  David Armengod (El Nacional, Nov 2013).
+                </p>
+              </article>
+              <article class="portfolio-card" data-reveal>
+                <span class="meta" data-i18n="portfolio.work.w2.meta">Patriotic ballet · ~2013</span>
+                <h3 data-i18n="portfolio.work.w2.title">MOMENTOS — Restauración</h3>
+                <p data-i18n="portfolio.work.w2.body">
+                  Choreography for Restauración sequence with BFND, Ballet Nacional dancers, and guests; Franklin Díaz as
+                  Luperón (El Nacional, May 2013).
+                </p>
+              </article>
+              <article class="portfolio-card" data-reveal>
+                <span class="meta" data-i18n="portfolio.work.w3.meta">Awards show · Apr 2013</span>
+                <h3 data-i18n="portfolio.work.w3.title">Premios Soberano 2013</h3>
+                <p data-i18n="portfolio.work.w3.body">
+                  Show choreographer and casting lead; genres included lyrical, street/urban, Latin mix, and freestyle
+                  (Ensegundos, Jan 2013).
+                </p>
+              </article>
+              <article class="portfolio-card" data-reveal>
+                <span class="meta" data-i18n="portfolio.work.w4.meta">Festival · Colombia · 2022</span>
+                <h3 data-i18n="portfolio.work.w4.title">República Dominicana Soy</h3>
+                <p data-i18n="portfolio.work.w4.body">
+                  Ballet Sinergia / Fundación Mov Arte — merengue, bachata, and Congos de Villa Mella on tour with ~20
+                  artists (Diario Hispaniola &amp; El Día).
+                </p>
+              </article>
+              <article class="portfolio-card" data-reveal>
+                <span class="meta" data-i18n="portfolio.work.w5.meta">Casandra · nomination cycle</span>
+                <h3 data-i18n="portfolio.work.w5.title">Danza: Cuatro estilos</h3>
+                <p data-i18n="portfolio.work.w5.body">
+                  Nominee, classical/modern dancer category (“Danza: Cuatro estilos”) — Dominicana Online Casandra nominee
+                  list (separate from 2012 choreographer win).
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-expertise">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.015">
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.expertise.kicker">Styles &amp; expertise</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.expertise.title">Technique, folklore &amp; <em>musical collaboration.</em></h2>
+              <p class="lead" data-i18n="portfolio.expertise.lead">
+                Movement vocabulary reflected across HCA teaching specialties and Dominican press coverage of BFND and
+                touring work.
+              </p>
+              <div class="portfolio-pill-row">
+                <span data-i18n="portfolio.expertise.p1">Classical ballet</span>
+                <span data-i18n="portfolio.expertise.p2">Contemporary</span>
+                <span data-i18n="portfolio.expertise.p3">Dominican &amp; Latin American folklore</span>
+                <span data-i18n="portfolio.expertise.p4">Afro-Caribbean / African diaspora</span>
+                <span data-i18n="portfolio.expertise.p5">Historical &amp; cultural narrative pieces</span>
+                <span data-i18n="portfolio.expertise.p6">Musical theater</span>
+                <span data-i18n="portfolio.expertise.p7">Latin &amp; social dances</span>
+                <span data-i18n="portfolio.expertise.p8">Music direction collaboration</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-orgs">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.015">
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.orgs.kicker">Companies &amp; institutions</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.orgs.title">Affiliations &amp; <em>leadership.</em></h2>
+            </div>
+            <div class="portfolio-orgs" style="margin-top: 1.75rem" data-reveal>
+              <div class="portfolio-org">
+                <strong data-i18n="portfolio.orgs.o1.name">Ballet Folklórico Nacional Dominicano (BFND)</strong>
+                <span data-i18n="portfolio.orgs.o1.role">Artistic Director (published 2012–2016, HCA)</span>
+              </div>
+              <div class="portfolio-org">
+                <strong data-i18n="portfolio.orgs.o2.name">Ballet Nacional Dominicano</strong>
+                <span data-i18n="portfolio.orgs.o2.role">Former company dancer (2020 open letter)</span>
+              </div>
+              <div class="portfolio-org">
+                <strong data-i18n="portfolio.orgs.o3.name">Fundación Mov Arte · Ballet Sinergia</strong>
+                <span data-i18n="portfolio.orgs.o3.role">Director / choreographer (2022 press)</span>
+              </div>
+              <div class="portfolio-org">
+                <strong data-i18n="portfolio.orgs.o4.name">Ministerio de Relaciones Exteriores (MIREX)</strong>
+                <span data-i18n="portfolio.orgs.o4.role">Cultural promotion &amp; artistic corps (HCA; 2020 press)</span>
+              </div>
+              <div class="portfolio-org">
+                <strong data-i18n="portfolio.orgs.o5.name">Hispanic Culture Arts</strong>
+                <span data-i18n="portfolio.orgs.o5.role">Teaching artist — Bronx, NY (HCA About)</span>
+              </div>
+              <div class="portfolio-org">
+                <strong data-i18n="portfolio.orgs.o6.name">Danzart Studio</strong>
+                <span data-i18n="portfolio.orgs.o6.role">Casting &amp; studio contact (Premios Soberano 2013 notices)</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-teaching">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.015">
+            <div class="portfolio-split">
+              <div data-reveal>
+                <p class="section-kicker" data-i18n="portfolio.teaching.kicker">Teaching</p>
+                <h2 class="display-title portfolio-display" data-i18n-html="portfolio.teaching.title">Classrooms, ensembles &amp; <em>community.</em></h2>
+                <p class="lead" data-i18n="portfolio.teaching.lead">
+                  HCA lists ballet, contemporary, musical theater, Afro-Caribbean, Dominican folk, and Latin social
+                  dances for K–12 and community settings. Since 2022 she has taught NYC public school programs as an
+                  independent vendor (HCA).
+                </p>
+                <p class="portfolio-source-note" data-i18n="portfolio.teaching.note">
+                  Collaborator bio on HCA also references co-led workshops with Isidro Bobadilla for Jazz Power Inc.
+                  (dates and venues not listed on the public page).
+                </p>
+              </div>
+              <div class="portfolio-media-placeholder" data-reveal aria-hidden="true">
+                <span data-i18n="portfolio.teaching.placeholder">Classroom photo placeholder — usage rights pending</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-press">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.01">
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.press.kicker">Press &amp; recognition</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.press.title">Documented <em>coverage.</em></h2>
+              <p class="lead" data-i18n="portfolio.press.lead">Selected articles and award listings — external links open in a new tab.</p>
+            </div>
+            <div class="portfolio-press-list" style="margin-top: 1.5rem" data-reveal>
+              <a href="https://elnacional.com.do/fama-y-vida/la-bachata-maximaganadora-de-la-noche_112022.html" target="_blank" rel="noopener noreferrer">
+                <span class="press-title" data-i18n="portfolio.press.p1.title">Premios Casandra — Coreógrafo clásico winner list</span>
+                <span class="press-source" data-i18n="portfolio.press.p1.source">El Nacional</span>
+              </a>
+              <a href="https://elnacional.com.do/fama-y-vida/somos-dominicana_174560.html" target="_blank" rel="noopener noreferrer">
+                <span class="press-title" data-i18n="portfolio.press.p2.title">“Somos Dominicana!” — BFND profile</span>
+                <span class="press-source" data-i18n="portfolio.press.p2.source">El Nacional · 2013</span>
+              </a>
+              <a href="https://elnacional.com.do/opinion/elizabeth-y-la-restauracion_147190.html" target="_blank" rel="noopener noreferrer">
+                <span class="press-title" data-i18n="portfolio.press.p3.title">Elizabeth y la Restauración — MOMENTOS</span>
+                <span class="press-source" data-i18n="portfolio.press.p3.source">El Nacional · 2013</span>
+              </a>
+              <a href="https://elnacional.com.do/fama-y-vida/crooke-respeta-bases-folklore-rd_259758.html" target="_blank" rel="noopener noreferrer">
+                <span class="press-title" data-i18n="portfolio.press.p4.title">Crooke respeta bases del folklore RD</span>
+                <span class="press-source" data-i18n="portfolio.press.p4.source">El Nacional · 2016</span>
+              </a>
+              <a href="https://www.hispanicculturearts.com/about" target="_blank" rel="noopener noreferrer">
+                <span class="press-title" data-i18n="portfolio.press.p5.title">Teaching artist biography</span>
+                <span class="press-source" data-i18n="portfolio.press.p5.source">Hispanic Culture Arts</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-media">
+          <div class="portfolio-section-inner section-panel" data-parallax="0.01">
+            <div data-reveal>
+              <p class="section-kicker" data-i18n="portfolio.media.kicker">Photo &amp; video</p>
+              <h2 class="display-title portfolio-display" data-i18n-html="portfolio.media.title">Reel &amp; gallery <em>coming soon.</em></h2>
+              <p class="lead" data-i18n="portfolio.media.lead">
+                No verified personal showreel URL was found in public research. Slots below are reserved for cleared
+                performance and classroom footage.
+              </p>
+            </div>
+            <div class="portfolio-video-grid" style="margin-top: 1.5rem" data-reveal>
+              <div class="portfolio-video-placeholder" aria-hidden="true">
+                <span data-i18n="portfolio.media.v1">Video placeholder — BFND / stage performance</span>
+              </div>
+              <div class="portfolio-video-placeholder" aria-hidden="true">
+                <span data-i18n="portfolio.media.v2">Video placeholder — choreography reel</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="portfolio-section" id="portfolio-booking">
+          <div class="portfolio-section-inner portfolio-booking section-panel" data-parallax="0.01">
+            <div class="contact-grid">
+              <div data-reveal>
+                <p class="section-kicker" data-i18n="portfolio.booking.kicker">Booking</p>
+                <h2 class="display-title portfolio-display" data-i18n-html="portfolio.booking.title">Produce with <em>NovaStage.</em></h2>
+                <p class="lead" data-i18n="portfolio.booking.lead">
+                  NovaStage books dancers, models, musicians, choreography, and full show production. Share your dates,
+                  venue, and creative goals — we’ll route production inquiries through NovaStage.
+                </p>
+                <ul class="portfolio-booking-list">
+                  <li data-i18n="portfolio.booking.s1">Performers &amp; ensemble casting</li>
+                  <li data-i18n="portfolio.booking.s2">Original choreography &amp; cultural repertoire</li>
+                  <li data-i18n="portfolio.booking.s3">Music direction collaboration</li>
+                  <li data-i18n="portfolio.booking.s4">School residencies &amp; community showcases</li>
+                  <li data-i18n="portfolio.booking.s5">Full-scale show production</li>
+                </ul>
+                <div class="contact-meta" style="margin-top: 1.25rem">
+                  <p>
+                    <a href="mailto:info@novastage.com">info@novastage.com</a>
+                    <span class="placeholder" data-i18n="portfolio.booking.emailNote"> — NovaStage booking placeholder</span>
+                  </p>
+                </div>
+              </div>
+              <form class="form" id="portfolio-booking-form" data-reveal novalidate>
+                <div class="field-row">
+                  <div class="field">
+                    <label for="booking-name" data-i18n="form.name">Name</label>
+                    <input id="booking-name" name="name" autocomplete="name" required />
+                  </div>
+                  <div class="field">
+                    <label for="booking-email" data-i18n="form.email">Email</label>
+                    <input id="booking-email" name="email" type="email" autocomplete="email" required />
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="booking-interest" data-i18n="portfolio.booking.interestLabel">Booking interest</label>
+                  <select id="booking-interest" name="interest">
+                    <option value="dancers" data-i18n="portfolio.booking.opt.dancers">Dancers / performers</option>
+                    <option value="choreography" data-i18n="portfolio.booking.opt.choreography">Choreography</option>
+                    <option value="musicians" data-i18n="portfolio.booking.opt.musicians">Musicians</option>
+                    <option value="production" data-i18n="portfolio.booking.opt.production">Full show production</option>
+                    <option value="school" data-i18n="form.opt.school">School programs</option>
+                    <option value="general" data-i18n="form.opt.general">General inquiry</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="booking-message" data-i18n="form.message">Tell us a little more</label>
+                  <textarea id="booking-message" name="message" required></textarea>
+                </div>
+                <button class="button button-primary" type="submit" data-i18n="portfolio.booking.submit">Request booking</button>
+                <p class="form-note" data-i18n="form.note">Form preview only — submissions are not sent yet. (TODO: connect Netlify Forms or your preferred handler.)</p>
+                <p id="portfolio-form-status" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
 
     <footer>
@@ -337,6 +718,7 @@
     <script src="js/version-audio.js" defer></script>
     <script src="js/version-switcher.js" defer></script>
     <script src="js/invert.js" defer></script>
+    <script src="js/page-router.js" defer></script>
     <script src="js/main.js" defer></script>
   </body>
 </html>

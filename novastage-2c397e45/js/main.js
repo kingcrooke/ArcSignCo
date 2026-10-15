@@ -25,6 +25,7 @@
 
   var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var revealEls = document.querySelectorAll("[data-reveal]");
+  var revealObserver = null;
 
   function isBelowFold(el) {
     var rect = el.getBoundingClientRect();
@@ -46,24 +47,49 @@
       }
     });
 
-    var observer = new IntersectionObserver(
+    revealObserver = new IntersectionObserver(
       function (entries) {
         entries.forEach(function (entry) {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
             entry.target.classList.remove("reveal-pending");
-            observer.unobserve(entry.target);
+            revealObserver.unobserve(entry.target);
           }
         });
       },
       { rootMargin: "0px 0px -4% 0px", threshold: 0.08 }
     );
 
-    revealEls.forEach(function (el) {
-      if (el.classList.contains("reveal-pending")) {
-        observer.observe(el);
+    function observePending(scope) {
+      (scope || document).querySelectorAll("[data-reveal].reveal-pending").forEach(function (el) {
+        revealObserver.observe(el);
+      });
+    }
+
+    observePending();
+
+    window.NOVASTAGE_refreshReveal = function () {
+      if (!revealObserver) {
+        return;
       }
-    });
+      var scope = document.getElementById("view-portfolio");
+      if (!scope || scope.hidden) {
+        return;
+      }
+      scope.querySelectorAll("[data-reveal]").forEach(function (el) {
+        if (el.closest(".hero")) {
+          return;
+        }
+        if (!el.classList.contains("is-visible")) {
+          if (isBelowFold(el)) {
+            el.classList.add("reveal-pending");
+          } else {
+            el.classList.add("is-visible");
+          }
+        }
+      });
+      observePending(scope);
+    };
   } else {
     revealEls.forEach(function (el) {
       el.classList.add("is-visible");
@@ -119,6 +145,21 @@
         ? window.NOVASTAGE_t("form.status")
         : "Thank you — your message is ready to send once the contact form is connected. (TODO: wire up form handler.)";
       status.setAttribute("data-filled", "1");
+    });
+  }
+
+  var portfolioForm = document.getElementById("portfolio-booking-form");
+  var portfolioStatus = document.getElementById("portfolio-form-status");
+  if (portfolioForm && portfolioStatus) {
+    portfolioForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (!portfolioForm.reportValidity()) {
+        return;
+      }
+      portfolioStatus.textContent = window.NOVASTAGE_t
+        ? window.NOVASTAGE_t("portfolio.form.status")
+        : "Thank you — your booking request is ready to send once the contact form is connected.";
+      portfolioStatus.setAttribute("data-filled", "1");
     });
   }
 })();

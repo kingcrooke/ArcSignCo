@@ -1,0 +1,385 @@
+/* Elizabeth Crooke portfolio — inherits version palettes + invert tokens */
+
+body[data-active-page="portfolio"] .site-backdrop {
+  opacity: 0.45;
+}
+
+body[data-active-page="portfolio"] .site-backdrop-scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 24, 33, 0.35) 0%,
+    rgba(20, 24, 33, 0.55) 50%,
+    rgba(20, 24, 33, 0.72) 100%
+  );
+}
+
+.site-view[hidden] {
+  display: none !important;
+}
+
+.nav-shell a.nav-link--active {
+  color: var(--palette-accent, var(--turquoise-bright));
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.portfolio-hero {
+  position: relative;
+  min-height: min(92svh, 880px);
+  display: grid;
+  align-items: end;
+  padding: max(120px, 14vh) 24px clamp(48px, 8vw, 72px);
+}
+
+.portfolio-hero-inner {
+  width: min(100%, var(--max-width));
+  margin: 0 auto;
+}
+
+.portfolio-hero-panel {
+  display: grid;
+  gap: clamp(20px, 3vw, 32px);
+  padding: clamp(40px, 6vw, 72px);
+  border-radius: 14px;
+  border: 1px solid var(--line-dark);
+  background: color-mix(in srgb, var(--panel-bg) 92%, transparent);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.portfolio-eyebrow {
+  margin: 0;
+  font-family: var(--caps);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--palette-accent, var(--turquoise-bright));
+}
+
+.portfolio-name {
+  margin: 0;
+  font-family: "Glacial Indifference", var(--sans);
+  font-size: clamp(2.8rem, 8vw, 4.75rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--text-on-dark);
+}
+
+.portfolio-roles {
+  margin: 0;
+  font-family: var(--caps);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.portfolio-tagline {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 1.08rem;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+}
+
+.portfolio-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.portfolio-display {
+  font-family: "Glacial Indifference", var(--display);
+  font-weight: 400;
+}
+
+.portfolio-section {
+  padding: clamp(40px, 7vw, 72px) 24px;
+}
+
+.portfolio-section-inner {
+  width: min(100%, var(--max-width));
+  margin: 0 auto;
+}
+
+.portfolio-split {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: start;
+}
+
+.portfolio-media-placeholder {
+  aspect-ratio: 4 / 5;
+  border-radius: 10px;
+  border: 1px dashed color-mix(in srgb, var(--palette-accent, var(--turquoise-bright)) 45%, var(--line-dark));
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--charcoal-soft) 80%, transparent),
+    color-mix(in srgb, var(--charcoal) 90%, transparent)
+  );
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.portfolio-media-placeholder span {
+  font-family: var(--caps);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+  max-width: 22ch;
+}
+
+.portfolio-timeline {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--line-dark);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.portfolio-timeline-item {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  gap: 20px;
+  padding: 22px 24px;
+  background: color-mix(in srgb, var(--charcoal-soft) 75%, transparent);
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.portfolio-timeline-item:last-child {
+  border-bottom: 0;
+}
+
+.portfolio-timeline-item .year {
+  font-family: var(--caps);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+}
+
+.portfolio-timeline-item h3 {
+  margin: 0 0 0.35rem;
+  font-family: "Glacial Indifference", var(--display);
+  font-size: 1.25rem;
+  font-weight: 400;
+}
+
+.portfolio-timeline-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.portfolio-card {
+  grid-column: span 4;
+  padding: 26px;
+  min-height: 200px;
+  border: 1px solid var(--line-dark);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--charcoal-soft) 70%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.portfolio-card.featured {
+  grid-column: span 8;
+}
+
+.portfolio-card .meta {
+  font-family: var(--caps);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--palette-accent, var(--turquoise-bright));
+}
+
+.portfolio-card h3 {
+  margin: 0.75rem 0 0.5rem;
+  font-family: "Glacial Indifference", var(--display);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.portfolio-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+}
+
+.portfolio-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.portfolio-pill-row span {
+  padding: 6px 12px;
+  border: 1px solid var(--line-dark);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted-dark);
+}
+
+.portfolio-orgs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.portfolio-org {
+  padding: 18px 20px;
+  border: 1px solid var(--line-dark);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--charcoal) 65%, transparent);
+}
+
+.portfolio-org strong {
+  display: block;
+  font-family: "Glacial Indifference", var(--display);
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.portfolio-org span {
+  font-size: 0.82rem;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+}
+
+.portfolio-press-list {
+  display: grid;
+  gap: 12px;
+}
+
+.portfolio-press-list a {
+  display: block;
+  padding: 16px 18px;
+  border: 1px solid var(--line-dark);
+  border-radius: 8px;
+  text-decoration: none;
+  background: color-mix(in srgb, var(--charcoal-soft) 60%, transparent);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.portfolio-press-list a:hover {
+  border-color: var(--palette-accent, var(--turquoise-bright));
+  background: color-mix(in srgb, var(--charcoal-soft) 85%, transparent);
+}
+
+.portfolio-press-list .press-title {
+  display: block;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--text-on-dark);
+  margin-bottom: 4px;
+}
+
+.portfolio-press-list .press-source {
+  font-size: 0.78rem;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+}
+
+.portfolio-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.portfolio-video-placeholder {
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  border: 1px dashed var(--line-dark);
+  background: color-mix(in srgb, var(--charcoal) 80%, transparent);
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 16px;
+}
+
+.portfolio-video-placeholder span {
+  font-family: var(--caps);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+}
+
+.portfolio-booking {
+  border: 1px solid color-mix(in srgb, var(--palette-accent, var(--turquoise-bright)) 35%, var(--line-dark));
+  border-radius: 14px;
+  padding: clamp(32px, 5vw, 48px);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--charcoal-soft) 90%, transparent),
+    color-mix(in srgb, var(--charcoal) 95%, transparent)
+  );
+}
+
+.portfolio-booking-list {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.portfolio-booking-list li {
+  font-size: 0.9rem;
+  color: var(--palette-text-muted, var(--text-muted-dark));
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.portfolio-booking-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--palette-accent, var(--turquoise-bright));
+}
+
+.portfolio-source-note {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-muted-dark);
+  opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+  .portfolio-split {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-card,
+  .portfolio-card.featured {
+    grid-column: span 12;
+  }
+
+  .portfolio-video-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .portfolio-timeline-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
