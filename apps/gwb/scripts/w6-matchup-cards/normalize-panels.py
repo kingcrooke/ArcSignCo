@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Normalize panel crops so horn/head bounding boxes align (~5% tolerance target)."""
+"""Normalize panel crops so horn/head bounding boxes align (~5% tolerance target).
+
+Fills OUT_W×OUT_H with cover-style crop (no letterboxing black bars).
+"""
 from __future__ import annotations
 
 import json
@@ -29,39 +32,33 @@ def horn_bbox(img: np.ndarray) -> tuple[int, int, int, int]:
     return max(0, x0 - pad), max(0, y0 - pad), min(w, x1 + pad), min(roi.shape[0], y1 + pad)
 
 
+def cover_crop(img: np.ndarray, out_w: int, out_h: int) -> np.ndarray:
+    """Scale image to cover out_w×out_h, crop overflow; bias crop to keep horns high."""
+    h, w = img.shape[:2]
+    scale = max(out_w / w, out_h / h)
+    new_w, new_h = int(round(w * scale)), int(round(h * scale))
+    resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
+
+    x0, y0, x1, y1 = horn_bbox(resized)
+    horn_cy_px = (y0 + y1) / 2
+    target_cy = out_h * (TARGET_HORN_TOP + 0.22)
+
+    cx = max(0, (new_w - out_w) // 2)
+    cy = int(horn_cy_px - target_cy)
+    cy = int(np.clip(cy, 0, max(0, new_h - out_h)))
+
+    cropped = resized[cy : cy + out_h, cx : cx + out_w]
+    if cropped.shape[0] != out_h or cropped.shape[1] != out_w:
+        cropped = cv2.resize(cropped, (out_w, out_h), interpolation=cv2.INTER_LANCZOS4)
+    return cropped
+
+
 def normalize(path: Path) -> dict:
     img = cv2.imread(str(path))
     if img is None:
         raise SystemExit(f"missing {path}")
-    h, w = img.shape[:2]
-    x0, y0, x1, y1 = horn_bbox(img)
-    horn_h = max(1, y1 - y0)
-    horn_cy = (y0 + y1) / 2 / h
 
-    scale = (OUT_H * 0.38) / horn_h
-    scale = float(np.clip(scale, 0.85, 1.35))
-    new_w, new_h = int(w * scale), int(h * scale)
-    resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
-
-    # target horn center y
-    x0b, y0b, x1b, y1b = horn_bbox(resized)
-    horn_cy_px = (y0b + y1b) / 2
-    target_cy = OUT_H * TARGET_HORN_TOP + (OUT_H * 0.22)
-    y_off = int(target_cy - horn_cy_px)
-    x_off = (OUT_W - new_w) // 2
-
-    canvas = np.zeros((OUT_H, OUT_W, 3), dtype=np.uint8)
-    y1p = y_off + new_h
-    x1p = x_off + new_w
-    sy0 = max(0, -y_off)
-    sx0 = max(0, -x_off)
-    dy0 = max(0, y_off)
-    dx0 = max(0, x_off)
-    dy1 = min(OUT_H, y1p)
-    dx1 = min(OUT_W, x1p)
-    sy1 = sy0 + (dy1 - dy0)
-    sx1 = sx0 + (dx1 - dx0)
-    canvas[dy0:dy1, dx0:dx1] = resized[sy0:sy1, sx0:sx1]
+    canvas = cover_crop(img, OUT_W, OUT_H)
 
     cv2.imwrite(str(path), canvas, [int(cv2.IMWRITE_JPEG_QUALITY), 92])
     x0b, y0b, x1b, y1b = horn_bbox(canvas)
