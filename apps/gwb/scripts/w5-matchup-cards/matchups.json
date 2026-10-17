@@ -1,0 +1,158 @@
+[
+  {
+    "id": "vs-w5-m1",
+    "matchupNum": 1,
+    "title": "THE FINAL BOSS",
+    "left": {
+      "name": "STEVEN",
+      "record": "4-0",
+      "pct": 65,
+      "qb": "Sam Darnold",
+      "team": "SEA",
+      "number": 14,
+      "pose": "intense stare-down toward opponent, arms at sides",
+      "bg": "lava lightning gothic"
+    },
+    "right": {
+      "name": "CROOKE",
+      "record": "1-3",
+      "pct": 35,
+      "qb": "C.J. Stroud",
+      "team": "HOU",
+      "number": 7,
+      "pose": "arms crossed, chin up defiant",
+      "bg": "dark gothic storm lightning"
+    },
+    "tagline": "Darnold vs Stroud • Steven 714 PF through Week 4"
+  },
+  {
+    "id": "vs-w5-m2",
+    "matchupNum": 2,
+    "title": "REDEMPTION ARC",
+    "left": {
+      "name": "DANNY",
+      "record": "1-3",
+      "pct": 43,
+      "qb": "Trevor Lawrence",
+      "team": "JAX",
+      "number": 16,
+      "pose": "football tucked under arm, forward lean",
+      "bg": "lava embers lightning"
+    },
+    "right": {
+      "name": "MANNY",
+      "record": "2-2",
+      "pct": 57,
+      "qb": "Kirk Cousins",
+      "team": "LV",
+      "number": 8,
+      "pose": "pointing at opponent, other hand on hip",
+      "bg": "purple gothic storm"
+    },
+    "tagline": "Lawrence vs Cousins • Manny riding a 2-game win streak"
+  },
+  {
+    "id": "vs-w5-m3",
+    "matchupNum": 3,
+    "title": "INJURY REPORT BOWL",
+    "left": {
+      "name": "NARKING",
+      "record": "1-3",
+      "pct": 57,
+      "qb": "Brock Purdy",
+      "team": "SF",
+      "number": 13,
+      "pose": "roaring hype pose, mouth open",
+      "bg": "red lava lightning"
+    },
+    "right": {
+      "name": "ERIC",
+      "record": "2-2",
+      "pct": 43,
+      "qb": "Dak Prescott",
+      "team": "DAL",
+      "number": 4,
+      "pose": "double bicep flex, confident",
+      "bg": "dark gothic castle lightning"
+    },
+    "tagline": "Purdy vs Prescott • Narking's RB room is a war zone"
+  },
+  {
+    "id": "vs-w5-m4",
+    "matchupNum": 4,
+    "title": "COOKOUT CHECK",
+    "left": {
+      "name": "HADY",
+      "record": "3-1",
+      "pct": 60,
+      "qb": "Drake Maye",
+      "team": "NE",
+      "number": 10,
+      "pose": "arms crossed, stone-cold stare",
+      "bg": "lava gothic lightning"
+    },
+    "right": {
+      "name": "FRANKIE",
+      "record": "1-3",
+      "pct": 40,
+      "qb": "Jared Goff",
+      "team": "DET",
+      "number": 16,
+      "pose": "narrow-eyed stare-down",
+      "bg": "storm lightning spires"
+    },
+    "tagline": "Maye vs Goff • Hady hunting another W"
+  },
+  {
+    "id": "vs-w5-m5",
+    "matchupNum": 5,
+    "title": "PLAYOFF PREVIEW",
+    "left": {
+      "name": "MAURICIO",
+      "record": "2-2",
+      "pct": 38,
+      "qb": "Jacoby Brissett",
+      "team": "ARI",
+      "number": 7,
+      "pose": "pointing forward, commanding",
+      "bg": "lava lightning"
+    },
+    "right": {
+      "name": "JAMIL",
+      "record": "3-1",
+      "pct": 62,
+      "qb": "Jalen Hurts",
+      "team": "PHI",
+      "number": 1,
+      "pose": "football tucked, ready to run",
+      "bg": "gothic storm green lightning"
+    },
+    "tagline": "Brissett vs Hurts • Both sitting on 2+ wins"
+  },
+  {
+    "id": "vs-w5-m6",
+    "matchupNum": 6,
+    "title": "DESPERATION BOWL",
+    "left": {
+      "name": "KAYSER",
+      "record": "3-1",
+      "pct": 52,
+      "qb": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9,
+      "pose": "confident flex, one arm raised",
+      "bg": "lava gothic"
+    },
+    "right": {
+      "name": "MATT",
+      "record": "1-3",
+      "pct": 48,
+      "qb": "Josh Allen",
+      "team": "BUF",
+      "number": 17,
+      "pose": "hype roar with football raised (no fist pump)",
+      "bg": "dark lightning storm"
+    },
+    "tagline": "Stafford vs Allen • Matt needs a lifeline"
+  }
+]

@@ -26,6 +26,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
 
   const matchupsByWeek: Record<number, PublishedSlide[]> = {
     5: publish(WEEK_5_MATCHUPS),
+    6: publish(WEEK_6_MATCHUPS),
   }
   const matchups = matchupsByWeek[week]
   if (matchups?.length) {
@@ -153,6 +154,15 @@ const WEEK_5_MATCHUPS: PublishedSlide[] = [
   vs('vs-w5-m4', 'Hady vs Frankie'),
   vs('vs-w5-m5', 'Mauricio vs Jamil'),
   vs('vs-w5-m6', 'Kayser vs Matt'),
+]
+
+const WEEK_6_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w6-m1', 'Crooke vs Manny'),
+  vs('vs-w6-m2', 'Eric vs Steven'),
+  vs('vs-w6-m3', 'Danny vs Frankie'),
+  vs('vs-w6-m4', 'Narking vs Jamil'),
+  vs('vs-w6-m5', 'Hady vs Matt'),
+  vs('vs-w6-m6', 'Mauricio vs Kayser'),
 ]
 
 const WEEK_4_REPORT: PublishedSlide[] = [
