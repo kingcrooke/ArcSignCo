@@ -1,0 +1,226 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const FONTS = path.join(__dirname, '../fonts-local')
+
+export function cardHtml(m, leftImg, rightImg) {
+  const leftPct = m.left.pct
+  const rightPct = m.right.pct
+  const leftNameTitle = `${m.left.name} vs ${m.right.name}`
+  const recordLine = `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
+  const barLeft = leftPct
+  const footerRight = `MATCHUP • W5M${m.matchupNum}`
+
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+@font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
+@font-face { font-family: 'Bebas'; src: url('file://${FONTS}/BebasNeue-Regular.ttf'); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0c10; }
+.slide {
+  width: 1080px; height: 1350px;
+  background: linear-gradient(180deg, #0d1118 0%, #080a0f 55%, #06080c 100%);
+  color: #fff;
+  font-family: 'Anton', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.header {
+  padding: 48px 56px 0;
+}
+.kicker {
+  font-family: 'Bebas', sans-serif;
+  font-size: 32px;
+  letter-spacing: 0.12em;
+  color: #d4af37;
+  margin-bottom: 6px;
+}
+.kicker-line {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #d4af37 0%, rgba(212,175,55,0.2) 100%);
+  margin-bottom: 14px;
+}
+.headline {
+  font-size: 76px;
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.headline .vs {
+  font-size: 52px;
+  color: #c9c9c9;
+  margin: 0 0.15em;
+}
+.records {
+  font-family: 'Bebas', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.06em;
+  color: #d4af37;
+  margin-bottom: 8px;
+}
+.panels {
+  position: relative;
+  margin: 36px 44px 0;
+  height: 640px;
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  align-items: stretch;
+}
+.panel {
+  width: 472px;
+  border-radius: 18px;
+  border: 4px solid #d4af37;
+  box-shadow: 0 0 28px rgba(212,175,55,0.35), inset 0 0 0 1px rgba(0,0,0,0.6);
+  position: relative;
+  overflow: hidden;
+  background: #111;
+}
+.panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 8%;
+  display: block;
+}
+.pill {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-family: 'Bebas', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.08em;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.72);
+  border: 2px solid #d4af37;
+  color: #d4af37;
+  z-index: 2;
+}
+.vs-badge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0d060, #c9a227 55%, #8a6d12);
+  border: 5px solid #1a1408;
+  box-shadow: 0 0 24px rgba(212,175,55,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 46px;
+  color: #0a0806;
+  z-index: 5;
+}
+.mid {
+  text-align: center;
+  margin-top: 34px;
+  padding: 0 56px;
+}
+.bowl {
+  font-size: 56px;
+  letter-spacing: 0.06em;
+  color: #d4af37;
+  margin-bottom: 22px;
+}
+.pct-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Bebas', sans-serif;
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+.pct-left { color: #d4af37; }
+.pct-right { color: #e8e8e8; }
+.bar {
+  height: 14px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #2a2f38;
+  display: flex;
+}
+.bar-fill { background: linear-gradient(90deg, #e8c547, #b8922a); height: 100%; }
+.tagline {
+  margin-top: 16px;
+  font-family: 'Bebas', sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  color: #8a9099;
+}
+.footer {
+  position: absolute;
+  left: 56px;
+  right: 56px;
+  bottom: 42px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'Bebas', sans-serif;
+}
+.footer-left {
+  font-size: 24px;
+  color: #4a5058;
+  letter-spacing: 0.02em;
+}
+.footer-right {
+  font-size: 30px;
+  letter-spacing: 0.12em;
+}
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="header">
+    <div class="kicker">GWB • WEEK 5</div>
+    <div class="kicker-line"></div>
+    <div class="headline">${m.left.name} <span class="vs">vs</span> ${m.right.name}</div>
+    <div class="records">${recordLine}</div>
+  </div>
+  <div class="panels">
+    <div class="panel panel-left">
+      <div class="pill">${m.left.name} ${m.left.record}</div>
+      <img src="file://${leftImg}" alt=""/>
+    </div>
+    <div class="vs-badge">VS</div>
+    <div class="panel panel-right">
+      <div class="pill">${m.right.name} ${m.right.record}</div>
+      <img src="file://${rightImg}" alt=""/>
+    </div>
+  </div>
+  <div class="mid">
+    <div class="bowl">${m.title}</div>
+    <div class="pct-row">
+      <span class="pct-left">${cap(m.left.name)} ${leftPct}%</span>
+      <span class="pct-right">${cap(m.right.name)} ${rightPct}%</span>
+    </div>
+    <div class="bar">
+      <div class="bar-fill" style="width: ${barLeft}%"></div>
+    </div>
+    <div class="tagline">${m.tagline}</div>
+  </div>
+  <div class="footer">
+    <span class="footer-left">gwb_fantasy_football</span>
+    <span class="footer-right">${footerRight}</span>
+  </div>
+</div>
+</body>
+</html>`
+}
+
+function cap(s) {
+  return s.charAt(0) + s.slice(1).toLowerCase()
+}
+
+export function loadMatchups() {
+  return JSON.parse(readFileSync(path.join(__dirname, 'matchups.json'), 'utf8'))
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "id": "vs-w6-m1",
+    "matchupNum": 1,
+    "title": "DESPERATION DUEL",
+    "left": {
+      "name": "CROOKE",
+      "record": "2-3",
+      "pct": 50,
+      "qb": "Lamar Jackson",
+      "team": "BAL",
+      "number": 8,
+      "pose": "arms crossed, chin up defiant",
+      "bg": "dark gothic storm lightning"
+    },
+    "right": {
+      "name": "MANNY",
+      "record": "2-3",
+      "pct": 50,
+      "qb": "Patrick Mahomes",
+      "team": "KC",
+      "number": 15,
+      "pose": "pointing at opponent, other hand on hip",
+      "bg": "purple gothic storm"
+    },
+    "tagline": "Lamar vs Mahomes • Both teams need a bounce-back"
+  },
+  {
+    "id": "vs-w6-m2",
+    "matchupNum": 2,
+    "title": "CONTENDER CHECK",
+    "left": {
+      "name": "ERIC",
+      "record": "3-2",
+      "pct": 45,
+      "qb": "Jordan Love",
+      "team": "GB",
+      "number": 10,
+      "pose": "double bicep flex, confident",
+      "bg": "dark gothic castle lightning"
+    },
+    "right": {
+      "name": "STEVEN",
+      "record": "4-1",
+      "pct": 55,
+      "qb": "Sam Darnold",
+      "team": "SEA",
+      "number": 14,
+      "pose": "intense stare-down toward opponent, arms at sides",
+      "bg": "lava lightning gothic"
+    },
+    "tagline": "Love vs Darnold • Steven still hunting perfection"
+  },
+  {
+    "id": "vs-w6-m3",
+    "matchupNum": 3,
+    "title": "REDEMPTION ARC",
+    "left": {
+      "name": "DANNY",
+      "record": "2-3",
+      "pct": 55,
+      "qb": "Trevor Lawrence",
+      "team": "JAX",
+      "number": 16,
+      "pose": "football tucked under arm, forward lean",
+      "bg": "lava embers lightning"
+    },
+    "right": {
+      "name": "FRANKIE",
+      "record": "1-4",
+      "pct": 45,
+      "qb": "Aaron Rodgers",
+      "team": "PIT",
+      "number": 8,
+      "pose": "narrow-eyed stare-down",
+      "bg": "storm lightning spires"
+    },
+    "tagline": "Lawrence vs Rodgers • Frankie Zone on life support"
+  },
+  {
+    "id": "vs-w6-m4",
+    "matchupNum": 4,
+    "title": "SURVIVAL BOWL",
+    "left": {
+      "name": "NARKING",
+      "record": "1-4",
+      "pct": 48,
+      "qb": "Brock Purdy",
+      "team": "SF",
+      "number": 13,
+      "pose": "roaring hype pose, mouth open",
+      "bg": "red lava lightning"
+    },
+    "right": {
+      "name": "JAMIL",
+      "record": "3-2",
+      "pct": 52,
+      "qb": "Jameis Winston",
+      "team": "NYG",
+      "number": 19,
+      "pose": "football tucked, ready to run",
+      "bg": "gothic storm green lightning"
+    },
+    "tagline": "Purdy vs Winston • Narking's season on the brink"
+  },
+  {
+    "id": "vs-w6-m5",
+    "matchupNum": 5,
+    "title": "PLAYOFF PREVIEW",
+    "left": {
+      "name": "HADY",
+      "record": "4-1",
+      "pct": 50,
+      "qb": "Drake Maye",
+      "team": "NE",
+      "number": 10,
+      "pose": "arms crossed, stone-cold stare",
+      "bg": "lava gothic lightning"
+    },
+    "right": {
+      "name": "MATT",
+      "record": "2-3",
+      "pct": 50,
+      "qb": "Josh Allen",
+      "team": "BUF",
+      "number": 17,
+      "pose": "hype roar with football raised (no fist pump)",
+      "bg": "dark lightning storm"
+    },
+    "tagline": "Maye vs Allen • Hady defending top-two seed"
+  },
+  {
+    "id": "vs-w6-m6",
+    "matchupNum": 6,
+    "title": "DEADLOCK DERBY",
+    "left": {
+      "name": "MAURICIO",
+      "record": "3-2",
+      "pct": 49,
+      "qb": "Bryce Young",
+      "team": "CAR",
+      "number": 9,
+      "pose": "pointing forward, commanding",
+      "bg": "lava lightning"
+    },
+    "right": {
+      "name": "KAYSER",
+      "record": "3-2",
+      "pct": 51,
+      "qb": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9,
+      "pose": "confident flex, one arm raised",
+      "bg": "lava gothic"
+    },
+    "tagline": "Young vs Stafford • Identical records, different vibes"
+  }
+]
