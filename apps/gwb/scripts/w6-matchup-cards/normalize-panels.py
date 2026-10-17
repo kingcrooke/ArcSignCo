@@ -75,7 +75,7 @@ def normalize(path: Path) -> dict:
 
 def main() -> None:
     stats = []
-    for p in sorted(ASSETS.glob("vs-w5-m*.jpg")):
+    for p in sorted(ASSETS.glob("vs-w6-m*.jpg")):
         stats.append(normalize(p))
     hs = [s["horn_h"] for s in stats]
     ref = float(np.median(hs))
