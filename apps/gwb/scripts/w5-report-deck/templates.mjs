@@ -16,11 +16,17 @@ function esc(s) {
     .replace(/</g, '&lt;')
 }
 
-function heroPair(heroId) {
+function pickHeroSide(slide) {
+  return slide.heroSide === 'loser' ? 'loser' : 'winner'
+}
+
+function heroPair(heroId, side = 'winner') {
   if (!heroId) return null
+  const pick = side === 'loser' ? 'loser' : 'winner'
   return {
     winner: fileUrl(path.join(RESULT_ASSETS, `${heroId}-winner.jpg`)),
     loser: fileUrl(path.join(RESULT_ASSETS, `${heroId}-loser.jpg`)),
+    focus: fileUrl(path.join(RESULT_ASSETS, `${heroId}-${pick}.jpg`)),
   }
 }
 
@@ -93,11 +99,11 @@ function titleBlock(slide) {
 }
 
 function layoutCover(slide, pageNum) {
-  const heroes = heroPair(slide.hero)
+  const heroes = heroPair(slide.hero, pickHeroSide(slide))
   const body = (slide.body ?? [])
     .map((line) => (line ? `<p>${esc(line)}</p>` : '<p>&nbsp;</p>'))
     .join('')
-  const heroImg = heroes?.winner ?? ''
+  const heroImg = heroes?.focus ?? ''
   const heroSide = heroImg
     ? `<div class="cover-hero"><img src="${heroImg}" alt=""/><div class="veil"></div></div>`
     : ''
@@ -151,9 +157,9 @@ function layoutMatchup(slide, pageNum) {
 }
 
 function layoutStat(slide, pageNum) {
-  const heroes = heroPair(slide.hero)
+  const heroes = heroPair(slide.hero, pickHeroSide(slide))
   const bg = heroes
-    ? `<div class="bg-hero"><img src="${heroes.winner}" alt=""/></div><div class="bg-scrim"></div>`
+    ? `<div class="bg-hero"><img src="${heroes.focus}" alt=""/></div><div class="bg-scrim"></div>`
     : ''
   const boxes = (slide.statBoxes ?? [])
     .map(

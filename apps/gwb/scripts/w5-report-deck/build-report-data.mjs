@@ -143,6 +143,8 @@ async function main() {
         'NO MORE PERFECT RECORDS.',
       ],
       hero: steven.id,
+      heroSide: 'loser',
+      heroManager: 'Steven',
     },
     {
       id: 'w5-slide-02',
@@ -156,6 +158,7 @@ async function main() {
         `Steven still leads the league at ${standings.find((s) => s.name === 'Steven').pf.toFixed(2)} PF.`,
       ],
       hero: steven.id,
+      heroManager: 'Crooke',
     },
     {
       id: 'w5-slide-03',
@@ -169,6 +172,7 @@ async function main() {
         `HADY moves to ${hady.winnerRecord}.`,
       ],
       hero: hady.id,
+      heroManager: 'Hady',
     },
     {
       id: 'w5-slide-04',
@@ -182,6 +186,7 @@ async function main() {
         'Danny snaps a two-game skid.',
       ],
       hero: 'results-w5-m2',
+      heroManager: 'Danny',
     },
     {
       id: 'w5-slide-05',
@@ -194,6 +199,7 @@ async function main() {
         `${startingQbLastName(matchups, players, ROSTER.Mauricio)} vs ${startingQbLastName(matchups, players, ROSTER.Jamil)} on the stat sheet.`,
       ],
       hero: 'results-w5-m5',
+      heroManager: 'Mauricio',
     },
     {
       id: 'w5-slide-06',
@@ -206,6 +212,7 @@ async function main() {
         `${startingQbLastName(matchups, players, ROSTER.Matt)} vs ${startingQbLastName(matchups, players, ROSTER.Kayser)} — Matt gets the W.`,
       ],
       hero: 'results-w5-m6',
+      heroManager: 'Matt',
     },
     {
       id: 'w5-slide-07',
@@ -219,6 +226,7 @@ async function main() {
         `Narking held to ${narking.loserPoints.toFixed(2)} — low mark of the week.`,
       ],
       hero: 'results-w5-m3',
+      heroManager: 'Eric',
     },
     {
       id: 'w5-slide-08',
@@ -248,6 +256,8 @@ async function main() {
         'The zone signage remains fully operational.',
       ],
       hero: 'results-w5-m4',
+      heroSide: 'loser',
+      heroManager: 'Frankie',
     },
     {
       id: 'w5-slide-10',

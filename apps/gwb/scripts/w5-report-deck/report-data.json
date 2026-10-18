@@ -13,7 +13,9 @@
         "",
         "NO MORE PERFECT RECORDS."
       ],
-      "hero": "results-w5-m1"
+      "hero": "results-w5-m1",
+      "heroSide": "loser",
+      "heroManager": "Steven"
     },
     {
       "id": "w5-slide-02",
@@ -26,7 +28,8 @@
         "Crooke climbs to 2-3.",
         "Steven still leads the league at 834.84 PF."
       ],
-      "hero": "results-w5-m1"
+      "hero": "results-w5-m1",
+      "heroManager": "Crooke"
     },
     {
       "id": "w5-slide-03",
@@ -39,7 +42,8 @@
         "Margin: 111.27 — biggest blowout of the week.",
         "HADY moves to 4-1."
       ],
-      "hero": "results-w5-m4"
+      "hero": "results-w5-m4",
+      "heroManager": "Hady"
     },
     {
       "id": "w5-slide-04",
@@ -52,7 +56,8 @@
         "Lawrence vs Cousins on the stat sheet.",
         "Danny snaps a two-game skid."
       ],
-      "hero": "results-w5-m2"
+      "hero": "results-w5-m2",
+      "heroManager": "Danny"
     },
     {
       "id": "w5-slide-05",
@@ -64,7 +69,8 @@
         "Warren 44.8.",
         "Brissett vs Hurts on the stat sheet."
       ],
-      "hero": "results-w5-m5"
+      "hero": "results-w5-m5",
+      "heroManager": "Mauricio"
     },
     {
       "id": "w5-slide-06",
@@ -76,7 +82,8 @@
         "Gibbs 39.7.",
         "Allen vs Stafford — Matt gets the W."
       ],
-      "hero": "results-w5-m6"
+      "hero": "results-w5-m6",
+      "heroManager": "Matt"
     },
     {
       "id": "w5-slide-07",
@@ -89,7 +96,8 @@
         "Prescott vs Purdy.",
         "Narking held to 95.86 — low mark of the week."
       ],
-      "hero": "results-w5-m3"
+      "hero": "results-w5-m3",
+      "heroManager": "Eric"
     },
     {
       "id": "w5-slide-08",
@@ -126,7 +134,9 @@
         "Score: 101.06 in the HADY rout.",
         "The zone signage remains fully operational."
       ],
-      "hero": "results-w5-m4"
+      "hero": "results-w5-m4",
+      "heroSide": "loser",
+      "heroManager": "Frankie"
     },
     {
       "id": "w5-slide-10",
