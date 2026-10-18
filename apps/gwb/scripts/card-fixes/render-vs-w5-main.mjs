@@ -1,5 +1,5 @@
 /**
- * Render vs-w5-m2 / m4 with origin/main template + live-card-copy data (same path as m1 would use).
+ * Render vs-w5-m2 / m4 with w5-matchup-cards/template.mjs + live-card-copy (no m1 composite).
  */
 import { chromium } from 'playwright'
 import { mkdir, writeFile, readFile } from 'node:fs/promises'
