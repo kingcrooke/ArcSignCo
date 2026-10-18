@@ -29,13 +29,26 @@ def main_from_git(card_id: str) -> Image.Image:
     return Image.open(tmp).convert("RGB")
 
 
+def touched_results() -> set[str] | None:
+    raw = __import__("os").environ.get("GWB_ROUND7_RESULTS", "").strip()
+    if not raw:
+        return None
+    return {s.strip() for s in raw.split(",") if s.strip()}
+
+
 def main() -> None:
     regen = json.loads((CARD_FIXES / "panel-fixes.json").read_text())
+    allow = touched_results()
     by_card: dict[str, dict[str, Path]] = {}
     for job in regen["panels"]:
         if not job["cardId"].startswith("results-w"):
             continue
-        by_card.setdefault(job["cardId"], {})[job["side"]] = CARD_FIXES / job["outFile"]
+        if allow is not None and job["cardId"] not in allow:
+            continue
+        out = CARD_FIXES / job["outFile"]
+        if not out.is_file():
+            raise FileNotFoundError(job["panelId"])
+        by_card.setdefault(job["cardId"], {})[job["side"]] = out
 
     for card_id, sides in sorted(by_card.items()):
         img = main_from_git(card_id)

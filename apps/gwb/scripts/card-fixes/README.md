@@ -18,7 +18,7 @@ node scripts/card-fixes/build-panel-fixes.mjs
 
 python3 scripts/card-fixes/rebuild/extract-keeper-panels.py
 node scripts/card-fixes/rebuild/build-results-meta.mjs
-node scripts/card-fixes/rebuild/render-all.mjs
+node scripts/card-fixes/render-round7.mjs
 
 node scripts/optimize-published-slides.mjs --only=<touched ids>
 # copy public/slides/* → gwb-fe006a16/slides/ for touched basenames only

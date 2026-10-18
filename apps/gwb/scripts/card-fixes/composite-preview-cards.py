@@ -49,11 +49,21 @@ def panel_path(job: dict) -> Path:
     raise FileNotFoundError(rel)
 
 
+def touched_previews() -> set[str] | None:
+    raw = __import__("os").environ.get("GWB_ROUND7_PREVIEWS", "").strip()
+    if not raw:
+        return None
+    return {s.strip() for s in raw.split(",") if s.strip()}
+
+
 def main() -> None:
+    allow = touched_previews()
     by_card: dict[str, list] = {}
     for job in REGEN["panels"]:
         cid = job["cardId"]
         if not cid.startswith("vs-"):
+            continue
+        if allow is not None and cid not in allow:
             continue
         by_card.setdefault(cid, []).append(job)
 
