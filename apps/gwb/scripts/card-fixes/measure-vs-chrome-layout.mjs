@@ -251,19 +251,40 @@ async function main() {
 
   const vsTest = (r, g, b) => r > 235 && g > 235 && b > 235
   function measureVsInk(buf) {
-    let x0 = 9999
-    let x1 = -1
-    for (let y = 168; y < 208; y++) {
+    let best = null
+    for (let y = 175; y < 205; y++) {
+      let inRun = false
+      let s = 0
       for (let x = 280; x < 420; x++) {
         const i = (y * w + x) * 3
-        if (vsTest(buf[i], buf[i + 1], buf[i + 2])) {
-          x0 = Math.min(x0, x)
-          x1 = Math.max(x1, x)
+        const on = vsTest(buf[i], buf[i + 1], buf[i + 2])
+        if (on && !inRun) {
+          inRun = true
+          s = x
+        }
+        if (!on && inRun) {
+          const run = { x0: s, x1: x - 1, w: x - s }
+          if (run.w >= 50 && run.w <= 100 && (!best || run.w < best.w)) best = run
+          inRun = false
         }
       }
     }
-    if (x1 < x0) return null
-    return { x0, x1, w: x1 - x0 + 1 }
+    if (!best) {
+      let x0 = 9999
+      let x1 = -1
+      for (let y = 168; y < 208; y++) {
+        for (let x = 300; x < 400; x++) {
+          const i = (y * w + x) * 3
+          if (vsTest(buf[i], buf[i + 1], buf[i + 2])) {
+            x0 = Math.min(x0, x)
+            x1 = Math.max(x1, x)
+          }
+        }
+      }
+      if (x1 < x0) return null
+      return { x0, x1, w: x1 - x0 + 1 }
+    }
+    return { x0: best.x0, x1: best.x1, w: best.w }
   }
   const vsLive = measureVsInk(liveRaw)
   const vsNew = measureVsInk(candRaw)
@@ -284,6 +305,108 @@ async function main() {
   ruleLuma /= 400 - 67
   console.log('kicker rule mean luma y98:', ruleLuma.toFixed(1), '(target ~48)')
   if (ruleLuma < 42 || ruleLuma > 58) fail = true
+
+  function titleVsGaps(buf) {
+    const vs = measureVsInk(buf)
+    if (!vs) return null
+    const white = (r, g, b) => r > 235 && g > 235 && b > 235
+    let leftNameR = -1
+    let rightNameL = 9999
+    for (let y = 175; y < 200; y++) {
+      for (let x = 67; x < vs.x0; x++) {
+        const i = (y * w + x) * 3
+        if (white(buf[i], buf[i + 1], buf[i + 2])) leftNameR = Math.max(leftNameR, x)
+      }
+      for (let x = vs.x1 + 1; x < 900; x++) {
+        const i = (y * w + x) * 3
+        if (white(buf[i], buf[i + 1], buf[i + 2])) rightNameL = Math.min(rightNameL, x)
+      }
+    }
+    if (leftNameR < 0 || rightNameL > 900) return null
+    return { leftGap: vs.x0 - leftNameR - 1, rightGap: rightNameL - vs.x1 - 1 }
+  }
+
+  function recordVsGaps(buf) {
+    const gold = tests.gold
+    let leftR = -1
+    let vsL = 9999
+    let vsR = -1
+    let rightL = 9999
+    for (let y = 239; y < 268; y++) {
+      for (let x = 67; x < 1013; x++) {
+        const i = (y * w + x) * 3
+        if (!gold(buf[i], buf[i + 1], buf[i + 2])) continue
+        if (x < 520) leftR = Math.max(leftR, x)
+        const lower =
+          buf[i + 1] > buf[i] &&
+          buf[i + 2] < buf[i] - 20 &&
+          x > 400 &&
+          x < 620
+        if (lower) {
+          vsL = Math.min(vsL, x)
+          vsR = Math.max(vsR, x)
+        }
+      }
+    }
+    if (leftR < 0 || vsL > 700) return null
+    return { leftGap: vsL - leftR - 1, rightGap: rightL - vsR - 1, vsL, vsR, rightL }
+  }
+
+  function recordVsGapsSimple(buf) {
+    const gold = tests.gold
+    for (let y = 245; y < 265; y++) {
+      const runs = []
+      let inRun = false
+      let s = 0
+      for (let x = 67; x < 1013; x++) {
+        const i = (y * w + x) * 3
+        const on = gold(buf[i], buf[i + 1], buf[i + 2])
+        if (on && !inRun) {
+          inRun = true
+          s = x
+        }
+        if (!on && inRun) {
+          runs.push({ x0: s, x1: x - 1, w: x - s })
+          inRun = false
+        }
+      }
+      const vsRun = runs.find((r) => r.w >= 12 && r.w <= 70 && r.x0 > 320 && r.x1 < 680)
+      if (!vsRun) continue
+      const leftRun = runs.filter((r) => r.x1 < vsRun.x0).pop()
+      const rightRun = runs.find((r) => r.x0 > vsRun.x1)
+      if (!leftRun || !rightRun) continue
+      return {
+        leftGap: vsRun.x0 - leftRun.x1 - 1,
+        rightGap: rightRun.x0 - vsRun.x1 - 1,
+      }
+    }
+    return null
+  }
+
+  const tgLive = titleVsGaps(liveRaw)
+  const tgNew = titleVsGaps(candRaw)
+  console.log(
+    'title vs gaps (px)',
+    tgLive ? `L${tgLive.leftGap} R${tgLive.rightGap}` : 'MISS',
+    '|',
+    tgNew ? `L${tgNew.leftGap} R${tgNew.rightGap}` : 'MISS',
+    '(target ~24)',
+  )
+
+  const rgLive = recordVsGapsSimple(liveRaw)
+  const rgNew = recordVsGapsSimple(candRaw)
+  console.log(
+    'record vs gaps (px)',
+    rgLive ? `L${rgLive.leftGap} R${rgLive.rightGap}` : 'MISS',
+    '|',
+    rgNew ? `L${rgNew.leftGap} R${rgNew.rightGap}` : 'MISS',
+    '(target ~37)',
+  )
+
+  const neuCap = measureRecordCap(candRaw, w, RECORD_CAP_BANDS[0])
+  console.log('record capH new:', neuCap?.capH ?? 'MISS', '(target 27)')
+
+  if (neuCap && Math.abs(neuCap.capH - 27) > 2) fail = true
 
   if (fail) process.exit(1)
 }

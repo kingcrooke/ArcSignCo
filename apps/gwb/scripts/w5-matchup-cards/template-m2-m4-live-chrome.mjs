@@ -30,6 +30,7 @@ export function cardHtml(m, leftImg, rightImg) {
 @font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Regular.ttf'); font-weight: 400; }
 @font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-SemiBold.ttf'); font-weight: 600; }
 @font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Bold.ttf'); font-weight: 700; }
+@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Bold.ttf'); font-weight: 800; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #030406; }
 .slide {
@@ -46,13 +47,13 @@ body { background: #030406; }
   z-index: 10;
 }
 .kicker {
-  position: absolute; left: 70px; right: 64px; top: 51px;
+  position: absolute; left: 72px; right: 62px; top: 51px;
   font-family: 'Inter', sans-serif;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 29px;
   line-height: 1;
-  letter-spacing: 0.212em;
-  color: #e8b24a;
+  letter-spacing: 0.202em;
+  color: #dfab48;
   text-transform: uppercase;
 }
 .kicker-line {
@@ -71,7 +72,7 @@ body { background: #030406; }
 .headline .vs {
   font-size: 86px;
   color: #ffffff;
-  margin: 0 15px;
+  margin: 0 3px;
   text-transform: lowercase;
   font-weight: 400;
   vertical-align: baseline;
@@ -80,7 +81,7 @@ body { background: #030406; }
   position: absolute; left: 67px; right: 67px; top: 240px;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 30px;
+  font-size: 32px;
   line-height: 0.96;
   letter-spacing: 0.03em;
   white-space: pre;
