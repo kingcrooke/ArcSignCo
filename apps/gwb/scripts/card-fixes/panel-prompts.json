@@ -9,7 +9,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
     "pose": "fist pump skyward, mouth open celebrating",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). New York Giants blue jersey white number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: fist pump skyward, mouth open celebrating. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New York Giants blue jersey white number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: fist pump skyward, mouth open celebrating. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "hady-NE-10-w1",
@@ -21,7 +21,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
     "pose": "head down, shoulders slumped, dejected walk-off",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). New England Patriots navy jersey red-white-blue number. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: head down, shoulders slumped, dejected walk-off. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New England Patriots navy jersey red-white-blue number. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: head down, shoulders slumped, dejected walk-off. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "narking-NO-6-w1",
@@ -33,7 +33,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m1-winner.jpg",
     "w5_style_ref": "results-w5-m1-winner.jpg",
     "pose": "hands on helmet, frustrated stare at ground",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). New Orleans Saints black jersey gold number. ONE bold 6 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: hands on helmet, frustrated stare at ground. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New Orleans Saints black jersey gold number. ONE bold 6 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: hands on helmet, frustrated stare at ground. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "danny-DEN-10-w1",
@@ -45,7 +45,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
     "pose": "kneeling on one knee, disappointed",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Denver Broncos orange jersey navy number. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: kneeling on one knee, disappointed. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Denver Broncos orange jersey navy number. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: kneeling on one knee, disappointed. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "steven-CHI-4-w1",
@@ -56,8 +56,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/steven.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "beating chest, roaring winner",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Chicago Bears navy jersey orange number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: beating chest, roaring winner. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "roaring hyped winner, chest out, no brown fur tint",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Chicago Bears navy jersey orange number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: roaring hyped winner, chest out, no brown fur tint. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "frankie-CIN-9-w1",
@@ -69,7 +69,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
     "pose": "arms limp at sides, blank stare loss",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Cincinnati Bengals orange jersey black number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms limp at sides, blank stare loss. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Cincinnati Bengals orange jersey black number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms limp at sides, blank stare loss. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "manny-CHI-18-w1",
@@ -80,8 +80,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m1-winner.jpg",
     "w5_style_ref": "results-w5-m1-winner.jpg",
-    "pose": "pointing at scoreboard, hyped winner",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Chicago Bears navy jersey orange number. ONE bold 18 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: pointing at scoreboard, hyped winner. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "arms raised hyped winner shouting",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Chicago Bears navy jersey orange number. ONE bold 18 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms raised hyped winner shouting. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "eric-DAL-4-w1",
@@ -92,8 +92,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/eric.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "turning away from camera, dejected",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Dallas Cowboys white jersey blue number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: turning away from camera, dejected. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "slumped shoulders dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Dallas Cowboys white jersey blue number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped shoulders dejected loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "mauricio-LAC-10-w2",
@@ -105,7 +105,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
     "pose": "palms up “why me” loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Los Angeles Chargers powder blue jersey. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: palms up “why me” loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Chargers powder blue jersey. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: palms up “why me” loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "kayser-LAR-9-w2",
@@ -117,7 +117,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
     "pose": "victory flex both arms high",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Los Angeles Rams royal blue jersey gold trim. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: victory flex both arms high. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Rams royal blue jersey gold trim. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: victory flex both arms high. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w2",
@@ -129,7 +129,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
     "pose": "throwing motion follow-through, fired up",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: throwing motion follow-through, fired up. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: throwing motion follow-through, fired up. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "steven-NO-12-w2",
@@ -140,8 +140,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/steven.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m1-winner.jpg",
     "w5_style_ref": "results-w5-m1-winner.jpg",
-    "pose": "confident smirk, hand on hip",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). New Orleans Saints black jersey gold number. ONE bold 12 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident smirk, hand on hip. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "fist pump hyped winner celebration",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New Orleans Saints black jersey gold number. ONE bold 12 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: fist pump hyped winner celebration. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "matt-BUF-17-w2",
@@ -152,8 +152,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/matt.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-winner.jpg",
     "w5_style_ref": "results-w5-m6-winner.jpg",
-    "pose": "headshake, arms crossed loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Buffalo Bills royal blue jersey red-white number. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: headshake, arms crossed loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "dejected arms down, number 17 fully visible on chest",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: dejected arms down, number 17 fully visible on chest. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "jamil-PHI-1-w2",
@@ -165,7 +165,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
     "w5_style_ref": "results-w5-m2-loser.jpg",
     "pose": "slumped on bench posture",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Philadelphia Eagles midnight green jersey white number. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped on bench posture. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Philadelphia Eagles midnight green jersey white number. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped on bench posture. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "eric-DAL-4-w2",
@@ -177,7 +177,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
     "pose": "spiking invisible football celebration",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Dallas Cowboys white jersey blue number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: spiking invisible football celebration. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Dallas Cowboys white jersey blue number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: spiking invisible football celebration. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "frankie-CIN-9-w2",
@@ -188,8 +188,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "hands on knees catching breath loss",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Cincinnati Bengals orange jersey black number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: hands on knees catching breath loss. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "dejected kneeling loser, Bengals orange jersey clear",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Cincinnati Bengals orange jersey black number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: dejected kneeling loser, Bengals orange jersey clear. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "narking-SF-13-w3",
@@ -201,7 +201,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-winner.jpg",
     "w5_style_ref": "results-w5-m2-winner.jpg",
     "pose": "stare at turf, bitter loss",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). San Francisco 49ers red jersey gold number. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: stare at turf, bitter loss. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. San Francisco 49ers red jersey gold number. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: stare at turf, bitter loss. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w3",
@@ -212,8 +212,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "walking off field back turned",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: walking off field back turned. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "walking away dejected, smooth stone skin no fur",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: walking away dejected, smooth stone skin no fur. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "steven-SEA-14-w3",
@@ -225,7 +225,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-loser.jpg",
     "w5_style_ref": "results-w5-m3-loser.jpg",
     "pose": "crowd wave one arm raised winner",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Seattle Seahawks navy jersey green number. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: crowd wave one arm raised winner. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Seattle Seahawks navy jersey green number. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: crowd wave one arm raised winner. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "mauricio-CAR-9-w3",
@@ -237,7 +237,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
     "pose": "disbelief hands on head loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Carolina Panthers black jersey blue number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: disbelief hands on head loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Carolina Panthers black jersey blue number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: disbelief hands on head loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "kayser-LAR-9-w3",
@@ -248,8 +248,19 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/kayser.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "confident quarterback pre-throw windup winner",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Los Angeles Rams royal blue jersey gold trim. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident quarterback pre-throw windup winner. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "victory pose winner, smooth stone skin no shaggy fur",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Rams royal blue jersey gold trim. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: victory pose winner, smooth stone skin no shaggy fur. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "manny-KC-15-w3",
+    "cardId": "results-w3-m4",
+    "side": "loser",
+    "file": "manny-KC-15-w3.jpg",
+    "outFile": "assets/results-w3-m4-loser.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
+    "w5_style_ref": "results-w5-m4-winner.jpg",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. KC NFL jersey correct team colors. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "eric-ATL-5-w3",
@@ -261,7 +272,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-loser.jpg",
     "w5_style_ref": "results-w5-m6-loser.jpg",
     "pose": "jumping chest bump solo celebration",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Atlanta Falcons black jersey red number. ONE bold 5 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: jumping chest bump solo celebration. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Atlanta Falcons black jersey red number. ONE bold 5 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: jumping chest bump solo celebration. hyped winner celebration. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "matt-BUF-17-w3",
@@ -273,7 +284,19 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-loser.jpg",
     "w5_style_ref": "results-w5-m6-loser.jpg",
     "pose": "frustrated helmet off at hip loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Buffalo Bills royal blue jersey red-white number. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: frustrated helmet off at hip loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: frustrated helmet off at hip loser. dejected loser body language. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "narking-SF-13-w4",
+    "cardId": "vs-m1-narking-steven",
+    "side": "left",
+    "file": "vs-m1-narking-steven-left.jpg",
+    "outFile": "w4-preview-assets/vs-m1-narking-steven-left.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/narking.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
+    "w5_style_ref": "results-w5-m2-loser.jpg",
+    "pose": "arms crossed skeptical preview stance",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. San Francisco 49ers red jersey gold number. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms crossed skeptical preview stance. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "steven-SEA-14-w4",
@@ -285,7 +308,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-winner.jpg",
     "w5_style_ref": "results-w5-m3-winner.jpg",
     "pose": "intense stare-down, arms at sides preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Seattle Seahawks navy jersey green number. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: intense stare-down, arms at sides preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Seattle Seahawks navy jersey green number. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: intense stare-down, arms at sides preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "kayser-LAR-9-w4",
@@ -297,7 +320,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
     "pose": "adjusting chin strap, locked-in preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Los Angeles Rams royal blue jersey gold trim. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: adjusting chin strap, locked-in preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Rams royal blue jersey gold trim. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: adjusting chin strap, locked-in preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "frankie-DET-16-w4",
@@ -308,8 +331,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "football at chest two-hand grip, calm focus preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Detroit Lions Honolulu blue jersey silver number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: football at chest two-hand grip, calm focus preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "holding ball at chest, number 16 large high-contrast on chest",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Detroit Lions Honolulu blue jersey silver number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: holding ball at chest, number 16 large high-contrast on chest. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "hady-MIN-1-w4",
@@ -321,7 +344,19 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-winner.jpg",
     "w5_style_ref": "results-w5-m2-winner.jpg",
     "pose": "pointing forward commanding preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Minnesota Vikings purple jersey gold number. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: pointing forward commanding preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Minnesota Vikings purple jersey gold number. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: pointing forward commanding preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "manny-KC-15-w4",
+    "cardId": "vs-m3-hadi-manny",
+    "side": "right",
+    "file": "vs-m3-hadi-manny-right.jpg",
+    "outFile": "w4-preview-assets/vs-m3-hadi-manny-right.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
+    "w5_style_ref": "results-w5-m4-loser.jpg",
+    "pose": "confident smirk preview, chin up",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. KC NFL jersey correct team colors. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident smirk preview, chin up. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "jamil-PHI-1-w4",
@@ -333,7 +368,19 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
     "w5_style_ref": "results-w5-m2-loser.jpg",
     "pose": "ready stance knees bent preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Philadelphia Eagles midnight green jersey white number. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: ready stance knees bent preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Philadelphia Eagles midnight green jersey white number. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: ready stance knees bent preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "matt-BUF-17-w4",
+    "cardId": "vs-m4-jamil-matt",
+    "side": "right",
+    "file": "vs-m4-jamil-matt-right.jpg",
+    "outFile": "w4-preview-assets/vs-m4-jamil-matt-right.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/matt.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-winner.jpg",
+    "w5_style_ref": "results-w5-m6-winner.jpg",
+    "pose": "tense ready stance preview",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: tense ready stance preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "mauricio-CAR-9-w4",
@@ -345,7 +392,19 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
     "pose": "cracking neck side to side preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Carolina Panthers black jersey blue number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: cracking neck side to side preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Carolina Panthers black jersey blue number. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: cracking neck side to side preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "eric-DAL-4-w4",
+    "cardId": "vs-m5-mauricio-eric",
+    "side": "right",
+    "file": "vs-m5-mauricio-eric-right.jpg",
+    "outFile": "w4-preview-assets/vs-m5-mauricio-eric-right.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/eric.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
+    "w5_style_ref": "results-w5-m5-winner.jpg",
+    "pose": "pointing at opponent preview",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Dallas Cowboys white jersey blue number. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: pointing at opponent preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w4",
@@ -357,7 +416,31 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
     "pose": "football tucked under arm forward lean preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: football tucked under arm forward lean preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: football tucked under arm forward lean preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "crooke-BAL-8-w4",
+    "cardId": "vs-m6-danny-crooke",
+    "side": "right",
+    "file": "vs-m6-danny-crooke-right.jpg",
+    "outFile": "w4-preview-assets/vs-m6-danny-crooke-right.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/crooke.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-winner.jpg",
+    "w5_style_ref": "results-w5-m3-winner.jpg",
+    "pose": "Lamar swagger preview, football in one hand",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Baltimore Ravens purple jersey white number. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: Lamar swagger preview, football in one hand. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "danny-JAX-16-w5",
+    "cardId": "vs-w5-m2",
+    "side": "left",
+    "file": "vs-w5-m2-left.jpg",
+    "outFile": "../w5-matchup-cards/assets/vs-w5-m2-left.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
+    "w5_style_ref": "results-w5-m5-winner.jpg",
+    "pose": "forward lean tuck and run preview",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: forward lean tuck and run preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "manny-LV-8-w5",
@@ -369,7 +452,7 @@
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-winner.jpg",
     "w5_style_ref": "results-w5-m3-winner.jpg",
     "pose": "overhand throw motion, eyes downfield preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). Las Vegas Raiders black jersey silver number. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: overhand throw motion, eyes downfield preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Las Vegas Raiders black jersey silver number. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: overhand throw motion, eyes downfield preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   },
   {
     "panelId": "hady-NE-10-w5",
@@ -380,7 +463,19 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/hady.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "narrow-eyed stare-down preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal). New England Patriots navy jersey red-white-blue number. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: narrow-eyed stare-down preview. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+    "pose": "stone-faced stare-down preview, calm eyes",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New England Patriots navy jersey red-white-blue number. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: stone-faced stare-down preview, calm eyes. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
+  },
+  {
+    "panelId": "frankie-DET-16-w5",
+    "cardId": "vs-w5-m4",
+    "side": "right",
+    "file": "vs-w5-m4-right.jpg",
+    "outFile": "../w5-matchup-cards/assets/vs-w5-m4-right.jpg",
+    "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
+    "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
+    "w5_style_ref": "results-w5-m5-winner.jpg",
+    "pose": "slumped shoulders preview loser energy",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Detroit Lions Honolulu blue jersey silver number. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped shoulders preview loser energy. confident pre-game preview energy. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character."
   }
 ]

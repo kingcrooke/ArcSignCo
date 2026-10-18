@@ -47,7 +47,23 @@ const POSES = {
   'mauricio-CAR-9-w4': 'cracking neck side to side preview',
   'danny-JAX-16-w4': 'football tucked under arm forward lean preview',
   'manny-LV-8-w5': 'overhand throw motion, eyes downfield preview',
-  'hady-NE-10-w5': 'narrow-eyed stare-down preview',
+  'hady-NE-10-w5': 'stone-faced stare-down preview, calm eyes',
+  'narking-SF-13-w4': 'arms crossed skeptical preview stance',
+  'manny-KC-15-w4': 'confident smirk preview, chin up',
+  'matt-BUF-17-w4': 'tense ready stance preview',
+  'eric-DAL-4-w4': 'pointing at opponent preview',
+  'crooke-BAL-8-w4': 'Lamar swagger preview, football in one hand',
+  'danny-JAX-16-w5': 'forward lean tuck and run preview',
+  'frankie-DET-16-w5': 'slumped shoulders preview loser energy',
+  'steven-CHI-4-w1': 'roaring hyped winner, chest out, no brown fur tint',
+  'steven-NO-12-w2': 'fist pump hyped winner celebration',
+  'manny-CHI-18-w1': 'arms raised hyped winner shouting',
+  'eric-DAL-4-w1': 'slumped shoulders dejected loser',
+  'frankie-CIN-9-w2': 'dejected kneeling loser, Bengals orange jersey clear',
+  'frankie-DET-16-w4': 'holding ball at chest, number 16 large high-contrast on chest',
+  'matt-BUF-17-w2': 'dejected arms down, number 17 fully visible on chest',
+  'kayser-LAR-9-w3': 'victory pose winner, smooth stone skin no shaggy fur',
+  'danny-JAX-16-w3': 'walking away dejected, smooth stone skin no fur',
 }
 
 const TEAM_COLORS = {
@@ -120,7 +136,7 @@ function promptFor(job) {
   const colors = TEAM_COLORS[team] ?? `${team} NFL jersey correct team colors`
   const numberRule = `ONE bold ${num} printed in jersey fabric once, large on chest, never hidden by arms or hands`
   const stone =
-    'Reference B: light weathered granite stone-gray cracked fur with subtle red crack glow (PR #94 Week 5 tone, not charcoal)'
+    'Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.'
   const refA =
     'Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only.'
   return `${refA} ${stone}. ${colors}. ${numberRule}. POSE: ${pose}. ${mood(job)}. Vertical 3:4 portrait, photoreal illustration, no card frame, no text labels, full-bleed character.`

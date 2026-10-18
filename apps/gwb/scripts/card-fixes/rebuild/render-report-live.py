@@ -47,7 +47,6 @@ def w2_slide_06() -> None:
     img = main_slide("w2-slide-06")
     white = (255, 255, 255)
     muted = sample_text_color(img, (72, 500, 900, 600))
-    replace_line_in_box(img, (72, 200, 900, 320), "1-1 AND UNEXPLAINED", "anton", white)
     replace_line_in_box(img, (72, 380, 900, 440), "Eric is 1-1.", "inter-semibold", muted)
     replace_word_in_box(img, (72, 440, 1000, 500), "44.00", "inter-semibold", muted)
     replace_word_in_box(img, (72, 440, 1000, 500), "37.2", "inter-semibold", muted)

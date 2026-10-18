@@ -24,8 +24,8 @@ export function panelImagePath(cardId, side) {
     return p
   }
   const keeper = path.join(KEEPERS, `${cardId}-${side}.jpg`)
-  if (!existsSync(keeper)) {
-    throw new Error(`missing keeper panel ${keeper} — run extract-keeper-panels.py`)
-  }
-  return keeper
+  if (existsSync(keeper)) return keeper
+  throw new Error(
+    `missing panel for ${cardId}:${side} — run generate-panels.mjs or extract-keeper-panels.py`,
+  )
 }
