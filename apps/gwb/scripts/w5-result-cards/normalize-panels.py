@@ -28,9 +28,22 @@ def horn_bbox(img: np.ndarray) -> tuple[int, int, int, int]:
     return max(0, x0 - pad), max(0, y0 - pad), min(w, x1 + pad), min(roi.shape[0], y1 + pad)
 
 
+def trim_letterbox(img: np.ndarray, thresh: int = 18) -> np.ndarray:
+    """Remove near-black margins so cover-crop fills the frame."""
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    mask = gray > thresh
+    ys, xs = np.where(mask)
+    if len(xs) < 100:
+        return img
+    y0, y1 = int(ys.min()), int(ys.max())
+    x0, x1 = int(xs.min()), int(xs.max())
+    return img[y0 : y1 + 1, x0 : x1 + 1]
+
+
 def cover_crop(img: np.ndarray, out_w: int, out_h: int) -> np.ndarray:
+    img = trim_letterbox(img)
     h, w = img.shape[:2]
-    scale = max(out_w / w, out_h / h)
+    scale = max(out_w / w, out_h / h) * 1.06
     new_w, new_h = int(round(w * scale)), int(round(h * scale))
     resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LANCZOS4)
     x0, y0, x1, y1 = horn_bbox(resized)

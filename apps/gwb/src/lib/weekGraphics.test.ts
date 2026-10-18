@@ -49,7 +49,7 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
     expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
     expect(sections.find((s) => s.kind === 'results')?.slides[3]?.title).toBe(
-      'FINAL: Hady TAKES IT',
+      'FINAL: HADY TAKES IT',
     )
   })
 

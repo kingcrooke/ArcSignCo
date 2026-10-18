@@ -3,100 +3,160 @@
   "ordered": [
     {
       "id": "w5-slide-01",
-      "title": "Steven's Perfect Season Is Over",
+      "layout": "cover",
+      "title": "THE UNDEFEATED RUN",
+      "titleGold": "IS OVER",
       "body": [
         "Week 5 is OFFICIALLY over.",
         "Sleeper scores reviewed. Monday night reviewed.",
-        "Mulligans audited. The 4-0 shield has cracked.",
+        "Steven falls to 4-1 — first loss of the season.",
         "",
-        "THERE IS STILL NO MERCY FOR THE AI."
-      ]
+        "NO MORE PERFECT RECORDS."
+      ],
+      "hero": "results-w5-m1"
     },
     {
       "id": "w5-slide-02",
-      "title": "Crooke 159.29 def Steven",
-      "subtitle": "DEF. STEVEN 120.77",
+      "layout": "matchup",
+      "kicker": "MATCHUP 1",
+      "title": "Crooke 159.29",
+      "titleGold": "DEF. STEVEN 120.77",
       "body": [
-        "Steven drops to 4-1 — first loss of the season.",
-        "Margin: 38.52."
+        "Margin: 38.52 points.",
+        "Crooke climbs to 2-3.",
+        "Steven still leads the league at 834.84 PF."
       ],
       "hero": "results-w5-m1"
     },
     {
       "id": "w5-slide-03",
-      "title": "Hady 212.33 def Frankie",
-      "subtitle": "Week 5 high score",
+      "layout": "matchup",
+      "kicker": "WEEK 5 HIGH SCORE",
+      "title": "HADY 212.33",
+      "titleGold": "DEF. FRANKIE 101.06",
       "body": [
-        "Frankie held to 101.06.",
-        "Margin: 111.27.",
-        "Hady climbs to 4-1."
+        "Drake Maye 58.56 in the starting lineup.",
+        "Margin: 111.27 — biggest blowout of the week.",
+        "HADY moves to 4-1."
       ],
       "hero": "results-w5-m4"
     },
     {
       "id": "w5-slide-04",
-      "title": "Danny 176.78 def Manny",
+      "layout": "matchup",
+      "kicker": "MATCHUP 2",
+      "title": "DANNY 176.78",
+      "titleGold": "DEF. MANNY 122.18",
       "body": [
-        "Danny moves to 2-3.",
-        "Manny falls to 2-3."
+        "Watson 40.3.",
+        "Lawrence vs Cousins on the stat sheet.",
+        "Danny snaps a two-game skid."
       ],
       "hero": "results-w5-m2"
     },
     {
       "id": "w5-slide-05",
-      "title": "Mauricio 204.16 def Jamil",
+      "layout": "matchup",
+      "kicker": "MATCHUP 5",
+      "title": "MAURICIO 204.16",
+      "titleGold": "DEF. JAMIL 143.54",
       "body": [
-        "Mauricio to 3-2.",
-        "Jamil to 3-2."
+        "Warren 44.8.",
+        "Brissett vs Hurts on the stat sheet."
       ],
       "hero": "results-w5-m5"
     },
     {
       "id": "w5-slide-06",
-      "title": "Matt 176.87 def Kayser",
+      "layout": "matchup",
+      "kicker": "MATCHUP 6",
+      "title": "MATT 176.87",
+      "titleGold": "DEF. KAYSER 150.26",
       "body": [
-        "Matt to 2-3.",
-        "Kayser to 3-2."
+        "Gibbs 39.7.",
+        "Allen vs Stafford — Matt gets the W."
       ],
       "hero": "results-w5-m6"
     },
     {
       "id": "w5-slide-07",
-      "title": "Eric 145.67 def Narking",
+      "layout": "matchup",
+      "kicker": "MATCHUP 3",
+      "title": "ERIC 145.67",
+      "titleGold": "DEF. NARKING 95.86",
       "body": [
-        "Eric to 3-2.",
-        "Narking to 1-4."
+        "Prescott 25.17.",
+        "Prescott vs Purdy.",
+        "Narking held to 95.86 — low mark of the week."
       ],
       "hero": "results-w5-m3"
     },
     {
       "id": "w5-slide-08",
-      "title": "Stat of the Week",
+      "layout": "stat",
+      "kicker": "BENCH WATCH",
+      "title": "LEFT ON THE",
+      "titleGold": "PINE",
+      "statBoxes": [
+        {
+          "label": "TOP BENCH",
+          "value": "Jordan Love #10",
+          "sub": "45.19 (Eric)"
+        },
+        {
+          "label": "RUNNER UP",
+          "value": "Joe Burrow #9",
+          "sub": "40.73 (Frankie)"
+        }
+      ],
       "body": [
-        "Closest game: Matt over Kayser",
-        "Margin: 26.61 points.",
-        "Lowest score: Narking 95.86."
-      ]
+        "Frankie left Joe Burrow 40.73 on the bench.",
+        "GWB rewards the starters. Usually."
+      ],
+      "footnote": "BENCH POINTS FROM SLEEPER WEEK 5"
     },
     {
       "id": "w5-slide-09",
-      "title": "Frankie Zone Check-In",
+      "layout": "stat",
+      "kicker": "FRANKIE ZONE",
+      "title": "STILL",
+      "titleGold": "OPEN",
       "body": [
-        "Frankie falls to 1-4 after 101.06 points.",
-        "The zone signage remains highly dramatic."
-      ]
+        "Frankie drops to 1-4.",
+        "Score: 101.06 in the HADY rout.",
+        "The zone signage remains fully operational."
+      ],
+      "hero": "results-w5-m4"
     },
     {
       "id": "w5-slide-10",
-      "title": "But One Very Nice Website",
+      "layout": "stat",
+      "kicker": "TOP SCORERS",
+      "title": "WEEK 5",
+      "titleGold": "LEADERS",
+      "statBoxes": [
+        {
+          "label": "#1",
+          "value": "Drake Maye #10",
+          "sub": "58.56 (Hady)"
+        },
+        {
+          "label": "#2",
+          "value": "Jaylen Warren #30",
+          "sub": "44.80 (Mauricio)"
+        }
+      ],
       "body": [
-        "gwb-fe006a16 receipts still export cleanly.",
-        "Graphics tab updated for Week 5 finals."
-      ]
+        "#3 Matthew Stafford #9 — 44.66",
+        "#4 Christian Watson #9 — 40.30"
+      ],
+      "footnote": "STARTERS ONLY · SLEEPER WEEK 5"
     },
     {
       "id": "w5-slide-11",
-      "title": "Final Week 5 Scoring",
+      "layout": "table",
+      "title": "FINAL WEEK 5",
+      "titleGold": "SCORING",
       "table": [
         {
           "rank": 1,
@@ -158,19 +218,27 @@
           "name": "Narking",
           "pts": "95.86"
         }
-      ]
+      ],
+      "footnote": "Top 3 separated by 35.46 points."
     },
     {
       "id": "w5-slide-12",
-      "title": "Closest: 26.61 Points",
+      "layout": "stat",
+      "kicker": "STAT OF THE WEEK",
+      "title": "CLOSEST: 26.61",
+      "titleGold": "BLOWOUT: 111.27",
       "body": [
         "Matt over Kayser",
-        "Every margin on this deck is from Sleeper Week 5 finals."
-      ]
+        "Hady over Frankie",
+        "Low score: Narking 95.86."
+      ],
+      "footnote": "ALL MARGINS FROM SLEEPER FINALS"
     },
     {
       "id": "w5-slide-13",
-      "title": "Standings After Week 5",
+      "layout": "table",
+      "title": "STANDINGS AFTER",
+      "titleGold": "WEEK 5",
       "table": [
         {
           "rank": 1,
@@ -232,32 +300,77 @@
           "name": "Frankie",
           "pf": "1-4 · 582.27 PF"
         }
-      ]
+      ],
+      "footnote": "HADY and Steven tied atop the table at 4-1."
     },
     {
       "id": "w5-slide-14",
-      "title": "AI Hady Audit",
+      "layout": "stat",
+      "kicker": "BIGGEST BLOWOUT",
+      "title": "HADY 212.33",
+      "titleGold": "FRANKIE 101.06",
+      "statBoxes": [
+        {
+          "label": "MAYE",
+          "value": "58.56",
+          "sub": "HADY starter"
+        },
+        {
+          "label": "GOFF",
+          "value": "101.06",
+          "sub": "FRANKIE total"
+        }
+      ],
       "body": [
-        "Crystal-ball picks vs Week 5 finals.",
-        "Spelling locked: Hady — never Hadi."
-      ]
+        "Margin: 111.27 points."
+      ],
+      "footnote": "SLEEPER WEEK 5 MATCHUP 4"
     },
     {
       "id": "w5-slide-15",
-      "title": "Week 5 Awards",
+      "layout": "stat",
+      "kicker": "WEEK 5 AWARDS",
+      "title": "HIGH / LOW",
+      "titleGold": "MARKS",
+      "statBoxes": [
+        {
+          "label": "HIGH",
+          "value": "212.33",
+          "sub": "HADY"
+        },
+        {
+          "label": "LOW",
+          "value": "95.86",
+          "sub": "NARKING"
+        }
+      ],
       "body": [
-        "High score: Hady 212.33",
-        "Low score: Narking 95.86",
-        "Biggest upset: Crooke over Steven"
+        "Upset: Crooke over Steven.",
+        "Runner-up score: Mauricio 204.16."
       ]
     },
     {
       "id": "w5-slide-16",
-      "title": "Week 6: No Undefeateds",
+      "layout": "cover",
+      "title": "WEEK 6",
+      "titleGold": "WE RUN IT BACK",
       "body": [
-        "Hady and Steven tied atop the table at 4-1.",
-        "Week 6 matchup previews are live."
-      ]
+        "Crooke (2-3) vs Manny (2-3)",
+        "Eric (3-2) vs Steven (4-1)",
+        "Danny (2-3) vs Frankie (1-4)",
+        "Narking (1-4) vs Jamil (3-2)",
+        "Hady (4-1) vs Matt (2-3)",
+        "Mauricio (3-2) vs Kayser (3-2)"
+      ],
+      "footnote": "ENTERING RECORDS FROM SLEEPER"
     }
-  ]
+  ],
+  "reportFacts": {
+    "closestMargin": 26.610000000000014,
+    "blowoutMargin": 111.27000000000001,
+    "highScore": 212.33,
+    "lowScore": 95.86,
+    "topBench": 45.19,
+    "topScorer": 58.56
+  }
 }

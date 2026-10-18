@@ -35,7 +35,7 @@
     },
     "headline": "FINAL: CROOKE TAKES IT",
     "bowlTitle": "THE FINAL BOSS",
-    "tagline": "Darnold vs Stroud • Steven 714 PF through Week 4",
+    "tagline": "Lamar vs Darnold • Steven's first loss of the season",
     "winnerPointsDisplay": "159.3",
     "loserPointsDisplay": "120.8"
   },
@@ -75,7 +75,7 @@
     },
     "headline": "FINAL: DANNY TAKES IT",
     "bowlTitle": "REDEMPTION ARC",
-    "tagline": "Lawrence vs Cousins • Manny riding a 2-game win streak",
+    "tagline": "Lawrence vs Cousins • Watson 40.3",
     "winnerPointsDisplay": "176.8",
     "loserPointsDisplay": "122.2"
   },
@@ -115,7 +115,7 @@
     },
     "headline": "FINAL: ERIC TAKES IT",
     "bowlTitle": "INJURY REPORT BOWL",
-    "tagline": "Purdy vs Prescott • Narking's RB room is a war zone",
+    "tagline": "Prescott vs Purdy • Prescott 25.2 pts",
     "winnerPointsDisplay": "145.7",
     "loserPointsDisplay": "95.9"
   },
@@ -153,9 +153,9 @@
       "team": "DET",
       "number": 16
     },
-    "headline": "FINAL: Hady TAKES IT",
+    "headline": "FINAL: HADY TAKES IT",
     "bowlTitle": "COOKOUT CHECK",
-    "tagline": "Maye vs Goff • Hady hunting another W",
+    "tagline": "Maye vs Goff • Maye 58.6 pts",
     "winnerPointsDisplay": "212.3",
     "loserPointsDisplay": "101.1"
   },
@@ -195,7 +195,7 @@
     },
     "headline": "FINAL: MAURICIO TAKES IT",
     "bowlTitle": "PLAYOFF PREVIEW",
-    "tagline": "Brissett vs Hurts • Both sitting on 2+ wins",
+    "tagline": "Brissett vs Hurts • Warren 44.8 pts",
     "winnerPointsDisplay": "204.2",
     "loserPointsDisplay": "143.5"
   },
@@ -235,7 +235,7 @@
     },
     "headline": "FINAL: MATT TAKES IT",
     "bowlTitle": "DESPERATION BOWL",
-    "tagline": "Stafford vs Allen • Matt needs a lifeline",
+    "tagline": "Allen vs Stafford • Gibbs 39.7",
     "winnerPointsDisplay": "176.9",
     "loserPointsDisplay": "150.3"
   }

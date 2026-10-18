@@ -2,7 +2,12 @@
  * Re-fetch Sleeper Week 5 and assert scores, records, and jersey targets.
  * Exits non-zero on mismatch (run in CI / before render).
  */
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { loadWeekMatchupFacts } from './lib/sleeper-week-facts.mjs'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /** Commissioner brief jerseys (Sleeper matchup_id order m1–m6). */
 const SLEEPER_JERSEYS = {
@@ -101,12 +106,60 @@ async function main() {
     }
   }
 
+  const resultsJson = JSON.parse(
+    readFileSync(path.join(__dirname, 'w5-result-cards/results.json'), 'utf8'),
+  )
+  for (const r of resultsJson) {
+    if (!r.headline?.startsWith('FINAL: ') || !r.headline.endsWith(' TAKES IT')) {
+      errors.push(`${r.id} headline format: ${r.headline}`)
+    }
+    if (r.headline !== `FINAL: ${r.winner.toUpperCase()} TAKES IT`) {
+      errors.push(`${r.id} headline must be all-caps winner: ${r.headline}`)
+    }
+    if (r.id === 'results-w5-m1' && !r.tagline.startsWith('Lamar vs ')) {
+      errors.push(`m1 tagline must start with Lamar vs: ${r.tagline}`)
+    }
+    if (r.tagline.includes('Stroud') && r.id === 'results-w5-m1') {
+      errors.push(`m1 tagline must not reference Stroud: ${r.tagline}`)
+    }
+  }
+
+  const reportPath = path.join(__dirname, 'w5-report-deck/report-data.json')
+  try {
+    const { reportFacts } = JSON.parse(readFileSync(reportPath, 'utf8'))
+    const hady = results.find((r) => r.winner === 'Hady')
+    const narking = results.find((r) => r.loser === 'Narking')
+    const margins = results
+      .map((r) => r.winnerPoints - r.loserPoints)
+      .sort((a, b) => a - b)
+    if (!approx(reportFacts.highScore, hady.winnerPoints)) {
+      errors.push(`report highScore ${reportFacts.highScore} !== ${hady.winnerPoints}`)
+    }
+    if (!approx(reportFacts.lowScore, narking.loserPoints)) {
+      errors.push(`report lowScore ${reportFacts.lowScore} !== ${narking.loserPoints}`)
+    }
+    if (!approx(reportFacts.closestMargin, margins[0])) {
+      errors.push(`report closestMargin ${reportFacts.closestMargin} !== ${margins[0]}`)
+    }
+    if (!approx(reportFacts.blowoutMargin, margins[margins.length - 1])) {
+      errors.push(
+        `report blowoutMargin ${reportFacts.blowoutMargin} !== ${margins[margins.length - 1]}`,
+      )
+    }
+    const forbidden = /website|receipt|AI Hady|spelling|export cleanly|build process/i
+    const reportRaw = readFileSync(reportPath, 'utf8')
+    if (forbidden.test(reportRaw)) {
+      errors.push('report-data.json contains forbidden meta/build copy')
+    }
+  } catch (e) {
+    errors.push(`report-data.json: ${e.message}`)
+  }
+
   if (errors.length) {
     console.error('Week 5 Sleeper assertions FAILED:\n' + errors.map((e) => `  - ${e}`).join('\n'))
     process.exit(1)
   }
   console.log('Week 5 Sleeper assertions OK (%d matchups)', results.length)
-  console.log(JSON.stringify(results, null, 2))
 }
 
 main().catch((e) => {

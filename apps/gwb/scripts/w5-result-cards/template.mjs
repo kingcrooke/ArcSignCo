@@ -64,8 +64,8 @@ body { background: #0a0c10; }
   overflow: hidden; background: #111; z-index: 1;
 }
 .panel img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 8%;
-  display: block;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 12%;
+  display: block; transform: scale(1.04);
 }
 .pill {
   position: absolute; top: 16px; left: 16px; z-index: 3;

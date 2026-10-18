@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { COLORS, MARGIN, fileUrl, wrapHtml } from '../remake-held/shared-css.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const FONTS = path.join(__dirname, '../fonts-local')
 const RESULT_ASSETS = path.join(__dirname, '../w5-result-cards/assets')
 
 export function loadReport() {
@@ -16,66 +16,204 @@ function esc(s) {
     .replace(/</g, '&lt;')
 }
 
-const baseCss = `
-@font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
-@font-face { font-family: 'Bebas'; src: url('file://${FONTS}/BebasNeue-Regular.ttf'); }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #0a0c10; }
-.slide {
-  width: 1080px; height: 1350px;
-  background: linear-gradient(180deg, #0d1118 0%, #080a0f 55%, #06080c 100%);
-  color: #fff; font-family: 'Anton', sans-serif; position: relative; overflow: hidden;
-  padding: 56px 64px 88px;
+function heroPair(heroId) {
+  if (!heroId) return null
+  return {
+    winner: fileUrl(path.join(RESULT_ASSETS, `${heroId}-winner.jpg`)),
+    loser: fileUrl(path.join(RESULT_ASSETS, `${heroId}-loser.jpg`)),
+  }
 }
-.kicker { font-family: 'Bebas', sans-serif; font-size: 30px; letter-spacing: 0.14em; color: #d4af37; text-align: center; }
-.kicker-line { height: 2px; margin: 12px 0 28px; background: linear-gradient(90deg, transparent, #d4af37, transparent); }
-h1 { font-size: 58px; line-height: 1.12; text-align: center; letter-spacing: 0.02em; }
-h2 { font-family: 'Bebas', sans-serif; font-size: 34px; color: #d4af37; text-align: center; margin-top: 12px; letter-spacing: 0.05em; }
-.body { margin-top: 36px; font-family: 'Bebas', sans-serif; font-size: 30px; line-height: 1.45; color: #e8e8e8; text-align: center; }
-.body p { margin: 10px 0; }
-.hero { margin: 28px auto 0; width: 420px; height: 520px; border-radius: 16px; border: 3px solid #d4af37; overflow: hidden; }
-.hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 8%; }
-table { width: 100%; margin-top: 32px; border-collapse: collapse; font-family: 'Bebas', sans-serif; font-size: 32px; }
-tr { border-bottom: 1px solid rgba(255,255,255,0.08); }
-td { padding: 12px 8px; }
-td.rank { width: 56px; color: #8a9099; }
-td.name { text-align: left; }
-td.num { text-align: right; color: #d4af37; }
-.footer { position: absolute; left: 64px; right: 64px; bottom: 44px; display: flex; justify-content: space-between; font-family: 'Bebas', sans-serif; font-size: 22px; color: #4a5058; }
-.footer .page { color: #d4af37; font-size: 26px; }
+
+const cssBase = `
+.slide { background: ${COLORS.bg}; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 3; }
+.title-split { margin-top: 20px; font-size: 62px; line-height: 1.1; }
+.title-split .gold { color: ${COLORS.gold}; }
+.body-block {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; z-index: 3;
+  font-size: 26px; line-height: 1.45; color: #c8d4e0; font-weight: 600;
+}
+.body-block p { margin-bottom: 10px; }
+.footnote {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; bottom: 72px; z-index: 3;
+  text-align: center; font-size: 22px; color: ${COLORS.muted}; letter-spacing: 0.06em;
+}
+.bg-hero {
+  position: absolute; inset: 0; z-index: 1;
+}
+.bg-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; transform: scale(1.08); }
+.bg-scrim { position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, rgba(10,15,20,0.92) 0%, rgba(10,15,20,0.55) 42%, rgba(10,15,20,0.88) 100%); }
+.dual-cards { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 320px; height: 520px; z-index: 3; display: flex; gap: 24px; justify-content: center; }
+.dual-cards .card {
+  width: 420px; height: 100%; border-radius: 16px; overflow: hidden; border: 3px solid ${COLORS.gold};
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+}
+.dual-cards .card.dim { border-color: #4a5058; }
+.dual-cards img { width: 100%; height: 100%; object-fit: cover; object-position: center 14%; transform: scale(1.05); }
+.info-stack {
+  position: absolute; left: 96px; right: 96px; top: 868px; z-index: 3;
+  background: rgba(18, 24, 32, 0.96); border-left: 4px solid ${COLORS.gold}; padding: 22px 28px;
+}
+.info-stack p { font-size: 24px; color: #b8c4d0; line-height: 1.42; margin-top: 8px; font-weight: 600; }
+.stat-grid {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 280px; z-index: 3;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.stat-box {
+  background: rgba(18, 24, 32, 0.96); padding: 22px 24px; border-top: 3px solid ${COLORS.gold};
+}
+.stat-box .label { font-size: 24px; color: ${COLORS.muted}; letter-spacing: 0.08em; }
+.stat-box .value { margin-top: 10px; font-size: 30px; color: ${COLORS.white}; line-height: 1.2; }
+.stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
+.list-panel {
+  position: absolute; left: 88px; right: 88px; top: 248px; z-index: 3;
+  background: rgba(18, 24, 32, 0.96); padding: 18px 22px; max-height: 880px; overflow: hidden;
+}
+.row { display: flex; gap: 16px; font-size: 26px; font-weight: 600; color: #b8c4d0; padding: 12px 6px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.row .n { color: ${COLORS.gold}; min-width: 44px; }
+.row .name { color: ${COLORS.white}; flex: 1; }
+.row .pts { color: ${COLORS.gold}; text-align: right; min-width: 100px; }
+.cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
+.cover-hero {
+  position: absolute; right: 0; top: 0; width: 420px; height: 1350px; z-index: 2; overflow: hidden;
+}
+.cover-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; transform: scale(1.1); }
+.cover-hero .veil { position: absolute; inset: 0; background: linear-gradient(90deg, ${COLORS.bg} 0%, transparent 35%); }
 `
 
-export function slideHtml(slide, pageNum) {
-  const heroPath = slide.hero
-    ? path.join(RESULT_ASSETS, `${slide.hero}-winner.jpg`)
-    : null
-  const heroBlock = heroPath
-    ? `<div class="hero"><img src="file://${heroPath}" alt=""/></div>`
+function footer(pageNum) {
+  return `<div class="footer inter"><span>gwb_fantasy_football</span><span class="bebas">${pageNum}/16</span></div>`
+}
+
+function titleBlock(slide) {
+  const gold = slide.titleGold
+    ? `<br/><span class="gold anton">${esc(slide.titleGold)}</span>`
     : ''
+  return `<h1 class="title-split anton">${esc(slide.title)}${gold}</h1>`
+}
 
-  let tableBlock = ''
-  if (slide.table) {
-    const rows = slide.table
-      .map(
-        (row) =>
-          `<tr><td class="rank">${row.rank}</td><td class="name">${esc(row.name)}</td><td class="num">${esc(row.pf ?? row.pts)}</td></tr>`,
-      )
-      .join('')
-    tableBlock = `<table>${rows}</table>`
-  }
-
+function layoutCover(slide, pageNum) {
+  const heroes = heroPair(slide.hero)
   const body = (slide.body ?? [])
     .map((line) => (line ? `<p>${esc(line)}</p>` : '<p>&nbsp;</p>'))
     .join('')
+  const heroImg = heroes?.winner ?? ''
+  const heroSide = heroImg
+    ? `<div class="cover-hero"><img src="${heroImg}" alt=""/><div class="veil"></div></div>`
+    : ''
+  const kicker = slide.kicker
+    ? `<div class="kicker bebas">${esc(slide.kicker)}</div><div class="kicker-line"></div>`
+    : `<div class="kicker bebas">GWB · WEEK 5 · FINAL REPORT</div><div class="kicker-line"></div>`
 
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"/><style>${baseCss}</style></head><body>
-<div class="slide">
-  <div class="kicker">${esc(slide.kicker ?? 'GWB · WEEK 5 · FINAL REPORT')}</div>
-  <div class="kicker-line"></div>
-  <h1>${esc(slide.title)}</h1>
-  ${slide.subtitle ? `<h2>${esc(slide.subtitle)}</h2>` : ''}
-  ${heroBlock}
-  ${tableBlock || `<div class="body">${body}</div>`}
-  <div class="footer"><span>gwb_fantasy_football</span><span class="page">${pageNum}/16</span></div>
-</div></body></html>`
+  const listBody =
+    slide.body?.length > 4
+      ? `<div class="body-block inter-semibold" style="top:340px;right:${MARGIN}px;width:620px">${body}</div>`
+      : `<div class="body-block inter-semibold" style="top:280px;width:580px">${body}</div>`
+
+  return wrapHtml(
+    `<div class="slide">
+  ${heroSide}
+  <div class="cover-text">
+    ${kicker}
+    ${titleBlock(slide)}
+  </div>
+  ${listBody}
+  ${slide.footnote ? `<div class="footnote bebas">${esc(slide.footnote)}</div>` : ''}
+  ${footer(pageNum)}
+</div>`,
+    cssBase,
+  )
+}
+
+function layoutMatchup(slide, pageNum) {
+  const heroes = heroPair(slide.hero)
+  const body = (slide.body ?? []).map((line) => `<p>${esc(line)}</p>`).join('')
+  const cards = heroes
+    ? `<div class="dual-cards">
+    <div class="card"><img src="${heroes.winner}" alt=""/></div>
+    <div class="card dim"><img src="${heroes.loser}" alt=""/></div>
+  </div>`
+    : ''
+  return wrapHtml(
+    `<div class="slide">
+  <div class="hdr">
+    <div class="kicker bebas">${esc(slide.kicker ?? 'GWB · WEEK 5')}</div>
+    <div class="kicker-line"></div>
+    ${titleBlock(slide)}
+  </div>
+  ${cards}
+  <div class="info-stack inter-semibold">${body}</div>
+  ${slide.footnote ? `<div class="footnote bebas">${esc(slide.footnote)}</div>` : ''}
+  ${footer(pageNum)}
+</div>`,
+    cssBase,
+  )
+}
+
+function layoutStat(slide, pageNum) {
+  const heroes = heroPair(slide.hero)
+  const bg = heroes
+    ? `<div class="bg-hero"><img src="${heroes.winner}" alt=""/></div><div class="bg-scrim"></div>`
+    : ''
+  const boxes = (slide.statBoxes ?? [])
+    .map(
+      (b) =>
+        `<div class="stat-box inter-semibold"><div class="label bebas">${esc(b.label)}</div><div class="value bebas">${esc(b.value)}</div>${b.sub ? `<div class="sub">${esc(b.sub)}</div>` : ''}</div>`,
+    )
+    .join('')
+  const body = (slide.body ?? [])
+    .map((line) => (line ? `<p>${esc(line)}</p>` : ''))
+    .join('')
+  return wrapHtml(
+    `<div class="slide">
+  ${bg}
+  <div class="hdr">
+    <div class="kicker bebas">${esc(slide.kicker ?? 'GWB · WEEK 5')}</div>
+    <div class="kicker-line"></div>
+    ${titleBlock(slide)}
+  </div>
+  ${boxes ? `<div class="stat-grid">${boxes}</div>` : ''}
+  <div class="body-block inter-semibold" style="top:${boxes ? 560 : 300}px">${body}</div>
+  ${slide.footnote ? `<div class="footnote bebas">${esc(slide.footnote)}</div>` : ''}
+  ${footer(pageNum)}
+</div>`,
+    cssBase,
+  )
+}
+
+function layoutTable(slide, pageNum) {
+  const rows = (slide.table ?? [])
+    .map(
+      (row) =>
+        `<div class="row inter-semibold"><span class="n bebas">${row.rank}</span><span class="name">${esc(row.name)}</span><span class="pts bebas">${esc(row.pf ?? row.pts)}</span></div>`,
+    )
+    .join('')
+  return wrapHtml(
+    `<div class="slide">
+  <div class="hdr">
+    <div class="kicker bebas">GWB · WEEK 5 · FINAL REPORT</div>
+    <div class="kicker-line"></div>
+    ${titleBlock(slide)}
+  </div>
+  <div class="list-panel">${rows}</div>
+  ${slide.footnote ? `<div class="footnote bebas">${esc(slide.footnote)}</div>` : ''}
+  ${footer(pageNum)}
+</div>`,
+    cssBase,
+  )
+}
+
+export function slideHtml(slide, pageNum) {
+  switch (slide.layout) {
+    case 'cover':
+      return layoutCover(slide, pageNum)
+    case 'matchup':
+      return layoutMatchup(slide, pageNum)
+    case 'stat':
+      return layoutStat(slide, pageNum)
+    case 'table':
+      return layoutTable(slide, pageNum)
+    default:
+      return layoutStat(slide, pageNum)
+  }
 }
