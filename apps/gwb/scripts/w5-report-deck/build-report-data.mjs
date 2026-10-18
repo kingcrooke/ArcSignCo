@@ -248,8 +248,8 @@ async function main() {
         { label: 'RUNNER UP', value: `${benchLeaders[1].label}`, sub: `${benchLeaders[1].pts.toFixed(2)} (${benchLeaders[1].mgr})` },
       ],
       body: [
-        `Frankie left Joe Burrow ${(benchLeaders.find((b) => b.mgr === 'Frankie')?.pts ?? 40.73).toFixed(2)} on the bench.`,
-        'GWB rewards the starters. Usually.',
+        `Eric left Jordan Love's ${benchLeaders[0].pts.toFixed(2)} on the bench and still won.`,
+        `Frankie sat Joe Burrow's ${(benchLeaders.find((b) => b.mgr === 'Frankie')?.pts ?? 40.73).toFixed(2)}. It wouldn't have saved him.`,
       ],
       footnote: 'BENCH POINTS FROM SLEEPER WEEK 5',
     },

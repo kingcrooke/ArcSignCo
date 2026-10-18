@@ -165,6 +165,12 @@ async function main() {
     if (!loveSub.startsWith('45.19')) {
       errors.push(`w5-slide-08 top bench must show 45.19, got ${loveSub}`)
     }
+    const slide08Body = slide08?.body ?? []
+    const loveLine = `Eric left Jordan Love's 45.19 on the bench and still won.`
+    const burrowLine = `Frankie sat Joe Burrow's 40.73. It wouldn't have saved him.`
+    if (slide08Body[0] !== loveLine || slide08Body[1] !== burrowLine) {
+      errors.push(`w5-slide-08 body copy mismatch: ${JSON.stringify(slide08Body)}`)
+    }
     if (String(reportRaw).includes('49.16')) {
       errors.push('report-data.json must not contain incorrect 49.16 bench score')
     }
