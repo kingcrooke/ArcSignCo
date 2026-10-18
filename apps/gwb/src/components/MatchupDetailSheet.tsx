@@ -11,31 +11,7 @@ import {
 } from '../lib/matchupBoard'
 import type { ProjectionsMap } from '../lib/projections'
 import type { PlayersMap, SleeperMatchup, TeamInfo } from '../lib/types'
-
-function TeamAvatar({
-  team,
-  className = 'h-10 w-10',
-}: {
-  team: TeamInfo | undefined
-  className?: string
-}) {
-  if (team?.avatarUrl) {
-    return (
-      <img
-        src={team.avatarUrl}
-        alt=""
-        className={`${className} rounded-full border border-[var(--gwb-border)] object-cover`}
-      />
-    )
-  }
-  return (
-    <div
-      className={`${className} flex items-center justify-center rounded-full border border-[var(--gwb-border)] bg-[#243040] text-xs font-semibold text-[var(--gwb-muted)]`}
-    >
-      {team?.teamName?.slice(0, 1) ?? '?'}
-    </div>
-  )
-}
+import { TeamAvatar } from './TeamAvatar'
 
 function LineupSide({
   matchup,
@@ -67,7 +43,7 @@ function LineupSide({
       <div
         className={`mb-2 flex items-center gap-1.5 ${compact ? 'flex-col text-center' : 'gap-2'}`}
       >
-        <TeamAvatar team={team} className={compact ? 'h-8 w-8' : 'h-10 w-10'} />
+        <TeamAvatar team={team} size={compact ? 'sm' : 'md'} />
         <div className="min-w-0 w-full">
           <p
             className={`truncate font-semibold ${compact ? 'text-[11px] leading-tight' : ''}`}

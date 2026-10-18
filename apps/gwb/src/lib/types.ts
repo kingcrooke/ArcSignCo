@@ -137,6 +137,8 @@ export interface TeamInfo {
   displayName: string
   teamName: string
   avatarUrl: string | null
+  /** Fallback when avatarUrl fails to load (Sleeper users.avatar thumb). */
+  avatarThumbUrl: string | null
 }
 
 export interface StandingRow {
