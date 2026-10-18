@@ -120,8 +120,8 @@ if (!html.includes("Mary Thelma Morel")) fail("missing Mami seed");
 pass("core family seed names referenced");
 
 const robotsTxt = fs.readFileSync(path.join(root, "robots.txt"), "utf8");
-if (!robotsTxt.includes(`Disallow: /${SLUG}/`)) fail("robots.txt must Disallow the crooke path");
-else pass("robots.txt disallow");
+if (robotsTxt.includes(SLUG)) fail("robots.txt must not mention the crooke path");
+else pass("robots.txt omits crooke path");
 
 const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
 if (!toml.includes(`/${SLUG}/*`)) fail("netlify.toml missing X-Robots-Tag for crooke path");
