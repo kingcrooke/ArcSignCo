@@ -28,11 +28,11 @@
   {
     "id": "vs-w5-m2",
     "matchupNum": 2,
-    "title": "REDEMPTION ARC",
+    "title": "RECESSION WATCH",
     "left": {
       "name": "DANNY",
       "record": "1-3",
-      "pct": 43,
+      "pct": 59,
       "qb": "Trevor Lawrence",
       "team": "JAX",
       "number": 16,
@@ -42,14 +42,14 @@
     "right": {
       "name": "MANNY",
       "record": "2-2",
-      "pct": 57,
+      "pct": 41,
       "qb": "Kirk Cousins",
       "team": "LV",
       "number": 8,
       "pose": "pointing at opponent, other hand on hip",
       "bg": "purple gothic storm"
     },
-    "tagline": "Lawrence vs Cousins • Manny riding a 2-game win streak"
+    "tagline": "Lawrence vs Cousins"
   },
   {
     "id": "vs-w5-m3",
@@ -80,11 +80,11 @@
   {
     "id": "vs-w5-m4",
     "matchupNum": 4,
-    "title": "COOKOUT CHECK",
+    "title": "NO REST FOR THE POOR",
     "left": {
       "name": "HADY",
       "record": "3-1",
-      "pct": 60,
+      "pct": 54,
       "qb": "Drake Maye",
       "team": "NE",
       "number": 10,
@@ -94,14 +94,14 @@
     "right": {
       "name": "FRANKIE",
       "record": "1-3",
-      "pct": 40,
+      "pct": 46,
       "qb": "Jared Goff",
       "team": "DET",
       "number": 16,
       "pose": "narrow-eyed stare-down",
       "bg": "storm lightning spires"
     },
-    "tagline": "Maye vs Goff • Hady hunting another W"
+    "tagline": "Maye vs Goff"
   },
   {
     "id": "vs-w5-m5",

@@ -16,15 +16,12 @@ const OUT = path.join(__dirname, 'rebuild/output')
 const SLIDE_SOURCES = path.join(__dirname, '../slide-sources')
 
 const RESULT_IDS = [
-  'results-w2-m2',
   'results-w2-m3',
-  'results-w2-m4',
   'results-w2-m5',
   'results-w2-m6',
-  'results-w3-m1',
+  'results-w3-m2',
   'results-w3-m3',
   'results-w3-m4',
-  'results-w3-m5',
 ]
 
 async function renderHtml(page, html, basename) {
@@ -55,7 +52,9 @@ async function main() {
     await renderHtml(page, resultHtml(r, wImg, lImg), id)
   }
 
-  await renderHtml(page, REPORT_SLIDES['w2-slide-06'](), 'w2-slide-06')
+  if (REPORT_SLIDES['w2-slide-06']) {
+    await renderHtml(page, REPORT_SLIDES['w2-slide-06'](), 'w2-slide-06')
+  }
   await browser.close()
 }
 

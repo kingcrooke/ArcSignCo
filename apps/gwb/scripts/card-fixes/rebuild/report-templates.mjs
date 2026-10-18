@@ -46,9 +46,13 @@ const cssBase = `
 .stat-box .value { margin-top: 10px; font-size: 36px; color: ${COLORS.white}; line-height: 1.2; }
 .stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
 .cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
-.cover-hero { position: absolute; right: 0; top: 0; width: 420px; height: 1350px; z-index: 2; overflow: hidden; }
-.cover-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; transform: scale(1.1); }
-.cover-hero .veil { position: absolute; inset: 0; background: linear-gradient(90deg, ${COLORS.bg} 0%, transparent 35%); }
+.cover-hero { position: absolute; right: 0; top: 0; width: 460px; height: 1180px; z-index: 2; overflow: hidden; }
+.cover-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transform: scale(0.92); }
+.cover-hero .veil { position: absolute; inset: 0; background: linear-gradient(90deg, ${COLORS.bg} 0%, transparent 38%); }
+.w2-slide-06-footer-band {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 88px; z-index: 19;
+  background: linear-gradient(180deg, transparent 0%, rgba(8,10,14,0.92) 35%, rgba(8,10,14,0.98) 100%);
+}
 .margin-hero {
   position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 520px; z-index: 3;
   text-align: center; font-size: 96px; color: ${COLORS.gold}; line-height: 1;
@@ -114,6 +118,7 @@ export function w2Slide06() {
     ${titleBlock('2-0 AND', 'UNEXPLAINED')}
   </div>
   <div class="body-block inter-semibold" style="top:280px;width:580px">${body}</div>
+  <div class="w2-slide-06-footer-band"></div>
   ${footer('6/16')}
 </div>`,
     cssBase,
