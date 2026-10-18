@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { COLORS, MARGIN, fileUrl, wrapHtml } from './shared-css.mjs'
@@ -13,9 +14,19 @@ function esc(s) {
     .replace(/"/g, '&quot;')
 }
 
-function avatarUrl(rosterId) {
+/** @param {'base' | 'excited' | 'loss'} mood */
+function avatarUrl(rosterId, mood = 'base') {
   const id = String(rosterId).padStart(2, '0')
-  return fileUrl(path.join(AVATARS, `roster-${id}.png`))
+  const base = path.join(AVATARS, `roster-${id}.png`)
+  if (mood === 'excited') {
+    const excited = path.join(AVATARS, `roster-${id}-excited.png`)
+    return fileUrl(existsSync(excited) ? excited : base)
+  }
+  if (mood === 'loss') {
+    const crushed = path.join(AVATARS, `roster-${id}-crushed.png`)
+    return fileUrl(existsSync(crushed) ? crushed : base)
+  }
+  return fileUrl(base)
 }
 
 function recordLabel(standings, rosterId) {
@@ -135,8 +146,8 @@ export function resultSlide(cfg, standings) {
   const total = cfg.homePts + cfg.awayPts
   const barWin = Math.round((Number(wScore) / total) * 100)
   const barLose = 100 - barWin
-  const wImg = avatarUrl(winnerRoster)
-  const lImg = avatarUrl(loserRoster)
+  const wImg = avatarUrl(winnerRoster, 'excited')
+  const lImg = avatarUrl(loserRoster, 'loss')
   const wRec = recordLabel(standings, winnerRoster)
   const lRec = recordLabel(standings, loserRoster)
   const finalShort = winnerName.trim().length > 22
