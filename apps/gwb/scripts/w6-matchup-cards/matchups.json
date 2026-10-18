@@ -10,7 +10,7 @@
       "qb": "Lamar Jackson",
       "team": "BAL",
       "number": 8,
-      "pose": "arms crossed, chin up defiant",
+      "pose": "arms crossed over chest, chin up defiant (only crossed-arms in W6)",
       "bg": "dark gothic storm lightning"
     },
     "right": {
@@ -46,7 +46,7 @@
       "qb": "Sam Darnold",
       "team": "SEA",
       "number": 14,
-      "pose": "intense stare-down toward opponent, arms at sides",
+      "pose": "cracking knuckles, fired-up menace",
       "bg": "lava lightning gothic"
     },
     "tagline": "Love vs Darnold • Steven still hunting perfection"
@@ -72,7 +72,7 @@
       "qb": "Aaron Rodgers",
       "team": "PIT",
       "number": 8,
-      "pose": "narrow-eyed stare-down",
+      "pose": "narrow-eyed stare-down, arms at sides",
       "bg": "storm lightning spires"
     },
     "tagline": "Lawrence vs Rodgers • Frankie Zone on life support"
@@ -98,7 +98,7 @@
       "qb": "Jameis Winston",
       "team": "NYG",
       "number": 19,
-      "pose": "football tucked, ready to run",
+      "pose": "holding football forward toward viewer",
       "bg": "gothic storm green lightning"
     },
     "tagline": "Purdy vs Winston • Narking's season on the brink"
@@ -114,7 +114,7 @@
       "qb": "Drake Maye",
       "team": "NE",
       "number": 10,
-      "pose": "arms crossed, stone-cold stare",
+      "pose": "beating chest, fierce pre-game",
       "bg": "lava gothic lightning"
     },
     "right": {
@@ -124,7 +124,7 @@
       "qb": "Josh Allen",
       "team": "BUF",
       "number": 17,
-      "pose": "hype roar with football raised (no fist pump)",
+      "pose": "arms raised high to crowd, fired up",
       "bg": "dark lightning storm"
     },
     "tagline": "Maye vs Allen • Hady defending top-two seed"
@@ -140,7 +140,7 @@
       "qb": "Bryce Young",
       "team": "CAR",
       "number": 9,
-      "pose": "pointing forward, commanding",
+      "pose": "horns-down charge stomp",
       "bg": "lava lightning"
     },
     "right": {
@@ -150,7 +150,7 @@
       "qb": "Matthew Stafford",
       "team": "LAR",
       "number": 9,
-      "pose": "confident flex, one arm raised",
+      "pose": "adjusting helmet chin strap",
       "bg": "lava gothic"
     },
     "tagline": "Young vs Stafford • Identical records, different vibes"

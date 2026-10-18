@@ -1,0 +1,74 @@
+[
+  {
+    "file": "vs-w6-m1-left.jpg",
+    "w5_style_ref": "results-w5-m6-winner.jpg",
+    "pose": "arms crossed over chest, chin up defiant — only crossed-arms pose in the set",
+    "prompt": "Reference A: Baltimore Ravens purple jersey, gothic red lightning background, horned stone buffalo mascot. Reference B: light weathered granite fur with red crack glow. POSE: arms crossed over chest, chin up, defiant confident pre-game stare. ONE white number 8 black trim in fabric once. Not celebrating."
+  },
+  {
+    "file": "vs-w6-m1-right.jpg",
+    "w5_style_ref": "results-w5-m1-winner.jpg",
+    "pose": "pointing at opponent, other hand on hip",
+    "prompt": "Reference A: Kansas City Chiefs red jersey, purple gothic storm background. Reference B: light granite fur tone. POSE: pointing finger at opponent off-frame, other hand on hip, fired-up preview. ONE number 15 white with gold outline in jersey fabric once."
+  },
+  {
+    "file": "vs-w6-m2-left.jpg",
+    "w5_style_ref": "results-w5-m2-winner.jpg",
+    "pose": "double bicep flex",
+    "prompt": "Reference A: Green Bay Packers green jersey, castle lightning background. Reference B: light stone-gray granite fur. POSE: double bicep flex, confident pre-game hype. Gold number 10 in fabric once."
+  },
+  {
+    "file": "vs-w6-m2-right.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "pose": "cracking knuckles",
+    "prompt": "Reference A: Seattle Seahawks navy jersey, lava gothic lightning. Reference B: light granite fur. POSE: cracking knuckles on one hand, other fist clenched, menacing ready-for-war preview. White number 14 in fabric once."
+  },
+  {
+    "file": "vs-w6-m3-left.jpg",
+    "w5_style_ref": "results-w5-m3-winner.jpg",
+    "pose": "football tucked under arm, forward lean",
+    "prompt": "Reference A: Jacksonville teal jersey, ember lightning. Reference B: light weathered stone fur. POSE: football tucked under arm, forward athletic lean, ready to strike. White number 16 in fabric once."
+  },
+  {
+    "file": "vs-w6-m3-right.jpg",
+    "w5_style_ref": "results-w5-m3-loser.jpg",
+    "pose": "narrow-eyed stare-down, arms at sides",
+    "prompt": "Reference A: Pittsburgh black jersey, storm spires background. Reference B: light granite fur. POSE: narrow-eyed stare-down toward opponent, arms at sides, coiled intensity. Gold number 8 in fabric once."
+  },
+  {
+    "file": "vs-w6-m4-left.jpg",
+    "w5_style_ref": "results-w5-m4-winner.jpg",
+    "pose": "roaring hype, mouth open",
+    "prompt": "Reference A: San Francisco red/gold jersey, red lava lightning. Reference B: light stone-gray cracked fur. POSE: roaring with mouth open, fired-up pre-game energy not victory celebration. White number 13 in fabric once."
+  },
+  {
+    "file": "vs-w6-m4-right.jpg",
+    "w5_style_ref": "results-w5-m4-loser.jpg",
+    "pose": "holding football forward toward viewer",
+    "prompt": "Reference A: New York Giants blue jersey, green lightning storm. Reference B: light granite fur. POSE: both hands presenting football extended toward camera, challenging preview. White number 19 in fabric once."
+  },
+  {
+    "file": "vs-w6-m5-left.jpg",
+    "w5_style_ref": "results-w5-m5-loser.jpg",
+    "pose": "beating chest",
+    "prompt": "Reference A: New England Patriots navy jersey, lava gothic lightning. Reference B: light granite fur. POSE: beating chest with one fist, fierce pre-game intensity. White/red number 10 in fabric once."
+  },
+  {
+    "file": "vs-w6-m5-right.jpg",
+    "w5_style_ref": "results-w5-m5-winner.jpg",
+    "pose": "arms raised high to crowd",
+    "prompt": "Reference A: Buffalo Bills blue jersey, dark lightning storm. Reference B: light granite fur. POSE: both arms raised high to crowd, fired up pre-game not trophy celebration. White number 17 red outline in fabric once."
+  },
+  {
+    "file": "vs-w6-m6-left.jpg",
+    "w5_style_ref": "results-w5-m6-loser.jpg",
+    "pose": "horns-down charge stomp",
+    "prompt": "Reference A: Carolina black jersey blue trim, lava lightning. Reference B: light stone-gray fur. POSE: horns lowered, charging stomp one foot forward, bull rush pre-game. Light blue/white number 9 in fabric once."
+  },
+  {
+    "file": "vs-w6-m6-right.jpg",
+    "w5_style_ref": "results-w5-m6-winner.jpg",
+    "pose": "adjusting helmet chin strap",
+    "prompt": "Reference A: LA Rams blue jersey gold trim, lava gothic background. Reference B: light granite cracked fur. POSE: adjusting football helmet chin strap, locked-in pre-game focus. White number 9 gold outline in fabric once."
+  }
+]

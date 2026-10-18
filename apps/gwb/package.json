@@ -22,6 +22,7 @@
     "react-markdown": "^10.1.0"
   },
   "devDependencies": {
+    "@google/genai": "^2.30.0",
     "@playwright/test": "^1.63.0",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
