@@ -1,10 +1,8 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { readFileSync } from 'node:fs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const FONTS = path.join(__dirname, '../../fonts-local')
-const FACTS = JSON.parse(readFileSync(path.join(__dirname, '../sleeper-facts.json'), 'utf8'))
 
 const baseCss = `
 @font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
@@ -14,7 +12,7 @@ const baseCss = `
 body { background: #080c10; }
 .slide {
   width: 1080px; height: 1350px;
-  background: linear-gradient(180deg, #0d1118 0%, #080a0f 100%);
+  background: radial-gradient(ellipse 120% 80% at 50% 40%, #1a2230 0%, #0a0e14 55%, #06080c 100%);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -33,17 +31,71 @@ body { background: #080c10; }
 .hero {
   font-family: 'Anton', sans-serif;
   font-size: 68px;
-  line-height: 1.1;
-  margin-top: 12px;
+  line-height: 1.05;
+  margin-top: 8px;
 }
+.hero .gold { color: #d4af37; }
+.hero .dim { font-size: 42px; color: #c8d0d8; font-weight: 400; }
 .body {
   margin-top: 28px;
   font-size: 28px;
   line-height: 1.45;
-  color: #c8d4e0;
+  color: #e8eef4;
   font-weight: 600;
 }
-.body p { margin-bottom: 12px; }
+.body p { margin-bottom: 14px; }
+.score-stack {
+  margin-top: 36px;
+  background: rgba(12, 16, 22, 0.92);
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 920px;
+}
+.score-row {
+  display: grid;
+  grid-template-columns: 6px 1fr auto;
+  gap: 0 16px;
+  align-items: center;
+  padding: 18px 22px 18px 0;
+  font-size: 26px;
+  font-weight: 600;
+}
+.score-row.win { border-left: 6px solid #d4af37; }
+.score-row.lose { border-left: 6px solid #c45c5c; color: #d0d8e0; }
+.score-row .team { color: #fff; }
+.score-row .tag { color: #d4af37; font-size: 22px; margin-left: 8px; }
+.score-row.lose .tag { color: #e8a0a0; }
+.score-row .pts { font-family: 'Anton', sans-serif; font-size: 36px; color: #d4af37; }
+.score-row.lose .pts { color: #fff; }
+.caption-line {
+  margin-top: 28px;
+  font-size: 28px;
+  color: #e8eef4;
+  font-weight: 600;
+}
+.stat-center {
+  text-align: center;
+  padding: 48px 56px 0;
+}
+.stat-center .label {
+  font-family: 'Bebas', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.14em;
+  color: #8a9099;
+  margin-top: 12px;
+}
+.stat-center .line {
+  font-family: 'Anton', sans-serif;
+  font-size: 52px;
+  margin-top: 28px;
+}
+.stat-center .margin {
+  font-family: 'Anton', sans-serif;
+  font-size: 96px;
+  color: #d4af37;
+  margin-top: 24px;
+  line-height: 1;
+}
 .footer {
   position: absolute; left: 56px; right: 56px; bottom: 42px;
   display: flex; justify-content: space-between;
@@ -63,13 +115,22 @@ export function w1Slide09() {
   return wrap(`
 <div class="slide">
   <div class="pad">
-    <div class="kicker">GWB | WEEK 1 | SCOREBOARD</div>
+    <div class="kicker">GWB | WEEK 1 | FINAL REPORT</div>
     <div class="kicker-line"></div>
-    <h1 class="hero">MATT <span style="color:#d4af37">175.08</span></h1>
-    <div class="body">
-      <p>Narking's 158.17 was the <strong style="color:#fff">fourth-highest</strong> Week 1 score in league history.</p>
-      <p>Not third-highest — Matt's eruption still owns the podium.</p>
+    <h1 class="hero"><span class="gold">MATT 175.08</span> <span class="dim">def. Narking 158.17</span></h1>
+    <div class="score-stack">
+      <div class="score-row win">
+        <span></span>
+        <div><span class="team">Matt</span><span class="tag">"Buried by Toe Burrow"</span></div>
+        <span class="pts">175.08</span>
+      </div>
+      <div class="score-row lose">
+        <span></span>
+        <div><span class="team">Narking</span><span class="tag">"Put em down Jeanty"</span></div>
+        <span class="pts">158.17</span>
+      </div>
     </div>
+    <p class="caption-line">158 wasted. fourth-highest score, still 0-1.</p>
   </div>
   <div class="footer"><span>gwb_fantasy_football</span><span class="r">9/16</span></div>
 </div>`)
@@ -79,12 +140,14 @@ export function w2Slide06() {
   return wrap(`
 <div class="slide">
   <div class="pad">
-    <div class="kicker">GWB | WEEK 2 | UNEXPLAINED</div>
+    <div class="kicker">GWB | WEEK 2 | FINAL REPORT</div>
     <div class="kicker-line"></div>
-    <h1 class="hero">ERIC IS 1-1 AFTER WEEK 2</h1>
+    <h1 class="hero">2-0 AND <span class="gold">UNEXPLAINED</span></h1>
     <div class="body">
-      <p>Not undefeated — Eric split after losing to Manny.</p>
-      <p>Amon-Ra St. Brown scored <strong style="color:#fff">37.2</strong> in Week 2 (not 44.00).</p>
+      <p>Eric is 1-1.</p>
+      <p>The man who drafted like a different sport is undefeated. Amon-Ra's 37.2 Thursday did the heavy lifting.</p>
+      <p>Frankie: 0-2.</p>
+      <p>Joe Money has become Joe Problems.</p>
     </div>
   </div>
   <div class="footer"><span>gwb_fantasy_football</span><span class="r">6/16</span></div>
@@ -92,30 +155,18 @@ export function w2Slide06() {
 }
 
 export function w4Slide12() {
-  const closest = FACTS.margins.w4[0]
-  const margin = closest.margin.toFixed(2)
-  const w = closest.winner === 'Hady' ? 'HADY' : closest.winner.toUpperCase()
-  const l = closest.loser.toUpperCase()
-  return wrap(
-    `
+  return wrap(`
 <div class="slide">
-  <div class="pad" style="text-align:center">
-    <div class="kicker">GWB | WEEK 4 | STAT OF THE WEEK</div>
+  <div class="stat-center">
+    <div class="kicker">GWB | WEEK 4 | FINAL REPORT</div>
     <div class="kicker-line"></div>
-    <p class="kicker" style="font-size:36px;color:#8a9099;margin-top:24px">STAT OF THE WEEK</p>
-    <h1 class="hero" style="font-size:52px;margin-top:20px">${w} ${closest.winnerPts.toFixed(2)}</h1>
-    <h1 class="hero" style="font-size:52px;margin-top:8px">${l} ${closest.loserPts.toFixed(2)}</h1>
-    <p class="hero" style="color:#d4af37;font-size:72px;margin-top:16px">${margin}</p>
-    <div class="body" style="text-align:left;margin-top:32px">
-      <p>Closest game of Week 4: ${closest.winner === 'Hady' ? 'HADY' : closest.winner} over ${closest.loser} by ${margin}.</p>
-      <p>Mauricio edged Narking by 0.03 in total points — not the same as matchup margin.</p>
-      <p>Biggest blowout: Steven over Narking by 39.35.</p>
-    </div>
+    <p class="label">STAT OF THE WEEK</p>
+    <p class="line">HADY 141.65</p>
+    <p class="line">MANNY 134.88</p>
+    <p class="margin">6.77</p>
   </div>
   <div class="footer"><span>gwb_fantasy_football</span><span class="r">12/16</span></div>
-</div>`,
-    `.hero { text-align: center; }`,
-  )
+</div>`)
 }
 
 export const REPORT_SLIDES = {

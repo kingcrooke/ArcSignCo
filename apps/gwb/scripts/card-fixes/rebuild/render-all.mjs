@@ -5,13 +5,13 @@ import { chromium } from 'playwright'
 import { mkdir, writeFile, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { execSync } from 'node:child_process'
 import sharp from 'sharp'
 import { panelImagePath } from './panel-paths.mjs'
 import { resultHtml } from './result-template.mjs'
 import { resultFromCopy } from './copy-to-result.mjs'
-import { cardHtml as w4CardHtml, loadMatchups as loadW4 } from '../w4-preview-cards/template.mjs'
-import { cardHtml as w5CardHtml, loadMatchups as loadW5 } from '../../w5-matchup-cards/template.mjs'
+import { cardHtml as w5CardHtml } from '../../w5-matchup-cards/template.mjs'
+import { previewFromCopy } from './preview-from-copy.mjs'
+import { renderReportSlides } from './render-report-slides.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, 'output')
@@ -21,23 +21,9 @@ const W4_ASSETS = path.join(__dirname, '..', 'w4-preview-assets')
 const W5_ASSETS = path.join(__dirname, '..', '..', 'w5-matchup-cards', 'assets')
 
 const RESULT_IDS = Object.keys(COPY).filter((k) => k.startsWith('results-'))
-const W4_IDS = Object.keys(COPY).filter((k) => k.startsWith('vs-m'))
-const W5_IDS = Object.keys(COPY).filter((k) => k.startsWith('vs-w5'))
-
-const w4ById = new Map(loadW4().map((m) => [m.id, m]))
-const w5ById = new Map(loadW5().map((m) => [m.id, m]))
-
-function applyPreviewCopy(m, cardId) {
-  const c = COPY[cardId]
-  if (!c) return m
-  return {
-    ...m,
-    title: c.bowlTitle ?? m.title,
-    tagline: c.tagline ?? m.tagline,
-    left: { ...m.left, record: c.leftPill?.replace(/^\S+\s+/, '') ?? m.left.record },
-    right: { ...m.right, record: c.rightPill?.replace(/^\S+\s+/, '') ?? m.right.record },
-  }
-}
+const PREVIEW_IDS = Object.keys(COPY).filter(
+  (k) => k.startsWith('vs-m') || k.startsWith('vs-w5'),
+)
 
 async function renderHtml(page, html, basename) {
   const tmp = path.join(OUT, `.tmp-${basename}.html`)
@@ -60,12 +46,6 @@ async function main() {
   await mkdir(OUT, { recursive: true })
   await mkdir(SLIDE_SOURCES, { recursive: true })
 
-  const gwbRoot = path.join(__dirname, '..', '..', '..')
-  execSync('python3 scripts/card-fixes/rebuild/render-report-live.py', {
-    cwd: gwbRoot,
-    stdio: 'inherit',
-  })
-
   const browser = await chromium.launch()
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } })
 
@@ -77,20 +57,14 @@ async function main() {
     console.log('result', dest)
   }
 
-  for (const id of W4_IDS) {
-    const m = applyPreviewCopy(w4ById.get(id), id)
-    const left = panelImagePath(id, 'left')
-    const right = panelImagePath(id, 'right')
-    const dest = await renderHtml(page, w4CardHtml(m, left, right), id)
-    console.log('preview w4', dest)
-  }
+  await renderReportSlides(page)
 
-  for (const id of W5_IDS) {
-    const m = applyPreviewCopy(w5ById.get(id), id)
+  for (const id of PREVIEW_IDS) {
+    const m = previewFromCopy(id)
     const left = panelImagePath(id, 'left')
     const right = panelImagePath(id, 'right')
     const dest = await renderHtml(page, w5CardHtml(m, left, right), id)
-    console.log('preview w5', dest)
+    console.log('preview', dest)
   }
 
   await browser.close()

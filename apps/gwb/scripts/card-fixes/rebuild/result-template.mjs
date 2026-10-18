@@ -11,8 +11,7 @@ export function resultHtml(r, winnerImg, loserImg) {
   const lName = r.loserDisplay ?? r.loser
   const scoreLine = `${String(wName).toUpperCase()} ${r.winnerPointsDisplay} — ${r.loserPointsDisplay} ${String(lName).toUpperCase()}`
   const footerRight = `RESULTS • W${r.week}M${r.matchupNum}`
-  const caption = r.caption || r.tagline
-  const midTag = r.caption ? r.tagline : ''
+  const caption = r.caption || ''
 
   return `<!DOCTYPE html>
 <html>
@@ -149,8 +148,7 @@ body { background: #0a0c10; }
     </div>
   </div>
   <div class="bar"><div class="bar-fill" style="width:${barWin}%"></div></div>
-  ${midTag ? `<div class="tagline">${midTag}</div>` : ''}
-  <div class="caption">${caption}</div>
+  ${caption ? `<div class="caption">${caption}</div>` : ''}
   <div class="footer">
     <span class="footer-left">gwb_fantasy_football</span>
     <span class="footer-right">${footerRight}</span>

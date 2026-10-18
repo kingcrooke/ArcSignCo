@@ -12,11 +12,6 @@ const COPY = JSON.parse(readFileSync(path.join(__dirname, 'live-card-copy.json')
 
 const metaById = new Map(META.map((r) => [r.id, r]))
 
-const DISPLAY_OVERRIDE = {
-  'results-w1-m6': { winner: 'MNNY' },
-  'results-w2-m5': { winner: 'MNNY' },
-}
-
 function parsePill(pill) {
   const m = String(pill).trim().match(/^(.+?)\s+([\d]+-[\d]+)$/)
   if (!m) return { name: pill, record: '' }
@@ -44,9 +39,7 @@ export function resultFromCopy(cardId) {
   const wPill = parsePill(c.winnerPill)
   const lPill = parsePill(c.loserPill)
   const scores = scoreFromScoreline(c.scoreline)
-  const ov = DISPLAY_OVERRIDE[cardId] ?? {}
-
-  const winnerDisplay = ov.winner ?? wPill.name
+  const winnerDisplay = wPill.name
   const loserDisplay = lPill.name
 
   const winnerPoints = scores?.winnerPts ?? m.winnerPointsDisplay
@@ -67,7 +60,6 @@ export function resultFromCopy(cardId) {
     winnerPointsDisplay: winnerPoints,
     loserPointsDisplay: loserPoints,
     bowlTitle: c.midTitle,
-    tagline: c.tagline ?? m.tagline ?? '',
     caption: c.caption ?? m.caption ?? '',
   }
 }

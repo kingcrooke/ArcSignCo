@@ -6,12 +6,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const FONTS = path.join(__dirname, '../fonts-local')
 
 export function cardHtml(m, leftImg, rightImg) {
+  const week = m.week ?? 5
   const leftPct = m.left.pct
   const rightPct = m.right.pct
-  const leftNameTitle = `${m.left.name} vs ${m.right.name}`
-  const recordLine = `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
-  const barLeft = leftPct
-  const footerRight = `MATCHUP • W5M${m.matchupNum}`
+  const recordLine =
+    m.recordLine ??
+    `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
+  const barLeft = m.barLeftPct ?? leftPct
+  const pctLeft =
+    m.leftPctLabel ?? `${cap(m.left.name)} ${leftPct}%`
+  const pctRight =
+    m.rightPctLabel ?? `${cap(m.right.name)} ${rightPct}%`
+  const footerRight = m.footerRight ?? `MATCHUP • W5M${m.matchupNum}`
 
   return `<!DOCTYPE html>
 <html>
@@ -181,7 +187,7 @@ body { background: #0a0c10; }
 <body>
 <div class="slide">
   <div class="header">
-    <div class="kicker">GWB • WEEK 5</div>
+    <div class="kicker">GWB • WEEK ${week}</div>
     <div class="kicker-line"></div>
     <div class="headline">${m.left.name} <span class="vs">vs</span> ${m.right.name}</div>
     <div class="records">${recordLine}</div>
@@ -200,8 +206,8 @@ body { background: #0a0c10; }
   <div class="mid">
     <div class="bowl">${m.title}</div>
     <div class="pct-row">
-      <span class="pct-left">${cap(m.left.name)} ${leftPct}%</span>
-      <span class="pct-right">${cap(m.right.name)} ${rightPct}%</span>
+      <span class="pct-left">${pctLeft}</span>
+      <span class="pct-right">${pctRight}</span>
     </div>
     <div class="bar">
       <div class="bar-fill" style="width: ${barLeft}%"></div>
