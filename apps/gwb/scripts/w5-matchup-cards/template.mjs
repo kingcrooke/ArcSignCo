@@ -42,7 +42,7 @@ body { background: #0a0a0a; }
   z-index: 10;
 }
 .header {
-  padding: 34px 56px 0;
+  padding: 30px 56px 0;
 }
 .kicker {
   font-family: 'Bebas', sans-serif;
@@ -79,8 +79,8 @@ body { background: #0a0a0a; }
 }
 .panels {
   position: relative;
-  margin: 28px 44px 0;
-  height: 652px;
+  margin: 92px 44px 0;
+  height: 628px;
   display: flex;
   gap: 24px;
   justify-content: center;
@@ -149,7 +149,7 @@ body { background: #0a0a0a; }
 }
 .mid {
   text-align: center;
-  margin-top: 26px;
+  margin-top: 22px;
   padding: 0 56px;
 }
 .bowl {
@@ -162,29 +162,32 @@ body { background: #0a0a0a; }
 .pct-row {
   display: flex;
   justify-content: space-between;
-  font-family: 'Bebas', sans-serif;
-  font-size: 32px;
-  margin-bottom: 8px;
-  letter-spacing: 0.04em;
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+  text-transform: none;
 }
 .pct-left { color: #d4af37; }
 .pct-right { color: #f0f2f5; }
 .bar {
-  height: 32px;
-  border-radius: 4px;
+  height: 40px;
+  border-radius: 6px;
   overflow: hidden;
   background: #1e242c;
   display: flex;
 }
 .bar-fill { background: linear-gradient(90deg, #efcc55, #c9a227); height: 100%; }
 .tagline {
-  margin-top: 14px;
+  margin-top: 16px;
   font-family: 'Inter', sans-serif;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
   color: #8a9099;
+  line-height: 1.35;
 }
 .footer {
   position: absolute;

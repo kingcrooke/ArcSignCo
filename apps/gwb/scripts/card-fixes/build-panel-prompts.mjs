@@ -16,57 +16,87 @@ const REFCROP = path.join(__dirname, '../w5-matchup-cards/ref-crops')
 
 /** Unique pose per panelId — preview confident; result winner hyped / loser dejected */
 const POSES = {
-  'mauricio-NYG-9-w1': 'fist pump skyward, mouth open celebrating',
-  'kayser-BAL-22-w1': 'one arm raised index finger to sky, other on hip — not double-fist',
-  'matt-BUF-17-w1': 'double fist roar toward camera, hyped winner',
-  'hady-NE-10-w1': 'head down, shoulders slumped, dejected walk-off',
-  'narking-NO-6-w1': 'hands on helmet, frustrated stare at ground, dejected loser',
-  'danny-DEN-10-w1': 'kneeling on one knee, disappointed',
-  'steven-CHI-4-w1': 'beating chest, roaring winner',
-  'frankie-CIN-9-w1': 'arms limp at sides, blank stare loss, dejected',
-  'manny-CHI-18-w1': 'pointing at scoreboard, hyped winner',
-  'eric-DAL-4-w1': 'turning away from camera, dejected loser',
-  'mauricio-LAC-10-w2': 'palms up “why me” loser, slumped dejected',
-  'kayser-LAR-9-w2': 'victory flex both arms high',
-  'danny-JAX-16-w2': 'dejected slumped shoulders, Jacksonville teal jersey number 16 visible',
-  'steven-NO-12-w2': 'confident smirk, hand on hip',
-  'matt-BUF-17-w2': 'headshake, arms crossed loser',
-  'jamil-PHI-1-w2': 'slumped on bench posture',
-  'eric-DAL-4-w2': 'spiking invisible football celebration',
-  'frankie-CIN-9-w2': 'hands on knees catching breath loss',
-  'narking-SF-13-w3': 'stare at turf, bitter loss, dejected',
-  'danny-JAX-16-w3': 'walking off field back turned',
-  'steven-SEA-14-w3': 'crowd wave one arm raised winner',
-  'mauricio-CAR-9-w3': 'disbelief hands on head loser',
-  'kayser-LAR-9-w3': 'confident quarterback pre-throw windup winner',
-  'eric-ATL-5-w3': 'jumping chest bump solo celebration',
-  'matt-BUF-17-w3': 'frustrated helmet off at hip loser',
-  'steven-SEA-14-w4': 'intense stare-down, arms at sides preview',
-  'kayser-LAR-9-w4': 'adjusting chin strap, locked-in preview',
-  'frankie-DET-16-w4': 'football at chest two-hand grip, calm focus preview',
-  'hady-MIN-1-w4': 'pointing forward commanding preview, index finger only',
-  'jamil-PHI-1-w4': 'football tucked under arm, forward lean preview (no pointing)',
-  'mauricio-CAR-9-w4': 'cracking neck side to side preview',
-  'danny-JAX-16-w4': 'football tucked under arm forward lean preview',
-  'manny-LV-8-w5': 'overhand throw motion, eyes downfield preview',
-  'hady-NE-10-w5': 'stone-faced stare-down preview, calm eyes',
-  'narking-SF-13-w4': 'palms up questioning gesture preview, arms not crossed',
-  'manny-KC-15-w4': 'confident smirk preview, chin up',
-  'matt-BUF-17-w4': 'tense ready stance preview',
-  'eric-DAL-4-w4': 'arms crossed chin up preview, no pointing gesture',
-  'crooke-BAL-8-w4': 'Lamar swagger preview, football in one hand',
-  'danny-JAX-16-w5': 'forward lean tuck and run preview',
-  'frankie-DET-16-w5': 'slumped shoulders preview loser energy',
-  'steven-CHI-4-w1': 'roaring hyped winner, chest out, no brown fur tint',
-  'steven-NO-12-w2': 'fist pump hyped winner celebration',
-  'manny-CHI-18-w1': 'arms raised hyped winner shouting, no city signs or text in background',
-  'eric-DAL-4-w1': 'slumped shoulders dejected loser',
-  'frankie-CIN-9-w2': 'dejected kneeling loser, Bengals orange jersey clear',
-  'frankie-DET-16-w4': 'holding ball at chest, number 16 large high-contrast on chest',
-  'matt-BUF-17-w2': 'dejected arms at sides away from chest, number 17 large on jersey front',
-  'kayser-LAR-9-w3': 'victory pose winner, smooth stone skin no shaggy fur',
-  'danny-JAX-16-w3': 'walking away dejected, smooth stone skin no fur',
+  'mauricio-NYG-9-w1': 'leaping celebration both arms wide, hyped winner',
+  'kayser-BAL-22-w1': 'flexing bicep toward crowd, hyped winner',
+  'matt-BUF-17-w1': 'spiking football at feet, hyped winner',
+  'jamil-KC-9-w1': 'pointing to sky with index finger, hyped winner',
+  'steven-CHI-4-w1': 'chest bump solo pose, hyped winner',
+  'manny-CHI-18-w1': 'arms raised shouting to crowd, hyped winner',
+  'crooke-BAL-8-w1': 'kneeling on turf one knee, dejected loser',
+  'hady-NE-10-w1': 'both hands on head, dejected loser',
+  'danny-DEN-10-w1': 'sitting on bench slumped, dejected loser',
+  'frankie-CIN-9-w1': 'walking away from camera shoulders low, dejected loser',
+  'eric-DAL-4-w1': 'slumped against wall arms crossed, dejected loser',
+  'narking-NO-6-w1': 'helmet off held at side, head visible, staring at turf — no lava cracks on skin',
+  'narking-SF-13-w2': 'hands on knees bent over, dejected loser',
+  'mauricio-LAC-10-w2': 'staring down at turf helmet in hand, dejected loser',
+  'kayser-LAR-9-w2': 'victory flex both arms high winner, smooth stone skin no beard',
+  'danny-JAX-16-w2': 'clipboard-free empty hands, upright pre-snap winner stance',
+  'steven-NO-12-w2': 'hyped winner fist pump, smooth stone no goatee',
+  'matt-BUF-17-w2': 'turning away shoulders slumped, dejected loser',
+  'jamil-PHI-1-w2': 'sitting on bench head down, dejected loser',
+  'frankie-CIN-9-w2': 'anthropomorphic stone buffalo only, no human face, dejected kneeling loser',
+  'narking-SF-13-w3': 'arms crossed bitter stare, dejected loser',
+  'danny-JAX-16-w3': 'slow walk head down, dejected loser',
+  'steven-SEA-14-w3': 'winner pose no signs or text in scene, no goatee',
+  'mauricio-CAR-9-w3': 'winner celebration no Seahawks logo on jersey, Panthers only',
+  'matt-BUF-17-w3': 'dejected loser no wrong-team logos, Bills only',
+  'manny-KC-15-w3': 'sitting on bench elbows on knees, dejected loser',
+  'danny-JAX-16-w5': 'confident pre-game forward lean, football tucked, smooth stone no fur',
+  'hady-NE-10-w5': 'confident pre-game stare-down, calm neutral eyes, no pink tint or green collar',
+  'frankie-DET-16-w5': 'confident pre-game two-hand ball grip, upright posture, no Lions wordmark text',
 }
+
+const BACKGROUNDS = {
+  'crooke-BAL-8-w1': 'cool blue stadium tunnel lighting',
+  'hady-NE-10-w1': 'overcast sideline dusk',
+  'danny-DEN-10-w1': 'warm orange sunset end zone',
+  'frankie-CIN-9-w1': 'rainy night stadium',
+  'eric-DAL-4-w1': 'grey foggy away locker glow',
+  'narking-NO-6-w1': 'neutral grey practice field, soft light',
+  'mauricio-LAC-10-w2': 'purple twilight sky',
+  'jamil-PHI-1-w2': 'green turf under lights',
+  'matt-BUF-17-w2': 'snow flurry blue hour',
+  'narking-SF-13-w2': 'red tunnel lights',
+  'narking-SF-13-w3': 'misty morning field',
+  'danny-JAX-16-w3': 'teal aurora dusk',
+  'manny-KC-15-w3': 'red end zone glow',
+  'danny-JAX-16-w5': 'teal pregame smoke haze',
+  'hady-NE-10-w5': 'navy minimalist stadium bokeh',
+  'frankie-DET-16-w5': 'silver dome interior lights',
+}
+
+export const ROUND10_PANEL_IDS = new Set([
+  'mauricio-NYG-9-w1',
+  'kayser-BAL-22-w1',
+  'matt-BUF-17-w1',
+  'jamil-KC-9-w1',
+  'steven-CHI-4-w1',
+  'manny-CHI-18-w1',
+  'crooke-BAL-8-w1',
+  'hady-NE-10-w1',
+  'danny-DEN-10-w1',
+  'frankie-CIN-9-w1',
+  'eric-DAL-4-w1',
+  'narking-NO-6-w1',
+  'narking-SF-13-w2',
+  'mauricio-LAC-10-w2',
+  'kayser-LAR-9-w2',
+  'danny-JAX-16-w2',
+  'steven-NO-12-w2',
+  'matt-BUF-17-w2',
+  'jamil-PHI-1-w2',
+  'frankie-CIN-9-w2',
+  'narking-SF-13-w3',
+  'danny-JAX-16-w3',
+  'steven-SEA-14-w3',
+  'mauricio-CAR-9-w3',
+  'matt-BUF-17-w3',
+  'manny-KC-15-w3',
+  'danny-JAX-16-w5',
+  'hady-NE-10-w5',
+  'frankie-DET-16-w5',
+])
 
 const TEAM_COLORS = {
   NYG: 'New York Giants blue jersey white number',
@@ -135,13 +165,14 @@ function promptFor(job) {
   const team = job.jersey.team
   const num = job.jersey.number
   const pose = POSES[job.panelId] ?? 'three-quarter athletic stance, distinct from arms-crossed'
+  const bg = BACKGROUNDS[job.panelId] ?? 'distinct stadium lighting from other panels in batch'
   const colors = TEAM_COLORS[team] ?? `${team} NFL jersey correct team colors`
   const numberRule = `ONE bold ${num} printed in jersey fabric once, large on chest, never hidden by arms or hands`
   const stone =
-    'Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.'
+    'Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.'
   const refA =
     'Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only.'
-  return `${refA} ${stone}. ${colors}. Correct official team logo only. ${numberRule}. POSE: ${pose}. ${mood(job)}. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character.`
+  return `${refA} ${stone}. ${colors}. Correct official team logo only once on jersey. ${numberRule}. POSE: ${pose}. BACKGROUND: ${bg}. ${mood(job)}. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character.`
 }
 
 const items = []
@@ -164,3 +195,40 @@ for (const job of FIXES.panels) {
 const out = path.join(__dirname, 'panel-prompts.json')
 await writeFile(out, JSON.stringify(items, null, 2) + '\n')
 console.log(`Wrote ${items.length} prompts to ${out}`)
+
+const round10 = items
+  .filter((i) => ROUND10_PANEL_IDS.has(i.panelId))
+  .map((i) => ({
+    outFile: i.outFile.replace(/^\.\.\//, '').replace(/^assets\//, 'assets/'),
+    pose_ref: i.w5_style_ref,
+    prompt: i.prompt,
+    panelId: i.panelId,
+  }))
+const pr96 = round10.map((i) => ({
+  outFile: i.outFile.startsWith('assets/') || i.outFile.includes('w5-matchup')
+    ? i.outFile.replace('../w5-matchup-cards/', '../w5-matchup-cards/')
+    : i.outFile,
+  pose_ref: i.pose_ref,
+  prompt: i.prompt,
+}))
+for (const job of FIXES.panels) {
+  if (!ROUND10_PANEL_IDS.has(job.panelId)) continue
+  const entry = pr96.find((p) => p.outFile.endsWith(path.basename(job.outFile)))
+  if (entry) entry.outFile = job.outFile.startsWith('..') ? job.outFile.slice(3) : job.outFile
+}
+await writeFile(
+  path.join(__dirname, 'panel-prompts-round10.json'),
+  JSON.stringify(
+    round10.map((r) => {
+      const job = FIXES.panels.find((j) => j.panelId === r.panelId)
+      return {
+        outFile: job.outFile.replace(/^\.\.\//, ''),
+        pose_ref: r.pose_ref,
+        prompt: r.prompt,
+      }
+    }),
+    null,
+    2,
+  ) + '\n',
+)
+console.log(`Wrote ${round10.length} round10 prompts`)

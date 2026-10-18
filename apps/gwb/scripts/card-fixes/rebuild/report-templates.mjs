@@ -56,7 +56,7 @@ const cssBase = `
 `
 
 function footer(pageNum) {
-  return `<div class="footer inter"><span>gwb_fantasy_football</span><span class="bebas">${pageNum}/16</span></div>`
+  return `<div class="footer inter"><span>gwb_fantasy_football</span><span class="bebas">${pageNum}</span></div>`
 }
 
 function titleBlock(title, titleGold) {
@@ -87,7 +87,7 @@ export function w1Slide09() {
   <div class="info-stack inter-semibold">
     <p>Matt — "Buried by Toe Burrow" — 175.08</p>
     <p>Narking — "Put em down Jeanty" — 158.17</p>
-    <p>Fourth-highest score, still 0-1.</p>
+    <p>158 wasted. Fourth-highest score, still 0-1.</p>
   </div>
   ${footer('9/16')}
 </div>`,
@@ -96,7 +96,7 @@ export function w1Slide09() {
 }
 
 export function w2Slide06() {
-  const hero = fileUrl(path.join(W5_ASSETS, 'results-w5-m2-winner.jpg'))
+  const hero = fileUrl(path.join(__dirname, '..', 'generated', 'eric-DAL-4-w2.jpg'))
   const body = [
     'Eric is 1-1.',
     "The man who drafted like a different sport is undefeated. Amon-Ra's 37.2 Thursday did the heavy lifting.",

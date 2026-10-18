@@ -11,7 +11,7 @@ const LIVE = path.join(GWB, 'public/slides/vs-w5-m1.full.jpg')
 const CANDIDATE = path.join(GWB, 'scripts/slide-sources/vs-w5-m2.png')
 const OUT = '/opt/cursor/artifacts/gwb-vs-chrome-diff.png'
 
-const MASK = { left: 44, top: 200, width: 992, height: 700 }
+const MASK = { left: 44, top: 250, width: 992, height: 650 }
 
 async function maskPanels(input) {
   const img = sharp(input)

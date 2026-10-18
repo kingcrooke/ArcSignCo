@@ -8,8 +8,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/mauricio.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "fist pump skyward, mouth open celebrating",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New York Giants blue jersey white number. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: fist pump skyward, mouth open celebrating. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "leaping celebration both arms wide, hyped winner",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. New York Giants blue jersey white number. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: leaping celebration both arms wide, hyped winner. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "crooke-BAL-8-w1",
@@ -20,7 +20,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/crooke.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-loser.jpg",
     "w5_style_ref": "results-w5-m3-loser.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Baltimore Ravens purple jersey white number. Correct official team logo only. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "kneeling on turf one knee, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Baltimore Ravens purple jersey white number. Correct official team logo only once on jersey. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: kneeling on turf one knee, dejected loser. BACKGROUND: cool blue stadium tunnel lighting. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "kayser-BAL-22-w1",
@@ -31,8 +32,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/kayser.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "one arm raised index finger to sky, other on hip — not double-fist",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Baltimore Ravens purple jersey white number. Correct official team logo only. ONE bold 22 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: one arm raised index finger to sky, other on hip — not double-fist. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "flexing bicep toward crowd, hyped winner",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Baltimore Ravens purple jersey white number. Correct official team logo only once on jersey. ONE bold 22 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: flexing bicep toward crowd, hyped winner. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "hady-NE-10-w1",
@@ -43,8 +44,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/hady.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "head down, shoulders slumped, dejected walk-off",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New England Patriots navy jersey red-white-blue number. Correct official team logo only. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: head down, shoulders slumped, dejected walk-off. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "both hands on head, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. New England Patriots navy jersey red-white-blue number. Correct official team logo only once on jersey. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: both hands on head, dejected loser. BACKGROUND: overcast sideline dusk. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "matt-BUF-17-w1",
@@ -55,8 +56,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/matt.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-loser.jpg",
     "w5_style_ref": "results-w5-m6-loser.jpg",
-    "pose": "double fist roar toward camera, hyped winner",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: double fist roar toward camera, hyped winner. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "spiking football at feet, hyped winner",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only once on jersey. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: spiking football at feet, hyped winner. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "narking-NO-6-w1",
@@ -67,8 +68,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/narking.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m1-winner.jpg",
     "w5_style_ref": "results-w5-m1-winner.jpg",
-    "pose": "hands on helmet, frustrated stare at ground, dejected loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New Orleans Saints black jersey gold number. Correct official team logo only. ONE bold 6 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: hands on helmet, frustrated stare at ground, dejected loser. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "helmet off held at side, head visible, staring at turf — no lava cracks on skin",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. New Orleans Saints black jersey gold number. Correct official team logo only once on jersey. ONE bold 6 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: helmet off held at side, head visible, staring at turf — no lava cracks on skin. BACKGROUND: neutral grey practice field, soft light. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "jamil-KC-9-w1",
@@ -79,7 +80,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/jamil.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. KC NFL jersey correct team colors. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "pointing to sky with index finger, hyped winner",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. KC NFL jersey correct team colors. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: pointing to sky with index finger, hyped winner. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "danny-DEN-10-w1",
@@ -90,8 +92,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "kneeling on one knee, disappointed",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Denver Broncos orange jersey navy number. Correct official team logo only. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: kneeling on one knee, disappointed. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "sitting on bench slumped, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Denver Broncos orange jersey navy number. Correct official team logo only once on jersey. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: sitting on bench slumped, dejected loser. BACKGROUND: warm orange sunset end zone. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "steven-CHI-4-w1",
@@ -102,8 +104,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/steven.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "roaring hyped winner, chest out, no brown fur tint",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Chicago Bears navy jersey orange number. Correct official team logo only. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: roaring hyped winner, chest out, no brown fur tint. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "chest bump solo pose, hyped winner",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Chicago Bears navy jersey orange number. Correct official team logo only once on jersey. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: chest bump solo pose, hyped winner. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "frankie-CIN-9-w1",
@@ -114,8 +116,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
-    "pose": "arms limp at sides, blank stare loss, dejected",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Cincinnati Bengals orange jersey black number. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms limp at sides, blank stare loss, dejected. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "walking away from camera shoulders low, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Cincinnati Bengals orange jersey black number. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: walking away from camera shoulders low, dejected loser. BACKGROUND: rainy night stadium. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "manny-CHI-18-w1",
@@ -126,8 +128,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m1-winner.jpg",
     "w5_style_ref": "results-w5-m1-winner.jpg",
-    "pose": "arms raised hyped winner shouting, no city signs or text in background",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Chicago Bears navy jersey orange number. Correct official team logo only. ONE bold 18 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms raised hyped winner shouting, no city signs or text in background. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "arms raised shouting to crowd, hyped winner",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Chicago Bears navy jersey orange number. Correct official team logo only once on jersey. ONE bold 18 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms raised shouting to crowd, hyped winner. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "eric-DAL-4-w1",
@@ -138,8 +140,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/eric.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "slumped shoulders dejected loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Dallas Cowboys white jersey blue number. Correct official team logo only. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped shoulders dejected loser. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "slumped against wall arms crossed, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Dallas Cowboys white jersey blue number. Correct official team logo only once on jersey. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped against wall arms crossed, dejected loser. BACKGROUND: grey foggy away locker glow. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "narking-SF-13-w2",
@@ -150,7 +152,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/narking.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
     "w5_style_ref": "results-w5-m2-loser.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. San Francisco 49ers red jersey gold number. Correct official team logo only. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "hands on knees bent over, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. San Francisco 49ers red jersey gold number. Correct official team logo only once on jersey. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: hands on knees bent over, dejected loser. BACKGROUND: red tunnel lights. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "mauricio-LAC-10-w2",
@@ -161,8 +164,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/mauricio.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "palms up “why me” loser, slumped dejected",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Chargers powder blue jersey. Correct official team logo only. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: palms up “why me” loser, slumped dejected. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "staring down at turf helmet in hand, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Los Angeles Chargers powder blue jersey. Correct official team logo only once on jersey. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: staring down at turf helmet in hand, dejected loser. BACKGROUND: purple twilight sky. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "kayser-LAR-9-w2",
@@ -173,8 +176,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/kayser.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
-    "pose": "victory flex both arms high",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Rams royal blue jersey gold trim. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: victory flex both arms high. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "victory flex both arms high winner, smooth stone skin no beard",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Los Angeles Rams royal blue jersey gold trim. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: victory flex both arms high winner, smooth stone skin no beard. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w2",
@@ -185,8 +188,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "dejected slumped shoulders, Jacksonville teal jersey number 16 visible",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. Correct official team logo only. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: dejected slumped shoulders, Jacksonville teal jersey number 16 visible. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "clipboard-free empty hands, upright pre-snap winner stance",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Jacksonville Jaguars teal jersey white number. Correct official team logo only once on jersey. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: clipboard-free empty hands, upright pre-snap winner stance. BACKGROUND: distinct stadium lighting from other panels in batch. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "steven-NO-12-w2",
@@ -197,8 +200,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/steven.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m1-winner.jpg",
     "w5_style_ref": "results-w5-m1-winner.jpg",
-    "pose": "fist pump hyped winner celebration",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New Orleans Saints black jersey gold number. Correct official team logo only. ONE bold 12 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: fist pump hyped winner celebration. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "hyped winner fist pump, smooth stone no goatee",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. New Orleans Saints black jersey gold number. Correct official team logo only once on jersey. ONE bold 12 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: hyped winner fist pump, smooth stone no goatee. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "matt-BUF-17-w2",
@@ -209,8 +212,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/matt.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-winner.jpg",
     "w5_style_ref": "results-w5-m6-winner.jpg",
-    "pose": "dejected arms at sides away from chest, number 17 large on jersey front",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: dejected arms at sides away from chest, number 17 large on jersey front. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "turning away shoulders slumped, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only once on jersey. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: turning away shoulders slumped, dejected loser. BACKGROUND: snow flurry blue hour. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "manny-KC-15-w2",
@@ -221,7 +224,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. KC NFL jersey correct team colors. Correct official team logo only. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. KC NFL jersey correct team colors. Correct official team logo only once on jersey. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "jamil-PHI-1-w2",
@@ -232,8 +235,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/jamil.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
     "w5_style_ref": "results-w5-m2-loser.jpg",
-    "pose": "slumped on bench posture",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Philadelphia Eagles midnight green jersey white number. Correct official team logo only. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped on bench posture. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "sitting on bench head down, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Philadelphia Eagles midnight green jersey white number. Correct official team logo only once on jersey. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: sitting on bench head down, dejected loser. BACKGROUND: green turf under lights. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "eric-DAL-4-w2",
@@ -244,8 +247,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/eric.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "spiking invisible football celebration",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Dallas Cowboys white jersey blue number. Correct official team logo only. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: spiking invisible football celebration. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Dallas Cowboys white jersey blue number. Correct official team logo only once on jersey. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "frankie-CIN-9-w2",
@@ -256,8 +258,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "dejected kneeling loser, Bengals orange jersey clear",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Cincinnati Bengals orange jersey black number. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: dejected kneeling loser, Bengals orange jersey clear. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "anthropomorphic stone buffalo only, no human face, dejected kneeling loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Cincinnati Bengals orange jersey black number. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: anthropomorphic stone buffalo only, no human face, dejected kneeling loser. BACKGROUND: distinct stadium lighting from other panels in batch. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "crooke-BAL-8-w3",
@@ -268,7 +270,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/crooke.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-loser.jpg",
     "w5_style_ref": "results-w5-m3-loser.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Baltimore Ravens purple jersey white number. Correct official team logo only. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Baltimore Ravens purple jersey white number. Correct official team logo only once on jersey. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "narking-SF-13-w3",
@@ -279,8 +281,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/narking.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-winner.jpg",
     "w5_style_ref": "results-w5-m2-winner.jpg",
-    "pose": "stare at turf, bitter loss, dejected",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. San Francisco 49ers red jersey gold number. Correct official team logo only. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: stare at turf, bitter loss, dejected. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "arms crossed bitter stare, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. San Francisco 49ers red jersey gold number. Correct official team logo only once on jersey. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms crossed bitter stare, dejected loser. BACKGROUND: misty morning field. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "hady-SEA-11-w3",
@@ -291,7 +293,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/hady.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-loser.jpg",
     "w5_style_ref": "results-w5-m6-loser.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Seattle Seahawks navy jersey green number. Correct official team logo only. ONE bold 11 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Seattle Seahawks navy jersey green number. Correct official team logo only once on jersey. ONE bold 11 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w3",
@@ -302,8 +304,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "walking away dejected, smooth stone skin no fur",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. Correct official team logo only. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: walking away dejected, smooth stone skin no fur. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "slow walk head down, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Jacksonville Jaguars teal jersey white number. Correct official team logo only once on jersey. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slow walk head down, dejected loser. BACKGROUND: teal aurora dusk. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "steven-SEA-14-w3",
@@ -314,8 +316,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/steven.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-loser.jpg",
     "w5_style_ref": "results-w5-m3-loser.jpg",
-    "pose": "crowd wave one arm raised winner",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Seattle Seahawks navy jersey green number. Correct official team logo only. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: crowd wave one arm raised winner. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "winner pose no signs or text in scene, no goatee",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Seattle Seahawks navy jersey green number. Correct official team logo only once on jersey. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: winner pose no signs or text in scene, no goatee. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "mauricio-CAR-9-w3",
@@ -326,8 +328,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/mauricio.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "disbelief hands on head loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Carolina Panthers black jersey blue number. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: disbelief hands on head loser. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "winner celebration no Seahawks logo on jersey, Panthers only",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Carolina Panthers black jersey blue number. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: winner celebration no Seahawks logo on jersey, Panthers only. BACKGROUND: distinct stadium lighting from other panels in batch. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "kayser-LAR-9-w3",
@@ -338,8 +340,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/kayser.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "victory pose winner, smooth stone skin no shaggy fur",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Rams royal blue jersey gold trim. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: victory pose winner, smooth stone skin no shaggy fur. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Los Angeles Rams royal blue jersey gold trim. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "manny-KC-15-w3",
@@ -350,7 +351,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. KC NFL jersey correct team colors. Correct official team logo only. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "sitting on bench elbows on knees, dejected loser",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. KC NFL jersey correct team colors. Correct official team logo only once on jersey. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: sitting on bench elbows on knees, dejected loser. BACKGROUND: red end zone glow. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "eric-ATL-5-w3",
@@ -361,8 +363,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/eric.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-loser.jpg",
     "w5_style_ref": "results-w5-m6-loser.jpg",
-    "pose": "jumping chest bump solo celebration",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Atlanta Falcons black jersey red number. Correct official team logo only. ONE bold 5 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: jumping chest bump solo celebration. hyped winner celebration. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Atlanta Falcons black jersey red number. Correct official team logo only once on jersey. ONE bold 5 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. hyped winner celebration. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "matt-BUF-17-w3",
@@ -373,8 +374,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/matt.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-loser.jpg",
     "w5_style_ref": "results-w5-m6-loser.jpg",
-    "pose": "frustrated helmet off at hip loser",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: frustrated helmet off at hip loser. dejected loser body language. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "dejected loser no wrong-team logos, Bills only",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only once on jersey. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: dejected loser no wrong-team logos, Bills only. BACKGROUND: distinct stadium lighting from other panels in batch. dejected loser body language. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "narking-SF-13-w4",
@@ -385,8 +386,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/narking.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
     "w5_style_ref": "results-w5-m2-loser.jpg",
-    "pose": "palms up questioning gesture preview, arms not crossed",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. San Francisco 49ers red jersey gold number. Correct official team logo only. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: palms up questioning gesture preview, arms not crossed. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. San Francisco 49ers red jersey gold number. Correct official team logo only once on jersey. ONE bold 13 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "steven-SEA-14-w4",
@@ -397,8 +397,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/steven.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-winner.jpg",
     "w5_style_ref": "results-w5-m3-winner.jpg",
-    "pose": "intense stare-down, arms at sides preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Seattle Seahawks navy jersey green number. Correct official team logo only. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: intense stare-down, arms at sides preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Seattle Seahawks navy jersey green number. Correct official team logo only once on jersey. ONE bold 14 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "kayser-LAR-9-w4",
@@ -409,8 +408,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/kayser.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
-    "pose": "adjusting chin strap, locked-in preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Los Angeles Rams royal blue jersey gold trim. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: adjusting chin strap, locked-in preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Los Angeles Rams royal blue jersey gold trim. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "frankie-DET-16-w4",
@@ -421,8 +419,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "holding ball at chest, number 16 large high-contrast on chest",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Detroit Lions Honolulu blue jersey silver number. Correct official team logo only. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: holding ball at chest, number 16 large high-contrast on chest. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Detroit Lions Honolulu blue jersey silver number. Correct official team logo only once on jersey. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "hady-MIN-1-w4",
@@ -433,8 +430,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/hady.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-winner.jpg",
     "w5_style_ref": "results-w5-m2-winner.jpg",
-    "pose": "pointing forward commanding preview, index finger only",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Minnesota Vikings purple jersey gold number. Correct official team logo only. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: pointing forward commanding preview, index finger only. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Minnesota Vikings purple jersey gold number. Correct official team logo only once on jersey. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "manny-KC-15-w4",
@@ -445,8 +441,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-loser.jpg",
     "w5_style_ref": "results-w5-m4-loser.jpg",
-    "pose": "confident smirk preview, chin up",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. KC NFL jersey correct team colors. Correct official team logo only. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident smirk preview, chin up. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. KC NFL jersey correct team colors. Correct official team logo only once on jersey. ONE bold 15 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "jamil-PHI-1-w4",
@@ -457,8 +452,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/jamil.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m2-loser.jpg",
     "w5_style_ref": "results-w5-m2-loser.jpg",
-    "pose": "football tucked under arm, forward lean preview (no pointing)",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Philadelphia Eagles midnight green jersey white number. Correct official team logo only. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: football tucked under arm, forward lean preview (no pointing). confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Philadelphia Eagles midnight green jersey white number. Correct official team logo only once on jersey. ONE bold 1 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "matt-BUF-17-w4",
@@ -469,8 +463,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/matt.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m6-winner.jpg",
     "w5_style_ref": "results-w5-m6-winner.jpg",
-    "pose": "tense ready stance preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: tense ready stance preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Buffalo Bills royal blue jersey red-white number. Correct official team logo only once on jersey. ONE bold 17 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "mauricio-CAR-9-w4",
@@ -481,8 +474,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/mauricio.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m4-winner.jpg",
     "w5_style_ref": "results-w5-m4-winner.jpg",
-    "pose": "cracking neck side to side preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Carolina Panthers black jersey blue number. Correct official team logo only. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: cracking neck side to side preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Carolina Panthers black jersey blue number. Correct official team logo only once on jersey. ONE bold 9 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "eric-DAL-4-w4",
@@ -493,8 +485,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/eric.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "arms crossed chin up preview, no pointing gesture",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Dallas Cowboys white jersey blue number. Correct official team logo only. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: arms crossed chin up preview, no pointing gesture. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Dallas Cowboys white jersey blue number. Correct official team logo only once on jersey. ONE bold 4 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w4",
@@ -505,8 +496,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "football tucked under arm forward lean preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. Correct official team logo only. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: football tucked under arm forward lean preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Jacksonville Jaguars teal jersey white number. Correct official team logo only once on jersey. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "crooke-BAL-8-w4",
@@ -517,8 +507,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/crooke.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-winner.jpg",
     "w5_style_ref": "results-w5-m3-winner.jpg",
-    "pose": "Lamar swagger preview, football in one hand",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Baltimore Ravens purple jersey white number. Correct official team logo only. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: Lamar swagger preview, football in one hand. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Baltimore Ravens purple jersey white number. Correct official team logo only once on jersey. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "danny-JAX-16-w5",
@@ -529,8 +518,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/danny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "forward lean tuck and run preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Jacksonville Jaguars teal jersey white number. Correct official team logo only. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: forward lean tuck and run preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "confident pre-game forward lean, football tucked, smooth stone no fur",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Jacksonville Jaguars teal jersey white number. Correct official team logo only once on jersey. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident pre-game forward lean, football tucked, smooth stone no fur. BACKGROUND: teal pregame smoke haze. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "manny-LV-8-w5",
@@ -541,8 +530,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/manny.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m3-winner.jpg",
     "w5_style_ref": "results-w5-m3-winner.jpg",
-    "pose": "overhand throw motion, eyes downfield preview",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Las Vegas Raiders black jersey silver number. Correct official team logo only. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: overhand throw motion, eyes downfield preview. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Las Vegas Raiders black jersey silver number. Correct official team logo only once on jersey. ONE bold 8 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: three-quarter athletic stance, distinct from arms-crossed. BACKGROUND: distinct stadium lighting from other panels in batch. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "hady-NE-10-w5",
@@ -553,8 +541,8 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/hady.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-loser.jpg",
     "w5_style_ref": "results-w5-m5-loser.jpg",
-    "pose": "stone-faced stare-down preview, calm eyes",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. New England Patriots navy jersey red-white-blue number. Correct official team logo only. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: stone-faced stare-down preview, calm eyes. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "confident pre-game stare-down, calm neutral eyes, no pink tint or green collar",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. New England Patriots navy jersey red-white-blue number. Correct official team logo only once on jersey. ONE bold 10 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident pre-game stare-down, calm neutral eyes, no pink tint or green collar. BACKGROUND: navy minimalist stadium bokeh. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   },
   {
     "panelId": "frankie-DET-16-w5",
@@ -565,7 +553,7 @@
     "refA": "/workspace/apps/gwb/scripts/w5-matchup-cards/ref-crops/frankie.jpg",
     "refB": "/workspace/apps/gwb/scripts/w6-matchup-cards/refs-w5/results-w5-m5-winner.jpg",
     "w5_style_ref": "results-w5-m5-winner.jpg",
-    "pose": "slumped shoulders preview loser energy",
-    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light weathered granite stone-gray SKIN with subtle red crack glow (PR #94 tone). NO fur, NO mane, NO beard, NO brown tint on skin. Full head and horns in frame, full-panel vertical portrait.. Detroit Lions Honolulu blue jersey silver number. Correct official team logo only. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: slumped shoulders preview loser energy. confident pre-game preview energy. NO text, signs, stadium words, extra background numbers, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
+    "pose": "confident pre-game two-hand ball grip, upright posture, no Lions wordmark text",
+    "prompt": "Reference A: manager face/horns likeness and jersey layout. Reference B: fur lightness only. Reference B: light smooth stone-gray buffalo skin (PR #96). NO fur, NO mane, NO beard, NO goatee, NO red eyes, NO lava cracks. Full buffalo head and horns visible. NO human faces.. Detroit Lions Honolulu blue jersey silver number. Correct official team logo only once on jersey. ONE bold 16 printed in jersey fabric once, large on chest, never hidden by arms or hands. POSE: confident pre-game two-hand ball grip, upright posture, no Lions wordmark text. BACKGROUND: silver dome interior lights. confident pre-game preview energy. NO text, wordmarks, signs, badges, clipboards, lanyards, or lettering anywhere. Vertical 3:4 portrait, photoreal illustration, no card frame, full-bleed character."
   }
 ]
