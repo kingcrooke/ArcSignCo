@@ -1,38 +1,86 @@
 {
   "1": {
-    "base": { "webp": "avatars/roster-01.webp", "png": "avatars/roster-01.png" }
+    "base": { "webp": "avatars/roster-01.webp", "png": "avatars/roster-01.png" },
+    "excited": {
+      "webp": "avatars/roster-01-excited.webp",
+      "png": "avatars/roster-01-excited.png"
+    }
   },
   "2": {
-    "base": { "webp": "avatars/roster-02.webp", "png": "avatars/roster-02.png" }
+    "base": { "webp": "avatars/roster-02.webp", "png": "avatars/roster-02.png" },
+    "loss": {
+      "webp": "avatars/roster-02-crushed.webp",
+      "png": "avatars/roster-02-crushed.png"
+    }
   },
   "3": {
-    "base": { "webp": "avatars/roster-03.webp", "png": "avatars/roster-03.png" }
+    "base": { "webp": "avatars/roster-03.webp", "png": "avatars/roster-03.png" },
+    "excited": {
+      "webp": "avatars/roster-03-excited.webp",
+      "png": "avatars/roster-03-excited.png"
+    }
   },
   "4": {
-    "base": { "webp": "avatars/roster-04.webp", "png": "avatars/roster-04.png" }
+    "base": { "webp": "avatars/roster-04.webp", "png": "avatars/roster-04.png" },
+    "loss": {
+      "webp": "avatars/roster-04-crushed.webp",
+      "png": "avatars/roster-04-crushed.png"
+    }
   },
   "5": {
-    "base": { "webp": "avatars/roster-05.webp", "png": "avatars/roster-05.png" }
+    "base": { "webp": "avatars/roster-05.webp", "png": "avatars/roster-05.png" },
+    "excited": {
+      "webp": "avatars/roster-05-excited.webp",
+      "png": "avatars/roster-05-excited.png"
+    }
   },
   "6": {
-    "base": { "webp": "avatars/roster-06.webp", "png": "avatars/roster-06.png" }
+    "base": { "webp": "avatars/roster-06.webp", "png": "avatars/roster-06.png" },
+    "loss": {
+      "webp": "avatars/roster-06-crushed.webp",
+      "png": "avatars/roster-06-crushed.png"
+    }
   },
   "7": {
-    "base": { "webp": "avatars/roster-07.webp", "png": "avatars/roster-07.png" }
+    "base": { "webp": "avatars/roster-07.webp", "png": "avatars/roster-07.png" },
+    "excited": {
+      "webp": "avatars/roster-07-excited.webp",
+      "png": "avatars/roster-07-excited.png"
+    }
   },
   "8": {
-    "base": { "webp": "avatars/roster-08.webp", "png": "avatars/roster-08.png" }
+    "base": { "webp": "avatars/roster-08.webp", "png": "avatars/roster-08.png" },
+    "loss": {
+      "webp": "avatars/roster-08-crushed.webp",
+      "png": "avatars/roster-08-crushed.png"
+    }
   },
   "9": {
-    "base": { "webp": "avatars/roster-09.webp", "png": "avatars/roster-09.png" }
+    "base": { "webp": "avatars/roster-09.webp", "png": "avatars/roster-09.png" },
+    "excited": {
+      "webp": "avatars/roster-09-excited.webp",
+      "png": "avatars/roster-09-excited.png"
+    }
   },
   "10": {
-    "base": { "webp": "avatars/roster-10.webp", "png": "avatars/roster-10.png" }
+    "base": { "webp": "avatars/roster-10.webp", "png": "avatars/roster-10.png" },
+    "excited": {
+      "webp": "avatars/roster-10-excited.webp",
+      "png": "avatars/roster-10-excited.png"
+    }
   },
   "11": {
-    "base": { "webp": "avatars/roster-11.webp", "png": "avatars/roster-11.png" }
+    "base": { "webp": "avatars/roster-11.webp", "png": "avatars/roster-11.png" },
+    "loss": {
+      "webp": "avatars/roster-11-crushed.webp",
+      "png": "avatars/roster-11-crushed.png"
+    }
   },
   "12": {
-    "base": { "webp": "avatars/roster-12.webp", "png": "avatars/roster-12.png" }
+    "base": { "webp": "avatars/roster-12.webp", "png": "avatars/roster-12.png" },
+    "loss": {
+      "webp": "avatars/roster-12-crushed.webp",
+      "png": "avatars/roster-12-crushed.png"
+    }
   }
 }

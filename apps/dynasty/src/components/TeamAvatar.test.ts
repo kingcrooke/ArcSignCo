@@ -23,6 +23,21 @@ describe('avatarUrlChain', () => {
     expect(chain[3]).toBe(team.globalAvatarUrl)
   })
 
+  it('uses excited mood assets when set', () => {
+    const team: TeamInfo = {
+      rosterId: 5,
+      userId: 'u5',
+      displayName: 'Chase',
+      teamName: 'Chase’n Dubs',
+      leagueAvatarUrl: null,
+      globalAvatarUrl: null,
+      avatarUrl: null,
+    }
+    const chain = avatarUrlChain(team, 'excited')
+    expect(chain[0]).toContain('avatars/roster-05-excited.webp')
+    expect(chain[1]).toContain('avatars/roster-05-excited.png')
+  })
+
   it('falls back to base mood asset when hype is unset', () => {
     const team: TeamInfo = {
       rosterId: 1,
