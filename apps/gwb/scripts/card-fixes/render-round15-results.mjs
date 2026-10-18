@@ -14,6 +14,7 @@ const SLIDE_SOURCES = path.join(__dirname, '../slide-sources')
 
 const RESULT_IDS = [
   'results-w2-m3',
+  'results-w2-m6',
   'results-w3-m2',
   'results-w3-m3',
   'results-w3-m4',

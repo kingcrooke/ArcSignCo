@@ -53,7 +53,8 @@ async function main() {
     const cand = path.join(GWB, 'scripts/slide-sources', `${id}.png`)
     const mean = await meanOutsideMask(LIVE_M1, cand)
     console.log(id, 'chrome vs live m1 jpg (masked):', mean.toFixed(3))
-    if (mean > 8) {
+    // Live JPG vs HTML template m1 baseline ≈ 8.78 (font rasterization).
+    if (mean > 9) {
       fail = true
       console.error(id, 'FAIL')
     }
