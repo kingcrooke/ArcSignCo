@@ -1,0 +1,74 @@
+[
+  {
+    "file": "results-w5-m1-winner.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m1-winner.jpg",
+    "prompt": "Reference A jersey/pose layout. Reference B skin tone ONLY: light stone-gray cracked granite skin on entire buffalo head body horns, zero brown tan or orange fur. WINNER celebration: pounding own chest with one fist, other arm back, mouth open hype. Baltimore Ravens purple jersey, white number 8 printed once on chest in fabric. Fiery background but skin stays cool light gray stone. No text overlays."
+  },
+  {
+    "file": "results-w5-m1-loser.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m1-loser.jpg",
+    "prompt": "Reference B tone. LOSER: standing bent forward hands on knees exhausted, head down, muted gray-purple storm light. Seattle Seahawks navy jersey number 14 once on chest only. Light stone-gray cracked skin, no brown fur. No rain cloud, no tear. No text."
+  },
+  {
+    "file": "results-w5-m2-winner.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m2-winner.jpg",
+    "prompt": "Reference B stone-gray cracked skin everywhere no furry brown coat. WINNER: spiking football into ground with both hands, knees bent. Green Bay Packers green and gold jersey number 9 once on chest. Fire glow in background only. No text."
+  },
+  {
+    "file": "results-w5-m2-loser.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m2-loser.jpg",
+    "prompt": "Reference B tone. LOSER seated on bench head in both hands. Las Vegas Raiders black jersey number 8 once on chest only not on shoulder. Muted stadium gray light, stone-gray skin. No text."
+  },
+  {
+    "file": "results-w5-m3-winner.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m3-winner.jpg",
+    "prompt": "Reference B light stone-gray cracked skin. WINNER smug point at camera, slight grin, other hand on hip. Dallas Cowboys navy jersey number 4 once on chest. Warm fire background, skin not orange. No text."
+  },
+  {
+    "file": "results-w5-m3-loser.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m3-loser.jpg",
+    "prompt": "Reference B tone. LOSER kneeling on one knee with one fist pressed into turf, head bowed. San Francisco 49ers red jersey number 13 once on chest only. Cool desaturated lighting, stone-gray skin. No rain no tear. No text."
+  },
+  {
+    "file": "results-w5-m4-winner.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m4-winner.jpg",
+    "prompt": "Reference B stone-gray cracked skin. WINNER arms spread wide open celebration in fire. New England Patriots navy jersey number 10 once on chest. Absolutely NO words NO WINNER text NO labels in the image. No text overlays."
+  },
+  {
+    "file": "results-w5-m4-loser.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m4-loser.jpg",
+    "prompt": "Reference B tone. LOSER lying flat on back on football turf looking up, light rain falling, only loser with rain. Detroit Lions honolulu blue jersey number 16 once on chest. Stone-gray skin muted. No rain cloud icon. No text."
+  },
+  {
+    "file": "results-w5-m5-winner.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m5-winner.jpg",
+    "prompt": "Reference B stone-gray skin. WINNER mid-air jumping chest-bump pose alone fists together at chest, joyful not roaring. Pittsburgh Steelers black jersey yellow number 30 once on chest. Fire background. No text."
+  },
+  {
+    "file": "results-w5-m5-loser.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m5-loser.jpg",
+    "prompt": "Reference B tone. LOSER walking away into dark tunnel, helmet dangling from hand, slumped shoulders. Philadelphia Eagles midnight green jersey number 1 once on back or chest visible once. Stone-gray skin cool gray light. No rain. No text."
+  },
+  {
+    "file": "results-w5-m6-winner.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m6-winner.jpg",
+    "prompt": "Reference B light stone-gray cracked skin no mane no tan fur. WINNER leaping mid-air knees bent arms raised victory. Detroit Lions authentic honolulu blue jersey with Lions styling, crisp white number 0 printed in fabric once not beige. Fire rim light. No text."
+  },
+  {
+    "file": "results-w5-m6-loser.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "w5_pose_ref": "results-w5-m6-loser.jpg",
+    "prompt": "Reference B tone. LOSER sitting against concrete wall knees pulled up, arms resting on knees so chest jersey visible. LA Rams blue and gold jersey number 9 large clear on chest. Stone-gray skin, muted gray alley light. No rain cloud. No text."
+  }
+]
