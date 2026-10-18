@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /crooke-7c3a9e12/
 
 Sitemap: https://arcsignco.com/sitemap.xml
