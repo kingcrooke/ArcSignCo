@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Report fur-mask mean L* per matchup card for PR #91, NEW, and PR #92 (normalized panels)."""
+"""Report fur-mask mean L* per W6 card vs PR #91, PR #92, 70% target, and W5 result reference."""
 from __future__ import annotations
 
 import importlib.util
 import json
-import tempfile
 from pathlib import Path
 
 import cv2
@@ -16,10 +15,6 @@ _lsf = importlib.util.spec_from_file_location(
 lighten = importlib.util.module_from_spec(_lsf)
 assert _lsf.loader
 _lsf.loader.exec_module(lighten)
-REF_91 = lighten.REF_91
-REF_92 = lighten.REF_92
-build_fur_mask = lighten.build_fur_mask
-fur_mean_l = lighten.fur_mean_l
 
 _norm = importlib.util.spec_from_file_location(
     "normalize_panels", Path(__file__).with_name("normalize-panels.py")
@@ -29,26 +24,24 @@ assert _norm.loader
 _norm.loader.exec_module(norm_mod)
 
 ASSETS = Path(__file__).resolve().parent / "assets"
-REPO = ASSETS.parents[3]
-
-
-def git_panel(rev: str, name: str) -> np.ndarray:
-    rel = f"apps/gwb/scripts/w6-matchup-cards/assets/{name}"
-    data = __import__("subprocess").check_output(["git", "-C", str(REPO), "show", f"{rev}:{rel}"])
-    tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
-    tmp.write(data)
-    tmp.close()
-    img = cv2.imread(tmp.name)
-    Path(tmp.name).unlink(missing_ok=True)
-    return img
+REF_91 = lighten.REF_91
+REF_92 = lighten.REF_92
+build_fur_mask = lighten.build_fur_mask
+fur_mean_l = lighten.fur_mean_l
+git_panel = lighten.git_panel
+normalized_git_panel = lighten.normalized_git_panel
 
 
 def normalize_panel(img: np.ndarray) -> np.ndarray:
-    with tempfile.TemporaryDirectory() as tmp:
-        p = Path(tmp) / "panel.jpg"
-        cv2.imwrite(str(p), img)
-        norm_mod.normalize(p)
-        return cv2.imread(str(p))
+    import tempfile
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
+        p = Path(tmp.name)
+    cv2.imwrite(str(p), img)
+    norm_mod.normalize(p)
+    out = cv2.imread(str(p))
+    p.unlink(missing_ok=True)
+    return out
 
 
 def card_fur_l(img_left: np.ndarray, img_right: np.ndarray) -> float:
@@ -60,6 +53,7 @@ def card_fur_l(img_left: np.ndarray, img_right: np.ndarray) -> float:
 
 
 def main() -> None:
+    _, blend70, w5 = lighten.card_fur_targets()
     rows = []
     for n in range(1, 7):
         left = f"vs-w6-m{n}-left.jpg"
@@ -68,12 +62,16 @@ def main() -> None:
         img91_r = normalize_panel(git_panel(REF_91, right))
         img92_l, img92_r = git_panel(REF_92, left), git_panel(REF_92, right)
         img_new_l, img_new_r = cv2.imread(str(ASSETS / left)), cv2.imread(str(ASSETS / right))
+        l91 = card_fur_l(img91_l, img91_r)
+        l92 = card_fur_l(img92_l, img92_r)
         rows.append(
             {
                 "card": f"m{n}",
-                "L_91": round(card_fur_l(img91_l, img91_r), 2),
+                "L_91": round(l91, 2),
+                "L_70pct_target": round(blend70[n], 2),
+                "L_w5_ref_target": round(w5[n], 2),
                 "L_new": round(card_fur_l(img_new_l, img_new_r), 2),
-                "L_92": round(card_fur_l(img92_l, img92_r), 2),
+                "L_92": round(l92, 2),
             }
         )
     print(json.dumps(rows, indent=2))

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lighten cracked-stone buffalo fur toward midpoint L* between PR #91 and PR #92 panels."""
+"""Lighten cracked-stone buffalo fur toward 70% blend L* (#91 → #92) with local contrast preserved."""
 from __future__ import annotations
 
 import argparse
@@ -14,6 +14,9 @@ ASSETS = Path(__file__).resolve().parent / "assets"
 REPO = ASSETS.parents[3]
 REF_91 = "741e20d"
 REF_92 = "af18e0d"
+REF_W5 = "3795b91"
+BLEND_TOWARD_92 = 0.7
+L_CAP = 148.0
 
 
 def build_fur_mask(img: np.ndarray, l_max: float = 200.0) -> np.ndarray:
@@ -65,8 +68,7 @@ def fur_mean_l(img: np.ndarray, mask: np.ndarray) -> float:
     return float(lab[:, :, 0][sel].mean())
 
 
-def git_panel(rev: str, name: str) -> np.ndarray:
-    rel = f"apps/gwb/scripts/w6-matchup-cards/assets/{name}"
+def git_file_at_rev(rev: str, rel: str) -> np.ndarray:
     data = subprocess.check_output(["git", "-C", str(REPO), "show", f"{rev}:{rel}"])
     tmp = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
     tmp.write(data)
@@ -76,6 +78,11 @@ def git_panel(rev: str, name: str) -> np.ndarray:
     if img is None:
         raise SystemExit(f"cannot read {rev}:{rel}")
     return img
+
+
+def git_panel(rev: str, name: str) -> np.ndarray:
+    rel = f"apps/gwb/scripts/w6-matchup-cards/assets/{name}"
+    return git_file_at_rev(rev, rel)
 
 
 def _normalize_file(path: Path) -> None:
@@ -104,9 +111,9 @@ def normalized_git_panel(rev: str, name: str) -> np.ndarray:
     return img
 
 
-def card_midpoint_targets() -> dict[str, float]:
-    """Per-matchup fur L* target = midpoint of card-averaged PR #91 and PR #92 fur means."""
-    targets: dict[str, float] = {}
+def card_blend_targets(blend: float = BLEND_TOWARD_92) -> dict[int, float]:
+    """Per-matchup fur L* = L91 + blend * (L92 - L91), card-averaged."""
+    by_card: dict[int, float] = {}
     for n in range(1, 7):
         vals91: list[float] = []
         vals92: list[float] = []
@@ -122,35 +129,84 @@ def card_midpoint_targets() -> dict[str, float]:
             m92 = build_fur_mask(img92, l_max=200.0)
             vals91.append(fur_mean_l(img91, m91))
             vals92.append(fur_mean_l(img92, m92))
-        mid = (float(np.mean(vals91)) + float(np.mean(vals92))) / 2.0
+        l91 = float(np.mean(vals91))
+        l92 = float(np.mean(vals92))
+        by_card[n] = l91 + blend * (l92 - l91)
+    return by_card
+
+
+def w5_result_fur_targets() -> dict[int, float]:
+    """Fur-mask mean L* from PR #94 Week 5 result panels (winner+loser avg per card)."""
+    by_card: dict[int, float] = {}
+    for n in range(1, 7):
+        vals: list[float] = []
+        for role in ("winner", "loser"):
+            rel = f"apps/gwb/scripts/w5-result-cards/assets/results-w5-m{n}-{role}.jpg"
+            img = git_file_at_rev(REF_W5, rel)
+            m = build_fur_mask(img, l_max=200.0)
+            vals.append(fur_mean_l(img, m))
+        by_card[n] = float(np.mean(vals))
+    return by_card
+
+
+def card_fur_targets() -> tuple[dict[str, float], dict[int, float], dict[int, float]]:
+    """Panel targets keyed by filename; card-level 70% and W5 reference maps."""
+    blend70 = card_blend_targets()
+    w5 = w5_result_fur_targets()
+    panel_targets: dict[str, float] = {}
+    for n in range(1, 7):
+        tgt = w5[n]
         for side in ("left", "right"):
-            targets[f"vs-w6-m{n}-{side}.jpg"] = mid
-    return targets
+            panel_targets[f"vs-w6-m{n}-{side}.jpg"] = tgt
+    return panel_targets, blend70, w5
 
 
-def lighten_to_target(
+def lighten_levels_preserve(
     img: np.ndarray,
     mask: np.ndarray,
     target_l: float,
-    l_cap: float = 152.0,
-    max_passes: int = 6,
+    l_cap: float = L_CAP,
+    contrast: float = 0.86,
 ) -> np.ndarray:
-    out = img.copy()
-    for _ in range(max_passes):
-        lab = cv2.cvtColor(out, cv2.COLOR_BGR2LAB).astype(np.float32)
-        l_ch = lab[:, :, 0]
-        m = (mask > 0).astype(np.float32)
-        m = cv2.GaussianBlur(m, (0, 0), 2.5)
-        cur = fur_mean_l(out, mask)
-        gap = target_l - cur
-        if abs(gap) < 0.35:
+    """Shift fur L* to target while scaling local deviations (cracks stay dark)."""
+    lab = cv2.cvtColor(img, cv2.COLOR_BGR2LAB).astype(np.float32)
+    l_ch = lab[:, :, 0].copy()
+    sel = mask > 0
+    if not sel.any():
+        return img
+
+    f = l_ch[sel].astype(np.float64)
+    mu = float(f.mean())
+    p8, p92 = np.percentile(f, [8, 92])
+    span = max(float(p92 - p8), 10.0)
+
+    # Levels stretch + mean shift hybrid
+    out_lo = max(16.0, p8 + 0.08 * span)
+    out_hi = min(l_cap, out_lo + span * 1.35 + max(0.0, target_l - mu) * 0.85)
+    stretched = (f - p8) / span * (out_hi - out_lo) + out_lo
+    shifted = target_l + (f - mu) * contrast
+    new_f = 0.45 * stretched + 0.55 * shifted
+
+    for _ in range(24):
+        cur = float(new_f.mean())
+        delta = target_l - cur
+        if abs(delta) < 0.2:
             break
-        eff = max(float(m[mask > 0].mean()), 0.15)
-        lift = (gap / eff) * m
-        l_ch = np.clip(l_ch + lift, 0, l_cap)
-        lab[:, :, 0] = l_ch
-        out = cv2.cvtColor(lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
-    return out
+        new_f = new_f + delta
+        # Soft ceiling: compress highlights above cap instead of hard clip
+        over = new_f > l_cap
+        if over.any():
+            new_f[over] = l_cap - (new_f[over] - l_cap) * 0.35
+        new_f = np.clip(new_f, 14.0, l_cap)
+
+    l_new = l_ch.copy()
+    l_new[sel] = new_f.astype(np.float32)
+
+    m = (mask > 0).astype(np.float32)
+    m = cv2.GaussianBlur(m, (0, 0), 2.0)
+    l_ch = l_ch * (1 - m) + l_new * m
+    lab[:, :, 0] = l_ch
+    return cv2.cvtColor(lab.astype(np.uint8), cv2.COLOR_LAB2BGR)
 
 
 def process(
@@ -165,7 +221,7 @@ def process(
     mask = build_fur_mask(img)
     tgt = target_l if target_l is not None else card_targets[path.name]
     before = fur_mean_l(img, mask)
-    out = lighten_to_target(img, mask, tgt)
+    out = lighten_levels_preserve(img, mask, tgt)
     after = fur_mean_l(out, mask)
     if not dry_run:
         cv2.imwrite(str(path), out, [int(cv2.IMWRITE_JPEG_QUALITY), 92])
@@ -181,12 +237,19 @@ def process(
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--target-l", type=float, default=None, help="fixed L* for all panels")
+    ap.add_argument("--blend", type=float, default=BLEND_TOWARD_92)
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-    card_targets = card_midpoint_targets()
+    panel_targets, blend70, w5 = card_fur_targets()
+    if args.target_l is not None:
+        card_targets = {k: args.target_l for k in panel_targets}
+    else:
+        card_targets = panel_targets
     stats = []
     for p in sorted(ASSETS.glob("vs-w6-m*.jpg")):
-        stats.append(process(p, args.target_l, card_targets, dry_run=args.dry_run))
+        stats.append(process(p, None, card_targets, dry_run=args.dry_run))
+    print("blend70_card", {f"m{k}": round(v, 2) for k, v in blend70.items()})
+    print("w5_ref_card", {f"m{k}": round(v, 2) for k, v in w5.items()})
     for s in stats:
         print(s)
 
