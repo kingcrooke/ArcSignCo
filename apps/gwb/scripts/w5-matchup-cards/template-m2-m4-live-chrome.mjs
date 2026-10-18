@@ -1,13 +1,33 @@
-<!DOCTYPE html>
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const FONTS = path.join(__dirname, '../fonts-local')
+
+/** Live vs-w5-m1 chrome — used only for vs-w5-m2 / vs-w5-m4 renders. */
+export function cardHtml(m, leftImg, rightImg) {
+  const week = m.week ?? 5
+  const leftPct = m.left.pct
+  const rightPct = m.right.pct
+  const recordLine =
+    m.recordLine ??
+    `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
+  const barLeft = m.barLeftPct ?? leftPct
+  const pctLeft = m.leftPctLabel ?? `${cap(m.left.name)} ${leftPct}%`
+  const pctRight = m.rightPctLabel ?? `${cap(m.right.name)} ${rightPct}%`
+  const footerRight = m.footerRight ?? `VS • M${m.matchupNum}`
+
+  return `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8"/>
 <style>
-@font-face { font-family: 'Anton'; src: url('file:///workspace/apps/gwb/scripts/fonts-local/Anton-Regular.ttf'); }
-@font-face { font-family: 'Montserrat'; src: url('file:///workspace/apps/gwb/scripts/fonts-local/Montserrat-Bold.ttf'); font-weight: 700; }
-@font-face { font-family: 'Inter'; src: url('file:///workspace/apps/gwb/scripts/fonts-local/Inter-Regular.ttf'); font-weight: 400; }
-@font-face { font-family: 'Inter'; src: url('file:///workspace/apps/gwb/scripts/fonts-local/Inter-SemiBold.ttf'); font-weight: 600; }
-@font-face { font-family: 'Inter'; src: url('file:///workspace/apps/gwb/scripts/fonts-local/Inter-Bold.ttf'); font-weight: 700; }
+@font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
+@font-face { font-family: 'Montserrat'; src: url('file://${FONTS}/Montserrat-Bold.ttf'); font-weight: 700; }
+@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Regular.ttf'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-SemiBold.ttf'); font-weight: 600; }
+@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Bold.ttf'); font-weight: 700; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #030406; }
 .slide {
@@ -20,17 +40,17 @@ body { background: #030406; }
 }
 .top-bar {
   position: absolute; left: 0; right: 0; top: 0; height: 14px;
-  background: linear-gradient(180deg, #f0c84a 0%, #d4af37 55%, #b8922a 100%);
+  background: linear-gradient(180deg, #e8c84a 0%, #d4af37 55%, #b8922a 100%);
   z-index: 10;
 }
 .header {
-  padding: 38px 67px 0;
+  padding: 80px 67px 0;
 }
 .kicker {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 30px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.12em;
   color: #d4af37;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -41,35 +61,35 @@ body { background: #030406; }
   margin-bottom: 16px;
 }
 .headline {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 76px;
+  font-family: 'Anton', sans-serif;
+  font-size: 71px;
   line-height: 1.02;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.015em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .headline .vs {
-  font-size: 48px;
+  font-size: 43px;
   color: #ffffff;
-  margin: 0 0.22em;
+  margin: 0 0.18em;
   text-transform: lowercase;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 400;
 }
 .records {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 38px;
-  letter-spacing: 0.1em;
-  word-spacing: 0.35em;
+  font-size: 26px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  word-spacing: normal;
+  white-space: pre;
   color: #d4af37;
-  margin-bottom: 2px;
+  margin-bottom: 6px;
   text-transform: none;
 }
 .panels {
   position: relative;
-  margin: 46px 67px 0;
+  margin: 68px 67px 0;
   height: 668px;
   display: flex;
   gap: 22px;
@@ -125,16 +145,18 @@ body { background: #030406; }
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 132px;
-  height: 132px;
+  box-sizing: border-box;
+  width: 207px;
+  height: 207px;
+  min-width: 207px;
+  min-height: 207px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #f5dc6a, #d4af37 52%, #9a7a18);
-  border: 6px solid #1a1408;
-  box-shadow: 0 0 36px rgba(212,175,55,0.65);
+  background: #d4af37;
+  box-shadow: inset 0 0 0 2px #1c1608;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 46px;
+  font-size: 72px;
   line-height: 1;
   color: #0a0806;
   z-index: 6;
@@ -164,21 +186,22 @@ body { background: #030406; }
 .pct-left { color: #d4af37; }
 .pct-right { color: #f0f2f5; }
 .bar {
-  height: 40px;
-  border-radius: 6px;
+  height: 32px;
+  border-radius: 4px;
   overflow: hidden;
   background: #1e242c;
   display: flex;
 }
 .bar-fill { background: #d4af37; height: 100%; }
 .tagline {
-  margin-top: 16px;
+  margin-top: 12px;
+  margin-bottom: 14px;
   font-family: 'Inter', sans-serif;
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0;
   text-transform: none;
-  color: #b8bcc4;
+  color: #c4c8ce;
 }
 .footer {
   position: absolute;
@@ -191,10 +214,10 @@ body { background: #030406; }
   font-family: 'Inter', sans-serif;
 }
 .footer-left {
-  font-size: 26px;
-  color: #8a9098;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 28px;
+  color: #a8aeb6;
+  font-weight: 400;
+  letter-spacing: 0;
 }
 .footer-right {
   font-family: 'Montserrat', sans-serif;
@@ -210,37 +233,46 @@ body { background: #030406; }
 <div class="slide">
   <div class="top-bar"></div>
   <div class="header">
-    <div class="kicker">GWB • WEEK 5</div>
+    <div class="kicker">GWB • WEEK ${week}</div>
     <div class="kicker-line"></div>
-    <div class="headline">STEVEN <span class="vs">vs</span> CROOKE</div>
-    <div class="records">STEVEN (4-0)   vs   CROOKE (1-3)</div>
+    <div class="headline">${m.left.name} <span class="vs">vs</span> ${m.right.name}</div>
+    <div class="records">${recordLine}</div>
   </div>
   <div class="panels">
     <div class="panel panel-left">
-      <div class="pill pill-left">STEVEN 4-0</div>
-      <img src="file:///workspace/apps/gwb/scripts/w5-matchup-cards/assets/vs-w5-m1-left.jpg" alt=""/>
+      <div class="pill pill-left">${m.left.name} ${m.left.record}</div>
+      <img src="file://${leftImg}" alt=""/>
     </div>
     <div class="vs-badge">VS</div>
     <div class="panel panel-right">
-      <div class="pill pill-right">CROOKE 1-3</div>
-      <img src="file:///workspace/apps/gwb/scripts/w5-matchup-cards/assets/vs-w5-m1-right.jpg" alt=""/>
+      <div class="pill pill-right">${m.right.name} ${m.right.record}</div>
+      <img src="file://${rightImg}" alt=""/>
     </div>
   </div>
   <div class="mid">
-    <div class="bowl">THE FINAL BOSS</div>
+    <div class="bowl">${m.title}</div>
     <div class="pct-row">
-      <span class="pct-left">Steven 65%</span>
-      <span class="pct-right">Crooke 35%</span>
+      <span class="pct-left">${pctLeft}</span>
+      <span class="pct-right">${pctRight}</span>
     </div>
     <div class="bar">
-      <div class="bar-fill" style="width: 65%"></div>
+      <div class="bar-fill" style="width: ${barLeft}%"></div>
     </div>
-    <div class="tagline">Darnold vs Stroud • Steven 714 PF through Week 4</div>
+    <div class="tagline">${m.tagline}</div>
   </div>
   <div class="footer">
     <span class="footer-left">gwb_fantasy_football</span>
-    <span class="footer-right">VS • M1</span>
+    <span class="footer-right">${footerRight}</span>
   </div>
 </div>
 </body>
-</html>
+</html>`
+}
+
+function cap(s) {
+  return s.charAt(0) + s.slice(1).toLowerCase()
+}
+
+export function loadMatchups() {
+  return JSON.parse(readFileSync(path.join(__dirname, 'matchups.json'), 'utf8'))
+}

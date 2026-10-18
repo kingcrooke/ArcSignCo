@@ -7,6 +7,7 @@ import { panelImagePath } from './rebuild/panel-paths.mjs'
 import { resultHtml } from './rebuild/result-template.mjs'
 import { resultFromCopy } from './rebuild/copy-to-result.mjs'
 import { REPORT_SLIDES } from './rebuild/report-templates.mjs'
+import { renderW2Slide06Composite } from './composite-w2-slide06.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const OUT = path.join(__dirname, 'rebuild/output')
@@ -41,7 +42,7 @@ async function main() {
     const r = resultFromCopy(id)
     await renderHtml(page, resultHtml(r, panelImagePath(id, 'winner'), panelImagePath(id, 'loser')), id)
   }
-  await renderHtml(page, REPORT_SLIDES['w2-slide-06'](), 'w2-slide-06')
+  await renderW2Slide06Composite(page)
   await browser.close()
 }
 

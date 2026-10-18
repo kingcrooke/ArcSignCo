@@ -2,145 +2,145 @@
   {
     "file": "vs-w5-m1-left.jpg",
     "horn_box": [
-      136,
-      191,
-      807,
+      93,
+      154,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 671,
+    "horn_h": 550,
+    "horn_w": 757,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m1-right.jpg",
     "horn_box": [
-      136,
-      191,
-      797,
+      93,
+      154,
+      848,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 661,
+    "horn_h": 550,
+    "horn_w": 755,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m2-left.jpg",
     "horn_box": [
-      140,
-      191,
-      807,
+      103,
+      154,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 667,
+    "horn_h": 550,
+    "horn_w": 747,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m2-right.jpg",
     "horn_box": [
-      94,
-      168,
-      836,
+      93,
+      178,
+      850,
       704
     ],
-    "horn_h": 536,
-    "horn_w": 742,
-    "horn_h_dev_pct": 4.5
+    "horn_h": 526,
+    "horn_w": 757,
+    "horn_h_dev_pct": 4.4
   },
   {
     "file": "vs-w5-m3-left.jpg",
     "horn_box": [
-      136,
-      191,
-      807,
+      107,
+      154,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 671,
+    "horn_h": 550,
+    "horn_w": 743,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m3-right.jpg",
     "horn_box": [
-      136,
-      191,
-      807,
+      93,
+      154,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 671,
+    "horn_h": 550,
+    "horn_w": 757,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m4-left.jpg",
     "horn_box": [
-      112,
-      169,
-      847,
+      97,
+      154,
+      850,
       704
     ],
-    "horn_h": 535,
-    "horn_w": 735,
-    "horn_h_dev_pct": 4.3
+    "horn_h": 550,
+    "horn_w": 753,
+    "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m4-right.jpg",
     "horn_box": [
-      172,
-      191,
-      807,
+      135,
+      154,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 635,
+    "horn_h": 550,
+    "horn_w": 715,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m5-left.jpg",
     "horn_box": [
-      136,
-      191,
-      801,
+      93,
+      154,
+      843,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 665,
+    "horn_h": 550,
+    "horn_w": 750,
     "horn_h_dev_pct": 0.0
   },
   {
     "file": "vs-w5-m5-right.jpg",
     "horn_box": [
-      128,
-      191,
-      815,
+      94,
+      167,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 687,
-    "horn_h_dev_pct": 0.0
+    "horn_h": 537,
+    "horn_w": 756,
+    "horn_h_dev_pct": 2.4
   },
   {
     "file": "vs-w5-m6-left.jpg",
     "horn_box": [
-      130,
-      191,
-      813,
+      93,
+      164,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 683,
-    "horn_h_dev_pct": 0.0
+    "horn_h": 540,
+    "horn_w": 757,
+    "horn_h_dev_pct": 1.8
   },
   {
     "file": "vs-w5-m6-right.jpg",
     "horn_box": [
-      135,
-      191,
-      816,
+      98,
+      167,
+      850,
       704
     ],
-    "horn_h": 513,
-    "horn_w": 681,
-    "horn_h_dev_pct": 0.0
+    "horn_h": 537,
+    "horn_w": 752,
+    "horn_h_dev_pct": 2.4
   }
 ]

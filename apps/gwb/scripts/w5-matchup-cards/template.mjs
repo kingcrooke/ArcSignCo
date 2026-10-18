@@ -5,18 +5,13 @@ import { fileURLToPath } from 'node:url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const FONTS = path.join(__dirname, '../fonts-local')
 
-/** Live vs-w5-m1 chrome (gold top bar, asymmetric frames/pills, thick odds bar). */
 export function cardHtml(m, leftImg, rightImg) {
-  const week = m.week ?? 5
   const leftPct = m.left.pct
   const rightPct = m.right.pct
-  const recordLine =
-    m.recordLine ??
-    `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
-  const barLeft = m.barLeftPct ?? leftPct
-  const pctLeft = m.leftPctLabel ?? `${cap(m.left.name)} ${leftPct}%`
-  const pctRight = m.rightPctLabel ?? `${cap(m.right.name)} ${rightPct}%`
-  const footerRight = m.footerRight ?? `VS • M${m.matchupNum}`
+  const leftNameTitle = `${m.left.name} vs ${m.right.name}`
+  const recordLine = `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
+  const barLeft = leftPct
+  const footerRight = `MATCHUP • W5M${m.matchupNum}`
 
   return `<!DOCTYPE html>
 <html>
@@ -24,236 +19,189 @@ export function cardHtml(m, leftImg, rightImg) {
 <meta charset="utf-8"/>
 <style>
 @font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
-@font-face { font-family: 'Montserrat'; src: url('file://${FONTS}/Montserrat-Bold.ttf'); font-weight: 700; }
-@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Regular.ttf'); font-weight: 400; }
-@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-SemiBold.ttf'); font-weight: 600; }
-@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-Bold.ttf'); font-weight: 700; }
+@font-face { font-family: 'Bebas'; src: url('file://${FONTS}/BebasNeue-Regular.ttf'); }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #030406; }
+body { background: #0a0c10; }
 .slide {
   width: 1080px; height: 1350px;
-  background: #030406;
+  background: linear-gradient(180deg, #0d1118 0%, #080a0f 55%, #06080c 100%);
   color: #fff;
   font-family: 'Anton', sans-serif;
   position: relative;
   overflow: hidden;
 }
-.top-bar {
-  position: absolute; left: 0; right: 0; top: 0; height: 14px;
-  background: linear-gradient(180deg, #f0c84a 0%, #d4af37 55%, #b8922a 100%);
-  z-index: 10;
-}
 .header {
-  padding: 38px 67px 0;
+  padding: 48px 56px 0;
 }
 .kicker {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 30px;
-  letter-spacing: 0.2em;
+  font-family: 'Bebas', sans-serif;
+  font-size: 32px;
+  letter-spacing: 0.12em;
   color: #d4af37;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-}
-.kicker-line {
-  height: 2px; width: 100%;
-  background: linear-gradient(90deg, #d4af37 0%, rgba(212,175,55,0.12) 100%);
-  margin-bottom: 16px;
-}
-.headline {
-  font-family: 'Anton', sans-serif;
-  font-size: 71px;
-  line-height: 0.92;
-  letter-spacing: 0.015em;
-  text-transform: uppercase;
   margin-bottom: 6px;
 }
+.kicker-line {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(90deg, #d4af37 0%, rgba(212,175,55,0.2) 100%);
+  margin-bottom: 14px;
+}
+.headline {
+  font-size: 76px;
+  line-height: 0.98;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
 .headline .vs {
-  font-size: 43px;
-  color: #ffffff;
-  margin: 0 0.18em;
-  text-transform: lowercase;
-  font-weight: 400;
+  font-size: 52px;
+  color: #c9c9c9;
+  margin: 0 0.15em;
 }
 .records {
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  font-size: 44px;
-  letter-spacing: 0.02em;
-  word-spacing: normal;
-  white-space: pre;
+  font-family: 'Bebas', sans-serif;
+  font-size: 36px;
+  letter-spacing: 0.06em;
   color: #d4af37;
-  margin-bottom: 2px;
-  text-transform: none;
+  margin-bottom: 8px;
 }
 .panels {
   position: relative;
-  margin: 46px 67px 0;
-  height: 668px;
+  margin: 36px 44px 0;
+  height: 640px;
   display: flex;
-  gap: 22px;
+  gap: 28px;
   justify-content: center;
   align-items: stretch;
 }
 .panel {
-  width: 486px;
+  width: 472px;
   border-radius: 18px;
+  border: 4px solid #d4af37;
+  box-shadow: 0 0 28px rgba(212,175,55,0.35), inset 0 0 0 1px rgba(0,0,0,0.6);
   position: relative;
   overflow: hidden;
-  background: #0c0e12;
-}
-.panel-left {
-  border: 4px solid #d4af37;
-  box-shadow: 0 0 40px rgba(212,175,55,0.45), 0 0 80px rgba(212,175,55,0.18), inset 0 0 0 1px rgba(0,0,0,0.5);
-}
-.panel-right {
-  border: 4px solid #3a4048;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.55);
+  background: #111;
 }
 .panel img {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center 10%;
+  object-position: center 8%;
   display: block;
 }
 .pill {
   position: absolute;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 26px;
-  letter-spacing: 0.14em;
+  top: 18px;
+  left: 18px;
+  font-family: 'Bebas', sans-serif;
+  font-size: 28px;
+  letter-spacing: 0.08em;
   padding: 8px 18px;
   border-radius: 999px;
-  background: rgba(8,8,10,0.88);
-  z-index: 2;
-  text-transform: uppercase;
-}
-.pill-left {
-  top: 16px; left: 16px;
+  background: rgba(0,0,0,0.72);
   border: 2px solid #d4af37;
   color: #d4af37;
-}
-.pill-right {
-  top: 16px; right: 16px; left: auto;
-  border: 2px solid #e87898;
-  color: #f0b8c8;
-  background: rgba(12,8,10,0.9);
+  z-index: 2;
 }
 .vs-badge {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  box-sizing: border-box;
-  width: 207px;
-  height: 207px;
-  min-width: 207px;
-  min-height: 207px;
-  flex-shrink: 0;
+  width: 108px;
+  height: 108px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #f5dc6a, #d4af37 52%, #9a7a18);
-  border: none;
-  box-shadow: inset 0 0 0 8px #1a1408, 0 0 42px rgba(212,175,55,0.7);
+  background: radial-gradient(circle at 35% 30%, #f0d060, #c9a227 55%, #8a6d12);
+  border: 5px solid #1a1408;
+  box-shadow: 0 0 24px rgba(212,175,55,0.55);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 72px;
-  line-height: 1;
+  font-size: 46px;
   color: #0a0806;
-  z-index: 6;
+  z-index: 5;
 }
 .mid {
   text-align: center;
-  margin-top: 22px;
-  padding: 0 67px;
+  margin-top: 34px;
+  padding: 0 56px;
 }
 .bowl {
-  font-size: 60px;
-  letter-spacing: 0.05em;
+  font-size: 56px;
+  letter-spacing: 0.06em;
   color: #d4af37;
-  margin-bottom: 16px;
-  line-height: 1.02;
+  margin-bottom: 22px;
 }
 .pct-row {
   display: flex;
   justify-content: space-between;
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  font-size: 38px;
+  font-family: 'Bebas', sans-serif;
+  font-size: 34px;
   margin-bottom: 10px;
-  letter-spacing: 0.02em;
-  text-transform: none;
 }
 .pct-left { color: #d4af37; }
-.pct-right { color: #f0f2f5; }
+.pct-right { color: #e8e8e8; }
 .bar {
-  height: 32px;
-  border-radius: 4px;
+  height: 14px;
+  border-radius: 8px;
   overflow: hidden;
-  background: #1e242c;
+  background: #2a2f38;
   display: flex;
 }
-.bar-fill { background: #d4af37; height: 100%; }
+.bar-fill { background: linear-gradient(90deg, #e8c547, #b8922a); height: 100%; }
 .tagline {
   margin-top: 16px;
-  font-family: 'Inter', sans-serif;
-  font-size: 28px;
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
-  color: #b8bcc4;
+  font-family: 'Bebas', sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.04em;
+  color: #8a9099;
 }
 .footer {
   position: absolute;
-  left: 67px;
-  right: 67px;
-  bottom: 73px;
+  left: 56px;
+  right: 56px;
+  bottom: 42px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Bebas', sans-serif;
 }
 .footer-left {
   font-size: 24px;
-  color: #7a8088;
-  font-weight: 400;
-  letter-spacing: 0;
+  color: #4a5058;
+  letter-spacing: 0.02em;
 }
 .footer-right {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
   font-size: 30px;
-  letter-spacing: 0.16em;
-  color: #f4f6f8;
-  text-transform: uppercase;
+  letter-spacing: 0.12em;
 }
 </style>
 </head>
 <body>
 <div class="slide">
-  <div class="top-bar"></div>
   <div class="header">
-    <div class="kicker">GWB • WEEK ${week}</div>
+    <div class="kicker">GWB • WEEK 5</div>
     <div class="kicker-line"></div>
     <div class="headline">${m.left.name} <span class="vs">vs</span> ${m.right.name}</div>
     <div class="records">${recordLine}</div>
   </div>
   <div class="panels">
     <div class="panel panel-left">
-      <div class="pill pill-left">${m.left.name} ${m.left.record}</div>
+      <div class="pill">${m.left.name} ${m.left.record}</div>
       <img src="file://${leftImg}" alt=""/>
     </div>
     <div class="vs-badge">VS</div>
     <div class="panel panel-right">
-      <div class="pill pill-right">${m.right.name} ${m.right.record}</div>
+      <div class="pill">${m.right.name} ${m.right.record}</div>
       <img src="file://${rightImg}" alt=""/>
     </div>
   </div>
   <div class="mid">
     <div class="bowl">${m.title}</div>
     <div class="pct-row">
-      <span class="pct-left">${pctLeft}</span>
-      <span class="pct-right">${pctRight}</span>
+      <span class="pct-left">${cap(m.left.name)} ${leftPct}%</span>
+      <span class="pct-right">${cap(m.right.name)} ${rightPct}%</span>
     </div>
     <div class="bar">
       <div class="bar-fill" style="width: ${barLeft}%"></div>

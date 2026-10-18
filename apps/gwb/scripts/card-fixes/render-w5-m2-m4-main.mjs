@@ -6,7 +6,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
-import { cardHtml, loadMatchups } from '../w5-matchup-cards/template.mjs'
+import { cardHtml, loadMatchups } from '../w5-matchup-cards/template-m2-m4-live-chrome.mjs'
 import { previewFromCopy } from './rebuild/preview-from-copy.mjs'
 import { panelImagePath } from './rebuild/panel-paths.mjs'
 

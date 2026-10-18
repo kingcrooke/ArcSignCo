@@ -46,14 +46,6 @@ const cssBase = `
 .stat-box .value { margin-top: 10px; font-size: 36px; color: ${COLORS.white}; line-height: 1.2; }
 .stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
 .cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
-.w2-06-hero {
-  position: absolute; right: 0; top: 0; width: 52%; height: 100%; z-index: 1; overflow: hidden;
-  pointer-events: none;
-}
-.w2-06-hero img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
-  filter: brightness(1.05) contrast(1.02);
-}
 .w2-06-content { position: relative; z-index: 3; }
 .margin-hero {
   position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 520px; z-index: 3;
@@ -101,8 +93,7 @@ export function w1Slide09() {
   )
 }
 
-export function w2Slide06() {
-  const hero = fileUrl(path.join(CARD_ASSETS, 'w2-slide-06-hero.png'))
+function w2Slide06BodyHtml() {
   const body = [
     'Eric is 1-1.',
     "The man who drafted like a different sport is undefeated. Amon-Ra's 37.2 Thursday did the heavy lifting.",
@@ -111,19 +102,24 @@ export function w2Slide06() {
   ]
     .map((line) => `<p>${esc(line)}</p>`)
     .join('')
-  return wrapHtml(
-    `<div class="slide w2-06-content">
-  <div class="w2-06-hero"><img src="${hero}" alt=""/></div>
+  return `<div class="slide w2-06-content">
   <div class="cover-text" style="max-width:54%">
     <div class="kicker bebas">${esc('GWB · WEEK 2 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>
     ${titleBlock('2-0 AND', 'UNEXPLAINED')}
   </div>
-  <div class="body-block inter-semibold" style="top:300px;width:560px;max-width:58%">${body}</div>
+  <div class="body-block inter-semibold" style="top:300px;width:520px;max-width:48%">${body}</div>
   ${footer('6/16')}
-</div>`,
-    cssBase,
-  )
+</div>`
+}
+
+/** Playwright base layer (hero composited separately). */
+export function w2Slide06BaseHtml() {
+  return wrapHtml(w2Slide06BodyHtml(), cssBase)
+}
+
+export function w2Slide06() {
+  return w2Slide06BaseHtml()
 }
 
 export const REPORT_SLIDES = {
