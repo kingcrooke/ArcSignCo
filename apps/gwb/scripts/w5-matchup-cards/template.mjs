@@ -62,14 +62,14 @@ body { background: #030406; }
 }
 .headline {
   font-family: 'Anton', sans-serif;
-  font-size: 96px;
+  font-size: 71px;
   line-height: 0.92;
   letter-spacing: 0.015em;
   text-transform: uppercase;
   margin-bottom: 6px;
 }
 .headline .vs {
-  font-size: 58px;
+  font-size: 43px;
   color: #ffffff;
   margin: 0 0.18em;
   text-transform: lowercase;
@@ -81,6 +81,7 @@ body { background: #030406; }
   font-size: 44px;
   letter-spacing: 0.02em;
   word-spacing: normal;
+  white-space: pre;
   color: #d4af37;
   margin-bottom: 2px;
   text-transform: none;
@@ -143,12 +144,16 @@ body { background: #030406; }
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  box-sizing: border-box;
   width: 207px;
   height: 207px;
+  min-width: 207px;
+  min-height: 207px;
+  flex-shrink: 0;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #f5dc6a, #d4af37 52%, #9a7a18);
-  border: 8px solid #1a1408;
-  box-shadow: 0 0 42px rgba(212,175,55,0.7);
+  border: none;
+  box-shadow: inset 0 0 0 8px #1a1408, 0 0 42px rgba(212,175,55,0.7);
   display: flex;
   align-items: center;
   justify-content: center;

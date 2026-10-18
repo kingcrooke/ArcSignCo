@@ -47,13 +47,12 @@ const cssBase = `
 .stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
 .cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
 .w2-06-hero {
-  position: absolute; right: 0; top: 0; width: 52%; height: 72%; z-index: 1; overflow: hidden;
+  position: absolute; right: 0; top: 0; width: 52%; height: 100%; z-index: 1; overflow: hidden;
+  pointer-events: none;
 }
 .w2-06-hero img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 8%;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 18%;
   filter: brightness(1.05) contrast(1.02);
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, rgba(0,0,0,0.75) 72%, rgba(0,0,0,0.35) 86%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 55%, rgba(0,0,0,0.75) 72%, rgba(0,0,0,0.35) 86%, transparent 100%);
 }
 .w2-06-content { position: relative; z-index: 3; }
 .margin-hero {
@@ -103,7 +102,7 @@ export function w1Slide09() {
 }
 
 export function w2Slide06() {
-  const hero = fileUrl(path.join(__dirname, '..', 'generated', 'eric-DAL-4-w2.jpg'))
+  const hero = fileUrl(path.join(CARD_ASSETS, 'w2-slide-06-hero.png'))
   const body = [
     'Eric is 1-1.',
     "The man who drafted like a different sport is undefeated. Amon-Ra's 37.2 Thursday did the heavy lifting.",

@@ -9,6 +9,7 @@ const run = (cmd) => execSync(cmd, { cwd: GWB, stdio: 'inherit' })
 const ONLY =
   'vs-w5-m2,vs-w5-m4,results-w2-m3,results-w2-m6,results-w3-m2,results-w3-m3,results-w3-m4,results-w3-m5,w2-slide-06'
 
+run('node scripts/card-fixes/bake-w2-slide06-hero.mjs')
 run('node scripts/card-fixes/render-w5-m2-m4-main.mjs')
 run('node scripts/card-fixes/build-vs-chrome-crop-sheet.mjs')
 run('node scripts/card-fixes/verify-vs-w5-m1-chrome.mjs')
