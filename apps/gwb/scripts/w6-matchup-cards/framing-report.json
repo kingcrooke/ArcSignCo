@@ -2,62 +2,62 @@
   {
     "file": "vs-w6-m1-left.jpg",
     "horn_box": [
-      8,
-      58,
-      930,
+      0,
+      36,
+      944,
       704
     ],
-    "horn_h": 646,
-    "horn_w": 922,
-    "horn_h_dev_pct": 4.4
+    "horn_h": 668,
+    "horn_w": 944,
+    "horn_h_dev_pct": 3.5
   },
   {
     "file": "vs-w6-m1-right.jpg",
     "horn_box": [
       0,
-      61,
+      47,
       944,
       704
     ],
-    "horn_h": 643,
+    "horn_h": 657,
     "horn_w": 944,
-    "horn_h_dev_pct": 4.9
+    "horn_h_dev_pct": 5.1
   },
   {
     "file": "vs-w6-m2-left.jpg",
     "horn_box": [
       0,
-      30,
+      20,
       944,
       704
     ],
-    "horn_h": 674,
+    "horn_h": 684,
     "horn_w": 944,
-    "horn_h_dev_pct": 0.3
+    "horn_h_dev_pct": 1.2
   },
   {
     "file": "vs-w6-m2-right.jpg",
     "horn_box": [
       0,
-      23,
+      0,
       944,
       704
     ],
-    "horn_h": 681,
+    "horn_h": 704,
     "horn_w": 944,
-    "horn_h_dev_pct": 0.7
+    "horn_h_dev_pct": 1.7
   },
   {
     "file": "vs-w6-m3-left.jpg",
     "horn_box": [
       0,
-      5,
+      0,
       944,
       704
     ],
-    "horn_h": 699,
+    "horn_h": 704,
     "horn_w": 944,
-    "horn_h_dev_pct": 3.4
+    "horn_h_dev_pct": 1.7
   },
   {
     "file": "vs-w6-m3-right.jpg",
@@ -69,46 +69,10 @@
     ],
     "horn_h": 704,
     "horn_w": 944,
-    "horn_h_dev_pct": 4.1
+    "horn_h_dev_pct": 1.7
   },
   {
     "file": "vs-w6-m4-left.jpg",
-    "horn_box": [
-      0,
-      71,
-      944,
-      704
-    ],
-    "horn_h": 633,
-    "horn_w": 944,
-    "horn_h_dev_pct": 6.4
-  },
-  {
-    "file": "vs-w6-m4-right.jpg",
-    "horn_box": [
-      0,
-      3,
-      944,
-      704
-    ],
-    "horn_h": 701,
-    "horn_w": 944,
-    "horn_h_dev_pct": 3.7
-  },
-  {
-    "file": "vs-w6-m5-left.jpg",
-    "horn_box": [
-      0,
-      26,
-      944,
-      704
-    ],
-    "horn_h": 678,
-    "horn_w": 944,
-    "horn_h_dev_pct": 0.3
-  },
-  {
-    "file": "vs-w6-m5-right.jpg",
     "horn_box": [
       0,
       0,
@@ -117,30 +81,66 @@
     ],
     "horn_h": 704,
     "horn_w": 944,
-    "horn_h_dev_pct": 4.1
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-w6-m4-right.jpg",
+    "horn_box": [
+      0,
+      13,
+      899,
+      704
+    ],
+    "horn_h": 691,
+    "horn_w": 899,
+    "horn_h_dev_pct": 0.1
+  },
+  {
+    "file": "vs-w6-m5-left.jpg",
+    "horn_box": [
+      0,
+      16,
+      943,
+      704
+    ],
+    "horn_h": 688,
+    "horn_w": 943,
+    "horn_h_dev_pct": 0.6
+  },
+  {
+    "file": "vs-w6-m5-right.jpg",
+    "horn_box": [
+      0,
+      11,
+      944,
+      704
+    ],
+    "horn_h": 693,
+    "horn_w": 944,
+    "horn_h_dev_pct": 0.1
   },
   {
     "file": "vs-w6-m6-left.jpg",
     "horn_box": [
       0,
-      63,
+      0,
       944,
       704
     ],
-    "horn_h": 641,
+    "horn_h": 704,
     "horn_w": 944,
-    "horn_h_dev_pct": 5.2
+    "horn_h_dev_pct": 1.7
   },
   {
     "file": "vs-w6-m6-right.jpg",
     "horn_box": [
       0,
-      50,
+      13,
       944,
       704
     ],
-    "horn_h": 654,
+    "horn_h": 691,
     "horn_w": 944,
-    "horn_h_dev_pct": 3.3
+    "horn_h_dev_pct": 0.1
   }
 ]
