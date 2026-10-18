@@ -43,7 +43,7 @@ export const TOUCHED_PREVIEWS = [
   'vs-w5-m4',
 ]
 
-export const REPORT_SLIDES = ['w1-slide-09', 'w2-slide-06', 'w4-slide-12']
+export const REPORT_SLIDES = ['w1-slide-09', 'w2-slide-06']
 
 export const LEFT_AS_LIVE_RESULTS = ['results-w1-m2', 'results-w3-m2']
 

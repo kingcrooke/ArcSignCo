@@ -120,32 +120,7 @@ export function w2Slide06() {
   )
 }
 
-export function w4Slide12() {
-  const hero = fileUrl(path.join(CARD_ASSETS, 'results-w3-m2-winner.jpg'))
-  return wrapHtml(
-    `<div class="slide">
-  <div class="bg-hero"><img src="${hero}" alt=""/></div>
-  <div class="bg-scrim"></div>
-  <div class="hdr">
-    <div class="kicker bebas">${esc('GWB · WEEK 4 · FINAL REPORT')}</div>
-    <div class="kicker-line"></div>
-    ${titleBlock('STAT OF THE', 'WEEK')}
-  </div>
-  <div class="stat-grid">
-    <div class="stat-box inter-semibold"><div class="label bebas">HADY</div><div class="value bebas">141.65</div><div class="sub">winner pts</div></div>
-    <div class="stat-box inter-semibold"><div class="label bebas">MANNY</div><div class="value bebas">134.88</div><div class="sub">loser pts</div></div>
-  </div>
-  <div class="margin-hero anton">6.77</div>
-  <div class="body-block inter-semibold" style="top:640px">Closest game of Week 4 — HADY over MANNY.</div>
-  <div class="footnote bebas">HADY OVER MANNY</div>
-  ${footer('12/16')}
-</div>`,
-    cssBase,
-  )
-}
-
 export const REPORT_SLIDES = {
   'w1-slide-09': w1Slide09,
   'w2-slide-06': w2Slide06,
-  'w4-slide-12': w4Slide12,
 }

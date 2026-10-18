@@ -1,5 +1,5 @@
 /**
- * Side-by-side: main (live) vs branch proposed for W4 preview cards + w4-slide-12.
+ * Side-by-side: main (live) vs branch proposed for W4 preview cards (vs-m1..m6).
  * Output: week4-compare/<id>-current-vs-proposed.jpg and ALL.jpg (each < 1.5MB).
  */
 import { execSync } from 'node:child_process'
@@ -21,7 +21,6 @@ const IDS = [
   'vs-m4-jamil-matt',
   'vs-m5-mauricio-eric',
   'vs-m6-danny-crooke',
-  'w4-slide-12',
 ]
 
 async function loadCurrent(id) {
