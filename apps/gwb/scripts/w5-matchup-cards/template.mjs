@@ -61,28 +61,26 @@ body { background: #030406; }
   margin-bottom: 16px;
 }
 .headline {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 76px;
-  line-height: 1.02;
-  letter-spacing: 0.04em;
+  font-family: 'Anton', sans-serif;
+  font-size: 96px;
+  line-height: 0.92;
+  letter-spacing: 0.015em;
   text-transform: uppercase;
   margin-bottom: 6px;
 }
 .headline .vs {
-  font-size: 48px;
+  font-size: 58px;
   color: #ffffff;
-  margin: 0 0.22em;
+  margin: 0 0.18em;
   text-transform: lowercase;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 400;
 }
 .records {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 38px;
-  letter-spacing: 0.1em;
-  word-spacing: 0.35em;
+  font-size: 44px;
+  letter-spacing: 0.02em;
+  word-spacing: normal;
   color: #d4af37;
   margin-bottom: 2px;
   text-transform: none;
@@ -145,16 +143,16 @@ body { background: #030406; }
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 132px;
-  height: 132px;
+  width: 207px;
+  height: 207px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, #f5dc6a, #d4af37 52%, #9a7a18);
-  border: 6px solid #1a1408;
-  box-shadow: 0 0 36px rgba(212,175,55,0.65);
+  border: 8px solid #1a1408;
+  box-shadow: 0 0 42px rgba(212,175,55,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 46px;
+  font-size: 72px;
   line-height: 1;
   color: #0a0806;
   z-index: 6;
@@ -194,9 +192,9 @@ body { background: #030406; }
 .tagline {
   margin-top: 16px;
   font-family: 'Inter', sans-serif;
-  font-size: 30px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0;
   text-transform: none;
   color: #b8bcc4;
 }
@@ -204,17 +202,17 @@ body { background: #030406; }
   position: absolute;
   left: 67px;
   right: 67px;
-  bottom: 38px;
+  bottom: 73px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   font-family: 'Inter', sans-serif;
 }
 .footer-left {
-  font-size: 26px;
-  color: #8a9098;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-size: 24px;
+  color: #7a8088;
+  font-weight: 400;
+  letter-spacing: 0;
 }
 .footer-right {
   font-family: 'Montserrat', sans-serif;

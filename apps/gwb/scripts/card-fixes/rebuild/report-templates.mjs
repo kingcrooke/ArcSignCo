@@ -47,24 +47,13 @@ const cssBase = `
 .stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
 .cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
 .w2-06-hero {
-  position: absolute; right: 0; top: 0; width: 52%; height: 88%; z-index: 1; overflow: hidden;
+  position: absolute; right: 0; top: 0; width: 52%; height: 72%; z-index: 1; overflow: hidden;
 }
 .w2-06-hero img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 6%;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 8%;
   filter: brightness(1.05) contrast(1.02);
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 62%, rgba(0,0,0,0.55) 82%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 62%, rgba(0,0,0,0.55) 82%, transparent 100%);
-}
-.w2-06-hero .veil {
-  position: absolute; inset: 0;
-  background:
-    linear-gradient(90deg, ${COLORS.bg} 0%, rgba(10,15,20,0.55) 28%, transparent 58%),
-    linear-gradient(180deg, transparent 48%, rgba(10,15,20,0.45) 72%, ${COLORS.bg} 100%);
-}
-.w2-06-scrim {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: 2;
-  background: linear-gradient(180deg, transparent 0%, ${COLORS.bg} 88%);
-  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, rgba(0,0,0,0.75) 72%, rgba(0,0,0,0.35) 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 55%, rgba(0,0,0,0.75) 72%, rgba(0,0,0,0.35) 86%, transparent 100%);
 }
 .w2-06-content { position: relative; z-index: 3; }
 .margin-hero {
@@ -125,8 +114,7 @@ export function w2Slide06() {
     .join('')
   return wrapHtml(
     `<div class="slide w2-06-content">
-  <div class="w2-06-hero"><img src="${hero}" alt=""/><div class="veil"></div></div>
-  <div class="w2-06-scrim"></div>
+  <div class="w2-06-hero"><img src="${hero}" alt=""/></div>
   <div class="cover-text" style="max-width:54%">
     <div class="kicker bebas">${esc('GWB · WEEK 2 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>

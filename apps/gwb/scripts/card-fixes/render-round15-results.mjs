@@ -18,6 +18,7 @@ const RESULT_IDS = [
   'results-w3-m2',
   'results-w3-m3',
   'results-w3-m4',
+  'results-w3-m5',
 ]
 
 async function renderHtml(page, html, basename) {
