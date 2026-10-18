@@ -7,8 +7,13 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 import { cardHtml, loadMatchups } from '../w5-matchup-cards/template-m2-m4-live-chrome.mjs'
+import { m2m4PanelPath } from '../w5-matchup-cards/m2-m4-panel-path.mjs'
 import { previewFromCopy } from './rebuild/preview-from-copy.mjs'
-import { panelImagePath } from './rebuild/panel-paths.mjs'
+
+const BOWL_TITLE = {
+  'vs-w5-m2': 'RECESSION WATCH',
+  'vs-w5-m4': 'NO REST FOR THE POOR',
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const W5 = path.join(__dirname, '..', 'w5-matchup-cards')
@@ -23,7 +28,7 @@ export function mergeMatchup(id) {
   const barLeft = c.barLeftPct ?? base.left.pct
   return {
     ...base,
-    title: c.bowlTitle ?? base.title,
+    title: BOWL_TITLE[id] ?? c.bowlTitle ?? base.title,
     tagline: c.tagline ?? base.tagline,
     recordLine: c.recordLine,
     footerRight: c.footerRight,
@@ -37,8 +42,8 @@ export function mergeMatchup(id) {
 
 async function renderOne(page, id) {
   const m = mergeMatchup(id)
-  const leftImg = panelImagePath(id, 'left')
-  const rightImg = panelImagePath(id, 'right')
+  const leftImg = m2m4PanelPath(id, 'left')
+  const rightImg = m2m4PanelPath(id, 'right')
   const html = cardHtml(m, leftImg, rightImg)
   const tmp = path.join(OUT, `.tmp-${id}.html`)
   await writeFile(tmp, html)

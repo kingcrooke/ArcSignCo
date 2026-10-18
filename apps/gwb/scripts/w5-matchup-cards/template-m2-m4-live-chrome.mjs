@@ -44,7 +44,7 @@ body { background: #030406; }
   z-index: 10;
 }
 .header {
-  padding: 80px 67px 0;
+  padding: 40px 67px 0;
 }
 .kicker {
   font-family: 'Montserrat', sans-serif;
@@ -63,9 +63,10 @@ body { background: #030406; }
 .headline {
   font-family: 'Anton', sans-serif;
   font-size: 71px;
-  line-height: 1.02;
+  line-height: 1;
   letter-spacing: 0.015em;
   text-transform: uppercase;
+  margin-top: 35px;
   margin-bottom: 4px;
 }
 .headline .vs {
@@ -78,8 +79,8 @@ body { background: #030406; }
 .records {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 26px;
-  line-height: 1;
+  font-size: 28px;
+  line-height: 0.96;
   letter-spacing: 0.02em;
   word-spacing: normal;
   white-space: pre;
@@ -89,7 +90,7 @@ body { background: #030406; }
 }
 .panels {
   position: relative;
-  margin: 68px 67px 0;
+  margin: 49px 67px 0;
   height: 668px;
   display: flex;
   gap: 22px;
@@ -112,9 +113,12 @@ body { background: #030406; }
   box-shadow: inset 0 0 0 1px rgba(0,0,0,0.55);
 }
 .panel img {
-  width: 100%; height: 100%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  object-position: center 10%;
+  object-position: center 12%;
   display: block;
 }
 .pill {
@@ -194,8 +198,12 @@ body { background: #030406; }
 }
 .bar-fill { background: #d4af37; height: 100%; }
 .tagline {
-  margin-top: 12px;
-  margin-bottom: 14px;
+  position: absolute;
+  left: 67px;
+  right: 67px;
+  top: 1048px;
+  margin: 0;
+  text-align: center;
   font-family: 'Inter', sans-serif;
   font-size: 28px;
   font-weight: 400;
@@ -207,7 +215,7 @@ body { background: #030406; }
   position: absolute;
   left: 67px;
   right: 67px;
-  bottom: 38px;
+  bottom: 78px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -258,8 +266,8 @@ body { background: #030406; }
     <div class="bar">
       <div class="bar-fill" style="width: ${barLeft}%"></div>
     </div>
-    <div class="tagline">${m.tagline}</div>
   </div>
+  <div class="tagline">${m.tagline}</div>
   <div class="footer">
     <span class="footer-left">gwb_fantasy_football</span>
     <span class="footer-right">${footerRight}</span>
