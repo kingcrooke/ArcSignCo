@@ -15,6 +15,33 @@
       "panelId": "mauricio-NYG-9-w1"
     },
     {
+      "cardId": "results-w1-m1",
+      "side": "loser",
+      "managerKey": "crooke",
+      "jersey": {
+        "playerId": "4881",
+        "name": "Lamar Jackson",
+        "number": 8,
+        "team": "BAL"
+      },
+      "outFile": "assets/results-w1-m1-loser.jpg",
+      "panelId": "crooke-BAL-8-w1"
+    },
+    {
+      "cardId": "results-w1-m2",
+      "side": "winner",
+      "managerKey": "kayser",
+      "jersey": {
+        "playerId": "3198",
+        "name": "Derrick Henry",
+        "number": 22,
+        "team": "BAL",
+        "points": 37.3
+      },
+      "outFile": "assets/results-w1-m2-winner.jpg",
+      "panelId": "kayser-BAL-22-w1"
+    },
+    {
       "cardId": "results-w1-m2",
       "side": "loser",
       "managerKey": "hady",
@@ -29,6 +56,20 @@
     },
     {
       "cardId": "results-w1-m3",
+      "side": "winner",
+      "managerKey": "matt",
+      "jersey": {
+        "playerId": "4984",
+        "name": "Josh Allen",
+        "number": 17,
+        "team": "BUF",
+        "points": 51.68
+      },
+      "outFile": "assets/results-w1-m3-winner.jpg",
+      "panelId": "matt-BUF-17-w1"
+    },
+    {
+      "cardId": "results-w1-m3",
       "side": "loser",
       "managerKey": "narking",
       "jersey": {
@@ -39,6 +80,20 @@
       },
       "outFile": "assets/results-w1-m3-loser.jpg",
       "panelId": "narking-NO-6-w1"
+    },
+    {
+      "cardId": "results-w1-m4",
+      "side": "winner",
+      "managerKey": "jamil",
+      "jersey": {
+        "playerId": "8151",
+        "name": "Kenneth Walker",
+        "number": 9,
+        "team": "KC",
+        "points": 39.1
+      },
+      "outFile": "assets/results-w1-m4-winner.jpg",
+      "panelId": "jamil-KC-9-w1"
     },
     {
       "cardId": "results-w1-m4",
@@ -109,6 +164,20 @@
     },
     {
       "cardId": "results-w2-m2",
+      "side": "winner",
+      "managerKey": "narking",
+      "jersey": {
+        "playerId": "8183",
+        "name": "Brock Purdy",
+        "number": 13,
+        "team": "SF",
+        "points": 40.23
+      },
+      "outFile": "assets/results-w2-m2-winner.jpg",
+      "panelId": "narking-SF-13-w2"
+    },
+    {
+      "cardId": "results-w2-m2",
       "side": "loser",
       "managerKey": "mauricio",
       "jersey": {
@@ -176,6 +245,20 @@
     },
     {
       "cardId": "results-w2-m5",
+      "side": "winner",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "4046",
+        "name": "Patrick Mahomes",
+        "number": 15,
+        "team": "KC",
+        "points": 45.29
+      },
+      "outFile": "assets/results-w2-m5-winner.jpg",
+      "panelId": "manny-KC-15-w2"
+    },
+    {
+      "cardId": "results-w2-m5",
       "side": "loser",
       "managerKey": "jamil",
       "jersey": {
@@ -216,6 +299,19 @@
     },
     {
       "cardId": "results-w3-m1",
+      "side": "winner",
+      "managerKey": "crooke",
+      "jersey": {
+        "playerId": "4881",
+        "name": "Lamar Jackson",
+        "number": 8,
+        "team": "BAL"
+      },
+      "outFile": "assets/results-w3-m1-winner.jpg",
+      "panelId": "crooke-BAL-8-w3"
+    },
+    {
+      "cardId": "results-w3-m1",
       "side": "loser",
       "managerKey": "narking",
       "jersey": {
@@ -226,6 +322,20 @@
       },
       "outFile": "assets/results-w3-m1-loser.jpg",
       "panelId": "narking-SF-13-w3"
+    },
+    {
+      "cardId": "results-w3-m2",
+      "side": "winner",
+      "managerKey": "hady",
+      "jersey": {
+        "playerId": "9488",
+        "name": "Jaxon Smith-Njigba",
+        "number": 11,
+        "team": "SEA",
+        "points": 37.74
+      },
+      "outFile": "assets/results-w3-m2-winner.jpg",
+      "panelId": "hady-SEA-11-w3"
     },
     {
       "cardId": "results-w3-m2",

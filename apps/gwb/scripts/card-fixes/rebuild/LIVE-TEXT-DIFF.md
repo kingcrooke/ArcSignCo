@@ -1,19 +1,14 @@
 # Text changes vs live (`main` JPG plates)
 
-Only the following intentional deltas from live transcription. All other strings match `live-card-copy.json` (sourced from live OCR / plate read).
-
 | Card | Live text | New text | Reason |
 |------|-----------|----------|--------|
-| All touched previews/results where live says **HADI** | `HADI` | `HADY` | Requested spelling |
-| `results-w1-m2` scoreline, loser pill, caption | `…119.4 HADI`, `HADI 0-1`, `Hadi's crown…` | `HADY` forms | HADY spelling |
-| `results-w3-m2` final line, scoreline, winner pill | `HADI` | `HADY` | HADY spelling |
-| `vs-m3-hadi-manny` headline, pills, record line | `HADI` | `HADY` | HADY spelling |
-| `vs-w5-m4` headline, pills, record line, odds label | `HADI` / `Hadi` | `HADY` / `Hady` | HADY spelling |
-| `results-w2-m2` caption | `Mauricio held under 100 — brutal` | *(unchanged)* | Sleeper W2: Narking 131.93 over Mauricio 99.76; live caption factually correct (top scorer Brock Purdy 40.23 — earlier round asked Purdy caption with 49.0, not applied) |
-| `vs-w5-m2` tagline | `Lawrence vs Caleb • …` | `Lawrence vs Cousins • …` | Live QB wrong; Cousins per W5 preview/Sleeper |
-| `vs-w5-m4` tagline | `Kyler vs Goff • …` | `Maye vs Goff • …` | Requested QB swap to Maye |
-| `w1-slide-09` caption word | `Third-highest` | `fourth-highest` | Requested stat fix |
-| `w2-slide-06` body only | `Eric is 2-0`, Amon-Ra `44.00` | `Eric is 1-1.`, `37.2` | Requested record/points fix; **title stays** `2-0 AND UNEXPLAINED` |
-| `w4-slide-12` stat block | Mauricio/Narking `0.03` + `NARKING LOSES BY 39.35` | HADY/Manny `6.77` closest-game stat | Requested replace Narking blowout stat |
+| HADY spelling on touched cards | `HADI` | `HADY` | Requested spelling |
+| `results-w2-m2` caption | *(unchanged)* | *(unchanged)* | Live caption factually correct |
+| `vs-w5-m2` tagline | `Lawrence vs Caleb • …` | `Lawrence vs Cousins • …` | QB fix |
+| `vs-w5-m4` tagline | `Kyler vs Goff • …` | `Maye vs Goff • …` | QB fix |
+| `w1-slide-09` | `Third-highest` | `fourth-highest` | Stat fix |
+| `w2-slide-06` body | `Eric is 2-0.`, Amon-Ra `44.00` | `Eric is 1-1.`, `37.2` | Record/points fix |
+| `w2-slide-06` “is undefeated” line | unchanged | unchanged | **PENDING JESUS DECISION** (now factually false; kept verbatim per request) |
+| `w4-slide-12` stat block | Mauricio/Narking `0.03` matchup | HADY/Manny closest margin `6.77` | Requested closest-game stat |
 
-No other copy edits are intended.
+All other copy matches live transcription in `live-card-copy.json` (BIGBLUE, ALTADEI, MNNY, `8.45 → 45.29`, `Hady's crown`, preview `Name vs Name` headlines from `matchups.json` templates).

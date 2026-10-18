@@ -17,7 +17,7 @@
     "winnerPill": "KAYSER 1-0",
     "loserPill": "HADY 0-1",
     "midTitle": "THE SPECIAL ONE STRIKES",
-    "caption": "Kayser 1-0 — HADY's crown slips in Week 1"
+    "caption": "Kayser 1-0 — Hady's crown slips in Week 1"
   },
   "results-w1-m3": {
     "week": 1,
@@ -36,7 +36,7 @@
     "scoreline": "JAMIL 171.7 — 111.9 DANNY",
     "winnerPill": "JAMIL 1-0",
     "loserPill": "DANNY 0-1",
-    "midTitle": "BIOBLUE BULLIES SANTAGUA",
+    "midTitle": "BIGBLUE BULLIES SANTAGUA",
     "caption": "Jamil 171.7 — Danny barely cracks 112"
   },
   "results-w1-m5": {
@@ -54,7 +54,7 @@
     "matchup": "W1M6",
     "finalLine": "FINAL: MANNY TAKES IT",
     "scoreline": "MANNY 133.2 — 129.1 ERIC",
-    "winnerPill": "MANNY 1-0",
+    "winnerPill": "MNNY 1-0",
     "loserPill": "ERIC 0-1",
     "midTitle": "MANNY SURVIVES BY 4",
     "caption": "4.09 points — closest game of Week 1"
@@ -94,10 +94,10 @@
     "matchup": "W2M5",
     "finalLine": "FINAL: MANNY TAKES IT",
     "scoreline": "MANNY 184.0 — 138.9 JAMIL",
-    "winnerPill": "MANNY 2-0",
+    "winnerPill": "MNNY 2-0",
     "loserPill": "JAMIL 1-1",
-    "midTitle": "MULLIGAN MAGIC FOR MANNY",
-    "caption": "Manny's Week 2 mulligan: 8.45 > 45.29. Won it."
+    "midTitle": "MULLIGAN MAGIC FOR MNNY",
+    "caption": "Manny's Week 2 mulligan: 8.45 → 45.29. Won it."
   },
   "results-w2-m6": {
     "week": 2,
@@ -106,7 +106,7 @@
     "scoreline": "ERIC 142.7 — 105.2 FRANKIE",
     "winnerPill": "ERIC 1-1",
     "loserPill": "FRANKIE 0-2",
-    "midTitle": "ALTADE HANDLES BUSINESS",
+    "midTitle": "ALTADEI HANDLES BUSINESS",
     "caption": "Eric to 1-1 — Frankie falls to 0-2"
   },
   "results-w3-m1": {
@@ -156,7 +156,7 @@
     "scoreline": "ERIC 130.4 — 128.6 MATT",
     "winnerPill": "ERIC 2-1",
     "loserPill": "MATT 1-2",
-    "midTitle": "ALTADE BY 1.82",
+    "midTitle": "ALTADEI BY 1.82",
     "caption": "1.82 points — Matt's second heartbreak loss"
   },
   "vs-m1-narking-steven": {
