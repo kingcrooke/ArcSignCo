@@ -236,7 +236,7 @@ export function SlideLightbox({
             ref={imgRef}
             key={slide.basename}
             src={jpg}
-            srcSet={`${webp} 1080w`}
+            srcSet={`${webp} ${slide.width}w`}
             sizes="(max-width: 720px) 100vw, 720px"
             alt={slide.title}
             width={slide.width}

@@ -24,7 +24,10 @@ import { ShareCardButton } from './ShareCardButton'
 import { SlideLightbox } from './SlideLightbox'
 
 const THUMB_WIDTH = 540
-const THUMB_HEIGHT = 675
+
+function thumbHeight(slide: PublishedSlide): number {
+  return Math.round((THUMB_WIDTH * slide.height) / slide.width)
+}
 
 function GraphicThumb({
   slide,
@@ -83,14 +86,16 @@ function GraphicThumb({
           src={jpg}
           alt=""
           width={THUMB_WIDTH}
-          height={THUMB_HEIGHT}
+          height={thumbHeight(slide)}
           loading="lazy"
           decoding="async"
-          className="aspect-[4/5] w-full bg-[#0d1319] object-cover object-top transition group-hover:opacity-95"
+          style={{ aspectRatio: `${slide.width} / ${slide.height}` }}
+          className="w-full bg-[#0d1319] object-contain transition group-hover:opacity-95"
         />
       ) : (
         <div
-          className="aspect-[4/5] w-full bg-[#0d1319]"
+          className="w-full bg-[#0d1319]"
+          style={{ aspectRatio: `${slide.width} / ${slide.height}` }}
           aria-hidden
         />
       )}

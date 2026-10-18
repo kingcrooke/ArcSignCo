@@ -11,11 +11,13 @@ const EXPECTED: Record<string, number> = {
   '2023': 0,
   '2024': 1,
   '2025': 2,
-  '2026': 1,
+  '2026': 3,
 }
 
 describe('trade history chain (live Sleeper)', () => {
-  it('loads 20 trades across 2019–2026', async () => {
+  it(
+    'loads 22 trades across 2019–2026',
+    async () => {
     const players = await loadPlayersMap()
     const { bundles, priorSeasonsFailed } = await fetchTradeHistoryChain()
     expect(priorSeasonsFailed).toBe(false)
@@ -34,7 +36,7 @@ describe('trade history chain (live Sleeper)', () => {
       }
     }
     const trades = mergeTradeLogs(entries)
-    expect(trades).toHaveLength(20)
+    expect(trades).toHaveLength(22)
 
     const counts = tradeCountBySeason(trades)
     for (const [season, n] of Object.entries(EXPECTED)) {
@@ -48,5 +50,7 @@ describe('trade history chain (live Sleeper)', () => {
       s?.received.some((a) => a.label.includes('Shough')),
     )
     expect(dannySide?.sent.some((a) => a.label.includes('Bo Nix'))).toBe(true)
-  })
+  },
+    30_000,
+  )
 })
