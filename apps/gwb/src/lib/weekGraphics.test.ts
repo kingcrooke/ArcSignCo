@@ -43,18 +43,14 @@ describe('getWeekGraphicsSections week 4', () => {
     ])
   })
 
-  it('lists Matchups only for upcoming Week 5', () => {
+  it('lists Results and Report for finished Week 5', () => {
     const sections = getWeekGraphicsSections(5)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
-    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
-      ['vs-w5-m1', 'vs-w5-m1', 'Steven vs Crooke'],
-      ['vs-w5-m2', 'vs-w5-m2', 'Danny vs Manny'],
-      ['vs-w5-m3', 'vs-w5-m3', 'Narking vs Eric'],
-      ['vs-w5-m4', 'vs-w5-m4', 'Hady vs Frankie'],
-      ['vs-w5-m5', 'vs-w5-m5', 'Mauricio vs Jamil'],
-      ['vs-w5-m6', 'vs-w5-m6', 'Kayser vs Matt'],
-    ])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'report'])
+    expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
+    expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
+    expect(sections.find((s) => s.kind === 'results')?.slides[3]?.title).toBe(
+      'FINAL: HADY TAKES IT',
+    )
   })
 
   it('lists Matchups only for upcoming Week 6', () => {
