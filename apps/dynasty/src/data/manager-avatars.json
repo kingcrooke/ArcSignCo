@@ -4,10 +4,18 @@
     "excited": {
       "webp": "avatars/roster-01-excited.webp",
       "png": "avatars/roster-01-excited.png"
+    },
+    "loss": {
+      "webp": "avatars/roster-01-crushed.webp",
+      "png": "avatars/roster-01-crushed.png"
     }
   },
   "2": {
     "base": { "webp": "avatars/roster-02.webp", "png": "avatars/roster-02.png" },
+    "excited": {
+      "webp": "avatars/roster-02-excited.webp",
+      "png": "avatars/roster-02-excited.png"
+    },
     "loss": {
       "webp": "avatars/roster-02-crushed.webp",
       "png": "avatars/roster-02-crushed.png"
@@ -18,10 +26,18 @@
     "excited": {
       "webp": "avatars/roster-03-excited.webp",
       "png": "avatars/roster-03-excited.png"
+    },
+    "loss": {
+      "webp": "avatars/roster-03-crushed.webp",
+      "png": "avatars/roster-03-crushed.png"
     }
   },
   "4": {
     "base": { "webp": "avatars/roster-04.webp", "png": "avatars/roster-04.png" },
+    "excited": {
+      "webp": "avatars/roster-04-excited.webp",
+      "png": "avatars/roster-04-excited.png"
+    },
     "loss": {
       "webp": "avatars/roster-04-crushed.webp",
       "png": "avatars/roster-04-crushed.png"
@@ -32,10 +48,18 @@
     "excited": {
       "webp": "avatars/roster-05-excited.webp",
       "png": "avatars/roster-05-excited.png"
+    },
+    "loss": {
+      "webp": "avatars/roster-05-crushed.webp",
+      "png": "avatars/roster-05-crushed.png"
     }
   },
   "6": {
     "base": { "webp": "avatars/roster-06.webp", "png": "avatars/roster-06.png" },
+    "excited": {
+      "webp": "avatars/roster-06-excited.webp",
+      "png": "avatars/roster-06-excited.png"
+    },
     "loss": {
       "webp": "avatars/roster-06-crushed.webp",
       "png": "avatars/roster-06-crushed.png"
@@ -46,10 +70,18 @@
     "excited": {
       "webp": "avatars/roster-07-excited.webp",
       "png": "avatars/roster-07-excited.png"
+    },
+    "loss": {
+      "webp": "avatars/roster-07-crushed.webp",
+      "png": "avatars/roster-07-crushed.png"
     }
   },
   "8": {
     "base": { "webp": "avatars/roster-08.webp", "png": "avatars/roster-08.png" },
+    "excited": {
+      "webp": "avatars/roster-08-excited.webp",
+      "png": "avatars/roster-08-excited.png"
+    },
     "loss": {
       "webp": "avatars/roster-08-crushed.webp",
       "png": "avatars/roster-08-crushed.png"
@@ -60,6 +92,10 @@
     "excited": {
       "webp": "avatars/roster-09-excited.webp",
       "png": "avatars/roster-09-excited.png"
+    },
+    "loss": {
+      "webp": "avatars/roster-09-crushed.webp",
+      "png": "avatars/roster-09-crushed.png"
     }
   },
   "10": {
@@ -67,10 +103,18 @@
     "excited": {
       "webp": "avatars/roster-10-excited.webp",
       "png": "avatars/roster-10-excited.png"
+    },
+    "loss": {
+      "webp": "avatars/roster-10-crushed.webp",
+      "png": "avatars/roster-10-crushed.png"
     }
   },
   "11": {
     "base": { "webp": "avatars/roster-11.webp", "png": "avatars/roster-11.png" },
+    "excited": {
+      "webp": "avatars/roster-11-excited.webp",
+      "png": "avatars/roster-11-excited.png"
+    },
     "loss": {
       "webp": "avatars/roster-11-crushed.webp",
       "png": "avatars/roster-11-crushed.png"
@@ -78,6 +122,10 @@
   },
   "12": {
     "base": { "webp": "avatars/roster-12.webp", "png": "avatars/roster-12.png" },
+    "excited": {
+      "webp": "avatars/roster-12-excited.webp",
+      "png": "avatars/roster-12-excited.png"
+    },
     "loss": {
       "webp": "avatars/roster-12-crushed.webp",
       "png": "avatars/roster-12-crushed.png"

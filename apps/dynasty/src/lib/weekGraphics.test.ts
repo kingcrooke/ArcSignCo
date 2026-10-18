@@ -2,6 +2,16 @@ import { describe, expect, it } from 'vitest'
 import { getWeekGraphicsSections, getWeekGraphicsSlides } from './weekGraphics'
 
 describe('weekGraphics', () => {
+  it('weeks 1–4 expose results only', () => {
+    for (const week of [1, 2, 3, 4]) {
+      const sections = getWeekGraphicsSections(week)
+      expect(sections).toHaveLength(1)
+      expect(sections[0].kind).toBe('results')
+      expect(sections[0].slides).toHaveLength(6)
+      expect(sections[0].slides[0].id).toBe(`results-w${week}-m1`)
+    }
+  })
+
   it('week 5 has separate results and matchup sections', () => {
     const sections = getWeekGraphicsSections(5)
     expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])

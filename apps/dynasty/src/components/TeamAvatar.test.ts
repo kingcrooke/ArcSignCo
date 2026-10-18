@@ -23,6 +23,21 @@ describe('avatarUrlChain', () => {
     expect(chain[3]).toBe(team.globalAvatarUrl)
   })
 
+  it('chains base assets after mood for missing file fallback', () => {
+    const team: TeamInfo = {
+      rosterId: 2,
+      userId: 'u2',
+      displayName: 'Nix',
+      teamName: 'Nix in 5',
+      leagueAvatarUrl: null,
+      globalAvatarUrl: null,
+      avatarUrl: null,
+    }
+    const chain = avatarUrlChain(team, 'excited')
+    expect(chain[0]).toContain('avatars/roster-02-excited.webp')
+    expect(chain[2]).toContain('avatars/roster-02.webp')
+  })
+
   it('uses excited mood assets when set', () => {
     const team: TeamInfo = {
       rosterId: 5,
