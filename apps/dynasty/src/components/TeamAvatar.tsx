@@ -61,7 +61,11 @@ function resolveCustomUrls(rosterId: number, mood: AvatarMood): string[] {
           ? record.loss
           : record.base
   if (!ref && mood !== 'base') ref = record.base
-  return pathsFromRef(ref)
+  const urls = pathsFromRef(ref)
+  if (mood !== 'base' && record.base) {
+    urls.push(...pathsFromRef(record.base))
+  }
+  return urls
 }
 
 /** Custom cartoon → league metadata.avatar → global user.avatar thumb → initials. */

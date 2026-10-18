@@ -1,5 +1,6 @@
 import type { PublishedSlide } from './publishedSlides'
 import { HELD_BACK_SLIDES } from './publishedSlides'
+import weekResults from '../data/week-result-slides.json'
 
 export type GraphicsSectionKind = 'matchups' | 'results'
 
@@ -22,14 +23,15 @@ function slide(id: string, title: string): PublishedSlide {
   return { id, title, basename: id, ...SLIDE_SIZE }
 }
 
-const RESULTS_W5: PublishedSlide[] = [
-  slide('results-w5-m1', 'BigBlue 104.96 - Chase\u2019n Dubs 121.78'),
-  slide('results-w5-m2', 'Saints & Sinners 172.38 - Rubuilding 134.94'),
-  slide('results-w5-m3', 'Nix in 5 161.66 - Wolf Pack 178.40'),
-  slide('results-w5-m4', 'Chalupa Batman 115.44 - Team Name Hoes 154.22'),
-  slide('results-w5-m5', 'Love Thy Nabers 132.44 - MahomiesRidley4MooreJeffe 117.06'),
-  slide('results-w5-m6', 'A-Lamb-e que tengo hambre 86.94 - ramonguaraguao 122.40'),
-]
+const RESULTS_BY_WEEK = weekResults as Record<
+  string,
+  { id: string; title: string }[]
+>
+
+function resultsSlides(week: number): PublishedSlide[] {
+  const rows = RESULTS_BY_WEEK[String(week)] ?? []
+  return rows.map((r) => slide(r.id, r.title))
+}
 
 const VS_W6: PublishedSlide[] = [
   slide('vs-w6-m1', 'Chase\u2019n Dubs vs MahomiesRidley4MooreJeffe'),
@@ -40,12 +42,21 @@ const VS_W6: PublishedSlide[] = [
   slide('vs-w6-m6', 'Nix in 5 vs BigBlue'),
 ]
 
-/** Week 5 final: results then Week 6 matchup previews (never mixed in one gallery row). */
+/** Weeks 1–4: results only. Week 5: results + Week 6 previews. Week 6: matchups only. */
 export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const sections: WeekGraphicsSection[] = []
 
-  if (week === 5) {
-    sections.push({ kind: 'results', heading: 'Results', slides: publish(RESULTS_W5) })
+  if (week >= 1 && week <= 4) {
+    const slides = publish(resultsSlides(week))
+    if (slides.length) {
+      sections.push({ kind: 'results', heading: 'Results', slides })
+    }
+  } else if (week === 5) {
+    sections.push({
+      kind: 'results',
+      heading: 'Results',
+      slides: publish(resultsSlides(5)),
+    })
     sections.push({
       kind: 'matchups',
       heading: 'Week 6 matchup previews',

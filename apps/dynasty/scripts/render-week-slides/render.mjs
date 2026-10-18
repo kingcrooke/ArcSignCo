@@ -27,22 +27,45 @@ async function renderOne(page, id, html) {
   return out
 }
 
+function parseWeekArg(argv) {
+  const only = argv.find((a) => a.startsWith('--weeks='))
+  if (!only) return null
+  const spec = only.slice('--weeks='.length)
+  const weeks = new Set()
+  for (const part of spec.split(',')) {
+    const trimmed = part.trim()
+    if (trimmed.includes('-')) {
+      const [a, b] = trimmed.split('-').map((n) => Number(n))
+      for (let w = a; w <= b; w++) weeks.add(w)
+    } else if (trimmed) weeks.add(Number(trimmed))
+  }
+  return [...weeks].sort((a, b) => a - b)
+}
+
 async function main() {
   const raw = await readFile(DATA_PATH, 'utf8')
   const data = JSON.parse(raw)
-  const standings = data.standingsAfterWeek5
 
   const onlyResults = process.argv.includes('--results-only')
+  const weekFilter = parseWeekArg(process.argv)
 
   const jobs = []
-  for (const row of data.resultsWeek5) {
-    jobs.push({
-      id: row.id,
-      html: resultSlide({ ...row, week: 5 }, standings),
-    })
+  for (let week = 1; week <= 5; week++) {
+    if (weekFilter && !weekFilter.includes(week)) continue
+    const standings = data[`standingsAfterWeek${week}`]
+    const rows = data[`resultsWeek${week}`]
+    if (!rows?.length) continue
+    for (const row of rows) {
+      jobs.push({
+        id: row.id,
+        html: resultSlide({ ...row, week }, standings),
+      })
+    }
   }
+
   if (!onlyResults) {
-    for (const row of data.matchupsWeek6) {
+    const standings = data.standingsAfterWeek5
+    for (const row of data.matchupsWeek6 ?? []) {
       jobs.push({
         id: row.id,
         html: matchSlide({ ...row, week: 6 }, standings),
@@ -64,7 +87,7 @@ async function main() {
 
   await browser.close()
   await writeFile(
-    path.join(OUT_DIR, 'render-report-w5-w6.json'),
+    path.join(OUT_DIR, 'render-report.json'),
     JSON.stringify(report, null, 2),
   )
 }
