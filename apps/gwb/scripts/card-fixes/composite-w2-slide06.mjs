@@ -1,5 +1,5 @@
 /**
- * w2-slide-06: base + hero (620-1080 × 0-1220) + SVG fades; footer on top.
+ * w2-slide-06: base + hero flush to top/right + 4-edge fades on hero alpha rect.
  */
 import { chromium } from 'playwright'
 import { mkdir, writeFile } from 'node:fs/promises'
@@ -17,165 +17,185 @@ const HERO_LEFT = 620
 const HERO_WIDTH = 1080 - HERO_LEFT
 const HERO_TOP = 0
 const HERO_HEIGHT = 1220
-const BG = { r: 10, g: 15, b: 20 }
-const LEFT_FADE_X0 = 620
-const LEFT_FADE_X1 = 780
-const BOTTOM_FADE_Y0 = 820
-const BOTTOM_FADE_Y1 = 1180
-const HERO_SCALE = 1.1
-const HERO_CROP_LEFT = 0.36
-const HERO_CROP_TOP = 0.05
-const HERO_INSET_SCALE = 0.92
-const HERO_INSET_X = 8
+const BG_HEX = '#0a0f14'
+const FADE = { left: 160, right: 40, top: 60, bottomFrac: 0.35, outside: 2 }
 
-function luma(r, g, b) {
+export function luma(r, g, b) {
   return 0.299 * r + 0.587 * g + 0.114 * b
 }
 
-async function heroBuffer() {
+export function alphaBoundsRgba(data, w, h, ch, offsetX, offsetY, alphaMin = 12) {
+  let x0 = w
+  let y0 = h
+  let x1 = -1
+  let y1 = -1
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = (y * w + x) * ch
+      const a = ch === 4 ? data[i + 3] : 255
+      if (a < alphaMin) continue
+      const lx = offsetX + x
+      const ly = offsetY + y
+      x0 = Math.min(x0, lx)
+      y0 = Math.min(y0, ly)
+      x1 = Math.max(x1, lx)
+      y1 = Math.max(y1, ly)
+    }
+  }
+  if (x1 < x0) return null
+  return { left: x0, top: y0, right: x1 + 1, bottom: y1 + 1 }
+}
+
+async function heroLayer() {
   const meta = await sharp(HERO_SRC).metadata()
   const sw = meta.width
   const sh = meta.height
-  const innerW = Math.round(HERO_WIDTH * HERO_INSET_SCALE)
-  const innerH = Math.round(HERO_HEIGHT * HERO_INSET_SCALE)
-  const scale = Math.max(innerW / sw, innerH / sh) * HERO_SCALE
-  const scaledW = Math.ceil(sw * scale)
-  const scaledH = Math.ceil(sh * scale)
-  const cropLeft = Math.min(
-    Math.max(0, Math.floor(scaledW * HERO_CROP_LEFT)),
-    scaledW - innerW,
-  )
-  const cropTop = Math.min(
-    Math.max(0, Math.floor(scaledH * HERO_CROP_TOP)),
-    scaledH - innerH,
-  )
-  const resized = await sharp(HERO_SRC)
-    .resize(scaledW, scaledH, { fit: 'fill' })
-    .extract({ left: cropLeft, top: cropTop, width: innerW, height: innerH })
-    .png()
-    .toBuffer()
-  const padLeft = HERO_INSET_X
-  const padTop = Math.round((HERO_HEIGHT - innerH) / 2)
-  return sharp({
-    create: {
-      width: HERO_WIDTH,
-      height: HERO_HEIGHT,
-      channels: 4,
+  const extractW = Math.min(sw, Math.floor(sw * 0.86))
+  const extractLeft = Math.floor(sw * 0.08)
+  const padL = 182
+  const padR = 52
+  const innerW = HERO_WIDTH - padL - padR
+  const innerH = Math.round(HERO_HEIGHT * 0.84)
+  const buf = await sharp(HERO_SRC)
+    .extract({ left: extractLeft, top: 0, width: extractW, height: sh })
+    .resize(innerW, innerH, { fit: 'cover', position: 'top' })
+    .extend({
+      top: 0,
+      bottom: HERO_HEIGHT - innerH,
+      left: padL,
+      right: padR,
       background: { r: 0, g: 0, b: 0, alpha: 0 },
-    },
-  })
-    .composite([{ input: resized, left: padLeft, top: padTop }])
+    })
     .png()
     .toBuffer()
-}
-
-async function leftFadeOverlay() {
-  const pad = 24
-  const overlayW = LEFT_FADE_X1 - LEFT_FADE_X0 + pad * 2
-  const overlayH = 1350
-  const gradW = LEFT_FADE_X1 - LEFT_FADE_X0
-  const svg = `<svg width="${overlayW}" height="${overlayH}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="lf" x1="0" y1="0" x2="1" y2="0">
-        <stop offset="0%" stop-color="#0a0f14" stop-opacity="1"/>
-        <stop offset="100%" stop-color="#0a0f14" stop-opacity="0"/>
-      </linearGradient>
-    </defs>
-    <rect x="${pad}" y="0" width="${gradW + pad}" height="${overlayH}" fill="url(#lf)"/>
-  </svg>`
-  return { buf: await sharp(Buffer.from(svg)).png().toBuffer(), left: LEFT_FADE_X0 - pad }
-}
-
-async function bottomFadeOverlay() {
-  const padY = 80
-  const y0 = BOTTOM_FADE_Y0 - padY
-  const h = 1350 - y0
-  const g0 = BOTTOM_FADE_Y0 - y0
-  const g1 = BOTTOM_FADE_Y1 - y0
-  const svg = `<svg width="${HERO_WIDTH}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="bf" x1="0" y1="${g0}" x2="0" y2="${g1}" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#0a0f14" stop-opacity="0"/>
-        <stop offset="1" stop-color="#0a0f14" stop-opacity="1"/>
-      </linearGradient>
-    </defs>
-    <rect width="${HERO_WIDTH}" height="${h}" fill="url(#bf)"/>
-    <rect y="${g1}" width="${HERO_WIDTH}" height="${h - g1}" fill="#0a0f14"/>
-  </svg>`
-  return { buf: await sharp(Buffer.from(svg)).png().toBuffer(), top: y0, left: HERO_LEFT }
-}
-
-export function printW2Slide06SelfCheck(data, w, ch) {
-  const rgb = (buf, x, y) => {
-    const i = (y * w + x) * ch
-    return [buf[i], buf[i + 1], buf[i + 2]]
+  const rect = {
+    left: HERO_LEFT,
+    top: HERO_TOP,
+    right: HERO_LEFT + HERO_WIDTH,
+    bottom: HERO_TOP + HERO_HEIGHT,
   }
-  console.log('--- w2-slide-06 self-check ---')
+  return { buf, rect, drawLeft: HERO_LEFT, drawTop: HERO_TOP }
+}
+
+async function fadeOverlays(rect) {
+  const { left, top, right, bottom } = rect
+  const w = right - left
+  const h = bottom - top
+  const o = FADE.outside
+  const bottomH = Math.round(h * FADE.bottomFrac)
+  const svgW = 1080
+  const svgH = 1350
+  const shapes = []
+  const lf0 = left - o - FADE.left
+  const lf1 = left - o
+  shapes.push(
+    `<linearGradient id="gl" x1="${lf0}" y1="0" x2="${lf1}" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${BG_HEX}" stop-opacity="1"/>
+      <stop offset="1" stop-color="${BG_HEX}" stop-opacity="0"/>
+    </linearGradient>`,
+  )
+  shapes.push(`<rect x="${lf0}" y="${top - o - FADE.top}" width="${FADE.left + o}" height="${h + o * 2 + FADE.top + bottomH}" fill="url(#gl)"/>`)
+
+  const rf0 = right + o
+  const rf1 = right + o + FADE.right
+  shapes.push(
+    `<linearGradient id="gr" x1="${rf0}" y1="0" x2="${rf1}" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${BG_HEX}" stop-opacity="0"/>
+      <stop offset="1" stop-color="${BG_HEX}" stop-opacity="1"/>
+    </linearGradient>`,
+  )
+  shapes.push(`<rect x="${rf0}" y="${top - o - FADE.top}" width="${FADE.right + o}" height="${h + o * 2 + FADE.top + bottomH}" fill="url(#gr)"/>`)
+
+  const tf0 = top - o - FADE.top
+  const tf1 = top - o
+  shapes.push(
+    `<linearGradient id="gt" x1="0" y1="${tf0}" x2="0" y2="${tf1}" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${BG_HEX}" stop-opacity="1"/>
+      <stop offset="1" stop-color="${BG_HEX}" stop-opacity="0"/>
+    </linearGradient>`,
+  )
+  shapes.push(`<rect x="${left - o - FADE.left}" y="${tf0}" width="${w + FADE.left + FADE.right + o * 2}" height="${FADE.top + o}" fill="url(#gt)"/>`)
+
+  const bf0 = bottom + o
+  const bf1 = bottom + o + bottomH
+  shapes.push(
+    `<linearGradient id="gb" x1="0" y1="${bf0}" x2="0" y2="${bf1}" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="${BG_HEX}" stop-opacity="0"/>
+      <stop offset="1" stop-color="${BG_HEX}" stop-opacity="1"/>
+    </linearGradient>`,
+  )
+  shapes.push(`<rect x="${left - o - FADE.left}" y="${bf0}" width="${w + FADE.left + FADE.right + o * 2}" height="${bottomH + o}" fill="url(#gb)"/>`)
+  shapes.push(
+    `<rect x="${left - o - FADE.left}" y="${bf1}" width="${w + FADE.left + FADE.right + o * 2}" height="${1350 - bf1}" fill="${BG_HEX}"/>`,
+  )
+
+  const svg = `<svg width="${svgW}" height="${svgH}" xmlns="http://www.w3.org/2000/svg">
+    <defs>${shapes.filter((s) => s.startsWith('<linear')).join('')}</defs>
+    ${shapes.filter((s) => s.startsWith('<rect')).join('')}
+  </svg>`
+  return sharp(Buffer.from(svg)).png().toBuffer()
+}
+
+export function perimeterMaxStep(data, w, ch, rect) {
+  const lum = (x, y) => {
+    if (x < 0 || y < 0 || x >= w || y >= 1350) return null
+    const i = (y * w + x) * ch
+    return luma(data[i], data[i + 1], data[i + 2])
+  }
+  const { left, top, right, bottom } = rect
+  const d = 3
+  const loop = []
+  for (let x = left - d; x < right + d; x++) loop.push([x, top - d])
+  for (let y = top - d; y < bottom + d; y++) loop.push([right + d - 1, y])
+  for (let x = right + d - 2; x >= left - d; x--) loop.push([x, bottom + d - 1])
+  for (let y = bottom + d - 2; y >= top - d; y--) loop.push([left - d, y])
+  const vals = loop.map(([x, y]) => lum(x, y)).filter((v) => v != null)
   let maxStep = 0
   let maxAt = 0
-  const rows = []
-  for (let y = 600; y <= 1220; y += 10) {
-    let sum = 0
-    let n = 0
-    for (let x = 760; x <= 1060; x++) {
-      sum += luma(...rgb(data, x, y))
-      n++
-    }
-    rows.push({ y, mean: sum / n })
-  }
-  console.log('row-mean luma (x760-1060, every 10px y600-1220):')
-  for (const r of rows) console.log(`  y=${r.y}: ${r.mean.toFixed(1)}`)
-  for (let i = 1; i < rows.length; i++) {
-    if (rows[i].y < 900) continue
-    if (rows[i].mean > 40 || rows[i - 1].mean > 40) continue
-    const d = Math.abs(rows[i].mean - rows[i - 1].mean)
-    if (d > maxStep) {
-      maxStep = d
-      maxAt = rows[i].y
+  for (let i = 1; i < vals.length; i++) {
+    const step = Math.abs(vals[i] - vals[i - 1])
+    if (step > maxStep) {
+      maxStep = step
+      maxAt = i
     }
   }
-  console.log('max adjacent row-mean step (fade tail y>=900, mean<=40):', maxStep.toFixed(2), 'at y~', maxAt)
+  return { maxStep, maxAt }
+}
 
-  const cols = []
-  let maxColStep = 0
-  let maxColAt = 0
-  for (let x = 600; x <= 1080; x += 10) {
-    cols.push({ x, l: luma(...rgb(data, x, 400)) })
+export function printW2Slide06SelfCheck(data, w, ch, heroRect) {
+  const rgb = (x, y) => {
+    const i = (y * w + x) * ch
+    return [data[i], data[i + 1], data[i + 2]]
   }
-  console.log('column luma at y=400 (x600-1080, every 10px):')
-  for (const c of cols) console.log(`  x=${c.x}: ${c.l.toFixed(1)}`)
-  for (let i = 1; i < cols.length; i++) {
-    const d = Math.abs(cols[i].l - cols[i - 1].l)
-    if (d > maxColStep) {
-      maxColStep = d
-      maxColAt = cols[i].x
-    }
-  }
-  console.log('max adjacent column step at y=400:', maxColStep.toFixed(2), 'at x~', maxColAt)
+  console.log('--- w2-slide-06 self-check ---')
+  console.log('hero alpha rect:', JSON.stringify(heroRect))
+
+  const { maxStep, maxAt } = perimeterMaxStep(data, w, ch, heroRect)
+  console.log('max perimeter adjacent luma step:', maxStep.toFixed(2), 'at', maxAt)
 
   let hornL = 9999
   let hornR = -1
   for (let y = 140; y < 520; y++) {
     for (let x = 620; x < 1080; x++) {
-      if (luma(...rgb(data, x, y)) > 72) {
+      if (luma(...rgb(x, y)) > 72) {
         hornL = Math.min(hornL, x)
         hornR = Math.max(hornR, x)
       }
     }
   }
-  console.log('horn ink span (luma>72, y140-519):', hornL, '-', hornR)
+  console.log('horn tip span (luma>72, y140-519):', hornL, '-', hornR)
 
   let footerInk = 0
   for (let y = 1240; y < 1320; y++) {
     for (let x = 880; x < 1060; x++) {
-      const [r, g, b] = rgb(data, x, y)
+      const [r, g, b] = rgb(x, y)
       if (r + g + b > 120) footerInk++
     }
   }
-  console.log('footer 6/16 ink pixels (x880-1060,y1240-1320):', footerInk)
+  console.log('footer 6/16 ink pixels:', footerInk)
 
-  const hornsOk = hornL >= 660 && hornR <= 1060 && hornR > 900
-  const fail = maxStep > 6 || footerInk < 80 || !hornsOk
+  const hornsOk = hornL >= 800 && hornR <= 1030 && hornR > 880
+  const fail = maxStep > 8 || footerInk < 80 || !hornsOk
   if (fail) console.error('FAIL w2-slide-06 self-check')
   return !fail
 }
@@ -191,17 +211,13 @@ export async function renderW2Slide06Composite(page) {
   const basePng = path.join(OUT, 'w2-slide-06-base.png')
   await page.locator('.slide').screenshot({ path: basePng, type: 'png', scale: 'css' })
 
-  const [heroBuf, leftFade, bottomFade] = await Promise.all([
-    heroBuffer(),
-    leftFadeOverlay(),
-    bottomFadeOverlay(),
-  ])
+  const { buf: heroBuf, rect: heroRect, drawLeft, drawTop } = await heroLayer()
+  const fadeBuf = await fadeOverlays(heroRect)
 
   const composed = await sharp(basePng)
     .composite([
-      { input: heroBuf, left: HERO_LEFT, top: HERO_TOP },
-      { input: leftFade.buf, left: leftFade.left, top: 0 },
-      { input: bottomFade.buf, left: bottomFade.left, top: bottomFade.top },
+      { input: heroBuf, left: drawLeft, top: drawTop },
+      { input: fadeBuf, left: 0, top: 0 },
     ])
     .png()
     .toBuffer()
@@ -216,7 +232,7 @@ export async function renderW2Slide06Composite(page) {
     .toFile(outPng)
 
   const { data, info } = await sharp(outPng).raw().toBuffer({ resolveWithObject: true })
-  const ok = printW2Slide06SelfCheck(data, info.width, info.channels)
+  const ok = printW2Slide06SelfCheck(data, info.width, info.channels, heroRect)
   if (!ok) throw new Error('w2-slide-06 self-check failed')
 
   await sharp(outPng).resize(1080, 1350, { fit: 'fill' }).png().toFile(path.join(SLIDE_SOURCES, 'w2-slide-06.png'))

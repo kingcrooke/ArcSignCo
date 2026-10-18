@@ -10,9 +10,10 @@ export function cardHtml(m, leftImg, rightImg) {
   const week = m.week ?? 5
   const leftPct = m.left.pct
   const rightPct = m.right.pct
-  const recordLine =
+  const rawRecord =
     m.recordLine ??
     `${m.left.name} (${m.left.record})   vs   ${m.right.name} (${m.right.record})`
+  const recordLine = rawRecord.replace(/\s+vs\s+/gi, '      vs      ')
   const barLeft = m.barLeftPct ?? leftPct
   const pctLeft = m.leftPctLabel ?? `${cap(m.left.name)} ${leftPct}%`
   const pctRight = m.rightPctLabel ?? `${cap(m.right.name)} ${rightPct}%`
@@ -45,18 +46,19 @@ body { background: #030406; }
   z-index: 10;
 }
 .kicker {
-  position: absolute; left: 67px; right: 67px; top: 52px;
-  font-family: 'Bebas', sans-serif;
-  font-size: 32px;
+  position: absolute; left: 70px; right: 64px; top: 51px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 29px;
   line-height: 1;
-  letter-spacing: 0.12em;
-  color: #d4af37;
+  letter-spacing: 0.212em;
+  color: #e8b24a;
   text-transform: uppercase;
 }
 .kicker-line {
   position: absolute; left: 67px; right: 67px; top: 98px;
   height: 2px;
-  background: #4a5058;
+  background: #2a2e34;
 }
 .headline {
   position: absolute; left: 67px; right: 67px; top: 147px;
@@ -67,11 +69,12 @@ body { background: #030406; }
   text-transform: uppercase;
 }
 .headline .vs {
-  font-size: 52px;
-  color: #c9c9c9;
-  margin: 0 0.15em;
+  font-size: 86px;
+  color: #ffffff;
+  margin: 0 15px;
   text-transform: lowercase;
   font-weight: 400;
+  vertical-align: baseline;
 }
 .records {
   position: absolute; left: 67px; right: 67px; top: 240px;
@@ -79,9 +82,9 @@ body { background: #030406; }
   font-weight: 700;
   font-size: 30px;
   line-height: 0.96;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   white-space: pre;
-  color: #d4af37;
+  color: #e6b14b;
   text-transform: none;
 }
 .panels {

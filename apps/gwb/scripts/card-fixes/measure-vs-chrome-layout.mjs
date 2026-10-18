@@ -217,6 +217,74 @@ async function main() {
       }
     }
   }
+  function inkSpan(buf, region, pixelTest) {
+    let x0 = 9999
+    let x1 = -1
+    let y0 = 9999
+    let y1 = -1
+    for (let y = region.y0; y <= region.y1; y++) {
+      for (let x = region.x0; x < region.x1; x++) {
+        const i = (y * w + x) * 3
+        if (pixelTest(buf[i], buf[i + 1], buf[i + 2])) {
+          x0 = Math.min(x0, x)
+          x1 = Math.max(x1, x)
+          y0 = Math.min(y0, y)
+          y1 = Math.max(y1, y)
+        }
+      }
+    }
+    if (x1 < x0) return null
+    return { x0, x1, y0, y1, w: x1 - x0 + 1 }
+  }
+
+  console.log('--- typography ink spans (live vs m2) ---')
+  const kLive = inkSpan(liveRaw, { x0: 60, x1: 400, y0: 50, y1: 80 }, tests.gold)
+  const kNew = inkSpan(candRaw, { x0: 60, x1: 400, y0: 50, y1: 80 }, tests.gold)
+  console.log(
+    'kicker x',
+    kLive ? `${kLive.x0}-${kLive.x1}` : 'MISS',
+    '|',
+    kNew ? `${kNew.x0}-${kNew.x1}` : 'MISS',
+    '(target 72-338)',
+  )
+  if (kNew && (kNew.x0 < 69 || kNew.x1 > 341)) fail = true
+
+  const vsTest = (r, g, b) => r > 235 && g > 235 && b > 235
+  function measureVsInk(buf) {
+    let x0 = 9999
+    let x1 = -1
+    for (let y = 168; y < 208; y++) {
+      for (let x = 280; x < 420; x++) {
+        const i = (y * w + x) * 3
+        if (vsTest(buf[i], buf[i + 1], buf[i + 2])) {
+          x0 = Math.min(x0, x)
+          x1 = Math.max(x1, x)
+        }
+      }
+    }
+    if (x1 < x0) return null
+    return { x0, x1, w: x1 - x0 + 1 }
+  }
+  const vsLive = measureVsInk(liveRaw)
+  const vsNew = measureVsInk(candRaw)
+  console.log(
+    'title vs x',
+    vsLive ? `${vsLive.x0}-${vsLive.x1} w${vsLive.w}` : 'MISS',
+    '|',
+    vsNew ? `${vsNew.x0}-${vsNew.x1} w${vsNew.w}` : 'MISS',
+    '(target w~76, x~313-389)',
+  )
+  if (vsNew && (vsNew.w < 68 || vsNew.w > 84)) fail = true
+
+  let ruleLuma = 0
+  for (let x = 67; x < 400; x++) {
+    const i = (98 * w + x) * 3
+    ruleLuma += 0.299 * candRaw[i] + 0.587 * candRaw[i + 1] + 0.114 * candRaw[i + 2]
+  }
+  ruleLuma /= 400 - 67
+  console.log('kicker rule mean luma y98:', ruleLuma.toFixed(1), '(target ~48)')
+  if (ruleLuma < 42 || ruleLuma > 58) fail = true
+
   if (fail) process.exit(1)
 }
 
