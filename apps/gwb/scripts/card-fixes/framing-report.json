@@ -1,0 +1,146 @@
+[
+  {
+    "file": "vs-m1-narking-steven-left.jpg",
+    "horn_box": [
+      176,
+      193,
+      766,
+      704
+    ],
+    "horn_h": 511,
+    "horn_w": 590,
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-m1-narking-steven-right.jpg",
+    "horn_box": [
+      93,
+      166,
+      842,
+      704
+    ],
+    "horn_h": 538,
+    "horn_w": 749,
+    "horn_h_dev_pct": 3.5
+  },
+  {
+    "file": "vs-m2-kayser-frankie-left.jpg",
+    "horn_box": [
+      93,
+      172,
+      850,
+      704
+    ],
+    "horn_h": 532,
+    "horn_w": 757,
+    "horn_h_dev_pct": 2.3
+  },
+  {
+    "file": "vs-m2-kayser-frankie-right.jpg",
+    "horn_box": [
+      176,
+      193,
+      766,
+      704
+    ],
+    "horn_h": 511,
+    "horn_w": 590,
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-m3-hadi-manny-left.jpg",
+    "horn_box": [
+      93,
+      170,
+      850,
+      704
+    ],
+    "horn_h": 534,
+    "horn_w": 757,
+    "horn_h_dev_pct": 2.7
+  },
+  {
+    "file": "vs-m3-hadi-manny-right.jpg",
+    "horn_box": [
+      176,
+      193,
+      766,
+      704
+    ],
+    "horn_h": 511,
+    "horn_w": 590,
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-m4-jamil-matt-left.jpg",
+    "horn_box": [
+      101,
+      175,
+      838,
+      704
+    ],
+    "horn_h": 529,
+    "horn_w": 737,
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-m4-jamil-matt-right.jpg",
+    "horn_box": [
+      176,
+      193,
+      766,
+      704
+    ],
+    "horn_h": 511,
+    "horn_w": 590,
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-m5-mauricio-eric-left.jpg",
+    "horn_box": [
+      93,
+      170,
+      837,
+      704
+    ],
+    "horn_h": 534,
+    "horn_w": 744,
+    "horn_h_dev_pct": 2.7
+  },
+  {
+    "file": "vs-m5-mauricio-eric-right.jpg",
+    "horn_box": [
+      176,
+      193,
+      766,
+      704
+    ],
+    "horn_h": 511,
+    "horn_w": 590,
+    "horn_h_dev_pct": 1.7
+  },
+  {
+    "file": "vs-m6-danny-crooke-left.jpg",
+    "horn_box": [
+      93,
+      173,
+      850,
+      704
+    ],
+    "horn_h": 531,
+    "horn_w": 757,
+    "horn_h_dev_pct": 2.1
+  },
+  {
+    "file": "vs-m6-danny-crooke-right.jpg",
+    "horn_box": [
+      176,
+      193,
+      766,
+      704
+    ],
+    "horn_h": 511,
+    "horn_w": 590,
+    "horn_h_dev_pct": 1.7
+  }
+]

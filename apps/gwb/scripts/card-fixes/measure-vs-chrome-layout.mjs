@@ -1,0 +1,417 @@
+/**
+ * Ink bounding boxes vs live m1 — print table (±3px tolerance).
+ */
+import { chromium } from 'playwright'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import sharp from 'sharp'
+import { cardHtml } from '../w5-matchup-cards/template-m2-m4-live-chrome.mjs'
+import { m2m4PanelPath } from '../w5-matchup-cards/m2-m4-panel-path.mjs'
+import { mergeMatchup } from './render-w5-m2-m4-main.mjs'
+import { W5_SCRATCH } from '../w5-matchup-cards/scratch-path.mjs'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const GWB = path.join(__dirname, '..', '..')
+const LIVE = path.join(GWB, '..', '..', 'gwb-fe006a16', 'slides', 'vs-w5-m1.full.jpg')
+const TOL = 3
+
+const TARGETS = {
+  kicker: { y0: 54, y1: 75, x0: 67, x1: 500, test: 'gold', tight: true },
+  kickerRule: { y0: 98, y1: 99, x0: 67, x1: 900, test: 'goldLine', tight: true },
+  title: { y0: 147, y1: 218, x0: 67, x1: 900, test: 'white' },
+  record: { y0: 239, y1: 268, x0: 120, x1: 960, test: 'gold', tight: true },
+  bowl: { y0: 1038, y1: 1080, x0: 150, x1: 930, test: 'gold' },
+  pctL: { y0: 1112, y1: 1136, x0: 67, x1: 420, test: 'goldPct', tight: true },
+  pctR: { y0: 1112, y1: 1136, x0: 750, x1: 1013, test: 'pctWhite', tight: true },
+  bar: { y0: 1156, y1: 1188, x0: 67, x1: 1013, test: 'bar' },
+  clause: { y0: 1210, y1: 1242, x0: 100, x1: 980, test: 'grey' },
+  handle: { y0: 1267, y1: 1294, x0: 67, x1: 400, test: 'grey' },
+  footerR: { y0: 1267, y1: 1294, x0: 800, x1: 1013, test: 'footerWhite' },
+  badge: { y0: 545, y1: 753, x0: 430, x1: 650, test: 'gold' },
+}
+
+const RECORD_CAP_BANDS = [{ name: 'recordCap', x0: 67, x1: 240 }]
+const LIVE_RECORD_CAP_H = 27
+
+const tests = {
+  gold: (r, g, b) => g > 150 && r > 180 && b < 140,
+  goldLine: (r, g, b) => g > 130 && r > 160 && b < 150,
+  white: (r, g, b) => r > 240 && g > 240 && b > 240,
+  goldPct: (r, g, b) => g > 170 && r > 200 && b < 120,
+  pctWhite: (r, g, b) => r > 220 && g > 220 && b > 220,
+  footerWhite: (r, g, b) => r > 200 && g > 200 && b > 200,
+  grey: (r, g, b) => r > 120 && g > 125 && b > 130 && r < 210,
+  bar: (r, g, b) => g > 150 && r > 170 && b < 130,
+}
+
+function isRulePixel(r, g, b) {
+  if (tests.goldLine(r, g, b)) return true
+  const l = 0.299 * r + 0.587 * g + 0.114 * b
+  return l > 35 && l < 95 && Math.abs(r - g) < 12
+}
+
+function measureKickerRule(buf, w) {
+  let bestY = null
+  let bestN = 0
+  for (let y = 94; y <= 102; y++) {
+    let n = 0
+    for (let x = 67; x < 900; x++) {
+      const i = (y * w + x) * 3
+      if (isRulePixel(buf[i], buf[i + 1], buf[i + 2])) n++
+    }
+    if (n > bestN) {
+      bestN = n
+      bestY = y
+    }
+  }
+  if (bestY === null || bestN < 120) return null
+  return { y0: bestY, y1: bestY + 1 }
+}
+
+function measure(buf, w, region) {
+  const { x0, x1, y0, y1, test, tight } = region
+  const fn = tests[test]
+  let t0 = 9999
+  let t1 = -1
+  let hits = 0
+  const ya = tight ? y0 : y0 - 30
+  const yb = tight ? y1 + 1 : y1 + 30
+  for (let y = ya; y < yb; y++) {
+    for (let x = x0; x < x1; x++) {
+      const i = (y * w + x) * 3
+      if (fn(buf[i], buf[i + 1], buf[i + 2])) {
+        t0 = Math.min(t0, y)
+        t1 = Math.max(t1, y)
+        hits++
+      }
+    }
+  }
+  if (!hits) return null
+  return { y0: t0, y1: t1 }
+}
+
+function measureRecordCap(buf, w, band) {
+  const fn = tests.gold
+  let t0 = 9999
+  let t1 = -1
+  let hits = 0
+  for (let y = 235; y < 275; y++) {
+    for (let x = band.x0; x < band.x1; x++) {
+      const i = (y * w + x) * 3
+      if (fn(buf[i], buf[i + 1], buf[i + 2])) {
+        t0 = Math.min(t0, y)
+        t1 = Math.max(t1, y)
+        hits++
+      }
+    }
+  }
+  if (!hits) return null
+  return { y0: t0, y1: t1, capH: t1 - t0 }
+}
+
+async function renderM2() {
+  const m = mergeMatchup('vs-w5-m2')
+  const html = cardHtml(m, m2m4PanelPath('vs-w5-m2', 'left'), m2m4PanelPath('vs-w5-m2', 'right'))
+  const browser = await chromium.launch()
+  const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } })
+  const tmp = path.join(W5_SCRATCH, '.measure-layout-m2.html')
+  const { writeFile, mkdir } = await import('node:fs/promises')
+  await mkdir(path.dirname(tmp), { recursive: true })
+  await writeFile(tmp, html)
+  await page.goto(`file://${path.resolve(tmp)}`, { waitUntil: 'networkidle' })
+  await page.evaluate(() => document.fonts.ready)
+  await page.waitForTimeout(400)
+  const png = path.join(W5_SCRATCH, 'measure-layout-m2.png')
+  await page.locator('.slide').screenshot({ path: png, type: 'png', scale: 'css' })
+  await browser.close()
+  return png
+}
+
+async function main() {
+  const m2png = await renderM2()
+  const liveRaw = await sharp(LIVE).resize(1080, 1350).raw().toBuffer()
+  const candRaw = await sharp(m2png).resize(1080, 1350).raw().toBuffer()
+  const w = 1080
+
+  console.log('--- vs-w5 chrome layout (live m1 vs m2 render, ±3px) ---')
+  console.log('element        | live y0-y1 | new y0-y1 | Δy0 Δy1 | ok')
+  const boxes = []
+  let fail = false
+  const LIVE_RULE = { y0: 98, y1: 99 }
+
+  for (const [name, region] of Object.entries(TARGETS)) {
+    const live =
+      name === 'kickerRule' ? LIVE_RULE : measure(liveRaw, w, region)
+    const neu =
+      name === 'kickerRule' ? measureKickerRule(candRaw, w) : measure(candRaw, w, region)
+    if (!live || !neu) {
+      console.log(name, 'MISSING', live, neu)
+      fail = true
+      continue
+    }
+    const d0 = neu.y0 - live.y0
+    const d1 = neu.y1 - live.y1
+    const hLive = live.y1 - live.y0
+    const hNew = neu.y1 - neu.y0
+    const ok =
+      name === 'title'
+        ? Math.abs(d0) <= TOL && Math.abs(hNew - hLive) <= TOL
+        : name === 'footerR' || name === 'handle'
+          ? Math.abs(d0) <= TOL && Math.abs(d1) <= 4
+          : Math.abs(d0) <= TOL && Math.abs(d1) <= TOL
+    if (!ok) fail = true
+    console.log(
+      `${name.padEnd(14)} | ${live.y0}-${live.y1}`.padEnd(22) +
+        `| ${neu.y0}-${neu.y1}`.padEnd(14) +
+        `| ${d0} ${d1}`.padEnd(8) +
+        `| ${ok ? 'OK' : 'FAIL'}`,
+    )
+    boxes.push({ name, ...neu })
+  }
+
+  console.log('record cap height (letters only, y band 235-274):')
+  console.log('band           | live capH | new capH | Δ | ok')
+  for (const band of RECORD_CAP_BANDS) {
+    const live = measureRecordCap(liveRaw, w, band)
+    const neu = measureRecordCap(candRaw, w, band)
+    const liveH = live?.capH ?? LIVE_RECORD_CAP_H
+    if (!neu) {
+      console.log(band.name, 'MISSING', neu)
+      fail = true
+      continue
+    }
+    const d = neu.capH - liveH
+    const ok = Math.abs(d) <= TOL
+    if (!ok) fail = true
+    console.log(
+      `${band.name.padEnd(14)} | ${liveH}`.padEnd(12) +
+        `| ${neu.capH}`.padEnd(10) +
+        `| ${d}`.padEnd(4) +
+        `| ${ok ? 'OK' : 'FAIL'}`,
+    )
+  }
+
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i]
+      const b = boxes[j]
+      if (a.y0 <= b.y1 && b.y0 <= a.y1 && !['pctL', 'bar'].includes(a.name)) {
+        if (a.name === 'clause' && b.name === 'pctR') continue
+        if (a.name === 'pctR' && b.name === 'clause') continue
+        if (a.name === 'kicker' && b.name === 'kickerRule') continue
+        if (a.name === 'kickerRule' && b.name === 'kicker') continue
+        if (
+          (a.name === 'handle' && b.name === 'footerR') ||
+          (a.name === 'footerR' && b.name === 'handle')
+        )
+          continue
+        if (a.y1 > b.y0 && b.y1 > a.y0 && Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0) > 8) {
+          if (
+            (a.name === 'pctL' || a.name === 'pctR') &&
+            (b.name === 'bar' || b.name === 'bowl')
+          )
+            continue
+          console.error('OVERLAP', a.name, a.y0, a.y1, b.name, b.y0, b.y1)
+          fail = true
+        }
+      }
+    }
+  }
+  function inkSpan(buf, region, pixelTest) {
+    let x0 = 9999
+    let x1 = -1
+    let y0 = 9999
+    let y1 = -1
+    for (let y = region.y0; y <= region.y1; y++) {
+      for (let x = region.x0; x < region.x1; x++) {
+        const i = (y * w + x) * 3
+        if (pixelTest(buf[i], buf[i + 1], buf[i + 2])) {
+          x0 = Math.min(x0, x)
+          x1 = Math.max(x1, x)
+          y0 = Math.min(y0, y)
+          y1 = Math.max(y1, y)
+        }
+      }
+    }
+    if (x1 < x0) return null
+    return { x0, x1, y0, y1, w: x1 - x0 + 1 }
+  }
+
+  console.log('--- typography ink spans (live vs m2) ---')
+  const kLive = inkSpan(liveRaw, { x0: 60, x1: 400, y0: 50, y1: 80 }, tests.gold)
+  const kNew = inkSpan(candRaw, { x0: 60, x1: 400, y0: 50, y1: 80 }, tests.gold)
+  console.log(
+    'kicker x',
+    kLive ? `${kLive.x0}-${kLive.x1}` : 'MISS',
+    '|',
+    kNew ? `${kNew.x0}-${kNew.x1}` : 'MISS',
+    '(target 72-338)',
+  )
+  if (kNew && (kNew.x0 < 69 || kNew.x1 > 341)) fail = true
+
+  const vsTest = (r, g, b) => r > 235 && g > 235 && b > 235
+  function measureVsInk(buf) {
+    let best = null
+    for (let y = 175; y < 205; y++) {
+      let inRun = false
+      let s = 0
+      for (let x = 280; x < 420; x++) {
+        const i = (y * w + x) * 3
+        const on = vsTest(buf[i], buf[i + 1], buf[i + 2])
+        if (on && !inRun) {
+          inRun = true
+          s = x
+        }
+        if (!on && inRun) {
+          const run = { x0: s, x1: x - 1, w: x - s }
+          if (run.w >= 50 && run.w <= 100 && (!best || run.w < best.w)) best = run
+          inRun = false
+        }
+      }
+    }
+    if (!best) {
+      let x0 = 9999
+      let x1 = -1
+      for (let y = 168; y < 208; y++) {
+        for (let x = 300; x < 400; x++) {
+          const i = (y * w + x) * 3
+          if (vsTest(buf[i], buf[i + 1], buf[i + 2])) {
+            x0 = Math.min(x0, x)
+            x1 = Math.max(x1, x)
+          }
+        }
+      }
+      if (x1 < x0) return null
+      return { x0, x1, w: x1 - x0 + 1 }
+    }
+    return { x0: best.x0, x1: best.x1, w: best.w }
+  }
+  const vsLive = measureVsInk(liveRaw)
+  const vsNew = measureVsInk(candRaw)
+  console.log(
+    'title vs x',
+    vsLive ? `${vsLive.x0}-${vsLive.x1} w${vsLive.w}` : 'MISS',
+    '|',
+    vsNew ? `${vsNew.x0}-${vsNew.x1} w${vsNew.w}` : 'MISS',
+    '(target w~76, x~313-389)',
+  )
+  if (vsNew && (vsNew.w < 68 || vsNew.w > 84)) fail = true
+
+  let ruleLuma = 0
+  for (let x = 67; x < 400; x++) {
+    const i = (98 * w + x) * 3
+    ruleLuma += 0.299 * candRaw[i] + 0.587 * candRaw[i + 1] + 0.114 * candRaw[i + 2]
+  }
+  ruleLuma /= 400 - 67
+  console.log('kicker rule mean luma y98:', ruleLuma.toFixed(1), '(target ~48)')
+  if (ruleLuma < 42 || ruleLuma > 58) fail = true
+
+  function titleVsGaps(buf) {
+    const vs = measureVsInk(buf)
+    if (!vs) return null
+    const white = (r, g, b) => r > 235 && g > 235 && b > 235
+    let leftNameR = -1
+    let rightNameL = 9999
+    for (let y = 175; y < 200; y++) {
+      for (let x = 67; x < vs.x0; x++) {
+        const i = (y * w + x) * 3
+        if (white(buf[i], buf[i + 1], buf[i + 2])) leftNameR = Math.max(leftNameR, x)
+      }
+      for (let x = vs.x1 + 1; x < 900; x++) {
+        const i = (y * w + x) * 3
+        if (white(buf[i], buf[i + 1], buf[i + 2])) rightNameL = Math.min(rightNameL, x)
+      }
+    }
+    if (leftNameR < 0 || rightNameL > 900) return null
+    return { leftGap: vs.x0 - leftNameR - 1, rightGap: rightNameL - vs.x1 - 1 }
+  }
+
+  function recordVsGaps(buf) {
+    const gold = tests.gold
+    let leftR = -1
+    let vsL = 9999
+    let vsR = -1
+    let rightL = 9999
+    for (let y = 239; y < 268; y++) {
+      for (let x = 67; x < 1013; x++) {
+        const i = (y * w + x) * 3
+        if (!gold(buf[i], buf[i + 1], buf[i + 2])) continue
+        if (x < 520) leftR = Math.max(leftR, x)
+        const lower =
+          buf[i + 1] > buf[i] &&
+          buf[i + 2] < buf[i] - 20 &&
+          x > 400 &&
+          x < 620
+        if (lower) {
+          vsL = Math.min(vsL, x)
+          vsR = Math.max(vsR, x)
+        }
+      }
+    }
+    if (leftR < 0 || vsL > 700) return null
+    return { leftGap: vsL - leftR - 1, rightGap: rightL - vsR - 1, vsL, vsR, rightL }
+  }
+
+  function recordVsGapsSimple(buf) {
+    const gold = tests.gold
+    for (let y = 245; y < 265; y++) {
+      const runs = []
+      let inRun = false
+      let s = 0
+      for (let x = 67; x < 1013; x++) {
+        const i = (y * w + x) * 3
+        const on = gold(buf[i], buf[i + 1], buf[i + 2])
+        if (on && !inRun) {
+          inRun = true
+          s = x
+        }
+        if (!on && inRun) {
+          runs.push({ x0: s, x1: x - 1, w: x - s })
+          inRun = false
+        }
+      }
+      const vsRun = runs.find((r) => r.w >= 12 && r.w <= 70 && r.x0 > 320 && r.x1 < 680)
+      if (!vsRun) continue
+      const leftRun = runs.filter((r) => r.x1 < vsRun.x0).pop()
+      const rightRun = runs.find((r) => r.x0 > vsRun.x1)
+      if (!leftRun || !rightRun) continue
+      return {
+        leftGap: vsRun.x0 - leftRun.x1 - 1,
+        rightGap: rightRun.x0 - vsRun.x1 - 1,
+      }
+    }
+    return null
+  }
+
+  const tgLive = titleVsGaps(liveRaw)
+  const tgNew = titleVsGaps(candRaw)
+  console.log(
+    'title vs gaps (px)',
+    tgLive ? `L${tgLive.leftGap} R${tgLive.rightGap}` : 'MISS',
+    '|',
+    tgNew ? `L${tgNew.leftGap} R${tgNew.rightGap}` : 'MISS',
+    '(target ~24)',
+  )
+
+  const rgLive = recordVsGapsSimple(liveRaw)
+  const rgNew = recordVsGapsSimple(candRaw)
+  console.log(
+    'record vs gaps (px)',
+    rgLive ? `L${rgLive.leftGap} R${rgLive.rightGap}` : 'MISS',
+    '|',
+    rgNew ? `L${rgNew.leftGap} R${rgNew.rightGap}` : 'MISS',
+    '(target ~37)',
+  )
+
+  const neuCap = measureRecordCap(candRaw, w, RECORD_CAP_BANDS[0])
+  console.log('record capH new:', neuCap?.capH ?? 'MISS', '(target 27)')
+
+  if (neuCap && Math.abs(neuCap.capH - 27) > 2) fail = true
+
+  if (fail) process.exit(1)
+}
+
+main().catch((e) => {
+  console.error(e)
+  process.exit(1)
+})

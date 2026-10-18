@@ -1,0 +1,643 @@
+{
+  "panels": [
+    {
+      "cardId": "results-w1-m1",
+      "side": "winner",
+      "managerKey": "mauricio",
+      "jersey": {
+        "playerId": "8131",
+        "name": "Isaiah Likely",
+        "number": 9,
+        "team": "NYG",
+        "points": 27.8
+      },
+      "outFile": "assets/results-w1-m1-winner.jpg",
+      "panelId": "mauricio-NYG-9-w1"
+    },
+    {
+      "cardId": "results-w1-m1",
+      "side": "loser",
+      "managerKey": "crooke",
+      "jersey": {
+        "playerId": "4881",
+        "name": "Lamar Jackson",
+        "number": 8,
+        "team": "BAL"
+      },
+      "outFile": "assets/results-w1-m1-loser.jpg",
+      "panelId": "crooke-BAL-8-w1"
+    },
+    {
+      "cardId": "results-w1-m2",
+      "side": "winner",
+      "managerKey": "kayser",
+      "jersey": {
+        "playerId": "3198",
+        "name": "Derrick Henry",
+        "number": 22,
+        "team": "BAL",
+        "points": 37.3
+      },
+      "outFile": "assets/results-w1-m2-winner.jpg",
+      "panelId": "kayser-BAL-22-w1"
+    },
+    {
+      "cardId": "results-w1-m2",
+      "side": "loser",
+      "managerKey": "hady",
+      "jersey": {
+        "playerId": "11564",
+        "name": "Drake Maye",
+        "number": 10,
+        "team": "NE"
+      },
+      "outFile": "assets/results-w1-m2-loser.jpg",
+      "panelId": "hady-NE-10-w1"
+    },
+    {
+      "cardId": "results-w1-m3",
+      "side": "winner",
+      "managerKey": "matt",
+      "jersey": {
+        "playerId": "4984",
+        "name": "Josh Allen",
+        "number": 17,
+        "team": "BUF",
+        "points": 51.68
+      },
+      "outFile": "assets/results-w1-m3-winner.jpg",
+      "panelId": "matt-BUF-17-w1"
+    },
+    {
+      "cardId": "results-w1-m3",
+      "side": "loser",
+      "managerKey": "narking",
+      "jersey": {
+        "playerId": "12545",
+        "name": "Tyler Shough",
+        "number": 6,
+        "team": "NO"
+      },
+      "outFile": "assets/results-w1-m3-loser.jpg",
+      "panelId": "narking-NO-6-w1"
+    },
+    {
+      "cardId": "results-w1-m4",
+      "side": "winner",
+      "managerKey": "jamil",
+      "jersey": {
+        "playerId": "8151",
+        "name": "Kenneth Walker",
+        "number": 9,
+        "team": "KC",
+        "points": 39.1
+      },
+      "outFile": "assets/results-w1-m4-winner.jpg",
+      "panelId": "jamil-KC-9-w1"
+    },
+    {
+      "cardId": "results-w1-m4",
+      "side": "loser",
+      "managerKey": "danny",
+      "jersey": {
+        "playerId": "11563",
+        "name": "Bo Nix",
+        "number": 10,
+        "team": "DEN"
+      },
+      "outFile": "assets/results-w1-m4-loser.jpg",
+      "panelId": "danny-DEN-10-w1"
+    },
+    {
+      "cardId": "results-w1-m5",
+      "side": "winner",
+      "managerKey": "steven",
+      "jersey": {
+        "playerId": "6790",
+        "name": "D'Andre Swift",
+        "number": 4,
+        "team": "CHI",
+        "points": 34.4
+      },
+      "outFile": "assets/results-w1-m5-winner.jpg",
+      "panelId": "steven-CHI-4-w1"
+    },
+    {
+      "cardId": "results-w1-m5",
+      "side": "loser",
+      "managerKey": "frankie",
+      "jersey": {
+        "playerId": "6770",
+        "name": "Joe Burrow",
+        "number": 9,
+        "team": "CIN"
+      },
+      "outFile": "assets/results-w1-m5-loser.jpg",
+      "panelId": "frankie-CIN-9-w1"
+    },
+    {
+      "cardId": "results-w1-m6",
+      "side": "winner",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "11560",
+        "name": "Caleb Williams",
+        "number": 18,
+        "team": "CHI",
+        "points": 46.52
+      },
+      "outFile": "assets/results-w1-m6-winner.jpg",
+      "panelId": "manny-CHI-18-w1"
+    },
+    {
+      "cardId": "results-w1-m6",
+      "side": "loser",
+      "managerKey": "eric",
+      "jersey": {
+        "playerId": "3294",
+        "name": "Dak Prescott",
+        "number": 4,
+        "team": "DAL"
+      },
+      "outFile": "assets/results-w1-m6-loser.jpg",
+      "panelId": "eric-DAL-4-w1"
+    },
+    {
+      "cardId": "results-w2-m2",
+      "side": "winner",
+      "managerKey": "narking",
+      "jersey": {
+        "playerId": "8183",
+        "name": "Brock Purdy",
+        "number": 13,
+        "team": "SF",
+        "points": 40.23
+      },
+      "outFile": "assets/results-w2-m2-winner.jpg",
+      "panelId": "narking-SF-13-w2"
+    },
+    {
+      "cardId": "results-w2-m2",
+      "side": "loser",
+      "managerKey": "mauricio",
+      "jersey": {
+        "playerId": "6797",
+        "name": "Justin Herbert",
+        "number": 10,
+        "team": "LAC"
+      },
+      "outFile": "assets/results-w2-m2-loser.jpg",
+      "panelId": "mauricio-LAC-10-w2"
+    },
+    {
+      "cardId": "results-w2-m3",
+      "side": "winner",
+      "managerKey": "kayser",
+      "jersey": {
+        "playerId": "421",
+        "name": "Matthew Stafford",
+        "number": 9,
+        "team": "LAR",
+        "points": 44.81
+      },
+      "outFile": "assets/results-w2-m3-winner.jpg",
+      "panelId": "kayser-LAR-9-w2"
+    },
+    {
+      "cardId": "results-w2-m3",
+      "side": "loser",
+      "managerKey": "danny",
+      "jersey": {
+        "playerId": "7523",
+        "name": "Trevor Lawrence",
+        "number": 16,
+        "team": "JAX"
+      },
+      "outFile": "assets/results-w2-m3-loser.jpg",
+      "panelId": "danny-JAX-16-w2"
+    },
+    {
+      "cardId": "results-w2-m4",
+      "side": "winner",
+      "managerKey": "steven",
+      "jersey": {
+        "playerId": "8144",
+        "name": "Chris Olave",
+        "number": 12,
+        "team": "NO",
+        "points": 22.6
+      },
+      "outFile": "assets/results-w2-m4-winner.jpg",
+      "panelId": "steven-NO-12-w2"
+    },
+    {
+      "cardId": "results-w2-m4",
+      "side": "loser",
+      "managerKey": "matt",
+      "jersey": {
+        "playerId": "4984",
+        "name": "Josh Allen",
+        "number": 17,
+        "team": "BUF"
+      },
+      "outFile": "assets/results-w2-m4-loser.jpg",
+      "panelId": "matt-BUF-17-w2"
+    },
+    {
+      "cardId": "results-w2-m5",
+      "side": "winner",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "4046",
+        "name": "Patrick Mahomes",
+        "number": 15,
+        "team": "KC",
+        "points": 45.29
+      },
+      "outFile": "assets/results-w2-m5-winner.jpg",
+      "panelId": "manny-KC-15-w2"
+    },
+    {
+      "cardId": "results-w2-m5",
+      "side": "loser",
+      "managerKey": "jamil",
+      "jersey": {
+        "playerId": "6904",
+        "name": "Jalen Hurts",
+        "number": 1,
+        "team": "PHI"
+      },
+      "outFile": "assets/results-w2-m5-loser.jpg",
+      "panelId": "jamil-PHI-1-w2"
+    },
+    {
+      "cardId": "results-w2-m6",
+      "side": "winner",
+      "managerKey": "eric",
+      "jersey": {
+        "playerId": "3294",
+        "name": "Dak Prescott",
+        "number": 4,
+        "team": "DAL",
+        "points": 43.29
+      },
+      "outFile": "assets/results-w2-m6-winner.jpg",
+      "panelId": "eric-DAL-4-w2"
+    },
+    {
+      "cardId": "results-w2-m6",
+      "side": "loser",
+      "managerKey": "frankie",
+      "jersey": {
+        "playerId": "6770",
+        "name": "Joe Burrow",
+        "number": 9,
+        "team": "CIN"
+      },
+      "outFile": "assets/results-w2-m6-loser.jpg",
+      "panelId": "frankie-CIN-9-w2"
+    },
+    {
+      "cardId": "results-w3-m1",
+      "side": "winner",
+      "managerKey": "crooke",
+      "jersey": {
+        "playerId": "4881",
+        "name": "Lamar Jackson",
+        "number": 8,
+        "team": "BAL"
+      },
+      "outFile": "assets/results-w3-m1-winner.jpg",
+      "panelId": "crooke-BAL-8-w3"
+    },
+    {
+      "cardId": "results-w3-m1",
+      "side": "loser",
+      "managerKey": "narking",
+      "jersey": {
+        "playerId": "8183",
+        "name": "Brock Purdy",
+        "number": 13,
+        "team": "SF"
+      },
+      "outFile": "assets/results-w3-m1-loser.jpg",
+      "panelId": "narking-SF-13-w3"
+    },
+    {
+      "cardId": "results-w3-m2",
+      "side": "winner",
+      "managerKey": "hady",
+      "jersey": {
+        "playerId": "9488",
+        "name": "Jaxon Smith-Njigba",
+        "number": 11,
+        "team": "SEA",
+        "points": 37.74
+      },
+      "outFile": "assets/results-w3-m2-winner.jpg",
+      "panelId": "hady-SEA-11-w3"
+    },
+    {
+      "cardId": "results-w3-m2",
+      "side": "loser",
+      "managerKey": "danny",
+      "jersey": {
+        "playerId": "7523",
+        "name": "Trevor Lawrence",
+        "number": 16,
+        "team": "JAX"
+      },
+      "outFile": "assets/results-w3-m2-loser.jpg",
+      "panelId": "danny-JAX-16-w3"
+    },
+    {
+      "cardId": "results-w3-m3",
+      "side": "winner",
+      "managerKey": "steven",
+      "jersey": {
+        "playerId": "4943",
+        "name": "Sam Darnold",
+        "number": 14,
+        "team": "SEA",
+        "points": 47.89
+      },
+      "outFile": "assets/results-w3-m3-winner.jpg",
+      "panelId": "steven-SEA-14-w3"
+    },
+    {
+      "cardId": "results-w3-m3",
+      "side": "loser",
+      "managerKey": "mauricio",
+      "jersey": {
+        "playerId": "9228",
+        "name": "Bryce Young",
+        "number": 9,
+        "team": "CAR"
+      },
+      "outFile": "assets/results-w3-m3-loser.jpg",
+      "panelId": "mauricio-CAR-9-w3"
+    },
+    {
+      "cardId": "results-w3-m4",
+      "side": "winner",
+      "managerKey": "kayser",
+      "jersey": {
+        "playerId": "421",
+        "name": "Matthew Stafford",
+        "number": 9,
+        "team": "LAR",
+        "points": 36.43
+      },
+      "outFile": "assets/results-w3-m4-winner.jpg",
+      "panelId": "kayser-LAR-9-w3"
+    },
+    {
+      "cardId": "results-w3-m4",
+      "side": "loser",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "4046",
+        "name": "Patrick Mahomes",
+        "number": 15,
+        "team": "KC"
+      },
+      "outFile": "assets/results-w3-m4-loser.jpg",
+      "panelId": "manny-KC-15-w3"
+    },
+    {
+      "cardId": "results-w3-m5",
+      "side": "winner",
+      "managerKey": "eric",
+      "jersey": {
+        "playerId": "8112",
+        "name": "Drake London",
+        "number": 5,
+        "team": "ATL",
+        "points": 30.4
+      },
+      "outFile": "assets/results-w3-m5-winner.jpg",
+      "panelId": "eric-ATL-5-w3"
+    },
+    {
+      "cardId": "results-w3-m5",
+      "side": "loser",
+      "managerKey": "matt",
+      "jersey": {
+        "playerId": "4984",
+        "name": "Josh Allen",
+        "number": 17,
+        "team": "BUF"
+      },
+      "outFile": "assets/results-w3-m5-loser.jpg",
+      "panelId": "matt-BUF-17-w3"
+    },
+    {
+      "cardId": "vs-m1-narking-steven",
+      "side": "left",
+      "managerKey": "narking",
+      "jersey": {
+        "playerId": "8183",
+        "name": "Brock Purdy",
+        "number": 13,
+        "team": "SF"
+      },
+      "outFile": "w4-preview-assets/vs-m1-narking-steven-left.jpg",
+      "panelId": "narking-SF-13-w4"
+    },
+    {
+      "cardId": "vs-m1-narking-steven",
+      "side": "right",
+      "managerKey": "steven",
+      "jersey": {
+        "playerId": "4943",
+        "name": "Sam Darnold",
+        "number": 14,
+        "team": "SEA"
+      },
+      "outFile": "w4-preview-assets/vs-m1-narking-steven-right.jpg",
+      "panelId": "steven-SEA-14-w4"
+    },
+    {
+      "cardId": "vs-m2-kayser-frankie",
+      "side": "left",
+      "managerKey": "kayser",
+      "jersey": {
+        "playerId": "421",
+        "name": "Matthew Stafford",
+        "number": 9,
+        "team": "LAR"
+      },
+      "outFile": "w4-preview-assets/vs-m2-kayser-frankie-left.jpg",
+      "panelId": "kayser-LAR-9-w4"
+    },
+    {
+      "cardId": "vs-m2-kayser-frankie",
+      "side": "right",
+      "managerKey": "frankie",
+      "jersey": {
+        "playerId": "3163",
+        "name": "Jared Goff",
+        "number": 16,
+        "team": "DET"
+      },
+      "outFile": "w4-preview-assets/vs-m2-kayser-frankie-right.jpg",
+      "panelId": "frankie-DET-16-w4"
+    },
+    {
+      "cardId": "vs-m3-hadi-manny",
+      "side": "left",
+      "managerKey": "hady",
+      "jersey": {
+        "playerId": "5849",
+        "name": "Kyler Murray",
+        "number": 1,
+        "team": "MIN"
+      },
+      "outFile": "w4-preview-assets/vs-m3-hadi-manny-left.jpg",
+      "panelId": "hady-MIN-1-w4"
+    },
+    {
+      "cardId": "vs-m3-hadi-manny",
+      "side": "right",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "4046",
+        "name": "Patrick Mahomes",
+        "number": 15,
+        "team": "KC"
+      },
+      "outFile": "w4-preview-assets/vs-m3-hadi-manny-right.jpg",
+      "panelId": "manny-KC-15-w4"
+    },
+    {
+      "cardId": "vs-m4-jamil-matt",
+      "side": "left",
+      "managerKey": "jamil",
+      "jersey": {
+        "playerId": "6904",
+        "name": "Jalen Hurts",
+        "number": 1,
+        "team": "PHI"
+      },
+      "outFile": "w4-preview-assets/vs-m4-jamil-matt-left.jpg",
+      "panelId": "jamil-PHI-1-w4"
+    },
+    {
+      "cardId": "vs-m4-jamil-matt",
+      "side": "right",
+      "managerKey": "matt",
+      "jersey": {
+        "playerId": "4984",
+        "name": "Josh Allen",
+        "number": 17,
+        "team": "BUF"
+      },
+      "outFile": "w4-preview-assets/vs-m4-jamil-matt-right.jpg",
+      "panelId": "matt-BUF-17-w4"
+    },
+    {
+      "cardId": "vs-m5-mauricio-eric",
+      "side": "left",
+      "managerKey": "mauricio",
+      "jersey": {
+        "playerId": "9228",
+        "name": "Bryce Young",
+        "number": 9,
+        "team": "CAR"
+      },
+      "outFile": "w4-preview-assets/vs-m5-mauricio-eric-left.jpg",
+      "panelId": "mauricio-CAR-9-w4"
+    },
+    {
+      "cardId": "vs-m5-mauricio-eric",
+      "side": "right",
+      "managerKey": "eric",
+      "jersey": {
+        "playerId": "3294",
+        "name": "Dak Prescott",
+        "number": 4,
+        "team": "DAL"
+      },
+      "outFile": "w4-preview-assets/vs-m5-mauricio-eric-right.jpg",
+      "panelId": "eric-DAL-4-w4"
+    },
+    {
+      "cardId": "vs-m6-danny-crooke",
+      "side": "left",
+      "managerKey": "danny",
+      "jersey": {
+        "playerId": "7523",
+        "name": "Trevor Lawrence",
+        "number": 16,
+        "team": "JAX"
+      },
+      "outFile": "w4-preview-assets/vs-m6-danny-crooke-left.jpg",
+      "panelId": "danny-JAX-16-w4"
+    },
+    {
+      "cardId": "vs-m6-danny-crooke",
+      "side": "right",
+      "managerKey": "crooke",
+      "jersey": {
+        "playerId": "4881",
+        "name": "Lamar Jackson",
+        "number": 8,
+        "team": "BAL"
+      },
+      "outFile": "w4-preview-assets/vs-m6-danny-crooke-right.jpg",
+      "panelId": "crooke-BAL-8-w4"
+    },
+    {
+      "cardId": "vs-w5-m2",
+      "side": "left",
+      "managerKey": "danny",
+      "jersey": {
+        "playerId": "7523",
+        "name": "Trevor Lawrence",
+        "number": 16,
+        "team": "JAX"
+      },
+      "outFile": "../w5-matchup-cards/assets/vs-w5-m2-left.jpg",
+      "panelId": "danny-JAX-16-w5"
+    },
+    {
+      "cardId": "vs-w5-m2",
+      "side": "right",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "1166",
+        "name": "Kirk Cousins",
+        "number": 8,
+        "team": "LV"
+      },
+      "outFile": "../w5-matchup-cards/assets/vs-w5-m2-right.jpg",
+      "panelId": "manny-LV-8-w5"
+    },
+    {
+      "cardId": "vs-w5-m4",
+      "side": "left",
+      "managerKey": "hady",
+      "jersey": {
+        "playerId": "11564",
+        "name": "Drake Maye",
+        "number": 10,
+        "team": "NE"
+      },
+      "outFile": "../w5-matchup-cards/assets/vs-w5-m4-left.jpg",
+      "panelId": "hady-NE-10-w5"
+    },
+    {
+      "cardId": "vs-w5-m4",
+      "side": "right",
+      "managerKey": "frankie",
+      "jersey": {
+        "playerId": "3163",
+        "name": "Jared Goff",
+        "number": 16,
+        "team": "DET"
+      },
+      "outFile": "../w5-matchup-cards/assets/vs-w5-m4-right.jpg",
+      "panelId": "frankie-DET-16-w5"
+    }
+  ]
+}
