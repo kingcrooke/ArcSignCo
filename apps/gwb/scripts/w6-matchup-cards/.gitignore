@@ -1,2 +1,3 @@
 output/.tmp-*.html
 output/*.png
+__pycache__/
