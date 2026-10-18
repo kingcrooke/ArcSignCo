@@ -7,9 +7,11 @@
 | `vs-m3-hadi-manny` left pill | `HADI 2-1` | `HADY 2-1` | Requested spelling |
 | `vs-w5-m2` tagline | `Lawrence vs Caleb • …` | `Lawrence vs Cousins • Manny has lost two straight` | QB fix |
 | `vs-w5-m4` tagline | `Kyler vs Goff • …` | `Maye vs Goff • Frankie's first win came in Week 4` | QB fix |
-| `w1-slide-09` | `Third-highest` | `fourth-highest` | Sleeper / league history |
+| `w1-slide-09` | `Third-highest` | `Fourth-highest` | Sleeper / league history |
+| `results-w1-m6` | midTitle `MANNY SURVIVES…` | `MNNY SURVIVES BY 4` | MNNY in tagline-style mid title only |
 | `w2-slide-06` | `Eric is 2-0`, `44.00` | `Eric is 1-1`, `37.2` | Sleeper facts |
-| `w4-slide-12` | Mauricio/Narking 0.03 stat | HADY 141.65 / MANNY 134.88 / `6.77` | Closest matchup stat |
+| `w4-slide-12` | Mauricio/Narking 0.03 stat | HADY 141.65 / MANNY 134.88 / `6.77` | **Proposal only** — live W4 deck unchanged in `public/slides` |
+| `vs-m1`…`vs-m6` | Live W4 preview chrome | W5-style matchup template rebuild | **Proposal only** — see `WEEK4-PROPOSED-CHANGES.md` |
 | `results-w1-m6`, `results-w2-m5` pills | `MNNY` on live JPG | `MANNY` on winner pill | MNNY only in taglines |
 
 ## PENDING
