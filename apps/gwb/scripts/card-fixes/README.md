@@ -9,23 +9,22 @@ Art: PR #91 / #94 dual-ref img2img — **light granite** stone fur, **unique pos
 
 Spelling on touched cards: **HADY** (not HADI).
 
-## Pipeline
+## Pipeline (HTML rebuild — do not composite over baked JPGs)
 
 ```bash
 node scripts/card-fixes/sleeper-facts.mjs
 node scripts/card-fixes/build-panel-fixes.mjs
-node scripts/card-fixes/build-panel-prompts.mjs
-GEMINI_API_KEY=... node scripts/card-fixes/generate-panels.mjs   # or Cursor GenerateImage + generated/*.jpg
+# Regen panels → card-fixes/generated/ or assets/ (dual-ref prompts)
 
-python3 scripts/card-fixes/mask_composite_cards.py   # mask fill into main card frames
-python3 scripts/card-fixes/render-report-slides.py
-# captions: results-w2-m2, vs-w5-m2 footer (Lawrence vs Cousins)
+python3 scripts/card-fixes/rebuild/extract-keeper-panels.py
+node scripts/card-fixes/rebuild/build-results-meta.mjs
+node scripts/card-fixes/rebuild/render-all.mjs
 
-node scripts/optimize-published-slides.mjs --only=...   # includes vs-w5-m*
-cp public/slides/* ../../../gwb-fe006a16/slides/
+node scripts/optimize-published-slides.mjs --only=<touched ids>
+# copy public/slides/* → gwb-fe006a16/slides/ for touched basenames only
 
 node scripts/card-fixes/build-contact-sheet-weeks.mjs
 node scripts/card-fixes/build-panel-table.mjs
 ```
 
-Do **not** use rectangle paste compositors or full W6 HTML re-renders for Week 4/5 preview cards.
+Legacy mask/paste scripts (`mask_composite_cards.py`, `render-report-slides.py`) are **deprecated** for delivery.

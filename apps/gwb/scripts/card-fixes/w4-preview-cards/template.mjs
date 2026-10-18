@@ -3,7 +3,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const FONTS = path.join(__dirname, '../fonts-local')
+const FONTS = path.join(__dirname, '../../fonts-local')
 
 export function cardHtml(m, leftImg, rightImg) {
   const leftPct = m.left.pct

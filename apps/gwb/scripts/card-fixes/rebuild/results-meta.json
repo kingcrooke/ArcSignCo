@@ -1,0 +1,706 @@
+[
+  {
+    "id": "results-w1-m1",
+    "matchupNum": 1,
+    "winner": "Mauricio",
+    "loser": "Crooke",
+    "winnerPoints": 137.1,
+    "loserPoints": 124.51,
+    "winnerRecord": "3-2",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "8131",
+      "name": "Isaiah Likely",
+      "team": "NYG",
+      "number": 9,
+      "position": "TE",
+      "points": 27.8
+    },
+    "loserStartingQb": {
+      "id": "4881",
+      "name": "Lamar Jackson",
+      "team": "BAL",
+      "number": 8,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Isaiah Likely",
+      "team": "NYG",
+      "number": 9
+    },
+    "loserJersey": {
+      "name": "Lamar Jackson",
+      "team": "BAL",
+      "number": 8
+    },
+    "week": 1,
+    "headline": "FINAL: MAURICIO TAKES IT",
+    "winnerDisplay": "Mauricio",
+    "loserDisplay": "Crooke",
+    "winnerPointsDisplay": "137.1",
+    "loserPointsDisplay": "124.5",
+    "bowlTitle": "WEEK 1 • MATCH 1",
+    "tagline": "Likely vs Jackson • Likely 27.8",
+    "caption": ""
+  },
+  {
+    "id": "results-w1-m2",
+    "matchupNum": 2,
+    "winner": "Kayser",
+    "loser": "Hady",
+    "winnerPoints": 138.69,
+    "loserPoints": 119.43,
+    "winnerRecord": "3-2",
+    "loserRecord": "4-1",
+    "winnerTopScorer": {
+      "id": "3198",
+      "name": "Derrick Henry",
+      "team": "BAL",
+      "number": 22,
+      "position": "RB",
+      "points": 37.3
+    },
+    "loserStartingQb": {
+      "id": "11564",
+      "name": "Drake Maye",
+      "team": "NE",
+      "number": 10,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Derrick Henry",
+      "team": "BAL",
+      "number": 22
+    },
+    "loserJersey": {
+      "name": "Drake Maye",
+      "team": "NE",
+      "number": 10
+    },
+    "week": 1,
+    "headline": "FINAL: KAYSER TAKES IT",
+    "winnerDisplay": "Kayser",
+    "loserDisplay": "HADY",
+    "winnerPointsDisplay": "138.7",
+    "loserPointsDisplay": "119.4",
+    "bowlTitle": "THE SPECIAL ONE STRIKES",
+    "tagline": "Henry vs Maye • Henry 37.3",
+    "caption": "Kayser 1-0 — HADY's crown slips in Week 1"
+  },
+  {
+    "id": "results-w1-m3",
+    "matchupNum": 3,
+    "winner": "Matt",
+    "loser": "Narking",
+    "winnerPoints": 175.08,
+    "loserPoints": 158.17,
+    "winnerRecord": "2-3",
+    "loserRecord": "1-4",
+    "winnerTopScorer": {
+      "id": "4984",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "number": 17,
+      "position": "QB",
+      "points": 51.68
+    },
+    "loserStartingQb": {
+      "id": "12545",
+      "name": "Tyler Shough",
+      "team": "NO",
+      "number": 6,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Josh Allen",
+      "team": "BUF",
+      "number": 17
+    },
+    "loserJersey": {
+      "name": "Tyler Shough",
+      "team": "NO",
+      "number": 6
+    },
+    "week": 1,
+    "headline": "FINAL: MATT TAKES IT",
+    "winnerDisplay": "Matt",
+    "loserDisplay": "Narking",
+    "winnerPointsDisplay": "175.1",
+    "loserPointsDisplay": "158.2",
+    "bowlTitle": "WEEK 1 • MATCH 3",
+    "tagline": "Allen vs Shough • Allen 51.7",
+    "caption": ""
+  },
+  {
+    "id": "results-w1-m4",
+    "matchupNum": 4,
+    "winner": "Jamil",
+    "loser": "Danny",
+    "winnerPoints": 171.7,
+    "loserPoints": 111.88,
+    "winnerRecord": "3-2",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "8151",
+      "name": "Kenneth Walker",
+      "team": "KC",
+      "number": 9,
+      "position": "RB",
+      "points": 39.1
+    },
+    "loserStartingQb": {
+      "id": "11563",
+      "name": "Bo Nix",
+      "team": "DEN",
+      "number": 10,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Kenneth Walker",
+      "team": "KC",
+      "number": 9
+    },
+    "loserJersey": {
+      "name": "Bo Nix",
+      "team": "DEN",
+      "number": 10
+    },
+    "week": 1,
+    "headline": "FINAL: JAMIL TAKES IT",
+    "winnerDisplay": "Jamil",
+    "loserDisplay": "Danny",
+    "winnerPointsDisplay": "171.7",
+    "loserPointsDisplay": "111.9",
+    "bowlTitle": "WEEK 1 • MATCH 4",
+    "tagline": "Walker vs Nix • Walker 39.1",
+    "caption": ""
+  },
+  {
+    "id": "results-w1-m5",
+    "matchupNum": 5,
+    "winner": "Steven",
+    "loser": "Frankie",
+    "winnerPoints": 199.39,
+    "loserPoints": 135.42,
+    "winnerRecord": "4-1",
+    "loserRecord": "1-4",
+    "winnerTopScorer": {
+      "id": "6790",
+      "name": "D'Andre Swift",
+      "team": "CHI",
+      "number": 4,
+      "position": "RB",
+      "points": 34.4
+    },
+    "loserStartingQb": {
+      "id": "6770",
+      "name": "Joe Burrow",
+      "team": "CIN",
+      "number": 9,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "D'Andre Swift",
+      "team": "CHI",
+      "number": 4
+    },
+    "loserJersey": {
+      "name": "Joe Burrow",
+      "team": "CIN",
+      "number": 9
+    },
+    "week": 1,
+    "headline": "FINAL: STEVEN TAKES IT",
+    "winnerDisplay": "Steven",
+    "loserDisplay": "Frankie",
+    "winnerPointsDisplay": "199.4",
+    "loserPointsDisplay": "135.4",
+    "bowlTitle": "WEEK 1 • MATCH 5",
+    "tagline": "Swift vs Burrow • Swift 34.4",
+    "caption": ""
+  },
+  {
+    "id": "results-w1-m6",
+    "matchupNum": 6,
+    "winner": "Manny",
+    "loser": "Eric",
+    "winnerPoints": 133.22,
+    "loserPoints": 129.13,
+    "winnerRecord": "2-3",
+    "loserRecord": "3-2",
+    "winnerTopScorer": {
+      "id": "11560",
+      "name": "Caleb Williams",
+      "team": "CHI",
+      "number": 18,
+      "position": "QB",
+      "points": 46.52
+    },
+    "loserStartingQb": {
+      "id": "3294",
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "number": 4,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Caleb Williams",
+      "team": "CHI",
+      "number": 18
+    },
+    "loserJersey": {
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "number": 4
+    },
+    "week": 1,
+    "headline": "FINAL: MANNY TAKES IT",
+    "winnerDisplay": "Manny",
+    "loserDisplay": "Eric",
+    "winnerPointsDisplay": "133.2",
+    "loserPointsDisplay": "129.1",
+    "bowlTitle": "WEEK 1 • MATCH 6",
+    "tagline": "Williams vs Prescott • Williams 46.5",
+    "caption": ""
+  },
+  {
+    "id": "results-w2-m2",
+    "matchupNum": 2,
+    "winner": "Narking",
+    "loser": "Mauricio",
+    "winnerPoints": 131.93,
+    "loserPoints": 99.76,
+    "winnerRecord": "1-4",
+    "loserRecord": "3-2",
+    "winnerTopScorer": {
+      "id": "8183",
+      "name": "Brock Purdy",
+      "team": "SF",
+      "number": 13,
+      "position": "QB",
+      "points": 40.23
+    },
+    "loserStartingQb": {
+      "id": "6797",
+      "name": "Justin Herbert",
+      "team": "LAC",
+      "number": 10,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Brock Purdy",
+      "team": "SF",
+      "number": 13
+    },
+    "loserJersey": {
+      "name": "Justin Herbert",
+      "team": "LAC",
+      "number": 10
+    },
+    "week": 2,
+    "headline": "FINAL: NARKING TAKES IT",
+    "winnerDisplay": "Narking",
+    "loserDisplay": "Mauricio",
+    "winnerPointsDisplay": "131.9",
+    "loserPointsDisplay": "99.8",
+    "bowlTitle": "WEEK 2 • MATCH 2",
+    "tagline": "",
+    "caption": "Brock Purdy 49.0 — Narking climbs to 1-1"
+  },
+  {
+    "id": "results-w2-m3",
+    "matchupNum": 3,
+    "winner": "Kayser",
+    "loser": "Danny",
+    "winnerPoints": 170.91,
+    "loserPoints": 142.96,
+    "winnerRecord": "3-2",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "421",
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9,
+      "position": "QB",
+      "points": 44.81
+    },
+    "loserStartingQb": {
+      "id": "7523",
+      "name": "Trevor Lawrence",
+      "team": "JAX",
+      "number": 16,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9
+    },
+    "loserJersey": {
+      "name": "Trevor Lawrence",
+      "team": "JAX",
+      "number": 16
+    },
+    "week": 2,
+    "headline": "FINAL: KAYSER TAKES IT",
+    "winnerDisplay": "Kayser",
+    "loserDisplay": "Danny",
+    "winnerPointsDisplay": "170.9",
+    "loserPointsDisplay": "143.0",
+    "bowlTitle": "WEEK 2 • MATCH 3",
+    "tagline": "Stafford vs Lawrence • Stafford 44.8",
+    "caption": ""
+  },
+  {
+    "id": "results-w2-m4",
+    "matchupNum": 4,
+    "winner": "Steven",
+    "loser": "Matt",
+    "winnerPoints": 134.93,
+    "loserPoints": 130.52,
+    "winnerRecord": "4-1",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "8144",
+      "name": "Chris Olave",
+      "team": "NO",
+      "number": 12,
+      "position": "WR",
+      "points": 22.6
+    },
+    "loserStartingQb": {
+      "id": "4984",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "number": 17,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Chris Olave",
+      "team": "NO",
+      "number": 12
+    },
+    "loserJersey": {
+      "name": "Josh Allen",
+      "team": "BUF",
+      "number": 17
+    },
+    "week": 2,
+    "headline": "FINAL: STEVEN TAKES IT",
+    "winnerDisplay": "Steven",
+    "loserDisplay": "Matt",
+    "winnerPointsDisplay": "134.9",
+    "loserPointsDisplay": "130.5",
+    "bowlTitle": "WEEK 2 • MATCH 4",
+    "tagline": "Olave vs Allen • Olave 22.6",
+    "caption": ""
+  },
+  {
+    "id": "results-w2-m5",
+    "matchupNum": 5,
+    "winner": "Manny",
+    "loser": "Jamil",
+    "winnerPoints": 183.99,
+    "loserPoints": 138.89,
+    "winnerRecord": "2-3",
+    "loserRecord": "3-2",
+    "winnerTopScorer": {
+      "id": "4046",
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "number": 15,
+      "position": "QB",
+      "points": 45.29
+    },
+    "loserStartingQb": {
+      "id": "6904",
+      "name": "Jalen Hurts",
+      "team": "PHI",
+      "number": 1,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "number": 15
+    },
+    "loserJersey": {
+      "name": "Jalen Hurts",
+      "team": "PHI",
+      "number": 1
+    },
+    "week": 2,
+    "headline": "FINAL: MANNY TAKES IT",
+    "winnerDisplay": "Manny",
+    "loserDisplay": "Jamil",
+    "winnerPointsDisplay": "184.0",
+    "loserPointsDisplay": "138.9",
+    "bowlTitle": "WEEK 2 • MATCH 5",
+    "tagline": "Mahomes vs Hurts • Mahomes 45.3",
+    "caption": ""
+  },
+  {
+    "id": "results-w2-m6",
+    "matchupNum": 6,
+    "winner": "Eric",
+    "loser": "Frankie",
+    "winnerPoints": 142.69,
+    "loserPoints": 105.17,
+    "winnerRecord": "3-2",
+    "loserRecord": "1-4",
+    "winnerTopScorer": {
+      "id": "3294",
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "number": 4,
+      "position": "QB",
+      "points": 43.29
+    },
+    "loserStartingQb": {
+      "id": "6770",
+      "name": "Joe Burrow",
+      "team": "CIN",
+      "number": 9,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "number": 4
+    },
+    "loserJersey": {
+      "name": "Joe Burrow",
+      "team": "CIN",
+      "number": 9
+    },
+    "week": 2,
+    "headline": "FINAL: ERIC TAKES IT",
+    "winnerDisplay": "Eric",
+    "loserDisplay": "Frankie",
+    "winnerPointsDisplay": "142.7",
+    "loserPointsDisplay": "105.2",
+    "bowlTitle": "WEEK 2 • MATCH 6",
+    "tagline": "Prescott vs Burrow • Prescott 43.3",
+    "caption": ""
+  },
+  {
+    "id": "results-w3-m1",
+    "matchupNum": 1,
+    "winner": "Crooke",
+    "loser": "Narking",
+    "winnerPoints": 167.66,
+    "loserPoints": 136.7,
+    "winnerRecord": "2-3",
+    "loserRecord": "1-4",
+    "winnerTopScorer": {
+      "id": "4881",
+      "name": "Lamar Jackson",
+      "team": "BAL",
+      "number": 8,
+      "position": "QB",
+      "points": 29.46
+    },
+    "loserStartingQb": {
+      "id": "8183",
+      "name": "Brock Purdy",
+      "team": "SF",
+      "number": 13,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Lamar Jackson",
+      "team": "BAL",
+      "number": 8
+    },
+    "loserJersey": {
+      "name": "Brock Purdy",
+      "team": "SF",
+      "number": 13
+    },
+    "week": 3,
+    "headline": "FINAL: CROOKE TAKES IT",
+    "winnerDisplay": "Crooke",
+    "loserDisplay": "Narking",
+    "winnerPointsDisplay": "167.7",
+    "loserPointsDisplay": "136.7",
+    "bowlTitle": "WEEK 3 • MATCH 1",
+    "tagline": "Lamar vs Purdy • Jackson 29.5",
+    "caption": "Crooke stays perfect — Narking drops to 0-2"
+  },
+  {
+    "id": "results-w3-m2",
+    "matchupNum": 2,
+    "winner": "Hady",
+    "loser": "Danny",
+    "winnerPoints": 131.97,
+    "loserPoints": 121.69,
+    "winnerRecord": "4-1",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "9488",
+      "name": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "number": 11,
+      "position": "WR",
+      "points": 37.74
+    },
+    "loserStartingQb": {
+      "id": "7523",
+      "name": "Trevor Lawrence",
+      "team": "JAX",
+      "number": 16,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "number": 11
+    },
+    "loserJersey": {
+      "name": "Trevor Lawrence",
+      "team": "JAX",
+      "number": 16
+    },
+    "week": 3,
+    "headline": "FINAL: HADY TAKES IT",
+    "winnerDisplay": "HADY",
+    "loserDisplay": "Danny",
+    "winnerPointsDisplay": "132.0",
+    "loserPointsDisplay": "121.7",
+    "bowlTitle": "EL CAMPEON TO 2-1",
+    "tagline": "Smith-Njigba vs Lawrence • Smith-Njigba 37.7",
+    "caption": "Danny's negative mulligan — first in GWB history"
+  },
+  {
+    "id": "results-w3-m3",
+    "matchupNum": 3,
+    "winner": "Steven",
+    "loser": "Mauricio",
+    "winnerPoints": 199.19,
+    "loserPoints": 123.9,
+    "winnerRecord": "4-1",
+    "loserRecord": "3-2",
+    "winnerTopScorer": {
+      "id": "4943",
+      "name": "Sam Darnold",
+      "team": "SEA",
+      "number": 14,
+      "position": "QB",
+      "points": 47.89
+    },
+    "loserStartingQb": {
+      "id": "9228",
+      "name": "Bryce Young",
+      "team": "CAR",
+      "number": 9,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Sam Darnold",
+      "team": "SEA",
+      "number": 14
+    },
+    "loserJersey": {
+      "name": "Bryce Young",
+      "team": "CAR",
+      "number": 9
+    },
+    "week": 3,
+    "headline": "FINAL: STEVEN TAKES IT",
+    "winnerDisplay": "Steven",
+    "loserDisplay": "Mauricio",
+    "winnerPointsDisplay": "199.2",
+    "loserPointsDisplay": "123.9",
+    "bowlTitle": "WEEK 3 • MATCH 3",
+    "tagline": "Darnold vs Young • Darnold 47.9",
+    "caption": ""
+  },
+  {
+    "id": "results-w3-m4",
+    "matchupNum": 4,
+    "winner": "Kayser",
+    "loser": "Manny",
+    "winnerPoints": 151.93,
+    "loserPoints": 129.68,
+    "winnerRecord": "3-2",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "421",
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9,
+      "position": "QB",
+      "points": 36.43
+    },
+    "loserStartingQb": {
+      "id": "4046",
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "number": 15,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9
+    },
+    "loserJersey": {
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "number": 15
+    },
+    "week": 3,
+    "headline": "FINAL: KAYSER TAKES IT",
+    "winnerDisplay": "Kayser",
+    "loserDisplay": "Manny",
+    "winnerPointsDisplay": "151.9",
+    "loserPointsDisplay": "129.7",
+    "bowlTitle": "WEEK 3 • MATCH 4",
+    "tagline": "Stafford vs Mahomes • Stafford 36.4",
+    "caption": ""
+  },
+  {
+    "id": "results-w3-m5",
+    "matchupNum": 5,
+    "winner": "Eric",
+    "loser": "Matt",
+    "winnerPoints": 130.39,
+    "loserPoints": 128.57,
+    "winnerRecord": "3-2",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "8112",
+      "name": "Drake London",
+      "team": "ATL",
+      "number": 5,
+      "position": "WR",
+      "points": 30.4
+    },
+    "loserStartingQb": {
+      "id": "4984",
+      "name": "Josh Allen",
+      "team": "BUF",
+      "number": 17,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Drake London",
+      "team": "ATL",
+      "number": 5
+    },
+    "loserJersey": {
+      "name": "Josh Allen",
+      "team": "BUF",
+      "number": 17
+    },
+    "week": 3,
+    "headline": "FINAL: ERIC TAKES IT",
+    "winnerDisplay": "Eric",
+    "loserDisplay": "Matt",
+    "winnerPointsDisplay": "130.4",
+    "loserPointsDisplay": "128.6",
+    "bowlTitle": "WEEK 3 • MATCH 5",
+    "tagline": "London vs Allen • London 30.4",
+    "caption": ""
+  }
+]
