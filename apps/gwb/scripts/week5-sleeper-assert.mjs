@@ -126,7 +126,9 @@ async function main() {
 
   const reportPath = path.join(__dirname, 'w5-report-deck/report-data.json')
   try {
-    const { reportFacts } = JSON.parse(readFileSync(reportPath, 'utf8'))
+    const reportRaw = readFileSync(reportPath, 'utf8')
+    const report = JSON.parse(reportRaw)
+    const { reportFacts, ordered } = report
     const hady = results.find((r) => r.winner === 'Hady')
     const narking = results.find((r) => r.loser === 'Narking')
     const margins = results
@@ -146,8 +148,33 @@ async function main() {
         `report blowoutMargin ${reportFacts.blowoutMargin} !== ${margins[margins.length - 1]}`,
       )
     }
+    if (!approx(reportFacts.topBench, 45.19)) {
+      errors.push(`report topBench (Jordan Love) must be 45.19, got ${reportFacts.topBench}`)
+    }
+    if (!approx(reportFacts.topBenchBurrow, 40.73)) {
+      errors.push(`report Frankie bench Burrow must be 40.73, got ${reportFacts.topBenchBurrow}`)
+    }
+    if (!approx(reportFacts.frankieStarterQbPts, 39.26)) {
+      errors.push(
+        `report Frankie starter QB (Goff) must be 39.26, got ${reportFacts.frankieStarterQbPts}`,
+      )
+    }
+    const slide08 = ordered?.find((s) => s.id === 'w5-slide-08')
+    const slide14 = ordered?.find((s) => s.id === 'w5-slide-14')
+    const loveSub = slide08?.statBoxes?.[0]?.sub ?? ''
+    if (!loveSub.startsWith('45.19')) {
+      errors.push(`w5-slide-08 top bench must show 45.19, got ${loveSub}`)
+    }
+    if (String(reportRaw).includes('49.16')) {
+      errors.push('report-data.json must not contain incorrect 49.16 bench score')
+    }
+    const goffBox = slide14?.statBoxes?.[1]
+    if (goffBox?.value !== '39.26' || goffBox?.sub !== 'FRANKIE starter') {
+      errors.push(
+        `w5-slide-14 Goff box must be 39.26 / FRANKIE starter, got ${JSON.stringify(goffBox)}`,
+      )
+    }
     const forbidden = /website|receipt|AI Hady|spelling|export cleanly|build process/i
-    const reportRaw = readFileSync(reportPath, 'utf8')
     if (forbidden.test(reportRaw)) {
       errors.push('report-data.json contains forbidden meta/build copy')
     }

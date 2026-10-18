@@ -327,8 +327,8 @@
         },
         {
           "label": "GOFF",
-          "value": "101.06",
-          "sub": "FRANKIE total"
+          "value": "39.26",
+          "sub": "FRANKIE starter"
         }
       ],
       "body": [
@@ -381,6 +381,8 @@
     "highScore": 212.33,
     "lowScore": 95.86,
     "topBench": 45.19,
+    "topBenchBurrow": 40.73,
+    "frankieStarterQbPts": 39.26,
     "topScorer": 58.56
   }
 }

@@ -11,11 +11,21 @@ const SLIDE_SOURCES = path.join(__dirname, '../slide-sources')
 
 async function main() {
   const { ordered } = loadReport()
+  const onlyArg = process.argv.find((a) => a.startsWith('--only='))
+  const only = onlyArg
+    ? new Set(onlyArg.slice('--only='.length).split(',').map((s) => s.trim()).filter(Boolean))
+    : null
+  const slides = only ? ordered.filter((s) => only.has(s.id)) : ordered
+  if (!slides.length) {
+    console.error('No slides matched', only ? [...only] : 'all')
+    process.exit(1)
+  }
   await mkdir(OUT, { recursive: true })
   const browser = await chromium.launch()
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } })
   for (let i = 0; i < ordered.length; i++) {
     const slide = ordered[i]
+    if (only && !only.has(slide.id)) continue
     const html = slideHtml(slide, i + 1)
     const tmp = path.join(OUT, `.tmp-${slide.id}.html`)
     await writeFile(tmp, html)

@@ -50,6 +50,14 @@ function startingQbLastName(matchups, players, rosterId) {
   return lastName(p?.full_name ?? pid)
 }
 
+function startingQbPoints(matchups, players, rosterId) {
+  const m = matchups.find((x) => x.roster_id === rosterId)
+  const pid = m?.starters?.[0]
+  const p = players[pid] ?? {}
+  const pts = m?.players_points?.[pid] ?? 0
+  return { name: p.full_name ?? pid, points: pts }
+}
+
 async function main() {
   const week = 5
   const players = await loadPlayersNfl()
@@ -107,6 +115,7 @@ async function main() {
   const steven = results.find((r) => r.loser === 'Steven')
   const hady = results.find((r) => r.winner === 'Hady')
   const narking = results.find((r) => r.loser === 'Narking')
+  const frankieQb = startingQbPoints(matchups, players, ROSTER.Frankie)
   const m2 = results.find((r) => r.id === 'results-w5-m2')
   const m3 = results.find((r) => r.id === 'results-w5-m3')
   const m5 = results.find((r) => r.id === 'results-w5-m5')
@@ -239,7 +248,7 @@ async function main() {
         { label: 'RUNNER UP', value: `${benchLeaders[1].label}`, sub: `${benchLeaders[1].pts.toFixed(2)} (${benchLeaders[1].mgr})` },
       ],
       body: [
-        `Frankie left Joe Burrow ${benchLeaders.find((b) => b.mgr === 'Frankie')?.pts.toFixed(2) ?? '40.73'} on the bench.`,
+        `Frankie left Joe Burrow ${(benchLeaders.find((b) => b.mgr === 'Frankie')?.pts ?? 40.73).toFixed(2)} on the bench.`,
         'GWB rewards the starters. Usually.',
       ],
       footnote: 'BENCH POINTS FROM SLEEPER WEEK 5',
@@ -320,9 +329,9 @@ async function main() {
       statBoxes: [
         { label: 'MAYE', value: hady.winnerTopScorer.points.toFixed(2), sub: 'HADY starter' },
         {
-          label: lastName(hady.loserStartingQb.name).toUpperCase(),
-          value: hady.loserPoints.toFixed(2),
-          sub: 'FRANKIE total',
+          label: lastName(frankieQb.name).toUpperCase(),
+          value: frankieQb.points.toFixed(2),
+          sub: 'FRANKIE starter',
         },
       ],
       body: [`Margin: ${(hady.winnerPoints - hady.loserPoints).toFixed(2)} points.`],
@@ -359,6 +368,8 @@ async function main() {
     highScore: hady.winnerPoints,
     lowScore: narking.loserPoints,
     topBench: benchLeaders[0].pts,
+    topBenchBurrow: benchLeaders.find((b) => b.mgr === 'Frankie')?.pts,
+    frankieStarterQbPts: frankieQb.points,
     topScorer: leagueTop[0].pts,
   }
 
