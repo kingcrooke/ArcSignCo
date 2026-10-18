@@ -46,13 +46,17 @@ const cssBase = `
 .stat-box .value { margin-top: 10px; font-size: 36px; color: ${COLORS.white}; line-height: 1.2; }
 .stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
 .cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
-.cover-hero { position: absolute; right: 0; top: 0; width: 460px; height: 1180px; z-index: 2; overflow: hidden; }
-.cover-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transform: scale(0.92); }
-.cover-hero .veil { position: absolute; inset: 0; background: linear-gradient(90deg, ${COLORS.bg} 0%, transparent 38%); }
-.w2-slide-06-footer-band {
-  position: absolute; left: 0; right: 0; bottom: 0; height: 88px; z-index: 19;
-  background: linear-gradient(180deg, transparent 0%, rgba(8,10,14,0.92) 35%, rgba(8,10,14,0.98) 100%);
+.w2-06-hero {
+  position: absolute; inset: 0; z-index: 1; overflow: hidden;
 }
+.w2-06-hero img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 8%; transform: scale(1.02);
+}
+.w2-06-scrim {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(180deg, rgba(10,15,20,0.88) 0%, rgba(10,15,20,0.45) 38%, rgba(10,15,20,0.55) 62%, rgba(8,10,14,0.92) 100%);
+}
+.w2-06-content { position: relative; z-index: 3; }
 .margin-hero {
   position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 520px; z-index: 3;
   text-align: center; font-size: 96px; color: ${COLORS.gold}; line-height: 1;
@@ -110,15 +114,15 @@ export function w2Slide06() {
     .map((line) => `<p>${esc(line)}</p>`)
     .join('')
   return wrapHtml(
-    `<div class="slide">
-  <div class="cover-hero"><img src="${hero}" alt=""/><div class="veil"></div></div>
+    `<div class="slide w2-06-content">
+  <div class="w2-06-hero"><img src="${hero}" alt=""/></div>
+  <div class="w2-06-scrim"></div>
   <div class="cover-text">
     <div class="kicker bebas">${esc('GWB · WEEK 2 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>
     ${titleBlock('2-0 AND', 'UNEXPLAINED')}
   </div>
-  <div class="body-block inter-semibold" style="top:280px;width:580px">${body}</div>
-  <div class="w2-slide-06-footer-band"></div>
+  <div class="body-block inter-semibold" style="top:300px;width:560px;max-width:58%">${body}</div>
   ${footer('6/16')}
 </div>`,
     cssBase,
