@@ -103,12 +103,12 @@ function w2Slide06BodyHtml() {
     .map((line) => `<p>${esc(line)}</p>`)
     .join('')
   return `<div class="slide w2-06-content">
-  <div class="cover-text" style="max-width:54%">
+  <div class="cover-text" style="max-width:520px">
     <div class="kicker bebas">${esc('GWB · WEEK 2 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>
     ${titleBlock('2-0 AND', 'UNEXPLAINED')}
   </div>
-  <div class="body-block inter-semibold" style="top:300px;width:520px;max-width:48%">${body}</div>
+  <div class="body-block inter-semibold" style="top:300px;width:520px;max-width:48%;padding-right:12px">${body}</div>
   ${footer('6/16')}
 </div>`
 }

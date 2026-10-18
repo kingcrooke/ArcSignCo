@@ -10,8 +10,8 @@ const ONLY = 'vs-w5-m2,vs-w5-m4,w2-slide-06'
 
 run('node scripts/card-fixes/render-w5-m2-m4-main.mjs')
 run('node scripts/card-fixes/verify-vs-w5-m2-m4-panels.mjs')
+run('node scripts/card-fixes/measure-vs-chrome-layout.mjs')
 run('node scripts/card-fixes/build-vs-chrome-crop-sheet.mjs')
-run('node scripts/card-fixes/verify-vs-w5-m1-chrome.mjs')
 run('node scripts/card-fixes/composite-w2-slide06.mjs')
 run(`node scripts/optimize-published-slides.mjs --only=${ONLY}`)
 run(`node scripts/card-fixes/sync-published-slides.mjs --only=${ONLY}`)
