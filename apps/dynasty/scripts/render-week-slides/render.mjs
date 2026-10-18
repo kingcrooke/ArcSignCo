@@ -32,6 +32,8 @@ async function main() {
   const data = JSON.parse(raw)
   const standings = data.standingsAfterWeek5
 
+  const onlyResults = process.argv.includes('--results-only')
+
   const jobs = []
   for (const row of data.resultsWeek5) {
     jobs.push({
@@ -39,11 +41,13 @@ async function main() {
       html: resultSlide({ ...row, week: 5 }, standings),
     })
   }
-  for (const row of data.matchupsWeek6) {
-    jobs.push({
-      id: row.id,
-      html: matchSlide({ ...row, week: 6 }, standings),
-    })
+  if (!onlyResults) {
+    for (const row of data.matchupsWeek6) {
+      jobs.push({
+        id: row.id,
+        html: matchSlide({ ...row, week: 6 }, standings),
+      })
+    }
   }
 
   await mkdir(OUT_DIR, { recursive: true })
