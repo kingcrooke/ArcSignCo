@@ -4,3 +4,5 @@ rebuild/output/
 rebuild/keepers/.src-*
 rebuild/keepers/*.jpg
 rebuild/ref-*.jpg
+rebuild/.src-*.jpg
+live-spec/

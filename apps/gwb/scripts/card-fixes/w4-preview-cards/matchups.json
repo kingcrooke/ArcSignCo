@@ -2,18 +2,18 @@
   {
     "id": "vs-m1-narking-steven",
     "matchupNum": 1,
-    "title": "INJURY REPORT BOWL",
-    "left": { "name": "NARKING", "record": "1-2", "pct": 42 },
-    "right": { "name": "STEVEN", "record": "3-0", "pct": 58 },
-    "tagline": "Purdy vs Darnold • Steven still perfect"
+    "title": "4-TIME CHAMP vs THE UNDEFEATED",
+    "left": { "name": "NARKING", "record": "1-2", "pct": 39 },
+    "right": { "name": "STEVEN", "record": "3-0", "pct": 61 },
+    "tagline": "Narking's RB room vs Steven's 177.8 pts/week"
   },
   {
     "id": "vs-m2-kayser-frankie",
     "matchupNum": 2,
-    "title": "UNDEFEATED VS WINLESS",
-    "left": { "name": "KAYSER", "record": "3-0", "pct": 72 },
-    "right": { "name": "FRANKIE", "record": "0-3", "pct": 28 },
-    "tagline": "Stafford vs Goff • Frankie Zone on life support"
+    "title": "BUDDHIST CALM vs THE ZONE",
+    "left": { "name": "KAYSER", "record": "3-0", "pct": 59 },
+    "right": { "name": "FRANKIE", "record": "0-3", "pct": 41 },
+    "tagline": "Stafford vs Goff • Frankie on life support"
   },
   {
     "id": "vs-m3-hadi-manny",
@@ -21,30 +21,30 @@
     "title": "SNEAKY GAME OF THE WEEK",
     "left": { "name": "HADY", "record": "2-1", "pct": 48 },
     "right": { "name": "MANNY", "record": "2-1", "pct": 52 },
-    "tagline": "Kyler vs Mahomes • Coin flip to 3-1"
+    "tagline": "Mahomes QB3 vs Kyler QB14 • JSN + Bowers back"
   },
   {
     "id": "vs-m4-jamil-matt",
     "matchupNum": 4,
-    "title": "PLAYOFF PREVIEW",
-    "left": { "name": "JAMIL", "record": "2-1", "pct": 55 },
-    "right": { "name": "MATT", "record": "1-2", "pct": 45 },
-    "tagline": "Hurts vs Allen • Matt needs a bounce-back"
+    "title": "LAW vs EXCEL II",
+    "left": { "name": "JAMIL", "record": "2-1", "pct": 47 },
+    "right": { "name": "MATT", "record": "1-2", "pct": 53 },
+    "tagline": "Josh Allen QB1 vs Hurts QB5 • Gibbs #1 FLEX"
   },
   {
     "id": "vs-m5-mauricio-eric",
     "matchupNum": 5,
-    "title": "MIDDLE OF THE PACK",
-    "left": { "name": "MAURICIO", "record": "1-2", "pct": 46 },
-    "right": { "name": "ERIC", "record": "2-1", "pct": 54 },
-    "tagline": "Young vs Prescott • Both fighting for footing"
+    "title": "NEW DAD BOWL",
+    "left": { "name": "MAURICIO", "record": "1-2", "pct": 49 },
+    "right": { "name": "ERIC", "record": "2-1", "pct": 51 },
+    "tagline": "Breece's thigh vs Mauricio owning Braelon Allen"
   },
   {
     "id": "vs-m6-danny-crooke",
     "matchupNum": 6,
     "title": "DESPERATION BOWL",
-    "left": { "name": "DANNY", "record": "0-3", "pct": 38 },
-    "right": { "name": "CROOKE", "record": "1-2", "pct": 62 },
-    "tagline": "Lawrence vs Lamar • Crooke rule in effect"
+    "left": { "name": "DANNY", "record": "0-3", "pct": 45 },
+    "right": { "name": "CROOKE", "record": "1-2", "pct": 55 },
+    "tagline": "Danny changed his kicker • Crooke has Lamar QB2"
   }
 ]

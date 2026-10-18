@@ -27,24 +27,24 @@ const RESULT_REGEN = {
   'results-w3-m1': [false, true],
   'results-w3-m2': [false, true],
   'results-w3-m3': [true, true],
-  'results-w3-m4': [true, false],
+  'results-w3-m4': [true, true],
   'results-w3-m5': [true, true],
   'results-w3-m6': [false, false],
 }
 
 /** w4 preview: [leftRegen, rightRegen] */
 const W4_PREVIEW_REGEN = {
-  'vs-m1-narking-steven': [false, true],
+  'vs-m1-narking-steven': [true, true],
   'vs-m2-kayser-frankie': [true, true],
-  'vs-m3-hadi-manny': [true, false],
-  'vs-m4-jamil-matt': [true, false],
-  'vs-m5-mauricio-eric': [true, false],
-  'vs-m6-danny-crooke': [true, false],
+  'vs-m3-hadi-manny': [true, true],
+  'vs-m4-jamil-matt': [true, true],
+  'vs-m5-mauricio-eric': [true, true],
+  'vs-m6-danny-crooke': [true, true],
 }
 
 const W5_PREVIEW_REGEN = {
-  'vs-w5-m2': [false, true],
-  'vs-w5-m4': [true, false],
+  'vs-w5-m2': [true, true],
+  'vs-w5-m4': [true, true],
 }
 
 function panelEntry(cardId, side, managerKey, jersey, outFile) {

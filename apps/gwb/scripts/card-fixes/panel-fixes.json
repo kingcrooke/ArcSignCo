@@ -282,6 +282,19 @@
       "panelId": "kayser-LAR-9-w3"
     },
     {
+      "cardId": "results-w3-m4",
+      "side": "loser",
+      "managerKey": "manny",
+      "jersey": {
+        "playerId": "4046",
+        "name": "Patrick Mahomes",
+        "number": 15,
+        "team": "KC"
+      },
+      "outFile": "assets/results-w3-m4-loser.jpg",
+      "panelId": "manny-KC-15-w3"
+    },
+    {
       "cardId": "results-w3-m5",
       "side": "winner",
       "managerKey": "eric",
