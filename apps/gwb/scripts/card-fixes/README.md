@@ -14,8 +14,7 @@ node scripts/card-fixes/sleeper-facts.mjs
 node scripts/card-fixes/build-panel-fixes.mjs
 # panel JPGs → card-fixes/assets, w4-preview-assets, w5-matchup-cards/assets
 python3 scripts/card-fixes/composite-result-cards.py   # W1–3 results (keeps HADI text)
-cd scripts/card-fixes/w4-preview-cards && python3 normalize-panels.py && node render.mjs
-# w5: normalize + render vs-w5-m2 / m4
+python3 scripts/card-fixes/composite-preview-cards.py # W4/W5 previews (keeps main layout/text)
 python3 scripts/card-fixes/fix-report-slides.py
 node scripts/optimize-published-slides.mjs --only=...
 node scripts/card-fixes/build-contact-sheet.mjs

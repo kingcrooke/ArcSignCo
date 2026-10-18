@@ -335,6 +335,19 @@
       "panelId": "kayser-LAR-9-w4"
     },
     {
+      "cardId": "vs-m2-kayser-frankie",
+      "side": "right",
+      "managerKey": "frankie",
+      "jersey": {
+        "playerId": "3163",
+        "name": "Jared Goff",
+        "number": 16,
+        "team": "DET"
+      },
+      "outFile": "w4-preview-assets/vs-m2-kayser-frankie-right.jpg",
+      "panelId": "frankie-DET-16-w4"
+    },
+    {
       "cardId": "vs-m3-hadi-manny",
       "side": "left",
       "managerKey": "hady",

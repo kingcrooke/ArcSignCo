@@ -101,6 +101,22 @@ def fix_w4_slide_12() -> None:
     save(img, path)
 
 
+def fix_vs_w5_m2_tagline() -> None:
+    path = SRC / "vs-w5-m2.png"
+    if not path.is_file():
+        return
+    img = load_rgb(path)
+    muted = sample_text_color(img, (72, 1180, 900, 1260))
+    replace_line_in_box(
+        img,
+        (72, 1195, 1008, 1245),
+        "Lawrence vs Cousins • Manny has lost two straight",
+        "inter-semibold",
+        muted,
+    )
+    save(img, path)
+
+
 def fix_w2_m2_caption() -> None:
     path = SRC / "results-w2-m2.png"
     if not path.is_file():
@@ -121,6 +137,7 @@ def main() -> None:
     fix_w1_slide_09()
     fix_w2_slide_06()
     fix_w4_slide_12()
+    fix_vs_w5_m2_tagline()
     fix_w2_m2_caption()
     print("report + caption fixes done")
 

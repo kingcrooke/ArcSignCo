@@ -35,7 +35,7 @@ const RESULT_REGEN = {
 /** w4 preview: [leftRegen, rightRegen] */
 const W4_PREVIEW_REGEN = {
   'vs-m1-narking-steven': [false, true],
-  'vs-m2-kayser-frankie': [true, false],
+  'vs-m2-kayser-frankie': [true, true],
   'vs-m3-hadi-manny': [true, false],
   'vs-m4-jamil-matt': [true, false],
   'vs-m5-mauricio-eric': [true, false],
