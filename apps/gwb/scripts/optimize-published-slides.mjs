@@ -16,11 +16,11 @@ const FULL_WIDTH = 1080
 const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
-const RESULTS_BASENAMES = [1, 2, 3, 4].flatMap((w) =>
+const RESULTS_BASENAMES = [1, 2, 3, 4, 5].flatMap((w) =>
   [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
 )
 
-const REPORT_WEEKS = [1, 2, 3, 4]
+const REPORT_WEEKS = [1, 2, 3, 4, 5]
 
 const SLIDE_BASENAMES = [
   ...REPORT_WEEKS.flatMap((w) =>

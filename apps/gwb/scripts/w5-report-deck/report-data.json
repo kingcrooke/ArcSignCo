@@ -1,0 +1,263 @@
+{
+  "week": 5,
+  "ordered": [
+    {
+      "id": "w5-slide-01",
+      "title": "Steven's Perfect Season Is Over",
+      "body": [
+        "Week 5 is OFFICIALLY over.",
+        "Sleeper scores reviewed. Monday night reviewed.",
+        "Mulligans audited. The 4-0 shield has cracked.",
+        "",
+        "THERE IS STILL NO MERCY FOR THE AI."
+      ]
+    },
+    {
+      "id": "w5-slide-02",
+      "title": "Crooke 159.29 def Steven",
+      "subtitle": "DEF. STEVEN 120.77",
+      "body": [
+        "Steven drops to 4-1 — first loss of the season.",
+        "Margin: 38.52."
+      ],
+      "hero": "results-w5-m1"
+    },
+    {
+      "id": "w5-slide-03",
+      "title": "Hady 212.33 def Frankie",
+      "subtitle": "Week 5 high score",
+      "body": [
+        "Frankie held to 101.06.",
+        "Margin: 111.27.",
+        "Hady climbs to 4-1."
+      ],
+      "hero": "results-w5-m4"
+    },
+    {
+      "id": "w5-slide-04",
+      "title": "Danny 176.78 def Manny",
+      "body": [
+        "Danny moves to 2-3.",
+        "Manny falls to 2-3."
+      ],
+      "hero": "results-w5-m2"
+    },
+    {
+      "id": "w5-slide-05",
+      "title": "Mauricio 204.16 def Jamil",
+      "body": [
+        "Mauricio to 3-2.",
+        "Jamil to 3-2."
+      ],
+      "hero": "results-w5-m5"
+    },
+    {
+      "id": "w5-slide-06",
+      "title": "Matt 176.87 def Kayser",
+      "body": [
+        "Matt to 2-3.",
+        "Kayser to 3-2."
+      ],
+      "hero": "results-w5-m6"
+    },
+    {
+      "id": "w5-slide-07",
+      "title": "Eric 145.67 def Narking",
+      "body": [
+        "Eric to 3-2.",
+        "Narking to 1-4."
+      ],
+      "hero": "results-w5-m3"
+    },
+    {
+      "id": "w5-slide-08",
+      "title": "Stat of the Week",
+      "body": [
+        "Closest game: Matt over Kayser",
+        "Margin: 26.61 points.",
+        "Lowest score: Narking 95.86."
+      ]
+    },
+    {
+      "id": "w5-slide-09",
+      "title": "Frankie Zone Check-In",
+      "body": [
+        "Frankie falls to 1-4 after 101.06 points.",
+        "The zone signage remains highly dramatic."
+      ]
+    },
+    {
+      "id": "w5-slide-10",
+      "title": "But One Very Nice Website",
+      "body": [
+        "gwb-fe006a16 receipts still export cleanly.",
+        "Graphics tab updated for Week 5 finals."
+      ]
+    },
+    {
+      "id": "w5-slide-11",
+      "title": "Final Week 5 Scoring",
+      "table": [
+        {
+          "rank": 1,
+          "name": "Hady",
+          "pts": "212.33"
+        },
+        {
+          "rank": 2,
+          "name": "Mauricio",
+          "pts": "204.16"
+        },
+        {
+          "rank": 3,
+          "name": "Matt",
+          "pts": "176.87"
+        },
+        {
+          "rank": 4,
+          "name": "Danny",
+          "pts": "176.78"
+        },
+        {
+          "rank": 5,
+          "name": "Crooke",
+          "pts": "159.29"
+        },
+        {
+          "rank": 6,
+          "name": "Kayser",
+          "pts": "150.26"
+        },
+        {
+          "rank": 7,
+          "name": "Eric",
+          "pts": "145.67"
+        },
+        {
+          "rank": 8,
+          "name": "Jamil",
+          "pts": "143.54"
+        },
+        {
+          "rank": 9,
+          "name": "Manny",
+          "pts": "122.18"
+        },
+        {
+          "rank": 10,
+          "name": "Steven",
+          "pts": "120.77"
+        },
+        {
+          "rank": 11,
+          "name": "Frankie",
+          "pts": "101.06"
+        },
+        {
+          "rank": 12,
+          "name": "Narking",
+          "pts": "95.86"
+        }
+      ]
+    },
+    {
+      "id": "w5-slide-12",
+      "title": "Closest: 26.61 Points",
+      "body": [
+        "Matt over Kayser",
+        "Every margin on this deck is from Sleeper Week 5 finals."
+      ]
+    },
+    {
+      "id": "w5-slide-13",
+      "title": "Standings After Week 5",
+      "table": [
+        {
+          "rank": 1,
+          "name": "Steven",
+          "pf": "4-1 · 834.84 PF"
+        },
+        {
+          "rank": 2,
+          "name": "Hady",
+          "pf": "4-1 · 756.42 PF"
+        },
+        {
+          "rank": 3,
+          "name": "Kayser",
+          "pf": "3-2 · 740.23 PF"
+        },
+        {
+          "rank": 4,
+          "name": "Jamil",
+          "pf": "3-2 · 730.51 PF"
+        },
+        {
+          "rank": 5,
+          "name": "Mauricio",
+          "pf": "3-2 · 706.16 PF"
+        },
+        {
+          "rank": 6,
+          "name": "Eric",
+          "pf": "3-2 · 671.53 PF"
+        },
+        {
+          "rank": 7,
+          "name": "Matt",
+          "pf": "2-3 · 754.59 PF"
+        },
+        {
+          "rank": 8,
+          "name": "Danny",
+          "pf": "2-3 · 717.22 PF"
+        },
+        {
+          "rank": 9,
+          "name": "Manny",
+          "pf": "2-3 · 703.95 PF"
+        },
+        {
+          "rank": 10,
+          "name": "Crooke",
+          "pf": "2-3 · 696.38 PF"
+        },
+        {
+          "rank": 11,
+          "name": "Narking",
+          "pf": "1-4 · 663.87 PF"
+        },
+        {
+          "rank": 12,
+          "name": "Frankie",
+          "pf": "1-4 · 582.27 PF"
+        }
+      ]
+    },
+    {
+      "id": "w5-slide-14",
+      "title": "AI Hady Audit",
+      "body": [
+        "Crystal-ball picks vs Week 5 finals.",
+        "Spelling locked: Hady — never Hadi."
+      ]
+    },
+    {
+      "id": "w5-slide-15",
+      "title": "Week 5 Awards",
+      "body": [
+        "High score: Hady 212.33",
+        "Low score: Narking 95.86",
+        "Biggest upset: Crooke over Steven"
+      ]
+    },
+    {
+      "id": "w5-slide-16",
+      "title": "Week 6: No Undefeateds",
+      "body": [
+        "Hady and Steven tied atop the table at 4-1.",
+        "Week 6 matchup previews are live."
+      ]
+    }
+  ]
+}

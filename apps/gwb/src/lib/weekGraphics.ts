@@ -25,7 +25,6 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const sections: WeekGraphicsSection[] = []
 
   const matchupsByWeek: Record<number, PublishedSlide[]> = {
-    5: publish(WEEK_5_MATCHUPS),
     6: publish(WEEK_6_MATCHUPS),
   }
   const matchups = matchupsByWeek[week]
@@ -38,6 +37,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     2: publish(RESULTS_W2),
     3: publish(RESULTS_W3),
     4: publish(RESULTS_W4),
+    5: publish(RESULTS_W5),
   }
   const results = resultsByWeek[week]
   if (results?.length) {
@@ -49,6 +49,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     2: publish(WEEK_2_REPORT),
     3: publish(WEEK_3_REPORT),
     4: publish(WEEK_4_REPORT),
+    5: publish(WEEK_5_REPORT),
   }
   const report = reportByWeek[week]
   if (report?.length) {
@@ -147,15 +148,6 @@ function result(id: string, title: string): PublishedSlide {
   return titled(id, title)
 }
 
-const WEEK_5_MATCHUPS: PublishedSlide[] = [
-  vs('vs-w5-m1', 'Steven vs Crooke'),
-  vs('vs-w5-m2', 'Danny vs Manny'),
-  vs('vs-w5-m3', 'Narking vs Eric'),
-  vs('vs-w5-m4', 'Hady vs Frankie'),
-  vs('vs-w5-m5', 'Mauricio vs Jamil'),
-  vs('vs-w5-m6', 'Kayser vs Matt'),
-]
-
 const WEEK_6_MATCHUPS: PublishedSlide[] = [
   vs('vs-w6-m1', 'Crooke vs Manny'),
   vs('vs-w6-m2', 'Eric vs Steven'),
@@ -218,4 +210,32 @@ const RESULTS_W4: PublishedSlide[] = [
   result('results-w4-m4', 'Jamil 162.8 – Matt 143.6'),
   result('results-w4-m5', 'Mauricio 141.2 – Eric 123.7'),
   result('results-w4-m6', 'Danny 163.9 – Crooke 121.3'),
+]
+
+const WEEK_5_REPORT: PublishedSlide[] = [
+  w4('w5-slide-01', "Steven's Perfect Season Is Over"),
+  w4('w5-slide-02', 'Crooke 159.29 def Steven'),
+  w4('w5-slide-03', 'Hady 212.33 def Frankie'),
+  w4('w5-slide-04', 'Danny 176.78 def Manny'),
+  w4('w5-slide-05', 'Mauricio 204.16 def Jamil'),
+  w4('w5-slide-06', 'Matt 176.87 def Kayser'),
+  w4('w5-slide-07', 'Eric 145.67 def Narking'),
+  w4('w5-slide-08', 'Stat of the Week'),
+  w4('w5-slide-09', 'Frankie Zone Check-In'),
+  w4('w5-slide-10', 'But One Very Nice Website'),
+  w4('w5-slide-11', 'Final Week 5 Scoring'),
+  w4('w5-slide-12', 'Closest Game Margin'),
+  w4('w5-slide-13', 'Standings After Week 5'),
+  w4('w5-slide-14', 'AI Hady Audit'),
+  w4('w5-slide-15', 'Week 5 Awards'),
+  w4('w5-slide-16', 'Week 6: No Undefeateds'),
+]
+
+const RESULTS_W5: PublishedSlide[] = [
+  result('results-w5-m1', 'Crooke 159.3 – Steven 120.8'),
+  result('results-w5-m2', 'Danny 176.8 – Manny 122.2'),
+  result('results-w5-m3', 'Eric 145.7 – Narking 95.9'),
+  result('results-w5-m4', 'Hady 212.3 – Frankie 101.1'),
+  result('results-w5-m5', 'Mauricio 204.2 – Jamil 143.5'),
+  result('results-w5-m6', 'Matt 176.9 – Kayser 150.3'),
 ]

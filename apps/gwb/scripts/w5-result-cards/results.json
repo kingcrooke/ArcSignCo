@@ -1,0 +1,242 @@
+[
+  {
+    "id": "results-w5-m1",
+    "matchupNum": 1,
+    "winner": "Crooke",
+    "loser": "Steven",
+    "winnerPoints": 159.29,
+    "loserPoints": 120.77,
+    "winnerRecord": "2-3",
+    "loserRecord": "4-1",
+    "winnerTopScorer": {
+      "id": "9487",
+      "name": "Parker Washington",
+      "team": "JAX",
+      "number": 11,
+      "position": "WR",
+      "points": 35.4
+    },
+    "loserStartingQb": {
+      "id": "4943",
+      "name": "Sam Darnold",
+      "team": "SEA",
+      "number": 14,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Lamar Jackson",
+      "team": "BAL",
+      "number": 8
+    },
+    "loserJersey": {
+      "name": "Sam Darnold",
+      "team": "SEA",
+      "number": 14
+    },
+    "headline": "FINAL: CROOKE TAKES IT",
+    "bowlTitle": "THE FINAL BOSS",
+    "tagline": "Darnold vs Stroud • Steven 714 PF through Week 4",
+    "winnerPointsDisplay": "159.3",
+    "loserPointsDisplay": "120.8"
+  },
+  {
+    "id": "results-w5-m2",
+    "matchupNum": 2,
+    "winner": "Danny",
+    "loser": "Manny",
+    "winnerPoints": 176.78,
+    "loserPoints": 122.18,
+    "winnerRecord": "2-3",
+    "loserRecord": "2-3",
+    "winnerTopScorer": {
+      "id": "8167",
+      "name": "Christian Watson",
+      "team": "GB",
+      "number": 9,
+      "position": "WR",
+      "points": 40.3
+    },
+    "loserStartingQb": {
+      "id": "1166",
+      "name": "Kirk Cousins",
+      "team": "LV",
+      "number": 8,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Christian Watson",
+      "team": "GB",
+      "number": 9
+    },
+    "loserJersey": {
+      "name": "Kirk Cousins",
+      "team": "LV",
+      "number": 8
+    },
+    "headline": "FINAL: DANNY TAKES IT",
+    "bowlTitle": "REDEMPTION ARC",
+    "tagline": "Lawrence vs Cousins • Manny riding a 2-game win streak",
+    "winnerPointsDisplay": "176.8",
+    "loserPointsDisplay": "122.2"
+  },
+  {
+    "id": "results-w5-m3",
+    "matchupNum": 3,
+    "winner": "Eric",
+    "loser": "Narking",
+    "winnerPoints": 145.67,
+    "loserPoints": 95.86,
+    "winnerRecord": "3-2",
+    "loserRecord": "1-4",
+    "winnerTopScorer": {
+      "id": "3294",
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "number": 4,
+      "position": "QB",
+      "points": 25.17
+    },
+    "loserStartingQb": {
+      "id": "8183",
+      "name": "Brock Purdy",
+      "team": "SF",
+      "number": 13,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "number": 4
+    },
+    "loserJersey": {
+      "name": "Brock Purdy",
+      "team": "SF",
+      "number": 13
+    },
+    "headline": "FINAL: ERIC TAKES IT",
+    "bowlTitle": "INJURY REPORT BOWL",
+    "tagline": "Purdy vs Prescott • Narking's RB room is a war zone",
+    "winnerPointsDisplay": "145.7",
+    "loserPointsDisplay": "95.9"
+  },
+  {
+    "id": "results-w5-m4",
+    "matchupNum": 4,
+    "winner": "Hady",
+    "loser": "Frankie",
+    "winnerPoints": 212.33,
+    "loserPoints": 101.06,
+    "winnerRecord": "4-1",
+    "loserRecord": "1-4",
+    "winnerTopScorer": {
+      "id": "11564",
+      "name": "Drake Maye",
+      "team": "NE",
+      "number": 10,
+      "position": "QB",
+      "points": 58.56
+    },
+    "loserStartingQb": {
+      "id": "3163",
+      "name": "Jared Goff",
+      "team": "DET",
+      "number": 16,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Drake Maye",
+      "team": "NE",
+      "number": 10
+    },
+    "loserJersey": {
+      "name": "Jared Goff",
+      "team": "DET",
+      "number": 16
+    },
+    "headline": "FINAL: Hady TAKES IT",
+    "bowlTitle": "COOKOUT CHECK",
+    "tagline": "Maye vs Goff • Hady hunting another W",
+    "winnerPointsDisplay": "212.3",
+    "loserPointsDisplay": "101.1"
+  },
+  {
+    "id": "results-w5-m5",
+    "matchupNum": 5,
+    "winner": "Mauricio",
+    "loser": "Jamil",
+    "winnerPoints": 204.16,
+    "loserPoints": 143.54,
+    "winnerRecord": "3-2",
+    "loserRecord": "3-2",
+    "winnerTopScorer": {
+      "id": "8228",
+      "name": "Jaylen Warren",
+      "team": "PIT",
+      "number": 30,
+      "position": "RB",
+      "points": 44.8
+    },
+    "loserStartingQb": {
+      "id": "6904",
+      "name": "Jalen Hurts",
+      "team": "PHI",
+      "number": 1,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Jaylen Warren",
+      "team": "PIT",
+      "number": 30
+    },
+    "loserJersey": {
+      "name": "Jalen Hurts",
+      "team": "PHI",
+      "number": 1
+    },
+    "headline": "FINAL: MAURICIO TAKES IT",
+    "bowlTitle": "PLAYOFF PREVIEW",
+    "tagline": "Brissett vs Hurts • Both sitting on 2+ wins",
+    "winnerPointsDisplay": "204.2",
+    "loserPointsDisplay": "143.5"
+  },
+  {
+    "id": "results-w5-m6",
+    "matchupNum": 6,
+    "winner": "Matt",
+    "loser": "Kayser",
+    "winnerPoints": 176.87,
+    "loserPoints": 150.26,
+    "winnerRecord": "2-3",
+    "loserRecord": "3-2",
+    "winnerTopScorer": {
+      "id": "9221",
+      "name": "Jahmyr Gibbs",
+      "team": "DET",
+      "number": 0,
+      "position": "RB",
+      "points": 39.7
+    },
+    "loserStartingQb": {
+      "id": "421",
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9,
+      "position": "QB"
+    },
+    "winnerJersey": {
+      "name": "Jahmyr Gibbs",
+      "team": "DET",
+      "number": 0
+    },
+    "loserJersey": {
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "number": 9
+    },
+    "headline": "FINAL: MATT TAKES IT",
+    "bowlTitle": "DESPERATION BOWL",
+    "tagline": "Stafford vs Allen • Matt needs a lifeline",
+    "winnerPointsDisplay": "176.9",
+    "loserPointsDisplay": "150.3"
+  }
+]
