@@ -1,0 +1,62 @@
+[
+  {
+    "file": "vs-w6-m1-left.jpg",
+    "w5_style_ref": "results-w5-m6-winner.jpg",
+    "prompt": "Recreate reference A exactly: same crossed-arms pose, purple Baltimore Ravens jersey, gothic red lightning background, horned stone buffalo. Change ONLY fur to light weathered granite stone (PR94 Week5 result tone in reference B) with red crack glow. ONE integrated jersey number 8 in bold white with black trim printed in fabric mesh, crisp at thumbnail, no overlay sticker, no duplicate numbers. Neutral confident preview stance."
+  },
+  {
+    "file": "vs-w6-m1-right.jpg",
+    "w5_style_ref": "results-w5-m1-winner.jpg",
+    "prompt": "Match reference A pose (pointing at opponent, hand on hip), Kansas City Chiefs red jersey, purple storm background. Light granite cracked stone fur like reference B, red eyes. ONE number 15 in white with gold outline woven into jersey fabric, highly readable, single number only. Neutral menacing preview, not celebrating."
+  },
+  {
+    "file": "vs-w6-m2-left.jpg",
+    "w5_style_ref": "results-w5-m2-winner.jpg",
+    "prompt": "Reference A: double bicep flex, Green Bay Packers green jersey, castle lightning background. Fur = light stone gray granite with cracks (reference B tone). Gold/white number 10 printed once in fabric, bold. No stickers or blur patches."
+  },
+  {
+    "file": "vs-w6-m2-right.jpg",
+    "w5_style_ref": "results-w5-m1-loser.jpg",
+    "prompt": "Reference A: intense stare arms at sides, Seattle Seahawks navy jersey, lava lightning. Light granite stone fur per reference B. White number 14 with team trim integrated in jersey, single crisp glyph."
+  },
+  {
+    "file": "vs-w6-m3-left.jpg",
+    "w5_style_ref": "results-w5-m3-winner.jpg",
+    "prompt": "Reference A: football tucked, forward lean, Jacksonville teal jersey, ember lightning. Light weathered stone fur (reference B). White number 16 printed in fabric once, readable."
+  },
+  {
+    "file": "vs-w6-m3-right.jpg",
+    "w5_style_ref": "results-w5-m3-loser.jpg",
+    "prompt": "Reference A: narrow-eyed stare-down, Pittsburgh black jersey, storm spires. Light granite fur like reference B. Gold number 8 in fabric, single number, high contrast."
+  },
+  {
+    "file": "vs-w6-m4-left.jpg",
+    "w5_style_ref": "results-w5-m4-winner.jpg",
+    "prompt": "Reference A: roaring hype mouth open, San Francisco red/gold jersey, red lava lightning. Light stone-gray cracked fur (reference B). White number 13 on jersey fabric once."
+  },
+  {
+    "file": "vs-w6-m4-right.jpg",
+    "w5_style_ref": "results-w5-m4-loser.jpg",
+    "prompt": "Reference A: football tucked ready to run, New York Giants blue jersey, green lightning storm. Light granite fur per reference B. White number 19 integrated in jersey, crisp."
+  },
+  {
+    "file": "vs-w6-m5-left.jpg",
+    "w5_style_ref": "results-w5-m5-loser.jpg",
+    "prompt": "Reference A: arms crossed stone-cold stare, New England navy jersey, lava gothic lightning. Light weathered granite fur (reference B). White/red number 10 printed once in fabric."
+  },
+  {
+    "file": "vs-w6-m5-right.jpg",
+    "w5_style_ref": "results-w5-m5-winner.jpg",
+    "prompt": "Reference A: hype roar football raised (no fist pump), Buffalo Bills blue jersey, dark lightning. Light granite stone fur like reference B. White number 17 with red outline in jersey mesh, single number."
+  },
+  {
+    "file": "vs-w6-m6-left.jpg",
+    "w5_style_ref": "results-w5-m6-loser.jpg",
+    "prompt": "Reference A: pointing forward commanding, Carolina black jersey, lava lightning. Light stone-gray fur per reference B. Light blue/white number 9 in fabric once."
+  },
+  {
+    "file": "vs-w6-m6-right.jpg",
+    "w5_style_ref": "results-w5-m6-winner.jpg",
+    "prompt": "Reference A: confident flex one arm raised, LA Rams blue jersey gold trim, lava gothic. Light granite cracked fur (reference B). White number 9 gold outline printed in jersey, one number only."
+  }
+]
