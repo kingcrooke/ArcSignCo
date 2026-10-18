@@ -1,172 +1,147 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { COLORS, MARGIN, fileUrl, wrapHtml } from '../../remake-held/shared-css.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const FONTS = path.join(__dirname, '../../fonts-local')
+const CARD_ASSETS = path.join(__dirname, '..', 'assets')
+const W5_ASSETS = path.join(__dirname, '../../w5-result-cards/assets')
 
-const baseCss = `
-@font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
-@font-face { font-family: 'Bebas'; src: url('file://${FONTS}/BebasNeue-Regular.ttf'); }
-@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-SemiBold.ttf'); font-weight: 600; }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: #080c10; }
-.slide {
-  width: 1080px; height: 1350px;
-  background: radial-gradient(ellipse 120% 80% at 50% 40%, #1a2230 0%, #0a0e14 55%, #06080c 100%);
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  font-family: 'Inter', sans-serif;
+const cssBase = `
+.slide { background: ${COLORS.bg}; }
+.hdr { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 48px; z-index: 3; }
+.title-split { margin-top: 20px; font-size: 62px; line-height: 1.1; }
+.title-split .gold { color: ${COLORS.gold}; }
+.body-block {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; z-index: 3;
+  font-size: 26px; line-height: 1.45; color: #c8d4e0; font-weight: 600;
 }
-.kicker {
-  font-family: 'Bebas', sans-serif;
-  font-size: 32px;
-  letter-spacing: 0.12em;
-  color: #d4af37;
+.body-block p { margin-bottom: 10px; }
+.footnote {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; bottom: 72px; z-index: 3;
+  text-align: center; font-size: 22px; color: ${COLORS.muted}; letter-spacing: 0.06em;
 }
-.kicker-line {
-  height: 2px; width: 100%; margin: 8px 0 18px;
-  background: linear-gradient(90deg, #d4af37 0%, rgba(212,175,55,0.15) 100%);
+.bg-hero { position: absolute; inset: 0; z-index: 1; }
+.bg-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 18%; transform: scale(1.08); }
+.bg-scrim { position: absolute; inset: 0; z-index: 2; background: linear-gradient(180deg, rgba(10,15,20,0.92) 0%, rgba(10,15,20,0.55) 42%, rgba(10,15,20,0.9) 100%); }
+.dual-cards { position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 320px; height: 520px; z-index: 3; display: flex; gap: 24px; justify-content: center; }
+.dual-cards .card {
+  width: 420px; height: 100%; border-radius: 16px; overflow: hidden; border: 3px solid ${COLORS.gold};
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
 }
-.hero {
-  font-family: 'Anton', sans-serif;
-  font-size: 68px;
-  line-height: 1.05;
-  margin-top: 8px;
+.dual-cards .card.dim { border-color: #4a5058; }
+.dual-cards img { width: 100%; height: 100%; object-fit: cover; object-position: center 14%; transform: scale(1.05); }
+.info-stack {
+  position: absolute; left: 96px; right: 96px; top: 868px; z-index: 3;
+  background: rgba(18, 24, 32, 0.96); border-left: 4px solid ${COLORS.gold}; padding: 22px 28px;
 }
-.hero .gold { color: #d4af37; }
-.hero .dim { font-size: 42px; color: #c8d0d8; font-weight: 400; }
-.body {
-  margin-top: 28px;
-  font-size: 28px;
-  line-height: 1.45;
-  color: #e8eef4;
-  font-weight: 600;
+.info-stack p { font-size: 24px; color: #b8c4d0; line-height: 1.42; margin-top: 8px; font-weight: 600; }
+.stat-grid {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 300px; z-index: 3;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
 }
-.body p { margin-bottom: 14px; }
-.score-stack {
-  margin-top: 36px;
-  background: rgba(12, 16, 22, 0.92);
-  border-radius: 4px;
-  overflow: hidden;
-  max-width: 920px;
+.stat-box {
+  background: rgba(18, 24, 32, 0.96); padding: 22px 24px; border-top: 3px solid ${COLORS.gold};
 }
-.score-row {
-  display: grid;
-  grid-template-columns: 6px 1fr auto;
-  gap: 0 16px;
-  align-items: center;
-  padding: 18px 22px 18px 0;
-  font-size: 26px;
-  font-weight: 600;
+.stat-box .label { font-size: 24px; color: ${COLORS.muted}; letter-spacing: 0.08em; }
+.stat-box .value { margin-top: 10px; font-size: 36px; color: ${COLORS.white}; line-height: 1.2; }
+.stat-box .sub { margin-top: 8px; font-size: 22px; color: ${COLORS.gold}; }
+.cover-text { position: absolute; left: ${MARGIN}px; top: 48px; width: 620px; z-index: 3; padding-right: 20px; }
+.cover-hero { position: absolute; right: 0; top: 0; width: 420px; height: 1350px; z-index: 2; overflow: hidden; }
+.cover-hero img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; transform: scale(1.1); }
+.cover-hero .veil { position: absolute; inset: 0; background: linear-gradient(90deg, ${COLORS.bg} 0%, transparent 35%); }
+.margin-hero {
+  position: absolute; left: ${MARGIN}px; right: ${MARGIN}px; top: 520px; z-index: 3;
+  text-align: center; font-size: 96px; color: ${COLORS.gold}; line-height: 1;
 }
-.score-row.win { border-left: 6px solid #d4af37; }
-.score-row.lose { border-left: 6px solid #c45c5c; color: #d0d8e0; }
-.score-row .team { color: #fff; }
-.score-row .tag { color: #d4af37; font-size: 22px; margin-left: 8px; }
-.score-row.lose .tag { color: #e8a0a0; }
-.score-row .pts { font-family: 'Anton', sans-serif; font-size: 36px; color: #d4af37; }
-.score-row.lose .pts { color: #fff; }
-.caption-line {
-  margin-top: 28px;
-  font-size: 28px;
-  color: #e8eef4;
-  font-weight: 600;
-}
-.stat-center {
-  text-align: center;
-  padding: 48px 56px 0;
-}
-.stat-center .label {
-  font-family: 'Bebas', sans-serif;
-  font-size: 36px;
-  letter-spacing: 0.14em;
-  color: #8a9099;
-  margin-top: 12px;
-}
-.stat-center .line {
-  font-family: 'Anton', sans-serif;
-  font-size: 52px;
-  margin-top: 28px;
-}
-.stat-center .margin {
-  font-family: 'Anton', sans-serif;
-  font-size: 96px;
-  color: #d4af37;
-  margin-top: 24px;
-  line-height: 1;
-}
-.footer {
-  position: absolute; left: 56px; right: 56px; bottom: 42px;
-  display: flex; justify-content: space-between;
-  font-family: 'Bebas', sans-serif;
-  font-size: 24px;
-  color: #4a5058;
-}
-.footer .r { color: #e8e8e8; font-size: 28px; }
-.pad { padding: 48px 56px 0; }
 `
 
-function wrap(body, extraCss = '') {
-  return `<!DOCTYPE html><html><head><meta charset="utf-8"/><style>${baseCss}${extraCss}</style></head><body>${body}</body></html>`
+function footer(pageNum) {
+  return `<div class="footer inter"><span>gwb_fantasy_football</span><span class="bebas">${pageNum}/16</span></div>`
+}
+
+function titleBlock(title, titleGold) {
+  const gold = titleGold
+    ? `<br/><span class="gold anton">${titleGold}</span>`
+    : ''
+  return `<h1 class="title-split anton">${title}${gold}</h1>`
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;')
 }
 
 export function w1Slide09() {
-  return wrap(`
-<div class="slide">
-  <div class="pad">
-    <div class="kicker">GWB | WEEK 1 | FINAL REPORT</div>
+  const left = fileUrl(path.join(CARD_ASSETS, 'results-w1-m3-winner.jpg'))
+  const right = fileUrl(path.join(CARD_ASSETS, 'results-w1-m3-loser.jpg'))
+  return wrapHtml(
+    `<div class="slide">
+  <div class="hdr">
+    <div class="kicker bebas">${esc('GWB · WEEK 1 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>
-    <h1 class="hero"><span class="gold">MATT 175.08</span> <span class="dim">def. Narking 158.17</span></h1>
-    <div class="score-stack">
-      <div class="score-row win">
-        <span></span>
-        <div><span class="team">Matt</span><span class="tag">"Buried by Toe Burrow"</span></div>
-        <span class="pts">175.08</span>
-      </div>
-      <div class="score-row lose">
-        <span></span>
-        <div><span class="team">Narking</span><span class="tag">"Put em down Jeanty"</span></div>
-        <span class="pts">158.17</span>
-      </div>
-    </div>
-    <p class="caption-line">158 wasted. fourth-highest score, still 0-1.</p>
+    ${titleBlock('MATT 175.08', 'DEF. NARKING 158.17')}
   </div>
-  <div class="footer"><span>gwb_fantasy_football</span><span class="r">9/16</span></div>
-</div>`)
+  <div class="dual-cards">
+    <div class="card"><img src="${left}" alt=""/></div>
+    <div class="card dim"><img src="${right}" alt=""/></div>
+  </div>
+  <div class="info-stack inter-semibold">
+    <p>Matt — "Buried by Toe Burrow" — 175.08</p>
+    <p>Narking — "Put em down Jeanty" — 158.17</p>
+    <p>Fourth-highest score, still 0-1.</p>
+  </div>
+  ${footer('9/16')}
+</div>`,
+    cssBase,
+  )
 }
 
 export function w2Slide06() {
-  return wrap(`
-<div class="slide">
-  <div class="pad">
-    <div class="kicker">GWB | WEEK 2 | FINAL REPORT</div>
+  const hero = fileUrl(path.join(W5_ASSETS, 'results-w5-m2-winner.jpg'))
+  const body = [
+    'Eric is 1-1.',
+    "The man who drafted like a different sport is undefeated. Amon-Ra's 37.2 Thursday did the heavy lifting.",
+    'Frankie: 0-2.',
+    'Joe Money has become Joe Problems.',
+  ]
+    .map((line) => `<p>${esc(line)}</p>`)
+    .join('')
+  return wrapHtml(
+    `<div class="slide">
+  <div class="cover-hero"><img src="${hero}" alt=""/><div class="veil"></div></div>
+  <div class="cover-text">
+    <div class="kicker bebas">${esc('GWB · WEEK 2 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>
-    <h1 class="hero">2-0 AND <span class="gold">UNEXPLAINED</span></h1>
-    <div class="body">
-      <p>Eric is 1-1.</p>
-      <p>The man who drafted like a different sport is undefeated. Amon-Ra's 37.2 Thursday did the heavy lifting.</p>
-      <p>Frankie: 0-2.</p>
-      <p>Joe Money has become Joe Problems.</p>
-    </div>
+    ${titleBlock('2-0 AND', 'UNEXPLAINED')}
   </div>
-  <div class="footer"><span>gwb_fantasy_football</span><span class="r">6/16</span></div>
-</div>`)
+  <div class="body-block inter-semibold" style="top:280px;width:580px">${body}</div>
+  ${footer('6/16')}
+</div>`,
+    cssBase,
+  )
 }
 
 export function w4Slide12() {
-  return wrap(`
-<div class="slide">
-  <div class="stat-center">
-    <div class="kicker">GWB | WEEK 4 | FINAL REPORT</div>
+  const hero = fileUrl(path.join(CARD_ASSETS, 'results-w3-m2-winner.jpg'))
+  return wrapHtml(
+    `<div class="slide">
+  <div class="bg-hero"><img src="${hero}" alt=""/></div>
+  <div class="bg-scrim"></div>
+  <div class="hdr">
+    <div class="kicker bebas">${esc('GWB · WEEK 4 · FINAL REPORT')}</div>
     <div class="kicker-line"></div>
-    <p class="label">STAT OF THE WEEK</p>
-    <p class="line">HADY 141.65</p>
-    <p class="line">MANNY 134.88</p>
-    <p class="margin">6.77</p>
+    ${titleBlock('STAT OF THE', 'WEEK')}
   </div>
-  <div class="footer"><span>gwb_fantasy_football</span><span class="r">12/16</span></div>
-</div>`)
+  <div class="stat-grid">
+    <div class="stat-box inter-semibold"><div class="label bebas">HADY</div><div class="value bebas">141.65</div><div class="sub">winner pts</div></div>
+    <div class="stat-box inter-semibold"><div class="label bebas">MANNY</div><div class="value bebas">134.88</div><div class="sub">loser pts</div></div>
+  </div>
+  <div class="margin-hero anton">6.77</div>
+  <div class="body-block inter-semibold" style="top:640px">Closest game of Week 4 — HADY over MANNY.</div>
+  <div class="footnote bebas">HADY OVER MANNY</div>
+  ${footer('12/16')}
+</div>`,
+    cssBase,
+  )
 }
 
 export const REPORT_SLIDES = {

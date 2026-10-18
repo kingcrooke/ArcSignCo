@@ -25,6 +25,6 @@
 | `results-w2-m2` caption | Live caption kept |
 | Results score lines, pills, bars | Say **MANNY** where live does; **MNNY** only in live tagline positions |
 | W5 odds bars | **59/41** (`vs-w5-m2`), **54/46** (`vs-w5-m4`) as on live |
-| `results-w1-m2`, `results-w3-m2` | Full card left as live (out of 14-card scope) |
+| `results-w1-m2`, `results-w3-m2` | Full W5-template rebuild; panels regenerated (PR #96 tone pipeline) |
 
 No new “LIKELY VS JACKSON” / matchup.json taglines on results cards.

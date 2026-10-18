@@ -1,8 +1,20 @@
+# Round 8b — VS chrome, report deck style, PR #96 panels
+
 # Round 8 — W5 template rebuild (no compositing)
 
 **Pipeline:** `rebuild/render-all.mjs` → `optimize-published-slides.mjs --only=…` → `sync-published-slides.mjs` (MD5 match `public/slides` ↔ `gwb-fe006a16/slides`).
 
 **Contact sheets:** `/opt/cursor/artifacts/gwb-week-{1..5}-old-vs-new-*.png`
+
+## Round 8b deltas
+
+| Area | Change |
+|------|--------|
+| VS template | `w5-matchup-cards/template.mjs` matches live `vs-w5-m1` chrome (gold top bar, gold left / grey right frame, pink right pill, 132px VS badge, 32px odds bar). `verify-vs-chrome.mjs` masked mean diff ≈17 vs live. |
+| Results caption | `.tagline` under score bar (W5 `results-w5-m1` style, uppercase). |
+| Reports | W5 report deck layout (`remake-held/shared-css`): dual cards + info stack (w1), cover + hero (w2), stat grid + 6.77 hero fill (w4). |
+| Art | All 48 `panel-fixes` panels regenerated via PR #96 tone ref + GenerateImage (`panel-prompts-pr96.json` + remainder). Tone sheet: `gwb-panel-tone-vs-w5m1.png`. |
+| Text | `results-w1-m6` midTitle `MNNY SURVIVES BY 4`; w1-slide `Fourth-highest`. |
 
 ## Global
 

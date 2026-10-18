@@ -1,3 +1,6 @@
+/**
+ * W1–W4 results: same chrome as live results-w5-m1 (w5-result-cards/template.mjs).
+ */
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -20,7 +23,6 @@ export function resultHtml(r, winnerImg, loserImg) {
 <style>
 @font-face { font-family: 'Anton'; src: url('file://${FONTS}/Anton-Regular.ttf'); }
 @font-face { font-family: 'Bebas'; src: url('file://${FONTS}/BebasNeue-Regular.ttf'); }
-@font-face { font-family: 'Inter'; src: url('file://${FONTS}/Inter-SemiBold.ttf'); font-weight: 600; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #0a0c10; }
 .slide {
@@ -62,19 +64,15 @@ body { background: #0a0c10; }
   border-radius: 18px; border: 3px solid #4a5058;
   overflow: hidden; background: #111; z-index: 1;
 }
-.art {
-  position: absolute; inset: 0;
-  overflow: hidden; border-radius: 14px;
-}
-.art img {
-  width: 100%; height: 100%; object-fit: cover; object-position: center 10%;
-  display: block; transform: scale(1.06);
+.panel img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center 12%;
+  display: block; transform: scale(1.04);
 }
 .pill {
   position: absolute; top: 16px; left: 16px; z-index: 3;
   font-family: 'Bebas', sans-serif; font-size: 26px; letter-spacing: 0.06em;
   padding: 8px 16px; border-radius: 999px;
-  background: rgba(0,0,0,0.82); border: 2px solid #d4af37; color: #d4af37;
+  background: rgba(0,0,0,0.75); border: 2px solid #d4af37; color: #d4af37;
 }
 .pill.dim { border-color: #6a7078; color: #e8e8e8; }
 .badge {
@@ -86,14 +84,14 @@ body { background: #0a0c10; }
 .badge.lose { background: #3a4450; color: #fff; }
 .medal {
   position: absolute; left: 50%; top: 300px; transform: translate(-50%, 0);
-  width: 96px; height: 96px; border-radius: 50%; z-index: 5;
+  width: 96px; height: 96px; border-radius: 50%; z-index: 4;
   background: radial-gradient(circle at 35% 30%, #f0d060, #c9a227 55%, #8a6d12);
   border: 5px solid #1a1408;
   display: flex; align-items: center; justify-content: center;
   font-size: 44px; color: #0a0806;
 }
-.mid { text-align: center; padding: 20px 56px 0; }
-.bowl { font-size: 44px; color: #d4af37; letter-spacing: 0.06em; margin-bottom: 10px; }
+.mid { text-align: center; padding: 24px 56px 0; }
+.bowl { font-size: 48px; color: #d4af37; letter-spacing: 0.06em; margin-bottom: 12px; }
 .scores {
   display: flex; justify-content: space-between;
   font-family: 'Bebas', sans-serif; font-size: 32px; margin-bottom: 10px;
@@ -102,13 +100,9 @@ body { background: #0a0c10; }
 .bar { height: 14px; border-radius: 8px; overflow: hidden; background: #2a2f38; display: flex; margin: 0 56px; }
 .bar-fill { background: linear-gradient(90deg, #e8c547, #b8922a); height: 100%; }
 .tagline {
-  margin-top: 12px; font-family: 'Bebas', sans-serif; font-size: 24px;
+  margin-top: 14px; font-family: 'Bebas', sans-serif; font-size: 24px;
   color: #8a9099; letter-spacing: 0.04em;
-}
-.caption {
-  position: absolute; left: 56px; right: 56px; bottom: 88px;
-  text-align: center; font-family: 'Inter', sans-serif; font-size: 22px;
-  color: #8a9099; line-height: 1.35;
+  text-transform: uppercase;
 }
 .footer {
   position: absolute; left: 56px; right: 56px; bottom: 40px;
@@ -128,15 +122,15 @@ body { background: #0a0c10; }
     <div class="scoreline">${scoreLine}</div>
   </div>
   <div class="cards">
-    <div class="winner">
-      <div class="art"><img src="file://${winnerImg}" alt=""/></div>
+    <div class="winner panel">
       <div class="pill">${wName} ${r.winnerRecord}</div>
+      <img src="file://${winnerImg}" alt=""/>
       <div class="badge win">WINNER</div>
     </div>
     <div class="medal">W</div>
-    <div class="loser">
-      <div class="art"><img src="file://${loserImg}" alt=""/></div>
+    <div class="loser panel">
       <div class="pill dim">${lName} ${r.loserRecord}</div>
+      <img src="file://${loserImg}" alt=""/>
       <div class="badge lose">LOSER</div>
     </div>
   </div>
@@ -148,7 +142,7 @@ body { background: #0a0c10; }
     </div>
   </div>
   <div class="bar"><div class="bar-fill" style="width:${barWin}%"></div></div>
-  ${caption ? `<div class="caption">${caption}</div>` : ''}
+  ${caption ? `<div class="tagline">${caption}</div>` : ''}
   <div class="footer">
     <span class="footer-left">gwb_fantasy_football</span>
     <span class="footer-right">${footerRight}</span>
