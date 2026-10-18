@@ -1,0 +1,953 @@
+{
+  "leagueId": "1389375326257184768",
+  "generatedAt": "2026-10-18T00:33:37.763Z",
+  "rosters": [
+    {
+      "rosterId": 1,
+      "name": "Danny",
+      "ownerId": "401754707162333184"
+    },
+    {
+      "rosterId": 2,
+      "name": "Mauricio",
+      "ownerId": "429321092230815744"
+    },
+    {
+      "rosterId": 3,
+      "name": "Narking",
+      "ownerId": "427945970563559424"
+    },
+    {
+      "rosterId": 4,
+      "name": "Kayser",
+      "ownerId": "475769424679268352"
+    },
+    {
+      "rosterId": 5,
+      "name": "Eric",
+      "ownerId": "420639669546385408"
+    },
+    {
+      "rosterId": 6,
+      "name": "Hady",
+      "ownerId": "429316063394541568"
+    },
+    {
+      "rosterId": 7,
+      "name": "Steven",
+      "ownerId": "475825464573685760"
+    },
+    {
+      "rosterId": 8,
+      "name": "Crooke",
+      "ownerId": "427930731889565696"
+    },
+    {
+      "rosterId": 9,
+      "name": "Manny",
+      "ownerId": "475828957426479104"
+    },
+    {
+      "rosterId": 10,
+      "name": "Jamil",
+      "ownerId": "427903132685574144"
+    },
+    {
+      "rosterId": 11,
+      "name": "Frankie",
+      "ownerId": "475847480039174144"
+    },
+    {
+      "rosterId": 12,
+      "name": "Matt",
+      "ownerId": "427906596501213184"
+    }
+  ],
+  "results": {
+    "w1": [
+      {
+        "id": "results-w1-m1",
+        "week": 1,
+        "matchup": "W1M1",
+        "winner": {
+          "rosterId": 2,
+          "name": "Mauricio"
+        },
+        "loser": {
+          "rosterId": 8,
+          "name": "Crooke"
+        },
+        "winnerJersey": {
+          "playerId": "8131",
+          "name": "Isaiah Likely",
+          "number": 9,
+          "team": "NYG",
+          "points": 27.8
+        },
+        "loserJersey": {
+          "playerId": "4881",
+          "name": "Lamar Jackson",
+          "number": 8,
+          "team": "BAL"
+        },
+        "scores": {
+          "winner": 137.1,
+          "loser": 124.5
+        }
+      },
+      {
+        "id": "results-w1-m2",
+        "week": 1,
+        "matchup": "W1M2",
+        "winner": {
+          "rosterId": 4,
+          "name": "Kayser"
+        },
+        "loser": {
+          "rosterId": 6,
+          "name": "Hady"
+        },
+        "winnerJersey": {
+          "playerId": "3198",
+          "name": "Derrick Henry",
+          "number": 22,
+          "team": "BAL",
+          "points": 37.3
+        },
+        "loserJersey": {
+          "playerId": "11564",
+          "name": "Drake Maye",
+          "number": 10,
+          "team": "NE"
+        },
+        "scores": {
+          "winner": 138.7,
+          "loser": 119.4
+        }
+      },
+      {
+        "id": "results-w1-m3",
+        "week": 1,
+        "matchup": "W1M3",
+        "winner": {
+          "rosterId": 12,
+          "name": "Matt"
+        },
+        "loser": {
+          "rosterId": 3,
+          "name": "Narking"
+        },
+        "winnerJersey": {
+          "playerId": "4984",
+          "name": "Josh Allen",
+          "number": 17,
+          "team": "BUF",
+          "points": 51.68
+        },
+        "loserJersey": {
+          "playerId": "12545",
+          "name": "Tyler Shough",
+          "number": 6,
+          "team": "NO"
+        },
+        "scores": {
+          "winner": 175.1,
+          "loser": 158.2
+        }
+      },
+      {
+        "id": "results-w1-m4",
+        "week": 1,
+        "matchup": "W1M4",
+        "winner": {
+          "rosterId": 10,
+          "name": "Jamil"
+        },
+        "loser": {
+          "rosterId": 1,
+          "name": "Danny"
+        },
+        "winnerJersey": {
+          "playerId": "8151",
+          "name": "Kenneth Walker",
+          "number": 9,
+          "team": "KC",
+          "points": 39.1
+        },
+        "loserJersey": {
+          "playerId": "11563",
+          "name": "Bo Nix",
+          "number": 10,
+          "team": "DEN"
+        },
+        "scores": {
+          "winner": 171.7,
+          "loser": 111.9
+        }
+      },
+      {
+        "id": "results-w1-m5",
+        "week": 1,
+        "matchup": "W1M5",
+        "winner": {
+          "rosterId": 7,
+          "name": "Steven"
+        },
+        "loser": {
+          "rosterId": 11,
+          "name": "Frankie"
+        },
+        "winnerJersey": {
+          "playerId": "6790",
+          "name": "D'Andre Swift",
+          "number": 4,
+          "team": "CHI",
+          "points": 34.4
+        },
+        "loserJersey": {
+          "playerId": "6770",
+          "name": "Joe Burrow",
+          "number": 9,
+          "team": "CIN"
+        },
+        "scores": {
+          "winner": 199.4,
+          "loser": 135.4
+        }
+      },
+      {
+        "id": "results-w1-m6",
+        "week": 1,
+        "matchup": "W1M6",
+        "winner": {
+          "rosterId": 9,
+          "name": "Manny"
+        },
+        "loser": {
+          "rosterId": 5,
+          "name": "Eric"
+        },
+        "winnerJersey": {
+          "playerId": "11560",
+          "name": "Caleb Williams",
+          "number": 18,
+          "team": "CHI",
+          "points": 46.52
+        },
+        "loserJersey": {
+          "playerId": "3294",
+          "name": "Dak Prescott",
+          "number": 4,
+          "team": "DAL"
+        },
+        "scores": {
+          "winner": 133.2,
+          "loser": 129.1
+        }
+      }
+    ],
+    "w2": [
+      {
+        "id": "results-w2-m1",
+        "week": 2,
+        "matchup": "W2M1",
+        "winner": {
+          "rosterId": 6,
+          "name": "Hady"
+        },
+        "loser": {
+          "rosterId": 8,
+          "name": "Crooke"
+        },
+        "winnerJersey": {
+          "playerId": "9488",
+          "name": "Jaxon Smith-Njigba",
+          "number": 11,
+          "team": "SEA",
+          "points": 47.5
+        },
+        "loserJersey": {
+          "playerId": "4881",
+          "name": "Lamar Jackson",
+          "number": 8,
+          "team": "BAL"
+        },
+        "scores": {
+          "winner": 151,
+          "loser": 123.7
+        }
+      },
+      {
+        "id": "results-w2-m2",
+        "week": 2,
+        "matchup": "W2M2",
+        "winner": {
+          "rosterId": 3,
+          "name": "Narking"
+        },
+        "loser": {
+          "rosterId": 2,
+          "name": "Mauricio"
+        },
+        "winnerJersey": {
+          "playerId": "8183",
+          "name": "Brock Purdy",
+          "number": 13,
+          "team": "SF",
+          "points": 40.23
+        },
+        "loserJersey": {
+          "playerId": "6797",
+          "name": "Justin Herbert",
+          "number": 10,
+          "team": "LAC"
+        },
+        "scores": {
+          "winner": 131.9,
+          "loser": 99.8
+        }
+      },
+      {
+        "id": "results-w2-m3",
+        "week": 2,
+        "matchup": "W2M3",
+        "winner": {
+          "rosterId": 4,
+          "name": "Kayser"
+        },
+        "loser": {
+          "rosterId": 1,
+          "name": "Danny"
+        },
+        "winnerJersey": {
+          "playerId": "421",
+          "name": "Matthew Stafford",
+          "number": 9,
+          "team": "LAR",
+          "points": 44.81
+        },
+        "loserJersey": {
+          "playerId": "7523",
+          "name": "Trevor Lawrence",
+          "number": 16,
+          "team": "JAX"
+        },
+        "scores": {
+          "winner": 170.9,
+          "loser": 143
+        }
+      },
+      {
+        "id": "results-w2-m4",
+        "week": 2,
+        "matchup": "W2M4",
+        "winner": {
+          "rosterId": 7,
+          "name": "Steven"
+        },
+        "loser": {
+          "rosterId": 12,
+          "name": "Matt"
+        },
+        "winnerJersey": {
+          "playerId": "8144",
+          "name": "Chris Olave",
+          "number": 12,
+          "team": "NO",
+          "points": 22.6
+        },
+        "loserJersey": {
+          "playerId": "4984",
+          "name": "Josh Allen",
+          "number": 17,
+          "team": "BUF"
+        },
+        "scores": {
+          "winner": 134.9,
+          "loser": 130.5
+        }
+      },
+      {
+        "id": "results-w2-m5",
+        "week": 2,
+        "matchup": "W2M5",
+        "winner": {
+          "rosterId": 9,
+          "name": "Manny"
+        },
+        "loser": {
+          "rosterId": 10,
+          "name": "Jamil"
+        },
+        "winnerJersey": {
+          "playerId": "4046",
+          "name": "Patrick Mahomes",
+          "number": 15,
+          "team": "KC",
+          "points": 45.29
+        },
+        "loserJersey": {
+          "playerId": "6904",
+          "name": "Jalen Hurts",
+          "number": 1,
+          "team": "PHI"
+        },
+        "scores": {
+          "winner": 184,
+          "loser": 138.9
+        }
+      },
+      {
+        "id": "results-w2-m6",
+        "week": 2,
+        "matchup": "W2M6",
+        "winner": {
+          "rosterId": 5,
+          "name": "Eric"
+        },
+        "loser": {
+          "rosterId": 11,
+          "name": "Frankie"
+        },
+        "winnerJersey": {
+          "playerId": "3294",
+          "name": "Dak Prescott",
+          "number": 4,
+          "team": "DAL",
+          "points": 43.29
+        },
+        "loserJersey": {
+          "playerId": "6770",
+          "name": "Joe Burrow",
+          "number": 9,
+          "team": "CIN"
+        },
+        "scores": {
+          "winner": 142.7,
+          "loser": 105.2
+        }
+      }
+    ],
+    "w3": [
+      {
+        "id": "results-w3-m1",
+        "week": 3,
+        "matchup": "W3M1",
+        "winner": {
+          "rosterId": 8,
+          "name": "Crooke"
+        },
+        "loser": {
+          "rosterId": 3,
+          "name": "Narking"
+        },
+        "winnerJersey": {
+          "playerId": "4881",
+          "name": "Lamar Jackson",
+          "number": 8,
+          "team": "BAL"
+        },
+        "loserJersey": {
+          "playerId": "8183",
+          "name": "Brock Purdy",
+          "number": 13,
+          "team": "SF"
+        },
+        "scores": {
+          "winner": 167.7,
+          "loser": 136.7
+        }
+      },
+      {
+        "id": "results-w3-m2",
+        "week": 3,
+        "matchup": "W3M2",
+        "winner": {
+          "rosterId": 6,
+          "name": "Hady"
+        },
+        "loser": {
+          "rosterId": 1,
+          "name": "Danny"
+        },
+        "winnerJersey": {
+          "playerId": "9488",
+          "name": "Jaxon Smith-Njigba",
+          "number": 11,
+          "team": "SEA",
+          "points": 37.74
+        },
+        "loserJersey": {
+          "playerId": "7523",
+          "name": "Trevor Lawrence",
+          "number": 16,
+          "team": "JAX"
+        },
+        "scores": {
+          "winner": 132,
+          "loser": 121.7
+        }
+      },
+      {
+        "id": "results-w3-m3",
+        "week": 3,
+        "matchup": "W3M3",
+        "winner": {
+          "rosterId": 7,
+          "name": "Steven"
+        },
+        "loser": {
+          "rosterId": 2,
+          "name": "Mauricio"
+        },
+        "winnerJersey": {
+          "playerId": "4943",
+          "name": "Sam Darnold",
+          "number": 14,
+          "team": "SEA",
+          "points": 47.89
+        },
+        "loserJersey": {
+          "playerId": "9228",
+          "name": "Bryce Young",
+          "number": 9,
+          "team": "CAR"
+        },
+        "scores": {
+          "winner": 199.2,
+          "loser": 123.9
+        }
+      },
+      {
+        "id": "results-w3-m4",
+        "week": 3,
+        "matchup": "W3M4",
+        "winner": {
+          "rosterId": 4,
+          "name": "Kayser"
+        },
+        "loser": {
+          "rosterId": 9,
+          "name": "Manny"
+        },
+        "winnerJersey": {
+          "playerId": "421",
+          "name": "Matthew Stafford",
+          "number": 9,
+          "team": "LAR",
+          "points": 36.43
+        },
+        "loserJersey": {
+          "playerId": "4046",
+          "name": "Patrick Mahomes",
+          "number": 15,
+          "team": "KC"
+        },
+        "scores": {
+          "winner": 151.9,
+          "loser": 129.7
+        }
+      },
+      {
+        "id": "results-w3-m5",
+        "week": 3,
+        "matchup": "W3M5",
+        "winner": {
+          "rosterId": 5,
+          "name": "Eric"
+        },
+        "loser": {
+          "rosterId": 12,
+          "name": "Matt"
+        },
+        "winnerJersey": {
+          "playerId": "8112",
+          "name": "Drake London",
+          "number": 5,
+          "team": "ATL",
+          "points": 30.4
+        },
+        "loserJersey": {
+          "playerId": "4984",
+          "name": "Josh Allen",
+          "number": 17,
+          "team": "BUF"
+        },
+        "scores": {
+          "winner": 130.4,
+          "loser": 128.6
+        }
+      },
+      {
+        "id": "results-w3-m6",
+        "week": 3,
+        "matchup": "W3M6",
+        "winner": {
+          "rosterId": 10,
+          "name": "Jamil"
+        },
+        "loser": {
+          "rosterId": 11,
+          "name": "Frankie"
+        },
+        "winnerJersey": {
+          "playerId": "8151",
+          "name": "Kenneth Walker",
+          "number": 9,
+          "team": "KC",
+          "points": 21.3
+        },
+        "loserJersey": {
+          "playerId": "3163",
+          "name": "Jared Goff",
+          "number": 16,
+          "team": "DET"
+        },
+        "scores": {
+          "winner": 113.6,
+          "loser": 95.8
+        }
+      }
+    ]
+  },
+  "previews": {
+    "w4": [
+      {
+        "id": "vs-m1-narking-steven",
+        "week": 4,
+        "left": {
+          "rosterId": 3,
+          "name": "Narking",
+          "jersey": {
+            "playerId": "8183",
+            "name": "Brock Purdy",
+            "number": 13,
+            "team": "SF"
+          }
+        },
+        "right": {
+          "rosterId": 7,
+          "name": "Steven",
+          "jersey": {
+            "playerId": "4943",
+            "name": "Sam Darnold",
+            "number": 14,
+            "team": "SEA"
+          }
+        }
+      },
+      {
+        "id": "vs-m2-kayser-frankie",
+        "week": 4,
+        "left": {
+          "rosterId": 4,
+          "name": "Kayser",
+          "jersey": {
+            "playerId": "421",
+            "name": "Matthew Stafford",
+            "number": 9,
+            "team": "LAR"
+          }
+        },
+        "right": {
+          "rosterId": 11,
+          "name": "Frankie",
+          "jersey": {
+            "playerId": "3163",
+            "name": "Jared Goff",
+            "number": 16,
+            "team": "DET"
+          }
+        }
+      },
+      {
+        "id": "vs-m3-hadi-manny",
+        "week": 4,
+        "left": {
+          "rosterId": 6,
+          "name": "Hady",
+          "jersey": {
+            "playerId": "5849",
+            "name": "Kyler Murray",
+            "number": 1,
+            "team": "MIN"
+          }
+        },
+        "right": {
+          "rosterId": 9,
+          "name": "Manny",
+          "jersey": {
+            "playerId": "4046",
+            "name": "Patrick Mahomes",
+            "number": 15,
+            "team": "KC"
+          }
+        }
+      },
+      {
+        "id": "vs-m4-jamil-matt",
+        "week": 4,
+        "left": {
+          "rosterId": 10,
+          "name": "Jamil",
+          "jersey": {
+            "playerId": "6904",
+            "name": "Jalen Hurts",
+            "number": 1,
+            "team": "PHI"
+          }
+        },
+        "right": {
+          "rosterId": 12,
+          "name": "Matt",
+          "jersey": {
+            "playerId": "4984",
+            "name": "Josh Allen",
+            "number": 17,
+            "team": "BUF"
+          }
+        }
+      },
+      {
+        "id": "vs-m5-mauricio-eric",
+        "week": 4,
+        "left": {
+          "rosterId": 2,
+          "name": "Mauricio",
+          "jersey": {
+            "playerId": "9228",
+            "name": "Bryce Young",
+            "number": 9,
+            "team": "CAR"
+          }
+        },
+        "right": {
+          "rosterId": 5,
+          "name": "Eric",
+          "jersey": {
+            "playerId": "3294",
+            "name": "Dak Prescott",
+            "number": 4,
+            "team": "DAL"
+          }
+        }
+      },
+      {
+        "id": "vs-m6-danny-crooke",
+        "week": 4,
+        "left": {
+          "rosterId": 1,
+          "name": "Danny",
+          "jersey": {
+            "playerId": "7523",
+            "name": "Trevor Lawrence",
+            "number": 16,
+            "team": "JAX"
+          }
+        },
+        "right": {
+          "rosterId": 8,
+          "name": "Crooke",
+          "jersey": {
+            "playerId": "4881",
+            "name": "Lamar Jackson",
+            "number": 8,
+            "team": "BAL"
+          }
+        }
+      }
+    ],
+    "w5": [
+      {
+        "id": "vs-w5-m1",
+        "week": 5,
+        "left": {
+          "rosterId": 7,
+          "name": "Steven",
+          "jersey": {
+            "playerId": "4943",
+            "name": "Sam Darnold",
+            "number": 14,
+            "team": "SEA"
+          }
+        },
+        "right": {
+          "rosterId": 8,
+          "name": "Crooke",
+          "jersey": {
+            "playerId": "4881",
+            "name": "Lamar Jackson",
+            "number": 8,
+            "team": "BAL"
+          }
+        }
+      },
+      {
+        "id": "vs-w5-m2",
+        "week": 5,
+        "left": {
+          "rosterId": 1,
+          "name": "Danny",
+          "jersey": {
+            "playerId": "7523",
+            "name": "Trevor Lawrence",
+            "number": 16,
+            "team": "JAX"
+          }
+        },
+        "right": {
+          "rosterId": 9,
+          "name": "Manny",
+          "jersey": {
+            "playerId": "1166",
+            "name": "Kirk Cousins",
+            "number": 8,
+            "team": "LV"
+          }
+        }
+      },
+      {
+        "id": "vs-w5-m3",
+        "week": 5,
+        "left": {
+          "rosterId": 3,
+          "name": "Narking",
+          "jersey": {
+            "playerId": "8183",
+            "name": "Brock Purdy",
+            "number": 13,
+            "team": "SF"
+          }
+        },
+        "right": {
+          "rosterId": 5,
+          "name": "Eric",
+          "jersey": {
+            "playerId": "3294",
+            "name": "Dak Prescott",
+            "number": 4,
+            "team": "DAL"
+          }
+        }
+      },
+      {
+        "id": "vs-w5-m4",
+        "week": 5,
+        "left": {
+          "rosterId": 6,
+          "name": "Hady",
+          "jersey": {
+            "playerId": "11564",
+            "name": "Drake Maye",
+            "number": 10,
+            "team": "NE"
+          }
+        },
+        "right": {
+          "rosterId": 11,
+          "name": "Frankie",
+          "jersey": {
+            "playerId": "3163",
+            "name": "Jared Goff",
+            "number": 16,
+            "team": "DET"
+          }
+        }
+      },
+      {
+        "id": "vs-w5-m5",
+        "week": 5,
+        "left": {
+          "rosterId": 2,
+          "name": "Mauricio",
+          "jersey": {
+            "playerId": "3257",
+            "name": "Jacoby Brissett",
+            "number": 7,
+            "team": "ARI"
+          }
+        },
+        "right": {
+          "rosterId": 10,
+          "name": "Jamil",
+          "jersey": {
+            "playerId": "6904",
+            "name": "Jalen Hurts",
+            "number": 1,
+            "team": "PHI"
+          }
+        }
+      },
+      {
+        "id": "vs-w5-m6",
+        "week": 5,
+        "left": {
+          "rosterId": 4,
+          "name": "Kayser",
+          "jersey": {
+            "playerId": "421",
+            "name": "Matthew Stafford",
+            "number": 9,
+            "team": "LAR"
+          }
+        },
+        "right": {
+          "rosterId": 12,
+          "name": "Matt",
+          "jersey": {
+            "playerId": "4984",
+            "name": "Josh Allen",
+            "number": 17,
+            "team": "BUF"
+          }
+        }
+      }
+    ]
+  },
+  "margins": {
+    "w4": [
+      {
+        "winner": "Hady",
+        "loser": "Manny",
+        "margin": 6.77,
+        "winnerPts": 141.65,
+        "loserPts": 134.88
+      },
+      {
+        "winner": "Frankie",
+        "loser": "Kayser",
+        "margin": 16.36,
+        "winnerPts": 144.8,
+        "loserPts": 128.44
+      },
+      {
+        "winner": "Mauricio",
+        "loser": "Eric",
+        "margin": 17.59,
+        "winnerPts": 141.24,
+        "loserPts": 123.65
+      },
+      {
+        "winner": "Jamil",
+        "loser": "Matt",
+        "margin": 19.28,
+        "winnerPts": 162.83,
+        "loserPts": 143.55
+      },
+      {
+        "winner": "Steven",
+        "loser": "Narking",
+        "margin": 39.35,
+        "winnerPts": 180.56,
+        "loserPts": 141.21
+      },
+      {
+        "winner": "Danny",
+        "loser": "Crooke",
+        "margin": 42.64,
+        "winnerPts": 163.91,
+        "loserPts": 121.27
+      }
+    ]
+  }
+}
