@@ -4,8 +4,9 @@ Rebuilds `vs-w6-m1` … `vs-w6-m6` (1080×1350) with v5 cracked-stone buffalo ar
 
 ```bash
 # 1) Place generated panel JPGs in assets/ (vs-w6-mN-left.jpg, -right.jpg), then:
-python3 lighten-stone-fur.py   # optional: ~25% lighter stone fur vs raw v5 panels
 python3 normalize-panels.py
+python3 lighten-stone-fur.py   # midpoint fur L* between PR #91 and PR #92 (normalized)
+python3 bake-jersey-numbers.py
 node render.mjs
 
 # 2) Publish derivatives
