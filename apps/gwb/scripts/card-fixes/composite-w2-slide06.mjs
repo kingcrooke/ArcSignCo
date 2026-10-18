@@ -22,9 +22,11 @@ const LEFT_FADE_X0 = 620
 const LEFT_FADE_X1 = 780
 const BOTTOM_FADE_Y0 = 820
 const BOTTOM_FADE_Y1 = 1180
-const HERO_SCALE = 1.38
-const HERO_CROP_LEFT = 0.4
-const HERO_CROP_TOP = 0.04
+const HERO_SCALE = 1.1
+const HERO_CROP_LEFT = 0.36
+const HERO_CROP_TOP = 0.05
+const HERO_INSET_SCALE = 0.92
+const HERO_INSET_X = 8
 
 function luma(r, g, b) {
   return 0.299 * r + 0.587 * g + 0.114 * b
@@ -34,20 +36,35 @@ async function heroBuffer() {
   const meta = await sharp(HERO_SRC).metadata()
   const sw = meta.width
   const sh = meta.height
-  const scale = Math.max(HERO_WIDTH / sw, HERO_HEIGHT / sh) * HERO_SCALE
+  const innerW = Math.round(HERO_WIDTH * HERO_INSET_SCALE)
+  const innerH = Math.round(HERO_HEIGHT * HERO_INSET_SCALE)
+  const scale = Math.max(innerW / sw, innerH / sh) * HERO_SCALE
   const scaledW = Math.ceil(sw * scale)
   const scaledH = Math.ceil(sh * scale)
   const cropLeft = Math.min(
     Math.max(0, Math.floor(scaledW * HERO_CROP_LEFT)),
-    scaledW - HERO_WIDTH,
+    scaledW - innerW,
   )
   const cropTop = Math.min(
     Math.max(0, Math.floor(scaledH * HERO_CROP_TOP)),
-    scaledH - HERO_HEIGHT,
+    scaledH - innerH,
   )
-  return sharp(HERO_SRC)
+  const resized = await sharp(HERO_SRC)
     .resize(scaledW, scaledH, { fit: 'fill' })
-    .extract({ left: cropLeft, top: cropTop, width: HERO_WIDTH, height: HERO_HEIGHT })
+    .extract({ left: cropLeft, top: cropTop, width: innerW, height: innerH })
+    .png()
+    .toBuffer()
+  const padLeft = HERO_INSET_X
+  const padTop = Math.round((HERO_HEIGHT - innerH) / 2)
+  return sharp({
+    create: {
+      width: HERO_WIDTH,
+      height: HERO_HEIGHT,
+      channels: 4,
+      background: { r: 0, g: 0, b: 0, alpha: 0 },
+    },
+  })
+    .composite([{ input: resized, left: padLeft, top: padTop }])
     .png()
     .toBuffer()
 }
@@ -136,11 +153,17 @@ export function printW2Slide06SelfCheck(data, w, ch) {
   }
   console.log('max adjacent column step at y=400:', maxColStep.toFixed(2), 'at x~', maxColAt)
 
-  let maxRightLuma = 0
-  for (let x = 1060; x < 1080; x++) {
-    maxRightLuma = Math.max(maxRightLuma, luma(...rgb(data, x, 400)))
+  let hornL = 9999
+  let hornR = -1
+  for (let y = 140; y < 520; y++) {
+    for (let x = 620; x < 1080; x++) {
+      if (luma(...rgb(data, x, y)) > 72) {
+        hornL = Math.min(hornL, x)
+        hornR = Math.max(hornR, x)
+      }
+    }
   }
-  console.log('max luma x1060-1079 at y=400:', maxRightLuma.toFixed(1))
+  console.log('horn ink span (luma>72, y140-519):', hornL, '-', hornR)
 
   let footerInk = 0
   for (let y = 1240; y < 1320; y++) {
@@ -151,7 +174,8 @@ export function printW2Slide06SelfCheck(data, w, ch) {
   }
   console.log('footer 6/16 ink pixels (x880-1060,y1240-1320):', footerInk)
 
-  const fail = maxStep > 6 || footerInk < 80 || maxRightLuma < 36
+  const hornsOk = hornL >= 660 && hornR <= 1060 && hornR > 900
+  const fail = maxStep > 6 || footerInk < 80 || !hornsOk
   if (fail) console.error('FAIL w2-slide-06 self-check')
   return !fail
 }

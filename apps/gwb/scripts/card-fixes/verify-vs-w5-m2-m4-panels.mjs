@@ -8,11 +8,12 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 import { m2m4PanelPath } from '../w5-matchup-cards/m2-m4-panel-path.mjs'
+import { W5_SCRATCH } from '../w5-matchup-cards/scratch-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const GWB = path.join(__dirname, '..', '..')
 const REF_SHA = '74a66a1'
-const CAND = path.join(GWB, 'scripts/w5-matchup-cards/output')
+const CAND = W5_SCRATCH
 
 const PANEL_TOP = 275
 const LEFT = { left: 67, top: PANEL_TOP, width: 486, height: 668 }

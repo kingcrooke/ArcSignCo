@@ -9,6 +9,7 @@ import sharp from 'sharp'
 import { cardHtml } from '../w5-matchup-cards/template.mjs'
 import { mergeMatchup } from './render-w5-m2-m4-main.mjs'
 import { panelImagePath } from './rebuild/panel-paths.mjs'
+import { W5_SCRATCH } from '../w5-matchup-cards/scratch-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const GWB = path.join(__dirname, '..', '..')
@@ -18,15 +19,15 @@ const OUT = path.join(__dirname, 'vs-w5-m1-m2-chrome-blend.jpg')
 async function main() {
   const m = mergeMatchup('vs-w5-m2')
   const html = cardHtml(m, panelImagePath('vs-w5-m2', 'left'), panelImagePath('vs-w5-m2', 'right'))
-  const tmp = path.join(GWB, 'scripts/w5-matchup-cards/output', '.blend-m2.html')
-  await mkdir(path.dirname(tmp), { recursive: true })
+  const tmp = path.join(W5_SCRATCH, '.blend-m2.html')
+  await mkdir(W5_SCRATCH, { recursive: true })
   await writeFile(tmp, html)
   const browser = await chromium.launch()
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } })
   await page.goto(`file://${path.resolve(tmp)}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(350)
-  const m2png = path.join(GWB, 'scripts/w5-matchup-cards/output', 'blend-m2.png')
+  const m2png = path.join(W5_SCRATCH, 'blend-m2.png')
   await page.locator('.slide').screenshot({ path: m2png, type: 'png', scale: 'css' })
   await browser.close()
 

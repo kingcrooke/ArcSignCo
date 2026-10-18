@@ -9,12 +9,13 @@ import sharp from 'sharp'
 import { cardHtml } from '../w5-matchup-cards/template-m2-m4-live-chrome.mjs'
 import { m2m4PanelPath } from '../w5-matchup-cards/m2-m4-panel-path.mjs'
 import { mergeMatchup } from './render-w5-m2-m4-main.mjs'
+import { W5_SCRATCH } from '../w5-matchup-cards/scratch-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const GWB = path.join(__dirname, '..', '..')
 const LIVE = path.join(GWB, '..', '..', 'gwb-fe006a16', 'slides', 'vs-w5-m1.full.jpg')
 const OUT = path.join(__dirname, 'vs-w5-chrome-crop-sheet.jpg')
-const W5OUT = path.join(GWB, 'scripts/w5-matchup-cards/output')
+const W5OUT = W5_SCRATCH
 
 const STRIPS = [
   { name: 'top', top: 0, height: 340 },

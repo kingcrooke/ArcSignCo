@@ -46,18 +46,17 @@ body { background: #030406; }
 }
 .kicker {
   position: absolute; left: 67px; right: 67px; top: 52px;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 28px;
+  font-family: 'Bebas', sans-serif;
+  font-size: 32px;
   line-height: 1;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.12em;
   color: #d4af37;
   text-transform: uppercase;
 }
 .kicker-line {
   position: absolute; left: 67px; right: 67px; top: 98px;
   height: 2px;
-  background: linear-gradient(90deg, #d4af37 0%, rgba(212,175,55,0.12) 100%);
+  background: #4a5058;
 }
 .headline {
   position: absolute; left: 67px; right: 67px; top: 147px;
@@ -68,19 +67,19 @@ body { background: #030406; }
   text-transform: uppercase;
 }
 .headline .vs {
-  font-size: 43px;
-  color: #ffffff;
-  margin: 0 0.08em;
+  font-size: 52px;
+  color: #c9c9c9;
+  margin: 0 0.15em;
   text-transform: lowercase;
   font-weight: 400;
 }
 .records {
   position: absolute; left: 67px; right: 67px; top: 240px;
-  font-family: 'Bebas', sans-serif;
-  font-weight: 400;
-  font-size: 36px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
   line-height: 0.96;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.02em;
   white-space: pre;
   color: #d4af37;
   text-transform: none;

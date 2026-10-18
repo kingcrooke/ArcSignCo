@@ -8,6 +8,7 @@ import sharp from 'sharp'
 import { cardHtml } from '../w5-matchup-cards/template-m2-m4-live-chrome.mjs'
 import { m2m4PanelPath } from '../w5-matchup-cards/m2-m4-panel-path.mjs'
 import { mergeMatchup } from './render-w5-m2-m4-main.mjs'
+import { W5_SCRATCH } from '../w5-matchup-cards/scratch-path.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const GWB = path.join(__dirname, '..', '..')
@@ -43,15 +44,20 @@ const tests = {
   bar: (r, g, b) => g > 150 && r > 170 && b < 130,
 }
 
+function isRulePixel(r, g, b) {
+  if (tests.goldLine(r, g, b)) return true
+  const l = 0.299 * r + 0.587 * g + 0.114 * b
+  return l > 35 && l < 95 && Math.abs(r - g) < 12
+}
+
 function measureKickerRule(buf, w) {
-  const fn = tests.goldLine
   let bestY = null
   let bestN = 0
   for (let y = 94; y <= 102; y++) {
     let n = 0
     for (let x = 67; x < 900; x++) {
       const i = (y * w + x) * 3
-      if (fn(buf[i], buf[i + 1], buf[i + 2])) n++
+      if (isRulePixel(buf[i], buf[i + 1], buf[i + 2])) n++
     }
     if (n > bestN) {
       bestN = n
@@ -108,14 +114,14 @@ async function renderM2() {
   const html = cardHtml(m, m2m4PanelPath('vs-w5-m2', 'left'), m2m4PanelPath('vs-w5-m2', 'right'))
   const browser = await chromium.launch()
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } })
-  const tmp = path.join(GWB, 'scripts/w5-matchup-cards/output', '.measure-layout-m2.html')
+  const tmp = path.join(W5_SCRATCH, '.measure-layout-m2.html')
   const { writeFile, mkdir } = await import('node:fs/promises')
   await mkdir(path.dirname(tmp), { recursive: true })
   await writeFile(tmp, html)
   await page.goto(`file://${path.resolve(tmp)}`, { waitUntil: 'networkidle' })
   await page.evaluate(() => document.fonts.ready)
   await page.waitForTimeout(400)
-  const png = path.join(GWB, 'scripts/w5-matchup-cards/output', 'measure-layout-m2.png')
+  const png = path.join(W5_SCRATCH, 'measure-layout-m2.png')
   await page.locator('.slide').screenshot({ path: png, type: 'png', scale: 'css' })
   await browser.close()
   return png

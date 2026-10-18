@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url'
 import sharp from 'sharp'
 import { cardHtml, loadMatchups } from '../w5-matchup-cards/template-m2-m4-live-chrome.mjs'
 import { m2m4PanelPath } from '../w5-matchup-cards/m2-m4-panel-path.mjs'
+import { W5_SCRATCH } from '../w5-matchup-cards/scratch-path.mjs'
 import { previewFromCopy } from './rebuild/preview-from-copy.mjs'
 
 const BOWL_TITLE = {
@@ -17,7 +18,7 @@ const BOWL_TITLE = {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const W5 = path.join(__dirname, '..', 'w5-matchup-cards')
-const OUT = path.join(W5, 'output')
+const OUT = W5_SCRATCH
 const SLIDE_SOURCES = path.join(__dirname, '..', 'slide-sources')
 const ONLY = new Set(['vs-w5-m2', 'vs-w5-m4'])
 
