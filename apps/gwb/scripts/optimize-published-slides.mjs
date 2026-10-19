@@ -28,21 +28,18 @@ const SLIDE_BASENAMES = [
       `w${w}-slide-${String(i + 1).padStart(2, '0')}`,
     ),
   ),
-  'vs-m1-narking-steven',
-  'vs-m2-kayser-frankie',
-  'vs-m3-hadi-manny',
-  'vs-m4-jamil-matt',
-  'vs-m5-mauricio-eric',
-  'vs-m6-danny-crooke',
-  ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w5-m${m}`),
-  ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w6-m${m}`),
+  ...[1, 2, 3, 4, 5, 6].flatMap((w) =>
+    [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
+  ),
   ...RESULTS_BASENAMES,
 ]
 
-/** Muse Week 1–6 designer cards (results-w1..w5 + vs-w6). */
+/** Muse designer cards (results-w1..w5 + vs-w1..w6 previews). */
 export const MUSE_CARD_BASENAMES = [
   ...RESULTS_BASENAMES,
-  ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w6-m${m}`),
+  ...[1, 2, 3, 4, 5, 6].flatMap((w) =>
+    [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
+  ),
 ]
 
 async function findSourceForBasename(basename, searchDirs) {
