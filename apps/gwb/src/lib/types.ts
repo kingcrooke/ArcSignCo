@@ -139,6 +139,9 @@ export interface TeamInfo {
   avatarUrl: string | null
   /** Fallback when avatarUrl fails to load (Sleeper users.avatar thumb). */
   avatarThumbUrl: string | null
+  /** Raw Sleeper fields for avatar resolution (metadata.avatar, users.avatar). */
+  sleeperMetadataAvatar?: string | null
+  sleeperUserAvatar?: string | null
 }
 
 export interface StandingRow {

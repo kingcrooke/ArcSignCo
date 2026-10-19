@@ -1,6 +1,7 @@
 import { managerNickname } from '../lib/nicknames'
 import {
   POWER_RANKINGS_METHOD_NOTE,
+  powerRankingsMovementLabel,
   type PowerRankingRow,
 } from '../lib/powerRankings'
 import type { TeamInfo } from '../lib/types'
@@ -22,16 +23,33 @@ export function PowerRankingsPanel({
   teams: Map<number, TeamInfo>
   throughWeek: number
 }) {
+  const movementFromWeek = throughWeek > 1 ? throughWeek - 1 : null
+  const movementHint =
+    movementFromWeek != null
+      ? powerRankingsMovementLabel(movementFromWeek, throughWeek)
+      : null
+
   return (
     <div className="space-y-2" id="power-rankings-panel">
       <p className="text-xs text-[var(--gwb-muted)]">{POWER_RANKINGS_METHOD_NOTE}</p>
+      {movementHint && (
+        <p className="text-xs text-[var(--gwb-muted)]">{movementHint}</p>
+      )}
       <ul
         className="overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]"
         role="list"
       >
         {rows.map((r, i) => {
           const team = teams.get(r.rosterId)
-          const manager = managerNickname(r.rosterId, r.displayName)
+          const manager = managerNickname(
+            r.rosterId,
+            r.displayName,
+            team?.userId,
+          )
+          const movementTitle =
+            movementFromWeek != null
+              ? powerRankingsMovementLabel(movementFromWeek, throughWeek)
+              : 'No prior week'
           const record =
             r.ties > 0
               ? `${r.wins}-${r.losses}-${r.ties}`
@@ -50,7 +68,7 @@ export function PowerRankingsPanel({
                 >
                   {r.rank}
                 </span>
-                {team && <TeamAvatar team={team} size="sm" />}
+                <TeamAvatar team={team} size="sm" />
                 <div className="min-w-0 flex-1">
                   <p className="font-medium leading-tight">{manager}</p>
                   <p className="text-xs text-[var(--gwb-muted)]">
@@ -70,7 +88,8 @@ export function PowerRankingsPanel({
                         ? 'text-rose-400/80'
                         : 'text-[var(--gwb-muted)]'
                   }`}
-                  title="Vs prior week"
+                  title={movementTitle}
+                  aria-label={movementTitle}
                 >
                   {movementLabel(r.movement)}
                 </span>

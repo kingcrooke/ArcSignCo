@@ -33,6 +33,8 @@ export function buildTeamMap(
       userId: r.owner_id ?? '',
       displayName: user?.display_name?.trim() ?? `Roster ${r.roster_id}`,
       teamName: getTeamName(user, r.roster_id),
+      sleeperMetadataAvatar: user?.metadata?.avatar ?? null,
+      sleeperUserAvatar: user?.avatar ?? null,
       avatarUrl: sleeperAvatarPrimaryUrl(
         user?.metadata?.avatar ?? null,
         user?.avatar ?? null,

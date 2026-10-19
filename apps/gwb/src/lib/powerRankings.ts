@@ -5,6 +5,14 @@ import type { SleeperMatchup, StandingRow, TeamInfo } from './types'
 export const POWER_RANKINGS_METHOD_NOTE =
   '40% all-play record, 25% actual record, 20% points per game, 15% last-3-weeks scoring. Updated after each week is final.'
 
+/** Rank movement compares the table through `toWeek` vs through `fromWeek` (completed weeks only). */
+export function powerRankingsMovementLabel(
+  fromWeek: number,
+  toWeek: number,
+): string {
+  return `Rank after Week ${toWeek} vs Week ${fromWeek} (▲ moved up)`
+}
+
 export interface PowerRankingRow {
   rosterId: number
   displayName: string
@@ -166,6 +174,7 @@ export function computePowerRankings({
     teams,
     throughWeek - 1,
   )
+  // Movement arrows: rank through (throughWeek − 1) vs through throughWeek.
   const previous = buildTable(prevStandings, matchupsByWeek, throughWeek - 1)
   return attachMovement(current, previous)
 }

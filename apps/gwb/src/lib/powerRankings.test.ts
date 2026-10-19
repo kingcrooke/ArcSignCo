@@ -56,4 +56,32 @@ describe('computePowerRankings', () => {
     expect(rows[0].losses).toBe(1)
     expect(rows[11].score).toBeLessThan(20)
   })
+
+  it('movement compares rank through week 4 vs week 5', () => {
+    const users = load<SleeperUser[]>('users.json')
+    const rosters = load<SleeperRoster[]>('rosters.json')
+    const teams = buildTeamMap(users, rosters)
+    const matchupsByWeek = new Map<number, SleeperMatchup[]>()
+    for (const week of [1, 2, 3, 4, 5]) {
+      matchupsByWeek.set(week, loadPr<SleeperMatchup[]>(`matchups-${week}.json`))
+    }
+
+    const w4 = computePowerRankings({
+      matchupsByWeek,
+      teams,
+      throughWeek: 4,
+    })
+    const w5 = computePowerRankings({
+      matchupsByWeek,
+      teams,
+      throughWeek: 5,
+    })
+    const w4Rank = new Map(w4.map((r) => [r.rosterId, r.rank]))
+    for (const row of w5) {
+      if (row.movement == null) continue
+      const prev = w4Rank.get(row.rosterId)
+      expect(prev).toBe(row.prevRank)
+      expect(row.movement).toBe(prev! - row.rank)
+    }
+  })
 })
