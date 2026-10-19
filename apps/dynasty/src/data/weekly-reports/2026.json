@@ -1,0 +1,4479 @@
+{
+  "season": "2026",
+  "leagueId": "1312077668782473216",
+  "weeks": {
+    "1": {
+      "season": "2026",
+      "leagueId": "1312077668782473216",
+      "week": 1,
+      "source": "sleeper",
+      "matchups": [
+        {
+          "matchupId": 3,
+          "margin": 2.58,
+          "upset": false,
+          "tie": false,
+          "recap": "Saints & Sinners 119.98 defeated BigBlue 117.40 by 2.58. Saints & Sinners top scorers: Kenneth Walker 36.10, Tyler Shough 22.20. BigBlue top scorers: Jaxson Dart 29.60, Bijan Robinson 29.30.",
+          "winner": {
+            "rosterId": 1,
+            "userId": "401754707162333184",
+            "name": "Saints & Sinners",
+            "score": 119.98,
+            "recordAfter": "1-0",
+            "topScorers": [
+              {
+                "playerId": "8151",
+                "name": "Kenneth Walker",
+                "points": 36.1,
+                "started": true
+              },
+              {
+                "playerId": "12545",
+                "name": "Tyler Shough",
+                "points": 22.2,
+                "started": false
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 4,
+            "userId": "427903132685574144",
+            "name": "BigBlue",
+            "score": 117.4,
+            "topScorers": [
+              {
+                "playerId": "12508",
+                "name": "Jaxson Dart",
+                "points": 29.6,
+                "started": true
+              },
+              {
+                "playerId": "9509",
+                "name": "Bijan Robinson",
+                "points": 29.3,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 5,
+          "margin": 40.06,
+          "upset": false,
+          "tie": false,
+          "recap": "Nix in 5 165.06 defeated Chalupa Batman 125.00 by 40.06. Nix in 5 top scorers: Jahmyr Gibbs 32.60, Isaiah Likely 26.80. Chalupa Batman top scorers: Amon-Ra St. Brown 28.70, Javonte Williams 24.20.",
+          "winner": {
+            "rosterId": 2,
+            "userId": "735615874752483328",
+            "name": "Nix in 5",
+            "score": 165.06,
+            "recordAfter": "1-0",
+            "topScorers": [
+              {
+                "playerId": "9221",
+                "name": "Jahmyr Gibbs",
+                "points": 32.6,
+                "started": true
+              },
+              {
+                "playerId": "8131",
+                "name": "Isaiah Likely",
+                "points": 26.8,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 8,
+            "userId": "427956169848401920",
+            "name": "Chalupa Batman",
+            "score": 125,
+            "topScorers": [
+              {
+                "playerId": "7547",
+                "name": "Amon-Ra St. Brown",
+                "points": 28.7,
+                "started": true
+              },
+              {
+                "playerId": "7588",
+                "name": "Javonte Williams",
+                "points": 24.2,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 2,
+          "margin": 40.5,
+          "upset": false,
+          "tie": false,
+          "recap": "Wolf Pack 156.76 defeated Team Name Hoes 116.26 by 40.50. Wolf Pack top scorers: Jalen Coker 35.80, Christian Watson 34.70. Team Name Hoes top scorers: D'Andre Swift 32.40, Lamar Jackson 23.96.",
+          "winner": {
+            "rosterId": 3,
+            "userId": "427899269689647104",
+            "name": "Wolf Pack",
+            "score": 156.76,
+            "recordAfter": "1-0",
+            "topScorers": [
+              {
+                "playerId": "11646",
+                "name": "Jalen Coker",
+                "points": 35.8,
+                "started": true
+              },
+              {
+                "playerId": "8167",
+                "name": "Christian Watson",
+                "points": 34.7,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 9,
+            "userId": "420639669546385408",
+            "name": "Team Name Hoes",
+            "score": 116.26,
+            "topScorers": [
+              {
+                "playerId": "6790",
+                "name": "D'Andre Swift",
+                "points": 32.4,
+                "started": true
+              },
+              {
+                "playerId": "4881",
+                "name": "Lamar Jackson",
+                "points": 23.96,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 1,
+          "margin": 48.78,
+          "upset": false,
+          "tie": false,
+          "recap": "Chase’n Dubs 165.92 defeated Rubuilding 117.14 by 48.78. Chase’n Dubs top scorers: Zay Flowers 30.00, David Montgomery 28.90. Rubuilding top scorers: Josh Allen 36.66, Derrick Henry 35.30.",
+          "winner": {
+            "rosterId": 5,
+            "userId": "427906596501213184",
+            "name": "Chase’n Dubs",
+            "score": 165.92,
+            "recordAfter": "1-0",
+            "topScorers": [
+              {
+                "playerId": "9997",
+                "name": "Zay Flowers",
+                "points": 30,
+                "started": true
+              },
+              {
+                "playerId": "5892",
+                "name": "David Montgomery",
+                "points": 28.9,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 12,
+            "userId": "429321092230815744",
+            "name": "Rubuilding",
+            "score": 117.14,
+            "topScorers": [
+              {
+                "playerId": "4984",
+                "name": "Josh Allen",
+                "points": 36.66,
+                "started": false
+              },
+              {
+                "playerId": "3198",
+                "name": "Derrick Henry",
+                "points": 35.3,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 4,
+          "margin": 15.06,
+          "upset": false,
+          "tie": false,
+          "recap": "A-Lamb-e que tengo hambre 162.96 defeated MahomiesRidley4MooreJeffe 147.90 by 15.06. A-Lamb-e que tengo hambre top scorers: Caleb Williams 39.26, Trevor Lawrence 33.10. MahomiesRidley4MooreJeffe top scorers: Justin Jefferson 31.20, Brock Purdy 27.10.",
+          "winner": {
+            "rosterId": 6,
+            "userId": "427930731889565696",
+            "name": "A-Lamb-e que tengo hambre",
+            "score": 162.96,
+            "recordAfter": "1-0",
+            "topScorers": [
+              {
+                "playerId": "11560",
+                "name": "Caleb Williams",
+                "points": 39.26,
+                "started": true
+              },
+              {
+                "playerId": "7523",
+                "name": "Trevor Lawrence",
+                "points": 33.1,
+                "started": false
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 11,
+            "userId": "429316063394541568",
+            "name": "MahomiesRidley4MooreJeffe",
+            "score": 147.9,
+            "topScorers": [
+              {
+                "playerId": "6794",
+                "name": "Justin Jefferson",
+                "points": 31.2,
+                "started": true
+              },
+              {
+                "playerId": "8183",
+                "name": "Brock Purdy",
+                "points": 27.1,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 6,
+          "margin": 33.74,
+          "upset": false,
+          "tie": false,
+          "recap": "ramonguaraguao 124.36 defeated Love Thy Nabers 90.62 by 33.74. ramonguaraguao top scorers: Bryce Young 35.44, Chris Olave 32.20. Love Thy Nabers top scorers: C.J. Stroud 15.46, Jacksonville Jaguars 15.00.",
+          "winner": {
+            "rosterId": 10,
+            "userId": "570012643529134080",
+            "name": "ramonguaraguao",
+            "score": 124.36,
+            "recordAfter": "1-0",
+            "topScorers": [
+              {
+                "playerId": "9228",
+                "name": "Bryce Young",
+                "points": 35.44,
+                "started": false
+              },
+              {
+                "playerId": "8144",
+                "name": "Chris Olave",
+                "points": 32.2,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 7,
+            "userId": "427945970563559424",
+            "name": "Love Thy Nabers",
+            "score": 90.62,
+            "topScorers": [
+              {
+                "playerId": "9758",
+                "name": "C.J. Stroud",
+                "points": 15.46,
+                "started": false
+              },
+              {
+                "playerId": "JAX",
+                "name": "Jacksonville Jaguars",
+                "points": 15,
+                "started": true
+              }
+            ]
+          }
+        }
+      ],
+      "highScore": {
+        "rosterId": 5,
+        "userId": "427906596501213184",
+        "name": "Chase’n Dubs",
+        "points": 165.92
+      },
+      "lowScore": {
+        "rosterId": 7,
+        "userId": "427945970563559424",
+        "name": "Love Thy Nabers",
+        "points": 90.62
+      },
+      "closest": {
+        "margin": 2.58,
+        "winnerName": "Saints & Sinners",
+        "winnerScore": 119.98,
+        "loserName": "BigBlue",
+        "loserScore": 117.4,
+        "matchupId": 3
+      },
+      "blowout": {
+        "margin": 48.78,
+        "winnerName": "Chase’n Dubs",
+        "winnerScore": 165.92,
+        "loserName": "Rubuilding",
+        "loserScore": 117.14,
+        "matchupId": 1
+      },
+      "topPlayer": {
+        "playerId": "11560",
+        "name": "Caleb Williams",
+        "points": 39.26,
+        "started": true,
+        "rosterId": 6,
+        "userId": "427930731889565696",
+        "manager": "A-Lamb-e que tengo hambre"
+      },
+      "mostBench": {
+        "rosterId": 11,
+        "userId": "429316063394541568",
+        "name": "MahomiesRidley4MooreJeffe",
+        "points": 110.26
+      },
+      "bestGame": {
+        "matchupId": 4,
+        "winnerName": "A-Lamb-e que tengo hambre",
+        "winnerScore": 162.96,
+        "loserName": "MahomiesRidley4MooreJeffe",
+        "loserScore": 147.9,
+        "margin": 15.06,
+        "upset": false
+      },
+      "standings": [
+        {
+          "rank": 1,
+          "rosterId": 5,
+          "userId": "427906596501213184",
+          "name": "Chase’n Dubs",
+          "wins": 1,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 165.92
+        },
+        {
+          "rank": 2,
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "name": "Nix in 5",
+          "wins": 1,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 165.06
+        },
+        {
+          "rank": 3,
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "name": "A-Lamb-e que tengo hambre",
+          "wins": 1,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 162.96
+        },
+        {
+          "rank": 4,
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "name": "Wolf Pack",
+          "wins": 1,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 156.76
+        },
+        {
+          "rank": 5,
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "name": "ramonguaraguao",
+          "wins": 1,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 124.36
+        },
+        {
+          "rank": 6,
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "name": "Saints & Sinners",
+          "wins": 1,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 119.98
+        },
+        {
+          "rank": 7,
+          "rosterId": 11,
+          "userId": "429316063394541568",
+          "name": "MahomiesRidley4MooreJeffe",
+          "wins": 0,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 147.9
+        },
+        {
+          "rank": 8,
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "name": "Chalupa Batman",
+          "wins": 0,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 125
+        },
+        {
+          "rank": 9,
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "name": "BigBlue",
+          "wins": 0,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 117.4
+        },
+        {
+          "rank": 10,
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "name": "Rubuilding",
+          "wins": 0,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 117.14
+        },
+        {
+          "rank": 11,
+          "rosterId": 9,
+          "userId": "420639669546385408",
+          "name": "Team Name Hoes",
+          "wins": 0,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 116.26
+        },
+        {
+          "rank": 12,
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "name": "Love Thy Nabers",
+          "wins": 0,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 90.62
+        }
+      ],
+      "waivers": [
+        {
+          "transactionId": "1405824301973667840",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": 18,
+          "adds": [
+            {
+              "playerId": "6130",
+              "name": "Devin Singletary",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "9511",
+              "name": "Keaton Mitchell",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1405823995428794368",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": 3,
+          "adds": [
+            {
+              "playerId": "CAR",
+              "name": "Carolina Panthers",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "DET",
+              "name": "Detroit Lions",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1405719383107543040",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "manager": "Love Thy Nabers",
+          "faab": 5,
+          "adds": [
+            {
+              "playerId": "12547",
+              "name": "Kyle Williams",
+              "rosterId": 7
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "8127",
+              "name": "Charlie Kolar",
+              "rosterId": 7
+            }
+          ],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1405712278883409920",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "manager": "ramonguaraguao",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "SF",
+              "name": "San Francisco 49ers",
+              "rosterId": 10
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "MIN",
+              "name": "Minnesota Vikings",
+              "rosterId": 10
+            }
+          ],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1405619152906878976",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": 18,
+          "adds": [
+            {
+              "playerId": "7600",
+              "name": "Pat Freiermuth",
+              "rosterId": 8
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1405533152176304128",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": 2,
+          "adds": [
+            {
+              "playerId": "KC",
+              "name": "Kansas City Chiefs",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "7567",
+              "name": "Kenny Gainwell",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1405532354105090048",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": 5,
+          "adds": [
+            {
+              "playerId": "4993",
+              "name": "Mike Gesicki",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "8111",
+              "name": "Cade Otton",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1789542878903
+        },
+        {
+          "transactionId": "1404182047643144192",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "8111",
+              "name": "Cade Otton",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "9506",
+              "name": "Sean Tucker",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1789145597900
+        },
+        {
+          "transactionId": "1403218046239170560",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "11370",
+              "name": "Chris Brooks",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11592",
+              "name": "Erick All",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1789085027854
+        }
+      ],
+      "trades": [
+        {
+          "transactionId": "1404574450682167296",
+          "statusUpdated": 1789316059229,
+          "sides": [
+            {
+              "rosterId": 1,
+              "userId": "401754707162333184",
+              "manager": "Saints & Sinners",
+              "receivedPlayers": [
+                "Tyler Shough"
+              ],
+              "sentPlayers": [
+                "Sam Darnold"
+              ],
+              "receivedPicks": []
+            },
+            {
+              "rosterId": 11,
+              "userId": "429316063394541568",
+              "manager": "MahomiesRidley4MooreJeffe",
+              "receivedPlayers": [
+                "Sam Darnold"
+              ],
+              "sentPlayers": [
+                "Tyler Shough"
+              ],
+              "receivedPicks": [
+                "29 Rd 1 (Saints & Sinners)"
+              ]
+            }
+          ]
+        },
+        {
+          "transactionId": "1403924254491185152",
+          "statusUpdated": 1789084361375,
+          "sides": [
+            {
+              "rosterId": 1,
+              "userId": "401754707162333184",
+              "manager": "Saints & Sinners",
+              "receivedPlayers": [
+                "Brock Bowers"
+              ],
+              "sentPlayers": [
+                "Tucker Kraft"
+              ],
+              "receivedPicks": []
+            },
+            {
+              "rosterId": 3,
+              "userId": "427899269689647104",
+              "manager": "Wolf Pack",
+              "receivedPlayers": [
+                "Tucker Kraft"
+              ],
+              "sentPlayers": [
+                "Brock Bowers"
+              ],
+              "receivedPicks": [
+                "28 Rd 1 (Saints & Sinners)",
+                "27 Rd 1 (Wolf Pack)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "2": {
+      "season": "2026",
+      "leagueId": "1312077668782473216",
+      "week": 2,
+      "source": "sleeper",
+      "matchups": [
+        {
+          "matchupId": 3,
+          "margin": 5.28,
+          "upset": true,
+          "tie": false,
+          "recap": "MahomiesRidley4MooreJeffe 96.88 defeated Saints & Sinners 91.60 by 5.28. MahomiesRidley4MooreJeffe top scorers: Patrick Mahomes 32.98, Brock Purdy 32.48. Saints & Sinners top scorers: Kenneth Walker 23.80, Denzel Boston 22.50.",
+          "winner": {
+            "rosterId": 11,
+            "userId": "429316063394541568",
+            "name": "MahomiesRidley4MooreJeffe",
+            "score": 96.88,
+            "recordAfter": "1-1",
+            "topScorers": [
+              {
+                "playerId": "4046",
+                "name": "Patrick Mahomes",
+                "points": 32.98,
+                "started": false
+              },
+              {
+                "playerId": "8183",
+                "name": "Brock Purdy",
+                "points": 32.48,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 1,
+            "userId": "401754707162333184",
+            "name": "Saints & Sinners",
+            "score": 91.6,
+            "topScorers": [
+              {
+                "playerId": "8151",
+                "name": "Kenneth Walker",
+                "points": 23.8,
+                "started": true
+              },
+              {
+                "playerId": "13346",
+                "name": "Denzel Boston",
+                "points": 22.5,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 6,
+          "margin": 43.42,
+          "upset": false,
+          "tie": false,
+          "recap": "Nix in 5 128.54 defeated Love Thy Nabers 85.12 by 43.42. Nix in 5 top scorers: Carolina Panthers 26.00, Jahmyr Gibbs 23.30. Love Thy Nabers top scorers: DeVonta Smith 27.70, Omarion Hampton 16.50.",
+          "winner": {
+            "rosterId": 2,
+            "userId": "735615874752483328",
+            "name": "Nix in 5",
+            "score": 128.54,
+            "recordAfter": "2-0",
+            "topScorers": [
+              {
+                "playerId": "CAR",
+                "name": "Carolina Panthers",
+                "points": 26,
+                "started": true
+              },
+              {
+                "playerId": "9221",
+                "name": "Jahmyr Gibbs",
+                "points": 23.3,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 7,
+            "userId": "427945970563559424",
+            "name": "Love Thy Nabers",
+            "score": 85.12,
+            "topScorers": [
+              {
+                "playerId": "7525",
+                "name": "DeVonta Smith",
+                "points": 27.7,
+                "started": true
+              },
+              {
+                "playerId": "12507",
+                "name": "Omarion Hampton",
+                "points": 16.5,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 1,
+          "margin": 58.28,
+          "upset": false,
+          "tie": false,
+          "recap": "Chase’n Dubs 158.16 defeated Wolf Pack 99.88 by 58.28. Chase’n Dubs top scorers: Jaxon Smith-Njigba 44.50, Jonathan Taylor 29.20. Wolf Pack top scorers: Derrick Henry 17.70, Parker Washington 15.80.",
+          "winner": {
+            "rosterId": 5,
+            "userId": "427906596501213184",
+            "name": "Chase’n Dubs",
+            "score": 158.16,
+            "recordAfter": "2-0",
+            "topScorers": [
+              {
+                "playerId": "9488",
+                "name": "Jaxon Smith-Njigba",
+                "points": 44.5,
+                "started": true
+              },
+              {
+                "playerId": "6813",
+                "name": "Jonathan Taylor",
+                "points": 29.2,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 3,
+            "userId": "427899269689647104",
+            "name": "Wolf Pack",
+            "score": 99.88,
+            "topScorers": [
+              {
+                "playerId": "3198",
+                "name": "Derrick Henry",
+                "points": 17.7,
+                "started": true
+              },
+              {
+                "playerId": "9487",
+                "name": "Parker Washington",
+                "points": 15.8,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 4,
+          "margin": 11.32,
+          "upset": false,
+          "tie": false,
+          "recap": "A-Lamb-e que tengo hambre 114.62 defeated BigBlue 103.30 by 11.32. A-Lamb-e que tengo hambre top scorers: Dalton Kincaid 22.50, Breece Hall 16.20. BigBlue top scorers: Tre Tucker 26.90, Dalton Schultz 26.00.",
+          "winner": {
+            "rosterId": 6,
+            "userId": "427930731889565696",
+            "name": "A-Lamb-e que tengo hambre",
+            "score": 114.62,
+            "recordAfter": "2-0",
+            "topScorers": [
+              {
+                "playerId": "10236",
+                "name": "Dalton Kincaid",
+                "points": 22.5,
+                "started": true
+              },
+              {
+                "playerId": "8155",
+                "name": "Breece Hall",
+                "points": 16.2,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 4,
+            "userId": "427903132685574144",
+            "name": "BigBlue",
+            "score": 103.3,
+            "topScorers": [
+              {
+                "playerId": "10213",
+                "name": "Tre Tucker",
+                "points": 26.9,
+                "started": false
+              },
+              {
+                "playerId": "5001",
+                "name": "Dalton Schultz",
+                "points": 26,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 5,
+          "margin": 48.98,
+          "upset": true,
+          "tie": false,
+          "recap": "Chalupa Batman 178.76 defeated ramonguaraguao 129.78 by 48.98. Chalupa Batman top scorers: Davante Adams 41.50, Dak Prescott 35.76. ramonguaraguao top scorers: Bryce Young 28.08, Chris Olave 22.60.",
+          "winner": {
+            "rosterId": 8,
+            "userId": "427956169848401920",
+            "name": "Chalupa Batman",
+            "score": 178.76,
+            "recordAfter": "1-1",
+            "topScorers": [
+              {
+                "playerId": "2133",
+                "name": "Davante Adams",
+                "points": 41.5,
+                "started": true
+              },
+              {
+                "playerId": "3294",
+                "name": "Dak Prescott",
+                "points": 35.76,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 10,
+            "userId": "570012643529134080",
+            "name": "ramonguaraguao",
+            "score": 129.78,
+            "topScorers": [
+              {
+                "playerId": "9228",
+                "name": "Bryce Young",
+                "points": 28.08,
+                "started": false
+              },
+              {
+                "playerId": "8144",
+                "name": "Chris Olave",
+                "points": 22.6,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 2,
+          "margin": 62.32,
+          "upset": false,
+          "tie": false,
+          "recap": "Rubuilding 177.02 defeated Team Name Hoes 114.70 by 62.32. Rubuilding top scorers: Josh Allen 43.82, CeeDee Lamb 35.30. Team Name Hoes top scorers: Matthew Stafford 33.98, Travis Kelce 25.10.",
+          "winner": {
+            "rosterId": 12,
+            "userId": "429321092230815744",
+            "name": "Rubuilding",
+            "score": 177.02,
+            "recordAfter": "1-1",
+            "topScorers": [
+              {
+                "playerId": "4984",
+                "name": "Josh Allen",
+                "points": 43.82,
+                "started": true
+              },
+              {
+                "playerId": "6786",
+                "name": "CeeDee Lamb",
+                "points": 35.3,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 9,
+            "userId": "420639669546385408",
+            "name": "Team Name Hoes",
+            "score": 114.7,
+            "topScorers": [
+              {
+                "playerId": "421",
+                "name": "Matthew Stafford",
+                "points": 33.98,
+                "started": false
+              },
+              {
+                "playerId": "1466",
+                "name": "Travis Kelce",
+                "points": 25.1,
+                "started": false
+              }
+            ]
+          }
+        }
+      ],
+      "highScore": {
+        "rosterId": 8,
+        "userId": "427956169848401920",
+        "name": "Chalupa Batman",
+        "points": 178.76
+      },
+      "lowScore": {
+        "rosterId": 7,
+        "userId": "427945970563559424",
+        "name": "Love Thy Nabers",
+        "points": 85.12
+      },
+      "closest": {
+        "margin": 5.28,
+        "winnerName": "MahomiesRidley4MooreJeffe",
+        "winnerScore": 96.88,
+        "loserName": "Saints & Sinners",
+        "loserScore": 91.6,
+        "matchupId": 3
+      },
+      "blowout": {
+        "margin": 62.32,
+        "winnerName": "Rubuilding",
+        "winnerScore": 177.02,
+        "loserName": "Team Name Hoes",
+        "loserScore": 114.7,
+        "matchupId": 2
+      },
+      "topPlayer": {
+        "playerId": "9488",
+        "name": "Jaxon Smith-Njigba",
+        "points": 44.5,
+        "started": true,
+        "rosterId": 5,
+        "userId": "427906596501213184",
+        "manager": "Chase’n Dubs"
+      },
+      "mostBench": {
+        "rosterId": 10,
+        "userId": "570012643529134080",
+        "name": "ramonguaraguao",
+        "points": 89.98
+      },
+      "bestGame": {
+        "matchupId": 3,
+        "winnerName": "MahomiesRidley4MooreJeffe",
+        "winnerScore": 96.88,
+        "loserName": "Saints & Sinners",
+        "loserScore": 91.6,
+        "margin": 5.28,
+        "upset": true
+      },
+      "standings": [
+        {
+          "rank": 1,
+          "rosterId": 5,
+          "userId": "427906596501213184",
+          "name": "Chase’n Dubs",
+          "wins": 2,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 324.08
+        },
+        {
+          "rank": 2,
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "name": "Nix in 5",
+          "wins": 2,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 293.6
+        },
+        {
+          "rank": 3,
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "name": "A-Lamb-e que tengo hambre",
+          "wins": 2,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 277.58
+        },
+        {
+          "rank": 4,
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "name": "Chalupa Batman",
+          "wins": 1,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 303.76
+        },
+        {
+          "rank": 5,
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "name": "Rubuilding",
+          "wins": 1,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 294.16
+        },
+        {
+          "rank": 6,
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "name": "Wolf Pack",
+          "wins": 1,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 256.64
+        },
+        {
+          "rank": 7,
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "name": "ramonguaraguao",
+          "wins": 1,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 254.14
+        },
+        {
+          "rank": 8,
+          "rosterId": 11,
+          "userId": "429316063394541568",
+          "name": "MahomiesRidley4MooreJeffe",
+          "wins": 1,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 244.78
+        },
+        {
+          "rank": 9,
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "name": "Saints & Sinners",
+          "wins": 1,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 211.58
+        },
+        {
+          "rank": 10,
+          "rosterId": 9,
+          "userId": "420639669546385408",
+          "name": "Team Name Hoes",
+          "wins": 0,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 230.96
+        },
+        {
+          "rank": 11,
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "name": "BigBlue",
+          "wins": 0,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 220.7
+        },
+        {
+          "rank": 12,
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "name": "Love Thy Nabers",
+          "wins": 0,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 175.74
+        }
+      ],
+      "waivers": [
+        {
+          "transactionId": "1408300555381542912",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": 28,
+          "adds": [
+            {
+              "playerId": "11435",
+              "name": "Emanuel Wilson",
+              "rosterId": 8
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4033",
+              "name": "David Njoku",
+              "rosterId": 8
+            }
+          ],
+          "statusUpdated": 1790147635463
+        },
+        {
+          "transactionId": "1408299670765056000",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": 9,
+          "adds": [
+            {
+              "playerId": "9225",
+              "name": "Tank Bigsby",
+              "rosterId": 1
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790147635463
+        },
+        {
+          "transactionId": "1408279283155152896",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 1,
+          "adds": [
+            {
+              "playerId": "4227",
+              "name": "Harrison Butker",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "2020",
+              "name": "Cairo Santos",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790147635463
+        },
+        {
+          "transactionId": "1408279103525658624",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 1,
+          "adds": [
+            {
+              "playerId": "1166",
+              "name": "Kirk Cousins",
+              "rosterId": 12
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790147635463
+        },
+        {
+          "transactionId": "1408206700523094016",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": 28,
+          "adds": [
+            {
+              "playerId": "5854",
+              "name": "Drew Lock",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "6130",
+              "name": "Devin Singletary",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1790147635463
+        },
+        {
+          "transactionId": "1408115111075336192",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": 2,
+          "adds": [
+            {
+              "playerId": "1339",
+              "name": "Zach Ertz",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4993",
+              "name": "Mike Gesicki",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1790147635463
+        },
+        {
+          "transactionId": "1407436131942907904",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "manager": "A-Lamb-e que tengo hambre",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "CIN",
+              "name": "Cincinnati Bengals",
+              "rosterId": 6
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "NE",
+              "name": "New England Patriots",
+              "rosterId": 6
+            }
+          ],
+          "statusUpdated": 1789921432056
+        },
+        {
+          "transactionId": "1407435635022712832",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "manager": "A-Lamb-e que tengo hambre",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "6083",
+              "name": "Matt Gay",
+              "rosterId": 6
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "5189",
+              "name": "Eddy Pineiro",
+              "rosterId": 6
+            }
+          ],
+          "statusUpdated": 1789921313580
+        },
+        {
+          "transactionId": "1407430748297826304",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "7571",
+              "name": "Rashod Bateman",
+              "rosterId": 12
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789920148494
+        },
+        {
+          "transactionId": "1407430302976028672",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "2020",
+              "name": "Cairo Santos",
+              "rosterId": 12
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789920042321
+        },
+        {
+          "transactionId": "1407429873009532928",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "MIN",
+              "name": "Minnesota Vikings",
+              "rosterId": 12
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789919939810
+        },
+        {
+          "transactionId": "1406799477355937792",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "11596",
+              "name": "Ben Sinnott",
+              "rosterId": 12
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789769641773
+        },
+        {
+          "transactionId": "1406774127058051072",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "manager": "Love Thy Nabers",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "12536",
+              "name": "Jaylin Noel",
+              "rosterId": 7
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "6783",
+              "name": "Jerry Jeudy",
+              "rosterId": 7
+            }
+          ],
+          "statusUpdated": 1789763597792
+        },
+        {
+          "transactionId": "1406726840147509248",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "12048",
+              "name": "George Holani",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "3286",
+              "name": "Demarcus Robinson",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1789752323713
+        },
+        {
+          "transactionId": "1406402608393990144",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "10218",
+              "name": "Xavier Hutchinson",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "12536",
+              "name": "Jaylin Noel",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1789675020840
+        },
+        {
+          "transactionId": "1406397123091615744",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "3286",
+              "name": "Demarcus Robinson",
+              "rosterId": 2
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789673713041
+        },
+        {
+          "transactionId": "1406372132773978112",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "manager": "BigBlue",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "12472",
+              "name": "Raheim Sanders",
+              "rosterId": 4
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11237",
+              "name": "Jacob Saylors",
+              "rosterId": 4
+            }
+          ],
+          "statusUpdated": 1789667754885
+        },
+        {
+          "transactionId": "1406345963764781056",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "HOU",
+              "name": "Houston Texans",
+              "rosterId": 8
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1789812266113
+        },
+        {
+          "transactionId": "1406345836929032192",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "GB",
+              "name": "Green Bay Packers",
+              "rosterId": 1
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "LAC",
+              "name": "Los Angeles Chargers",
+              "rosterId": 1
+            }
+          ],
+          "statusUpdated": 1789661485467
+        },
+        {
+          "transactionId": "1406268255324151808",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "12536",
+              "name": "Jaylin Noel",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "HOU",
+              "name": "Houston Texans",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1789642988572
+        },
+        {
+          "transactionId": "1405923522659790848",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "9501",
+              "name": "DeMario Douglas",
+              "rosterId": 8
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "8172",
+              "name": "Greg Dulcich",
+              "rosterId": 8
+            }
+          ],
+          "statusUpdated": 1789560797900
+        },
+        {
+          "transactionId": "1405851141308215296",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "11199",
+              "name": "Emari Demercado",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "2505",
+              "name": "Darren Waller",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1789543540841
+        }
+      ],
+      "trades": [
+        {
+          "transactionId": "1407946465828978688",
+          "statusUpdated": 1790043978520,
+          "sides": [
+            {
+              "rosterId": 6,
+              "userId": "427930731889565696",
+              "manager": "A-Lamb-e que tengo hambre",
+              "receivedPlayers": [
+                "CeeDee Lamb"
+              ],
+              "sentPlayers": [
+                "Jonathon Brooks",
+                "Jordyn Tyson"
+              ],
+              "receivedPicks": []
+            },
+            {
+              "rosterId": 12,
+              "userId": "429321092230815744",
+              "manager": "Rubuilding",
+              "receivedPlayers": [
+                "Jonathon Brooks",
+                "Jordyn Tyson"
+              ],
+              "sentPlayers": [
+                "CeeDee Lamb"
+              ],
+              "receivedPicks": [
+                "27 Rd 2 (Nix in 5)",
+                "27 Rd 1 (A-Lamb-e que tengo hambre)",
+                "27 Rd 2 (A-Lamb-e que tengo hambre)",
+                "29 Rd 1 (A-Lamb-e que tengo hambre)"
+              ]
+            }
+          ]
+        },
+        {
+          "transactionId": "1407414709560340480",
+          "statusUpdated": 1789919425923,
+          "sides": [
+            {
+              "rosterId": 8,
+              "userId": "427956169848401920",
+              "manager": "Chalupa Batman",
+              "receivedPlayers": [
+                "Davante Adams",
+                "Ka'imi Fairbairn",
+                "DK Metcalf",
+                "Seattle Seahawks"
+              ],
+              "sentPlayers": [
+                "Emmett Johnson"
+              ],
+              "receivedPicks": []
+            },
+            {
+              "rosterId": 12,
+              "userId": "429321092230815744",
+              "manager": "Rubuilding",
+              "receivedPlayers": [
+                "Emmett Johnson"
+              ],
+              "sentPlayers": [
+                "Davante Adams",
+                "Ka'imi Fairbairn",
+                "DK Metcalf",
+                "Seattle Seahawks"
+              ],
+              "receivedPicks": [
+                "27 Rd 2 (Rubuilding)",
+                "27 Rd 2 (Love Thy Nabers)",
+                "27 Rd 3 (Chalupa Batman)",
+                "29 Rd 1 (Chalupa Batman)"
+              ]
+            }
+          ]
+        },
+        {
+          "transactionId": "1406798502901698560",
+          "statusUpdated": 1789769463302,
+          "sides": [
+            {
+              "rosterId": 3,
+              "userId": "427899269689647104",
+              "manager": "Wolf Pack",
+              "receivedPlayers": [
+                "Derrick Henry"
+              ],
+              "sentPlayers": [],
+              "receivedPicks": []
+            },
+            {
+              "rosterId": 12,
+              "userId": "429321092230815744",
+              "manager": "Rubuilding",
+              "receivedPlayers": [],
+              "sentPlayers": [
+                "Derrick Henry"
+              ],
+              "receivedPicks": [
+                "27 Rd 2 (Saints & Sinners)",
+                "28 Rd 2 (Rubuilding)",
+                "27 Rd 1 (Wolf Pack)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "3": {
+      "season": "2026",
+      "leagueId": "1312077668782473216",
+      "week": 3,
+      "source": "sleeper",
+      "matchups": [
+        {
+          "matchupId": 3,
+          "margin": 34.72,
+          "upset": true,
+          "tie": false,
+          "recap": "Saints & Sinners 145.40 defeated A-Lamb-e que tengo hambre 110.68 by 34.72. Saints & Sinners top scorers: Tyler Shough 27.80, Brock Bowers 27.60. A-Lamb-e que tengo hambre top scorers: Trevor Lawrence 24.78, Harold Fannin 24.10.",
+          "winner": {
+            "rosterId": 1,
+            "userId": "401754707162333184",
+            "name": "Saints & Sinners",
+            "score": 145.4,
+            "recordAfter": "2-1",
+            "topScorers": [
+              {
+                "playerId": "12545",
+                "name": "Tyler Shough",
+                "points": 27.8,
+                "started": true
+              },
+              {
+                "playerId": "11604",
+                "name": "Brock Bowers",
+                "points": 27.6,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 6,
+            "userId": "427930731889565696",
+            "name": "A-Lamb-e que tengo hambre",
+            "score": 110.68,
+            "topScorers": [
+              {
+                "playerId": "7523",
+                "name": "Trevor Lawrence",
+                "points": 24.78,
+                "started": true
+              },
+              {
+                "playerId": "12506",
+                "name": "Harold Fannin",
+                "points": 24.1,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 6,
+          "margin": 22.1,
+          "upset": false,
+          "tie": false,
+          "recap": "Nix in 5 173.64 defeated ramonguaraguao 151.54 by 22.10. Nix in 5 top scorers: Jahmyr Gibbs 41.40, Bo Nix 27.14. ramonguaraguao top scorers: George Kittle 26.20, Jordan Addison 22.00.",
+          "winner": {
+            "rosterId": 2,
+            "userId": "735615874752483328",
+            "name": "Nix in 5",
+            "score": 173.64,
+            "recordAfter": "3-0",
+            "topScorers": [
+              {
+                "playerId": "9221",
+                "name": "Jahmyr Gibbs",
+                "points": 41.4,
+                "started": true
+              },
+              {
+                "playerId": "11563",
+                "name": "Bo Nix",
+                "points": 27.14,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 10,
+            "userId": "570012643529134080",
+            "name": "ramonguaraguao",
+            "score": 151.54,
+            "topScorers": [
+              {
+                "playerId": "4217",
+                "name": "George Kittle",
+                "points": 26.2,
+                "started": true
+              },
+              {
+                "playerId": "9756",
+                "name": "Jordan Addison",
+                "points": 22,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 2,
+          "margin": 53.32,
+          "upset": false,
+          "tie": false,
+          "recap": "Wolf Pack 140.58 defeated Rubuilding 87.26 by 53.32. Wolf Pack top scorers: Jacoby Brissett 27.60, Joe Burrow 26.58. Rubuilding top scorers: Kyren Williams 21.80, Jared Goff 21.36.",
+          "winner": {
+            "rosterId": 3,
+            "userId": "427899269689647104",
+            "name": "Wolf Pack",
+            "score": 140.58,
+            "recordAfter": "2-1",
+            "topScorers": [
+              {
+                "playerId": "3257",
+                "name": "Jacoby Brissett",
+                "points": 27.6,
+                "started": false
+              },
+              {
+                "playerId": "6770",
+                "name": "Joe Burrow",
+                "points": 26.58,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 12,
+            "userId": "429321092230815744",
+            "name": "Rubuilding",
+            "score": 87.26,
+            "topScorers": [
+              {
+                "playerId": "8150",
+                "name": "Kyren Williams",
+                "points": 21.8,
+                "started": true
+              },
+              {
+                "playerId": "3163",
+                "name": "Jared Goff",
+                "points": 21.36,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 4,
+          "margin": 1.16,
+          "upset": false,
+          "tie": false,
+          "recap": "MahomiesRidley4MooreJeffe 127.58 defeated BigBlue 126.42 by 1.16. MahomiesRidley4MooreJeffe top scorers: Brock Purdy 39.28, Sam Darnold 35.66. BigBlue top scorers: Bijan Robinson 37.30, Drake London 32.40.",
+          "winner": {
+            "rosterId": 11,
+            "userId": "429316063394541568",
+            "name": "MahomiesRidley4MooreJeffe",
+            "score": 127.58,
+            "recordAfter": "2-1",
+            "topScorers": [
+              {
+                "playerId": "8183",
+                "name": "Brock Purdy",
+                "points": 39.28,
+                "started": true
+              },
+              {
+                "playerId": "4943",
+                "name": "Sam Darnold",
+                "points": 35.66,
+                "started": false
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 4,
+            "userId": "427903132685574144",
+            "name": "BigBlue",
+            "score": 126.42,
+            "topScorers": [
+              {
+                "playerId": "9509",
+                "name": "Bijan Robinson",
+                "points": 37.3,
+                "started": true
+              },
+              {
+                "playerId": "8112",
+                "name": "Drake London",
+                "points": 32.4,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 1,
+          "margin": 8.84,
+          "upset": false,
+          "tie": false,
+          "recap": "Chase’n Dubs 134.08 defeated Team Name Hoes 125.24 by 8.84. Chase’n Dubs top scorers: Jaxon Smith-Njigba 35.36, Michael Wilson 25.90. Team Name Hoes top scorers: Garrett Wilson 26.70, Lamar Jackson 24.44.",
+          "winner": {
+            "rosterId": 5,
+            "userId": "427906596501213184",
+            "name": "Chase’n Dubs",
+            "score": 134.08,
+            "recordAfter": "3-0",
+            "topScorers": [
+              {
+                "playerId": "9488",
+                "name": "Jaxon Smith-Njigba",
+                "points": 35.36,
+                "started": true
+              },
+              {
+                "playerId": "10232",
+                "name": "Michael Wilson",
+                "points": 25.9,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 9,
+            "userId": "420639669546385408",
+            "name": "Team Name Hoes",
+            "score": 125.24,
+            "topScorers": [
+              {
+                "playerId": "8146",
+                "name": "Garrett Wilson",
+                "points": 26.7,
+                "started": true
+              },
+              {
+                "playerId": "4881",
+                "name": "Lamar Jackson",
+                "points": 24.44,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 5,
+          "margin": 18.06,
+          "upset": false,
+          "tie": false,
+          "recap": "Chalupa Batman 115.54 defeated Love Thy Nabers 97.48 by 18.06. Chalupa Batman top scorers: Davante Adams 22.70, Dak Prescott 19.94. Love Thy Nabers top scorers: Jacksonville Jaguars 17.00, George Pickens 15.20.",
+          "winner": {
+            "rosterId": 8,
+            "userId": "427956169848401920",
+            "name": "Chalupa Batman",
+            "score": 115.54,
+            "recordAfter": "2-1",
+            "topScorers": [
+              {
+                "playerId": "2133",
+                "name": "Davante Adams",
+                "points": 22.7,
+                "started": true
+              },
+              {
+                "playerId": "3294",
+                "name": "Dak Prescott",
+                "points": 19.94,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 7,
+            "userId": "427945970563559424",
+            "name": "Love Thy Nabers",
+            "score": 97.48,
+            "topScorers": [
+              {
+                "playerId": "JAX",
+                "name": "Jacksonville Jaguars",
+                "points": 17,
+                "started": true
+              },
+              {
+                "playerId": "8137",
+                "name": "George Pickens",
+                "points": 15.2,
+                "started": true
+              }
+            ]
+          }
+        }
+      ],
+      "highScore": {
+        "rosterId": 2,
+        "userId": "735615874752483328",
+        "name": "Nix in 5",
+        "points": 173.64
+      },
+      "lowScore": {
+        "rosterId": 12,
+        "userId": "429321092230815744",
+        "name": "Rubuilding",
+        "points": 87.26
+      },
+      "closest": {
+        "margin": 1.16,
+        "winnerName": "MahomiesRidley4MooreJeffe",
+        "winnerScore": 127.58,
+        "loserName": "BigBlue",
+        "loserScore": 126.42,
+        "matchupId": 4
+      },
+      "blowout": {
+        "margin": 53.32,
+        "winnerName": "Wolf Pack",
+        "winnerScore": 140.58,
+        "loserName": "Rubuilding",
+        "loserScore": 87.26,
+        "matchupId": 2
+      },
+      "topPlayer": {
+        "playerId": "9221",
+        "name": "Jahmyr Gibbs",
+        "points": 41.4,
+        "started": true,
+        "rosterId": 2,
+        "userId": "735615874752483328",
+        "manager": "Nix in 5"
+      },
+      "mostBench": {
+        "rosterId": 11,
+        "userId": "429316063394541568",
+        "name": "MahomiesRidley4MooreJeffe",
+        "points": 123.7
+      },
+      "bestGame": {
+        "matchupId": 4,
+        "winnerName": "MahomiesRidley4MooreJeffe",
+        "winnerScore": 127.58,
+        "loserName": "BigBlue",
+        "loserScore": 126.42,
+        "margin": 1.16,
+        "upset": false
+      },
+      "standings": [
+        {
+          "rank": 1,
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "name": "Nix in 5",
+          "wins": 3,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 467.24
+        },
+        {
+          "rank": 2,
+          "rosterId": 5,
+          "userId": "427906596501213184",
+          "name": "Chase’n Dubs",
+          "wins": 3,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 458.16
+        },
+        {
+          "rank": 3,
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "name": "Chalupa Batman",
+          "wins": 2,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 419.3
+        },
+        {
+          "rank": 4,
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "name": "Wolf Pack",
+          "wins": 2,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 397.22
+        },
+        {
+          "rank": 5,
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "name": "A-Lamb-e que tengo hambre",
+          "wins": 2,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 388.26
+        },
+        {
+          "rank": 6,
+          "rosterId": 11,
+          "userId": "429316063394541568",
+          "name": "MahomiesRidley4MooreJeffe",
+          "wins": 2,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 372.36
+        },
+        {
+          "rank": 7,
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "name": "Saints & Sinners",
+          "wins": 2,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 356.98
+        },
+        {
+          "rank": 8,
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "name": "ramonguaraguao",
+          "wins": 1,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 405.68
+        },
+        {
+          "rank": 9,
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "name": "Rubuilding",
+          "wins": 1,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 381.42
+        },
+        {
+          "rank": 10,
+          "rosterId": 9,
+          "userId": "420639669546385408",
+          "name": "Team Name Hoes",
+          "wins": 0,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 356.2
+        },
+        {
+          "rank": 11,
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "name": "BigBlue",
+          "wins": 0,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 347.12
+        },
+        {
+          "rank": 12,
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "name": "Love Thy Nabers",
+          "wins": 0,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 273.22
+        }
+      ],
+      "waivers": [
+        {
+          "transactionId": "1410851943005347840",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "manager": "ramonguaraguao",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "LV",
+              "name": "Las Vegas Raiders",
+              "rosterId": 10
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "SF",
+              "name": "San Francisco 49ers",
+              "rosterId": 10
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410825066459025408",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": 11,
+          "adds": [
+            {
+              "playerId": "9757",
+              "name": "Kendre Miller",
+              "rosterId": 1
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "6828",
+              "name": "AJ Dillon",
+              "rosterId": 1
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410816774408040448",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": 5,
+          "adds": [
+            {
+              "playerId": "2505",
+              "name": "Darren Waller",
+              "rosterId": 8
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "7600",
+              "name": "Pat Freiermuth",
+              "rosterId": 8
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410788960413728768",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "manager": "BigBlue",
+          "faab": 45,
+          "adds": [
+            {
+              "playerId": "12495",
+              "name": "Ollie Gordon",
+              "rosterId": 4
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410765835324133376",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "4663",
+              "name": "Austin Ekeler",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11370",
+              "name": "Chris Brooks",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410748680910176256",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "11630",
+              "name": "Roman Wilson",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "10218",
+              "name": "Xavier Hutchinson",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410748180550696960",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "11792",
+              "name": "Will Reichard",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4227",
+              "name": "Harrison Butker",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410747407527899136",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "12718",
+              "name": "Konata Mumpfield",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11559",
+              "name": "Michael Penix",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410473990182428672",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": 1,
+          "adds": [
+            {
+              "playerId": "12015",
+              "name": "Harrison Mevis",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11539",
+              "name": "Jake Bates",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1790752447987
+        },
+        {
+          "transactionId": "1410417842729259008",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "3634",
+              "name": "Kalif Raymond",
+              "rosterId": 2
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790632327304
+        },
+        {
+          "transactionId": "1409208698034716672",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "NYG",
+              "name": "New York Giants",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "CAR",
+              "name": "Carolina Panthers",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1790344044745
+        },
+        {
+          "transactionId": "1408558088436379648",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "13545",
+              "name": "Trey Smack",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "8259",
+              "name": "Cameron Dicker",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1790188927328
+        },
+        {
+          "transactionId": "1408520745880940544",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "11559",
+              "name": "Michael Penix",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4663",
+              "name": "Austin Ekeler",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790180024169
+        },
+        {
+          "transactionId": "1408495026119409664",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4663",
+              "name": "Austin Ekeler",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "1166",
+              "name": "Kirk Cousins",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790173892100
+        },
+        {
+          "transactionId": "1408490512125562880",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": 3,
+          "adds": [
+            {
+              "playerId": "5844",
+              "name": "T.J. Hockenson",
+              "rosterId": 8
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "HOU",
+              "name": "Houston Texans",
+              "rosterId": 8
+            }
+          ],
+          "statusUpdated": 1790292272527
+        },
+        {
+          "transactionId": "1408487091028942848",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "6828",
+              "name": "AJ Dillon",
+              "rosterId": 1
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790172000228
+        },
+        {
+          "transactionId": "1408486921490935808",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "NE",
+              "name": "New England Patriots",
+              "rosterId": 12
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790171959807
+        }
+      ],
+      "trades": [
+        {
+          "transactionId": "1410417407620550656",
+          "statusUpdated": 1790632259235,
+          "sides": [
+            {
+              "rosterId": 2,
+              "userId": "735615874752483328",
+              "manager": "Nix in 5",
+              "receivedPlayers": [],
+              "sentPlayers": [
+                "Drew Lock",
+                "Terrance Ferguson"
+              ],
+              "receivedPicks": [
+                "27 Rd 3 (Love Thy Nabers)",
+                "28 Rd 2 (Love Thy Nabers)"
+              ]
+            },
+            {
+              "rosterId": 7,
+              "userId": "427945970563559424",
+              "manager": "Love Thy Nabers",
+              "receivedPlayers": [
+                "Drew Lock",
+                "Terrance Ferguson"
+              ],
+              "sentPlayers": [],
+              "receivedPicks": []
+            }
+          ]
+        }
+      ]
+    },
+    "4": {
+      "season": "2026",
+      "leagueId": "1312077668782473216",
+      "week": 4,
+      "source": "sleeper",
+      "matchups": [
+        {
+          "matchupId": 1,
+          "margin": 14.22,
+          "upset": true,
+          "tie": false,
+          "recap": "Saints & Sinners 153.84 defeated Chase’n Dubs 139.62 by 14.22. Saints & Sinners top scorers: Kenneth Walker 32.90, Brock Bowers 20.60. Chase’n Dubs top scorers: Zay Flowers 27.80, Romeo Doubs 23.80.",
+          "winner": {
+            "rosterId": 1,
+            "userId": "401754707162333184",
+            "name": "Saints & Sinners",
+            "score": 153.84,
+            "recordAfter": "3-1",
+            "topScorers": [
+              {
+                "playerId": "8151",
+                "name": "Kenneth Walker",
+                "points": 32.9,
+                "started": true
+              },
+              {
+                "playerId": "11604",
+                "name": "Brock Bowers",
+                "points": 20.6,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 5,
+            "userId": "427906596501213184",
+            "name": "Chase’n Dubs",
+            "score": 139.62,
+            "topScorers": [
+              {
+                "playerId": "9997",
+                "name": "Zay Flowers",
+                "points": 27.8,
+                "started": true
+              },
+              {
+                "playerId": "8121",
+                "name": "Romeo Doubs",
+                "points": 23.8,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 4,
+          "margin": 22.08,
+          "upset": false,
+          "tie": false,
+          "recap": "Nix in 5 141.96 defeated Team Name Hoes 119.88 by 22.08. Nix in 5 top scorers: Puka Nacua 27.70, Tee Higgins 26.70. Team Name Hoes top scorers: Sam LaPorta 22.40, Lamar Jackson 20.88.",
+          "winner": {
+            "rosterId": 2,
+            "userId": "735615874752483328",
+            "name": "Nix in 5",
+            "score": 141.96,
+            "recordAfter": "4-0",
+            "topScorers": [
+              {
+                "playerId": "9493",
+                "name": "Puka Nacua",
+                "points": 27.7,
+                "started": true
+              },
+              {
+                "playerId": "6801",
+                "name": "Tee Higgins",
+                "points": 26.7,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 9,
+            "userId": "420639669546385408",
+            "name": "Team Name Hoes",
+            "score": 119.88,
+            "topScorers": [
+              {
+                "playerId": "10859",
+                "name": "Sam LaPorta",
+                "points": 22.4,
+                "started": true
+              },
+              {
+                "playerId": "4881",
+                "name": "Lamar Jackson",
+                "points": 20.88,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 3,
+          "margin": 6.52,
+          "upset": false,
+          "tie": false,
+          "recap": "Wolf Pack 133.92 defeated Chalupa Batman 127.40 by 6.52. Wolf Pack top scorers: Nico Collins 32.80, Kirk Cousins 26.60. Chalupa Batman top scorers: Javonte Williams 31.30, Emanuel Wilson 26.00.",
+          "winner": {
+            "rosterId": 3,
+            "userId": "427899269689647104",
+            "name": "Wolf Pack",
+            "score": 133.92,
+            "recordAfter": "3-1",
+            "topScorers": [
+              {
+                "playerId": "7569",
+                "name": "Nico Collins",
+                "points": 32.8,
+                "started": true
+              },
+              {
+                "playerId": "1166",
+                "name": "Kirk Cousins",
+                "points": 26.6,
+                "started": false
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 8,
+            "userId": "427956169848401920",
+            "name": "Chalupa Batman",
+            "score": 127.4,
+            "topScorers": [
+              {
+                "playerId": "7588",
+                "name": "Javonte Williams",
+                "points": 31.3,
+                "started": true
+              },
+              {
+                "playerId": "11435",
+                "name": "Emanuel Wilson",
+                "points": 26,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 2,
+          "margin": 24.3,
+          "upset": false,
+          "tie": false,
+          "recap": "Rubuilding 129.88 defeated BigBlue 105.58 by 24.30. Rubuilding top scorers: Kyren Williams 36.70, Bryce Young 22.46. BigBlue top scorers: Bijan Robinson 29.70, Ollie Gordon 20.00.",
+          "winner": {
+            "rosterId": 12,
+            "userId": "429321092230815744",
+            "name": "Rubuilding",
+            "score": 129.88,
+            "recordAfter": "2-2",
+            "topScorers": [
+              {
+                "playerId": "8150",
+                "name": "Kyren Williams",
+                "points": 36.7,
+                "started": true
+              },
+              {
+                "playerId": "9228",
+                "name": "Bryce Young",
+                "points": 22.46,
+                "started": false
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 4,
+            "userId": "427903132685574144",
+            "name": "BigBlue",
+            "score": 105.58,
+            "topScorers": [
+              {
+                "playerId": "9509",
+                "name": "Bijan Robinson",
+                "points": 29.7,
+                "started": true
+              },
+              {
+                "playerId": "12495",
+                "name": "Ollie Gordon",
+                "points": 20,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 6,
+          "margin": 46.9,
+          "upset": false,
+          "tie": false,
+          "recap": "A-Lamb-e que tengo hambre 162.58 defeated Love Thy Nabers 115.68 by 46.90. A-Lamb-e que tengo hambre top scorers: Tetairoa McMillan 44.20, CeeDee Lamb 41.30. Love Thy Nabers top scorers: Drake Maye 28.16, Brian Robinson 25.70.",
+          "winner": {
+            "rosterId": 6,
+            "userId": "427930731889565696",
+            "name": "A-Lamb-e que tengo hambre",
+            "score": 162.58,
+            "recordAfter": "3-1",
+            "topScorers": [
+              {
+                "playerId": "12526",
+                "name": "Tetairoa McMillan",
+                "points": 44.2,
+                "started": true
+              },
+              {
+                "playerId": "6786",
+                "name": "CeeDee Lamb",
+                "points": 41.3,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 7,
+            "userId": "427945970563559424",
+            "name": "Love Thy Nabers",
+            "score": 115.68,
+            "topScorers": [
+              {
+                "playerId": "11564",
+                "name": "Drake Maye",
+                "points": 28.16,
+                "started": false
+              },
+              {
+                "playerId": "8154",
+                "name": "Brian Robinson",
+                "points": 25.7,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 5,
+          "margin": 19.42,
+          "upset": true,
+          "tie": false,
+          "recap": "ramonguaraguao 121.32 defeated MahomiesRidley4MooreJeffe 101.90 by 19.42. ramonguaraguao top scorers: Kyle Monangai 28.00, Keon Coleman 23.60. MahomiesRidley4MooreJeffe top scorers: Chuba Hubbard 25.90, Brock Purdy 23.62.",
+          "winner": {
+            "rosterId": 10,
+            "userId": "570012643529134080",
+            "name": "ramonguaraguao",
+            "score": 121.32,
+            "recordAfter": "2-2",
+            "topScorers": [
+              {
+                "playerId": "12534",
+                "name": "Kyle Monangai",
+                "points": 28,
+                "started": false
+              },
+              {
+                "playerId": "11637",
+                "name": "Keon Coleman",
+                "points": 23.6,
+                "started": false
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 11,
+            "userId": "429316063394541568",
+            "name": "MahomiesRidley4MooreJeffe",
+            "score": 101.9,
+            "topScorers": [
+              {
+                "playerId": "7594",
+                "name": "Chuba Hubbard",
+                "points": 25.9,
+                "started": true
+              },
+              {
+                "playerId": "8183",
+                "name": "Brock Purdy",
+                "points": 23.62,
+                "started": false
+              }
+            ]
+          }
+        }
+      ],
+      "highScore": {
+        "rosterId": 6,
+        "userId": "427930731889565696",
+        "name": "A-Lamb-e que tengo hambre",
+        "points": 162.58
+      },
+      "lowScore": {
+        "rosterId": 11,
+        "userId": "429316063394541568",
+        "name": "MahomiesRidley4MooreJeffe",
+        "points": 101.9
+      },
+      "closest": {
+        "margin": 6.52,
+        "winnerName": "Wolf Pack",
+        "winnerScore": 133.92,
+        "loserName": "Chalupa Batman",
+        "loserScore": 127.4,
+        "matchupId": 3
+      },
+      "blowout": {
+        "margin": 46.9,
+        "winnerName": "A-Lamb-e que tengo hambre",
+        "winnerScore": 162.58,
+        "loserName": "Love Thy Nabers",
+        "loserScore": 115.68,
+        "matchupId": 6
+      },
+      "topPlayer": {
+        "playerId": "12526",
+        "name": "Tetairoa McMillan",
+        "points": 44.2,
+        "started": true,
+        "rosterId": 6,
+        "userId": "427930731889565696",
+        "manager": "A-Lamb-e que tengo hambre"
+      },
+      "mostBench": {
+        "rosterId": 8,
+        "userId": "427956169848401920",
+        "name": "Chalupa Batman",
+        "points": 104.4
+      },
+      "bestGame": {
+        "matchupId": 1,
+        "winnerName": "Saints & Sinners",
+        "winnerScore": 153.84,
+        "loserName": "Chase’n Dubs",
+        "loserScore": 139.62,
+        "margin": 14.22,
+        "upset": true
+      },
+      "standings": [
+        {
+          "rank": 1,
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "name": "Nix in 5",
+          "wins": 4,
+          "losses": 0,
+          "ties": 0,
+          "pointsFor": 609.2
+        },
+        {
+          "rank": 2,
+          "rosterId": 5,
+          "userId": "427906596501213184",
+          "name": "Chase’n Dubs",
+          "wins": 3,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 597.78
+        },
+        {
+          "rank": 3,
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "name": "A-Lamb-e que tengo hambre",
+          "wins": 3,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 550.84
+        },
+        {
+          "rank": 4,
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "name": "Wolf Pack",
+          "wins": 3,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 531.14
+        },
+        {
+          "rank": 5,
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "name": "Saints & Sinners",
+          "wins": 3,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 510.82
+        },
+        {
+          "rank": 6,
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "name": "Chalupa Batman",
+          "wins": 2,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 546.7
+        },
+        {
+          "rank": 7,
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "name": "ramonguaraguao",
+          "wins": 2,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 527
+        },
+        {
+          "rank": 8,
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "name": "Rubuilding",
+          "wins": 2,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 511.3
+        },
+        {
+          "rank": 9,
+          "rosterId": 11,
+          "userId": "429316063394541568",
+          "name": "MahomiesRidley4MooreJeffe",
+          "wins": 2,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 474.26
+        },
+        {
+          "rank": 10,
+          "rosterId": 9,
+          "userId": "420639669546385408",
+          "name": "Team Name Hoes",
+          "wins": 0,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 476.08
+        },
+        {
+          "rank": 11,
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "name": "BigBlue",
+          "wins": 0,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 452.7
+        },
+        {
+          "rank": 12,
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "name": "Love Thy Nabers",
+          "wins": 0,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 388.9
+        }
+      ],
+      "waivers": [
+        {
+          "transactionId": "1413370053319020544",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "6783",
+              "name": "Jerry Jeudy",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4018",
+              "name": "Joe Mixon",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1791357246422
+        },
+        {
+          "transactionId": "1413357505320337408",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "manager": "Chalupa Batman",
+          "faab": 14,
+          "adds": [
+            {
+              "playerId": "13264",
+              "name": "Dohnte Meyers",
+              "rosterId": 8
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "2505",
+              "name": "Darren Waller",
+              "rosterId": 8
+            }
+          ],
+          "statusUpdated": 1791357246422
+        },
+        {
+          "transactionId": "1413353715955400704",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": 19,
+          "adds": [
+            {
+              "playerId": "11577",
+              "name": "Will Shipley",
+              "rosterId": 1
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1791357246422
+        },
+        {
+          "transactionId": "1413314523011485696",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "manager": "Love Thy Nabers",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "7567",
+              "name": "Kenny Gainwell",
+              "rosterId": 7
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1791357246422
+        },
+        {
+          "transactionId": "1413314379474071552",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "manager": "Love Thy Nabers",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "HOU",
+              "name": "Houston Texans",
+              "rosterId": 7
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1791357246422
+        },
+        {
+          "transactionId": "1413246088869122048",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 0,
+          "adds": [
+            {
+              "playerId": "3271",
+              "name": "Tyler Higbee",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4177",
+              "name": "Mack Hollins",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1791357246422
+        },
+        {
+          "transactionId": "1412418753425117184",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4018",
+              "name": "Joe Mixon",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "7567",
+              "name": "Kenny Gainwell",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1791109381589
+        },
+        {
+          "transactionId": "1412201740496908288",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "manager": "A-Lamb-e que tengo hambre",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "7571",
+              "name": "Rashod Bateman",
+              "rosterId": 6
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1791057641675
+        },
+        {
+          "transactionId": "1412128230734905344",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "5189",
+              "name": "Eddy Pineiro",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4227",
+              "name": "Harrison Butker",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1791040115582
+        },
+        {
+          "transactionId": "1411938857141731328",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "manager": "ramonguaraguao",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "12961",
+              "name": "Ryan Fitzgerald",
+              "rosterId": 10
+            }
+          ],
+          "drops": [],
+          "statusUpdated": 1790994965399
+        },
+        {
+          "transactionId": "1411857770164109312",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "3271",
+              "name": "Tyler Higbee",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "12718",
+              "name": "Konata Mumpfield",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790975632757
+        },
+        {
+          "transactionId": "1411762272560230400",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4227",
+              "name": "Harrison Butker",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "12015",
+              "name": "Harrison Mevis",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1790952864355
+        },
+        {
+          "transactionId": "1411761356662726656",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "NO",
+              "name": "New Orleans Saints",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "12048",
+              "name": "George Holani",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1790952645988
+        },
+        {
+          "transactionId": "1411760024761462784",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "1166",
+              "name": "Kirk Cousins",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "3257",
+              "name": "Jacoby Brissett",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1790952328437
+        },
+        {
+          "transactionId": "1411759253915447296",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4993",
+              "name": "Mike Gesicki",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "1339",
+              "name": "Zach Ertz",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1790952144653
+        },
+        {
+          "transactionId": "1411401719602065408",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4177",
+              "name": "Mack Hollins",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11199",
+              "name": "Emari Demercado",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790866901830
+        },
+        {
+          "transactionId": "1411056188505722880",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4017",
+              "name": "Deshaun Watson",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "NYG",
+              "name": "New York Giants",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1790784520797
+        },
+        {
+          "transactionId": "1411036902831730688",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "CHI",
+              "name": "Chicago Bears",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "KC",
+              "name": "Kansas City Chiefs",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1790779922734
+        },
+        {
+          "transactionId": "1410928147553075200",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "7567",
+              "name": "Kenny Gainwell",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "NE",
+              "name": "New England Patriots",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790753993455
+        },
+        {
+          "transactionId": "1410927577299685376",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "9511",
+              "name": "Keaton Mitchell",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "7571",
+              "name": "Rashod Bateman",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1790753857497
+        }
+      ],
+      "trades": [
+        {
+          "transactionId": "1411881952012681216",
+          "statusUpdated": 1790983316738,
+          "sides": [
+            {
+              "rosterId": 10,
+              "userId": "570012643529134080",
+              "manager": "ramonguaraguao",
+              "receivedPlayers": [
+                "Josh Allen"
+              ],
+              "sentPlayers": [
+                "Bryce Young",
+                "Emeka Egbuka"
+              ],
+              "receivedPicks": [
+                "28 Rd 2 (Rubuilding)",
+                "29 Rd 2 (Rubuilding)"
+              ]
+            },
+            {
+              "rosterId": 12,
+              "userId": "429321092230815744",
+              "manager": "Rubuilding",
+              "receivedPlayers": [
+                "Bryce Young",
+                "Emeka Egbuka"
+              ],
+              "sentPlayers": [
+                "Josh Allen"
+              ],
+              "receivedPicks": [
+                "27 Rd 1 (ramonguaraguao)",
+                "27 Rd 2 (ramonguaraguao)",
+                "29 Rd 1 (ramonguaraguao)",
+                "28 Rd 1 (Love Thy Nabers)"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "5": {
+      "season": "2026",
+      "leagueId": "1312077668782473216",
+      "week": 5,
+      "source": "sleeper",
+      "matchups": [
+        {
+          "matchupId": 2,
+          "margin": 37.44,
+          "upset": false,
+          "tie": false,
+          "recap": "Saints & Sinners 172.38 defeated Rubuilding 134.94 by 37.44. Saints & Sinners top scorers: Jaylen Warren 40.80, Jordan Love 26.28. Rubuilding top scorers: Jared Goff 30.94, Spencer Shrader 21.00.",
+          "winner": {
+            "rosterId": 1,
+            "userId": "401754707162333184",
+            "name": "Saints & Sinners",
+            "score": 172.38,
+            "recordAfter": "4-1",
+            "topScorers": [
+              {
+                "playerId": "8228",
+                "name": "Jaylen Warren",
+                "points": 40.8,
+                "started": true
+              },
+              {
+                "playerId": "6804",
+                "name": "Jordan Love",
+                "points": 26.28,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 12,
+            "userId": "429321092230815744",
+            "name": "Rubuilding",
+            "score": 134.94,
+            "topScorers": [
+              {
+                "playerId": "3163",
+                "name": "Jared Goff",
+                "points": 30.94,
+                "started": true
+              },
+              {
+                "playerId": "12185",
+                "name": "Spencer Shrader",
+                "points": 21,
+                "started": false
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 3,
+          "margin": 15.74,
+          "upset": true,
+          "tie": false,
+          "recap": "Wolf Pack 178.40 defeated Nix in 5 162.66 by 15.74. Wolf Pack top scorers: Christian Watson 36.30, Joe Burrow 32.60. Nix in 5 top scorers: Jahmyr Gibbs 37.70, Puka Nacua 37.70.",
+          "winner": {
+            "rosterId": 3,
+            "userId": "427899269689647104",
+            "name": "Wolf Pack",
+            "score": 178.4,
+            "recordAfter": "4-1",
+            "topScorers": [
+              {
+                "playerId": "8167",
+                "name": "Christian Watson",
+                "points": 36.3,
+                "started": true
+              },
+              {
+                "playerId": "6770",
+                "name": "Joe Burrow",
+                "points": 32.6,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 2,
+            "userId": "735615874752483328",
+            "name": "Nix in 5",
+            "score": 162.66,
+            "topScorers": [
+              {
+                "playerId": "9221",
+                "name": "Jahmyr Gibbs",
+                "points": 37.7,
+                "started": true
+              },
+              {
+                "playerId": "9493",
+                "name": "Puka Nacua",
+                "points": 37.7,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 1,
+          "margin": 16.82,
+          "upset": false,
+          "tie": false,
+          "recap": "Chase’n Dubs 121.78 defeated BigBlue 104.96 by 16.82. Chase’n Dubs top scorers: Jaxon Smith-Njigba 22.80, Ja'Marr Chase 21.70. BigBlue top scorers: Drake London 18.80, Kyler Murray 18.26.",
+          "winner": {
+            "rosterId": 5,
+            "userId": "427906596501213184",
+            "name": "Chase’n Dubs",
+            "score": 121.78,
+            "recordAfter": "4-1",
+            "topScorers": [
+              {
+                "playerId": "9488",
+                "name": "Jaxon Smith-Njigba",
+                "points": 22.8,
+                "started": true
+              },
+              {
+                "playerId": "7564",
+                "name": "Ja'Marr Chase",
+                "points": 21.7,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 4,
+            "userId": "427903132685574144",
+            "name": "BigBlue",
+            "score": 104.96,
+            "topScorers": [
+              {
+                "playerId": "8112",
+                "name": "Drake London",
+                "points": 18.8,
+                "started": true
+              },
+              {
+                "playerId": "5849",
+                "name": "Kyler Murray",
+                "points": 18.26,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 6,
+          "margin": 35.46,
+          "upset": true,
+          "tie": false,
+          "recap": "ramonguaraguao 122.40 defeated A-Lamb-e que tengo hambre 86.94 by 35.46. ramonguaraguao top scorers: Bucky Irving 33.50, Josh Allen 31.50. A-Lamb-e que tengo hambre top scorers: Mike Evans 26.30, Trevor Lawrence 21.74.",
+          "winner": {
+            "rosterId": 10,
+            "userId": "570012643529134080",
+            "name": "ramonguaraguao",
+            "score": 122.4,
+            "recordAfter": "3-2",
+            "topScorers": [
+              {
+                "playerId": "11584",
+                "name": "Bucky Irving",
+                "points": 33.5,
+                "started": true
+              },
+              {
+                "playerId": "4984",
+                "name": "Josh Allen",
+                "points": 31.5,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 6,
+            "userId": "427930731889565696",
+            "name": "A-Lamb-e que tengo hambre",
+            "score": 86.94,
+            "topScorers": [
+              {
+                "playerId": "2216",
+                "name": "Mike Evans",
+                "points": 26.3,
+                "started": true
+              },
+              {
+                "playerId": "7523",
+                "name": "Trevor Lawrence",
+                "points": 21.74,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 5,
+          "margin": 15.38,
+          "upset": true,
+          "tie": false,
+          "recap": "Love Thy Nabers 132.44 defeated MahomiesRidley4MooreJeffe 117.06 by 15.38. Love Thy Nabers top scorers: Drake Maye 46.46, Malik Nabers 29.10. MahomiesRidley4MooreJeffe top scorers: Tyler Warren 21.40, James Cook 20.80.",
+          "winner": {
+            "rosterId": 7,
+            "userId": "427945970563559424",
+            "name": "Love Thy Nabers",
+            "score": 132.44,
+            "recordAfter": "1-4",
+            "topScorers": [
+              {
+                "playerId": "11564",
+                "name": "Drake Maye",
+                "points": 46.46,
+                "started": false
+              },
+              {
+                "playerId": "11632",
+                "name": "Malik Nabers",
+                "points": 29.1,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 11,
+            "userId": "429316063394541568",
+            "name": "MahomiesRidley4MooreJeffe",
+            "score": 117.06,
+            "topScorers": [
+              {
+                "playerId": "12518",
+                "name": "Tyler Warren",
+                "points": 21.4,
+                "started": true
+              },
+              {
+                "playerId": "8138",
+                "name": "James Cook",
+                "points": 20.8,
+                "started": true
+              }
+            ]
+          }
+        },
+        {
+          "matchupId": 4,
+          "margin": 38.78,
+          "upset": true,
+          "tie": false,
+          "recap": "Team Name Hoes 154.22 defeated Chalupa Batman 115.44 by 38.78. Team Name Hoes top scorers: Matthew Stafford 32.32, Garrett Wilson 23.40. Chalupa Batman top scorers: Davante Adams 22.10, Ka'imi Fairbairn 17.00.",
+          "winner": {
+            "rosterId": 9,
+            "userId": "420639669546385408",
+            "name": "Team Name Hoes",
+            "score": 154.22,
+            "recordAfter": "1-4",
+            "topScorers": [
+              {
+                "playerId": "421",
+                "name": "Matthew Stafford",
+                "points": 32.32,
+                "started": true
+              },
+              {
+                "playerId": "8146",
+                "name": "Garrett Wilson",
+                "points": 23.4,
+                "started": true
+              }
+            ]
+          },
+          "loser": {
+            "rosterId": 8,
+            "userId": "427956169848401920",
+            "name": "Chalupa Batman",
+            "score": 115.44,
+            "topScorers": [
+              {
+                "playerId": "2133",
+                "name": "Davante Adams",
+                "points": 22.1,
+                "started": true
+              },
+              {
+                "playerId": "3451",
+                "name": "Ka'imi Fairbairn",
+                "points": 17,
+                "started": true
+              }
+            ]
+          }
+        }
+      ],
+      "highScore": {
+        "rosterId": 3,
+        "userId": "427899269689647104",
+        "name": "Wolf Pack",
+        "points": 178.4
+      },
+      "lowScore": {
+        "rosterId": 6,
+        "userId": "427930731889565696",
+        "name": "A-Lamb-e que tengo hambre",
+        "points": 86.94
+      },
+      "closest": {
+        "margin": 15.38,
+        "winnerName": "Love Thy Nabers",
+        "winnerScore": 132.44,
+        "loserName": "MahomiesRidley4MooreJeffe",
+        "loserScore": 117.06,
+        "matchupId": 5
+      },
+      "blowout": {
+        "margin": 38.78,
+        "winnerName": "Team Name Hoes",
+        "winnerScore": 154.22,
+        "loserName": "Chalupa Batman",
+        "loserScore": 115.44,
+        "matchupId": 4
+      },
+      "topPlayer": {
+        "playerId": "11564",
+        "name": "Drake Maye",
+        "points": 46.46,
+        "started": false,
+        "rosterId": 7,
+        "userId": "427945970563559424",
+        "manager": "Love Thy Nabers"
+      },
+      "mostBench": {
+        "rosterId": 2,
+        "userId": "735615874752483328",
+        "name": "Nix in 5",
+        "points": 82.72
+      },
+      "bestGame": {
+        "matchupId": 3,
+        "winnerName": "Wolf Pack",
+        "winnerScore": 178.4,
+        "loserName": "Nix in 5",
+        "loserScore": 162.66,
+        "margin": 15.74,
+        "upset": true
+      },
+      "standings": [
+        {
+          "rank": 1,
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "name": "Nix in 5",
+          "wins": 4,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 771.86
+        },
+        {
+          "rank": 2,
+          "rosterId": 5,
+          "userId": "427906596501213184",
+          "name": "Chase’n Dubs",
+          "wins": 4,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 719.56
+        },
+        {
+          "rank": 3,
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "name": "Wolf Pack",
+          "wins": 4,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 709.54
+        },
+        {
+          "rank": 4,
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "name": "Saints & Sinners",
+          "wins": 4,
+          "losses": 1,
+          "ties": 0,
+          "pointsFor": 683.2
+        },
+        {
+          "rank": 5,
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "name": "ramonguaraguao",
+          "wins": 3,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 649.4
+        },
+        {
+          "rank": 6,
+          "rosterId": 6,
+          "userId": "427930731889565696",
+          "name": "A-Lamb-e que tengo hambre",
+          "wins": 3,
+          "losses": 2,
+          "ties": 0,
+          "pointsFor": 637.78
+        },
+        {
+          "rank": 7,
+          "rosterId": 8,
+          "userId": "427956169848401920",
+          "name": "Chalupa Batman",
+          "wins": 2,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 662.14
+        },
+        {
+          "rank": 8,
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "name": "Rubuilding",
+          "wins": 2,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 646.24
+        },
+        {
+          "rank": 9,
+          "rosterId": 11,
+          "userId": "429316063394541568",
+          "name": "MahomiesRidley4MooreJeffe",
+          "wins": 2,
+          "losses": 3,
+          "ties": 0,
+          "pointsFor": 591.32
+        },
+        {
+          "rank": 10,
+          "rosterId": 9,
+          "userId": "420639669546385408",
+          "name": "Team Name Hoes",
+          "wins": 1,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 630.3
+        },
+        {
+          "rank": 11,
+          "rosterId": 7,
+          "userId": "427945970563559424",
+          "name": "Love Thy Nabers",
+          "wins": 1,
+          "losses": 4,
+          "ties": 0,
+          "pointsFor": 521.34
+        },
+        {
+          "rank": 12,
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "name": "BigBlue",
+          "wins": 0,
+          "losses": 5,
+          "ties": 0,
+          "pointsFor": 557.66
+        }
+      ],
+      "waivers": [
+        {
+          "transactionId": "1415973590024704000",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "manager": "BigBlue",
+          "faab": 2,
+          "adds": [
+            {
+              "playerId": "96",
+              "name": "Aaron Rodgers",
+              "rosterId": 4
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11655",
+              "name": "Tyrone Tracy",
+              "rosterId": 4
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415973460504522752",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 4,
+          "userId": "427903132685574144",
+          "manager": "BigBlue",
+          "faab": 3,
+          "adds": [
+            {
+              "playerId": "11439",
+              "name": "Jaleel McLaughlin",
+              "rosterId": 4
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "12472",
+              "name": "Raheim Sanders",
+              "rosterId": 4
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415962628467019776",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": 19,
+          "adds": [
+            {
+              "playerId": "8129",
+              "name": "Dameon Pierce",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11539",
+              "name": "Jake Bates",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415962440843210752",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": 9,
+          "adds": [
+            {
+              "playerId": "4454",
+              "name": "Kendrick Bourne",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "WAS",
+              "name": "Washington Commanders",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415850607465525248",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": 25,
+          "adds": [
+            {
+              "playerId": "7600",
+              "name": "Pat Freiermuth",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4663",
+              "name": "Austin Ekeler",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415786000143142912",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": 4,
+          "adds": [
+            {
+              "playerId": "13150",
+              "name": "Darius Cooper",
+              "rosterId": 1
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "11577",
+              "name": "Will Shipley",
+              "rosterId": 1
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415716818919669760",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 10,
+          "userId": "570012643529134080",
+          "manager": "ramonguaraguao",
+          "faab": 7,
+          "adds": [
+            {
+              "playerId": "SF",
+              "name": "San Francisco 49ers",
+              "rosterId": 10
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "LV",
+              "name": "Las Vegas Raiders",
+              "rosterId": 10
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415666353976717312",
+          "type": "waiver",
+          "status": "complete",
+          "rosterId": 1,
+          "userId": "401754707162333184",
+          "manager": "Saints & Sinners",
+          "faab": 2,
+          "adds": [
+            {
+              "playerId": "NE",
+              "name": "New England Patriots",
+              "rosterId": 1
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "GB",
+              "name": "Green Bay Packers",
+              "rosterId": 1
+            }
+          ],
+          "statusUpdated": 1791962080950
+        },
+        {
+          "transactionId": "1415001586777735168",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "WAS",
+              "name": "Washington Commanders",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "NO",
+              "name": "New Orleans Saints",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1791725177047
+        },
+        {
+          "transactionId": "1414779851268784128",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "12542",
+              "name": "Efton Chism",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4454",
+              "name": "Kendrick Bourne",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1791672311182
+        },
+        {
+          "transactionId": "1414778535335215104",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 12,
+          "userId": "429321092230815744",
+          "manager": "Rubuilding",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "4454",
+              "name": "Kendrick Bourne",
+              "rosterId": 12
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "6783",
+              "name": "Jerry Jeudy",
+              "rosterId": 12
+            }
+          ],
+          "statusUpdated": 1791671997439
+        },
+        {
+          "transactionId": "1414397234098814976",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 11,
+          "userId": "429316063394541568",
+          "manager": "MahomiesRidley4MooreJeffe",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "10235",
+              "name": "Roschon Johnson",
+              "rosterId": 11
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "4066",
+              "name": "Evan Engram",
+              "rosterId": 11
+            }
+          ],
+          "statusUpdated": 1791581088140
+        },
+        {
+          "transactionId": "1413737136074575872",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 3,
+          "userId": "427899269689647104",
+          "manager": "Wolf Pack",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "13833",
+              "name": "Dominic Zvada",
+              "rosterId": 3
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "13545",
+              "name": "Trey Smack",
+              "rosterId": 3
+            }
+          ],
+          "statusUpdated": 1791423708507
+        },
+        {
+          "transactionId": "1413529407473111040",
+          "type": "free_agent",
+          "status": "complete",
+          "rosterId": 2,
+          "userId": "735615874752483328",
+          "manager": "Nix in 5",
+          "faab": null,
+          "adds": [
+            {
+              "playerId": "11539",
+              "name": "Jake Bates",
+              "rosterId": 2
+            }
+          ],
+          "drops": [
+            {
+              "playerId": "5189",
+              "name": "Eddy Pineiro",
+              "rosterId": 2
+            }
+          ],
+          "statusUpdated": 1791374182150
+        }
+      ],
+      "trades": []
+    }
+  }
+}

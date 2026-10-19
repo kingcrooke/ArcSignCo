@@ -282,7 +282,7 @@ function WeeklyAddsStrip({
             </p>
             {showPending && m.pending ? (
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--dyn-accent-bright)]">
-                Pending
+                Not yet scored
               </p>
             ) : m.startedPoints != null ? (
               <p className="mt-1 tabular-nums text-[var(--dyn-accent)]">
@@ -681,7 +681,7 @@ function MoveRow({
         {move.status === 'failed' ? (
           <span className="text-xs uppercase tracking-wide text-red-200">Failed</span>
         ) : move.pending ? (
-          <span className="text-xs uppercase tracking-wide text-[var(--dyn-accent-bright)]">Pending</span>
+          <span className="text-xs uppercase tracking-wide text-[var(--dyn-accent-bright)]">Not yet scored</span>
         ) : (
           <span className="tabular-nums text-[var(--dyn-accent)]">
             {move.startedPoints == null ? '' : `${pts(move.startedPoints)} started`}

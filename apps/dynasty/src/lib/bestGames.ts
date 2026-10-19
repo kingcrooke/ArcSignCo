@@ -78,6 +78,21 @@ export function youtubeEmbedUrl(videoUrl: string): string | null {
 interface WinLoss {
   wins: number
   losses: number
+  ties?: number
+}
+
+function winPercent(rec: WinLoss): number | null {
+  const games = rec.wins + rec.losses + (rec.ties ?? 0)
+  if (games <= 0) return null
+  return rec.wins / games
+}
+
+/** Upset only when the winner's win% going in was strictly worse. Equal records are not upsets. */
+export function isUpset(winner: WinLoss, loser: WinLoss): boolean {
+  const winnerPct = winPercent(winner)
+  const loserPct = winPercent(loser)
+  if (winnerPct == null || loserPct == null) return false
+  return winnerPct < loserPct
 }
 
 function recordsBeforeWeek(
@@ -97,6 +112,9 @@ function recordsBeforeWeek(
       } else if (away.points > home.points) {
         aa.wins++
         ha.losses++
+      } else {
+        ha.ties = (ha.ties ?? 0) + 1
+        aa.ties = (aa.ties ?? 0) + 1
       }
       records.set(home.roster_id, ha)
       records.set(away.roster_id, aa)
@@ -121,8 +139,9 @@ export function computeGameBreakdown(
   const loser = winner === home.roster_id ? away.roster_id : home.roster_id
   const winnerRec = recordsBefore.get(winner) ?? { wins: 0, losses: 0 }
   const loserRec = recordsBefore.get(loser) ?? { wins: 0, losses: 0 }
-  const upsetUnits = Math.max(0, winnerRec.losses - loserRec.wins)
-  const upsetBonus = 12 * upsetUnits
+  const upset = isUpset(winnerRec, loserRec)
+  const upsetUnits = upset ? 1 : 0
+  const upsetBonus = upset ? 12 : 0
 
   const composite = closeness + shootout + upsetBonus
 

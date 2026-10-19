@@ -6,7 +6,7 @@ import type {
   SleeperTransaction,
   TeamInfo,
 } from './types'
-import type { TradeLogEntry } from './trades'
+import { tradeWeekLabel, type TradeLogEntry } from './trades'
 
 export interface DraftBoard {
   draft: SleeperDraft
@@ -26,10 +26,13 @@ export interface FuturePickRow {
 export interface TradedPickHistoryRow {
   season: string
   round: number
+  /** Original owner of the pick (Sleeper roster_id). */
+  originalRosterId: number
   fromRosterId: number
   toRosterId: number
   tradeSeason: string
   tradeWeek: number
+  weekLabel: string
   dateLabel: string
 }
 
@@ -78,6 +81,8 @@ export function futurePickOwnership(
   const rows: FuturePickRow[] = []
   for (const pick of tradedPicks) {
     if (!allowed.has(pick.season)) continue
+    // A pick that sits with its original owner is not a traded pick.
+    if (pick.owner_id === pick.roster_id) continue
     const original = teams.get(pick.roster_id)
     const owner = teams.get(pick.owner_id)
     rows.push({
@@ -112,10 +117,12 @@ export function tradedPickHistoryFromTrades(
         rows.push({
           season: parsed.season,
           round: parsed.round,
+          originalRosterId: parsed.fromRosterId ?? side.rosterId,
           fromRosterId: parsed.fromRosterId ?? side.rosterId,
           toRosterId: side.rosterId,
           tradeSeason: trade.season,
           tradeWeek: trade.week,
+          weekLabel: trade.weekLabel,
           dateLabel: trade.dateLabel,
         })
       }
@@ -138,19 +145,71 @@ function parsePickLabel(label: string): {
   return { season: yr, round: Number.parseInt(m[2], 10) }
 }
 
+function pickRow(
+  pick: { season: string; round: number; roster_id: number; owner_id: number },
+  teams: Map<number, TeamInfo>,
+): FuturePickRow {
+  const original = teams.get(pick.roster_id)
+  const owner = teams.get(pick.owner_id)
+  return {
+    season: pick.season,
+    round: pick.round,
+    originalRosterId: pick.roster_id,
+    ownerRosterId: pick.owner_id,
+    originalLabel: original
+      ? managerLabel(original, pick.roster_id)
+      : `R${pick.roster_id}`,
+    ownerLabel: owner ? managerLabel(owner, pick.owner_id) : `R${pick.owner_id}`,
+  }
+}
+
+function sortPickRows(rows: FuturePickRow[]): FuturePickRow[] {
+  return rows.sort((a, b) => {
+    if (a.season !== b.season) return Number(a.season) - Number(b.season)
+    if (a.round !== b.round) return a.round - b.round
+    return a.originalRosterId - b.originalRosterId
+  })
+}
+
+/**
+ * Picks this roster holds for the next draft years: its own picks it has not
+ * traded away, plus picks acquired from other rosters.
+ */
 export function picksOwnedByRoster(
   tradedPicks: SleeperTradedPick[],
   teams: Map<number, TeamInfo>,
   rosterId: number,
   baseSeason: string,
   yearsAhead = 3,
+  draftRounds = 3,
 ): FuturePickRow[] {
-  return futurePickOwnership(
-    tradedPicks,
-    teams,
-    baseSeason,
-    yearsAhead,
-  ).filter((r) => r.ownerRosterId === rosterId)
+  const seasons = futurePickSeasons(baseSeason, yearsAhead)
+  const allowed = new Set(seasons)
+  const relevant = tradedPicks.filter((p) => allowed.has(p.season))
+  const rows: FuturePickRow[] = []
+
+  for (const season of seasons) {
+    for (let round = 1; round <= draftRounds; round++) {
+      const moved = relevant.find(
+        (p) => p.season === season && p.round === round && p.roster_id === rosterId,
+      )
+      const stillOwns = !moved || moved.owner_id === rosterId
+      if (!stillOwns) continue
+      rows.push(
+        pickRow(
+          { season, round, roster_id: rosterId, owner_id: rosterId },
+          teams,
+        ),
+      )
+    }
+  }
+
+  for (const pick of relevant) {
+    if (pick.owner_id !== rosterId || pick.roster_id === rosterId) continue
+    rows.push(pickRow(pick, teams))
+  }
+
+  return sortPickRows(rows)
 }
 
 export function tradedPickHistoryFromTransactions(
@@ -166,10 +225,12 @@ export function tradedPickHistoryFromTransactions(
       rows.push({
         season: pick.season,
         round: pick.round,
+        originalRosterId: pick.roster_id,
         fromRosterId: from,
         toRosterId: to,
         tradeSeason: leagueSeason,
         tradeWeek: tx.leg,
+        weekLabel: tradeWeekLabel(tx.leg, tx.status_updated, leagueSeason),
         dateLabel: tx.status_updated
           ? new Date(tx.status_updated).toLocaleDateString('en-US', {
               month: 'short',

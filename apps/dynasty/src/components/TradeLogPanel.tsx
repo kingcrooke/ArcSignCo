@@ -122,7 +122,7 @@ export function TradeLogPanel({
                   />
                 </p>
                 <p className="text-xs text-[var(--dyn-muted)]">
-                  {t.dateLabel || '—'} · {t.season} · Week {t.week}
+                  {t.dateLabel || '—'} · {t.season} · {t.weekLabel}
                 </p>
               </div>
               <div className="mt-2 grid gap-2 text-sm sm:grid-cols-2">

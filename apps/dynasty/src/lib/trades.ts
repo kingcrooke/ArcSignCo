@@ -26,6 +26,8 @@ export interface TradeLogEntry {
   leagueId: string
   season: string
   week: number
+  /** "Week N", or "Offseason" when the trade closed before the season started. */
+  weekLabel: string
   completedAtMs: number
   dateLabel: string
   sideA: TradeSide
@@ -53,6 +55,64 @@ function playerLabel(playerId: string, players: PlayersMap | null): string {
   if (name) return name
   if (/^[A-Z]{2,4}$/.test(playerId)) return `${playerId} DEF`
   return ''
+}
+
+/** Thursday night opener, Eastern. Trades before this are offseason. */
+const WEEK1_KICKOFF_MS: Record<string, number> = {
+  '2019': Date.parse('2019-09-05T20:20:00-04:00'),
+  '2020': Date.parse('2020-09-10T20:20:00-04:00'),
+  '2021': Date.parse('2021-09-09T20:20:00-04:00'),
+  '2022': Date.parse('2022-09-08T20:20:00-04:00'),
+  '2023': Date.parse('2023-09-07T20:20:00-04:00'),
+  '2024': Date.parse('2024-09-05T20:20:00-04:00'),
+  '2025': Date.parse('2025-09-04T20:20:00-04:00'),
+  '2026': Date.parse('2026-09-10T20:20:00-04:00'),
+}
+
+function etMonthYear(ms: number): { year: number; month: number } {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: ET,
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(new Date(ms))
+  const year = Number(parts.find((p) => p.type === 'year')?.value)
+  const month = Number(parts.find((p) => p.type === 'month')?.value)
+  return { year, month }
+}
+
+/**
+ * Offseason when the trade closed before that season's Week 1 kickoff,
+ * or Sleeper filed it as leg 1 with a date before September.
+ */
+export function isOffseasonTrade(
+  week: number,
+  completedAtMs: number,
+  season: string,
+): boolean {
+  if (!completedAtMs) return false
+  const seasonYear = Number.parseInt(season, 10)
+  const { year, month } = etMonthYear(completedAtMs)
+  if (Number.isFinite(seasonYear) && year < seasonYear) return true
+  if (
+    Number.isFinite(seasonYear) &&
+    year === seasonYear &&
+    month < 9 &&
+    (week === 1 || week === 0)
+  ) {
+    return true
+  }
+  const kickoff = WEEK1_KICKOFF_MS[season]
+  if (kickoff != null && completedAtMs < kickoff) return true
+  return false
+}
+
+export function tradeWeekLabel(
+  week: number,
+  completedAtMs: number,
+  season: string,
+): string {
+  if (isOffseasonTrade(week, completedAtMs, season)) return 'Offseason'
+  return `Week ${week}`
 }
 
 function pickLabel(
@@ -89,9 +149,11 @@ function assetsForRoster(
     }
   }
   for (const pick of tx.draft_picks ?? []) {
-    if (pick.roster_id === rosterId) {
-      received.push({ label: pickLabel(pick, teams) })
-    }
+    const label = pickLabel(pick, teams)
+    // owner_id is the receiver; previous_owner_id is the giver.
+    // roster_id stays the original team and is only used in the label.
+    if (pick.owner_id === rosterId) received.push({ label })
+    if (pick.previous_owner_id === rosterId) sent.push({ label })
   }
   for (const wb of tx.waiver_budget ?? []) {
     if (wb.receiver === rosterId) {
@@ -153,6 +215,7 @@ export function buildTradeLogEntry(
     leagueId: league.league_id,
     season: league.season,
     week: tx.leg,
+    weekLabel: tradeWeekLabel(tx.leg, completedAtMs, league.season),
     completedAtMs,
     dateLabel: completedAtMs ? formatTradeDate(completedAtMs) : '',
     sideA,

@@ -11,7 +11,7 @@ const API = 'https://api.sleeper.app/v1'
 const DATA_PATH = path.join(__dirname, 'slide-data.json')
 const MANIFEST_PATH = path.join(
   __dirname,
-  '../../src/data/week-result-slides.json',
+  '../../src/data/week-graphics-manifest.json',
 )
 
 async function fetchJson(url) {
@@ -213,19 +213,28 @@ async function main() {
   const merged = { ...existing, ...data }
   await writeFile(DATA_PATH, `${JSON.stringify(merged, null, 2)}\n`)
 
-  const manifest = {}
+  const existingManifest = JSON.parse(
+    await readFile(MANIFEST_PATH, 'utf8').catch(() => '{"2026":{}}'),
+  )
+  const seasonKey = '2026'
+  const season = existingManifest[seasonKey] ?? {}
   for (let week = 1; week <= 5; week++) {
-    manifest[String(week)] = merged[`resultsWeek${week}`].map((row) => ({
-      id: row.id,
-      title: slideTitle(row),
-    }))
+    const prev = season[String(week)] ?? {}
+    season[String(week)] = {
+      ...prev,
+      results: merged[`resultsWeek${week}`].map((row) => ({
+        id: row.id,
+        title: slideTitle(row),
+      })),
+    }
   }
-  await writeFile(MANIFEST_PATH, `${JSON.stringify(manifest, null, 2)}\n`)
+  existingManifest[seasonKey] = season
+  await writeFile(MANIFEST_PATH, `${JSON.stringify(existingManifest, null, 2)}\n`)
 
   console.log('wrote', DATA_PATH)
   console.log('wrote', MANIFEST_PATH)
   for (let week = 1; week <= 4; week++) {
-    console.log(`week ${week} results:`, manifest[String(week)].length)
+    console.log(`week ${week} results:`, season[String(week)].results.length)
   }
 }
 

@@ -21,8 +21,9 @@ import {
   defaultSeason,
   leagueIdForSeason,
 } from './lib/constants'
+import { playoffResultsForLeague } from './lib/champions'
 import { maxSelectableWeek } from './lib/seasonContext'
-import { defaultBestGamesWeek } from './lib/weeks'
+import { defaultBestGamesWeek, isWeekComplete } from './lib/weeks'
 import { useLeagueChain } from './hooks/useLeagueChain'
 import { useLeagueData } from './hooks/useLeagueData'
 import { trackDynastyTab } from './lib/goatcounter'
@@ -343,6 +344,13 @@ export default function App() {
                 matchupsByWeek={data.matchupsByWeek}
                 standingsThroughWeek={data.standingsThroughWeek}
                 faabByRoster={data.faabByRoster}
+                seasonComplete={
+                  data.isHistoricalSeason || data.league.status === 'complete'
+                }
+                playoffResultByRoster={playoffResultsForLeague(
+                  chain.leagueSeasonSummaries,
+                  data.league.league_id,
+                )}
               />
               {!data.isHistoricalSeason && (
                 <div className="mt-8">
@@ -372,7 +380,14 @@ export default function App() {
                 Week {data.selectedWeek} graphics
               </h2>
               <DynastyWeekGraphicsPanel
+                season={data.league.season}
                 week={data.selectedWeek}
+                weekComplete={isWeekComplete(
+                  data.selectedWeek,
+                  data.league,
+                  data.nflState,
+                )}
+                teams={data.teams}
                 initialSlideId={gallerySlideId}
               />
             </section>
@@ -456,6 +471,7 @@ export default function App() {
                 allTrades={chain.allTrades}
                 tradedPicks={data.tradedPicks}
                 tradePriorSeasonsFailed={chain.priorSeasonsFailed}
+                draftRounds={data.league.settings.draft_rounds ?? 3}
               />
             </section>
           )}

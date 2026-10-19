@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import {
   computeAllPlayThroughWeek,
   formatAllPlayRecord,
+  finishedSeasonLine,
   playoffSeedHint,
 } from '../lib/allPlay'
 import { recordLabel, streakLabel } from '../lib/standings'
@@ -52,6 +53,8 @@ export function StandingsPanel({
   matchupsByWeek,
   standingsThroughWeek,
   faabByRoster,
+  seasonComplete = false,
+  playoffResultByRoster,
 }: {
   rows: StandingRow[]
   deferralNote?: string | null
@@ -60,6 +63,8 @@ export function StandingsPanel({
   matchupsByWeek: Map<number, SleeperMatchup[]>
   standingsThroughWeek: number
   faabByRoster: Map<number, FaabSnapshot>
+  seasonComplete?: boolean
+  playoffResultByRoster?: Map<number, string>
 }) {
   const sacko = rows.length ? rows[rows.length - 1] : null
   const cutoff =
@@ -92,8 +97,9 @@ export function StandingsPanel({
           const manager = r.teamName || r.displayName
           const showPlayoffLine =
             cutoff !== null && r.rank === cutoff && index < rows.length - 1
-          const seedLine =
-            playoffTeams && playoffTeams > 0
+          const seedLine = seasonComplete
+            ? finishedSeasonLine(r.rank, playoffResultByRoster?.get(r.rosterId))
+            : playoffTeams && playoffTeams > 0
               ? playoffSeedHint(r.rank, playoffTeams)
               : null
           const ap = allPlay.get(r.rosterId)

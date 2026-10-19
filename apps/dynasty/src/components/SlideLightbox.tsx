@@ -8,6 +8,7 @@ import {
 } from 'react'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
+import { ShareCardButton } from './ShareCardButton'
 
 type Props = {
   slides: PublishedSlide[]
@@ -108,13 +109,20 @@ export function SlideLightbox({
         <p className="truncate text-sm text-white/80">
           {index + 1} / {slides.length} · {slide.title}
         </p>
-        <button
-          type="button"
-          className="min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          <ShareCardButton
+            basename={slide.basename}
+            title={slide.title}
+            className="border-white/20 bg-transparent text-[var(--dyn-accent-bright)]"
+          />
+          <button
+            type="button"
+            className="min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
       </div>
 
       <div className="relative flex min-h-0 flex-1 items-center justify-center px-14 pb-4 sm:px-20">

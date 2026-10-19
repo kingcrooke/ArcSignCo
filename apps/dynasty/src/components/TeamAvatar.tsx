@@ -17,7 +17,7 @@ type AvatarEntry =
       loss?: AvatarFileRef
     }
 
-const customByRoster = managerAvatars as Record<string, AvatarEntry>
+const customByUser = managerAvatars as Record<string, AvatarEntry>
 
 function publicAssetUrl(path: string): string {
   if (path.startsWith('http') || path.startsWith('/')) return path
@@ -40,8 +40,9 @@ function pathsFromRef(ref: AvatarFileRef | undefined): string[] {
   return urls
 }
 
-function resolveCustomUrls(rosterId: number, mood: AvatarMood): string[] {
-  const entry = customByRoster[String(rosterId)]
+function resolveCustomUrls(userId: string | undefined, mood: AvatarMood): string[] {
+  if (!userId) return []
+  const entry = customByUser[userId]
   if (!entry) return []
   if (typeof entry === 'string' || 'webp' in entry || 'png' in entry || 'fallback' in entry) {
     return pathsFromRef(entry as AvatarFileRef)
@@ -75,7 +76,7 @@ export function avatarUrlChain(
 ): string[] {
   if (!team) return []
   const urls: string[] = []
-  urls.push(...resolveCustomUrls(team.rosterId, mood))
+  urls.push(...resolveCustomUrls(team.userId, mood))
   if (team.leagueAvatarUrl) urls.push(team.leagueAvatarUrl)
   if (team.globalAvatarUrl) urls.push(team.globalAvatarUrl)
   return urls

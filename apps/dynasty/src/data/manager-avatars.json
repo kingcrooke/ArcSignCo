@@ -1,6 +1,9 @@
 {
-  "1": {
-    "base": { "webp": "avatars/roster-01.webp", "png": "avatars/roster-01.png" },
+  "401754707162333184": {
+    "base": {
+      "webp": "avatars/roster-01.webp",
+      "png": "avatars/roster-01.png"
+    },
     "excited": {
       "webp": "avatars/roster-01-excited.webp",
       "png": "avatars/roster-01-excited.png"
@@ -10,8 +13,11 @@
       "png": "avatars/roster-01-crushed.png"
     }
   },
-  "2": {
-    "base": { "webp": "avatars/roster-02.webp", "png": "avatars/roster-02.png" },
+  "735615874752483328": {
+    "base": {
+      "webp": "avatars/roster-02.webp",
+      "png": "avatars/roster-02.png"
+    },
     "excited": {
       "webp": "avatars/roster-02-excited.webp",
       "png": "avatars/roster-02-excited.png"
@@ -21,8 +27,11 @@
       "png": "avatars/roster-02-crushed.png"
     }
   },
-  "3": {
-    "base": { "webp": "avatars/roster-03.webp", "png": "avatars/roster-03.png" },
+  "427899269689647104": {
+    "base": {
+      "webp": "avatars/roster-03.webp",
+      "png": "avatars/roster-03.png"
+    },
     "excited": {
       "webp": "avatars/roster-03-excited.webp",
       "png": "avatars/roster-03-excited.png"
@@ -32,8 +41,11 @@
       "png": "avatars/roster-03-crushed.png"
     }
   },
-  "4": {
-    "base": { "webp": "avatars/roster-04.webp", "png": "avatars/roster-04.png" },
+  "427903132685574144": {
+    "base": {
+      "webp": "avatars/roster-04.webp",
+      "png": "avatars/roster-04.png"
+    },
     "excited": {
       "webp": "avatars/roster-04-excited.webp",
       "png": "avatars/roster-04-excited.png"
@@ -43,8 +55,11 @@
       "png": "avatars/roster-04-crushed.png"
     }
   },
-  "5": {
-    "base": { "webp": "avatars/roster-05.webp", "png": "avatars/roster-05.png" },
+  "427906596501213184": {
+    "base": {
+      "webp": "avatars/roster-05.webp",
+      "png": "avatars/roster-05.png"
+    },
     "excited": {
       "webp": "avatars/roster-05-excited.webp",
       "png": "avatars/roster-05-excited.png"
@@ -54,8 +69,11 @@
       "png": "avatars/roster-05-crushed.png"
     }
   },
-  "6": {
-    "base": { "webp": "avatars/roster-06.webp", "png": "avatars/roster-06.png" },
+  "427930731889565696": {
+    "base": {
+      "webp": "avatars/roster-06.webp",
+      "png": "avatars/roster-06.png"
+    },
     "excited": {
       "webp": "avatars/roster-06-excited.webp",
       "png": "avatars/roster-06-excited.png"
@@ -65,8 +83,11 @@
       "png": "avatars/roster-06-crushed.png"
     }
   },
-  "7": {
-    "base": { "webp": "avatars/roster-07.webp", "png": "avatars/roster-07.png" },
+  "427945970563559424": {
+    "base": {
+      "webp": "avatars/roster-07.webp",
+      "png": "avatars/roster-07.png"
+    },
     "excited": {
       "webp": "avatars/roster-07-excited.webp",
       "png": "avatars/roster-07-excited.png"
@@ -76,8 +97,11 @@
       "png": "avatars/roster-07-crushed.png"
     }
   },
-  "8": {
-    "base": { "webp": "avatars/roster-08.webp", "png": "avatars/roster-08.png" },
+  "427956169848401920": {
+    "base": {
+      "webp": "avatars/roster-08.webp",
+      "png": "avatars/roster-08.png"
+    },
     "excited": {
       "webp": "avatars/roster-08-excited.webp",
       "png": "avatars/roster-08-excited.png"
@@ -87,8 +111,11 @@
       "png": "avatars/roster-08-crushed.png"
     }
   },
-  "9": {
-    "base": { "webp": "avatars/roster-09.webp", "png": "avatars/roster-09.png" },
+  "420639669546385408": {
+    "base": {
+      "webp": "avatars/roster-09.webp",
+      "png": "avatars/roster-09.png"
+    },
     "excited": {
       "webp": "avatars/roster-09-excited.webp",
       "png": "avatars/roster-09-excited.png"
@@ -98,8 +125,11 @@
       "png": "avatars/roster-09-crushed.png"
     }
   },
-  "10": {
-    "base": { "webp": "avatars/roster-10.webp", "png": "avatars/roster-10.png" },
+  "570012643529134080": {
+    "base": {
+      "webp": "avatars/roster-10.webp",
+      "png": "avatars/roster-10.png"
+    },
     "excited": {
       "webp": "avatars/roster-10-excited.webp",
       "png": "avatars/roster-10-excited.png"
@@ -109,8 +139,11 @@
       "png": "avatars/roster-10-crushed.png"
     }
   },
-  "11": {
-    "base": { "webp": "avatars/roster-11.webp", "png": "avatars/roster-11.png" },
+  "429316063394541568": {
+    "base": {
+      "webp": "avatars/roster-11.webp",
+      "png": "avatars/roster-11.png"
+    },
     "excited": {
       "webp": "avatars/roster-11-excited.webp",
       "png": "avatars/roster-11-excited.png"
@@ -120,8 +153,11 @@
       "png": "avatars/roster-11-crushed.png"
     }
   },
-  "12": {
-    "base": { "webp": "avatars/roster-12.webp", "png": "avatars/roster-12.png" },
+  "429321092230815744": {
+    "base": {
+      "webp": "avatars/roster-12.webp",
+      "png": "avatars/roster-12.png"
+    },
     "excited": {
       "webp": "avatars/roster-12-excited.webp",
       "png": "avatars/roster-12-excited.png"
