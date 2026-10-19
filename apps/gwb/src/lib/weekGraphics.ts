@@ -59,14 +59,22 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   return sections
 }
 
-const SLIDE_SIZE = { width: 1080, height: 1350 }
+/** Recap deck slides (wN-slide-NN) — 4:5 at 1080×1350. */
+const RECAP_SLIDE_SIZE = { width: 1080, height: 1350 }
 
-function titled(id: string, fallback: string): PublishedSlide {
+/** Muse designer result / matchup cards — 5:7 at 1000×1400. */
+export const MUSE_CARD_SLIDE_SIZE = { width: 1000, height: 1400 }
+
+function titled(
+  id: string,
+  fallback: string,
+  size: { width: number; height: number } = RECAP_SLIDE_SIZE,
+): PublishedSlide {
   return {
     id,
     title: slideHeadline(id, fallback),
     basename: id,
-    ...SLIDE_SIZE,
+    ...size,
   }
 }
 
@@ -141,11 +149,11 @@ const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
 ])
 
 function vs(id: string, title: string): PublishedSlide {
-  return titled(id, title)
+  return titled(id, title, MUSE_CARD_SLIDE_SIZE)
 }
 
 function result(id: string, title: string): PublishedSlide {
-  return titled(id, title)
+  return titled(id, title, MUSE_CARD_SLIDE_SIZE)
 }
 
 const WEEK_6_MATCHUPS: PublishedSlide[] = [

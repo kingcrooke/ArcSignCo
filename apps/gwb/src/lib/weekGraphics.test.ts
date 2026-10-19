@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { getWeekGraphicsSections } from './weekGraphics'
+import {
+  getWeekGraphicsSections,
+  MUSE_CARD_SLIDE_SIZE,
+} from './weekGraphics'
 
 describe('getWeekGraphicsSections week 4', () => {
   it('lists Results and Report only for a finished week', () => {
@@ -65,6 +68,21 @@ describe('getWeekGraphicsSections week 4', () => {
       ['vs-w6-m5', 'vs-w6-m5', 'Hady vs Matt'],
       ['vs-w6-m6', 'vs-w6-m6', 'Mauricio vs Kayser'],
     ])
+  })
+
+  it('uses 5:7 Muse card dimensions for results and Week 6 matchups', () => {
+    for (const week of [1, 2, 3, 4, 5]) {
+      const results = getWeekGraphicsSections(week).find((s) => s.kind === 'results')
+      for (const slide of results?.slides ?? []) {
+        expect(slide).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+      }
+    }
+    const matchups = getWeekGraphicsSections(6)[0]?.slides ?? []
+    for (const slide of matchups) {
+      expect(slide).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    }
+    const report = getWeekGraphicsSections(4).find((s) => s.kind === 'report')
+    expect(report?.slides[0]).toMatchObject({ width: 1080, height: 1350 })
   })
 
   it('publishes the six final result cards with approved headlines', () => {
