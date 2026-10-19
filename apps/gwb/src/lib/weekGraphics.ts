@@ -25,6 +25,9 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const sections: WeekGraphicsSection[] = []
 
   const matchupsByWeek: Record<number, PublishedSlide[]> = {
+    1: publish(WEEK_1_MATCHUPS),
+    2: publish(WEEK_2_MATCHUPS),
+    3: publish(WEEK_3_MATCHUPS),
     4: publish(WEEK_4_MATCHUPS),
     5: publish(WEEK_5_MATCHUPS),
     6: publish(WEEK_6_MATCHUPS),
@@ -150,11 +153,6 @@ const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
   'Slide 16',
 ])
 
-/** 4:5 preview cards (1080×1350) — not Muse 5:7 matchup size. */
-function vsLegacy(id: string, title: string): PublishedSlide {
-  return titled(id, title)
-}
-
 function vs(id: string, title: string): PublishedSlide {
   return titled(id, title, MUSE_CARD_SLIDE_SIZE)
 }
@@ -163,22 +161,49 @@ function result(id: string, title: string): PublishedSlide {
   return titled(id, title, MUSE_CARD_SLIDE_SIZE)
 }
 
+const WEEK_1_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w1-m1', 'Mauricio vs Crooke'),
+  vs('vs-w1-m2', 'Kayser vs Hady'),
+  vs('vs-w1-m3', 'Matt vs Narking'),
+  vs('vs-w1-m4', 'Jamil vs Danny'),
+  vs('vs-w1-m5', 'Steven vs Frankie'),
+  vs('vs-w1-m6', 'Manny vs Eric'),
+]
+
+const WEEK_2_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w2-m1', 'Hady vs Crooke'),
+  vs('vs-w2-m2', 'Narking vs Mauricio'),
+  vs('vs-w2-m3', 'Kayser vs Danny'),
+  vs('vs-w2-m4', 'Steven vs Matt'),
+  vs('vs-w2-m5', 'Manny vs Jamil'),
+  vs('vs-w2-m6', 'Eric vs Frankie'),
+]
+
+const WEEK_3_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w3-m1', 'Crooke vs Narking'),
+  vs('vs-w3-m2', 'Hady vs Danny'),
+  vs('vs-w3-m3', 'Steven vs Mauricio'),
+  vs('vs-w3-m4', 'Kayser vs Manny'),
+  vs('vs-w3-m5', 'Eric vs Matt'),
+  vs('vs-w3-m6', 'Jamil vs Frankie'),
+]
+
 const WEEK_4_MATCHUPS: PublishedSlide[] = [
-  vsLegacy('vs-m1-narking-steven', 'Narking vs Steven'),
-  vsLegacy('vs-m2-kayser-frankie', 'Kayser vs Frankie'),
-  vsLegacy('vs-m3-hadi-manny', 'Hady vs Manny'),
-  vsLegacy('vs-m4-jamil-matt', 'Jamil vs Matt'),
-  vsLegacy('vs-m5-mauricio-eric', 'Mauricio vs Eric'),
-  vsLegacy('vs-m6-danny-crooke', 'Danny vs Crooke'),
+  vs('vs-w4-m1', 'Steven vs Narking'),
+  vs('vs-w4-m2', 'Frankie vs Kayser'),
+  vs('vs-w4-m3', 'Hady vs Manny'),
+  vs('vs-w4-m4', 'Jamil vs Matt'),
+  vs('vs-w4-m5', 'Mauricio vs Eric'),
+  vs('vs-w4-m6', 'Danny vs Crooke'),
 ]
 
 const WEEK_5_MATCHUPS: PublishedSlide[] = [
-  vsLegacy('vs-w5-m1', 'Steven vs Crooke'),
-  vsLegacy('vs-w5-m2', 'Danny vs Manny'),
-  vsLegacy('vs-w5-m3', 'Narking vs Eric'),
-  vsLegacy('vs-w5-m4', 'Hady vs Frankie'),
-  vsLegacy('vs-w5-m5', 'Mauricio vs Jamil'),
-  vsLegacy('vs-w5-m6', 'Kayser vs Matt'),
+  vs('vs-w5-m1', 'Crooke vs Steven'),
+  vs('vs-w5-m2', 'Danny vs Manny'),
+  vs('vs-w5-m3', 'Eric vs Narking'),
+  vs('vs-w5-m4', 'Hady vs Frankie'),
+  vs('vs-w5-m5', 'Mauricio vs Jamil'),
+  vs('vs-w5-m6', 'Matt vs Kayser'),
 ]
 
 const WEEK_6_MATCHUPS: PublishedSlide[] = [

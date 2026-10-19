@@ -14,9 +14,10 @@ describe('getWeekGraphicsSections week 4', () => {
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides).toHaveLength(6)
     expect(matchups?.slides[0]).toMatchObject({
-      id: 'vs-m1-narking-steven',
-      width: 1080,
-      height: 1350,
+      id: 'vs-w4-m1',
+      basename: 'vs-w4-m1',
+      title: 'Week 4 · Steven vs Narking',
+      ...MUSE_CARD_SLIDE_SIZE,
     })
     expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
     expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
@@ -28,12 +29,28 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(report?.slides[1]?.title).toBe('199.39: One Point From 200')
   })
 
-  it('keeps finished weeks 1–3 on results and report only', () => {
+  it('lists Muse preview matchups plus results and report for finished weeks 1–3', () => {
     for (const week of [1, 2, 3]) {
       const sections = getWeekGraphicsSections(week)
-      expect(sections.map((s) => s.kind)).toEqual(['results', 'report'])
+      expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
+      const matchups = sections.find((s) => s.kind === 'matchups')
+      expect(matchups?.slides).toHaveLength(6)
+      expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
       expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
     }
+  })
+
+  it('uses Week · team headlines for Fuse preview cards', () => {
+    const matchups = getWeekGraphicsSections(3).find((s) => s.kind === 'matchups')
+    expect(matchups?.slides[1]?.title).toBe('Week 3 · Hady vs Danny')
+    expect(matchups?.slides.map((s) => s.id)).toEqual([
+      'vs-w3-m1',
+      'vs-w3-m2',
+      'vs-w3-m3',
+      'vs-w3-m4',
+      'vs-w3-m5',
+      'vs-w3-m6',
+    ])
   })
 
   it('publishes the sixteen Week 4 recap slides in order', () => {
@@ -61,7 +78,13 @@ describe('getWeekGraphicsSections week 4', () => {
   it('lists Matchups, Results, and Report for finished Week 5', () => {
     const sections = getWeekGraphicsSections(5)
     expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
-    expect(sections.find((s) => s.kind === 'matchups')?.slides).toHaveLength(6)
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides).toHaveLength(6)
+    expect(matchups?.slides[0]).toMatchObject({
+      id: 'vs-w5-m1',
+      title: 'Week 5 · Crooke vs Steven',
+      ...MUSE_CARD_SLIDE_SIZE,
+    })
     expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
     expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
     expect(sections.find((s) => s.kind === 'results')?.slides[3]?.title).toBe(
