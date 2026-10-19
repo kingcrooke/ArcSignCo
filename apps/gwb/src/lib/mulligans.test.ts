@@ -122,6 +122,7 @@ describe('mulligans', () => {
     expect(mulligansUsedThroughWeek(2)).toBe(3)
     expect(mulligansUsedThroughWeek(3)).toBe(5)
     expect(mulligansUsedThroughWeek(4)).toBe(7)
+    expect(mulligansUsedThroughWeek(5)).toBe(7)
     expect(mulliganStatusForRoster(9, 1).used).toBe(false)
     expect(mulliganStatusForRoster(9, 2).used).toBe(true)
     expect(mulliganStatusForRoster(8, 3).used).toBe(false)

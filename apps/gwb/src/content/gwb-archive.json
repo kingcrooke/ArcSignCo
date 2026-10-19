@@ -1,6 +1,6 @@
 {
   "meta": {
-    "allTimeThrough": "2024 Week 10 per GWB Stats sheet",
+    "allTimeThrough": "2025 season (regular season; Sleeper)",
     "source": "Verified league archive (Gmail/Drive); Sleeper 2019+ for live seasons"
   },
   "champions": [
@@ -132,18 +132,18 @@
       "championSeed": "2nd",
       "runnerUp": "danny",
       "runnerUpRecord": null,
-      "runnerUpSeed": "3rd",
+      "runnerUpSeed": "4th",
       "finalScore": "150.50 - 134.27"
     },
     {
       "season": "2025",
       "champion": "hady",
-      "championRecord": null,
-      "championSeed": null,
+      "championRecord": "7-7",
+      "championSeed": "6th",
       "runnerUp": "steven",
-      "runnerUpRecord": null,
-      "runnerUpSeed": null,
-      "finalScore": null
+      "runnerUpRecord": "10-4",
+      "runnerUpSeed": "1st",
+      "finalScore": "177.10 - 86.47"
     }
   ],
   "members": {
@@ -153,10 +153,10 @@
       "joined": 2012,
       "currentMember": true,
       "titleYears": [2016, 2018, 2019, 2024],
-      "playoffYears": [2012, 2016, 2018, 2019, 2020, 2022, 2023, 2024],
+      "playoffYears": [2012, 2016, 2018, 2019, 2020, 2022, 2023, 2024, 2025],
       "finalsWins": 4,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 77, "losses": 82 }
+      "allTimeRecord": { "wins": 88, "losses": 89 }
     },
     "eric": {
       "displayName": "Eric",
@@ -164,10 +164,10 @@
       "joined": 2012,
       "currentMember": true,
       "titleYears": [2013, 2023],
-      "playoffYears": [2012, 2013, 2016, 2017, 2018, 2020, 2023],
+      "playoffYears": [2012, 2013, 2016, 2017, 2018, 2020, 2023, 2025],
       "finalsWins": 2,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 79, "losses": 80 }
+      "allTimeRecord": { "wins": 91, "losses": 86 }
     },
     "mauricio": {
       "displayName": "Mauricio",
@@ -179,7 +179,7 @@
       "playoffYears": [2012, 2014, 2018, 2019, 2021],
       "finalsWins": 1,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 71, "losses": 88 }
+      "allTimeRecord": { "wins": 78, "losses": 99 }
     },
     "danny": {
       "displayName": "Danny",
@@ -187,10 +187,10 @@
       "joined": 2012,
       "currentMember": true,
       "titleYears": [2012, 2020],
-      "playoffYears": [2012, 2013, 2014, 2018, 2020, 2022, 2023, 2024],
+      "playoffYears": [2012, 2013, 2014, 2018, 2020, 2022, 2023, 2024, 2025],
       "finalsWins": 2,
       "finalsLosses": 4,
-      "allTimeRecord": { "wins": 92, "losses": 67 }
+      "allTimeRecord": { "wins": 103, "losses": 74 }
     },
     "marcos": {
       "displayName": "Marcos",
@@ -211,10 +211,10 @@
       "joined": 2013,
       "currentMember": true,
       "titleYears": [2015],
-      "playoffYears": [2013, 2015, 2017, 2021, 2024],
+      "playoffYears": [2013, 2015, 2017, 2021, 2024, 2025],
       "finalsWins": 1,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 66, "losses": 80 }
+      "allTimeRecord": { "wins": 78, "losses": 86 }
     },
     "matt": {
       "displayName": "Matt",
@@ -225,7 +225,7 @@
       "playoffYears": [2013, 2014, 2015, 2018, 2019, 2020, 2021, 2023, 2024],
       "finalsWins": 0,
       "finalsLosses": 4,
-      "allTimeRecord": { "wins": 93, "losses": 53 }
+      "allTimeRecord": { "wins": 98, "losses": 66 }
     },
     "frankie": {
       "displayName": "Frankie",
@@ -236,7 +236,7 @@
       "playoffYears": [2014, 2017, 2019, 2022],
       "finalsWins": 0,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 65, "losses": 81 }
+      "allTimeRecord": { "wins": 72, "losses": 92 }
     },
     "manny": {
       "displayName": "Manny",
@@ -247,7 +247,7 @@
       "playoffYears": [2015, 2016, 2021, 2022, 2024],
       "finalsWins": 1,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 66, "losses": 67 }
+      "allTimeRecord": { "wins": 74, "losses": 77 }
     },
     "kayser": {
       "displayName": "Kayser",
@@ -258,7 +258,7 @@
       "playoffYears": [2014, 2016, 2017, 2019, 2022],
       "finalsWins": 0,
       "finalsLosses": 2,
-      "allTimeRecord": { "wins": 61, "losses": 72 }
+      "allTimeRecord": { "wins": 68, "losses": 83 }
     },
     "steven": {
       "displayName": "Steven",
@@ -266,10 +266,10 @@
       "joined": 2014,
       "currentMember": true,
       "titleYears": [2022],
-      "playoffYears": [2015, 2016, 2017, 2019, 2020, 2022, 2023],
+      "playoffYears": [2015, 2016, 2017, 2019, 2020, 2022, 2023, 2025],
       "finalsWins": 1,
-      "finalsLosses": 1,
-      "allTimeRecord": { "wins": 75, "losses": 58 }
+      "finalsLosses": 2,
+      "allTimeRecord": { "wins": 87, "losses": 64 }
     },
     "jamil": {
       "displayName": "Jamil",
@@ -280,7 +280,7 @@
       "playoffYears": [2018, 2020, 2021, 2024],
       "finalsWins": 0,
       "finalsLosses": 0,
-      "allTimeRecord": { "wins": 45, "losses": 49 }
+      "allTimeRecord": { "wins": 53, "losses": 59 }
     },
     "hady": {
       "displayName": "Hady",
@@ -288,10 +288,10 @@
       "joined": 2024,
       "currentMember": true,
       "titleYears": [2025],
-      "playoffYears": [],
+      "playoffYears": [2025],
       "finalsWins": 1,
       "finalsLosses": 0,
-      "allTimeRecord": null
+      "allTimeRecord": { "wins": 12, "losses": 16 }
     },
     "juan": {
       "displayName": "Juan",

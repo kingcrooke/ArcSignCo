@@ -4,6 +4,10 @@ import { buildWeekRecaps, weekHasMatchups } from '../lib/recaps'
 import { regularSeasonLastWeek } from '../lib/frankieZone'
 import { computePlayoffOdds, type PlayoffOddsRow } from '../lib/playoffOdds'
 import {
+  computePowerRankings,
+  type PowerRankingRow,
+} from '../lib/powerRankings'
+import {
   buildLeagueSeasonSummaries,
   type LeagueSeasonSummary,
 } from '../lib/managerSeasons'
@@ -93,6 +97,8 @@ export interface LeagueData {
   leagueSeasonSummaries: LeagueSeasonSummary[]
   weeklyAwards: WeeklyAwardsWeek[]
   playoffOdds: PlayoffOddsRow[]
+  powerRankings: PowerRankingRow[]
+  powerRankingsThroughWeek: number
   regularSeasonLastWeek: number
 }
 
@@ -343,6 +349,12 @@ export function useLeagueData(): {
       playoffTeams: league.settings.playoff_teams ?? 6,
       regularSeasonLastWeek: regLast,
     })
+    const powerRankingsThroughWeek = completedWeek
+    const powerRankings = computePowerRankings({
+      matchupsByWeek,
+      teams,
+      throughWeek: powerRankingsThroughWeek,
+    })
     return {
       league,
       nflState,
@@ -377,6 +389,8 @@ export function useLeagueData(): {
       leagueSeasonSummaries,
       weeklyAwards,
       playoffOdds,
+      powerRankings,
+      powerRankingsThroughWeek,
       regularSeasonLastWeek: regLast,
     }
   }, [

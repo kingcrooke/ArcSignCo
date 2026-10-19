@@ -16,7 +16,7 @@ function publish(slides: PublishedSlide[]): PublishedSlide[] {
   return slides.filter((s) => !HELD.has(s.id))
 }
 
-/** Finished week: results, then report. Matchup cards are for an upcoming week only. */
+/** Finished week: optional preview matchups, then results and report; upcoming weeks may be matchups only. */
 export function getWeekGraphicsSlides(week: number): PublishedSlide[] {
   return getWeekGraphicsSections(week).flatMap((s) => s.slides)
 }
@@ -25,6 +25,8 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const sections: WeekGraphicsSection[] = []
 
   const matchupsByWeek: Record<number, PublishedSlide[]> = {
+    4: publish(WEEK_4_MATCHUPS),
+    5: publish(WEEK_5_MATCHUPS),
     6: publish(WEEK_6_MATCHUPS),
   }
   const matchups = matchupsByWeek[week]
@@ -148,6 +150,11 @@ const WEEK_3_REPORT: PublishedSlide[] = finalReportDeck(3, [
   'Slide 16',
 ])
 
+/** 4:5 preview cards (1080×1350) — not Muse 5:7 matchup size. */
+function vsLegacy(id: string, title: string): PublishedSlide {
+  return titled(id, title)
+}
+
 function vs(id: string, title: string): PublishedSlide {
   return titled(id, title, MUSE_CARD_SLIDE_SIZE)
 }
@@ -155,6 +162,24 @@ function vs(id: string, title: string): PublishedSlide {
 function result(id: string, title: string): PublishedSlide {
   return titled(id, title, MUSE_CARD_SLIDE_SIZE)
 }
+
+const WEEK_4_MATCHUPS: PublishedSlide[] = [
+  vsLegacy('vs-m1-narking-steven', 'Narking vs Steven'),
+  vsLegacy('vs-m2-kayser-frankie', 'Kayser vs Frankie'),
+  vsLegacy('vs-m3-hadi-manny', 'Hady vs Manny'),
+  vsLegacy('vs-m4-jamil-matt', 'Jamil vs Matt'),
+  vsLegacy('vs-m5-mauricio-eric', 'Mauricio vs Eric'),
+  vsLegacy('vs-m6-danny-crooke', 'Danny vs Crooke'),
+]
+
+const WEEK_5_MATCHUPS: PublishedSlide[] = [
+  vsLegacy('vs-w5-m1', 'Steven vs Crooke'),
+  vsLegacy('vs-w5-m2', 'Danny vs Manny'),
+  vsLegacy('vs-w5-m3', 'Narking vs Eric'),
+  vsLegacy('vs-w5-m4', 'Hady vs Frankie'),
+  vsLegacy('vs-w5-m5', 'Mauricio vs Jamil'),
+  vsLegacy('vs-w5-m6', 'Kayser vs Matt'),
+]
 
 const WEEK_6_MATCHUPS: PublishedSlide[] = [
   vs('vs-w6-m1', 'Crooke vs Manny'),

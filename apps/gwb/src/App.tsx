@@ -14,6 +14,7 @@ import { LiveScoreboardPanel } from './components/LiveScoreboardPanel'
 import { TradeLogPanel } from './components/TradeLogPanel'
 import { WeeklyAwardsPanel } from './components/WeeklyAwardsPanel'
 import { PlayoffOddsPanel } from './components/PlayoffOddsPanel'
+import { PowerRankingsPanel } from './components/PowerRankingsPanel'
 import { ManagerPanel } from './components/ManagerPanel'
 import { WeekPicker } from './components/WeekPicker'
 import { LEAGUE_NAME } from './lib/constants'
@@ -38,6 +39,7 @@ import { type AppTab } from './hooks/useUrlState'
 
 const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
+  { id: 'powerrankings', label: 'Power Rankings' },
   { id: 'live', label: 'Live' },
   { id: 'gallery', label: 'Graphics' },
   { id: 'recaps', label: 'Recaps' },
@@ -52,6 +54,7 @@ const BASE_TABS: { id: AppTab; label: string }[] = [
 
 const TAB_IDS: AppTab[] = [
   'standings',
+  'powerrankings',
   'live',
   'gallery',
   'recaps',
@@ -403,6 +406,21 @@ export default function App() {
                 <h3 className="mb-3 text-base font-semibold">Playoff odds</h3>
                 <PlayoffOddsPanel rows={data.playoffOdds} />
               </div>
+            </section>
+          )}
+          {tab === 'powerrankings' && (
+            <section className="min-w-0 w-full">
+              <h2 className="mb-3 text-lg font-semibold">
+                Power Rankings
+                <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
+                  through Week {data.powerRankingsThroughWeek}
+                </span>
+              </h2>
+              <PowerRankingsPanel
+                rows={data.powerRankings}
+                teams={data.teams}
+                throughWeek={data.powerRankingsThroughWeek}
+              />
             </section>
           )}
           {tab === 'bestgames' && (

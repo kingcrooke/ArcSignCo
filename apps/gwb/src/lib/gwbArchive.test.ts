@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest'
 import {
   archiveMemberKeyForUserId,
   finalsAppearancesForUserId,
+  GWB_CHAMPIONS,
+  GWB_ARCHIVE_MEMBERS,
   titleCountForUserId,
   titlesLeaderboard,
   wallDisplayName,
@@ -32,6 +34,29 @@ describe('gwbArchive', () => {
 
   it('tracks Danny finals appearances', () => {
     expect(finalsAppearancesForUserId('401754707162333184')).toBe(6)
+  })
+
+  it('records 2025 champion Hady and Steven runner-up from Sleeper', () => {
+    const row = GWB_CHAMPIONS.find((c) => c.season === '2025')
+    expect(row).toMatchObject({
+      champion: 'hady',
+      championRecord: '7-7',
+      championSeed: '6th',
+      runnerUp: 'steven',
+      runnerUpRecord: '10-4',
+      runnerUpSeed: '1st',
+      finalScore: '177.10 - 86.47',
+    })
+    expect(GWB_ARCHIVE_MEMBERS.steven.finalsLosses).toBe(2)
+    expect(GWB_ARCHIVE_MEMBERS.hady.allTimeRecord).toEqual({
+      wins: 12,
+      losses: 16,
+    })
+  })
+
+  it('uses 4th seed for Danny in the 2024 final row', () => {
+    const row = GWB_CHAMPIONS.find((c) => c.season === '2024')
+    expect(row?.runnerUpSeed).toBe('4th')
   })
 
   it('maps Mauricio to archive history (Moe in STATS)', () => {

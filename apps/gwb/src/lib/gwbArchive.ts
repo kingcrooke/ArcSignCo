@@ -299,7 +299,7 @@ function pre2019RecordEstimate(
   let losses = member.allTimeRecord.losses
   for (const s of sleeperFinished) {
     const y = Number(s.season)
-    if (y >= 2019 && y <= 2024) {
+    if (y >= 2019 && y <= 2025) {
       wins -= s.wins
       losses -= s.losses
     }
