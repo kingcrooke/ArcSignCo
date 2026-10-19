@@ -108,4 +108,26 @@ describe('commissioner recaps timeline', () => {
     expect(waiver?.label).toBe('Predictions')
     expect(waiver?.title).toContain("WHO'S ACTUALLY GOOD?")
   })
+
+  it('lists the week 5 final mega report', () => {
+    const week5 = filterCommissionerRecapsByWeek(recaps, 5)
+    const ids = week5.map((r) => r.id)
+    expect(ids).toEqual(['recap-16'])
+    const final = week5[0]
+    expect(final?.label).toBe('Final')
+    expect(final?.week).toBe(5)
+    expect(final?.reconstructed).toBe(false)
+    expect(final?.index).toBe(16)
+    expect(final?.postedAt).toBe('2026-10-18')
+    expect(final?.title).toContain('WEEK 5 MEGA REPORT')
+    expect(final?.title).toContain('FALL OF THE UNDEFEATED')
+    expect(final?.bodyMarkdown).toContain('Crooke 159.29')
+    expect(final?.bodyMarkdown).toContain('Steven 120.77')
+    expect(final?.bodyMarkdown).toContain('834.84')
+    expect(final?.bodyMarkdown).toContain('212.33')
+    expect(final?.bodyMarkdown).not.toMatch(/Hadi|HADI|Kaiser|@\d{8,}/)
+    expect(final?.bodyMarkdown).not.toContain(
+      'GWB WEEK 5 MEGA REPORT — WAIVER RECEIPTS',
+    )
+  })
 })

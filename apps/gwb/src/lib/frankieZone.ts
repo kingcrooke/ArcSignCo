@@ -48,6 +48,12 @@ export const ZONE_LORE_QUOTES: ZoneLoreQuote[] = [
     recapId: 'recap-14',
     quote: 'The Frankie Zone becomes a UNESCO World Heritage Site.',
   },
+  {
+    week: 5,
+    recapId: 'recap-16',
+    quote:
+      'The Frankie Zone may have closed for one week. Property values have collapsed again.',
+  },
 ]
 
 export type ZoneResident = {
