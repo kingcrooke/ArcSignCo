@@ -1,5 +1,6 @@
 import {
   mulliganEntriesForWeek,
+  mulliganForRosterThroughWeek,
   mulliganReceiptParts,
   mulliganStatusParts,
   mulligansFlippedThroughWeek,
@@ -59,7 +60,32 @@ export function MulligansPanel({
 
         <ul className="overflow-hidden rounded-xl border border-[var(--gwb-border)]">
           {sorted.map((r) => {
-            const status = mulliganStatusParts(r.rosterId, statusThroughWeek)
+            const statusEntry = mulliganForRosterThroughWeek(
+              r.rosterId,
+              statusThroughWeek,
+            )
+            let liveCtx
+            if (statusEntry && statusEntry.week === selectedWeek) {
+              const rosterMatchup = weekMatchups?.find(
+                (m) => m.roster_id === r.rosterId,
+              )
+              const oppMatchup =
+                statusEntry.opponentRosterId != null
+                  ? weekMatchups?.find(
+                      (m) => m.roster_id === statusEntry.opponentRosterId,
+                    )
+                  : undefined
+              liveCtx = mulliganLiveContextForEntry(
+                statusEntry,
+                rosterMatchup?.players_points,
+                oppMatchup?.points,
+              )
+            }
+            const status = mulliganStatusParts(
+              r.rosterId,
+              statusThroughWeek,
+              liveCtx,
+            )
             return (
               <li
                 key={r.rosterId}
@@ -101,9 +127,16 @@ export function MulligansPanel({
               const matchup = weekMatchups?.find(
                 (m) => m.roster_id === entry.rosterId,
               )
+              const oppMatchup =
+                entry.opponentRosterId != null
+                  ? weekMatchups?.find(
+                      (m) => m.roster_id === entry.opponentRosterId,
+                    )
+                  : undefined
               const liveCtx = mulliganLiveContextForEntry(
                 entry,
                 matchup?.players_points,
+                oppMatchup?.points,
               )
               return (
                 <MulliganReceiptRow
@@ -152,7 +185,7 @@ function MulliganReceiptRow({
       <div className="mt-2 space-y-0.5 break-words text-xs leading-relaxed text-[var(--gwb-muted)]">
         <p>{parts.versusLine}</p>
         <p>{parts.withoutLine}</p>
-        <p>{parts.flipLine}</p>
+        {parts.flipLine ? <p>{parts.flipLine}</p> : null}
         {parts.footnote ? <p>{parts.footnote}</p> : null}
       </div>
     </li>

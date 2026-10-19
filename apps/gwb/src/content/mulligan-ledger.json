@@ -1,5 +1,5 @@
 {
-  "throughWeek": 5,
+  "throughWeek": 6,
   "weekNote": "",
   "entries": [
     {
@@ -146,6 +146,39 @@
       "won": false,
       "flipped": false,
       "footnote": "Vele dropped 17.4 on MNF; lost by 16.36 even with the +5.2."
+    },
+    {
+      "id": "w6-jamil",
+      "week": 6,
+      "rosterId": 10,
+      "manager": "BigBlue01",
+      "managerShort": "Jamil",
+      "team": "BigBlue",
+      "out": {
+        "name": "Mark Andrews",
+        "position": "TE",
+        "points": 1.4,
+        "team": "BAL"
+      },
+      "in": {
+        "name": "Jake Ferguson",
+        "position": "TE",
+        "points": 0,
+        "team": "DAL",
+        "pointsPending": true,
+        "sleeperPlayerId": "8110"
+      },
+      "netImpact": 0,
+      "netImpactPending": true,
+      "scoreWith": 131.68,
+      "scoreWithout": 133.08,
+      "opponentScore": 95.2,
+      "opponentScoreLive": true,
+      "opponentLabel": "Put em down Jeanty",
+      "opponentRosterId": 3,
+      "won": false,
+      "flipped": false,
+      "resultPending": true
     }
   ]
 }
