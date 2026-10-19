@@ -4,7 +4,7 @@ import { join } from 'node:path'
 
 const BASE =
   process.env.GWB_PREVIEW_BASE ??
-  'https://deploy-preview-107--arcsign.netlify.app/gwb-fe006a16/'
+  'https://deploy-preview-109--arcsign.netlify.app/gwb-fe006a16/'
 const OUT = '/opt/cursor/artifacts/gwb-fuse-w1-w5'
 
 async function shot(page, name, opts = {}) {
@@ -20,21 +20,38 @@ async function verifyWeekMatchups(page, week) {
     timeout: 120_000,
   })
   await page.waitForSelector('text=Matchups', { timeout: 60_000 })
-  const section = page.locator('section').filter({ hasText: 'Matchups' }).first()
-  await section.scrollIntoViewIfNeeded()
-  const imgs = section.locator('img[src*="/slides/vs-w"]')
-  const count = await imgs.count()
+  const section = page.locator(`#graphics-week-${week}-matchups`)
+  await section.waitFor({ timeout: 60_000 })
+  const items = section.locator('li[data-slide-id^="vs-w"]')
+  const count = await items.count()
   const sizes = []
   for (let i = 0; i < count; i++) {
-    const img = imgs.nth(i)
+    const item = items.nth(i)
+    await item.scrollIntoViewIfNeeded()
+    const img = item.locator('img').first()
+    await img.waitFor({ state: 'visible', timeout: 30_000 })
+    await img.evaluate((el) =>
+      new Promise((resolve) => {
+        if (el.complete && el.naturalWidth > 0) resolve(undefined)
+        else el.addEventListener('load', () => resolve(undefined), { once: true })
+      }),
+    )
     const src = await img.getAttribute('src')
     const natural = await img.evaluate((el) => ({
       w: el.naturalWidth,
       h: el.naturalHeight,
     }))
-    sizes.push({ src, ...natural })
+    sizes.push({ id: await item.getAttribute('data-slide-id'), src, ...natural })
   }
-  return { week, count, sizes }
+
+  let resultsCount = 0
+  const results = page.locator(`#graphics-week-${week}-results`)
+  if (await results.count()) {
+    const rItems = results.locator('li[data-slide-id^="results-w"]')
+    resultsCount = await rItems.count()
+  }
+
+  return { week, matchupCount: count, matchupSizes: sizes, resultsCount }
 }
 
 async function main() {
@@ -43,7 +60,7 @@ async function main() {
   const page = await browser.newPage()
 
   const reports = []
-  for (const week of [1, 4, 5, 6]) {
+  for (const week of [1, 2, 3, 4, 5, 6]) {
     reports.push(await verifyWeekMatchups(page, week))
   }
 
