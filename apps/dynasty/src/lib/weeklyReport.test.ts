@@ -14,11 +14,16 @@ describe('weekly reports', () => {
       expect(report?.lowScore?.points).toBeGreaterThan(0)
       expect(report?.closest?.margin).toBeGreaterThan(0)
       expect(report?.blowout?.margin).toBeGreaterThanOrEqual(report?.closest?.margin ?? 0)
+      expect(report?.topPlayer?.started).toBe(true)
       expect(report?.topPlayer?.name).toBeTruthy()
       for (const game of report?.matchups ?? []) {
         expect(game.recap).toContain(game.winner.name)
         expect(game.recap).toContain(game.winner.topScorers[0]?.name ?? '')
         expect(game.winner.score).toBeGreaterThanOrEqual(game.loser.score)
+        for (const side of [game.winner, game.loser]) {
+          expect(side.topScorers.length).toBeGreaterThan(0)
+          expect(side.topScorers.every((p) => p.started)).toBe(true)
+        }
       }
     }
     expect(getWeeklyReport(2026, 6)).toBeNull()
@@ -41,7 +46,18 @@ describe('weekly reports', () => {
     const love = report?.matchups.find((g) => g.winner.name === 'Love Thy Nabers')
     expect(love?.loser.name).toBe('MahomiesRidley4MooreJeffe')
     expect(love?.upset).toBe(true)
-    expect(report?.topPlayer?.name).toBe('Drake Maye')
+    expect(report?.topPlayer).toMatchObject({
+      name: 'Jaylen Warren',
+      points: 40.8,
+      manager: 'Saints & Sinners',
+      started: true,
+    })
     expect(report?.trades).toEqual([])
+    const week1 = getWeeklyReport('2026', 1)
+    const week1Players = (week1?.trades ?? []).flatMap((t) =>
+      t.sides.flatMap((s) => [...s.receivedPlayers, ...s.sentPlayers]),
+    )
+    expect(week1Players).not.toContain('Brock Bowers')
+    expect(week1Players).not.toContain('Tucker Kraft')
   })
 })

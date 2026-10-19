@@ -36,8 +36,8 @@ function Card({
   children: ReactNode
 }) {
   return (
-    <article className="flex aspect-[4/5] flex-col overflow-hidden rounded-xl border border-[var(--dyn-border)] bg-[#07050b] text-[var(--dyn-text)]">
-      <header className="shrink-0 border-b border-[var(--dyn-border)] px-4 pb-3 pt-4">
+    <article className="flex h-fit flex-col self-start rounded-xl border border-[var(--dyn-border)] bg-[#07050b] text-[var(--dyn-text)]">
+      <header className="border-b border-[var(--dyn-border)] px-4 pb-3 pt-4">
         <p className="font-['Bebas_Neue'] text-sm tracking-[0.14em] text-[var(--dyn-accent)]">
           {kicker}
         </p>
@@ -51,9 +51,7 @@ function Card({
           ) : null}
         </h4>
       </header>
-      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 text-sm leading-snug">
-        {children}
-      </div>
+      <div className="px-4 py-3 text-sm leading-snug">{children}</div>
     </article>
   )
 }
@@ -118,7 +116,7 @@ export function WeeklyReportDeck({
 }) {
   const top3 = report.standings.slice(0, 3)
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
       <Card
         kicker={`Dynasty · Week ${report.week} · Final report`}
         title={`Week ${report.week}`}
@@ -173,8 +171,7 @@ export function WeeklyReportDeck({
           )}
           {report.topPlayer && (
             <li>
-              Top player: {report.topPlayer.name} {pts(report.topPlayer.points)} ({report.topPlayer.manager}
-              {report.topPlayer.started ? ', started' : ', bench'})
+              Top player: {report.topPlayer.name} {pts(report.topPlayer.points)} ({report.topPlayer.manager}, started)
             </li>
           )}
           {report.mostBench && (

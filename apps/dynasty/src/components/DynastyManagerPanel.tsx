@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { picksOwnedByRoster } from '../lib/drafts'
+import { ownedPickOriginPhrase, picksOwnedByRoster } from '../lib/drafts'
 import {
   finishedSeasonsForManager,
   finishSummaryLine,
@@ -204,7 +204,7 @@ export function DynastyManagerPanel({
                       </span>
                       <span className="text-[var(--dyn-muted)]">
                         {' '}
-                        (from {p.originalLabel})
+                        ({ownedPickOriginPhrase(p, rosterId)})
                       </span>
                     </li>
                   ))}

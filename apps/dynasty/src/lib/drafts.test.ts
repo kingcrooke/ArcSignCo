@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { futurePickOwnership, picksOwnedByRoster, tradedPickHistoryFromTransactions } from './drafts'
+import {
+  futurePickOwnership,
+  ownedPickOriginPhrase,
+  picksOwnedByRoster,
+  tradedPickHistoryFromTransactions,
+} from './drafts'
 import type { SleeperTradedPick, SleeperTransaction, TeamInfo } from './types'
 
 function team(rosterId: number, teamName: string): TeamInfo {
@@ -60,6 +65,11 @@ describe('future pick ownership', () => {
     ])
     expect(owned.some((line) => line.startsWith('2027 Rd 2'))).toBe(false)
     expect(owned.some((line) => line === '2029 Rd 1 (Saints & Sinners)')).toBe(false)
+    const rows = picksOwnedByRoster(traded, teams, 1, '2026', 3, 3)
+    const retained = rows.find((r) => r.season === '2028' && r.round === 3)
+    const acquired = rows.find((r) => r.season === '2027' && r.round === 1 && r.originalRosterId === 8)
+    expect(retained && ownedPickOriginPhrase(retained, 1)).toBe('own')
+    expect(acquired && ownedPickOriginPhrase(acquired, 1)).toBe('from Chalupa Batman')
   })
 
   it('names the original pick and labels offseason trades', () => {

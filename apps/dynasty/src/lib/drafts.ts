@@ -163,6 +163,12 @@ function pickRow(
   }
 }
 
+/** "own" when this roster still holds its original pick; otherwise "from <team>". */
+export function ownedPickOriginPhrase(pick: FuturePickRow, rosterId: number): string {
+  if (pick.originalRosterId === rosterId) return 'own'
+  return `from ${pick.originalLabel}`
+}
+
 function sortPickRows(rows: FuturePickRow[]): FuturePickRow[] {
   return rows.sort((a, b) => {
     if (a.season !== b.season) return Number(a.season) - Number(b.season)

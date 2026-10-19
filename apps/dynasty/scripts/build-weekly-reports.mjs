@@ -19,11 +19,19 @@ const API = 'https://api.sleeper.app/v1'
 const DEFAULT_LEAGUE = '1312077668782473216'
 
 /**
- * Sleeper files offseason moves on leg 1. Week 1 of the report starts at
- * Thursday of NFL Week 1 (Eastern). Earlier moves are not that week's adds.
+ * Same Week 1 kickoff instants as `isOffseasonTrade` in src/lib/trades.ts.
+ * Transactions that closed before kickoff are offseason, including a
+ * Thursday trade filed on leg 1 (2026: Sep 10, 7:52 PM ET is before 8:20).
  */
-const WEEK1_START_MS = {
-  2026: Date.parse('2026-09-10T00:00:00-04:00'),
+const WEEK1_KICKOFF_MS = {
+  2019: Date.parse('2019-09-05T20:20:00-04:00'),
+  2020: Date.parse('2020-09-10T20:20:00-04:00'),
+  2021: Date.parse('2021-09-09T20:20:00-04:00'),
+  2022: Date.parse('2022-09-08T20:20:00-04:00'),
+  2023: Date.parse('2023-09-07T20:20:00-04:00'),
+  2024: Date.parse('2024-09-05T20:20:00-04:00'),
+  2025: Date.parse('2025-09-04T20:20:00-04:00'),
+  2026: Date.parse('2026-09-10T20:20:00-04:00'),
 }
 
 function arg(name, fallback) {
@@ -99,18 +107,24 @@ function winPct(rec) {
   return rec.wins / games
 }
 
-function topScorers(matchup, players, limit = 2) {
-  const starterSet = new Set(matchup.starters ?? [])
-  const rows = Object.entries(matchup.players_points ?? {})
-    .map(([playerId, points]) => ({
+/** Starters only, paired with Sleeper starters_points. Bench points are ignored. */
+function starterScorers(matchup, players) {
+  const ids = matchup.starters ?? []
+  const points = matchup.starters_points ?? []
+  return ids
+    .map((playerId, i) => ({
       playerId,
       name: playerName(players, playerId),
-      points: round2(points),
-      started: starterSet.has(playerId),
+      points: round2(points[i]),
+      started: true,
     }))
-    .filter((r) => r.points > 0)
+    .filter((r) => r.playerId && r.playerId !== '0' && r.points > 0)
+}
+
+function topScorers(matchup, players, limit = 2) {
+  return starterScorers(matchup, players)
     .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name))
-  return rows.slice(0, limit)
+    .slice(0, limit)
 }
 
 function benchPoints(matchup) {
@@ -333,19 +347,20 @@ async function main() {
     let topPlayer = null
     for (const m of matchups) {
       const team = rostersById.get(m.roster_id)
-      const starterSet = new Set(m.starters ?? [])
-      for (const [playerId, points] of Object.entries(m.players_points ?? {})) {
-        const pts = round2(points)
-        if (!topPlayer || pts > topPlayer.points) {
-          topPlayer = {
-            playerId,
-            name: playerName(players, playerId),
-            points: pts,
-            started: starterSet.has(playerId),
-            rosterId: m.roster_id,
-            userId: team?.owner_id ?? '',
-            manager: teamLabel(team),
-          }
+      for (const row of starterScorers(m, players)) {
+        const better =
+          !topPlayer ||
+          row.points > topPlayer.points ||
+          (row.points === topPlayer.points && row.name.localeCompare(topPlayer.name) < 0)
+        if (!better) continue
+        topPlayer = {
+          playerId: row.playerId,
+          name: row.name,
+          points: row.points,
+          started: true,
+          rosterId: m.roster_id,
+          userId: team?.owner_id ?? '',
+          manager: teamLabel(team),
         }
       }
     }
@@ -363,11 +378,11 @@ async function main() {
       return score(b) - score(a)
     })[0] ?? null
 
-    const week1Start = WEEK1_START_MS[Number(season)] ?? null
+    const week1Kickoff = WEEK1_KICKOFF_MS[Number(season)] ?? null
     const transactions = (txByWeek.get(week) ?? []).filter((tx) => {
       if (tx.status !== 'complete') return false
       const when = tx.status_updated ?? tx.created ?? 0
-      if (week === 1 && week1Start != null && when < week1Start) return false
+      if (week === 1 && week1Kickoff != null && when < week1Kickoff) return false
       return true
     })
     const waivers = transactions

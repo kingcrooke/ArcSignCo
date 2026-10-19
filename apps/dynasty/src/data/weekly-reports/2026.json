@@ -13,7 +13,7 @@
           "margin": 2.58,
           "upset": false,
           "tie": false,
-          "recap": "Saints & Sinners 119.98 defeated BigBlue 117.40 by 2.58. Saints & Sinners top scorers: Kenneth Walker 36.10, Tyler Shough 22.20. BigBlue top scorers: Jaxson Dart 29.60, Bijan Robinson 29.30.",
+          "recap": "Saints & Sinners 119.98 defeated BigBlue 117.40 by 2.58. Saints & Sinners top scorers: Kenneth Walker 36.10, Jordan Love 17.48. BigBlue top scorers: Jaxson Dart 29.60, Bijan Robinson 29.30.",
           "winner": {
             "rosterId": 1,
             "userId": "401754707162333184",
@@ -28,10 +28,10 @@
                 "started": true
               },
               {
-                "playerId": "12545",
-                "name": "Tyler Shough",
-                "points": 22.2,
-                "started": false
+                "playerId": "6804",
+                "name": "Jordan Love",
+                "points": 17.48,
+                "started": true
               }
             ]
           },
@@ -157,7 +157,7 @@
           "margin": 48.78,
           "upset": false,
           "tie": false,
-          "recap": "Chase’n Dubs 165.92 defeated Rubuilding 117.14 by 48.78. Chase’n Dubs top scorers: Zay Flowers 30.00, David Montgomery 28.90. Rubuilding top scorers: Josh Allen 36.66, Derrick Henry 35.30.",
+          "recap": "Chase’n Dubs 165.92 defeated Rubuilding 117.14 by 48.78. Chase’n Dubs top scorers: Zay Flowers 30.00, David Montgomery 28.90. Rubuilding top scorers: Derrick Henry 35.30, Jared Goff 18.44.",
           "winner": {
             "rosterId": 5,
             "userId": "427906596501213184",
@@ -186,15 +186,15 @@
             "score": 117.14,
             "topScorers": [
               {
-                "playerId": "4984",
-                "name": "Josh Allen",
-                "points": 36.66,
-                "started": false
-              },
-              {
                 "playerId": "3198",
                 "name": "Derrick Henry",
                 "points": 35.3,
+                "started": true
+              },
+              {
+                "playerId": "3163",
+                "name": "Jared Goff",
+                "points": 18.44,
                 "started": true
               }
             ]
@@ -205,7 +205,7 @@
           "margin": 15.06,
           "upset": false,
           "tie": false,
-          "recap": "A-Lamb-e que tengo hambre 162.96 defeated MahomiesRidley4MooreJeffe 147.90 by 15.06. A-Lamb-e que tengo hambre top scorers: Caleb Williams 39.26, Trevor Lawrence 33.10. MahomiesRidley4MooreJeffe top scorers: Justin Jefferson 31.20, Brock Purdy 27.10.",
+          "recap": "A-Lamb-e que tengo hambre 162.96 defeated MahomiesRidley4MooreJeffe 147.90 by 15.06. A-Lamb-e que tengo hambre top scorers: Caleb Williams 39.26, Ashton Jeanty 32.70. MahomiesRidley4MooreJeffe top scorers: Justin Jefferson 31.20, Brock Purdy 27.10.",
           "winner": {
             "rosterId": 6,
             "userId": "427930731889565696",
@@ -220,10 +220,10 @@
                 "started": true
               },
               {
-                "playerId": "7523",
-                "name": "Trevor Lawrence",
-                "points": 33.1,
-                "started": false
+                "playerId": "12527",
+                "name": "Ashton Jeanty",
+                "points": 32.7,
+                "started": true
               }
             ]
           },
@@ -253,7 +253,7 @@
           "margin": 33.74,
           "upset": false,
           "tie": false,
-          "recap": "ramonguaraguao 124.36 defeated Love Thy Nabers 90.62 by 33.74. ramonguaraguao top scorers: Bryce Young 35.44, Chris Olave 32.20. Love Thy Nabers top scorers: C.J. Stroud 15.46, Jacksonville Jaguars 15.00.",
+          "recap": "ramonguaraguao 124.36 defeated Love Thy Nabers 90.62 by 33.74. ramonguaraguao top scorers: Chris Olave 32.20, Bucky Irving 19.30. Love Thy Nabers top scorers: Jacksonville Jaguars 15.00, Malik Nabers 12.90.",
           "winner": {
             "rosterId": 10,
             "userId": "570012643529134080",
@@ -262,15 +262,15 @@
             "recordAfter": "1-0",
             "topScorers": [
               {
-                "playerId": "9228",
-                "name": "Bryce Young",
-                "points": 35.44,
-                "started": false
-              },
-              {
                 "playerId": "8144",
                 "name": "Chris Olave",
                 "points": 32.2,
+                "started": true
+              },
+              {
+                "playerId": "11584",
+                "name": "Bucky Irving",
+                "points": 19.3,
                 "started": true
               }
             ]
@@ -282,15 +282,15 @@
             "score": 90.62,
             "topScorers": [
               {
-                "playerId": "9758",
-                "name": "C.J. Stroud",
-                "points": 15.46,
-                "started": false
-              },
-              {
                 "playerId": "JAX",
                 "name": "Jacksonville Jaguars",
                 "points": 15,
+                "started": true
+              },
+              {
+                "playerId": "11632",
+                "name": "Malik Nabers",
+                "points": 12.9,
                 "started": true
               }
             ]
@@ -657,30 +657,6 @@
             }
           ],
           "statusUpdated": 1789145597900
-        },
-        {
-          "transactionId": "1403218046239170560",
-          "type": "waiver",
-          "status": "complete",
-          "rosterId": 12,
-          "userId": "429321092230815744",
-          "manager": "Rubuilding",
-          "faab": 0,
-          "adds": [
-            {
-              "playerId": "11370",
-              "name": "Chris Brooks",
-              "rosterId": 12
-            }
-          ],
-          "drops": [
-            {
-              "playerId": "11592",
-              "name": "Erick All",
-              "rosterId": 12
-            }
-          ],
-          "statusUpdated": 1789085027854
         }
       ],
       "trades": [
@@ -715,39 +691,6 @@
               ]
             }
           ]
-        },
-        {
-          "transactionId": "1403924254491185152",
-          "statusUpdated": 1789084361375,
-          "sides": [
-            {
-              "rosterId": 1,
-              "userId": "401754707162333184",
-              "manager": "Saints & Sinners",
-              "receivedPlayers": [
-                "Brock Bowers"
-              ],
-              "sentPlayers": [
-                "Tucker Kraft"
-              ],
-              "receivedPicks": []
-            },
-            {
-              "rosterId": 3,
-              "userId": "427899269689647104",
-              "manager": "Wolf Pack",
-              "receivedPlayers": [
-                "Tucker Kraft"
-              ],
-              "sentPlayers": [
-                "Brock Bowers"
-              ],
-              "receivedPicks": [
-                "28 Rd 1 (Saints & Sinners)",
-                "27 Rd 1 (Wolf Pack)"
-              ]
-            }
-          ]
         }
       ]
     },
@@ -762,7 +705,7 @@
           "margin": 5.28,
           "upset": true,
           "tie": false,
-          "recap": "MahomiesRidley4MooreJeffe 96.88 defeated Saints & Sinners 91.60 by 5.28. MahomiesRidley4MooreJeffe top scorers: Patrick Mahomes 32.98, Brock Purdy 32.48. Saints & Sinners top scorers: Kenneth Walker 23.80, Denzel Boston 22.50.",
+          "recap": "MahomiesRidley4MooreJeffe 96.88 defeated Saints & Sinners 91.60 by 5.28. MahomiesRidley4MooreJeffe top scorers: Brock Purdy 32.48, James Cook 20.90. Saints & Sinners top scorers: Kenneth Walker 23.80, Jordan Love 13.80.",
           "winner": {
             "rosterId": 11,
             "userId": "429316063394541568",
@@ -771,15 +714,15 @@
             "recordAfter": "1-1",
             "topScorers": [
               {
-                "playerId": "4046",
-                "name": "Patrick Mahomes",
-                "points": 32.98,
-                "started": false
-              },
-              {
                 "playerId": "8183",
                 "name": "Brock Purdy",
                 "points": 32.48,
+                "started": true
+              },
+              {
+                "playerId": "8138",
+                "name": "James Cook",
+                "points": 20.9,
                 "started": true
               }
             ]
@@ -797,10 +740,10 @@
                 "started": true
               },
               {
-                "playerId": "13346",
-                "name": "Denzel Boston",
-                "points": 22.5,
-                "started": false
+                "playerId": "6804",
+                "name": "Jordan Love",
+                "points": 13.8,
+                "started": true
               }
             ]
           }
@@ -906,7 +849,7 @@
           "margin": 11.32,
           "upset": false,
           "tie": false,
-          "recap": "A-Lamb-e que tengo hambre 114.62 defeated BigBlue 103.30 by 11.32. A-Lamb-e que tengo hambre top scorers: Dalton Kincaid 22.50, Breece Hall 16.20. BigBlue top scorers: Tre Tucker 26.90, Dalton Schultz 26.00.",
+          "recap": "A-Lamb-e que tengo hambre 114.62 defeated BigBlue 103.30 by 11.32. A-Lamb-e que tengo hambre top scorers: Dalton Kincaid 22.50, Breece Hall 16.20. BigBlue top scorers: Dalton Schultz 26.00, Chase McLaughlin 16.00.",
           "winner": {
             "rosterId": 6,
             "userId": "427930731889565696",
@@ -935,15 +878,15 @@
             "score": 103.3,
             "topScorers": [
               {
-                "playerId": "10213",
-                "name": "Tre Tucker",
-                "points": 26.9,
-                "started": false
-              },
-              {
                 "playerId": "5001",
                 "name": "Dalton Schultz",
                 "points": 26,
+                "started": true
+              },
+              {
+                "playerId": "6650",
+                "name": "Chase McLaughlin",
+                "points": 16,
                 "started": true
               }
             ]
@@ -954,7 +897,7 @@
           "margin": 48.98,
           "upset": true,
           "tie": false,
-          "recap": "Chalupa Batman 178.76 defeated ramonguaraguao 129.78 by 48.98. Chalupa Batman top scorers: Davante Adams 41.50, Dak Prescott 35.76. ramonguaraguao top scorers: Bryce Young 28.08, Chris Olave 22.60.",
+          "recap": "Chalupa Batman 178.76 defeated ramonguaraguao 129.78 by 48.98. Chalupa Batman top scorers: Davante Adams 41.50, Dak Prescott 35.76. ramonguaraguao top scorers: Chris Olave 22.60, Christian McCaffrey 22.60.",
           "winner": {
             "rosterId": 8,
             "userId": "427956169848401920",
@@ -983,14 +926,14 @@
             "score": 129.78,
             "topScorers": [
               {
-                "playerId": "9228",
-                "name": "Bryce Young",
-                "points": 28.08,
-                "started": false
-              },
-              {
                 "playerId": "8144",
                 "name": "Chris Olave",
+                "points": 22.6,
+                "started": true
+              },
+              {
+                "playerId": "4034",
+                "name": "Christian McCaffrey",
                 "points": 22.6,
                 "started": true
               }
@@ -1002,7 +945,7 @@
           "margin": 62.32,
           "upset": false,
           "tie": false,
-          "recap": "Rubuilding 177.02 defeated Team Name Hoes 114.70 by 62.32. Rubuilding top scorers: Josh Allen 43.82, CeeDee Lamb 35.30. Team Name Hoes top scorers: Matthew Stafford 33.98, Travis Kelce 25.10.",
+          "recap": "Rubuilding 177.02 defeated Team Name Hoes 114.70 by 62.32. Rubuilding top scorers: Josh Allen 43.82, CeeDee Lamb 35.30. Team Name Hoes top scorers: Jaylen Waddle 23.80, Sam LaPorta 17.20.",
           "winner": {
             "rosterId": 12,
             "userId": "429321092230815744",
@@ -1031,16 +974,16 @@
             "score": 114.7,
             "topScorers": [
               {
-                "playerId": "421",
-                "name": "Matthew Stafford",
-                "points": 33.98,
-                "started": false
+                "playerId": "7526",
+                "name": "Jaylen Waddle",
+                "points": 23.8,
+                "started": true
               },
               {
-                "playerId": "1466",
-                "name": "Travis Kelce",
-                "points": 25.1,
-                "started": false
+                "playerId": "10859",
+                "name": "Sam LaPorta",
+                "points": 17.2,
+                "started": true
               }
             ]
           }
@@ -1824,7 +1767,7 @@
           "margin": 34.72,
           "upset": true,
           "tie": false,
-          "recap": "Saints & Sinners 145.40 defeated A-Lamb-e que tengo hambre 110.68 by 34.72. Saints & Sinners top scorers: Tyler Shough 27.80, Brock Bowers 27.60. A-Lamb-e que tengo hambre top scorers: Trevor Lawrence 24.78, Harold Fannin 24.10.",
+          "recap": "Saints & Sinners 145.40 defeated A-Lamb-e que tengo hambre 110.68 by 34.72. Saints & Sinners top scorers: Tyler Shough 27.80, Brock Bowers 27.60. A-Lamb-e que tengo hambre top scorers: Trevor Lawrence 24.78, CeeDee Lamb 22.20.",
           "winner": {
             "rosterId": 1,
             "userId": "401754707162333184",
@@ -1859,10 +1802,10 @@
                 "started": true
               },
               {
-                "playerId": "12506",
-                "name": "Harold Fannin",
-                "points": 24.1,
-                "started": false
+                "playerId": "6786",
+                "name": "CeeDee Lamb",
+                "points": 22.2,
+                "started": true
               }
             ]
           }
@@ -1920,7 +1863,7 @@
           "margin": 53.32,
           "upset": false,
           "tie": false,
-          "recap": "Wolf Pack 140.58 defeated Rubuilding 87.26 by 53.32. Wolf Pack top scorers: Jacoby Brissett 27.60, Joe Burrow 26.58. Rubuilding top scorers: Kyren Williams 21.80, Jared Goff 21.36.",
+          "recap": "Wolf Pack 140.58 defeated Rubuilding 87.26 by 53.32. Wolf Pack top scorers: Joe Burrow 26.58, Christian Watson 22.60. Rubuilding top scorers: Kyren Williams 21.80, Minnesota Vikings 17.00.",
           "winner": {
             "rosterId": 3,
             "userId": "427899269689647104",
@@ -1929,15 +1872,15 @@
             "recordAfter": "2-1",
             "topScorers": [
               {
-                "playerId": "3257",
-                "name": "Jacoby Brissett",
-                "points": 27.6,
-                "started": false
-              },
-              {
                 "playerId": "6770",
                 "name": "Joe Burrow",
                 "points": 26.58,
+                "started": true
+              },
+              {
+                "playerId": "8167",
+                "name": "Christian Watson",
+                "points": 22.6,
                 "started": true
               }
             ]
@@ -1955,10 +1898,10 @@
                 "started": true
               },
               {
-                "playerId": "3163",
-                "name": "Jared Goff",
-                "points": 21.36,
-                "started": false
+                "playerId": "MIN",
+                "name": "Minnesota Vikings",
+                "points": 17,
+                "started": true
               }
             ]
           }
@@ -1968,7 +1911,7 @@
           "margin": 1.16,
           "upset": false,
           "tie": false,
-          "recap": "MahomiesRidley4MooreJeffe 127.58 defeated BigBlue 126.42 by 1.16. MahomiesRidley4MooreJeffe top scorers: Brock Purdy 39.28, Sam Darnold 35.66. BigBlue top scorers: Bijan Robinson 37.30, Drake London 32.40.",
+          "recap": "MahomiesRidley4MooreJeffe 127.58 defeated BigBlue 126.42 by 1.16. MahomiesRidley4MooreJeffe top scorers: Brock Purdy 39.28, James Cook 18.40. BigBlue top scorers: Bijan Robinson 37.30, Drake London 32.40.",
           "winner": {
             "rosterId": 11,
             "userId": "429316063394541568",
@@ -1983,10 +1926,10 @@
                 "started": true
               },
               {
-                "playerId": "4943",
-                "name": "Sam Darnold",
-                "points": 35.66,
-                "started": false
+                "playerId": "8138",
+                "name": "James Cook",
+                "points": 18.4,
+                "started": true
               }
             ]
           },
@@ -2713,7 +2656,7 @@
           "margin": 14.22,
           "upset": true,
           "tie": false,
-          "recap": "Saints & Sinners 153.84 defeated Chase’n Dubs 139.62 by 14.22. Saints & Sinners top scorers: Kenneth Walker 32.90, Brock Bowers 20.60. Chase’n Dubs top scorers: Zay Flowers 27.80, Romeo Doubs 23.80.",
+          "recap": "Saints & Sinners 153.84 defeated Chase’n Dubs 139.62 by 14.22. Saints & Sinners top scorers: Kenneth Walker 32.90, Brock Bowers 20.60. Chase’n Dubs top scorers: Zay Flowers 27.80, Jonathan Taylor 22.70.",
           "winner": {
             "rosterId": 1,
             "userId": "401754707162333184",
@@ -2748,10 +2691,10 @@
                 "started": true
               },
               {
-                "playerId": "8121",
-                "name": "Romeo Doubs",
-                "points": 23.8,
-                "started": false
+                "playerId": "6813",
+                "name": "Jonathan Taylor",
+                "points": 22.7,
+                "started": true
               }
             ]
           }
@@ -2809,7 +2752,7 @@
           "margin": 6.52,
           "upset": false,
           "tie": false,
-          "recap": "Wolf Pack 133.92 defeated Chalupa Batman 127.40 by 6.52. Wolf Pack top scorers: Nico Collins 32.80, Kirk Cousins 26.60. Chalupa Batman top scorers: Javonte Williams 31.30, Emanuel Wilson 26.00.",
+          "recap": "Wolf Pack 133.92 defeated Chalupa Batman 127.40 by 6.52. Wolf Pack top scorers: Nico Collins 32.80, Joe Burrow 22.72. Chalupa Batman top scorers: Javonte Williams 31.30, Dak Prescott 17.10.",
           "winner": {
             "rosterId": 3,
             "userId": "427899269689647104",
@@ -2824,10 +2767,10 @@
                 "started": true
               },
               {
-                "playerId": "1166",
-                "name": "Kirk Cousins",
-                "points": 26.6,
-                "started": false
+                "playerId": "6770",
+                "name": "Joe Burrow",
+                "points": 22.72,
+                "started": true
               }
             ]
           },
@@ -2844,10 +2787,10 @@
                 "started": true
               },
               {
-                "playerId": "11435",
-                "name": "Emanuel Wilson",
-                "points": 26,
-                "started": false
+                "playerId": "3294",
+                "name": "Dak Prescott",
+                "points": 17.1,
+                "started": true
               }
             ]
           }
@@ -2857,7 +2800,7 @@
           "margin": 24.3,
           "upset": false,
           "tie": false,
-          "recap": "Rubuilding 129.88 defeated BigBlue 105.58 by 24.30. Rubuilding top scorers: Kyren Williams 36.70, Bryce Young 22.46. BigBlue top scorers: Bijan Robinson 29.70, Ollie Gordon 20.00.",
+          "recap": "Rubuilding 129.88 defeated BigBlue 105.58 by 24.30. Rubuilding top scorers: Kyren Williams 36.70, Jared Goff 21.48. BigBlue top scorers: Bijan Robinson 29.70, Ollie Gordon 20.00.",
           "winner": {
             "rosterId": 12,
             "userId": "429321092230815744",
@@ -2872,10 +2815,10 @@
                 "started": true
               },
               {
-                "playerId": "9228",
-                "name": "Bryce Young",
-                "points": 22.46,
-                "started": false
+                "playerId": "3163",
+                "name": "Jared Goff",
+                "points": 21.48,
+                "started": true
               }
             ]
           },
@@ -2905,7 +2848,7 @@
           "margin": 46.9,
           "upset": false,
           "tie": false,
-          "recap": "A-Lamb-e que tengo hambre 162.58 defeated Love Thy Nabers 115.68 by 46.90. A-Lamb-e que tengo hambre top scorers: Tetairoa McMillan 44.20, CeeDee Lamb 41.30. Love Thy Nabers top scorers: Drake Maye 28.16, Brian Robinson 25.70.",
+          "recap": "A-Lamb-e que tengo hambre 162.58 defeated Love Thy Nabers 115.68 by 46.90. A-Lamb-e que tengo hambre top scorers: Tetairoa McMillan 44.20, CeeDee Lamb 41.30. Love Thy Nabers top scorers: C.J. Stroud 25.08, Malik Nabers 23.20.",
           "winner": {
             "rosterId": 6,
             "userId": "427930731889565696",
@@ -2934,16 +2877,16 @@
             "score": 115.68,
             "topScorers": [
               {
-                "playerId": "11564",
-                "name": "Drake Maye",
-                "points": 28.16,
-                "started": false
+                "playerId": "9758",
+                "name": "C.J. Stroud",
+                "points": 25.08,
+                "started": true
               },
               {
-                "playerId": "8154",
-                "name": "Brian Robinson",
-                "points": 25.7,
-                "started": false
+                "playerId": "11632",
+                "name": "Malik Nabers",
+                "points": 23.2,
+                "started": true
               }
             ]
           }
@@ -2953,7 +2896,7 @@
           "margin": 19.42,
           "upset": true,
           "tie": false,
-          "recap": "ramonguaraguao 121.32 defeated MahomiesRidley4MooreJeffe 101.90 by 19.42. ramonguaraguao top scorers: Kyle Monangai 28.00, Keon Coleman 23.60. MahomiesRidley4MooreJeffe top scorers: Chuba Hubbard 25.90, Brock Purdy 23.62.",
+          "recap": "ramonguaraguao 121.32 defeated MahomiesRidley4MooreJeffe 101.90 by 19.42. ramonguaraguao top scorers: Alvin Kamara 22.80, Chris Olave 21.60. MahomiesRidley4MooreJeffe top scorers: Chuba Hubbard 25.90, Patrick Mahomes 19.00.",
           "winner": {
             "rosterId": 10,
             "userId": "570012643529134080",
@@ -2962,16 +2905,16 @@
             "recordAfter": "2-2",
             "topScorers": [
               {
-                "playerId": "12534",
-                "name": "Kyle Monangai",
-                "points": 28,
-                "started": false
+                "playerId": "4035",
+                "name": "Alvin Kamara",
+                "points": 22.8,
+                "started": true
               },
               {
-                "playerId": "11637",
-                "name": "Keon Coleman",
-                "points": 23.6,
-                "started": false
+                "playerId": "8144",
+                "name": "Chris Olave",
+                "points": 21.6,
+                "started": true
               }
             ]
           },
@@ -2988,10 +2931,10 @@
                 "started": true
               },
               {
-                "playerId": "8183",
-                "name": "Brock Purdy",
-                "points": 23.62,
-                "started": false
+                "playerId": "4046",
+                "name": "Patrick Mahomes",
+                "points": 19,
+                "started": true
               }
             ]
           }
@@ -3677,7 +3620,7 @@
           "margin": 37.44,
           "upset": false,
           "tie": false,
-          "recap": "Saints & Sinners 172.38 defeated Rubuilding 134.94 by 37.44. Saints & Sinners top scorers: Jaylen Warren 40.80, Jordan Love 26.28. Rubuilding top scorers: Jared Goff 30.94, Spencer Shrader 21.00.",
+          "recap": "Saints & Sinners 172.38 defeated Rubuilding 134.94 by 37.44. Saints & Sinners top scorers: Jaylen Warren 40.80, Jordan Love 26.28. Rubuilding top scorers: Jared Goff 30.94, Kyren Williams 19.60.",
           "winner": {
             "rosterId": 1,
             "userId": "401754707162333184",
@@ -3712,10 +3655,10 @@
                 "started": true
               },
               {
-                "playerId": "12185",
-                "name": "Spencer Shrader",
-                "points": 21,
-                "started": false
+                "playerId": "8150",
+                "name": "Kyren Williams",
+                "points": 19.6,
+                "started": true
               }
             ]
           }
@@ -3869,7 +3812,7 @@
           "margin": 15.38,
           "upset": true,
           "tie": false,
-          "recap": "Love Thy Nabers 132.44 defeated MahomiesRidley4MooreJeffe 117.06 by 15.38. Love Thy Nabers top scorers: Drake Maye 46.46, Malik Nabers 29.10. MahomiesRidley4MooreJeffe top scorers: Tyler Warren 21.40, James Cook 20.80.",
+          "recap": "Love Thy Nabers 132.44 defeated MahomiesRidley4MooreJeffe 117.06 by 15.38. Love Thy Nabers top scorers: Malik Nabers 29.10, George Pickens 28.00. MahomiesRidley4MooreJeffe top scorers: Tyler Warren 21.40, James Cook 20.80.",
           "winner": {
             "rosterId": 7,
             "userId": "427945970563559424",
@@ -3878,15 +3821,15 @@
             "recordAfter": "1-4",
             "topScorers": [
               {
-                "playerId": "11564",
-                "name": "Drake Maye",
-                "points": 46.46,
-                "started": false
-              },
-              {
                 "playerId": "11632",
                 "name": "Malik Nabers",
                 "points": 29.1,
+                "started": true
+              },
+              {
+                "playerId": "8137",
+                "name": "George Pickens",
+                "points": 28,
                 "started": true
               }
             ]
@@ -3990,13 +3933,13 @@
         "matchupId": 4
       },
       "topPlayer": {
-        "playerId": "11564",
-        "name": "Drake Maye",
-        "points": 46.46,
-        "started": false,
-        "rosterId": 7,
-        "userId": "427945970563559424",
-        "manager": "Love Thy Nabers"
+        "playerId": "8228",
+        "name": "Jaylen Warren",
+        "points": 40.8,
+        "started": true,
+        "rosterId": 1,
+        "userId": "401754707162333184",
+        "manager": "Saints & Sinners"
       },
       "mostBench": {
         "rosterId": 2,
