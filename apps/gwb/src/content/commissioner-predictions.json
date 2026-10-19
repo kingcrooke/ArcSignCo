@@ -41,6 +41,48 @@
           "correct": false
         }
       ]
+    },
+    {
+      "week": 4,
+      "label": "Who's actually good?",
+      "picks": [
+        {
+          "matchup": "Narking vs Steven",
+          "pick": "Steven",
+          "actualWinner": "Steven",
+          "correct": true
+        },
+        {
+          "matchup": "Kayser vs Frankie",
+          "pick": "Kayser",
+          "actualWinner": "Frankie",
+          "correct": false
+        },
+        {
+          "matchup": "Hady vs Manny",
+          "pick": "Manny",
+          "actualWinner": "Hady",
+          "correct": false
+        },
+        {
+          "matchup": "Jamil vs Matt",
+          "pick": "Matt",
+          "actualWinner": "Jamil",
+          "correct": false
+        },
+        {
+          "matchup": "Mauricio vs Eric",
+          "pick": "Eric",
+          "actualWinner": "Mauricio",
+          "correct": false
+        },
+        {
+          "matchup": "Danny vs Crooke",
+          "pick": "Crooke",
+          "actualWinner": "Danny",
+          "correct": false
+        }
+      ]
     }
   ]
 }

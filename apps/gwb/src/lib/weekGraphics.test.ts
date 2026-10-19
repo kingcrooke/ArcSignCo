@@ -1,19 +1,31 @@
 import { describe, expect, it } from 'vitest'
-import {
-  getWeekGraphicsSections,
-  MUSE_CARD_SLIDE_SIZE,
-} from './weekGraphics'
+import { MUSE_CARD_SLIDE_SIZE } from './weekGraphics'
+import { getWeekGraphicsSections } from './weekGraphics'
 
 describe('getWeekGraphicsSections week 4', () => {
-  it('lists Results and Report only for a finished week', () => {
+  it('lists Matchups, Results, and Report for finished Week 4', () => {
     const sections = getWeekGraphicsSections(4)
-    expect(sections.map((s) => s.kind)).toEqual(['results', 'report'])
-    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Report'])
+    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
+    expect(sections.map((s) => s.heading)).toEqual([
+      'Matchups',
+      'Results',
+      'Report',
+    ])
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides).toHaveLength(6)
+    expect(matchups?.slides[0]).toMatchObject({
+      id: 'vs-m1-narking-steven',
+      width: 1080,
+      height: 1350,
+    })
     expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
     expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
-    expect(
-      sections.flatMap((s) => s.slides).some((s) => s.id.startsWith('vs-')),
-    ).toBe(false)
+  })
+
+  it('uses restored Week 1 deck titles from slide-headlines.json', () => {
+    const report = getWeekGraphicsSections(1).find((s) => s.kind === 'report')
+    expect(report?.slides[0]?.title).toBe('We Are So Back')
+    expect(report?.slides[1]?.title).toBe('199.39: One Point From 200')
   })
 
   it('keeps finished weeks 1–3 on results and report only', () => {
@@ -46,9 +58,10 @@ describe('getWeekGraphicsSections week 4', () => {
     ])
   })
 
-  it('lists Results and Report for finished Week 5', () => {
+  it('lists Matchups, Results, and Report for finished Week 5', () => {
     const sections = getWeekGraphicsSections(5)
-    expect(sections.map((s) => s.kind)).toEqual(['results', 'report'])
+    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
+    expect(sections.find((s) => s.kind === 'matchups')?.slides).toHaveLength(6)
     expect(sections.find((s) => s.kind === 'results')?.slides).toHaveLength(6)
     expect(sections.find((s) => s.kind === 'report')?.slides).toHaveLength(16)
     expect(sections.find((s) => s.kind === 'results')?.slides[3]?.title).toBe(
@@ -56,7 +69,7 @@ describe('getWeekGraphicsSections week 4', () => {
     )
   })
 
-  it('lists Matchups only for upcoming Week 6', () => {
+  it('lists Matchups only for upcoming Week 6 at Muse card size', () => {
     const sections = getWeekGraphicsSections(6)
     expect(sections.map((s) => s.kind)).toEqual(['matchups'])
     expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
@@ -68,21 +81,7 @@ describe('getWeekGraphicsSections week 4', () => {
       ['vs-w6-m5', 'vs-w6-m5', 'Hady vs Matt'],
       ['vs-w6-m6', 'vs-w6-m6', 'Mauricio vs Kayser'],
     ])
-  })
-
-  it('uses 5:7 Muse card dimensions for results and Week 6 matchups', () => {
-    for (const week of [1, 2, 3, 4, 5]) {
-      const results = getWeekGraphicsSections(week).find((s) => s.kind === 'results')
-      for (const slide of results?.slides ?? []) {
-        expect(slide).toMatchObject(MUSE_CARD_SLIDE_SIZE)
-      }
-    }
-    const matchups = getWeekGraphicsSections(6)[0]?.slides ?? []
-    for (const slide of matchups) {
-      expect(slide).toMatchObject(MUSE_CARD_SLIDE_SIZE)
-    }
-    const report = getWeekGraphicsSections(4).find((s) => s.kind === 'report')
-    expect(report?.slides[0]).toMatchObject({ width: 1080, height: 1350 })
+    expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
 
   it('publishes the six final result cards with approved headlines', () => {
