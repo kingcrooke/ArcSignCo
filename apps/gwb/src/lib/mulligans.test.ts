@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   formatMulliganLedgerLine,
   formatMulliganReceipt,
+  mulliganLiveContextForEntry,
   mulliganReceiptParts,
   mulliganStatusParts,
   mulliganEntriesForWeek,
@@ -19,13 +20,13 @@ import state from '../test/fixtures/state-nfl.json'
 import type { NflState, SleeperLeague } from './types'
 
 describe('mulligans', () => {
-  it('lists all seven confirmed uses in ledger order', () => {
-    expect(mulliganLedgerEntries()).toHaveLength(7)
-    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(7)
+  it('lists all eight confirmed uses in ledger order', () => {
+    expect(mulliganLedgerEntries()).toHaveLength(8)
+    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(8)
   })
 
-  it('marks rosters 1, 2, 3, 4, 8, 9, 12 as used and leaves others available', () => {
-    for (const id of [1, 2, 3, 4, 8, 9, 12]) {
+  it('marks rosters 1, 2, 3, 4, 8, 9, 10, 12 as used and leaves others available', () => {
+    for (const id of [1, 2, 3, 4, 8, 9, 10, 12]) {
       expect(mulliganStatusForRoster(id).used).toBe(true)
     }
     expect(mulliganLabel(mulliganStatusForRoster(4))).toContain('Used')
@@ -123,6 +124,9 @@ describe('mulligans', () => {
     expect(mulligansUsedThroughWeek(3)).toBe(5)
     expect(mulligansUsedThroughWeek(4)).toBe(7)
     expect(mulligansUsedThroughWeek(5)).toBe(7)
+    expect(mulligansUsedThroughWeek(6)).toBe(8)
+    expect(mulliganStatusForRoster(10).used).toBe(true)
+    expect(mulliganStatusForRoster(10, 5).used).toBe(false)
     expect(mulliganStatusForRoster(9, 1).used).toBe(false)
     expect(mulliganStatusForRoster(9, 2).used).toBe(true)
     expect(mulliganStatusForRoster(8, 3).used).toBe(false)
@@ -137,6 +141,31 @@ describe('mulligans', () => {
     expect(mulliganStatusThroughWeek(3, 4)).toBe(4)
     expect(mulliganStatusThroughWeek(4, 4)).toBe(4)
     expect(mulliganStatusThroughWeek(3, 2)).toBe(3)
+  })
+
+  it('shows Jamil week 6 swap with live Ferguson points and pending matchup', () => {
+    const jamil = mulliganForRoster(10)!
+    expect(jamil.id).toBe('w6-jamil')
+    expect(jamil.resultPending).toBe(true)
+    expect(jamil.scoreWithout).toBe(133.08)
+    expect(jamil.in.sleeperPlayerId).toBe('8110')
+    const liveCtx = mulliganLiveContextForEntry(
+      jamil,
+      { '8110': 6.5 },
+      97.4,
+    )
+    const parts = mulliganReceiptParts(jamil, liveCtx)
+    expect(parts.inLine).toContain('6.50 (live)')
+    expect(parts.netLine).toBe('Net +5.10 so far')
+    expect(parts.resultLine).toBe('TBD 138.18–97.40')
+    expect(parts.versusLine).toContain('Net so far vs Narking')
+    expect(parts.flipLine).toBeUndefined()
+    expect(formatMulliganReceipt(jamil, liveCtx)).not.toContain('No flip')
+    expect(formatMulliganLedgerLine(jamil, liveCtx)).toContain('Outcome TBD')
+    expect(formatMulliganLedgerLine(jamil, liveCtx)).not.toContain('Won')
+    expect(formatMulliganLedgerLine(jamil, liveCtx)).not.toContain('Lost')
+    expect(mulliganEntriesForWeek(6)).toHaveLength(1)
+    expect(mulliganLabel(mulliganStatusForRoster(10))).toContain('Andrews')
   })
 
   it('uses live mulligan deferral copy when ledger week is in progress', () => {

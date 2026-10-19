@@ -41,11 +41,14 @@ export interface MulliganLedgerEntry {
   won: boolean
   flipped: boolean
   resultPending?: boolean
+  /** When true, opponentScore is a baseline; use opponentMatchupPoints from live context. */
+  opponentScoreLive?: boolean
   footnote?: string
 }
 
 export interface MulliganLiveContext {
   playerPoints?: Record<string, number>
+  opponentMatchupPoints?: number
 }
 
 interface MulliganLedgerFile {
@@ -100,9 +103,32 @@ export function mulliganStatusForRoster(
 export function mulliganLiveContextForEntry(
   entry: MulliganLedgerEntry,
   playerPoints?: Record<string, number>,
+  opponentMatchupPoints?: number,
 ): MulliganLiveContext | undefined {
-  if (!entry.in.pointsPending || !playerPoints) return undefined
-  return { playerPoints }
+  const needsIn = entry.in.pointsPending && playerPoints
+  const needsOpp =
+    entry.resultPending &&
+    entry.opponentScoreLive &&
+    opponentMatchupPoints !== undefined
+  if (!needsIn && !needsOpp) return undefined
+  return {
+    playerPoints: needsIn ? playerPoints : undefined,
+    opponentMatchupPoints: needsOpp ? opponentMatchupPoints : undefined,
+  }
+}
+
+export function resolveOpponentScore(
+  entry: MulliganLedgerEntry,
+  ctx?: MulliganLiveContext,
+): number {
+  if (
+    entry.resultPending &&
+    entry.opponentScoreLive &&
+    ctx?.opponentMatchupPoints !== undefined
+  ) {
+    return ctx.opponentMatchupPoints
+  }
+  return entry.opponentScore
 }
 
 export function mulliganEntriesForWeek(week: number): MulliganLedgerEntry[] {
@@ -153,7 +179,7 @@ function formatSwapPoints(
   if (swap.pointsPending) {
     const live = resolveInSwapPoints(swap, ctx)
     if (live !== null) return `${formatScore(live)} (live)`
-    return 'pending'
+    return 'TBD'
   }
   return formatScore(swap.points)
 }
@@ -161,10 +187,12 @@ function formatSwapPoints(
 function formatNetImpact(
   entry: MulliganLedgerEntry,
   ctx?: MulliganLiveContext,
+  soFar = false,
 ): string {
   const net = resolveMulliganNetImpact(entry, ctx)
-  if (net === null) return 'pending'
-  return formatSignedImpact(net)
+  if (net === null) return 'TBD'
+  const base = formatSignedImpact(net)
+  return soFar ? `${base} so far` : base
 }
 
 function resolveScoreWith(
@@ -190,16 +218,18 @@ export type MulliganStatusParts =
 export function mulliganStatusParts(
   rosterId: number,
   throughWeek = Number.POSITIVE_INFINITY,
+  ctx?: MulliganLiveContext,
 ): MulliganStatusParts {
   const entry = mulliganForRosterThroughWeek(rosterId, throughWeek)
   if (!entry) return { used: false }
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
+  const netSoFar = entry.resultPending === true
   return {
     used: true,
     week: entry.week,
     outLine: `OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote}`,
-    inLine: `IN ${entry.in.name} ${formatSwapPoints(entry.in)}`,
-    netLine: `Net ${formatNetImpact(entry)}`,
+    inLine: `IN ${entry.in.name} ${formatSwapPoints(entry.in, ctx)}`,
+    netLine: `Net ${formatNetImpact(entry, ctx, netSoFar)}`,
   }
 }
 
@@ -211,7 +241,7 @@ export type MulliganReceiptParts = {
   resultLine: string
   versusLine: string
   withoutLine: string
-  flipLine: string
+  flipLine?: string
   footnote?: string
 }
 
@@ -239,19 +269,25 @@ export function mulliganReceiptParts(
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
   const result = entry.resultPending ? 'TBD' : entry.won ? 'W' : 'L'
   const scoreWith = resolveScoreWith(entry, ctx)
+  const opponentScore = resolveOpponentScore(entry, ctx)
   const resultVerb = entry.resultPending
-    ? 'Result TBD'
+    ? 'Net so far'
     : entry.won
       ? 'Won'
       : 'Lost'
   const vsWord = entry.resultPending || entry.won ? 'vs' : 'to'
-  const flip = entry.flipped ? 'Flipped the result' : 'No flip'
+  const flip = entry.resultPending
+    ? undefined
+    : entry.flipped
+      ? 'Flipped the result'
+      : 'No flip'
+  const netSoFar = entry.resultPending === true
   return {
     manager,
     outLine: `OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote}`,
     inLine: `IN ${entry.in.name} ${formatSwapPoints(entry.in, ctx)}`,
-    netLine: `Net ${formatNetImpact(entry, ctx)}`,
-    resultLine: `${result} ${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`,
+    netLine: `Net ${formatNetImpact(entry, ctx, netSoFar)}`,
+    resultLine: `${result} ${formatScore(scoreWith)}–${formatScore(opponentScore)}`,
     versusLine: `${resultVerb} ${vsWord} ${opponent}`,
     withoutLine: `Would've been ${formatScore(entry.scoreWithout)} without it`,
     flipLine: flip,
@@ -267,10 +303,12 @@ export function formatMulliganReceipt(
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
   const result = entry.resultPending ? 'TBD' : entry.won ? 'W' : 'L'
   const scoreWith = resolveScoreWith(entry, ctx)
+  const opponentScore = resolveOpponentScore(entry, ctx)
+  const netSoFar = entry.resultPending === true
   return (
     `${manager} · OUT ${entry.out.name} ${formatScore(entry.out.points)}${outNote} → ` +
     `IN ${entry.in.name} ${formatSwapPoints(entry.in, ctx)} · ` +
-    `Net ${formatNetImpact(entry, ctx)} · ${result} ${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`
+    `Net ${formatNetImpact(entry, ctx, netSoFar)} · ${result} ${formatScore(scoreWith)}–${formatScore(opponentScore)}`
   )
 }
 
@@ -333,14 +371,20 @@ export function formatMulliganLedgerLine(
     : entry.manager
   const outNote = entry.out.note ? ` (${entry.out.note})` : ''
   const scoreWith = resolveScoreWith(entry, ctx)
-  const matchup = `${formatScore(scoreWith)}–${formatScore(entry.opponentScore)}`
+  const opponentScore = resolveOpponentScore(entry, ctx)
+  const matchup = `${formatScore(scoreWith)}–${formatScore(opponentScore)}`
   const resultVerb = entry.resultPending
-    ? 'Result TBD'
+    ? 'Net so far'
     : entry.won
       ? 'Won'
       : 'Lost'
   const vsWord = entry.resultPending || entry.won ? 'vs' : 'to'
-  const flip = entry.flipped ? 'Flipped result' : 'No flip'
+  const flip = entry.resultPending
+    ? 'Outcome TBD'
+    : entry.flipped
+      ? 'Flipped result'
+      : 'No flip'
+  const netSoFar = entry.resultPending === true
   const tail = entry.footnote ? ` · ${entry.footnote}` : ''
   const outTeam = entry.out.team ? ` ${entry.out.team}` : ''
   const inTeam = entry.in.team ? ` ${entry.in.team}` : ''
@@ -348,7 +392,7 @@ export function formatMulliganLedgerLine(
     `W${entry.week} · ${manager} (${entry.team}) · ` +
     `OUT ${entry.out.name} ${entry.out.position}${outTeam} ${formatScore(entry.out.points)}${outNote} → ` +
     `IN ${entry.in.name} ${entry.in.position}${inTeam} ${formatSwapPoints(entry.in, ctx)} · ` +
-    `Net ${formatNetImpact(entry, ctx)} · ` +
+    `Net ${formatNetImpact(entry, ctx, netSoFar)} · ` +
     `${resultVerb} ${matchup} ${vsWord} ${receiptOpponentName(entry)} ` +
     `(would've been ${formatScore(entry.scoreWithout)} without it) · ${flip}${tail}`
   )
