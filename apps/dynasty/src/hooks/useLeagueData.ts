@@ -28,7 +28,7 @@ import {
   fetchTransactionsThroughWeek,
   fetchUsers,
 } from '../lib/sleeperApi'
-import { computeStandingsThroughWeek } from '../lib/standings'
+import { standingsForView } from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import { faabByRoster, leagueFaabBudget, type FaabSnapshot } from '../lib/faab'
 import { computeWaiverBoard, type WaiverBoard } from '../lib/waiverWire'
@@ -39,6 +39,7 @@ import {
   isWeekLive,
   lastCompletedWeek,
   regularSeasonLastWeek,
+  scoringThroughWeek,
   standingsDeferralNote,
   standingsThroughWeek,
   weekStatusLabel,
@@ -271,12 +272,16 @@ export function useLeagueData(leagueId: string): {
       selectedWeek,
       league,
       nflState,
+      historical,
     )
-    const standings = computeStandingsThroughWeek(
-      matchupsByWeek,
+    const scoringThrough = scoringThroughWeek(selectedWeek, league, nflState)
+    const standings = standingsForView({
+      historical,
+      rosters,
       teams,
-      throughForCumulative,
-    )
+      matchupsByWeek,
+      throughWeek: throughForCumulative,
+    })
     const deferNote = standingsDeferralNote(selectedWeek, league, nflState)
     const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
     const weekLabel = weekStatusLabel(selectedWeek, league, nflState)
@@ -296,7 +301,7 @@ export function useLeagueData(leagueId: string): {
       matchupsByWeek,
       teams,
       rosters,
-      scoringThrough: throughForCumulative,
+      scoringThrough,
       selectedWeek,
       selectedWeekComplete: !isSelectedWeekLive,
       faabBudget: leagueFaabBudget(league),

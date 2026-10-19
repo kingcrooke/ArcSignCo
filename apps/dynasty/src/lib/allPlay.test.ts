@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   computeAllPlayThroughWeek,
+  finishedSeasonLine,
   formatAllPlayRecord,
   playoffSeedHint,
 } from './allPlay'
@@ -23,5 +24,15 @@ describe('allPlay', () => {
   it('formats playoff seed hints', () => {
     expect(playoffSeedHint(3, 6)).toContain('3rd seed')
     expect(playoffSeedHint(8, 6)).toContain('outside')
+  })
+
+  it('uses final wording for a completed season', () => {
+    expect(finishedSeasonLine(1, 'Champion')).toBe(
+      'Finished #1 (regular season) · Champion',
+    )
+    expect(finishedSeasonLine(7, '')).toBe('Finished 7th in the regular season')
+    expect(finishedSeasonLine(2, 'Runner-up')).toBe(
+      'Finished #2 (regular season) · Runner-up',
+    )
   })
 })

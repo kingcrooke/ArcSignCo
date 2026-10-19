@@ -135,15 +135,17 @@ export function DraftsPanel({
             role="list"
           >
             {tradedPickHistory.map((row, i) => {
+              const original = teams.get(row.originalRosterId)
               const from = teams.get(row.fromRosterId)
               const to = teams.get(row.toRosterId)
+              const originalName = managerLabel(original, row.originalRosterId)
               return (
                 <li
                   key={`${row.season}-${row.round}-${i}`}
                   className="border-t border-[var(--dyn-border)] px-4 py-2 first:border-t-0"
                 >
                   <span className="font-medium">
-                    {row.season} Rd {row.round}
+                    {row.season} Rd {row.round} ({originalName}&apos;s pick)
                   </span>
                   <span className="text-[var(--dyn-muted)]">
                     {' '}
@@ -151,7 +153,7 @@ export function DraftsPanel({
                     {to?.teamName ?? `R${row.toRosterId}`}
                   </span>
                   <span className="block text-xs text-[var(--dyn-muted)]">
-                    {row.dateLabel} · Week {row.tradeWeek}
+                    {row.dateLabel} · {row.weekLabel}
                   </span>
                 </li>
               )

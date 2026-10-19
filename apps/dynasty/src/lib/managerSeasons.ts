@@ -17,6 +17,8 @@ export interface ManagerSeasonFinish {
   rosterId: number
   userId: string
   displayName: string
+  /** Sleeper user display_name. Champions wall uses this, not the team name. */
+  sleeperName?: string
   wins: number
   losses: number
   ties: number
@@ -190,6 +192,7 @@ function buildOneSeason(
       rosterId: r.roster_id,
       userId: t.userId,
       displayName: managerLabel(t, r.roster_id),
+      sleeperName: t.displayName,
       wins: r.settings.wins ?? 0,
       losses: r.settings.losses ?? 0,
       ties: r.settings.ties ?? 0,

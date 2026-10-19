@@ -172,6 +172,25 @@ export function computeStandings(
   return sortStandingRows(rows)
 }
 
+/**
+ * Completed seasons use Sleeper roster settings (regular-season wins and fpts).
+ * The in-progress season sums matchup scores through `throughWeek`.
+ */
+export function standingsForView(opts: {
+  historical: boolean
+  rosters: SleeperRoster[]
+  teams: Map<number, TeamInfo>
+  matchupsByWeek: Map<number, SleeperMatchup[]>
+  throughWeek: number
+}): StandingRow[] {
+  if (opts.historical) return computeStandings(opts.rosters, opts.teams)
+  return computeStandingsThroughWeek(
+    opts.matchupsByWeek,
+    opts.teams,
+    opts.throughWeek,
+  )
+}
+
 export function recordLabel(row: StandingRow): string {
   const t = row.ties ? `-${row.ties}` : ''
   return `${row.wins}-${row.losses}${t}`

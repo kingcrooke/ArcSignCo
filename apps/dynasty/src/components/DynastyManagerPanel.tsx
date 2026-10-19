@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { picksOwnedByRoster } from '../lib/drafts'
+import { ownedPickOriginPhrase, picksOwnedByRoster } from '../lib/drafts'
 import {
   finishedSeasonsForManager,
   finishSummaryLine,
@@ -19,6 +19,7 @@ import type {
   TeamInfo,
 } from '../lib/types'
 import { TradeLogPanel } from './TradeLogPanel'
+import { ChampionsWall } from './ChampionsWall'
 import { TeamAvatar } from './TeamAvatar'
 
 function StatPill({ label, value }: { label: string; value: string }) {
@@ -48,6 +49,7 @@ export function DynastyManagerPanel({
   allTrades,
   tradedPicks,
   tradePriorSeasonsFailed,
+  draftRounds = 3,
 }: {
   rosterId: number
   onRosterChange: (id: number) => void
@@ -62,6 +64,7 @@ export function DynastyManagerPanel({
   allTrades: TradeLogEntry[]
   tradedPicks: SleeperTradedPick[]
   tradePriorSeasonsFailed: boolean
+  draftRounds?: number
 }) {
   const rosterIds = useMemo(
     () => [...teams.keys()].sort((a, b) => a - b),
@@ -92,8 +95,15 @@ export function DynastyManagerPanel({
 
   const futurePicks = useMemo(
     () =>
-      picksOwnedByRoster(tradedPicks, teams, rosterId, currentSeason, 3),
-    [tradedPicks, teams, rosterId, currentSeason],
+      picksOwnedByRoster(
+        tradedPicks,
+        teams,
+        rosterId,
+        currentSeason,
+        3,
+        draftRounds,
+      ),
+    [tradedPicks, teams, rosterId, currentSeason, draftRounds],
   )
 
   const careerWins = finishedSeasons.reduce((s, f) => s + f.wins, 0)
@@ -108,6 +118,7 @@ export function DynastyManagerPanel({
 
   return (
     <div className="space-y-8" id="manager-panel">
+      <ChampionsWall leagueSeasonSummaries={leagueSeasonSummaries} />
       <label className="block text-sm">
         <span className="text-[var(--dyn-muted)]">Pick a manager</span>
         <select
@@ -193,7 +204,7 @@ export function DynastyManagerPanel({
                       </span>
                       <span className="text-[var(--dyn-muted)]">
                         {' '}
-                        (from {p.originalLabel})
+                        ({ownedPickOriginPhrase(p, rosterId)})
                       </span>
                     </li>
                   ))}

@@ -2,10 +2,15 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   getWeekGraphicsSections,
   getWeekGraphicsSlides,
+  weekGraphicsEmptyMessage,
 } from '../lib/weekGraphics'
+import { getWeeklyReport, weeklyReportEmptyMessage } from '../lib/weeklyReport'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
+import type { TeamInfo } from '../lib/types'
+import { ShareCardButton } from './ShareCardButton'
 import { SlideLightbox } from './SlideLightbox'
+import { WeeklyReportDeck } from './WeeklyReportDeck'
 
 const THUMB_WIDTH = 540
 const THUMB_HEIGHT = 675
@@ -87,14 +92,30 @@ function GraphicThumb({
 }
 
 export function DynastyWeekGraphicsPanel({
+  season,
   week,
+  weekComplete = false,
+  teams,
   initialSlideId,
 }: {
+  season: string
   week: number
+  weekComplete?: boolean
+  teams?: Map<number, TeamInfo>
   initialSlideId?: string | null
 }) {
-  const sections = useMemo(() => getWeekGraphicsSections(week), [week])
-  const weekSlides = useMemo(() => getWeekGraphicsSlides(week), [week])
+  const sections = useMemo(
+    () => getWeekGraphicsSections(season, week),
+    [season, week],
+  )
+  const weekSlides = useMemo(
+    () => getWeekGraphicsSlides(season, week),
+    [season, week],
+  )
+  const report = useMemo(
+    () => (weekComplete ? getWeeklyReport(season, week) : null),
+    [season, week, weekComplete],
+  )
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const openButtonRef = useRef<HTMLButtonElement | null>(null)
 
@@ -130,19 +151,19 @@ export function DynastyWeekGraphicsPanel({
     void navigator.clipboard?.writeText(url)
   }
 
-  if (!sections.length) {
-    return (
-      <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
-        No published graphics for Week {week} yet. Try another week.
-      </p>
-    )
-  }
-
   return (
     <div className="space-y-6" id="week-graphics-panel">
-      <p className="text-sm text-[var(--dyn-muted)]">
-        Week {week} feed graphics (1080×1350). Tap a card for full size.
-      </p>
+      {sections.length > 0 && (
+        <p className="text-sm text-[var(--dyn-muted)]">
+          Week {week} feed graphics (1080×1350). Tap a card for full size.
+        </p>
+      )}
+
+      {!sections.length && (
+        <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
+          {weekGraphicsEmptyMessage(week)}
+        </p>
+      )}
 
       <div className="flex flex-col gap-8">
         {sections.map((section, sectionIndex) => (
@@ -178,13 +199,16 @@ export function DynastyWeekGraphicsPanel({
                       loadImmediately={loadImmediately}
                       buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                     />
-                    <button
-                      type="button"
-                      className="min-h-11 w-full rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-2 text-xs font-semibold text-[var(--dyn-accent)]"
-                      onClick={() => copySlideLink(slide)}
-                    >
-                      Copy link
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <ShareCardButton basename={slide.basename} title={slide.title} />
+                      <button
+                        type="button"
+                        className="min-h-11 w-full rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-2 text-xs font-semibold text-[var(--dyn-accent)]"
+                        onClick={() => copySlideLink(slide)}
+                      >
+                        Copy link
+                      </button>
+                    </div>
                   </li>
                 )
               })}
@@ -192,6 +216,24 @@ export function DynastyWeekGraphicsPanel({
           </section>
         ))}
       </div>
+
+      {(report || season === '2026') && (
+      <section aria-labelledby={`graphics-report-${week}`}>
+        <h3
+          id={`graphics-report-${week}`}
+          className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]"
+        >
+          Report
+        </h3>
+        {report && teams ? (
+          <WeeklyReportDeck report={report} teams={teams} />
+        ) : (
+          <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
+            {weeklyReportEmptyMessage(week)}
+          </p>
+        )}
+      </section>
+      )}
 
       {lightboxIndex !== null && (
         <SlideLightbox

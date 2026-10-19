@@ -62,7 +62,7 @@ export function weekStatusLabel(
 }
 
 /** When the picker is on a live week, cumulative views use the last scored leg. */
-export function standingsThroughWeek(
+export function scoringThroughWeek(
   selectedWeek: number,
   league: SleeperLeague,
   nflState: NflState,
@@ -71,6 +71,35 @@ export function standingsThroughWeek(
     return lastCompletedWeek(league, nflState)
   }
   return selectedWeek
+}
+
+/**
+ * Standings, playoff odds, and all-play stop at the end of the regular season.
+ * A completed past season always shows the full regular season, even if the
+ * week picker is sitting on a playoff week for other tabs.
+ */
+export function standingsThroughWeek(
+  selectedWeek: number,
+  league: SleeperLeague,
+  nflState: NflState,
+  historical = false,
+): number {
+  const regLast = regularSeasonLastWeek(league.settings.playoff_week_start ?? 15)
+  if (historical) return regLast
+  return Math.min(scoringThroughWeek(selectedWeek, league, nflState), regLast)
+}
+
+export function bestGamesWeekChip(
+  week: number,
+  league: SleeperLeague,
+  nflState: NflState,
+): { label: string; disabled: boolean } {
+  const nfl = currentNflWeek(nflState)
+  if (week > nfl) return { label: `Week ${week} · Upcoming`, disabled: true }
+  if (isWeekLive(week, league, nflState)) {
+    return { label: `Week ${week} · In progress`, disabled: true }
+  }
+  return { label: `Week ${week}`, disabled: false }
 }
 
 export function standingsDeferralNote(

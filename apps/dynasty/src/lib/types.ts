@@ -127,6 +127,7 @@ export interface SleeperLeague {
     last_scored_leg?: number
     playoff_week_start?: number
     playoff_teams?: number
+    draft_rounds?: number
     waiver_budget?: number
   }
   roster_positions: string[]

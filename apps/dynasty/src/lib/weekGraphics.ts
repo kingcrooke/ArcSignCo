@@ -1,6 +1,6 @@
 import type { PublishedSlide } from './publishedSlides'
 import { HELD_BACK_SLIDES } from './publishedSlides'
-import weekResults from '../data/week-result-slides.json'
+import manifest from '../data/week-graphics-manifest.json'
 
 export type GraphicsSectionKind = 'matchups' | 'results'
 
@@ -12,8 +12,14 @@ export type WeekGraphicsSection = {
   previewWeek?: number
 }
 
+type ManifestSlide = { id: string; title: string }
+type ManifestMatchups = { previewWeek?: number; slides: ManifestSlide[] }
+type ManifestWeek = { results?: ManifestSlide[]; matchups?: ManifestMatchups }
+type Manifest = Record<string, Record<string, ManifestWeek>>
+
 const HELD = new Set(HELD_BACK_SLIDES.map((s) => s.id))
 const SLIDE_SIZE = { width: 1080, height: 1350 }
+const GRAPHICS = manifest as Manifest
 
 function publish(slides: PublishedSlide[]): PublishedSlide[] {
   return slides.filter((s) => !HELD.has(s.id))
@@ -23,53 +29,53 @@ function slide(id: string, title: string): PublishedSlide {
   return { id, title, basename: id, ...SLIDE_SIZE }
 }
 
-const RESULTS_BY_WEEK = weekResults as Record<
-  string,
-  { id: string; title: string }[]
->
-
-function resultsSlides(week: number): PublishedSlide[] {
-  const rows = RESULTS_BY_WEEK[String(week)] ?? []
-  return rows.map((r) => slide(r.id, r.title))
+function weekEntry(season: string | number, week: number): ManifestWeek | null {
+  const seasonRow = GRAPHICS[String(season)]
+  if (!seasonRow) return null
+  return seasonRow[String(week)] ?? null
 }
 
-const VS_W6: PublishedSlide[] = [
-  slide('vs-w6-m1', 'Chase\u2019n Dubs vs MahomiesRidley4MooreJeffe'),
-  slide('vs-w6-m2', 'A-Lamb-e que tengo hambre vs Rubuilding'),
-  slide('vs-w6-m3', 'Wolf Pack vs ramonguaraguao'),
-  slide('vs-w6-m4', 'Love Thy Nabers vs Team Name Hoes'),
-  slide('vs-w6-m5', 'Saints & Sinners vs Chalupa Batman'),
-  slide('vs-w6-m6', 'Nix in 5 vs BigBlue'),
-]
+/** Copy for a week that has no published cards. Never throws. */
+export function weekGraphicsEmptyMessage(week: number): string {
+  return `Week ${week} cards aren't posted yet.`
+}
 
-/** Weeks 1–4: results only. Week 5: results + Week 6 previews. Week 6: matchups only. */
-export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
+/**
+ * Card sections for a season and week. Unknown seasons and weeks return [].
+ * Adding a week is a manifest entry plus slide files — no code change.
+ */
+export function getWeekGraphicsSections(
+  season: string | number,
+  week: number,
+): WeekGraphicsSection[] {
+  const entry = weekEntry(season, week)
+  if (!entry) return []
   const sections: WeekGraphicsSection[] = []
 
-  if (week >= 1 && week <= 4) {
-    const slides = publish(resultsSlides(week))
-    if (slides.length) {
-      sections.push({ kind: 'results', heading: 'Results', slides })
-    }
-  } else if (week === 5) {
-    sections.push({
-      kind: 'results',
-      heading: 'Results',
-      slides: publish(resultsSlides(5)),
-    })
+  const results = publish((entry.results ?? []).map((r) => slide(r.id, r.title)))
+  if (results.length) {
+    sections.push({ kind: 'results', heading: 'Results', slides: results })
+  }
+
+  const matchupSlides = publish(
+    (entry.matchups?.slides ?? []).map((r) => slide(r.id, r.title)),
+  )
+  if (matchupSlides.length) {
+    const previewWeek = entry.matchups?.previewWeek
     sections.push({
       kind: 'matchups',
-      heading: 'Week 6 matchup previews',
-      previewWeek: 6,
-      slides: publish(VS_W6),
+      heading: previewWeek ? `Week ${previewWeek} matchup previews` : 'Matchups',
+      previewWeek,
+      slides: matchupSlides,
     })
-  } else if (week === 6) {
-    sections.push({ kind: 'matchups', heading: 'Matchups', slides: publish(VS_W6) })
   }
 
   return sections
 }
 
-export function getWeekGraphicsSlides(week: number): PublishedSlide[] {
-  return getWeekGraphicsSections(week).flatMap((s) => s.slides)
+export function getWeekGraphicsSlides(
+  season: string | number,
+  week: number,
+): PublishedSlide[] {
+  return getWeekGraphicsSections(season, week).flatMap((s) => s.slides)
 }

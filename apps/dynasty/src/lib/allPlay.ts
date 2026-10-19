@@ -55,6 +55,19 @@ function ordinal(n: number): string {
   return `${n}th`
 }
 
+/**
+ * Final regular-season line for a completed year.
+ * Uses the playoff result when Sleeper's winners bracket has one.
+ */
+export function finishedSeasonLine(
+  rank: number,
+  playoffResult: string | null | undefined,
+): string {
+  const result = playoffResult?.trim()
+  if (result) return `Finished #${rank} (regular season) · ${result}`
+  return `Finished ${ordinal(rank)} in the regular season`
+}
+
 /** Playoff seed if the season ended today (rank is current standings rank). */
 export function playoffSeedHint(
   rank: number,
