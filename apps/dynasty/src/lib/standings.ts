@@ -176,3 +176,60 @@ export function recordLabel(row: StandingRow): string {
   const t = row.ties ? `-${row.ties}` : ''
   return `${row.wins}-${row.losses}${t}`
 }
+
+function countRecordSlice(
+  record: string,
+  regLast: number,
+): { wins: number; losses: number; ties: number; outcomes: Outcome[] } {
+  const slice = record.slice(0, regLast)
+  let wins = 0
+  let losses = 0
+  let ties = 0
+  const outcomes: Outcome[] = []
+  for (const c of slice) {
+    if (c === 'W') {
+      wins++
+      outcomes.push('W')
+    } else if (c === 'L') {
+      losses++
+      outcomes.push('L')
+    } else if (c === 'T') {
+      ties++
+      outcomes.push('T')
+    }
+  }
+  return { wins, losses, ties, outcomes }
+}
+
+/**
+ * Final regular-season table for a completed league.
+ * Sleeper roster settings store the regular-season line (including stat
+ * corrections). Matchup weeks after `playoff_week_start - 1` are playoffs
+ * and must not be added on top. When `metadata.record` is present it is
+ * sliced to the regular season so a playoff streak cannot leak in.
+ */
+export function finalRegularSeasonStandings(
+  rosters: SleeperRoster[],
+  teams: Map<number, TeamInfo>,
+  regLast: number,
+): StandingRow[] {
+  const rows = rosters.map((r) => {
+    const t = teams.get(r.roster_id)
+    const rec = r.metadata?.record?.trim()
+    const sliced = rec ? countRecordSlice(rec, regLast) : null
+    return {
+      rosterId: r.roster_id,
+      teamName: t?.teamName ?? `Team ${r.roster_id}`,
+      displayName: t?.displayName ?? '',
+      wins: sliced ? sliced.wins : (r.settings.wins ?? 0),
+      losses: sliced ? sliced.losses : (r.settings.losses ?? 0),
+      ties: sliced ? sliced.ties : (r.settings.ties ?? 0),
+      pointsFor: rosterPointsFor(r.settings),
+      pointsAgainst: rosterPointsAgainst(r.settings),
+      streak: sliced
+        ? formatStreak(sliced.outcomes)
+        : streakLabel(r.metadata?.streak ?? ''),
+    }
+  })
+  return sortStandingRows(rows)
+}

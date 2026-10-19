@@ -1,4 +1,5 @@
 import { managerLabel } from './teams'
+import { tradePeriodLabel, type TradeLogEntry } from './trades'
 import type {
   SleeperDraft,
   SleeperDraftPick,
@@ -6,7 +7,6 @@ import type {
   SleeperTransaction,
   TeamInfo,
 } from './types'
-import type { TradeLogEntry } from './trades'
 
 export interface DraftBoard {
   draft: SleeperDraft
@@ -26,11 +26,15 @@ export interface FuturePickRow {
 export interface TradedPickHistoryRow {
   season: string
   round: number
+  /** Original owner of the pick (Sleeper roster_id). */
+  originalRosterId: number
   fromRosterId: number
   toRosterId: number
   tradeSeason: string
   tradeWeek: number
   dateLabel: string
+  /** "Week N" or "Offseason". */
+  periodLabel: string
 }
 
 export function buildDraftBoards(
@@ -68,36 +72,68 @@ export function futurePickSeasons(
   return Array.from({ length: count }, (_, i) => String(start + i + 1))
 }
 
-export function futurePickOwnership(
-  tradedPicks: SleeperTradedPick[],
+function pickRow(
+  season: string,
+  round: number,
+  originalRosterId: number,
+  ownerRosterId: number,
   teams: Map<number, TeamInfo>,
-  baseSeason: string,
-  yearsAhead = 3,
-): FuturePickRow[] {
-  const allowed = new Set(futurePickSeasons(baseSeason, yearsAhead))
-  const rows: FuturePickRow[] = []
-  for (const pick of tradedPicks) {
-    if (!allowed.has(pick.season)) continue
-    const original = teams.get(pick.roster_id)
-    const owner = teams.get(pick.owner_id)
-    rows.push({
-      season: pick.season,
-      round: pick.round,
-      originalRosterId: pick.roster_id,
-      ownerRosterId: pick.owner_id,
-      originalLabel: original
-        ? managerLabel(original, pick.roster_id)
-        : `R${pick.roster_id}`,
-      ownerLabel: owner
-        ? managerLabel(owner, pick.owner_id)
-        : `R${pick.owner_id}`,
-    })
+): FuturePickRow {
+  const original = teams.get(originalRosterId)
+  const owner = teams.get(ownerRosterId)
+  return {
+    season,
+    round,
+    originalRosterId,
+    ownerRosterId,
+    originalLabel: original
+      ? managerLabel(original, originalRosterId)
+      : `R${originalRosterId}`,
+    ownerLabel: owner ? managerLabel(owner, ownerRosterId) : `R${ownerRosterId}`,
   }
+}
+
+function sortPickRows(rows: FuturePickRow[]): FuturePickRow[] {
   return rows.sort((a, b) => {
     if (a.season !== b.season) return Number(a.season) - Number(b.season)
     if (a.round !== b.round) return a.round - b.round
     return a.originalRosterId - b.originalRosterId
   })
+}
+
+function picksInWindow(
+  tradedPicks: SleeperTradedPick[],
+  baseSeason: string,
+  yearsAhead: number,
+  draftRounds: number,
+): SleeperTradedPick[] {
+  const allowed = new Set(futurePickSeasons(baseSeason, yearsAhead))
+  return tradedPicks.filter(
+    (pick) =>
+      allowed.has(pick.season) &&
+      pick.round >= 1 &&
+      pick.round <= draftRounds,
+  )
+}
+
+/**
+ * Picks that changed hands over the next draft years.
+ * A pick whose current owner is still the original owner is omitted
+ * ("originally Wolf Pack → now Wolf Pack").
+ */
+export function futurePickOwnership(
+  tradedPicks: SleeperTradedPick[],
+  teams: Map<number, TeamInfo>,
+  baseSeason: string,
+  yearsAhead = 3,
+  draftRounds = 3,
+): FuturePickRow[] {
+  const rows: FuturePickRow[] = []
+  for (const pick of picksInWindow(tradedPicks, baseSeason, yearsAhead, draftRounds)) {
+    if (pick.owner_id === pick.roster_id) continue
+    rows.push(pickRow(pick.season, pick.round, pick.roster_id, pick.owner_id, teams))
+  }
+  return sortPickRows(rows)
 }
 
 export function tradedPickHistoryFromTrades(
@@ -112,11 +148,13 @@ export function tradedPickHistoryFromTrades(
         rows.push({
           season: parsed.season,
           round: parsed.round,
+          originalRosterId: parsed.fromRosterId ?? side.rosterId,
           fromRosterId: parsed.fromRosterId ?? side.rosterId,
           toRosterId: side.rosterId,
           tradeSeason: trade.season,
           tradeWeek: trade.week,
           dateLabel: trade.dateLabel,
+          periodLabel: tradePeriodLabel(trade.season, trade.week, trade.completedAtMs),
         })
       }
     }
@@ -138,19 +176,54 @@ function parsePickLabel(label: string): {
   return { season: yr, round: Number.parseInt(m[2], 10) }
 }
 
+/**
+ * Picks this roster holds for the next draft years: its own picks it still
+ * has, plus picks acquired in trades. Rounds follow league draft_rounds.
+ */
 export function picksOwnedByRoster(
   tradedPicks: SleeperTradedPick[],
   teams: Map<number, TeamInfo>,
   rosterId: number,
   baseSeason: string,
   yearsAhead = 3,
+  draftRounds = 3,
 ): FuturePickRow[] {
-  return futurePickOwnership(
+  const windowPicks = picksInWindow(
     tradedPicks,
-    teams,
     baseSeason,
     yearsAhead,
-  ).filter((r) => r.ownerRosterId === rosterId)
+    draftRounds,
+  )
+  const byOriginal = new Map<string, SleeperTradedPick>()
+  for (const pick of windowPicks) {
+    byOriginal.set(`${pick.season}:${pick.round}:${pick.roster_id}`, pick)
+  }
+
+  const seasons = futurePickSeasons(baseSeason, yearsAhead)
+  const rows: FuturePickRow[] = []
+  for (const season of seasons) {
+    for (let round = 1; round <= draftRounds; round++) {
+      const traded = byOriginal.get(`${season}:${round}:${rosterId}`)
+      if (!traded || traded.owner_id === rosterId) {
+        rows.push(pickRow(season, round, rosterId, rosterId, teams))
+      }
+    }
+  }
+  for (const pick of windowPicks) {
+    if (pick.owner_id !== rosterId || pick.roster_id === rosterId) continue
+    rows.push(pickRow(pick.season, pick.round, pick.roster_id, pick.owner_id, teams))
+  }
+  return sortPickRows(rows)
+}
+
+export function formatTradedPickHistory(
+  row: TradedPickHistoryRow,
+  teams: Map<number, TeamInfo>,
+): string {
+  const original = managerLabel(teams.get(row.originalRosterId), row.originalRosterId)
+  const from = managerLabel(teams.get(row.fromRosterId), row.fromRosterId)
+  const to = managerLabel(teams.get(row.toRosterId), row.toRosterId)
+  return `${row.season} Rd ${row.round} (${original}'s pick) · ${from} → ${to}`
 }
 
 export function tradedPickHistoryFromTransactions(
@@ -166,6 +239,7 @@ export function tradedPickHistoryFromTransactions(
       rows.push({
         season: pick.season,
         round: pick.round,
+        originalRosterId: pick.roster_id,
         fromRosterId: from,
         toRosterId: to,
         tradeSeason: leagueSeason,
@@ -177,6 +251,11 @@ export function tradedPickHistoryFromTransactions(
               year: 'numeric',
             })
           : '',
+        periodLabel: tradePeriodLabel(
+          leagueSeason,
+          tx.leg,
+          tx.status_updated || 0,
+        ),
       })
     }
   }

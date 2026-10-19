@@ -6,6 +6,7 @@ import { buildTeamMap } from './teams'
 import {
   computeStandings,
   computeStandingsThroughWeek,
+  finalRegularSeasonStandings,
   recordLabel,
   streakLabel,
 } from './standings'
@@ -51,5 +52,38 @@ describe('computeStandings', () => {
       expect(row.wins + row.losses + row.ties).toBeLessThanOrEqual(3)
     }
     expect(season[0].wins).toBeGreaterThanOrEqual(w3only[0].wins)
+  })
+})
+
+describe('finalRegularSeasonStandings', () => {
+  it('uses 2019 Nut Crusher roster settings (7-6, PF 1681.86), not a playoff-inflated line', () => {
+    const roster: SleeperRoster = {
+      roster_id: 12,
+      owner_id: 'nut',
+      players: [],
+      starters: [],
+      settings: {
+        wins: 7,
+        losses: 6,
+        ties: 0,
+        fpts: 1681,
+        fpts_decimal: 86,
+        fpts_against: 1600,
+        fpts_against_decimal: 0,
+        ppts: 0,
+        ppts_decimal: 0,
+      },
+    }
+    const teams = buildTeamMap(
+      [{ user_id: 'nut', display_name: 'NutCrusher' }],
+      [roster],
+    )
+    const rows = finalRegularSeasonStandings([roster], teams, 13)
+    const nut = rows.find((r) => r.rosterId === 12)
+    expect(nut?.wins).toBe(7)
+    expect(nut?.losses).toBe(6)
+    expect(nut?.pointsFor).toBeCloseTo(1681.86, 2)
+    expect(`${nut?.wins}-${nut?.losses}`).not.toBe('11-5')
+    expect(nut?.pointsFor).not.toBeCloseTo(2113.76, 1)
   })
 })

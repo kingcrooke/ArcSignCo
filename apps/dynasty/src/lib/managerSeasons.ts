@@ -38,9 +38,25 @@ export interface LeagueSeasonSummary {
   championRosterId: number | null
   championUserId: string
   championDisplayName: string
+  /** Sleeper display_name of the champion (Champions Wall). */
+  championSleeperName: string
+  runnerUpRosterId: number | null
+  runnerUpSleeperName: string
   byUserId: Map<string, ManagerSeasonFinish>
   byRosterId: Map<number, ManagerSeasonFinish>
   unavailable: boolean
+}
+
+export interface ChampionWallRow {
+  season: string
+  champion: string
+  runnerUp: string
+}
+
+export interface TitleLeaderEntry {
+  name: string
+  titles: number
+  years: string[]
 }
 
 function regularSeasonFromRecord(
@@ -84,6 +100,25 @@ function championRosterId(
   const lastRound = bracket.filter((m) => m.r === maxRound && m.w)
   if (lastRound.length === 1 && lastRound[0].w) return lastRound[0].w
   return null
+}
+
+function runnerUpRosterId(
+  bracket: SleeperBracketMatch[] | null,
+  championId: number | null,
+): number | null {
+  if (championId == null || !bracket?.length) return null
+  const final = bracket.find((m) => m.p === 1)
+  if (!final) return null
+  if (final.t1 === championId && final.t2 != null) return final.t2
+  if (final.t2 === championId && final.t1 != null) return final.t1
+  return null
+}
+
+function sleeperName(teams: Map<number, TeamInfo>, rosterId: number | null): string {
+  if (rosterId == null) return ''
+  const team = teams.get(rosterId)
+  if (!team) return ''
+  return team.displayName?.trim() || managerLabel(team, rosterId)
 }
 
 function playoffResultLabel(
@@ -168,12 +203,18 @@ function buildOneSeason(
 
   let championUserId = ''
   let championDisplayName = seasonComplete ? 'unavailable' : ''
+  let championSleeperName = ''
+  let runnerUpId: number | null = null
+  let runnerUpSleeperName = ''
   if (seasonComplete && champRoster != null) {
     const champTeam = teams.get(champRoster)
     championUserId = champTeam?.userId ?? ''
     championDisplayName = champTeam
       ? managerLabel(champTeam, champRoster)
       : 'unavailable'
+    championSleeperName = sleeperName(teams, champRoster) || championDisplayName
+    runnerUpId = runnerUpRosterId(bundle.winnersBracket, champRoster)
+    runnerUpSleeperName = sleeperName(teams, runnerUpId)
   }
 
   const byUserId = new Map<string, ManagerSeasonFinish>()
@@ -221,6 +262,9 @@ function buildOneSeason(
     championRosterId: champRoster,
     championUserId,
     championDisplayName,
+    championSleeperName,
+    runnerUpRosterId: runnerUpId,
+    runnerUpSleeperName,
     byUserId,
     byRosterId,
     unavailable: false,
@@ -318,6 +362,48 @@ export function managerCareerStats(
     playoffTrips,
     bestFinish,
   }
+}
+
+const WALL_FIRST_SEASON = 2019
+const WALL_LAST_SEASON = 2025
+
+/** Completed seasons on the Champions Wall, oldest first. */
+export function championsWallRows(
+  summaries: LeagueSeasonSummary[],
+): ChampionWallRow[] {
+  return summaries
+    .filter((s) => {
+      const year = Number(s.season)
+      return (
+        s.status === 'complete' &&
+        year >= WALL_FIRST_SEASON &&
+        year <= WALL_LAST_SEASON
+      )
+    })
+    .sort((a, b) => Number(a.season) - Number(b.season))
+    .map((s) => ({
+      season: s.season,
+      champion: s.championSleeperName || s.championDisplayName || 'unavailable',
+      runnerUp: s.runnerUpSleeperName || 'unavailable',
+    }))
+}
+
+export function titlesLeaderboard(
+  summaries: LeagueSeasonSummary[],
+): TitleLeaderEntry[] {
+  const yearsByName = new Map<string, string[]>()
+  for (const row of championsWallRows(summaries)) {
+    if (!row.champion || row.champion === 'unavailable') continue
+    const years = yearsByName.get(row.champion) ?? []
+    years.push(row.season)
+    yearsByName.set(row.champion, years)
+  }
+  return [...yearsByName.entries()]
+    .map(([name, years]) => ({ name, titles: years.length, years }))
+    .sort(
+      (a, b) =>
+        b.titles - a.titles || Number(a.years[0]) - Number(b.years[0]),
+    )
 }
 
 export function championBySeason(

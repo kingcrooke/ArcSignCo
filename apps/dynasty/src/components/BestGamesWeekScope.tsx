@@ -1,4 +1,4 @@
-import { isWeekLive } from '../lib/weeks'
+import { bestGamesWeekChip } from '../lib/weeks'
 import type { NflState, SleeperLeague } from '../lib/types'
 
 export type BestGamesScope = 'all' | number
@@ -36,13 +36,13 @@ export function BestGamesWeekScope({
           onClick={() => onChange('all')}
         />
         {weeks.map((w) => {
-          const live = isWeekLive(w, league, nflState)
+          const chip = bestGamesWeekChip(w, league, nflState)
           return (
             <ScopeChip
               key={w}
-              label={live ? `Week ${w} · In progress` : `Week ${w}`}
+              label={chip.label}
               active={scope === w}
-              disabled={live}
+              disabled={chip.disabled}
               onClick={() => onChange(w)}
             />
           )

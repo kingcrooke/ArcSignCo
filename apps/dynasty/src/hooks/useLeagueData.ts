@@ -28,13 +28,17 @@ import {
   fetchTransactionsThroughWeek,
   fetchUsers,
 } from '../lib/sleeperApi'
-import { computeStandingsThroughWeek } from '../lib/standings'
+import {
+  computeStandingsThroughWeek,
+  finalRegularSeasonStandings,
+} from '../lib/standings'
 import { buildTeamMap } from '../lib/teams'
 import { faabByRoster, leagueFaabBudget, type FaabSnapshot } from '../lib/faab'
 import { computeWaiverBoard, type WaiverBoard } from '../lib/waiverWire'
 import { computeWeeklyAwards, type WeeklyAwardsWeek } from '../lib/weeklyAwards'
 import {
   cumulativeDeferralNote,
+  cumulativeThroughWeek,
   currentNflWeek,
   isWeekLive,
   lastCompletedWeek,
@@ -78,6 +82,8 @@ export interface LeagueData {
   isSelectedWeekLive: boolean
   weekLabel: string
   standingsThroughWeek: number
+  /** Waiver and other score windows. Not capped at the regular season. */
+  scoringThroughWeek: number
   standingsDeferralNote: string | null
   updateWeekMatchups: (week: number, rows: SleeperMatchup[]) => void
   playoffOdds: PlayoffOddsRow[]
@@ -267,26 +273,34 @@ export function useLeagueData(leagueId: string): {
       tradedPicks,
     } = base
     const completedWeek = lastCompletedWeek(league, nflState)
-    const throughForCumulative = standingsThroughWeek(
+    const scoringThrough = cumulativeThroughWeek(
       selectedWeek,
       league,
       nflState,
     )
-    const standings = computeStandingsThroughWeek(
-      matchupsByWeek,
-      teams,
-      throughForCumulative,
+    const throughForStandings = standingsThroughWeek(
+      selectedWeek,
+      league,
+      nflState,
     )
-    const deferNote = standingsDeferralNote(selectedWeek, league, nflState)
-    const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
-    const weekLabel = weekStatusLabel(selectedWeek, league, nflState)
     const regLast = regularSeasonLastWeek(
       league.settings.playoff_week_start ?? 15,
     )
+    const standings =
+      league.status === 'complete' && throughForStandings >= regLast
+        ? finalRegularSeasonStandings(rosters, teams, regLast)
+        : computeStandingsThroughWeek(
+            matchupsByWeek,
+            teams,
+            throughForStandings,
+          )
+    const deferNote = standingsDeferralNote(selectedWeek, league, nflState)
+    const isSelectedWeekLive = isWeekLive(selectedWeek, league, nflState)
+    const weekLabel = weekStatusLabel(selectedWeek, league, nflState)
     const playoffOdds = computePlayoffOdds({
       standings,
       matchupsByWeek,
-      throughWeek: throughForCumulative,
+      throughWeek: throughForStandings,
       playoffTeams: league.settings.playoff_teams ?? 6,
       regularSeasonLastWeek: regLast,
     })
@@ -296,7 +310,7 @@ export function useLeagueData(leagueId: string): {
       matchupsByWeek,
       teams,
       rosters,
-      scoringThrough: throughForCumulative,
+      scoringThrough,
       selectedWeek,
       selectedWeekComplete: !isSelectedWeekLive,
       faabBudget: leagueFaabBudget(league),
@@ -344,7 +358,8 @@ export function useLeagueData(leagueId: string): {
       completedWeek,
       isSelectedWeekLive,
       weekLabel,
-      standingsThroughWeek: throughForCumulative,
+      standingsThroughWeek: throughForStandings,
+      scoringThroughWeek: scoringThrough,
       standingsDeferralNote: deferNote,
       updateWeekMatchups,
       playoffOdds,

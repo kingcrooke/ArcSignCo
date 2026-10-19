@@ -28,6 +28,8 @@ export interface TradeLogEntry {
   week: number
   completedAtMs: number
   dateLabel: string
+  /** "Week N" or "Offseason" when the trade predates Week 1 kickoff. */
+  weekLabel: string
   sideA: TradeSide
   sideB: TradeSide
 }
@@ -65,6 +67,46 @@ function pickLabel(
   return `${yr} Rd ${pick.round} (${nick})`
 }
 
+function etYearMonth(ms: number): { year: number; month: number } {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: ET,
+    year: 'numeric',
+    month: 'numeric',
+  }).formatToParts(new Date(ms))
+  return {
+    year: Number(parts.find((p) => p.type === 'year')?.value),
+    month: Number(parts.find((p) => p.type === 'month')?.value),
+  }
+}
+
+/**
+ * Offseason when the trade landed before that season's first NFL week.
+ * Sleeper often files those as leg 1 with a pre-September timestamp.
+ */
+export function isOffseasonTrade(
+  season: string,
+  week: number,
+  completedAtMs: number,
+): boolean {
+  if (!completedAtMs) return false
+  const seasonYear = Number(season)
+  if (!Number.isFinite(seasonYear)) return false
+  const { year, month } = etYearMonth(completedAtMs)
+  if (year < seasonYear) return true
+  if (year === seasonYear && month < 9) return true
+  if (week <= 1 && year === seasonYear && month < 9) return true
+  return false
+}
+
+export function tradePeriodLabel(
+  season: string,
+  week: number,
+  completedAtMs: number,
+): string {
+  if (isOffseasonTrade(season, week, completedAtMs)) return 'Offseason'
+  return `Week ${week}`
+}
+
 function assetsForRoster(
   rosterId: number,
   tx: SleeperTransaction,
@@ -89,9 +131,11 @@ function assetsForRoster(
     }
   }
   for (const pick of tx.draft_picks ?? []) {
-    if (pick.roster_id === rosterId) {
-      received.push({ label: pickLabel(pick, teams) })
-    }
+    // roster_id is the original owner. previous_owner_id gives the pick;
+    // owner_id receives it.
+    const label = pickLabel(pick, teams)
+    if (pick.owner_id === rosterId) received.push({ label })
+    if (pick.previous_owner_id === rosterId) sent.push({ label })
   }
   for (const wb of tx.waiver_budget ?? []) {
     if (wb.receiver === rosterId) {
@@ -155,6 +199,7 @@ export function buildTradeLogEntry(
     week: tx.leg,
     completedAtMs,
     dateLabel: completedAtMs ? formatTradeDate(completedAtMs) : '',
+    weekLabel: tradePeriodLabel(league.season, tx.leg, completedAtMs),
     sideA,
     sideB,
   }

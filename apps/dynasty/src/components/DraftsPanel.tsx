@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import {
+  formatTradedPickHistory,
   futurePickOwnership,
   picksByRound,
   type DraftBoard,
@@ -18,6 +19,7 @@ export function DraftsPanel({
   players,
   playersLoading,
   leagueSeason,
+  draftRounds = 3,
 }: {
   boards: DraftBoard[]
   tradedPicks: SleeperTradedPick[]
@@ -26,10 +28,11 @@ export function DraftsPanel({
   players: PlayersMap | null
   playersLoading: boolean
   leagueSeason: string
+  draftRounds?: number
 }) {
   const future = useMemo(
-    () => futurePickOwnership(tradedPicks, teams, leagueSeason, 3),
-    [tradedPicks, teams, leagueSeason],
+    () => futurePickOwnership(tradedPicks, teams, leagueSeason, 3, draftRounds),
+    [tradedPicks, teams, leagueSeason, draftRounds],
   )
 
   return (
@@ -95,7 +98,7 @@ export function DraftsPanel({
       <section>
         <h3 className="mb-2 text-lg font-semibold">Future pick ownership</h3>
         <p className="mb-3 text-xs text-[var(--dyn-muted)]">
-          Next three draft years from {leagueSeason} (via Sleeper traded picks).
+          Next three draft years from {leagueSeason}. Picks still with their original team are left off.
         </p>
         {future.length === 0 ? (
           <p className="dynasty-deferral text-sm">No traded future picks on file.</p>
@@ -135,23 +138,16 @@ export function DraftsPanel({
             role="list"
           >
             {tradedPickHistory.map((row, i) => {
-              const from = teams.get(row.fromRosterId)
-              const to = teams.get(row.toRosterId)
               return (
                 <li
                   key={`${row.season}-${row.round}-${i}`}
                   className="border-t border-[var(--dyn-border)] px-4 py-2 first:border-t-0"
                 >
                   <span className="font-medium">
-                    {row.season} Rd {row.round}
-                  </span>
-                  <span className="text-[var(--dyn-muted)]">
-                    {' '}
-                    · {from?.teamName ?? `R${row.fromRosterId}`} →{' '}
-                    {to?.teamName ?? `R${row.toRosterId}`}
+                    {formatTradedPickHistory(row, teams)}
                   </span>
                   <span className="block text-xs text-[var(--dyn-muted)]">
-                    {row.dateLabel} · Week {row.tradeWeek}
+                    {row.dateLabel} · {row.periodLabel}
                   </span>
                 </li>
               )

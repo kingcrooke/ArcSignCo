@@ -128,6 +128,7 @@ export interface SleeperLeague {
     playoff_week_start?: number
     playoff_teams?: number
     waiver_budget?: number
+    draft_rounds?: number
   }
   roster_positions: string[]
   scoring_settings: Record<string, number>

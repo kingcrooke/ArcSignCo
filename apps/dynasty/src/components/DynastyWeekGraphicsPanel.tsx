@@ -2,10 +2,23 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   getWeekGraphicsSections,
   getWeekGraphicsSlides,
+  graphicsEmptyMessage,
 } from '../lib/weekGraphics'
+import { buildWeekReport } from '../lib/weekReport'
 import type { PublishedSlide } from '../lib/publishedSlides'
 import { slideAssetUrl } from '../lib/publishedSlides'
+import type {
+  NflState,
+  PlayersMap,
+  SleeperLeague,
+  SleeperMatchup,
+  SleeperRoster,
+  TeamInfo,
+} from '../lib/types'
+import type { WaiverBoard } from '../lib/waiverWire'
+import { ShareCardButton } from './ShareCardButton'
 import { SlideLightbox } from './SlideLightbox'
+import { WeekReportCard } from './WeekReportCard'
 
 const THUMB_WIDTH = 540
 const THUMB_HEIGHT = 675
@@ -87,14 +100,55 @@ function GraphicThumb({
 }
 
 export function DynastyWeekGraphicsPanel({
+  season,
   week,
   initialSlideId,
+  matchupsByWeek,
+  teams,
+  league,
+  nflState,
+  rosters,
+  waiverBoard,
+  players,
 }: {
+  season: string
   week: number
   initialSlideId?: string | null
+  matchupsByWeek: Map<number, SleeperMatchup[]>
+  teams: Map<number, TeamInfo>
+  league: SleeperLeague
+  nflState: NflState
+  rosters: SleeperRoster[]
+  waiverBoard: WaiverBoard | null
+  players: PlayersMap | null
 }) {
-  const sections = useMemo(() => getWeekGraphicsSections(week), [week])
-  const weekSlides = useMemo(() => getWeekGraphicsSlides(week), [week])
+  const sections = useMemo(
+    () => getWeekGraphicsSections(season, week),
+    [season, week],
+  )
+  const weekSlides = useMemo(
+    () => getWeekGraphicsSlides(season, week),
+    [season, week],
+  )
+  const report = useMemo(() => {
+    const pickup = waiverBoard?.pickupOfWeek
+    return buildWeekReport({
+      week,
+      matchupsByWeek,
+      teams,
+      league,
+      nflState,
+      rosters,
+      waiverPickup:
+        pickup && pickup.week === week
+          ? {
+              playerId: pickup.playerId,
+              rosterId: pickup.rosterId,
+              points: pickup.points,
+            }
+          : null,
+    })
+  }, [week, matchupsByWeek, teams, league, nflState, rosters, waiverBoard])
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const openButtonRef = useRef<HTMLButtonElement | null>(null)
 
@@ -123,6 +177,7 @@ export function DynastyWeekGraphicsPanel({
 
   const copySlideLink = (slide: PublishedSlide) => {
     const params = new URLSearchParams(window.location.search)
+    params.set('season', season)
     params.set('week', String(week))
     params.set('tab', 'gallery')
     params.set('slide', slide.id)
@@ -130,19 +185,32 @@ export function DynastyWeekGraphicsPanel({
     void navigator.clipboard?.writeText(url)
   }
 
-  if (!sections.length) {
-    return (
-      <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
-        No published graphics for Week {week} yet. Try another week.
-      </p>
-    )
-  }
+  const slideActions = (slide: PublishedSlide) => (
+    <>
+      <ShareCardButton basename={slide.basename} title={slide.title} />
+      <button
+        type="button"
+        className="min-h-11 rounded-lg border border-white/20 px-3 py-1.5 text-xs font-semibold text-white"
+        onClick={() => copySlideLink(slide)}
+      >
+        Copy link
+      </button>
+    </>
+  )
 
   return (
     <div className="space-y-6" id="week-graphics-panel">
+      {!sections.length && (
+        <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
+          {graphicsEmptyMessage(season, week)}
+        </p>
+      )}
+
+      {sections.length > 0 && (
       <p className="text-sm text-[var(--dyn-muted)]">
         Week {week} feed graphics (1080×1350). Tap a card for full size.
       </p>
+      )}
 
       <div className="flex flex-col gap-8">
         {sections.map((section, sectionIndex) => (
@@ -178,13 +246,20 @@ export function DynastyWeekGraphicsPanel({
                       loadImmediately={loadImmediately}
                       buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                     />
-                    <button
-                      type="button"
-                      className="min-h-11 w-full rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-2 text-xs font-semibold text-[var(--dyn-accent)]"
-                      onClick={() => copySlideLink(slide)}
-                    >
-                      Copy link
-                    </button>
+                    <div className="grid grid-cols-2 gap-2">
+                      <ShareCardButton
+                        basename={slide.basename}
+                        title={slide.title}
+                        className="w-full"
+                      />
+                      <button
+                        type="button"
+                        className="min-h-11 w-full rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-2 text-xs font-semibold text-[var(--dyn-accent)]"
+                        onClick={() => copySlideLink(slide)}
+                      >
+                        Copy link
+                      </button>
+                    </div>
                   </li>
                 )
               })}
@@ -193,13 +268,26 @@ export function DynastyWeekGraphicsPanel({
         ))}
       </div>
 
-      {lightboxIndex !== null && (
+      {report && (
+        <section aria-labelledby={`graphics-heading-${week}-report`}>
+          <h3
+            id={`graphics-heading-${week}-report`}
+            className="mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--dyn-accent)]"
+          >
+            Report
+          </h3>
+          <WeekReportCard report={report} teams={teams} players={players} />
+        </section>
+      )}
+
+      {lightboxIndex !== null && weekSlides[lightboxIndex] && (
         <SlideLightbox
           slides={weekSlides}
           index={lightboxIndex}
           onClose={close}
           onIndexChange={setLightboxIndex}
           returnFocusRef={openButtonRef}
+          actions={slideActions(weekSlides[lightboxIndex])}
         />
       )}
     </div>

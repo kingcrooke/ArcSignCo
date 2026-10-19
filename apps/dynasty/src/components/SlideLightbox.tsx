@@ -3,6 +3,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type ReactNode,
   type RefObject,
   type TouchEvent,
 } from 'react'
@@ -15,6 +16,7 @@ type Props = {
   onClose: () => void
   onIndexChange: (index: number) => void
   returnFocusRef?: RefObject<HTMLElement | null>
+  actions?: ReactNode
 }
 
 const SWIPE_THRESHOLD_PX = 48
@@ -25,6 +27,7 @@ export function SlideLightbox({
   onClose,
   onIndexChange,
   returnFocusRef,
+  actions,
 }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -108,13 +111,16 @@ export function SlideLightbox({
         <p className="truncate text-sm text-white/80">
           {index + 1} / {slides.length} · {slide.title}
         </p>
-        <button
-          type="button"
-          className="min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
-          onClick={onClose}
-        >
-          Close
-        </button>
+        <div className="flex shrink-0 items-center gap-2">
+          {actions}
+          <button
+            type="button"
+            className="min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm font-medium text-white hover:bg-white/10"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
       </div>
 
       <div className="relative flex min-h-0 flex-1 items-center justify-center px-14 pb-4 sm:px-20">

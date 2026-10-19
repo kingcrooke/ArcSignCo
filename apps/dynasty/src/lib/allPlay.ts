@@ -67,6 +67,17 @@ export function playoffSeedHint(
   return `Would be ${ordinal(rank)} overall — outside the top ${playoffTeams}.`
 }
 
+/** Final regular-season line once the league is complete. */
+export function finishedSeasonLine(
+  rank: number,
+  playoffResult?: string | null,
+): string {
+  if (playoffResult) {
+    return `Finished #${rank} (regular season) · ${playoffResult}`
+  }
+  return `Finished ${ordinal(rank)} in the regular season`
+}
+
 export function allPlayLine(
   score: number,
   weekMatchups: SleeperMatchup[],

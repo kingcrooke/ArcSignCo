@@ -80,6 +80,18 @@ interface WinLoss {
   losses: number
 }
 
+/** Win percentage. An unplayed record is .500 so it ties, and ties are not upsets. */
+function winRate(rec: WinLoss): number {
+  const played = rec.wins + rec.losses
+  if (played <= 0) return 0.5
+  return rec.wins / played
+}
+
+/** Upset only when the winner's record going in was worse than the loser's. */
+export function isUpset(winner: WinLoss, loser: WinLoss): boolean {
+  return winRate(winner) < winRate(loser)
+}
+
 function recordsBeforeWeek(
   matchupsByWeek: Map<number, SleeperMatchup[]>,
   throughWeekExclusive: number,
@@ -121,8 +133,9 @@ export function computeGameBreakdown(
   const loser = winner === home.roster_id ? away.roster_id : home.roster_id
   const winnerRec = recordsBefore.get(winner) ?? { wins: 0, losses: 0 }
   const loserRec = recordsBefore.get(loser) ?? { wins: 0, losses: 0 }
-  const upsetUnits = Math.max(0, winnerRec.losses - loserRec.wins)
-  const upsetBonus = 12 * upsetUnits
+  const upset = isUpset(winnerRec, loserRec)
+  const upsetUnits = upset ? 1 : 0
+  const upsetBonus = upset ? 12 : 0
 
   const composite = closeness + shootout + upsetBonus
 

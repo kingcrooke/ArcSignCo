@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { picksOwnedByRoster } from '../lib/drafts'
+import { ChampionsWall } from './ChampionsWall'
 import {
   finishedSeasonsForManager,
   finishSummaryLine,
@@ -48,6 +49,7 @@ export function DynastyManagerPanel({
   allTrades,
   tradedPicks,
   tradePriorSeasonsFailed,
+  draftRounds = 3,
 }: {
   rosterId: number
   onRosterChange: (id: number) => void
@@ -62,6 +64,7 @@ export function DynastyManagerPanel({
   allTrades: TradeLogEntry[]
   tradedPicks: SleeperTradedPick[]
   tradePriorSeasonsFailed: boolean
+  draftRounds?: number
 }) {
   const rosterIds = useMemo(
     () => [...teams.keys()].sort((a, b) => a - b),
@@ -92,8 +95,15 @@ export function DynastyManagerPanel({
 
   const futurePicks = useMemo(
     () =>
-      picksOwnedByRoster(tradedPicks, teams, rosterId, currentSeason, 3),
-    [tradedPicks, teams, rosterId, currentSeason],
+      picksOwnedByRoster(
+        tradedPicks,
+        teams,
+        rosterId,
+        currentSeason,
+        3,
+        draftRounds,
+      ),
+    [tradedPicks, teams, rosterId, currentSeason, draftRounds],
   )
 
   const careerWins = finishedSeasons.reduce((s, f) => s + f.wins, 0)
@@ -108,6 +118,7 @@ export function DynastyManagerPanel({
 
   return (
     <div className="space-y-8" id="manager-panel">
+      <ChampionsWall leagueSeasonSummaries={leagueSeasonSummaries} />
       <label className="block text-sm">
         <span className="text-[var(--dyn-muted)]">Pick a manager</span>
         <select
@@ -180,7 +191,7 @@ export function DynastyManagerPanel({
 
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-wide text-[var(--dyn-muted)]">
-                Future picks owned (next 3 years)
+                Future picks owned (next 3 years, including your own)
               </p>
               {futurePicks.length === 0 ? (
                 <p className="mt-1 text-sm text-[var(--dyn-muted)]">None on file.</p>

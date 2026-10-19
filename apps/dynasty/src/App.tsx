@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BestGamesPanel } from './components/BestGamesPanel'
 import type { BestGamesScope } from './components/BestGamesWeekScope'
 import { DraftsPanel } from './components/DraftsPanel'
@@ -85,6 +85,19 @@ export default function App() {
   const effectiveBestGamesScope: BestGamesScope =
     bestGamesScope ??
     (data ? defaultBestGamesWeek(data.league, data.nflState) : 1)
+
+  const playoffResultByRoster = useMemo(() => {
+    const map = new Map<number, string>()
+    if (!data) return map
+    const summary = chain.leagueSeasonSummaries.find(
+      (s) => s.season === data.league.season && s.status === 'complete',
+    )
+    if (!summary) return map
+    for (const [rosterId, finish] of summary.byRosterId) {
+      if (finish.playoffResult) map.set(rosterId, finish.playoffResult)
+    }
+    return map
+  }, [data, chain.leagueSeasonSummaries])
 
   useEffect(() => {
     if (!data) return
@@ -343,6 +356,10 @@ export default function App() {
                 matchupsByWeek={data.matchupsByWeek}
                 standingsThroughWeek={data.standingsThroughWeek}
                 faabByRoster={data.faabByRoster}
+                seasonComplete={
+                  data.league.status === 'complete' || data.isHistoricalSeason
+                }
+                playoffResultByRoster={playoffResultByRoster}
               />
               {!data.isHistoricalSeason && (
                 <div className="mt-8">
@@ -363,6 +380,7 @@ export default function App() {
                 players={data.players}
                 playersLoading={data.playersLoading}
                 leagueSeason={data.league.season}
+                draftRounds={data.league.settings.draft_rounds ?? 3}
               />
             </section>
           )}
@@ -372,8 +390,16 @@ export default function App() {
                 Week {data.selectedWeek} graphics
               </h2>
               <DynastyWeekGraphicsPanel
+                season={data.league.season}
                 week={data.selectedWeek}
                 initialSlideId={gallerySlideId}
+                matchupsByWeek={data.matchupsByWeek}
+                teams={data.teams}
+                league={data.league}
+                nflState={data.nflState}
+                rosters={data.rosters}
+                waiverBoard={data.waiverBoard}
+                players={data.players}
               />
             </section>
           )}
@@ -383,7 +409,7 @@ export default function App() {
                 Waiver Wire Champion
                 <span className="ml-2 text-sm font-normal text-[var(--dyn-muted)]">
                   {' '}
-                  through Week {data.standingsThroughWeek}
+                  through Week {data.scoringThroughWeek}
                 </span>
               </h2>
               <WaiverPanel
@@ -456,6 +482,7 @@ export default function App() {
                 allTrades={chain.allTrades}
                 tradedPicks={data.tradedPicks}
                 tradePriorSeasonsFailed={chain.priorSeasonsFailed}
+                draftRounds={data.league.settings.draft_rounds ?? 3}
               />
             </section>
           )}

@@ -17,7 +17,8 @@ type AvatarEntry =
       loss?: AvatarFileRef
     }
 
-const customByRoster = managerAvatars as Record<string, AvatarEntry>
+/** Keyed by the current season's Sleeper owner user_id, not the roster slot. */
+const customByOwner = managerAvatars as Record<string, AvatarEntry>
 
 function publicAssetUrl(path: string): string {
   if (path.startsWith('http') || path.startsWith('/')) return path
@@ -40,8 +41,8 @@ function pathsFromRef(ref: AvatarFileRef | undefined): string[] {
   return urls
 }
 
-function resolveCustomUrls(rosterId: number, mood: AvatarMood): string[] {
-  const entry = customByRoster[String(rosterId)]
+function resolveCustomUrls(userId: string, mood: AvatarMood): string[] {
+  const entry = userId ? customByOwner[userId] : undefined
   if (!entry) return []
   if (typeof entry === 'string' || 'webp' in entry || 'png' in entry || 'fallback' in entry) {
     return pathsFromRef(entry as AvatarFileRef)
@@ -68,14 +69,18 @@ function resolveCustomUrls(rosterId: number, mood: AvatarMood): string[] {
   return urls
 }
 
-/** Custom cartoon → league metadata.avatar → global user.avatar thumb → initials. */
+/**
+ * Cartoon for a current manager (by user id) → league metadata.avatar →
+ * global user.avatar thumb → initials. Past owners who are not one of the
+ * current managers skip the cartoon.
+ */
 export function avatarUrlChain(
   team: TeamInfo | undefined,
   mood: AvatarMood = 'base',
 ): string[] {
   if (!team) return []
   const urls: string[] = []
-  urls.push(...resolveCustomUrls(team.rosterId, mood))
+  urls.push(...resolveCustomUrls(team.userId, mood))
   if (team.leagueAvatarUrl) urls.push(team.leagueAvatarUrl)
   if (team.globalAvatarUrl) urls.push(team.globalAvatarUrl)
   return urls
