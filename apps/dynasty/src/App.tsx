@@ -24,6 +24,10 @@ import {
 import { playoffResultsForLeague } from './lib/champions'
 import { maxSelectableWeek } from './lib/seasonContext'
 import { defaultBestGamesWeek, isWeekComplete } from './lib/weeks'
+import {
+  latestGraphicsContentWeek,
+  resolveGraphicsWeek,
+} from './lib/weekGraphics'
 import { useLeagueChain } from './hooks/useLeagueChain'
 import { useLeagueData } from './hooks/useLeagueData'
 import { trackDynastyTab } from './lib/goatcounter'
@@ -70,6 +74,8 @@ export default function App() {
     null,
   )
   const [gallerySlideId, setGallerySlideId] = useState<string | null>(null)
+  const [graphicsWeekPin, setGraphicsWeekPin] = useState<number | null>(null)
+  const [tabFade, setTabFade] = useState({ left: false, right: true })
   const sound = useSound()
   const navRef = useRef<HTMLElement>(null)
   const didInitialTabScroll = useRef(false)
@@ -87,6 +93,18 @@ export default function App() {
     bestGamesScope ??
     (data ? defaultBestGamesWeek(data.league, data.nflState) : 1)
 
+  const galleryWeek = data
+    ? resolveGraphicsWeek({
+        selectedWeek: data.selectedWeek,
+        pinnedWeek: graphicsWeekPin,
+        season: data.league.season,
+        maxWeek,
+      })
+    : 1
+  const latestGraphicsWeek = data
+    ? latestGraphicsContentWeek(data.league.season, maxWeek)
+    : null
+
   useEffect(() => {
     if (!data) return
     const params = new URLSearchParams(window.location.search)
@@ -98,7 +116,10 @@ export default function App() {
     if (s && leagueIdForSeason(s)) setSeason(s)
     if (w) {
       const n = Number.parseInt(w, 10)
-      if (!Number.isNaN(n)) data.setSelectedWeek(n)
+      if (!Number.isNaN(n)) {
+        data.setSelectedWeek(n)
+        if (t === 'gallery') setGraphicsWeekPin(n)
+      }
     }
     if (t && TAB_IDS.includes(t)) setTab(t)
     if (mgr) {
@@ -128,6 +149,8 @@ export default function App() {
           ? 'all'
           : String(effectiveBestGamesScope),
       )
+    } else if (tab === 'gallery') {
+      params.set('week', String(galleryWeek))
     } else {
       params.set('week', String(data.selectedWeek))
     }
@@ -145,6 +168,7 @@ export default function App() {
     data,
     effectiveBestGamesScope,
     managerRosterId,
+    galleryWeek,
   ])
 
   const scrollActiveTabIntoView = useCallback((behavior: ScrollBehavior) => {
@@ -155,12 +179,42 @@ export default function App() {
       ?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior })
   }, [])
 
+  const updateTabFade = useCallback(() => {
+    const nav = navRef.current
+    if (!nav) return
+    const max = nav.scrollWidth - nav.clientWidth
+    setTabFade({
+      left: nav.scrollLeft > 2,
+      right: max > 2 && nav.scrollLeft < max - 2,
+    })
+  }, [])
+
   useEffect(() => {
     if (state !== 'ready' || !data) return
     const behavior = didInitialTabScroll.current ? 'smooth' : 'instant'
     didInitialTabScroll.current = true
-    requestAnimationFrame(() => scrollActiveTabIntoView(behavior))
-  }, [tab, state, data, scrollActiveTabIntoView])
+    requestAnimationFrame(() => {
+      scrollActiveTabIntoView(behavior)
+      updateTabFade()
+    })
+  }, [tab, state, data, scrollActiveTabIntoView, updateTabFade])
+
+  useEffect(() => {
+    if (state !== 'ready') return
+    const nav = navRef.current
+    if (!nav) return
+    updateTabFade()
+    nav.addEventListener('scroll', updateTabFade, { passive: true })
+    const observer =
+      typeof ResizeObserver === 'undefined'
+        ? null
+        : new ResizeObserver(() => updateTabFade())
+    observer?.observe(nav)
+    return () => {
+      nav.removeEventListener('scroll', updateTabFade)
+      observer?.disconnect()
+    }
+  }, [state, data, updateTabFade])
 
   useEffect(() => {
     if (PLAYER_TABS.includes(tab)) data?.ensurePlayers()
@@ -189,7 +243,8 @@ export default function App() {
 
   const onWeekChange = (w: number) => {
     sound.playClick()
-    data?.setSelectedWeek(w)
+    if (tab === 'gallery') setGraphicsWeekPin(w)
+    else data?.setSelectedWeek(w)
   }
 
   const onSeasonChange = (nextSeason: string) => {
@@ -257,7 +312,7 @@ export default function App() {
                 onChange={onSeasonChange}
               />
               <WeekPicker
-                week={data.selectedWeek}
+                week={tab === 'gallery' ? galleryWeek : data.selectedWeek}
                 maxWeek={maxWeek}
                 onChange={onWeekChange}
               />
@@ -273,30 +328,46 @@ export default function App() {
             </p>
           </div>
 
-          <nav
-            ref={navRef}
-            className="dyn-section-tabs mb-6 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
-            aria-label="Sections"
+          <div
+            className={`dyn-section-tabs-wrap mb-6${
+              tabFade.left ? ' dyn-section-tabs-wrap--fade-left' : ''
+            }${tabFade.right ? ' dyn-section-tabs-wrap--fade-right' : ''}`}
           >
-            {BASE_TABS.map((t) => {
-              const active = tab === t.id
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  className={
-                    active
-                      ? 'dyn-section-tab dyn-section-tab--active'
-                      : 'dyn-section-tab'
-                  }
-                  aria-current={active ? 'page' : undefined}
-                  onClick={() => onTabChange(t.id)}
-                >
-                  {t.label}
-                </button>
-              )
-            })}
-          </nav>
+            <nav
+              ref={navRef}
+              className="dyn-section-tabs flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
+              aria-label="Sections"
+            >
+              {BASE_TABS.map((t) => {
+                const active = tab === t.id
+                return (
+                  <button
+                    key={t.id}
+                    type="button"
+                    className={
+                      active
+                        ? 'dyn-section-tab dyn-section-tab--active'
+                        : 'dyn-section-tab'
+                    }
+                    aria-current={active ? 'page' : undefined}
+                    onClick={() => onTabChange(t.id)}
+                  >
+                    {t.label}
+                  </button>
+                )
+              })}
+            </nav>
+            {tabFade.left && (
+              <span className="dyn-section-tabs-hint dyn-section-tabs-hint--left" aria-hidden="true">
+                ‹
+              </span>
+            )}
+            {tabFade.right && (
+              <span className="dyn-section-tabs-hint dyn-section-tabs-hint--right" aria-hidden="true">
+                ›
+              </span>
+            )}
+          </div>
 
           <div className="sr-only" aria-hidden="true">
             {' '}
@@ -377,18 +448,20 @@ export default function App() {
           {tab === 'gallery' && (
             <section className="min-w-0 w-full">
               <h2 className="mb-3 text-lg font-semibold">
-                Week {data.selectedWeek} graphics
+                Week {galleryWeek} graphics
               </h2>
               <DynastyWeekGraphicsPanel
                 season={data.league.season}
-                week={data.selectedWeek}
+                week={galleryWeek}
                 weekComplete={isWeekComplete(
-                  data.selectedWeek,
+                  galleryWeek,
                   data.league,
                   data.nflState,
                 )}
                 teams={data.teams}
                 initialSlideId={gallerySlideId}
+                latestContentWeek={latestGraphicsWeek}
+                onSelectWeek={(week) => setGraphicsWeekPin(week)}
               />
             </section>
           )}

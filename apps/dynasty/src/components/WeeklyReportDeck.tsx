@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react'
 import type { TeamInfo } from '../lib/types'
-import type {
-  ReportMatchup,
-  ReportSide,
-  WeeklyReport,
+import {
+  reportMatchupsBySleeperId,
+  type ReportMatchup,
+  type ReportSide,
+  type WeeklyReport,
 } from '../lib/weeklyReport'
 import { TeamAvatar } from './TeamAvatar'
 
@@ -83,18 +84,16 @@ function SideLine({
 
 function MatchupCard({
   game,
-  index,
   week,
   teams,
 }: {
   game: ReportMatchup
-  index: number
   week: number
   teams: Map<number, TeamInfo>
 }) {
   return (
     <Card
-      kicker={`Dynasty · Week ${week} · Matchup ${index + 1}`}
+      kicker={`Dynasty · Week ${week} · Matchup ${game.matchupId}`}
       title={`${game.winner.name} ${pts(game.winner.score)}`}
       accent={game.tie ? `TIED ${game.loser.name}` : `DEF. ${game.loser.name} ${pts(game.loser.score)}`}
     >
@@ -115,6 +114,7 @@ export function WeeklyReportDeck({
   teams: Map<number, TeamInfo>
 }) {
   const top3 = report.standings.slice(0, 3)
+  const matchups = reportMatchupsBySleeperId(report.matchups)
   return (
     <div className="grid grid-cols-1 items-start gap-4 sm:grid-cols-2">
       <Card
@@ -139,11 +139,10 @@ export function WeeklyReportDeck({
         )}
       </Card>
 
-      {report.matchups.map((game, index) => (
+      {matchups.map((game) => (
         <MatchupCard
           key={game.matchupId}
           game={game}
-          index={index}
           week={report.week}
           teams={teams}
         />
