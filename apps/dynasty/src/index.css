@@ -92,9 +92,35 @@ body {
 }
 
 /* Section tabs */
+.dyn-section-tabs-wrap {
+  position: relative;
+}
+
+.dyn-section-tabs-wrap--fade-left::before,
+.dyn-section-tabs-wrap--fade-right::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 2.25rem;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dyn-section-tabs-wrap--fade-left::before {
+  left: 1px;
+  border-radius: 0.7rem 0 0 0.7rem;
+  background: linear-gradient(to right, var(--dyn-surface) 15%, transparent);
+}
+
+.dyn-section-tabs-wrap--fade-right::after {
+  right: 1px;
+  border-radius: 0 0.7rem 0.7rem 0;
+  background: linear-gradient(to left, var(--dyn-surface) 15%, transparent);
+}
+
 nav.dyn-section-tabs button.dyn-section-tab {
   flex: 0 0 auto;
-  max-width: 100%;
   white-space: nowrap;
   text-align: center;
   border-radius: 0.5rem;
@@ -140,4 +166,5 @@ nav.dyn-section-tabs {
   position: relative;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
+  scroll-padding-inline: 1.75rem;
 }

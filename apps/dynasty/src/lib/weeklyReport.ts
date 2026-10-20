@@ -122,6 +122,16 @@ const BY_SEASON: Record<string, ReportFile> = {
   '2026': reports2026 as ReportFile,
 }
 
+/**
+ * Matchup cards in Sleeper `matchup_id` order (m1..m6 on the graphics cards).
+ * Stored reports are not pre-sorted.
+ */
+export function reportMatchupsBySleeperId(
+  matchups: ReportMatchup[],
+): ReportMatchup[] {
+  return [...matchups].sort((a, b) => a.matchupId - b.matchupId)
+}
+
 /** Stored Sleeper report for a completed week, or null when none has been generated. */
 export function getWeeklyReport(
   season: string | number,

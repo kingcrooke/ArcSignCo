@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest'
 import {
   getWeekGraphicsSections,
   getWeekGraphicsSlides,
+  latestGraphicsContentWeek,
+  resolveGraphicsWeek,
   weekGraphicsEmptyMessage,
+  weekHasPublishedGraphics,
 } from './weekGraphics'
 
 describe('weekGraphics manifest', () => {
@@ -46,6 +49,44 @@ describe('weekGraphics manifest', () => {
     expect(getWeekGraphicsSections(2025, 5)).toEqual([])
     expect(weekGraphicsEmptyMessage(7)).toBe("Week 7 cards aren't posted yet.")
     expect(weekGraphicsEmptyMessage(5)).toBe("Week 5 cards aren't posted yet.")
+  })
+
+  it('defaults the graphics week to the latest week with a report or cards', () => {
+    expect(latestGraphicsContentWeek(2026)).toBe(6)
+    expect(weekHasPublishedGraphics(2026, 6)).toBe(true)
+    expect(weekHasPublishedGraphics(2026, 7)).toBe(false)
+    expect(latestGraphicsContentWeek(2025)).toBeNull()
+    expect(
+      resolveGraphicsWeek({
+        selectedWeek: 7,
+        pinnedWeek: null,
+        season: 2026,
+      }),
+    ).toBe(6)
+    expect(
+      resolveGraphicsWeek({
+        selectedWeek: 5,
+        pinnedWeek: null,
+        season: 2026,
+      }),
+    ).toBe(5)
+  })
+
+  it('keeps an explicit empty week so the empty state can link back', () => {
+    expect(
+      resolveGraphicsWeek({
+        selectedWeek: 6,
+        pinnedWeek: 7,
+        season: 2026,
+      }),
+    ).toBe(7)
+    expect(
+      resolveGraphicsWeek({
+        selectedWeek: 7,
+        pinnedWeek: null,
+        season: 2019,
+      }),
+    ).toBe(7)
   })
 
   it('does not throw for week 18 or season 2019', () => {

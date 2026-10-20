@@ -125,7 +125,8 @@ export function StandingsPanel({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2 sm:items-center">
                     <p
-                      className="min-w-0 flex-1 text-sm font-semibold leading-snug break-words sm:truncate sm:leading-tight sm:text-[15px]"
+                      className="min-w-0 flex-1 truncate text-sm font-semibold leading-tight sm:text-[15px]"
+                      title={r.teamName}
                     >
                       {r.teamName}
                     </p>
@@ -140,14 +141,10 @@ export function StandingsPanel({
 
                   <p className="mt-0.5 text-xs leading-snug text-[var(--dyn-muted)] sm:truncate">
                     <span className="sm:hidden">
-                      {manager}
-                      <span className="text-[var(--dyn-muted)]/80">
-                        {' '}
-                        · {pf} PF · {pa} PA · FAAB {faabLabel(faab)} · AP{' '}
-                        {allPlayLabel}
-                      </span>
+                      {pf} PF · {pa} PA · FAAB {faabLabel(faab)} · AP{' '}
+                      {allPlayLabel}
                     </span>
-                    <span className="hidden sm:inline">
+                    <span className="hidden sm:inline" title={manager}>
                       {manager}
                       {r.displayName ? (
                         <span className="text-[var(--dyn-muted)]/75">
@@ -221,7 +218,10 @@ export function StandingsPanel({
       </ul>
 
       {sacko && (
-        <p className="text-sm text-[var(--dyn-muted)]">
+        <p
+          className="truncate text-sm text-[var(--dyn-muted)]"
+          title={`Sacko watch: #${sacko.rank} ${sacko.teamName} (${recordLabel(sacko)}, PF ${sacko.pointsFor.toFixed(2)}).`}
+        >
           Sacko watch: #{sacko.rank} {sacko.teamName} ({recordLabel(sacko)}, PF{' '}
           {sacko.pointsFor.toFixed(2)}).
         </p>

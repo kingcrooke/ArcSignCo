@@ -15,6 +15,38 @@ import { WeeklyReportDeck } from './WeeklyReportDeck'
 const THUMB_WIDTH = 540
 const THUMB_HEIGHT = 675
 
+function EmptyNotice({
+  message,
+  week,
+  latestWeek,
+  onSelectWeek,
+}: {
+  message: string
+  week: number
+  latestWeek?: number | null
+  onSelectWeek?: (week: number) => void
+}) {
+  const showLink =
+    latestWeek != null && latestWeek !== week && onSelectWeek != null
+  return (
+    <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
+      {message}
+      {showLink && (
+        <>
+          {' '}
+          <button
+            type="button"
+            className="font-semibold text-[var(--dyn-accent)] underline decoration-[var(--dyn-accent)]/60 underline-offset-2"
+            onClick={() => onSelectWeek(latestWeek)}
+          >
+            View Week {latestWeek}
+          </button>
+        </>
+      )}
+    </p>
+  )
+}
+
 function GraphicThumb({
   slide,
   onOpen,
@@ -97,12 +129,17 @@ export function DynastyWeekGraphicsPanel({
   weekComplete = false,
   teams,
   initialSlideId,
+  latestContentWeek = null,
+  onSelectWeek,
 }: {
   season: string
   week: number
   weekComplete?: boolean
   teams?: Map<number, TeamInfo>
   initialSlideId?: string | null
+  /** Latest week with cards or a report. Empty weeks link here. */
+  latestContentWeek?: number | null
+  onSelectWeek?: (week: number) => void
 }) {
   const sections = useMemo(
     () => getWeekGraphicsSections(season, week),
@@ -160,9 +197,12 @@ export function DynastyWeekGraphicsPanel({
       )}
 
       {!sections.length && (
-        <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
-          {weekGraphicsEmptyMessage(week)}
-        </p>
+        <EmptyNotice
+          message={weekGraphicsEmptyMessage(week)}
+          week={week}
+          latestWeek={latestContentWeek}
+          onSelectWeek={onSelectWeek}
+        />
       )}
 
       <div className="flex flex-col gap-8">
@@ -228,9 +268,12 @@ export function DynastyWeekGraphicsPanel({
         {report && teams ? (
           <WeeklyReportDeck report={report} teams={teams} />
         ) : (
-          <p className="rounded-xl border border-dashed border-[var(--dyn-border)] p-6 text-center text-[var(--dyn-muted)]">
-            {weeklyReportEmptyMessage(week)}
-          </p>
+          <EmptyNotice
+            message={weeklyReportEmptyMessage(week)}
+            week={week}
+            latestWeek={latestContentWeek}
+            onSelectWeek={onSelectWeek}
+          />
         )}
       </section>
       )}

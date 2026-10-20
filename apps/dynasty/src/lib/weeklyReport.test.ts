@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { getWeeklyReport, weeklyReportEmptyMessage } from './weeklyReport'
+import {
+  getWeeklyReport,
+  reportMatchupsBySleeperId,
+  weeklyReportEmptyMessage,
+} from './weeklyReport'
 
 describe('weekly reports', () => {
   it('has a Sleeper-backed report for 2026 weeks 1–6 and none after', () => {
@@ -85,5 +89,22 @@ describe('weekly reports', () => {
     line('Chase’n Dubs', 117.32, 'MahomiesRidley4MooreJeffe', 109.46)
     line('A-Lamb-e que tengo hambre', 128.44, 'Rubuilding', 69.44)
     line('Love Thy Nabers', 143.9, 'Team Name Hoes', 103.18)
+  })
+
+  it('sorts every week by Sleeper matchup_id, matching graphics m1..m6', () => {
+    for (const week of [1, 2, 3, 4, 5, 6]) {
+      const report = getWeeklyReport(2026, week)!
+      const ordered = reportMatchupsBySleeperId(report.matchups)
+      expect(ordered.map((g) => g.matchupId)).toEqual([1, 2, 3, 4, 5, 6])
+    }
+    const week6 = reportMatchupsBySleeperId(getWeeklyReport(2026, 6)!.matchups)
+    const matchup5 = week6.find((g) => g.matchupId === 5)
+    expect([matchup5?.winner.name, matchup5?.loser.name].sort()).toEqual([
+      'Chalupa Batman',
+      'Saints & Sinners',
+    ])
+    expect(getWeeklyReport(2026, 6)!.matchups.map((g) => g.matchupId)).not.toEqual([
+      1, 2, 3, 4, 5, 6,
+    ])
   })
 })

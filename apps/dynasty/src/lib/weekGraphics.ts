@@ -1,6 +1,7 @@
 import type { PublishedSlide } from './publishedSlides'
 import { HELD_BACK_SLIDES } from './publishedSlides'
 import manifest from '../data/week-graphics-manifest.json'
+import { getWeeklyReport } from './weeklyReport'
 
 export type GraphicsSectionKind = 'matchups' | 'results'
 
@@ -78,4 +79,48 @@ export function getWeekGraphicsSlides(
   week: number,
 ): PublishedSlide[] {
   return getWeekGraphicsSections(season, week).flatMap((s) => s.slides)
+}
+
+/** True when this week has published cards or a stored weekly report. */
+export function weekHasPublishedGraphics(
+  season: string | number,
+  week: number,
+): boolean {
+  if (getWeekGraphicsSections(season, week).length > 0) return true
+  return getWeeklyReport(season, week) != null
+}
+
+/** Latest week that has cards or a weekly report, or null when the season has none. */
+export function latestGraphicsContentWeek(
+  season: string | number,
+  maxWeek = 18,
+): number | null {
+  let latest: number | null = null
+  const last = Math.max(0, maxWeek)
+  for (let week = 1; week <= last; week++) {
+    if (weekHasPublishedGraphics(season, week)) latest = week
+  }
+  return latest
+}
+
+/**
+ * Week the Graphics tab should show.
+ * A pinned week is an explicit picker choice (including an empty week).
+ * Otherwise prefer the shared selected week when it has content, else the latest
+ * week that has a report or cards — not a live NFL week with nothing posted.
+ */
+export function resolveGraphicsWeek({
+  selectedWeek,
+  pinnedWeek,
+  season,
+  maxWeek = 18,
+}: {
+  selectedWeek: number
+  pinnedWeek: number | null
+  season: string | number
+  maxWeek?: number
+}): number {
+  if (pinnedWeek != null && pinnedWeek >= 1) return pinnedWeek
+  if (weekHasPublishedGraphics(season, selectedWeek)) return selectedWeek
+  return latestGraphicsContentWeek(season, maxWeek) ?? selectedWeek
 }

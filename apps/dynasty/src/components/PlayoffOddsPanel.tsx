@@ -24,7 +24,7 @@ export function PlayoffOddsPanel({ rows }: { rows: PlayoffOddsRow[] }) {
             }`}
           >
             <div className="min-w-0">
-              <p className="font-medium">
+              <p className="truncate font-medium" title={r.teamName || r.displayName}>
                 {r.teamName || r.displayName}
               </p>
               <p className="text-xs text-[var(--dyn-muted)]">
