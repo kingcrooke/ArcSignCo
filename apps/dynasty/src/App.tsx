@@ -357,6 +357,16 @@ export default function App() {
                 )
               })}
             </nav>
+            {tabFade.left && (
+              <span className="dyn-section-tabs-hint dyn-section-tabs-hint--left" aria-hidden="true">
+                ‹
+              </span>
+            )}
+            {tabFade.right && (
+              <span className="dyn-section-tabs-hint dyn-section-tabs-hint--right" aria-hidden="true">
+                ›
+              </span>
+            )}
           </div>
 
           <div className="sr-only" aria-hidden="true">

@@ -102,7 +102,7 @@ body {
   position: absolute;
   top: 1px;
   bottom: 1px;
-  width: 2.25rem;
+  width: 3.25rem;
   z-index: 1;
   pointer-events: none;
 }
@@ -110,13 +110,43 @@ body {
 .dyn-section-tabs-wrap--fade-left::before {
   left: 1px;
   border-radius: 0.7rem 0 0 0.7rem;
-  background: linear-gradient(to right, var(--dyn-surface) 15%, transparent);
+  background: linear-gradient(
+    to right,
+    var(--dyn-surface) 0%,
+    var(--dyn-surface) 42%,
+    transparent 100%
+  );
 }
 
 .dyn-section-tabs-wrap--fade-right::after {
   right: 1px;
   border-radius: 0 0.7rem 0.7rem 0;
-  background: linear-gradient(to left, var(--dyn-surface) 15%, transparent);
+  background: linear-gradient(
+    to left,
+    var(--dyn-surface) 0%,
+    var(--dyn-surface) 42%,
+    transparent 100%
+  );
+}
+
+.dyn-section-tabs-hint {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--dyn-accent-bright);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.dyn-section-tabs-hint--left {
+  left: 0.35rem;
+}
+
+.dyn-section-tabs-hint--right {
+  right: 0.35rem;
 }
 
 nav.dyn-section-tabs button.dyn-section-tab {
