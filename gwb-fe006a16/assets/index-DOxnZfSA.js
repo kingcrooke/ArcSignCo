@@ -19,7 +19,7 @@ Error generating stack: `+e.message+`
 `});++r<e.length;)r&&n.push({type:`text`,value:`
 `}),n.push(e[r]);return t&&e.length>0&&n.push({type:`text`,value:`
 `}),n}function Na(e){let t=0,n=e.charCodeAt(t);for(;n===9||n===32;)t++,n=e.charCodeAt(t);return e.slice(t)}function Pa(e,t){let n=Oa(e,t),r=n.one(e,void 0),i=pa(n),a=Array.isArray(r)?{type:`root`,children:r}:r||{type:`root`,children:[]};return i&&(`children`in a,a.children.push({type:`text`,value:`
-`},i)),a}function Fa(e,t){return e&&`run`in e?async function(n,r){let i=Pa(n,{file:r,...t});await e.run(i,r)}:function(n,r){return Pa(n,{file:r,...e||t})}}function Ia(e){if(e)throw e}var La=o(((e,t)=>{var n=Object.prototype.hasOwnProperty,r=Object.prototype.toString,i=Object.defineProperty,a=Object.getOwnPropertyDescriptor,o=function(e){return typeof Array.isArray==`function`?Array.isArray(e):r.call(e)===`[object Array]`},s=function(e){if(!e||r.call(e)!==`[object Object]`)return!1;var t=n.call(e,`constructor`),i=e.constructor&&e.constructor.prototype&&n.call(e.constructor.prototype,`isPrototypeOf`);if(e.constructor&&!t&&!i)return!1;for(var a in e);return a===void 0||n.call(e,a)},c=function(e,t){i&&t.name===`__proto__`?i(e,t.name,{enumerable:!0,configurable:!0,value:t.newValue,writable:!0}):e[t.name]=t.newValue},l=function(e,t){if(t===`__proto__`){if(!n.call(e,t))return;if(a)return a(e,t).value}return e[t]};t.exports=function e(){var t,n,r,i,a,u,d=arguments[0],f=1,p=arguments.length,m=!1;for(typeof d==`boolean`&&(m=d,d=arguments[1]||{},f=2),(d==null||typeof d!=`object`&&typeof d!=`function`)&&(d={});f<p;++f)if(t=arguments[f],t!=null)for(n in t)r=l(d,n),i=l(t,n),d!==i&&(m&&i&&(s(i)||(a=o(i)))?(a?(a=!1,u=r&&o(r)?r:[]):u=r&&s(r)?r:{},c(d,{name:n,newValue:e(m,u,i)})):i!==void 0&&c(d,{name:n,newValue:i}));return d}}));function Ra(e){if(typeof e!=`object`||!e)return!1;let t=Object.getPrototypeOf(e);return(t===null||t===Object.prototype||Object.getPrototypeOf(t)===null)&&!(Symbol.toStringTag in e)&&!(Symbol.iterator in e)}function za(){let e=[],t={run:n,use:r};return t;function n(...t){let n=-1,r=t.pop();if(typeof r!=`function`)throw TypeError(`Expected function as last argument, not `+r);i(null,...t);function i(a,...o){let s=e[++n],c=-1;if(a){r(a);return}for(;++c<t.length;)(o[c]===null||o[c]===void 0)&&(o[c]=t[c]);t=o,s?Ba(s,i)(...o):r(null,...o)}}function r(n){if(typeof n!=`function`)throw TypeError("Expected `middelware` to be a function, not "+n);return e.push(n),t}}function Ba(e,t){let n;return r;function r(...t){let r=e.length>t.length,o;r&&t.push(i);try{o=e.apply(this,t)}catch(e){let t=e;if(r&&n)throw t;return i(t)}r||(o&&o.then&&typeof o.then==`function`?o.then(a,i):o instanceof Error?i(o):a(o))}function i(e,...r){n||(n=!0,t(e,...r))}function a(e){i(null,e)}}var Va={basename:Ha,dirname:Ua,extname:Wa,join:Ga,sep:`/`};function Ha(e,t){if(t!==void 0&&typeof t!=`string`)throw TypeError(`"ext" argument must be a string`);Ja(e);let n=0,r=-1,i=e.length,a;if(t===void 0||t.length===0||t.length>e.length){for(;i--;)if(e.codePointAt(i)===47){if(a){n=i+1;break}}else r<0&&(a=!0,r=i+1);return r<0?``:e.slice(n,r)}if(t===e)return``;let o=-1,s=t.length-1;for(;i--;)if(e.codePointAt(i)===47){if(a){n=i+1;break}}else o<0&&(a=!0,o=i+1),s>-1&&(e.codePointAt(i)===t.codePointAt(s--)?s<0&&(r=i):(s=-1,r=o));return n===r?r=o:r<0&&(r=e.length),e.slice(n,r)}function Ua(e){if(Ja(e),e.length===0)return`.`;let t=-1,n=e.length,r;for(;--n;)if(e.codePointAt(n)===47){if(r){t=n;break}}else r||=!0;return t<0?e.codePointAt(0)===47?`/`:`.`:t===1&&e.codePointAt(0)===47?`//`:e.slice(0,t)}function Wa(e){Ja(e);let t=e.length,n=-1,r=0,i=-1,a=0,o;for(;t--;){let s=e.codePointAt(t);if(s===47){if(o){r=t+1;break}continue}n<0&&(o=!0,n=t+1),s===46?i<0?i=t:a!==1&&(a=1):i>-1&&(a=-1)}return i<0||n<0||a===0||a===1&&i===n-1&&i===r+1?``:e.slice(i,n)}function Ga(...e){let t=-1,n;for(;++t<e.length;)Ja(e[t]),e[t]&&(n=n===void 0?e[t]:n+`/`+e[t]);return n===void 0?`.`:Ka(n)}function Ka(e){Ja(e);let t=e.codePointAt(0)===47,n=qa(e,!t);return n.length===0&&!t&&(n=`.`),n.length>0&&e.codePointAt(e.length-1)===47&&(n+=`/`),t?`/`+n:n}function qa(e,t){let n=``,r=0,i=-1,a=0,o=-1,s,c;for(;++o<=e.length;){if(o<e.length)s=e.codePointAt(o);else if(s===47)break;else s=47;if(s===47){if(i!==o-1&&a!==1){if(i!==o-1&&a===2){if(n.length<2||r!==2||n.codePointAt(n.length-1)!==46||n.codePointAt(n.length-2)!==46){if(n.length>2){if(c=n.lastIndexOf(`/`),c!==n.length-1){c<0?(n=``,r=0):(n=n.slice(0,c),r=n.length-1-n.lastIndexOf(`/`)),i=o,a=0;continue}}else if(n.length>0){n=``,r=0,i=o,a=0;continue}}t&&(n=n.length>0?n+`/..`:`..`,r=2)}else n.length>0?n+=`/`+e.slice(i+1,o):n=e.slice(i+1,o),r=o-i-1}i=o,a=0}else s===46&&a>-1?a++:a=-1}return n}function Ja(e){if(typeof e!=`string`)throw TypeError(`Path must be a string. Received `+JSON.stringify(e))}var Ya={cwd:Xa};function Xa(){return`/`}function Za(e){return!!(typeof e==`object`&&e&&`href`in e&&e.href&&`protocol`in e&&e.protocol&&e.auth===void 0)}function Qa(e){if(typeof e==`string`)e=new URL(e);else if(!Za(e)){let t=TypeError('The "path" argument must be of type string or an instance of URL. Received `'+e+"`");throw t.code=`ERR_INVALID_ARG_TYPE`,t}if(e.protocol!==`file:`){let e=TypeError(`The URL must be of scheme file`);throw e.code=`ERR_INVALID_URL_SCHEME`,e}return $a(e)}function $a(e){if(e.hostname!==``){let e=TypeError(`File URL host must be "localhost" or empty on darwin`);throw e.code=`ERR_INVALID_FILE_URL_HOST`,e}let t=e.pathname,n=-1;for(;++n<t.length;)if(t.codePointAt(n)===37&&t.codePointAt(n+1)===50){let e=t.codePointAt(n+2);if(e===70||e===102){let e=TypeError(`File URL path must not include encoded / characters`);throw e.code=`ERR_INVALID_FILE_URL_PATH`,e}}return decodeURIComponent(t)}var eo=[`history`,`path`,`basename`,`stem`,`extname`,`dirname`],to=class{constructor(e){let t;t=e?Za(e)?{path:e}:typeof e==`string`||ao(e)?{value:e}:e:{},this.cwd=`cwd`in t?``:Ya.cwd(),this.data={},this.history=[],this.messages=[],this.value,this.map,this.result,this.stored;let n=-1;for(;++n<eo.length;){let e=eo[n];e in t&&t[e]!==void 0&&t[e]!==null&&(this[e]=e===`history`?[...t[e]]:t[e])}let r;for(r in t)eo.includes(r)||(this[r]=t[r])}get basename(){return typeof this.path==`string`?Va.basename(this.path):void 0}set basename(e){ro(e,`basename`),no(e,`basename`),this.path=Va.join(this.dirname||``,e)}get dirname(){return typeof this.path==`string`?Va.dirname(this.path):void 0}set dirname(e){io(this.basename,`dirname`),this.path=Va.join(e||``,this.basename)}get extname(){return typeof this.path==`string`?Va.extname(this.path):void 0}set extname(e){if(no(e,`extname`),io(this.dirname,`extname`),e){if(e.codePointAt(0)!==46)throw Error("`extname` must start with `.`");if(e.includes(`.`,1))throw Error("`extname` cannot contain multiple dots")}this.path=Va.join(this.dirname,this.stem+(e||``))}get path(){return this.history[this.history.length-1]}set path(e){Za(e)&&(e=Qa(e)),ro(e,`path`),this.path!==e&&this.history.push(e)}get stem(){return typeof this.path==`string`?Va.basename(this.path,this.extname):void 0}set stem(e){ro(e,`stem`),no(e,`stem`),this.path=Va.join(this.dirname||``,e+(this.extname||``))}fail(e,t,n){let r=this.message(e,t,n);throw r.fatal=!0,r}info(e,t,n){let r=this.message(e,t,n);return r.fatal=void 0,r}message(e,t,n){let r=new Be(e,t,n);return this.path&&(r.name=this.path+`:`+r.name,r.file=this.path),r.fatal=!1,this.messages.push(r),r}toString(e){return this.value===void 0?``:typeof this.value==`string`?this.value:new TextDecoder(e||void 0).decode(this.value)}};function no(e,t){if(e&&e.includes(Va.sep))throw Error("`"+t+"` cannot be a path: did not expect `"+Va.sep+"`")}function ro(e,t){if(!e)throw Error("`"+t+"` cannot be empty")}function io(e,t){if(!e)throw Error("Setting `"+t+"` requires `path` to be set too")}function ao(e){return!!(e&&typeof e==`object`&&`byteLength`in e&&`byteOffset`in e)}var oo=(function(e){let t=this.constructor.prototype,n=t[e],r=function(){return n.apply(r,arguments)};return Object.setPrototypeOf(r,t),r}),so=l(La(),1),co={}.hasOwnProperty,lo=new class e extends oo{constructor(){super(`copy`),this.Compiler=void 0,this.Parser=void 0,this.attachers=[],this.compiler=void 0,this.freezeIndex=-1,this.frozen=void 0,this.namespace={},this.parser=void 0,this.transformers=za()}copy(){let t=new e,n=-1;for(;++n<this.attachers.length;){let e=this.attachers[n];t.use(...e)}return t.data((0,so.default)(!0,{},this.namespace)),t}data(e,t){return typeof e==`string`?arguments.length===2?(po(`data`,this.frozen),this.namespace[e]=t,this):co.call(this.namespace,e)&&this.namespace[e]||void 0:e?(po(`data`,this.frozen),this.namespace=e,this):this.namespace}freeze(){if(this.frozen)return this;let e=this;for(;++this.freezeIndex<this.attachers.length;){let[t,...n]=this.attachers[this.freezeIndex];if(n[0]===!1)continue;n[0]===!0&&(n[0]=void 0);let r=t.call(e,...n);typeof r==`function`&&this.transformers.use(r)}return this.frozen=!0,this.freezeIndex=1/0,this}parse(e){this.freeze();let t=go(e),n=this.parser||this.Parser;return uo(`parse`,n),n(String(t),t)}process(e,t){let n=this;return this.freeze(),uo(`process`,this.parser||this.Parser),fo(`process`,this.compiler||this.Compiler),t?r(void 0,t):new Promise(r);function r(r,i){let a=go(e),o=n.parse(a);n.run(o,a,function(e,t,r){if(e||!t||!r)return s(e);let i=t,a=n.stringify(i,r);vo(a)?r.value=a:r.result=a,s(e,r)});function s(e,n){e||!n?i(e):r?r(n):t(void 0,n)}}}processSync(e){let t=!1,n;return this.freeze(),uo(`processSync`,this.parser||this.Parser),fo(`processSync`,this.compiler||this.Compiler),this.process(e,r),ho(`processSync`,`process`,t),n;function r(e,r){t=!0,Ia(e),n=r}}run(e,t,n){mo(e),this.freeze();let r=this.transformers;return!n&&typeof t==`function`&&(n=t,t=void 0),n?i(void 0,n):new Promise(i);function i(i,a){let o=go(t);r.run(e,o,s);function s(t,r,o){let s=r||e;t?a(t):i?i(s):n(void 0,s,o)}}}runSync(e,t){let n=!1,r;return this.run(e,t,i),ho(`runSync`,`run`,n),r;function i(e,t){Ia(e),r=t,n=!0}}stringify(e,t){this.freeze();let n=go(t),r=this.compiler||this.Compiler;return fo(`stringify`,r),mo(e),r(e,n)}use(e,...t){let n=this.attachers,r=this.namespace;if(po(`use`,this.frozen),e!=null){if(typeof e==`function`)s(e,t);else if(typeof e==`object`)Array.isArray(e)?o(e):a(e);else throw TypeError("Expected usable value, not `"+e+"`")}return this;function i(e){if(typeof e==`function`)s(e,[]);else if(typeof e==`object`){if(Array.isArray(e)){let[t,...n]=e;s(t,n)}else a(e)}else throw TypeError("Expected usable value, not `"+e+"`")}function a(e){if(!(`plugins`in e)&&!(`settings`in e))throw Error("Expected usable value but received an empty preset, which is probably a mistake: presets typically come with `plugins` and sometimes with `settings`, but this has neither");o(e.plugins),e.settings&&(r.settings=(0,so.default)(!0,r.settings,e.settings))}function o(e){let t=-1;if(e!=null){if(Array.isArray(e))for(;++t<e.length;){let n=e[t];i(n)}else throw TypeError("Expected a list of plugins, not `"+e+"`")}}function s(e,t){let r=-1,i=-1;for(;++r<n.length;)if(n[r][0]===e){i=r;break}if(i===-1)n.push([e,...t]);else if(t.length>0){let[r,...a]=t,o=n[i][1];Ra(o)&&Ra(r)&&(r=(0,so.default)(!0,o,r)),n[i]=[e,r,...a]}}}}().freeze();function uo(e,t){if(typeof t!=`function`)throw TypeError("Cannot `"+e+"` without `parser`")}function fo(e,t){if(typeof t!=`function`)throw TypeError("Cannot `"+e+"` without `compiler`")}function po(e,t){if(t)throw Error("Cannot call `"+e+"` on a frozen processor.\nCreate a new processor first, by calling it: use `processor()` instead of `processor`.")}function mo(e){if(!Ra(e)||typeof e.type!=`string`)throw TypeError("Expected node, got `"+e+"`")}function ho(e,t,n){if(!n)throw Error("`"+e+"` finished async. Use `"+t+"` instead")}function go(e){return _o(e)?e:new to(e)}function _o(e){return!!(e&&typeof e==`object`&&`message`in e&&`messages`in e)}function vo(e){return typeof e==`string`||yo(e)}function yo(e){return!!(e&&typeof e==`object`&&`byteLength`in e&&`byteOffset`in e)}var B=vt(),bo=[],xo={allowDangerousHtml:!0},So=/^(https?|ircs?|mailto|xmpp)$/i,Co=[{from:`astPlugins`,id:`remove-buggy-html-in-markdown-parser`},{from:`allowDangerousHtml`,id:`remove-buggy-html-in-markdown-parser`},{from:`allowNode`,id:`replace-allownode-allowedtypes-and-disallowedtypes`,to:`allowElement`},{from:`allowedTypes`,id:`replace-allownode-allowedtypes-and-disallowedtypes`,to:`allowedElements`},{from:`className`,id:`remove-classname`},{from:`disallowedTypes`,id:`replace-allownode-allowedtypes-and-disallowedtypes`,to:`disallowedElements`},{from:`escapeHtml`,id:`remove-buggy-html-in-markdown-parser`},{from:`includeElementIndex`,id:`#remove-includeelementindex`},{from:`includeNodeIndex`,id:`change-includenodeindex-to-includeelementindex`},{from:`linkTarget`,id:`remove-linktarget`},{from:`plugins`,id:`change-plugins-to-remarkplugins`,to:`remarkPlugins`},{from:`rawSourcePos`,id:`#remove-rawsourcepos`},{from:`renderers`,id:`change-renderers-to-components`,to:`components`},{from:`source`,id:`change-source-to-children`,to:`children`},{from:`sourcePos`,id:`#remove-sourcepos`},{from:`transformImageUri`,id:`#add-urltransform`,to:`urlTransform`},{from:`transformLinkUri`,id:`#add-urltransform`,to:`urlTransform`}];function wo(e){let t=To(e),n=Eo(e);return Do(t.runSync(t.parse(n),n),e)}function To(e){let t=e.rehypePlugins||bo,n=e.remarkPlugins||bo,r=e.remarkRehypeOptions?{...e.remarkRehypeOptions,...xo}:xo;return lo().use(yi).use(n).use(Fa,r).use(t)}function Eo(e){let t=e.children||``,n=new to;return typeof t==`string`?n.value=t:``+t,n}function Do(e,t){let n=t.allowedElements,r=t.allowElement,i=t.components,a=t.disallowedElements,o=t.skipHtml,s=t.unwrapDisallowed,c=t.urlTransform||Oo;for(let e of Co)Object.hasOwn(t,e.from)&&``+e.from+(e.to?"use `"+e.to+"` instead":`remove it`)+e.id;return Ta(e,l),Je(e,{Fragment:B.Fragment,components:i,ignoreInvalidStyle:!0,jsx:B.jsx,jsxs:B.jsxs,passKeys:!0,passNode:!0});function l(e,t,i){if(e.type===`raw`&&i&&typeof t==`number`)return o?i.children.splice(t,1):i.children[t]={type:`text`,value:e.value},t;if(e.type===`element`){let t;for(t in gt)if(Object.hasOwn(gt,t)&&Object.hasOwn(e.properties,t)){let n=e.properties[t],r=gt[t];(r===null||r.includes(e.tagName))&&(e.properties[t]=c(String(n||``),t,e))}}if(e.type===`element`){let o=n?!n.includes(e.tagName):a?a.includes(e.tagName):!1;if(!o&&r&&typeof t==`number`&&(o=!r(e,t,i)),o&&i&&typeof t==`number`)return s&&e.children?i.children.splice(t,1,...e.children):i.children.splice(t,1),t}}}function Oo(e){let t=e.indexOf(`:`),n=e.indexOf(`?`),r=e.indexOf(`#`),i=e.indexOf(`/`);return t===-1||i!==-1&&t>i||n!==-1&&t>n||r!==-1&&t>r||So.test(e.slice(0,t))?e:``}var ko={generatedAt:`2026-10-19T00:37:08.698Z`,label:`Commissioner's recaps`,recaps:[{id:`recap-1`,index:1,title:`GWB WEEK 1 RECAP: WE ARE SO BACK`,week:1,reconstructed:!1,bodyMarkdown:`🦬 GWB WEEK 1 RECAP: WE ARE SO BACK
+`},i)),a}function Fa(e,t){return e&&`run`in e?async function(n,r){let i=Pa(n,{file:r,...t});await e.run(i,r)}:function(n,r){return Pa(n,{file:r,...e||t})}}function Ia(e){if(e)throw e}var La=o(((e,t)=>{var n=Object.prototype.hasOwnProperty,r=Object.prototype.toString,i=Object.defineProperty,a=Object.getOwnPropertyDescriptor,o=function(e){return typeof Array.isArray==`function`?Array.isArray(e):r.call(e)===`[object Array]`},s=function(e){if(!e||r.call(e)!==`[object Object]`)return!1;var t=n.call(e,`constructor`),i=e.constructor&&e.constructor.prototype&&n.call(e.constructor.prototype,`isPrototypeOf`);if(e.constructor&&!t&&!i)return!1;for(var a in e);return a===void 0||n.call(e,a)},c=function(e,t){i&&t.name===`__proto__`?i(e,t.name,{enumerable:!0,configurable:!0,value:t.newValue,writable:!0}):e[t.name]=t.newValue},l=function(e,t){if(t===`__proto__`){if(!n.call(e,t))return;if(a)return a(e,t).value}return e[t]};t.exports=function e(){var t,n,r,i,a,u,d=arguments[0],f=1,p=arguments.length,m=!1;for(typeof d==`boolean`&&(m=d,d=arguments[1]||{},f=2),(d==null||typeof d!=`object`&&typeof d!=`function`)&&(d={});f<p;++f)if(t=arguments[f],t!=null)for(n in t)r=l(d,n),i=l(t,n),d!==i&&(m&&i&&(s(i)||(a=o(i)))?(a?(a=!1,u=r&&o(r)?r:[]):u=r&&s(r)?r:{},c(d,{name:n,newValue:e(m,u,i)})):i!==void 0&&c(d,{name:n,newValue:i}));return d}}));function Ra(e){if(typeof e!=`object`||!e)return!1;let t=Object.getPrototypeOf(e);return(t===null||t===Object.prototype||Object.getPrototypeOf(t)===null)&&!(Symbol.toStringTag in e)&&!(Symbol.iterator in e)}function za(){let e=[],t={run:n,use:r};return t;function n(...t){let n=-1,r=t.pop();if(typeof r!=`function`)throw TypeError(`Expected function as last argument, not `+r);i(null,...t);function i(a,...o){let s=e[++n],c=-1;if(a){r(a);return}for(;++c<t.length;)(o[c]===null||o[c]===void 0)&&(o[c]=t[c]);t=o,s?Ba(s,i)(...o):r(null,...o)}}function r(n){if(typeof n!=`function`)throw TypeError("Expected `middelware` to be a function, not "+n);return e.push(n),t}}function Ba(e,t){let n;return r;function r(...t){let r=e.length>t.length,o;r&&t.push(i);try{o=e.apply(this,t)}catch(e){let t=e;if(r&&n)throw t;return i(t)}r||(o&&o.then&&typeof o.then==`function`?o.then(a,i):o instanceof Error?i(o):a(o))}function i(e,...r){n||(n=!0,t(e,...r))}function a(e){i(null,e)}}var Va={basename:Ha,dirname:Ua,extname:Wa,join:Ga,sep:`/`};function Ha(e,t){if(t!==void 0&&typeof t!=`string`)throw TypeError(`"ext" argument must be a string`);Ja(e);let n=0,r=-1,i=e.length,a;if(t===void 0||t.length===0||t.length>e.length){for(;i--;)if(e.codePointAt(i)===47){if(a){n=i+1;break}}else r<0&&(a=!0,r=i+1);return r<0?``:e.slice(n,r)}if(t===e)return``;let o=-1,s=t.length-1;for(;i--;)if(e.codePointAt(i)===47){if(a){n=i+1;break}}else o<0&&(a=!0,o=i+1),s>-1&&(e.codePointAt(i)===t.codePointAt(s--)?s<0&&(r=i):(s=-1,r=o));return n===r?r=o:r<0&&(r=e.length),e.slice(n,r)}function Ua(e){if(Ja(e),e.length===0)return`.`;let t=-1,n=e.length,r;for(;--n;)if(e.codePointAt(n)===47){if(r){t=n;break}}else r||=!0;return t<0?e.codePointAt(0)===47?`/`:`.`:t===1&&e.codePointAt(0)===47?`//`:e.slice(0,t)}function Wa(e){Ja(e);let t=e.length,n=-1,r=0,i=-1,a=0,o;for(;t--;){let s=e.codePointAt(t);if(s===47){if(o){r=t+1;break}continue}n<0&&(o=!0,n=t+1),s===46?i<0?i=t:a!==1&&(a=1):i>-1&&(a=-1)}return i<0||n<0||a===0||a===1&&i===n-1&&i===r+1?``:e.slice(i,n)}function Ga(...e){let t=-1,n;for(;++t<e.length;)Ja(e[t]),e[t]&&(n=n===void 0?e[t]:n+`/`+e[t]);return n===void 0?`.`:Ka(n)}function Ka(e){Ja(e);let t=e.codePointAt(0)===47,n=qa(e,!t);return n.length===0&&!t&&(n=`.`),n.length>0&&e.codePointAt(e.length-1)===47&&(n+=`/`),t?`/`+n:n}function qa(e,t){let n=``,r=0,i=-1,a=0,o=-1,s,c;for(;++o<=e.length;){if(o<e.length)s=e.codePointAt(o);else if(s===47)break;else s=47;if(s===47){if(i!==o-1&&a!==1){if(i!==o-1&&a===2){if(n.length<2||r!==2||n.codePointAt(n.length-1)!==46||n.codePointAt(n.length-2)!==46){if(n.length>2){if(c=n.lastIndexOf(`/`),c!==n.length-1){c<0?(n=``,r=0):(n=n.slice(0,c),r=n.length-1-n.lastIndexOf(`/`)),i=o,a=0;continue}}else if(n.length>0){n=``,r=0,i=o,a=0;continue}}t&&(n=n.length>0?n+`/..`:`..`,r=2)}else n.length>0?n+=`/`+e.slice(i+1,o):n=e.slice(i+1,o),r=o-i-1}i=o,a=0}else s===46&&a>-1?a++:a=-1}return n}function Ja(e){if(typeof e!=`string`)throw TypeError(`Path must be a string. Received `+JSON.stringify(e))}var Ya={cwd:Xa};function Xa(){return`/`}function Za(e){return!!(typeof e==`object`&&e&&`href`in e&&e.href&&`protocol`in e&&e.protocol&&e.auth===void 0)}function Qa(e){if(typeof e==`string`)e=new URL(e);else if(!Za(e)){let t=TypeError('The "path" argument must be of type string or an instance of URL. Received `'+e+"`");throw t.code=`ERR_INVALID_ARG_TYPE`,t}if(e.protocol!==`file:`){let e=TypeError(`The URL must be of scheme file`);throw e.code=`ERR_INVALID_URL_SCHEME`,e}return $a(e)}function $a(e){if(e.hostname!==``){let e=TypeError(`File URL host must be "localhost" or empty on darwin`);throw e.code=`ERR_INVALID_FILE_URL_HOST`,e}let t=e.pathname,n=-1;for(;++n<t.length;)if(t.codePointAt(n)===37&&t.codePointAt(n+1)===50){let e=t.codePointAt(n+2);if(e===70||e===102){let e=TypeError(`File URL path must not include encoded / characters`);throw e.code=`ERR_INVALID_FILE_URL_PATH`,e}}return decodeURIComponent(t)}var eo=[`history`,`path`,`basename`,`stem`,`extname`,`dirname`],to=class{constructor(e){let t;t=e?Za(e)?{path:e}:typeof e==`string`||ao(e)?{value:e}:e:{},this.cwd=`cwd`in t?``:Ya.cwd(),this.data={},this.history=[],this.messages=[],this.value,this.map,this.result,this.stored;let n=-1;for(;++n<eo.length;){let e=eo[n];e in t&&t[e]!==void 0&&t[e]!==null&&(this[e]=e===`history`?[...t[e]]:t[e])}let r;for(r in t)eo.includes(r)||(this[r]=t[r])}get basename(){return typeof this.path==`string`?Va.basename(this.path):void 0}set basename(e){ro(e,`basename`),no(e,`basename`),this.path=Va.join(this.dirname||``,e)}get dirname(){return typeof this.path==`string`?Va.dirname(this.path):void 0}set dirname(e){io(this.basename,`dirname`),this.path=Va.join(e||``,this.basename)}get extname(){return typeof this.path==`string`?Va.extname(this.path):void 0}set extname(e){if(no(e,`extname`),io(this.dirname,`extname`),e){if(e.codePointAt(0)!==46)throw Error("`extname` must start with `.`");if(e.includes(`.`,1))throw Error("`extname` cannot contain multiple dots")}this.path=Va.join(this.dirname,this.stem+(e||``))}get path(){return this.history[this.history.length-1]}set path(e){Za(e)&&(e=Qa(e)),ro(e,`path`),this.path!==e&&this.history.push(e)}get stem(){return typeof this.path==`string`?Va.basename(this.path,this.extname):void 0}set stem(e){ro(e,`stem`),no(e,`stem`),this.path=Va.join(this.dirname||``,e+(this.extname||``))}fail(e,t,n){let r=this.message(e,t,n);throw r.fatal=!0,r}info(e,t,n){let r=this.message(e,t,n);return r.fatal=void 0,r}message(e,t,n){let r=new Be(e,t,n);return this.path&&(r.name=this.path+`:`+r.name,r.file=this.path),r.fatal=!1,this.messages.push(r),r}toString(e){return this.value===void 0?``:typeof this.value==`string`?this.value:new TextDecoder(e||void 0).decode(this.value)}};function no(e,t){if(e&&e.includes(Va.sep))throw Error("`"+t+"` cannot be a path: did not expect `"+Va.sep+"`")}function ro(e,t){if(!e)throw Error("`"+t+"` cannot be empty")}function io(e,t){if(!e)throw Error("Setting `"+t+"` requires `path` to be set too")}function ao(e){return!!(e&&typeof e==`object`&&`byteLength`in e&&`byteOffset`in e)}var oo=(function(e){let t=this.constructor.prototype,n=t[e],r=function(){return n.apply(r,arguments)};return Object.setPrototypeOf(r,t),r}),so=l(La(),1),co={}.hasOwnProperty,lo=new class e extends oo{constructor(){super(`copy`),this.Compiler=void 0,this.Parser=void 0,this.attachers=[],this.compiler=void 0,this.freezeIndex=-1,this.frozen=void 0,this.namespace={},this.parser=void 0,this.transformers=za()}copy(){let t=new e,n=-1;for(;++n<this.attachers.length;){let e=this.attachers[n];t.use(...e)}return t.data((0,so.default)(!0,{},this.namespace)),t}data(e,t){return typeof e==`string`?arguments.length===2?(po(`data`,this.frozen),this.namespace[e]=t,this):co.call(this.namespace,e)&&this.namespace[e]||void 0:e?(po(`data`,this.frozen),this.namespace=e,this):this.namespace}freeze(){if(this.frozen)return this;let e=this;for(;++this.freezeIndex<this.attachers.length;){let[t,...n]=this.attachers[this.freezeIndex];if(n[0]===!1)continue;n[0]===!0&&(n[0]=void 0);let r=t.call(e,...n);typeof r==`function`&&this.transformers.use(r)}return this.frozen=!0,this.freezeIndex=1/0,this}parse(e){this.freeze();let t=go(e),n=this.parser||this.Parser;return uo(`parse`,n),n(String(t),t)}process(e,t){let n=this;return this.freeze(),uo(`process`,this.parser||this.Parser),fo(`process`,this.compiler||this.Compiler),t?r(void 0,t):new Promise(r);function r(r,i){let a=go(e),o=n.parse(a);n.run(o,a,function(e,t,r){if(e||!t||!r)return s(e);let i=t,a=n.stringify(i,r);vo(a)?r.value=a:r.result=a,s(e,r)});function s(e,n){e||!n?i(e):r?r(n):t(void 0,n)}}}processSync(e){let t=!1,n;return this.freeze(),uo(`processSync`,this.parser||this.Parser),fo(`processSync`,this.compiler||this.Compiler),this.process(e,r),ho(`processSync`,`process`,t),n;function r(e,r){t=!0,Ia(e),n=r}}run(e,t,n){mo(e),this.freeze();let r=this.transformers;return!n&&typeof t==`function`&&(n=t,t=void 0),n?i(void 0,n):new Promise(i);function i(i,a){let o=go(t);r.run(e,o,s);function s(t,r,o){let s=r||e;t?a(t):i?i(s):n(void 0,s,o)}}}runSync(e,t){let n=!1,r;return this.run(e,t,i),ho(`runSync`,`run`,n),r;function i(e,t){Ia(e),r=t,n=!0}}stringify(e,t){this.freeze();let n=go(t),r=this.compiler||this.Compiler;return fo(`stringify`,r),mo(e),r(e,n)}use(e,...t){let n=this.attachers,r=this.namespace;if(po(`use`,this.frozen),e!=null){if(typeof e==`function`)s(e,t);else if(typeof e==`object`)Array.isArray(e)?o(e):a(e);else throw TypeError("Expected usable value, not `"+e+"`")}return this;function i(e){if(typeof e==`function`)s(e,[]);else if(typeof e==`object`){if(Array.isArray(e)){let[t,...n]=e;s(t,n)}else a(e)}else throw TypeError("Expected usable value, not `"+e+"`")}function a(e){if(!(`plugins`in e)&&!(`settings`in e))throw Error("Expected usable value but received an empty preset, which is probably a mistake: presets typically come with `plugins` and sometimes with `settings`, but this has neither");o(e.plugins),e.settings&&(r.settings=(0,so.default)(!0,r.settings,e.settings))}function o(e){let t=-1;if(e!=null){if(Array.isArray(e))for(;++t<e.length;){let n=e[t];i(n)}else throw TypeError("Expected a list of plugins, not `"+e+"`")}}function s(e,t){let r=-1,i=-1;for(;++r<n.length;)if(n[r][0]===e){i=r;break}if(i===-1)n.push([e,...t]);else if(t.length>0){let[r,...a]=t,o=n[i][1];Ra(o)&&Ra(r)&&(r=(0,so.default)(!0,o,r)),n[i]=[e,r,...a]}}}}().freeze();function uo(e,t){if(typeof t!=`function`)throw TypeError("Cannot `"+e+"` without `parser`")}function fo(e,t){if(typeof t!=`function`)throw TypeError("Cannot `"+e+"` without `compiler`")}function po(e,t){if(t)throw Error("Cannot call `"+e+"` on a frozen processor.\nCreate a new processor first, by calling it: use `processor()` instead of `processor`.")}function mo(e){if(!Ra(e)||typeof e.type!=`string`)throw TypeError("Expected node, got `"+e+"`")}function ho(e,t,n){if(!n)throw Error("`"+e+"` finished async. Use `"+t+"` instead")}function go(e){return _o(e)?e:new to(e)}function _o(e){return!!(e&&typeof e==`object`&&`message`in e&&`messages`in e)}function vo(e){return typeof e==`string`||yo(e)}function yo(e){return!!(e&&typeof e==`object`&&`byteLength`in e&&`byteOffset`in e)}var B=vt(),bo=[],xo={allowDangerousHtml:!0},So=/^(https?|ircs?|mailto|xmpp)$/i,Co=[{from:`astPlugins`,id:`remove-buggy-html-in-markdown-parser`},{from:`allowDangerousHtml`,id:`remove-buggy-html-in-markdown-parser`},{from:`allowNode`,id:`replace-allownode-allowedtypes-and-disallowedtypes`,to:`allowElement`},{from:`allowedTypes`,id:`replace-allownode-allowedtypes-and-disallowedtypes`,to:`allowedElements`},{from:`className`,id:`remove-classname`},{from:`disallowedTypes`,id:`replace-allownode-allowedtypes-and-disallowedtypes`,to:`disallowedElements`},{from:`escapeHtml`,id:`remove-buggy-html-in-markdown-parser`},{from:`includeElementIndex`,id:`#remove-includeelementindex`},{from:`includeNodeIndex`,id:`change-includenodeindex-to-includeelementindex`},{from:`linkTarget`,id:`remove-linktarget`},{from:`plugins`,id:`change-plugins-to-remarkplugins`,to:`remarkPlugins`},{from:`rawSourcePos`,id:`#remove-rawsourcepos`},{from:`renderers`,id:`change-renderers-to-components`,to:`components`},{from:`source`,id:`change-source-to-children`,to:`children`},{from:`sourcePos`,id:`#remove-sourcepos`},{from:`transformImageUri`,id:`#add-urltransform`,to:`urlTransform`},{from:`transformLinkUri`,id:`#add-urltransform`,to:`urlTransform`}];function wo(e){let t=To(e),n=Eo(e);return Do(t.runSync(t.parse(n),n),e)}function To(e){let t=e.rehypePlugins||bo,n=e.remarkPlugins||bo,r=e.remarkRehypeOptions?{...e.remarkRehypeOptions,...xo}:xo;return lo().use(yi).use(n).use(Fa,r).use(t)}function Eo(e){let t=e.children||``,n=new to;return typeof t==`string`?n.value=t:``+t,n}function Do(e,t){let n=t.allowedElements,r=t.allowElement,i=t.components,a=t.disallowedElements,o=t.skipHtml,s=t.unwrapDisallowed,c=t.urlTransform||Oo;for(let e of Co)Object.hasOwn(t,e.from)&&``+e.from+(e.to?"use `"+e.to+"` instead":`remove it`)+e.id;return Ta(e,l),Je(e,{Fragment:B.Fragment,components:i,ignoreInvalidStyle:!0,jsx:B.jsx,jsxs:B.jsxs,passKeys:!0,passNode:!0});function l(e,t,i){if(e.type===`raw`&&i&&typeof t==`number`)return o?i.children.splice(t,1):i.children[t]={type:`text`,value:e.value},t;if(e.type===`element`){let t;for(t in gt)if(Object.hasOwn(gt,t)&&Object.hasOwn(e.properties,t)){let n=e.properties[t],r=gt[t];(r===null||r.includes(e.tagName))&&(e.properties[t]=c(String(n||``),t,e))}}if(e.type===`element`){let o=n?!n.includes(e.tagName):a?a.includes(e.tagName):!1;if(!o&&r&&typeof t==`number`&&(o=!r(e,t,i)),o&&i&&typeof t==`number`)return s&&e.children?i.children.splice(t,1,...e.children):i.children.splice(t,1),t}}}function Oo(e){let t=e.indexOf(`:`),n=e.indexOf(`?`),r=e.indexOf(`#`),i=e.indexOf(`/`);return t===-1||i!==-1&&t>i||n!==-1&&t>n||r!==-1&&t>r||So.test(e.slice(0,t))?e:``}var ko={generatedAt:`2026-10-20T21:51:25.784Z`,label:`Commissioner's recaps`,recaps:[{id:`recap-1`,index:1,title:`GWB WEEK 1 RECAP: WE ARE SO BACK`,week:1,reconstructed:!1,bodyMarkdown:`🦬 GWB WEEK 1 RECAP: WE ARE SO BACK
 
 Week 1 is officially in the books, and some of you came prepared to win a championship. Others apparently thought preseason extended another week.
 
@@ -5074,5 +5074,1526 @@ Narking: 1-4. 11th in PF. But apparently this is exactly how two of his champion
 
 🦬 FINAL WORD
 Steven finally lost. Crooke delivered the upset. El Campeon dropped 212 and climbed to 4-1. Mauricio scored 204 while operating on five fragmented hours of dad sleep. Matt finally received a win proportional to his actual team strength. Danny has risen from the dead. Eric quietly handled business. Kayser is now on a two-game skid after starting 3-0. Jamil got punched in the mouth by Dad Strength. Manny's corporation has now lost three straight quarters. Narking is 1-4 and has begun citing prior championship case law. Frankie is once again staring at the basement. And Crooke has officially progressed from running our social media… to making robots compete for our approval.
-Five weeks down. This league makes absolutely no sense. Perfect. 🦬🔥`,label:`Final`,postedAt:`2026-10-18`}]},Ao=`America/New_York`;function jo(e){return/^\d{4}-\d{2}-\d{2}$/.test(e)?Date.parse(`${e}T12:00:00`):Date.parse(e)}function Mo(e){let t=jo(e);return Number.isNaN(t)?e:new Date(t).toLocaleDateString(`en-US`,{weekday:`short`,month:`short`,day:`numeric`,timeZone:Ao})}var No=1.5,Po=new Set([`RB`,`WR`,`TE`]);function Fo(e,t){return t[e]?.position??null}function Io(e,t){return t[e]?.full_name?.trim()||`Player`}function Lo(e,t,n){let r=new Set(e.starters),i=null;for(let[a,o]of Object.entries(e.players_points??{})){if(r.has(a))continue;let s=Fo(a,n);s&&e.starters.forEach((r,c)=>{let l=t[c];if(!l||l===`BN`||!(l===s||l===`FLEX`&&Po.has(s)))return;let u=e.starters_points[c]??0,d=o-u;if(!(d<No)&&(!i||d>i.gain)){let e=Io(a,n);i={name:e,gain:d,message:`${e} would have added ${d.toFixed(1)}`}}})}return i}var Ro={6:2},zo=6;function Bo(e,t){return t.find(t=>t.rosterId===e)}function Vo(e,t,n){if(!e.length)return null;let r=Ro[n];if(r!=null&&e.some(e=>e.matchupId===r))return r;let i=null,a=1/0;for(let n of e){let e=Bo(n.teamA.rosterId,t),r=Bo(n.teamB.rosterId,t);if(!e||!r||e.rank>zo||r.rank>zo)continue;let o=Math.abs(e.wins-r.wins)+Math.abs(e.losses-r.losses),s=e.rank+r.rank,c=o*100+s;c<a&&(a=c,i=n)}return i?i.matchupId:e.reduce((e,t)=>t.margin<e.margin?t:e).matchupId}var Ho=40,V=3;function H(e,t){return t[e]?.full_name?.trim()||`Player`}function Uo(e,t){let n=null;return e.starters.forEach((r,i)=>{let a=e.starters_points[i]??0;(!n||a>n.points)&&(n={name:H(r,t),points:a})}),n}function Wo(e,t){return t.find(t=>t.rosterId===e)?.rank??99}function Go(e,t,n,r,i,a){let o=n>=r,s=[],c=o?i:a,l=o?e:t,u=o?a:i,d=o?t:e;return c&&s.push(`${l}: ${c.name} ${c.points.toFixed(1)}`),u&&s.push(`${d}: ${u.name} ${u.points.toFixed(1)}`),s}function Ko(e){if(e.length)return e.length===1?`Top scorer — ${e[0]}`:`Top scorers — ${e.join(` · `)}`}function qo(e,t){let n=Math.round(e*10)/10,r=Math.round(t*10)/10;return Math.abs(n-r).toFixed(1)}function Jo(e,t){return e===0&&t===0}function Yo(e,t,n,r,i,a){let o=n>=r?e:t,s=n>=r?t:e,c=qo(n,r);return a?Jo(n,r)?`Not started`:`${o} is leading ${s} by ${c} points.`:`${o} topped ${s} by ${c} points.${i.length?` ${i.join(` · `)}.`:``}`}function Xo(e,t,n,r){let{rosterPositions:i,preWeekStandings:a,isWeekFinal:o,week:s=0}=r,c=new Map;for(let t of e){let e=c.get(t.matchup_id)??[];e.push(t),c.set(t.matchup_id,e)}let l=[];for(let[e,r]of c){if(r.length<2)continue;let[s,c]=r,u=t.get(s.roster_id),d=t.get(c.roster_id),f=Math.abs(s.points-c.points),p=s.points>=c.points?s.roster_id:c.roster_id,m=[];if(o&&f>=Ho&&m.push(`Blowout`),o){let e=Wo(s.roster_id,a),t=Wo(c.roster_id,a);(s.points>=c.points?e:t)-(s.points>=c.points?t:e)>=V&&m.push(`Upset`)}let h=Uo(s,n),g=Uo(c,n),_=Go(u?.teamName??`Team A`,d?.teamName??`Team B`,s.points,c.points,h,g);l.push({matchupId:e,teamA:{rosterId:s.roster_id,teamName:u?.teamName??`Team ${s.roster_id}`,points:s.points,topScorer:h,benchMiss:Lo(s,i,n)},teamB:{rosterId:c.roster_id,teamName:d?.teamName??`Team ${c.roster_id}`,points:c.points,topScorer:g,benchMiss:Lo(c,i,n)},margin:f,winnerRosterId:p,tags:m,narrative:Yo(u?.teamName??`Team A`,d?.teamName??`Team B`,s.points,c.points,m,!o),scorerLines:_,starsLine:Ko(_),isMatchupOfTheWeek:!1})}if(l.length){let e=Vo(l,a,s),t=l.find(t=>t.matchupId===e);t&&(t.isMatchupOfTheWeek=!0)}return l.sort((e,t)=>e.matchupId-t.matchupId)}function Zo(e){return e?.length?e.some(e=>e.starters?.length>0):!1}var Qo={Waivers:20,Predictions:30,Thursday:40,Saturday:50,Sunday:60,"Monday Morning":70,"Monday Night":80,Final:90,Correction:100},$o={Predictions:`Predictions`,Waivers:`Waivers`,Thursday:`Thursday`,Saturday:`Saturday`,Sunday:`Sunday`,"Monday Morning":`Monday`,"Monday Night":`Monday Night`,Final:`Final`,Correction:`Correction`};function es(e){return $o[e]}function ts(e,t){return e.week===t.week&&e.week>=4}function ns(e,t){let n=ts(e,t),r=jo(e.postedAt),i=jo(t.postedAt);if(r!==i)return n?i-r:r-i;let a=Qo[e.label]??50,o=Qo[t.label]??50;return a===o?n?t.index-e.index:e.index-t.index:n?o-a:a-o}function rs(e){return[...e].sort(ns)}function is(e,t){return rs(e.filter(e=>e.week===t))}function as(e){return e.replace(/^#+\s*/,``).replace(/\*\*([^*]+)\*\*/g,`$1`).replace(/\*([^*]+)\*/g,`$1`).trim()}function os(e,t=3,n){let r=n?as(n).toLowerCase():``,i=e.split(`
+Five weeks down. This league makes absolutely no sense. Perfect. 🦬🔥`,label:`Final`,postedAt:`2026-10-18`},{id:`recap-17`,index:17,title:`GWB Week 6 Final Report — Tradegate, Dirt Bag Ethics, Matt vs AI & the Great 3-0 Collapse`,week:6,reconstructed:!1,bodyMarkdown:`🦬🔥 GWB WEEK 6 FINAL REPORT — TRADEGATE, DIRT BAG ETHICS, MATT vs AI & THE GREAT 3-0 COLLAPSE
+
+Week 6 is officially dead.
+
+And after actually going back through the WhatsApp evidence, the box scores, the transactions and approximately 17 different side quests…
+
+this week had EVERYTHING.
+
+⚖️ Fantasy Supreme Court
+🦹‍♂️ an admitted dirtbag
+🤖 Matt declaring war on AI comedy
+🎰 a Mulligan decided by 0.71 points
+🐑 a team resurrecting from 0-3
+📉 another collapsing from 3-0
+🏢 an anonymous corporation entering a four-week recession
+📱 Crooke somehow becoming both a media mogul AND competent fantasy manager
+💰 and Frankie changing half his roster just to remain in last place
+
+Let’s get into this shit.
+
+⸻
+
+🤖🚨 FIRST: @⁨Bro matt bk⁩ HAS FILED AN OFFICIAL COMPLAINT AGAINST AI HADY
+
+Before we discuss football, this needs to enter the historical record.
+
+Matt:
+
+“Ai is stupid… and its corny excel and powerpoint jokes are getting exhausting.”
+
+Then:
+
+“TRY HARDER AI!”
+
+Then:
+
+“But damn the office jokes are terrible. It’s like being at a bad comedy show”
+
+Then:
+
+“I just want it roast style. The computer cannot offend me lol”
+
+And finally:
+
+“DO BETTER AI!”
+
+😭😭😭
+
+Fair.
+
+Complaint sustained.
+
+The Excel/PowerPoint department has been shut down.
+
+Not because Matt threatened us.
+
+Because Matt correctly pointed out that after YEARS of WhatsApp evidence, reducing him to one old joke is lazy.
+
+So Matt has now personally authorized:
+
+✅ culinary jokes
+✅ Sacko history
+✅ deleted-message evidence
+✅ premature victory laps
+✅ sticker addiction
+✅ terrible lineup decisions
+✅ anything else discovered in the archives
+
+He literally said:
+
+“the computer cannot offend me”
+
+Ladies and gentlemen…
+
+THAT IS A WAIVER OF LIABILITY.
+
+😂
+
+Be careful what you wish for, Cachaco.
+
+⸻
+
+⚖️🚨 THE PEOPLE vs. @⁨Narking⁩
+
+Now to the main event.
+
+At 1:17 Sunday afternoon, Mauricio entered the chat with one of the most dangerous openings in GWB history:
+
+“So I don’t like to do this….but it has to be said…”
+
+Oh no.
+
+😂
+
+Mauricio had been negotiating TWO trades.
+
+Trade #1 with Frankie:
+
+Mauricio sends:
+
+➡️ Bryce Young
+➡️ Jaylen Warren
+
+Mauricio receives:
+
+⬅️ Jared Goff
+⬅️ Justin Jefferson
+
+Trade #2 with Narking:
+
+Mauricio sends:
+
+➡️ Ladd McConkey
+
+Mauricio receives:
+
+⬅️ Travis Etienne
+
+According to Mauricio, the Narking deal had been discussed and was already sitting in Sleeper waiting for him to accept.
+
+Then the Frankie trade processed.
+
+Narking looked at Mauricio’s new roster.
+
+Did the math.
+
+And suddenly…
+
+CANCEL.
+
+😭😭😭
+
+⸻
+
+🧠 NARKING EXPLAINS THE CRIME
+
+Narking basically admitted exactly what happened:
+
+Mauricio was turning Warren into Jefferson…
+
+and McConkey into Etienne.
+
+Then:
+
+“everything clicked.”
+
+And:
+
+“But im quick.”
+
+LMFAOOOO.
+
+Translation:
+
+“I realized Moe was building the Avengers and removed my contribution before he could press accept.”
+
+⸻
+
+♟️ @⁨Santagua⁩ IMMEDIATELY UNDERSTOOD
+
+Danny:
+
+“Narking saw he was playing chess and said. Ok well. Checkmate”
+
+Exactly.
+
+Mauricio thought he was executing a multi-step roster strategy.
+
+Narking realized he was one of the steps…
+
+and deleted himself from the flowchart.
+
+😂
+
+⸻
+
+⚖️ THE LEGAL QUESTION
+
+Mauricio’s argument was basically:
+
+We agreed.
+
+The offer was there.
+
+I made another deal relying on that agreement.
+
+You only withdrew after seeing what I acquired.
+
+Which is a completely understandable reason to be pissed.
+
+Narking’s argument:
+
+YOU DIDN’T ACCEPT IT.
+
+Also true.
+
+So Commissioner Hady eventually ruled:
+
+Until somebody actually presses ACCEPT in Sleeper…
+
+there is no completed trade.
+
+You can hate it.
+
+You can call it dishonorable.
+
+You can question Narking’s character.
+
+But you cannot force through a trade that never officially processed.
+
+⸻
+
+😭 THEN KAYSER ASKED THE ACTUAL IMPORTANT QUESTION
+
+Kayser:
+
+“we ain’t arguing about the legality… we arguing if Narking is a man of honor or just a dirtbag”
+
+And Narking’s defense?
+
+“Im a dirtbag”
+
+CASE CLOSED.
+
+😂😂😂😂
+
+No cross-examination necessary.
+
+The defendant confessed.
+
+⸻
+
+🏛️ AND THEN THE COURTROOM COMPLETELY LOST CONTROL
+
+Eric initially:
+
+“He said fuck your trade lol”
+
+Then:
+
+“only trust i know in fantasy is I trust in each and everyone of you to try to help eachother lose”
+
+Honestly?
+
+One of the most accurate descriptions of fantasy football ever written.
+
+😂
+
+Then Kayser starts questioning Eric’s objectivity.
+
+Hady:
+
+“Eric is biased”
+
+Then Eric suddenly votes:
+
+“I vote to force the trade through”
+
+And by the NEXT MORNING Eric is saying:
+
+“Unethical - untrustworthy by pulling his trade smh”
+
+😭😭😭
+
+ERIC WENT FROM:
+
+“that’s fantasy”
+
+to:
+
+“this man lacks ethics”
+
+overnight.
+
+Brother changed jurisdictions.
+
+⸻
+
+😡 MAURICIO WAS ACTUALLY PISSED THOUGH
+
+This wasn’t fake outrage.
+
+He made it clear:
+
+“A man’s word is his bond.”
+
+And later:
+
+“stuff like this is uncalled for… this sets precedence and now we know people can’t be trusted”
+
+Whether you agree with him or not, that was the core of his issue.
+
+Not whether Narking COULD cancel.
+
+Whether Narking SHOULD cancel after apparently indicating the deal was good.
+
+That’s why this became bigger than:
+
+“just press accept faster.”
+
+⸻
+
+😂 DANNY’S RULING
+
+Danny eventually gave Mauricio the harsh version:
+
+You had both offers.
+
+You had the ability to accept them.
+
+You didn’t.
+
+“This is on YOU”
+
+Then acknowledged:
+
+“Is it funny. Yea. Yea it is. A bit.”
+
+A BIT?
+
+The group talked about this shit for like two hours.
+
+😭
+
+⸻
+
+🦹‍♂️ NARKING’S CLOSING STATEMENT
+
+“This ain’t personal. Its business”
+
+Sir.
+
+You are 2-4.
+
+You are not Gordon Gekko.
+
+😂😂😂
+
+⸻
+
+🏆 AND OF COURSE NARKING WON HIS MATCHUP
+
+Narking:
+
+137.59
+
+Jamil:
+
+134.98
+
+Margin:
+
+2.61
+
+Because naturally the villain wins the episode.
+
+😭
+
+Narking finished Sunday saying:
+
+“4x champ making 4x champ moves lol”
+
+The banners have once again been removed from storage.
+
+⸻
+
+🎰 BUT THE @⁨Jamil⁩ MULLIGAN ALMOST CHANGED EVERYTHING
+
+This happened literally DURING Tradegate.
+
+Mauricio:
+
+THIS LEAGUE HAS NO HONOR
+
+Jamil:
+
+“Mulligan swap Mark Andrews for Jake Ferguson”
+
+Danny:
+
+“Mulligan in. The midst of moe being mad is crazy”
+
+😭😭😭
+
+Beautiful timing.
+
+Final scores:
+
+Mark Andrews:
+
+1.4
+
+Jake Ferguson:
+
+3.3
+
+Mulligan improvement:
+
++1.9
+
+Final margin:
+
+2.61
+
+Meaning Jamil’s Mulligan got him to within:
+
+0.71 POINTS
+
+of actually changing the result.
+
+That’s BRUTAL.
+
+Correct decision.
+
+Correct process.
+
+Just not enough.
+
+⸻
+
+😈 AND NARKING IMMEDIATELY STARTED TALKING SHIT
+
+After surviving by 2.61:
+
+“All that help from officials and still couldn’t score”
+
+Next morning:
+
+“Moe may not talk in here for a while”
+
+Then:
+
+“My move threw him off balance. He needs to realign his chakras”
+
+😭😭😭
+
+One win.
+
+Confidence restored to championship levels.
+
+⸻
+
+🐑🔥 @⁨Santagua⁩ 131.40 — @222062761251006111.23
+
+Remember when Danny was:
+
+0-3?
+
+Neither does Danny.
+
+Because he is now:
+
+3-3
+
+THREE STRAIGHT WINS.
+
+Week 4: W
+Week 5: W
+Week 6: W
+
+The resurrection is complete.
+
+⸻
+
+🔥 TREVOR LAWRENCE SAVED THE DAY
+
+Trevor:
+
+45.60
+
+That’s more than a THIRD of Danny’s entire score.
+
+McBride:
+
+12.3
+
+CeeDee:
+
+16
+
+Dobbins:
+
+13.6
+
+Colts D:
+
+7
+
+Danny didn’t explode like Weeks 4 and 5.
+
+He just handled Frankie.
+
+⸻
+
+😂 DANNY ACTUALLY SAW TROUBLE COMING
+
+Danny:
+
+“I thought I had an easy win and frankie said shut the fuck up”
+
+Frankie:
+
+“It’s still an easy win for you lol”
+
+Frankie trash-talking HIMSELF is a difficult defensive scheme.
+
+What do you even say back?
+
+😭
+
+⸻
+
+📸 FRANKIE HAS OFFICIALLY REBRANDED
+
+On October 14, after discussing all his team problems, Frankie said:
+
+“Tamo feo pa la foto”
+
+And now his team is literally:
+
+FEO PA LA FOTO
+
+😂😂😂
+
+At least the branding accurately reflects the product.
+
+Record:
+
+1-5
+
+Frankie finally found a team name with transparent financial reporting.
+
+⸻
+
+💰 BUT FRANKIE ACTUALLY MADE A LOT OF GOOD MOVES
+
+This is important.
+
+The final record makes it easy to clown him…
+
+but his transaction activity genuinely helped.
+
+Trade additions:
+
+Bryce Young:
+
+🔥 29.43
+
+Jaylen Warren:
+
+9.8
+
+Late pickup Keenan Allen:
+
+🔥 16.2
+
+Kicker pickup Chase McLaughlin:
+
+🔥 17
+
+That’s:
+
+72.43 POINTS
+
+from players tied directly to recent roster activity.
+
+That is GOOD management.
+
+Frankie’s problem wasn’t inactivity.
+
+Frankie’s problem was everything else.
+
+😭
+
+MarShawn Lloyd:
+
+1.0
+
+Allgeier:
+
+5.8
+
+Godwin:
+
+7.7
+
+And the team still couldn’t get over 112.
+
+Sometimes you fix four leaks and the boat finds three new holes.
+
+⸻
+
+👑 @⁨Bro steven Buffet⁩ 119.93 — @18558558721655099.59
+
+Steven finally gave the league an opportunity.
+
+119.93.
+
+Very beatable.
+
+Eric’s response:
+
+99.59
+
+😭
+
+Come on bro.
+
+Steven was standing there with the door OPEN.
+
+⸻
+
+💀 ERIC’S LINEUP LOOKED SICK
+
+Not “sick” like good.
+
+Sick like it needed medical attention.
+
+Tyler Warren:
+
+0
+
+Houston D:
+
+-1
+
+Montgomery:
+
+4.3
+
+Gainwell:
+
+3.4
+
+Spears:
+
+1.8
+
+That’s a lot of grown men producing absolutely nothing.
+
+⸻
+
+🛡️ STEVEN’S DEFENSE STREAM WAS HUGE
+
+Steven added:
+
+✅ Kansas City D/ST
+
+They scored:
+
+🔥 18
+
+Final margin:
+
+20.34
+
+That pickup wasn’t cosmetic.
+
+It was a major part of the win.
+
+Steven moves to:
+
+5-1
+
+Still first overall.
+
+Still #1 in scoring:
+
+954.77 PF
+
+⸻
+
+🏆 HADY 144.85 — @⁨Bro matt bk⁩ 125.69
+
+Hady wins again.
+
+That’s now:
+
+FIVE STRAIGHT
+
+after losing Week 1.
+
+Record:
+
+5-1
+
+And Narking couldn’t resist:
+
+“Hady proving to everyone that you can just auto draft your way to the top”
+
+😭😭😭
+
+Remember when Autodraftgate was treated like a constitutional crisis?
+
+Apparently the punishment was:
+
+second place in the standings.
+
+⸻
+
+🔥 HADY’S CORE KEEPS DELIVERING
+
+Drake Maye:
+
+39.15
+
+JSN:
+
+27.4
+
+Chuba:
+
+21.1
+
+Coker:
+
+15.7
+
+Pickens:
+
+13.3
+
+Bowers:
+
+11
+
+Even with Cam Skattebo giving:
+
+ZERO
+
+El Campeon still clears 144.
+
+⸻
+
+😮‍💨 NOW MATT
+
+No Excel joke.
+
+No PowerPoint joke.
+
+We’re honoring the complaint.
+
+Let’s discuss the actual problem.
+
+Matt is now:
+
+2-4
+
+Despite scoring:
+
+880.28 POINTS
+
+Third-most in the entire league.
+
+His team has scored more than EVERYONE except:
+
+Steven
+Hady
+
+And he has FOUR LOSSES.
+
+That isn’t analytics.
+
+That’s a curse.
+
+😂
+
+Matt is basically driving 90 mph and hitting every red light in New Jersey.
+
+⸻
+
+💀 AND WEEK 6 WASN’T EVEN ONE OF HIS GREAT WEEKS
+
+Matt got:
+
+Josh Allen — 27.19
+
+Matthew Golden — 24.4
+
+Tre Tucker — 29.7
+
+Blake Corum — 14
+
+And still ended at:
+
+125.69
+
+because:
+
+Judkins — 0
+
+Fannin — 1.9
+
+Rhamondre — 3.6
+
+So this wasn’t some heroic 180-point loss.
+
+This was just regular pain.
+
+⸻
+
+🤖 AND MATT SPECIFICALLY REQUESTED BETTER MATERIAL
+
+So here you go.
+
+Matt spends all week demanding the AI become funnier…
+
+then gives the AI:
+
+2-4 with the third-most points
+
+as source material.
+
+Brother is outsourcing his own abuse.
+
+😭
+
+Then Sunday during Tradegate he pops in with:
+
+“Why doesn’t Frankie just trade you back lol”
+
+and later:
+
+“Damn Mauricio found a nut this week and crushed it too!”
+
+#keepthepackclose
+
+THAT’S the Matt we should be using.
+
+Random drive-by comments.
+
+Sticker spam.
+
+Deleted messages.
+
+Observing everybody else’s disaster while his own team quietly sits 2-4.
+
+😂
+
+⸻
+
+👶🔥 @⁨Bro Mauricio⁩ 143.21 — @13332013017093993.27
+
+Imagine spending Sunday afternoon fighting an ethics case…
+
+and then still beating your opponent by:
+
+49.94 POINTS
+
+😭
+
+Mauricio absolutely smoked Kayser.
+
+CMC:
+
+30.7
+
+Malik Nabers:
+
+30.5
+
+Isaiah Likely:
+
+23.9
+
+Diggs:
+
+16.4
+
+⸻
+
+😂 THE FUNNIEST PART?
+
+Mauricio’s new big trade pieces:
+
+Justin Jefferson:
+
+0
+
+Jared Goff:
+
+0
+
+They didn’t even help yet.
+
+So Narking looked at Mauricio’s future roster…
+
+got scared…
+
+pulled the trade…
+
+and Mauricio still dropped 143 WITHOUT THE NEW PLAYERS.
+
+😂😂😂
+
+⸻
+
+📉 THE KAYSER COLLAPSE IS NOW REAL
+
+Kayser began:
+
+3-0
+
+Then:
+
+Week 4 ❌
+Week 5 ❌
+Week 6 ❌
+
+Current:
+
+3-3
+
+THREE STRAIGHT LOSSES.
+
+Narking waited until 12:04 AM specifically to announce:
+
+“Just want to point out that Kaiser on a 3 game losing streak.”
+
+Then:
+
+“Bottom 6 coming soon 😂”
+
+This man keeps receipts in a bunker.
+
+⸻
+
+😭 KAYSER KNEW THIS WAS COMING
+
+This morning:
+
+“I said I was going to enjoy it while it last…”
+
+Then:
+
+“Just know on my way to the bottom…”
+
+HE LITERALLY FORETOLD HIS OWN SEASON.
+
+😂
+
+The prophecy is being fulfilled.
+
+⸻
+
+🪦 KAYSER’S WEEK 6 LINEUP
+
+Najee Harris:
+
+0.2
+
+Nick Folk:
+
+1
+
+Freiermuth:
+
+3.1
+
+McLaurin:
+
+3.7
+
+Derrick Henry:
+
+5
+
+Meanwhile sitting on the bench:
+
+GERMIE BERNARD — 25.7
+
+😭😭😭
+
+That’s not why he lost — Mauricio beat him by almost 50.
+
+But watching 25.7 from the bench while Najee produces POINT TWO is spiritually damaging.
+
+⸻
+
+😈 @⁨Jesus Crooke⁩ 128.80 — @33006890831959124.52
+
+Crooke did it again.
+
+Week 5:
+
+✅ beats Steven
+
+Week 6:
+
+✅ beats Manny
+
+Darkseid Jackson has officially won:
+
+TWO STRAIGHT
+
+and is now:
+
+3-3
+
+⸻
+
+📈 THE MEDIA COMPANY IS PROFITABLE
+
+Remember when Crooke was:
+
+0-2
+
+and we said Instagram engagement wasn’t a fantasy win?
+
+Well now he has:
+
+✅ Instagram
+✅ website
+✅ AI matchup cards
+✅ NFL experiential-event work
+✅ two-game fantasy winning streak
+
+The diversification strategy finally worked.
+
+😂
+
+⸻
+
+🔥 MIKE EVANS GOT THE CREDIT
+
+Late Monday:
+
+Crooke:
+
+“Evans came in for my w”
+
+“Goated”
+
+Evans:
+
+12.4
+
+Final margin:
+
+4.28
+
+That’s close enough that every usable point mattered.
+
+⸻
+
+🏢💀 MANNY’S CORPORATION IS IN FULL RECESSION
+
+Manny started:
+
+2-0
+
+Since:
+
+❌ Week 3
+❌ Week 4
+❌ Week 5
+❌ Week 6
+
+Current:
+
+2-4
+
+FOUR STRAIGHT LOSSES.
+
+This is no longer a quarterly downturn.
+
+The anonymous corporation needs restructuring consultants.
+
+⸻
+
+😂 AND LOOK AT MANNY’S STARTING LINEUP
+
+Kelce:
+
+TE.
+
+Hunter Henry:
+
+TE.
+
+Brenton Strange:
+
+TE.
+
+Manny started:
+
+THREE TIGHT ENDS
+
+😭😭😭
+
+This isn’t fantasy football.
+
+This is a construction crew.
+
+Mahomes threw 17.82.
+
+Davante gave 6.9.
+
+Emmett Johnson gave 4.4.
+
+And Manny lost by 4.28.
+
+⸻
+
+💎 BUT TYLER BASS WAS AN EXCELLENT PICKUP
+
+Manny added him Sunday.
+
+Bass:
+
+🔥 17
+
+Final loss:
+
+4.28.
+
+Without Bass doing his job, this matchup isn’t even close.
+
+Great move.
+
+Bad ending.
+
+⸻
+
+📊 FINAL WEEK 6 SCORING
+
+🥇 Hady — 144.85
+
+🥈 Mauricio — 143.21
+
+🥉 Narking — 137.59
+
+4️⃣ Jamil — 134.98 ❌
+
+5️⃣ Danny — 131.40
+
+6️⃣ Crooke — 128.80
+
+7️⃣ Matt — 125.69 ❌
+
+8️⃣ Manny — 124.52 ❌
+
+9️⃣ Steven — 119.93
+
+🔟 Frankie — 111.23
+
+11️⃣ Eric — 99.59
+
+12️⃣ Kayser — 93.27
+
+⸻
+
+📈 THE STANDINGS HAVE COMPLETELY CHANGED
+
+👑 5-1
+
+1️⃣ Steven — 954.77 PF
+
+2️⃣ Hady — 901.27
+
+⸻
+
+🔥 4-2
+
+3️⃣ Mauricio — 849.37
+
+⸻
+
+🚦 3-3 TRAFFIC JAM
+
+4️⃣ Jamil — 865.49
+
+5️⃣ Danny — 848.62
+
+6️⃣ Kayser — 833.50
+
+7️⃣ Crooke — 825.18
+
+8️⃣ Eric — 771.12
+
+FIVE TEAMS.
+
+SAME RECORD.
+
+This is where the season gets nasty.
+
+⸻
+
+🚑 2-4
+
+9️⃣ Matt — 880.28
+
+🔟 Manny — 828.47
+
+11️⃣ Narking — 801.46
+
+⸻
+
+📸 1-5
+
+12️⃣ Frankie — 693.50
+
+Feo Pa La Foto indeed.
+
+😭
+
+⸻
+
+🤯 THE MOST INSANE STANDINGS FACT
+
+Matt:
+
+880.28 PF
+
+Mauricio:
+
+849.37
+
+Jamil:
+
+865.49
+
+Danny:
+
+848.62
+
+Kayser:
+
+833.50
+
+Crooke:
+
+825.18
+
+Matt has OUTSCORED ALL OF THEM.
+
+Records:
+
+Mauricio: 4-2
+Jamil: 3-3
+Danny: 3-3
+Kayser: 3-3
+Crooke: 3-3
+
+Matt:
+
+2-4
+
+I don’t need an office joke.
+
+The standings themselves are roasting him harder than I ever could.
+
+😂
+
+⸻
+
+🔄 THE SEASON FLIP BOARD
+
+🐑 DANNY
+
+Started:
+
+0-3
+
+Now:
+
+3-3
+
+THREE STRAIGHT WINS.
+
+⸻
+
+📉 KAYSER
+
+Started:
+
+3-0
+
+Now:
+
+3-3
+
+THREE STRAIGHT LOSSES.
+
+Danny and Kayser have literally passed each other going opposite directions.
+
+⸻
+
+🏢 MANNY
+
+Started:
+
+2-0
+
+Now:
+
+2-4
+
+FOUR straight losses.
+
+⸻
+
+🏆 HADY
+
+Started:
+
+0-1
+
+Now:
+
+5-1
+
+FIVE straight wins.
+
+⸻
+
+📱 CROOKE
+
+Was:
+
+1-3
+
+Now:
+
+3-3
+
+Back-to-back wins over Steven and Manny.
+
+⸻
+
+🦹‍♂️ NARKING
+
+Was:
+
+1-4
+
+Now:
+
+2-4
+
+And one victory later the phrase:
+
+“4x champ”
+
+has returned to full circulation.
+
+😂
+
+⸻
+
+💰 WEEK 6 TRANSACTION RECEIPTS
+
+🥇 Steven — Chiefs D/ST
+
+18 points
+
+Excellent stream.
+
+⸻
+
+🥈 Frankie — Bryce + Warren trade return
+
+39.23 combined
+
+Immediate usable production.
+
+⸻
+
+🥉 Frankie — Keenan Allen + Chase McLaughlin
+
+33.2 combined
+
+Two late additions doing real work.
+
+Frankie actually managed aggressively this week.
+
+Record just doesn’t care.
+
+⸻
+
+🔥 Manny — Tyler Bass
+
+17
+
+Nearly kept him alive.
+
+⸻
+
+👍 Danny — Colts D
+
+7
+
+Perfectly fine stream.
+
+⸻
+
+😬 TRANSACTION / LINEUP REGRETS
+
+Kayser — Najee Harris
+
+0.2
+
+while Bernard’s 25.7 watches from the bench.
+
+⸻
+
+Eric — Houston D
+
+-1
+
+That’s not defense.
+
+That’s sabotage.
+
+⸻
+
+Jamil — Jameis Winston
+
+8.58
+
+QB replacement week was rough.
+
+⸻
+
+🎰 UPDATED MULLIGAN HISTORY
+
+Mauricio — Week 1
+✅ improved lineup, won
+
+Manny — Week 2
+✅ massive PF gain, would’ve won anyway
+
+Matt — Week 2
+✅ improved score, still lost
+
+Narking — Week 3
+✅ +7.3, still lost
+
+Danny — Week 3
+❌ -0.5, Reverse Mulligan
+
+Crooke — Week 4
+✅ +10.6, still lost
+
+Kayser — Week 4
+✅ +5.2, still lost
+
+Jamil — Week 6
+✅ +1.9, lost by 2.61
+
+The Mulligan has become less of an advantage and more of a GWB psychological experiment.
+
+😭
+
+⸻
+
+🏅 WEEK 6 AWARDS
+
+⚖️ CASE OF THE YEAR: Mauricio vs Narking
+
+🦹‍♂️ VILLAIN WHO CONFESSED: Narking — “Im a dirtbag”
+
+♟️ CHESS MOVE: rescinding Etienne once the Jefferson deal processed
+
+😡 MOST LEGITIMATELY ANGRY: Mauricio
+
+🎰 CLOSEST MULLIGAN: Jamil — 0.71 short of changing the result
+
+🐑 RESURRECTION AWARD: Danny — 0-3 → 3-3
+
+📉 FREEFALL: Kayser — 3-0 → 3-3
+
+🏢 DEPRESSION WATCH: Manny — four straight losses
+
+📱 TURNAROUND: Crooke — two straight
+
+💰 TRANSACTION GRIND: Frankie — lots of useful new production, same unfortunate record
+
+🤖 COMEDY CRITIC OF THE WEEK: Matt
+
+😂 MOST DANGEROUS PHRASE: “The computer cannot offend me”
+
+
+
+⸻
+
+🦬 FINAL WORD
+
+Steven is still the league’s benchmark at 5-1.
+
+Hady has won five straight and sits right behind him.
+
+Mauricio survived Fantasy Supreme Court and stands alone at 4-2.
+
+Danny has completed a full 0-3 to 3-3 resurrection.
+
+Jamil missed stealing a win by 0.71 Mulligan points.
+
+Kayser has gone from penthouse to elevator headed toward Bottom 6.
+
+Crooke is somehow running a content empire AND winning football games now.
+
+Eric wasted one of Steven’s weakest performances of the year.
+
+Matt demanded better jokes and then supplied the league with even better material himself.
+
+Manny’s anonymous corporation has lost four straight and is now starting tight ends in bulk.
+
+Narking won the courtroom procedure, won his matchup and openly admitted he is a dirtbag.
+
+Frankie made several legitimately good roster moves, changed the team name to Feo Pa La Foto, and somehow ended the week even deeper in last place.
+
+And after six weeks…
+
+the most important lesson of the season is now obvious:
+
+IF NARKING SENDS YOU A TRADE YOU LIKE…
+
+ACCEPT THAT SHIT BEFORE HE SEES YOUR NEXT MOVE.
+
+😭🦬🔥
+`,label:`Final`,postedAt:`2026-10-20`}]},Ao=`America/New_York`;function jo(e){return/^\d{4}-\d{2}-\d{2}$/.test(e)?Date.parse(`${e}T12:00:00`):Date.parse(e)}function Mo(e){let t=jo(e);return Number.isNaN(t)?e:new Date(t).toLocaleDateString(`en-US`,{weekday:`short`,month:`short`,day:`numeric`,timeZone:Ao})}var No=1.5,Po=new Set([`RB`,`WR`,`TE`]);function Fo(e,t){return t[e]?.position??null}function Io(e,t){return t[e]?.full_name?.trim()||`Player`}function Lo(e,t,n){let r=new Set(e.starters),i=null;for(let[a,o]of Object.entries(e.players_points??{})){if(r.has(a))continue;let s=Fo(a,n);s&&e.starters.forEach((r,c)=>{let l=t[c];if(!l||l===`BN`||!(l===s||l===`FLEX`&&Po.has(s)))return;let u=e.starters_points[c]??0,d=o-u;if(!(d<No)&&(!i||d>i.gain)){let e=Io(a,n);i={name:e,gain:d,message:`${e} would have added ${d.toFixed(1)}`}}})}return i}var Ro={6:2},zo=6;function Bo(e,t){return t.find(t=>t.rosterId===e)}function Vo(e,t,n){if(!e.length)return null;let r=Ro[n];if(r!=null&&e.some(e=>e.matchupId===r))return r;let i=null,a=1/0;for(let n of e){let e=Bo(n.teamA.rosterId,t),r=Bo(n.teamB.rosterId,t);if(!e||!r||e.rank>zo||r.rank>zo)continue;let o=Math.abs(e.wins-r.wins)+Math.abs(e.losses-r.losses),s=e.rank+r.rank,c=o*100+s;c<a&&(a=c,i=n)}return i?i.matchupId:e.reduce((e,t)=>t.margin<e.margin?t:e).matchupId}var Ho=40,V=3;function H(e,t){return t[e]?.full_name?.trim()||`Player`}function Uo(e,t){let n=null;return e.starters.forEach((r,i)=>{let a=e.starters_points[i]??0;(!n||a>n.points)&&(n={name:H(r,t),points:a})}),n}function Wo(e,t){return t.find(t=>t.rosterId===e)?.rank??99}function Go(e,t,n,r,i,a){let o=n>=r,s=[],c=o?i:a,l=o?e:t,u=o?a:i,d=o?t:e;return c&&s.push(`${l}: ${c.name} ${c.points.toFixed(1)}`),u&&s.push(`${d}: ${u.name} ${u.points.toFixed(1)}`),s}function Ko(e){if(e.length)return e.length===1?`Top scorer — ${e[0]}`:`Top scorers — ${e.join(` · `)}`}function qo(e,t){let n=Math.round(e*10)/10,r=Math.round(t*10)/10;return Math.abs(n-r).toFixed(1)}function Jo(e,t){return e===0&&t===0}function Yo(e,t,n,r,i,a){let o=n>=r?e:t,s=n>=r?t:e,c=qo(n,r);return a?Jo(n,r)?`Not started`:`${o} is leading ${s} by ${c} points.`:`${o} topped ${s} by ${c} points.${i.length?` ${i.join(` · `)}.`:``}`}function Xo(e,t,n,r){let{rosterPositions:i,preWeekStandings:a,isWeekFinal:o,week:s=0}=r,c=new Map;for(let t of e){let e=c.get(t.matchup_id)??[];e.push(t),c.set(t.matchup_id,e)}let l=[];for(let[e,r]of c){if(r.length<2)continue;let[s,c]=r,u=t.get(s.roster_id),d=t.get(c.roster_id),f=Math.abs(s.points-c.points),p=s.points>=c.points?s.roster_id:c.roster_id,m=[];if(o&&f>=Ho&&m.push(`Blowout`),o){let e=Wo(s.roster_id,a),t=Wo(c.roster_id,a);(s.points>=c.points?e:t)-(s.points>=c.points?t:e)>=V&&m.push(`Upset`)}let h=Uo(s,n),g=Uo(c,n),_=Go(u?.teamName??`Team A`,d?.teamName??`Team B`,s.points,c.points,h,g);l.push({matchupId:e,teamA:{rosterId:s.roster_id,teamName:u?.teamName??`Team ${s.roster_id}`,points:s.points,topScorer:h,benchMiss:Lo(s,i,n)},teamB:{rosterId:c.roster_id,teamName:d?.teamName??`Team ${c.roster_id}`,points:c.points,topScorer:g,benchMiss:Lo(c,i,n)},margin:f,winnerRosterId:p,tags:m,narrative:Yo(u?.teamName??`Team A`,d?.teamName??`Team B`,s.points,c.points,m,!o),scorerLines:_,starsLine:Ko(_),isMatchupOfTheWeek:!1})}if(l.length){let e=Vo(l,a,s),t=l.find(t=>t.matchupId===e);t&&(t.isMatchupOfTheWeek=!0)}return l.sort((e,t)=>e.matchupId-t.matchupId)}function Zo(e){return e?.length?e.some(e=>e.starters?.length>0):!1}var Qo={Waivers:20,Predictions:30,Thursday:40,Saturday:50,Sunday:60,"Monday Morning":70,"Monday Night":80,Final:90,Correction:100},$o={Predictions:`Predictions`,Waivers:`Waivers`,Thursday:`Thursday`,Saturday:`Saturday`,Sunday:`Sunday`,"Monday Morning":`Monday`,"Monday Night":`Monday Night`,Final:`Final`,Correction:`Correction`};function es(e){return $o[e]}function ts(e,t){return e.week===t.week&&e.week>=4}function ns(e,t){let n=ts(e,t),r=jo(e.postedAt),i=jo(t.postedAt);if(r!==i)return n?i-r:r-i;let a=Qo[e.label]??50,o=Qo[t.label]??50;return a===o?n?t.index-e.index:e.index-t.index:n?o-a:a-o}function rs(e){return[...e].sort(ns)}function is(e,t){return rs(e.filter(e=>e.week===t))}function as(e){return e.replace(/^#+\s*/,``).replace(/\*\*([^*]+)\*\*/g,`$1`).replace(/\*([^*]+)\*/g,`$1`).trim()}function os(e,t=3,n){let r=n?as(n).toLowerCase():``,i=e.split(`
 `).map(as).filter(e=>e.length>0&&e!==`⸻`&&!e.startsWith(`---`)&&!/^🦬+$/.test(e));return(r&&i[0]?.toLowerCase()===r?i.slice(1):i).slice(0,t).join(` `)}var ss={weeks:[{week:2,label:`Crystal ball`,picks:[{matchup:`Matt vs Steven`,pick:`Matt`,actualWinner:`Steven`,correct:!1},{matchup:`Crooke vs Hady`,pick:`Crooke`,actualWinner:`Hady`,correct:!1},{matchup:`Mauricio vs Narking`,pick:`Mauricio`,actualWinner:`Narking`,correct:!1},{matchup:`Kayser vs Danny`,pick:`Kayser`,actualWinner:`Kayser`,correct:!0},{matchup:`Frankie vs Eric`,pick:`Frankie`,actualWinner:`Eric`,correct:!1},{matchup:`Jamil vs Manny`,pick:`Jamil`,actualWinner:`Manny`,correct:!1}]},{week:4,label:`Who's actually good?`,picks:[{matchup:`Narking vs Steven`,pick:`Steven`,actualWinner:`Steven`,correct:!0},{matchup:`Kayser vs Frankie`,pick:`Kayser`,actualWinner:`Frankie`,correct:!1},{matchup:`Hady vs Manny`,pick:`Manny`,actualWinner:`Hady`,correct:!1},{matchup:`Jamil vs Matt`,pick:`Matt`,actualWinner:`Jamil`,correct:!1},{matchup:`Mauricio vs Eric`,pick:`Eric`,actualWinner:`Mauricio`,correct:!1},{matchup:`Danny vs Crooke`,pick:`Crooke`,actualWinner:`Danny`,correct:!1}]}]};function cs({week:e}){let t=ss.weeks.find(t=>t.week===e);if(!t)return null;let n=t.picks.filter(e=>e.correct).length,r=t.picks.length;return(0,B.jsxs)(`div`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-4 py-3 text-sm`,children:[(0,B.jsxs)(`p`,{className:`font-semibold text-[var(--gwb-accent)]`,children:[`Crystal ball — Week `,e,`: `,n,` of `,r]}),(0,B.jsx)(`ul`,{className:`mt-2 space-y-1 text-[var(--gwb-muted)]`,children:t.picks.map(e=>(0,B.jsxs)(`li`,{children:[e.matchup,`: picked `,e.pick,e.correct?` ✓`:` (won ${e.actualWinner})`]},e.matchup))})]})}var ls=ko.recaps;function us({week:e,focusRecapId:t,onFocusHandled:n}){let r=(0,v.useMemo)(()=>is(ls,e),[e]);return(0,v.useEffect)(()=>{if(!t)return;let e=document.getElementById(`commissioner-recap-${t}`);if(!e)return;let r=e.querySelector(`details`);r&&(r.open=!0),e.scrollIntoView({behavior:`smooth`,block:`start`}),n?.()},[t,e,n]),(0,B.jsxs)(`div`,{className:`space-y-4`,children:[(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[ko.label,` — timeline for NFL Week `,e,`. Tap a post to read the full recap.`]}),(0,B.jsx)(cs,{week:e}),r.length===0?(0,B.jsxs)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-sm text-[var(--gwb-muted)]`,children:[`No commissioner recaps for Week `,e,` yet.`]}):(0,B.jsx)(`ol`,{className:`relative space-y-2 border-l border-[var(--gwb-border)] pl-4`,children:r.map(e=>(0,B.jsxs)(`li`,{id:`commissioner-recap-${e.id}`,className:`relative`,children:[(0,B.jsx)(`span`,{className:`absolute -left-[1.125rem] top-4 h-2 w-2 rounded-full bg-[var(--gwb-accent)]`,"aria-hidden":!0}),(0,B.jsxs)(`details`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]`,children:[(0,B.jsx)(`summary`,{className:`cursor-pointer list-none px-4 py-3 marker:content-none [&::-webkit-details-marker]:hidden`,children:(0,B.jsxs)(`span`,{className:`flex flex-col gap-2`,children:[(0,B.jsxs)(`span`,{className:`flex flex-wrap items-center gap-2`,children:[(0,B.jsx)(`span`,{className:`rounded-full bg-[#243040] px-2 py-0.5 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:es(e.label)}),e.reconstructed&&(0,B.jsx)(`span`,{className:`rounded-full bg-[#243040] px-2 py-0.5 text-xs font-normal uppercase tracking-wide text-[var(--gwb-muted)]`,children:`reconstructed`}),(0,B.jsx)(`time`,{className:`text-xs text-[var(--gwb-muted)]`,dateTime:e.postedAt,children:Mo(e.postedAt)})]}),(0,B.jsx)(`span`,{className:`font-medium leading-snug`,children:e.title}),(0,B.jsx)(`span`,{className:`text-sm leading-relaxed text-[var(--gwb-muted)] line-clamp-3`,children:os(e.bodyMarkdown,3,e.title)})]})}),(0,B.jsxs)(`div`,{className:`commissioner-recap-prose border-t border-[var(--gwb-border)] px-4 py-4 text-sm leading-relaxed text-[var(--gwb-text)]`,children:[(0,B.jsx)(wo,{children:e.bodyMarkdown}),e.id===`recap-8`&&(0,B.jsx)(`p`,{className:`mt-3 text-xs text-[var(--gwb-muted)]`,children:`Final score made the mulligan unnecessary. See Mulligans.`})]})]})]},e.id))})]})}var ds=`1389375326257184768`,fs=`https://api.sleeper.app/v1`,ps=`gwb_players_nfl_v1`,ms={holderUserId:`475847480039174144`,holderName:`Frankie`,lossesWithoutWin:9,season:2015,renameAtLosses:10},hs={[ms.holderUserId]:ms.holderName},gs={"401754707162333184":`Danny`,"429321092230815744":`Mauricio`,"427945970563559424":`Narking`,"475769424679268352":`Kayser`,"420639669546385408":`Eric`,"429316063394541568":`Hady`,"475825464573685760":`Steven`,"427930731889565696":`Crooke`,"475828957426479104":`Manny`,"427903132685574144":`Jamil`,"475847480039174144":`Frankie`,"427906596501213184":`Matt`},_s=new Set(Object.keys(gs)),vs={1:`Danny`,2:`Mauricio`,3:`Narking`,4:`Kayser`,5:`Eric`,6:`Hady`,7:`Steven`,8:`Crooke`,9:`Manny`,10:`Jamil`,11:`Frankie`,12:`Matt`};function ys(e,t){return e&&_s.has(e)?gs[e]??t:t}function bs(e,t=``){return vs[e]??t}function xs(e,t,n){return n?ys(n,t):bs(e,t)}function Ss(e){let t=new Map;for(let n of e){let e=t.get(n.matchup_id)??[];e.push(n),t.set(n.matchup_id,e)}let n=[];for(let[e,r]of t){if(r.length<2)continue;let t=[...r].sort((e,t)=>e.roster_id-t.roster_id);n.push({matchupId:e,home:t[0],away:t[1]})}return n.sort((e,t)=>e.matchupId-t.matchupId)}function Cs(e){return e.filter(e=>e!==`BN`&&e!==`IR`&&e!==`TAXI`&&e!==`REC`)}function ws(e){return!e||e===`0`}function Ts(e){return/^[A-Z]{2,4}$/.test(e)}function Es(e,t){if(ws(e))return`Empty`;if(Ts(e))return e;let n=t[e];return n?n.full_name:`Player`}function Ds(e,t){if(ws(e))return`—`;if(Ts(e))return`DEF`;let n=t[e];return n?`${n.position??`—`} · ${n.team??`—`}`:`—`}function Os(e,t,n){if(ws(t))return 0;let r=e.players_points?.[t];return typeof r==`number`?r:n!==null&&e.starters_points?.[n]!=null?e.starters_points[n]??0:0}function ks(e){let t=new Set(e.starters??[]);return(e.players??[]).filter(e=>!ws(e)&&!t.has(e))}function As(e){return ks(e).reduce((t,n)=>t+Os(e,n,null),0)}function js(e,t){let n=t.get(e);return n?xs(e,n.displayName):`Team ${e}`}function Ms(e,t){return e.points>t.points?e.roster_id:t.points>e.points?t.roster_id:null}function Ns(e){let t=new Set;for(let n of e){if(n.status===`complete`)continue;let e=n.metadata?.home_team,r=n.metadata?.away_team;e&&t.add(e),r&&t.add(r)}return t}function Ps(e,t){return ws(e)?null:Ts(e)?e:t[e]?.team??null}function Fs(e,t,n){for(let r of e.starters??[]){let e=Ps(r,t);if(e&&n.has(e))return!0}return!1}function Is(e,t,n,r){let i=Ns(r);return!(Fs(e,n,i)||Fs(t,n,i)||e.points===0&&t.points===0&&!(e.starters?.some((t,n)=>(e.starters_points[n]??0)>0)||t.starters?.some((e,n)=>(t.starters_points[n]??0)>0)))}function Ls(e,t,n,r){let i=new Set;for(let{home:a,away:o}of Ss(t))Is(a,o,n,r)&&i.add(`${e}-${a.matchup_id}`);return i}function Rs(e){if(!e)return null;let t=e.trim();return t?t.startsWith(`http://`)||t.startsWith(`https://`)?t:`https://sleepercdn.com/avatars/thumbs/${t}`:null}function zs(e,t){return e?.trim()||Rs(t)}function Bs(e){if(!e)return!0;let t=e.trim();return!t||!/[a-zA-Z0-9]/.test(t)}function Vs(e,t){let n=(e?.metadata?.team_name)?.trim();return n&&!Bs(n)?n:e?.display_name?.trim()?e.display_name.trim():`Team ${t}`}function Hs(e,t){let n=new Map(e.map(e=>[e.user_id,e])),r=new Map;for(let e of t){let t=e.owner_id?n.get(e.owner_id):void 0;r.set(e.roster_id,{rosterId:e.roster_id,userId:e.owner_id??``,displayName:t?.display_name?.trim()??`Roster ${e.roster_id}`,teamName:Vs(t,e.roster_id),sleeperMetadataAvatar:t?.metadata?.avatar??null,sleeperUserAvatar:t?.avatar??null,avatarUrl:zs(t?.metadata?.avatar??null,t?.avatar??null),avatarThumbUrl:Rs(t?.avatar??null)})}return r}function Us(e){return e.fpts+e.fpts_decimal/100}function Ws(e){return e.fpts_against+e.fpts_against_decimal/100}function Gs(e){if(e.length===0)return``;let t=e[e.length-1],n=0;for(let r=e.length-1;r>=0&&e[r]===t;r--)n++;return`${t}${n}`}function Ks(e){let t=e.trim();if(!t)return``;let n=/^(\d+)([WLT])$/i.exec(t);return n?`${n[2].toUpperCase()}${n[1]}`:t}function qs(e){let t=[...e];return t.sort((e,t)=>t.wins===e.wins?t.pointsFor===e.pointsFor?e.pointsAgainst-t.pointsAgainst:t.pointsFor-e.pointsFor:t.wins-e.wins),t.map((e,t)=>({rank:t+1,rosterId:e.rosterId,teamName:e.teamName,displayName:e.displayName,wins:e.wins,losses:e.losses,ties:e.ties,pointsFor:e.pointsFor,pointsAgainst:e.pointsAgainst,streak:e.streak}))}function Js(e,t,n){let r=new Map;for(let e of t.keys())r.set(e,{wins:0,losses:0,ties:0,pointsFor:0,pointsAgainst:0,outcomes:[]});for(let t=1;t<=n;t++){let n=e.get(t);if(!n?.length)continue;let i=new Map;for(let e of n){let t=i.get(e.matchup_id)??[];t.push(e),i.set(e.matchup_id,t)}for(let e of i.values()){if(e.length!==2)continue;let[t,n]=e,i=r.get(t.roster_id),a=r.get(n.roster_id);i&&a&&(i.pointsFor+=t.points,i.pointsAgainst+=n.points,a.pointsFor+=n.points,a.pointsAgainst+=t.points,t.points>n.points?(i.wins++,a.losses++,i.outcomes.push(`W`),a.outcomes.push(`L`)):n.points>t.points?(a.wins++,i.losses++,a.outcomes.push(`W`),i.outcomes.push(`L`)):(i.ties++,a.ties++,i.outcomes.push(`T`),a.outcomes.push(`T`)))}}return qs([...t.entries()].map(([e,t])=>{let n=r.get(e);return{rosterId:e,teamName:t.teamName,displayName:t.displayName,wins:n.wins,losses:n.losses,ties:n.ties,pointsFor:n.pointsFor,pointsAgainst:n.pointsAgainst,streak:Gs(n.outcomes)}}))}function Ys(e,t){return qs(e.map(e=>{let n=t.get(e.roster_id),r=e.settings.wins??0,i=e.settings.losses??0,a=e.settings.ties??0;return{rosterId:e.roster_id,teamName:n?.teamName??`Team ${e.roster_id}`,displayName:n?.displayName??``,wins:r,losses:i,ties:a,pointsFor:Us(e.settings),pointsAgainst:Ws(e.settings),streak:Ks(e.metadata?.streak??``)}}))}function Xs(e){let t=e.ties?`-${e.ties}`:``;return`${e.wins}-${e.losses}${t}`}var Zs=[1,2,3,4,5,6,7,8,9,10],Qs=[{week:3,recapId:`recap-10`,quote:`The Frankie Zone is in full survival mode.`},{week:3,recapId:`recap-13`,quote:`The Frankie Zone has officially received statehood.`},{week:3,recapId:`recap-12`,quote:`Automatic first down for the Frankie Zone.`},{week:4,recapId:`recap-14`,quote:`Frankie IS STILL TRYING TO ESCAPE THE ZONE`},{week:4,recapId:`recap-14`,quote:`The Frankie Zone becomes a UNESCO World Heritage Site.`},{week:5,recapId:`recap-16`,quote:`The Frankie Zone may have closed for one week. Property values have collapsed again.`}];function $s(e){return Math.max(1,e-1)}function ec(e,t=2){return{collisions:e.slice(0,t),moreCount:Math.max(0,e.length-t)}}function tc(e,t){return hs[e]??t.split(/\s+/)[0]??t}function nc(e){return`THE ${e.toUpperCase()} ZONE`}function rc(e){return`${e} Zone`}function ic(e,t){let{completedThroughWeek:n,partialWeek:r,finalizedMatchupKeys:i}=t;return r!==void 0&&e>=r?{completedThroughWeek:n,partialWeek:r,finalizedMatchupKeys:i}:{completedThroughWeek:Math.min(n,e)}}function ac(e,t,n){let r=0,i=Math.max(n.completedThroughWeek,n.partialWeek??0);for(let a=1;a<=i;a++)cc(e,a,t,n)===`W`&&r++;return r}function oc(e,t,n){let r=0,i=Math.max(n.completedThroughWeek,n.partialWeek??0);for(let a=1;a<=i;a++)cc(e,a,t,n)===`L`&&r++;return r}function sc(e,t){return e<=t.completedThroughWeek||t.partialWeek===e&&!!t.finalizedMatchupKeys?.size}function cc(e,t,n,r){if(!sc(t,r))return null;let i=n.get(t);if(!i?.length)return null;let a=i.find(t=>t.roster_id===e);if(!a)return null;let o=i.find(t=>t.matchup_id===a.matchup_id&&t.roster_id!==e);if(!o)return null;if(r.partialWeek===t&&t>r.completedThroughWeek){let e=`${t}-${a.matchup_id}`;if(!r.finalizedMatchupKeys?.has(e))return null}return a.points===0&&o.points===0&&!a.starters?.some((e,t)=>(a.starters_points[t]??0)>0)?null:a.points>o.points?`W`:o.points>a.points?`L`:`T`}function lc(e,t,n,r){return qs([...t.entries()].map(([t,i])=>{let a=ac(t,e,r),o=oc(t,e,r),s=0,c=0,l=[],u=Math.max(n,r.partialWeek??0);for(let n=1;n<=u;n++){let i=cc(t,n,e,r);if(!i)continue;let a=e.get(n),o=a?.find(e=>e.roster_id===t),u=a?.find(e=>o&&e.matchup_id===o.matchup_id&&e.roster_id!==t);o&&u&&(s+=o.points,c+=u.points,l.push(i))}let d=l.length===0?``:(()=>{let e=l[l.length-1],t=0;for(let n=l.length-1;n>=0&&l[n]===e;n--)t++;return`${e}${t}`})();return{rosterId:t,teamName:i.teamName,displayName:i.displayName,wins:a,losses:o,ties:0,pointsFor:s,pointsAgainst:c,streak:d}}))}function uc(e){let{completedThroughWeek:t,weekInProgress:n,selectedWeek:r,matchupsByWeek:i,players:a,nflWeekGames:o}=e;if(!n||r<=t||!a||!o?.length)return{completedThroughWeek:t};let s=i.get(r);if(!s?.length)return{completedThroughWeek:t};let c=Ls(r,s,a,o);return c.size?{completedThroughWeek:t,partialWeek:r,finalizedMatchupKeys:c}:{completedThroughWeek:t}}function dc(e,t,n,r){let i=Math.max(r.completedThroughWeek,r.partialWeek??0);for(let a=1;a<=i;a++){let i=ic(a,r),o=ac(e,n,i),s=oc(e,n,i);if(o===0&&s>=t)return a}return null}function fc(e,t,n,r){let i=ms.renameAtLosses,a=null;for(let o of e){if(o.wins>0||o.losses<i)continue;let e=tc(t.get(o.rosterId)?.userId??``,o.displayName),s=dc(o.rosterId,i,n,r)??r.completedThroughWeek;(!a||s<a.week)&&(a={week:s,name:e})}return a?.name??ms.holderName}function pc(e,t,n){let r=[],i=Math.max(n.completedThroughWeek,n.partialWeek??0);for(let a of t.values()){let o=0;for(let s=1;s<=i;s++){let i=ic(s,n),c=ac(a.rosterId,e,i);if(o===0&&c===1){if((s<=1?0:oc(a.rosterId,e,ic(s-1,n)))<1){o=c;continue}let i=e.get(s),l=i?.find(e=>e.roster_id===a.rosterId),u=i?.find(e=>l&&e.matchup_id===l.matchup_id&&e.roster_id!==a.rosterId),d=u?t.get(u.roster_id):void 0,f=xs(a.rosterId,a.displayName),p=u?xs(u.roster_id,d?.displayName??d?.teamName??`opponent`):`opponent`,m=l?.points??0;r.push({rosterId:a.rosterId,teamName:a.teamName,displayName:a.displayName,week:s,points:m,opponentLabel:p,line:`${f} escaped W${s} · ${m.toFixed(2)} vs ${p}`})}o=c}}return r.sort((e,t)=>e.week-t.week||e.teamName.localeCompare(t.teamName))}function mc(e){let t=new Map,n=new Map;for(let t of e){let e=n.get(t.matchup_id)??[];e.push(t),n.set(t.matchup_id,e)}for(let e of n.values())e.length===2&&(t.set(e[0].roster_id,e[1].roster_id),t.set(e[1].roster_id,e[0].roster_id));return t}function hc(e,t,n,r,i=18){for(let a=r;a<=i;a++){let r=t.get(a)?.get(e);if(r==null)continue;let i=n.get(r);return{rosterId:r,displayName:i?.displayName??`Roster ${r}`,teamName:i?.teamName??`Team ${r}`,record:i?Xs(i):`—`,week:a}}return null}function gc(e,t,n,r,i,a=15){let o=[],s=$s(a);for(let a=r;a<=s;a++){let r=t.get(a);if(!r)continue;let s=new Set;for(let t of e){let c=r.get(t);if(c==null||!e.has(c))continue;let l=[t,c].sort().join(`-`);if(s.has(l))continue;s.add(l);let u=n.get(t),d=n.get(c);o.push({week:a,weeksUntil:Math.max(0,a-i),rosterA:t,rosterB:c,labelA:xs(t,u?.displayName??`Roster ${t}`),labelB:xs(c,d?.displayName??`Roster ${c}`)})}}return o.sort((e,t)=>e.week-t.week)}function _c(e){let t=new Map;for(let[n,r]of e)t.set(n,mc(r));return t}function vc(e,t,n,r){let i=`${e} STILL WINLESS · AFTER WEEK ${t}`;return n?`${i} · WEEK ${r} IN PROGRESS`:i}function yc(e,t){return`YOU ARE HERE · ${`0-${e}`}${t?` · UP NEXT`:``}`}function bc(e){let t=ms.renameAtLosses-e;return t<=0?`RECORD BROKEN — ZONE RENAMED`:t===1?`1 loss from breaking the record`:`${t} losses from breaking the record`}function xc(e){let{teams:t,matchupsByWeek:n,scheduleByWeek:r,completedThroughWeek:i,selectedWeek:a,weekInProgress:o,players:s,nflWeekGames:c,playoffWeekStart:l=15}=e,u=uc({completedThroughWeek:i,weekInProgress:o,selectedWeek:a,matchupsByWeek:n,players:s,nflWeekGames:c}),d=lc(n,t,i,u),f=u.completedThroughWeek,p=u.partialWeek!==void 0&&u.partialWeek>i,m=fc(d,t,n,u),h=d.filter(e=>e.wins===0).sort((e,t)=>t.losses-e.losses||e.pointsFor-t.pointsFor),g=new Map(d.map(e=>[e.rosterId,e])),_=p?(u.partialWeek??i)+1:i+1,v=p?u.partialWeek??a:i,y=[...t.values()].find(e=>e.userId===ms.holderUserId)?.rosterId,b=y?d.find(e=>e.rosterId===y):void 0,x=b?Xs(b):null,S=new Set(h.map(e=>e.rosterId)),C=h.map(e=>({rosterId:e.rosterId,displayName:e.displayName,teamName:e.teamName,wins:e.wins,losses:e.losses,pointsFor:e.pointsFor,record:Xs(e),lossesToRecord:Math.max(0,ms.renameAtLosses-e.losses),nextOpponent:hc(e.rosterId,r,g,_)})),w=pc(n,t,u),{collisions:T,moreCount:E}=ec(gc(S,r,t,_,v,l));return{zoneName:m,heroTitle:nc(m),tabLabel:rc(m),censusLine:vc(h.length,f,o,a),weekInProgressNote:p?`Week ${u.partialWeek} in progress — zone updated for finalized matchups only.`:o?`Week ${a} in progress — zone updates when matchups finalize.`:null,residents:C,escapes:w,collisions:T,moreCollisionsCount:E,isEmpty:h.length===0,frankieRecordLabel:x,throughWeek:p?u.partialWeek??f:f}}function Sc(e,t,n){let r=new Map(e);return r.set(t,mc(n)),r}var Cc={width:1080,height:1350};function wc(e,t){return{id:e,title:t,basename:e,...Cc}}var Tc=[{id:`results-w4-m2`,title:`Frankie 144.8 – Kayser 128.4`},{id:`results-w1-m5`,title:`Steven 199.4 – Frankie 135.4`},{id:`results-w2-m6`,title:`Eric 142.7 – Frankie 105.2`},{id:`results-w3-m6`,title:`Jamil 113.6 – Frankie 95.8`}];function Ec(){return Tc.map(e=>wc(e.id,e.title))}async function Dc(e){let t=await fetch(`${fs}${e}`);if(!t.ok)throw Error(`Sleeper API ${e}: ${t.status}`);return t.json()}function Oc(){return Dc(`/state/nfl`)}function kc(e,t,n=`regular`){return Dc(`/scores/nfl/${n}/${e}/${t}`)}function Ac(e=ds){return Dc(`/league/${e}`)}function jc(e=ds){return Dc(`/league/${e}/users`)}function Mc(e=ds){return Dc(`/league/${e}/rosters`)}function Nc(e,t=ds){return Dc(`/league/${t}/matchups/${e}`)}function Pc(e,t=ds){return Dc(`/league/${t}/transactions/${e}`)}async function Fc(e,t=ds){return e<1?[]:(await Promise.all(Array.from({length:e},(e,n)=>Pc(n+1,t)))).flat()}async function Ic(e,t=ds){let n=new Map,r=Array.from({length:e},(e,t)=>t+1),i=await Promise.all(r.map(e=>Nc(e,t).then(t=>({w:e,rows:t}))));for(let{w:e,rows:t}of i)t?.length&&t.some(e=>e.points>0||e.starters?.length)&&n.set(e,t);return n}async function Lc(e,t,n=ds){let r=new Map;if(t<e)return r;let i=Array.from({length:t-e+1},(t,n)=>e+n),a=await Promise.all(i.map(e=>Nc(e,n).then(t=>({w:e,rows:t}))));for(let{w:e,rows:t}of a)t?.length&&r.set(e,t);return r}var Rc=12,zc=18;function Bc(e){return Dc(`/league/${e}/winners_bracket`)}function Vc(e){return Dc(`/league/${e}/losers_bracket`)}async function Hc(e=ds){let t=[],n=!1,r=e,i=0;for(;r&&i<Rc;)try{let e=await Ac(r),[n,a]=await Promise.all([jc(r),Mc(r)]),o=Hs(n,a),[s,c,l]=await Promise.all([Fc(zc,r),Bc(r).catch(()=>null),Vc(r).catch(()=>null)]);t.push({league:e,rosters:a,teams:o,transactions:s,winnersBracket:c,losersBracket:l}),r=e.previous_league_id??null,i++}catch{i>0&&(n=!0);break}return{bundles:t,priorSeasonsFailed:n}}var Uc=[],Wc=`/gwb-fe006a16/`;function Gc(e,t,n){return`${Wc}slides/${e}.${t}.${n}`}async function Kc(e){let t=Gc(e,`full`,`jpg`),n=await fetch(t);if(!n.ok)throw Error(`Could not load full slide`);return n.blob()}async function qc(e,t){try{let n=await Kc(e),r=new File([n],`${e}.jpg`,{type:n.type||`image/jpeg`});if(typeof navigator.share==`function`&&(!navigator.canShare||navigator.canShare({files:[r]})))return await navigator.share({files:[r],title:t}),`shared`;let i=URL.createObjectURL(n),a=document.createElement(`a`);return a.href=i,a.download=`${e}.jpg`,a.click(),URL.revokeObjectURL(i),`downloaded`}catch{return`error`}}var Jc=48,Yc=`button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])`;function Xc({slides:e,index:t,onClose:n,onIndexChange:r,returnFocusRef:i}){let a=(0,v.useRef)(null),o=(0,v.useRef)(null),s=(0,v.useRef)(null),[c,l]=(0,v.useState)(!1),[u,d]=(0,v.useState)(`idle`),f=e[t],p=(0,v.useCallback)(()=>{t>0&&r(t-1)},[t,r]),m=(0,v.useCallback)(()=>{t<e.length-1&&r(t+1)},[t,r,e.length]);(0,v.useEffect)(()=>{let e=document.body.style.overflow;return document.body.style.overflow=`hidden`,a.current?.focus(),()=>{document.body.style.overflow=e,i?.current?.focus()}},[i]),(0,v.useEffect)(()=>{l(!1),d(`idle`)},[f?.basename]),(0,v.useEffect)(()=>{let e=e=>{if(e.key===`Escape`)e.preventDefault(),n();else if(e.key===`ArrowLeft`)e.preventDefault(),p();else if(e.key===`ArrowRight`)e.preventDefault(),m();else if(e.key===`Tab`&&a.current){let t=[...a.current.querySelectorAll(Yc)].filter(e=>!e.hasAttribute(`disabled`));if(!t.length)return;let n=t[0],r=t[t.length-1];e.shiftKey&&document.activeElement===n?(e.preventDefault(),r.focus()):!e.shiftKey&&document.activeElement===r&&(e.preventDefault(),n.focus())}};return window.addEventListener(`keydown`,e),()=>window.removeEventListener(`keydown`,e)},[n,p,m]);let h=e=>{s.current=e.changedTouches[0]?.clientX??null},g=e=>{let t=s.current,n=e.changedTouches[0]?.clientX;if(s.current=null,t==null||n==null)return;let r=n-t;r>Jc?p():r<-48&&m()},_=(0,v.useCallback)(async()=>{let e=o.current;if(e){try{typeof e.decode==`function`&&await e.decode()}catch{}e.naturalWidth>0&&l(!0)}},[]),y=(0,v.useCallback)(async()=>{if(f){d(`busy`);try{let e=await Kc(f.basename),t=new File([e],`${f.basename}.jpg`,{type:e.type||`image/jpeg`});if(typeof navigator.share==`function`&&(!navigator.canShare||navigator.canShare({files:[t]}))){await navigator.share({files:[t],title:f.title}),d(`done`);return}let n=URL.createObjectURL(e),r=document.createElement(`a`);r.href=n,r.download=`${f.basename}.jpg`,r.rel=`noopener`,document.body.appendChild(r),r.click(),r.remove(),URL.revokeObjectURL(n),d(`done`)}catch{d(`error`)}}},[f]);if(!f)return null;let b=Gc(f.basename,`full`,`webp`),x=Gc(f.basename,`full`,`jpg`),S=u===`busy`?`Saving…`:u===`done`?`Saved`:u===`error`?`Try again`:`Save image`;return(0,B.jsxs)(`div`,{ref:a,role:`dialog`,"aria-modal":`true`,"aria-label":`Slide ${t+1} of ${e.length}: ${f.title}`,tabIndex:-1,className:`fixed inset-0 z-50 flex flex-col bg-black/92 backdrop-blur-sm`,onClick:e=>{e.target===e.currentTarget&&n()},onTouchStart:h,onTouchEnd:g,children:[(0,B.jsxs)(`div`,{className:`flex shrink-0 flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6`,children:[(0,B.jsxs)(`p`,{className:`text-sm text-white/80`,children:[(0,B.jsxs)(`span`,{className:`block sm:inline`,children:[t+1,` / `,e.length]}),(0,B.jsxs)(`span`,{className:`mt-0.5 block truncate sm:mt-0 sm:inline`,children:[(0,B.jsx)(`span`,{className:`hidden sm:inline`,children:` · `}),f.title]})]}),(0,B.jsxs)(`div`,{className:`flex shrink-0 items-center justify-end gap-2`,children:[(0,B.jsx)(`button`,{type:`button`,className:`min-h-11 rounded-lg border border-white/25 px-3 py-2 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)] disabled:opacity-50`,onClick:()=>void y(),disabled:u===`busy`,"aria-label":`Save or share full size slide image`,children:S}),(0,B.jsx)(`button`,{type:`button`,className:`min-h-11 rounded-lg border border-white/20 px-3 py-2 text-sm font-medium text-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]`,onClick:n,"aria-label":`Close slide viewer`,children:`Close`})]})]}),(0,B.jsxs)(`div`,{className:`relative flex min-h-0 flex-1 items-center justify-center px-14 pb-4 pt-2 sm:px-20`,children:[(0,B.jsx)(`button`,{type:`button`,className:`absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/25 bg-black/50 p-3 text-white hover:bg-black/70 disabled:opacity-30 sm:left-4`,onClick:p,disabled:t===0,"aria-label":`Previous slide`,children:(0,B.jsx)(`span`,{"aria-hidden":`true`,children:`‹`})}),(0,B.jsxs)(`div`,{className:`relative z-10 flex max-h-[min(78dvh,900px)] w-full max-w-[min(100%,720px)] items-center justify-center`,children:[!c&&(0,B.jsx)(`div`,{className:`absolute inset-0 flex items-center justify-center text-sm text-white/50`,"aria-hidden":`true`,children:`Loading slide…`}),(0,B.jsx)(`img`,{ref:o,src:x,srcSet:`${b} ${f.width}w`,sizes:`(max-width: 720px) 100vw, 720px`,alt:f.title,width:f.width,height:f.height,decoding:`async`,fetchPriority:`high`,className:`block max-h-[min(78dvh,900px)] w-auto max-w-full object-contain transition-opacity duration-150 ${c?`opacity-100`:`opacity-0`}`,draggable:!1,onLoad:()=>{_()},onError:e=>{let t=e.currentTarget;t.src.endsWith(`.jpg`)||(t.removeAttribute(`srcset`),t.src=x)}},f.basename)]}),(0,B.jsx)(`button`,{type:`button`,className:`absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/25 bg-black/50 p-3 text-white hover:bg-black/70 disabled:opacity-30 sm:right-4`,onClick:m,disabled:t===e.length-1,"aria-label":`Next slide`,children:(0,B.jsx)(`span`,{"aria-hidden":`true`,children:`›`})})]})]})}var Zc=540,Qc=675;function $c({losses:e}){return(0,B.jsx)(`div`,{className:`overflow-x-auto pb-1`,children:(0,B.jsx)(`ol`,{className:`flex min-w-max gap-1.5`,"aria-label":`Winless path tracker`,children:Zs.map(t=>{let n=t===e,r=t===ms.lossesWithoutWin,i=t===ms.renameAtLosses;return(0,B.jsxs)(`li`,{className:`flex flex-col items-center rounded-lg border px-2 py-2 text-center ${n?`border-teal-400/70 bg-teal-950/40`:`border-[var(--gwb-border)] bg-[#0d1319]`}`,children:[(0,B.jsxs)(`span`,{className:`font-['Bebas Neue'] text-lg leading-none ${n?`text-teal-300`:`text-[var(--gwb-muted)]`}`,children:[`0-`,t]}),r&&(0,B.jsx)(`span`,{className:`mt-1 max-w-[4.5rem] text-[0.55rem] font-semibold uppercase leading-tight text-[var(--gwb-accent)]`,children:`Frankie's record (2015)`}),i&&(0,B.jsx)(`span`,{className:`mt-1 max-w-[4.5rem] text-[0.55rem] font-semibold uppercase leading-tight text-red-300`,children:`Zone renamed`}),n&&(0,B.jsx)(`span`,{className:`mt-1 text-[0.6rem] font-bold uppercase tracking-wide text-teal-300`,children:`Here`})]},t)})})})}function el({collision:e}){let t=e.weeksUntil===0?`THIS WEEK`:e.weeksUntil===1?`1 WEEK TO THE COLLISION`:`${e.weeksUntil} WEEKS TO THE COLLISION`;return(0,B.jsxs)(`article`,{className:`rounded-xl border-2 border-[var(--gwb-accent)] bg-gradient-to-b from-amber-950/50 to-[var(--gwb-surface)] p-4`,children:[(0,B.jsx)(`p`,{className:`font-['Bebas Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]`,children:t}),(0,B.jsxs)(`p`,{className:`mt-2 text-lg font-semibold leading-snug`,children:[e.labelA,` vs `,e.labelB]}),(0,B.jsxs)(`p`,{className:`mt-3 text-xs font-semibold uppercase tracking-[0.15em] text-[var(--gwb-muted)]`,children:[`Week `,e.week,` they collide / Who survives?`]})]})}function tl({teams:e,matchupsByWeek:t,selectedWeek:n,completedThroughWeek:r,weekInProgress:i,nflState:a,players:o,ensurePlayers:s,deferralNote:c,playoffWeekStart:l,onOpenRecap:u,initialSlideId:d,onSlideUrlChange:f}){let[p,m]=(0,v.useState)(()=>_c(t)),h=(0,v.useRef)(new Set),[g,_]=(0,v.useState)(!1),[y,b]=(0,v.useState)(null),[x,S]=(0,v.useState)(null),C=(0,v.useMemo)(()=>Ec(),[]);(0,v.useEffect)(()=>{if(!i){b(null);return}s();let e=!1;return kc(a.season,n,a.season_type).then(t=>{e||b(t)}).catch(()=>{e||b(null)}),()=>{e=!0}},[i,n,a.season,a.season_type,s]),(0,v.useEffect)(()=>{let e=[];for(let t of C)for(let n of[`webp`,`jpg`]){let r=document.createElement(`link`);r.rel=`preload`,r.as=`image`,r.href=Gc(t.basename,`thumb`,n),document.head.appendChild(r),e.push(r)}return()=>{for(let t of e)t.remove()}},[C]),(0,v.useEffect)(()=>{m(_c(t));for(let e of t.keys())h.current.add(e)},[t]),(0,v.useEffect)(()=>{let e=!1;return _(!1),(async()=>{let t=[];for(let e=1;e<=18;e++)h.current.has(e)||t.push(e);await Promise.all(t.map(async t=>{if(!e){h.current.add(t);try{let e=await Nc(t);if(!e?.length)return;m(n=>Sc(n,t,e))}catch{h.current.delete(t)}}})),e||_(!0)})(),()=>{e=!0}},[t]);let w=(0,v.useMemo)(()=>xc({teams:e,matchupsByWeek:t,scheduleByWeek:p,completedThroughWeek:r,selectedWeek:n,weekInProgress:i,players:o,nflWeekGames:y,playoffWeekStart:l}),[e,t,p,r,n,i,o,y,l]),T=(0,v.useMemo)(()=>{let e=new Map;return C.forEach((t,n)=>e.set(t.id,n)),e},[C]),E=(0,v.useCallback)(e=>{S(e);let t=C[e];f?.(t?.id??null)},[C,f]),D=(0,v.useCallback)(()=>{S(null),f?.(null)},[f]);(0,v.useEffect)(()=>{if(!d)return;let e=T.get(d);e!=null&&S(e)},[d,T]);let O=(0,v.useMemo)(()=>{let e=new Map;for(let t of ko.recaps)e.set(t.id,t.title);return e},[]);return(0,B.jsxs)(`div`,{id:`frankie-zone-section`,className:`space-y-8`,children:[w.weekInProgressNote?(0,B.jsx)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:w.weekInProgressNote}):c&&(0,B.jsx)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:c}),(0,B.jsxs)(`header`,{className:`text-center`,children:[(0,B.jsx)(`h2`,{className:`font-['Anton'] text-4xl uppercase leading-tight text-[var(--gwb-accent)] sm:text-5xl`,children:w.heroTitle}),(0,B.jsx)(`p`,{className:`mt-2 font-['Bebas Neue'] text-lg tracking-[0.12em] text-[var(--gwb-text)] sm:text-xl`,children:w.censusLine})]}),w.isEmpty?(0,B.jsxs)(`div`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-8 text-center`,children:[(0,B.jsx)(`p`,{className:`font-['Bebas Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]`,children:`ZONE EMPTY`}),(0,B.jsx)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:w.frankieRecordLabel?`Frankie is ${w.frankieRecordLabel} this season. The 0-${ms.lossesWithoutWin} mark from 2015 still stands in league lore.`:`Frankie's 0-${ms.lossesWithoutWin} record from 2015 still stands in league lore.`})]}):(0,B.jsxs)(B.Fragment,{children:[(0,B.jsxs)(`section`,{"aria-labelledby":`fz-census-heading`,children:[(0,B.jsx)(`h3`,{id:`fz-census-heading`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Zone census`}),(0,B.jsx)(`ul`,{className:`space-y-3`,role:`list`,children:w.residents.map(e=>(0,B.jsx)(`li`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-4 py-3`,children:(0,B.jsxs)(`div`,{className:`flex flex-wrap items-baseline justify-between gap-2`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsx)(`p`,{className:`text-lg font-semibold`,children:xs(e.rosterId,e.displayName)}),(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[e.teamName,(0,B.jsxs)(`span`,{className:`ml-1 text-xs`,title:`Sleeper: ${e.displayName}`,children:[`(@`,e.displayName,`)`]})]})]}),(0,B.jsxs)(`div`,{className:`text-right`,children:[(0,B.jsx)(`p`,{className:`font-['Bebas Neue'] text-2xl text-red-300`,children:e.record}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[e.pointsFor.toFixed(2),` PF`]})]})]})},e.rosterId))})]}),(!g||w.collisions.length>0||w.moreCollisionsCount>0)&&(0,B.jsxs)(`section`,{"aria-labelledby":`fz-collisions-heading`,children:[(0,B.jsx)(`h3`,{id:`fz-collisions-heading`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:`Collisions`}),g?w.collisions.length>0?(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`ul`,{className:`space-y-3`,role:`list`,children:w.collisions.map(e=>(0,B.jsx)(`li`,{children:(0,B.jsx)(el,{collision:e})},`${e.week}-${e.rosterA}-${e.rosterB}`))}),w.moreCollisionsCount>0&&(0,B.jsxs)(`p`,{className:`mt-2 text-xs text-[var(--gwb-muted)]`,children:[`+`,w.moreCollisionsCount,` more zone-vs-zone games this season`]})]}):(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:`No head-to-head collisions scheduled between current residents.`}):(0,B.jsx)(`p`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-4 py-3 text-sm text-[var(--gwb-muted)]`,"data-schedule-loading":!0,children:`Loading season schedule for collision watch…`})]}),(0,B.jsxs)(`section`,{"aria-labelledby":`fz-residents-heading`,children:[(0,B.jsx)(`h3`,{id:`fz-residents-heading`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`You are here`}),(0,B.jsx)(`ul`,{className:`space-y-6`,role:`list`,children:w.residents.map(e=>(0,B.jsxs)(`li`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[#0d1319] p-4`,children:[(0,B.jsxs)(`p`,{className:`font-medium`,children:[xs(e.rosterId,e.displayName),` · `,e.teamName]}),(0,B.jsx)(`p`,{className:`mt-1 text-xs font-semibold uppercase tracking-wide text-teal-300`,children:yc(e.losses,!!e.nextOpponent)}),(0,B.jsx)(`div`,{className:`mt-3`,children:(0,B.jsx)($c,{losses:e.losses})}),(0,B.jsx)(`p`,{className:`mt-3 text-sm text-[var(--gwb-muted)]`,children:bc(e.losses)}),e.nextOpponent&&(0,B.jsxs)(`div`,{className:`mt-4 rounded-lg border border-teal-900/50 bg-teal-950/20 px-3 py-2`,children:[(0,B.jsxs)(`p`,{className:`text-xs font-semibold uppercase tracking-wide text-teal-300`,children:[`Up next · Week `,e.nextOpponent.week]}),(0,B.jsxs)(`p`,{className:`mt-1 font-medium`,children:[xs(e.nextOpponent.rosterId,e.nextOpponent.displayName),` `,(0,B.jsxs)(`span`,{className:`text-[var(--gwb-muted)]`,children:[`(`,e.nextOpponent.record,`)`]})]}),(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:e.nextOpponent.teamName})]})]},e.rosterId))})]})]}),w.escapes.length>0&&(0,B.jsxs)(`section`,{"aria-labelledby":`fz-escape-heading`,children:[(0,B.jsx)(`h3`,{id:`fz-escape-heading`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Escape log`}),(0,B.jsx)(`ul`,{className:`space-y-2 text-sm`,role:`list`,children:w.escapes.map(e=>(0,B.jsx)(`li`,{className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2`,children:e.line},`${e.rosterId}-${e.week}`))})]}),(0,B.jsxs)(`section`,{"aria-labelledby":`fz-slides-heading`,children:[(0,B.jsx)(`h3`,{id:`fz-slides-heading`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Slides`}),(0,B.jsx)(`ul`,{className:`grid grid-cols-2 gap-2 sm:grid-cols-3`,role:`list`,children:C.map((e,t)=>{let n=Gc(e.basename,`thumb`,`jpg`);return(0,B.jsx)(`li`,{children:(0,B.jsxs)(`button`,{type:`button`,className:`group block w-full overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] text-left transition hover:border-[var(--gwb-accent)]`,onClick:()=>E(t),"aria-label":`Open ${e.title}`,children:[(0,B.jsx)(`img`,{src:n,alt:``,width:Zc,height:Qc,loading:`eager`,decoding:`sync`,fetchPriority:`high`,"data-fz-slide-thumb":e.id,className:`aspect-[4/5] w-full bg-[#0d1319] object-cover`}),(0,B.jsx)(`p`,{className:`truncate px-2 py-1.5 text-xs text-[var(--gwb-muted)]`,children:e.title})]})},e.id)})})]}),(0,B.jsxs)(`section`,{"aria-labelledby":`fz-lore-heading`,children:[(0,B.jsx)(`h3`,{id:`fz-lore-heading`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Zone lore`}),(0,B.jsx)(`ol`,{className:`space-y-3 border-l border-[var(--gwb-border)] pl-4`,children:Qs.map(e=>(0,B.jsxs)(`li`,{className:`relative`,children:[(0,B.jsx)(`span`,{className:`absolute -left-[1.125rem] top-2 h-2 w-2 rounded-full bg-[var(--gwb-accent)]`,"aria-hidden":!0}),(0,B.jsxs)(`button`,{type:`button`,className:`w-full rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-4 py-3 text-left transition hover:border-[var(--gwb-accent)]`,onClick:()=>u(e.week,e.recapId),children:[(0,B.jsxs)(`p`,{className:`text-sm leading-snug`,children:[`“`,e.quote,`”`]}),(0,B.jsxs)(`p`,{className:`mt-2 text-xs text-[var(--gwb-muted)]`,children:[`Week `,e.week,O.get(e.recapId)?` · ${O.get(e.recapId)}`:``]})]})]},`${e.recapId}-${e.quote}`))})]}),x!==null&&(0,B.jsx)(Xc,{slides:C,index:x,onClose:D,onIndexChange:e=>{S(e),f?.(C[e]?.id??null)}})]})}function nl(){return(0,B.jsxs)(`footer`,{className:`mt-10 border-t border-[var(--gwb-border)] pt-4 text-xs leading-relaxed text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`p`,{className:`font-semibold text-[var(--gwb-text)]`,children:`Sound`}),(0,B.jsxs)(`p`,{children:[`"Impact Moderato", "Volatile Reaction", "Sneaky Snitch", and "Monkeys Spinning Monkeys" Kevin MacLeod (incompetech.com), licensed under Creative Commons: By Attribution 4.0,`,` `,(0,B.jsx)(`a`,{href:`https://creativecommons.org/licenses/by/4.0/`,className:`text-[var(--gwb-accent)] underline`,rel:`noopener noreferrer`,target:`_blank`,children:`https://creativecommons.org/licenses/by/4.0/`})]})]})}var rl=864e5;function il(e){if(!e||typeof e!=`object`)return null;let t=String(e.first_name??``),n=String(e.last_name??``),r=e.full_name||`${t} ${n}`.trim()||`Unknown`;return{first_name:t,last_name:n,position:e.position??null,team:e.team??null,full_name:r}}function al(){try{let e=localStorage.getItem(ps);if(!e)return null;let t=JSON.parse(e);return Date.now()-t.fetchedAt>rl?null:t}catch{return null}}function ol(e){let t={fetchedAt:Date.now(),players:e};try{localStorage.setItem(ps,JSON.stringify(t))}catch{}}async function sl(e=!1){if(!e){let e=al();if(e)return e.players}let t=await fetch(`${fs}/players/nfl`);if(!t.ok)throw Error(`Failed to load players (${t.status})`);let n=await t.json(),r={};for(let[e,t]of Object.entries(n)){let n=il(t);n&&(r[e]=n)}return ol(r),r}function cl(e,t){let n=t[e];return n?n.position?`${n.full_name} (${n.position})`:n.full_name:e.length<8?e:`Player`}var ll=new Set([`waiver`,`free_agent`]),ul=new Set([`waiver`,`free_agent`]);function dl(e){return e===`waiver`||e===`free_agent`?e:e===`trade`?`trade`:e===`commissioner`?`commissioner`:`other`}function fl(e){let t=[];for(let n of e){if(n.status!==`complete`)continue;let e=dl(n.type),r=n.adds??{};if(n.type===`trade`){for(let[i,a]of Object.entries(r))typeof a==`number`&&t.push({rosterId:a,playerId:i,time:n.status_updated,via:e});continue}let i=vl(n);if(i!=null)for(let a of Object.keys(r))t.push({rosterId:i,playerId:a,time:n.status_updated,via:e})}return t}function pl(e,t,n,r){let i=null;for(let a of e)a.rosterId===t&&a.playerId===n&&(a.time>=r||(!i||a.time>i.time)&&(i=a));return i}function ml(e,t,n,r,i){let a=pl(e,t,n,i);return!a||!ul.has(a.via)?!1:a.time===r}function hl(e,t){let n=e.players_points?.[t];return typeof n==`number`&&Number.isFinite(n)?n:0}function gl(e,t){return!!e?.players?.includes(t)}function _l(e,t){return t!==`0`&&(e.starters??[]).includes(t)}function vl(e){let t=e.roster_ids?.[0];return typeof t==`number`?t:null}function yl(e){let t=e.netWaiverPoints,n=t>=0?`+`:`−`;return`${e.rosteredPickups} rostered pickups · net ${n}${Math.abs(t).toFixed(2)} points`}function bl(e,t){let n=new Map;for(let r=1;r<=t;r++){let t=-1;for(let n of e)n.type===`waiver`&&n.leg===r&&typeof n.status_updated==`number`&&n.status_updated>t&&(t=n.status_updated);t>=0&&n.set(r,t)}return n}function xl(e,t){let n=e.wes??-1/0,r=t.wes??-1/0;if(r!==n)return r-n;if(t.netWaiverPoints!==e.netWaiverPoints)return t.netWaiverPoints-e.netWaiverPoints;let i=e.hitRate??-1,a=t.hitRate??-1;return a===i?e.failedClaims-t.failedClaims:a-i}function Sl(e){let{transactions:t,matchupsByWeek:n,teams:r,rosters:i,scoringThrough:a,selectedWeek:o,selectedWeekComplete:s}=e,c=bl(t,a),l=c.get(a),u=fl(t),d=new Map;for(let e=1;e<=a;e++){let t=n.get(e);t?.length&&d.set(e,new Map(t.map(e=>[e.roster_id,e])))}let f=[],p=[],m=new Map,h=[];t.forEach((e,t)=>{if(!ll.has(e.type))return;let n=vl(e);if(n==null)return;let r=e.status===`failed`?`failed`:e.status===`complete`?`complete`:null;if(!r)return;let i=Object.keys(e.adds??{}),a=Object.keys(e.drops??{}),o=e.transaction_id??`${e.leg}-${e.status_updated}-${t}`,s=r===`complete`&&i.length>0&&l!=null&&e.status_updated>=l;if(r===`failed`&&m.set(n,(m.get(n)??0)+1),h.push({id:o,leg:e.leg,rosterId:n,type:e.type,status:r,statusUpdated:e.status_updated,adds:i,drops:a,notes:e.metadata?.notes??null,startedPoints:null,pending:s}),r===`complete`){for(let t of i)f.push({playerId:t,rosterId:n,time:e.status_updated,leg:e.leg,type:e.type,transactionId:o,started:0,bench:0,startWeeks:0,hit10:0,weeks:[],weeklyStarted:new Map,weeklyBench:new Map});for(let t of a)p.push({playerId:t,rosterId:n,time:e.status_updated,leg:e.leg,transactionId:o,regretByWeek:new Map})}});let g=new Map;for(let e of f){let t=`${e.rosterId}:${e.playerId}`,n=g.get(t);n?n.push(e):g.set(t,[e])}for(let e of g.values())e.sort((e,t)=>e.time-t.time);let _=[];for(let[e,t]of g){let n=Number(e.split(`:`)[0]),r=e.slice(e.indexOf(`:`)+1);for(let[e,i]of d){let a=c.get(e);if(a==null)continue;let o=i.get(n);if(!gl(o,r)||!o)continue;let s=t.filter(e=>e.time<a);if(!s.length)continue;let l=s[s.length-1];if(!ml(u,n,r,l.time,a))continue;let d=hl(o,r);l.weeks.push(e),_l(o,r)?(l.started+=d,l.startWeeks+=1,d>=10&&(l.hit10+=1),l.weeklyStarted.set(e,(l.weeklyStarted.get(e)??0)+d),_.push({week:e,playerId:r,points:d,rosterId:n})):(l.bench+=d,l.weeklyBench.set(e,(l.weeklyBench.get(e)??0)+d))}}let v=[];for(let e of p)for(let[t,n]of d){let r=c.get(t);if(r!=null&&e.time<r&&!gl(n.get(e.rosterId),e.playerId))for(let[r,i]of n){if(r===e.rosterId||!_l(i,e.playerId))continue;let n=hl(i,e.playerId);e.regretByWeek.set(t,(e.regretByWeek.get(t)??0)+n),v.push({week:t,playerId:e.playerId,points:n,rosterId:e.rosterId,startedByRosterId:r})}}let y=new Map;for(let e of f)y.set(e.transactionId,(y.get(e.transactionId)??0)+e.started);for(let e of h)e.status===`complete`&&e.adds.length&&(e.startedPoints=y.get(e.id)??0);let b=new Map;for(let e of i){let t=e.settings.waiver_position;b.set(e.roster_id,typeof t==`number`?t:null)}let x=new Set([...r.keys(),...f.map(e=>e.rosterId),...p.map(e=>e.rosterId)]),S=[];for(let e of x){let t=r.get(e),n=l==null?[]:f.filter(t=>t.rosterId===e&&t.time<l),i=n.filter(e=>e.weeks.length>0),c=f.filter(t=>t.rosterId===e&&l!=null&&t.time>=l).length,u=n.reduce((e,t)=>e+t.started,0),d=n.reduce((e,t)=>e+t.bench,0),h=n.filter(e=>e.hit10>0).length,g=h,_=p.filter(t=>t.rosterId===e),v=_.reduce((e,t)=>{let n=0;for(let e of t.regretByWeek.values())n+=e;return e+n},0),y=u-v,x=i.length?y/i.length:null,C=i.reduce((e,t)=>!e||t.started>e.started?t:e,null),w=[],T=0;for(let e=1;e<=a;e++){for(let t of n)T+=t.weeklyStarted.get(e)??0;w.push(T)}let E=null,D=null,O=null;s&&o>=1&&o<=a&&(E=n.reduce((e,t)=>e+(t.weeklyStarted.get(o)??0),0),D=_.reduce((e,t)=>e+(t.regretByWeek.get(o)??0),0),O=E-D),S.push({rosterId:e,displayName:t?.displayName??`Roster ${e}`,teamName:t?.teamName??`Roster ${e}`,waiverPriority:b.get(e)??null,pickupCount:n.length,rosteredPickups:i.length,pendingPickups:c,startedPoints:u,benchPoints:d,pointsPerPickup:n.length?u/n.length:null,hitHits:g,hitPickups:h,hitRate:n.length?h/n.length:null,netWaiverPoints:y,dropRegret:v,failedClaims:m.get(e)??0,wes:x,eligible:i.length>=3,poolRank:null,bestPickup:C?{playerId:C.playerId,points:C.started}:null,weeklyStarted:E,weeklyRegret:D,weeklyNet:O,cumulativeStarted:w})}let C=S.filter(e=>e.eligible).sort(xl);C.forEach((e,t)=>{e.poolRank=t+1});let w=S.filter(e=>!e.eligible).sort(xl),T=[...C,...w],E=s&&o>=1&&o<=a?[...T].sort((e,t)=>{let n=e.weeklyNet??0,r=t.weeklyNet??0;return r===n?(t.weeklyStarted??0)-(e.weeklyStarted??0):r-n}):[],D=s?_.filter(e=>e.week===o).sort((e,t)=>t.points-e.points)[0]??null:null,O=s?v.filter(e=>e.week===o&&e.points>0).sort((e,t)=>t.points-e.points)[0]??null:null;return h.sort((e,t)=>t.statusUpdated-e.statusUpdated),{scoringThrough:a,selectedWeek:o,selectedWeekComplete:s,managers:T,champion:C[0]??null,cellar:C.length>=2?C[C.length-1]:null,pickupOfWeek:D,worstDropOfWeek:O,moves:h,weeklyRanking:E}}var Cl=[`#e8b923`,`#7fd1c7`,`#f2a3b3`,`#9bb7ff`,`#e08a4f`,`#c6e07a`,`#d7b4f3`,`#8fd0ff`,`#f0d38a`,`#ff8f8f`,`#b8c4ce`,`#6ee7b7`];function wl(e){return Cl[(Math.abs(e)-1)%Cl.length]??Cl[0]}function Tl(e){return e.toFixed(2)}function El({managers:e,scoringThrough:t}){let n=[...e].sort((e,t)=>(t.wes??-999)-(e.wes??-999));if(!n.length||t<1)return(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:`Efficiency chart appears after a completed week.`});let r=n.map(e=>e.wes??0),i=Math.min(0,...r),a=Math.max(0,...r),o=(a-i||1)*.08,s=i-o,c=a+o,l=8+n.length*36+8,u=e=>168+(e-s)/(c-s)*496,d=u(0);return(0,B.jsxs)(`svg`,{viewBox:`0 0 720 ${l}`,className:`h-auto w-full`,role:`img`,"aria-label":`Waiver efficiency through week ${t}`,children:[(0,B.jsx)(`line`,{x1:d,y1:8,x2:d,y2:l-8,stroke:`#f4f7fb`,strokeWidth:1.25}),n.map((e,t)=>{let n=8+t*36,r=e.wes??0,i=Math.min(d,u(r)),a=Math.max(d,u(r)),o=e.eligible?wl(e.rosterId):`#243040`,s=r>=0?a+6:i-6;return(0,B.jsxs)(`g`,{children:[(0,B.jsx)(`text`,{x:8,y:n+22,fill:`#f4f7fb`,fontSize:13,fontFamily:`Inter, system-ui, sans-serif`,children:e.displayName}),(0,B.jsx)(`rect`,{x:i,y:n+8,width:Math.max(a-i,1.5),height:18,rx:4,fill:o,stroke:e.eligible?`none`:`#e8b923`,strokeWidth:e.eligible?0:1.25}),(0,B.jsx)(`text`,{x:s,y:n+22,fill:`#f4f7fb`,fontSize:12,fontFamily:`Inter, system-ui, sans-serif`,textAnchor:r>=0?`start`:`end`,children:e.wes==null?`—`:Tl(e.wes)})]},e.rosterId)})]})}function Dl({managers:e,scoringThrough:t}){let[n,r]=(0,v.useState)(new Set);if(t<1)return(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:`The week-by-week line appears after a completed week.`});let i=[...e].sort((e,n)=>(n.cumulativeStarted[t-1]??0)-(e.cumulativeStarted[t-1]??0)),a=Math.max(10,...i.map(e=>Math.max(0,...e.cumulativeStarted))),o=e=>40+(t===1?334:(e-1)/(t-1)*668),s=e=>16+(1-e/a)*236,c=[0,a/2,a];return(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`svg`,{viewBox:`0 0 720 280`,className:`h-auto w-full`,role:`img`,"aria-label":`Cumulative started pickup points through week ${t}`,children:[c.map(e=>(0,B.jsxs)(`g`,{children:[(0,B.jsx)(`line`,{x1:40,y1:s(e),x2:708,y2:s(e),stroke:`#243040`}),(0,B.jsx)(`text`,{x:34,y:s(e)+4,fill:`#8fa3b8`,fontSize:11,textAnchor:`end`,fontFamily:`Inter, system-ui, sans-serif`,children:Math.round(e)})]},e)),Array.from({length:t},(e,t)=>t+1).map(e=>(0,B.jsxs)(`text`,{x:o(e),y:272,fill:`#8fa3b8`,fontSize:11,textAnchor:`middle`,fontFamily:`Inter, system-ui, sans-serif`,children:[`W`,e]},e)),i.map(e=>{if(n.has(e.rosterId))return null;let t=e.cumulativeStarted.map((e,t)=>`${t===0?`M`:`L`}${o(t+1).toFixed(1)},${s(e).toFixed(1)}`).join(` `),r=wl(e.rosterId);return(0,B.jsxs)(`g`,{children:[(0,B.jsx)(`path`,{d:t,fill:`none`,stroke:r,strokeWidth:2.4,strokeLinejoin:`round`}),e.cumulativeStarted.map((e,t)=>(0,B.jsx)(`circle`,{cx:o(t+1),cy:s(e),r:3.2,fill:r},t))]},e.rosterId)})]}),(0,B.jsx)(`div`,{className:`mt-2 flex flex-wrap gap-1.5`,children:i.map(e=>{let t=n.has(e.rosterId);return(0,B.jsxs)(`button`,{type:`button`,className:`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs ${t?`border-[var(--gwb-border)] text-[var(--gwb-muted)] opacity-50`:`border-[var(--gwb-border)] text-[var(--gwb-text)]`}`,onClick:()=>{r(t=>{let n=new Set(t);return n.has(e.rosterId)?n.delete(e.rosterId):n.add(e.rosterId),n})},children:[(0,B.jsx)(`span`,{className:`inline-block h-2.5 w-2.5 rounded-sm`,style:{background:wl(e.rosterId)}}),e.displayName]},e.rosterId)})})]})}var Ol=new Intl.DateTimeFormat(`en-US`,{timeZone:`America/New_York`,month:`short`,day:`numeric`,hour:`numeric`,minute:`2-digit`});function kl(e){return e==null||Number.isNaN(e)?`—`:e.toFixed(2)}function Al(e){return e.pickupCount?`${e.hitPickups}/${e.pickupCount}`:`—`}function jl(e){return{...e,displayName:xs(e.rosterId,e.displayName),teamName:`${e.teamName} · @${e.displayName}`}}function Ml(e){return{...e,managers:e.managers.map(jl),weeklyRanking:e.weeklyRanking.map(jl),champion:e.champion?jl(e.champion):null,cellar:e.cellar?jl(e.cellar):null}}function Nl(e,t){return e.managers.find(e=>e.rosterId===t)?.displayName??`Roster ${t}`}function Pl({board:e,players:t,deferralNote:n,loadError:r}){let i=(0,v.useMemo)(()=>Ml(e),[e]),[a,o]=(0,v.useState)(`all`),[s,c]=(0,v.useState)(`all`),[l,u]=(0,v.useState)(`all`),[d,f]=(0,v.useState)(!1),p=(0,v.useMemo)(()=>i.moves.filter(e=>!(!d&&e.leg!==i.selectedWeek||a!==`all`&&e.rosterId!==a||s!==`all`&&e.status!==s||l!==`all`&&e.type!==l)),[d,i.moves,i.selectedWeek,l,a,s]),m=e=>cl(e,t??{});return(0,B.jsxs)(`div`,{id:`waiver-wire-panel`,className:`space-y-8`,children:[r&&(0,B.jsxs)(`p`,{className:`rounded-lg border border-red-900/50 bg-red-950/30 px-3 py-2 text-sm text-red-200`,children:[`Waiver moves didn’t load. `,r]}),t==null&&(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:`Loading player names…`}),n&&(0,B.jsxs)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:[n,` Moves from Week `,i.selectedWeek,` are still in the log.`]}),(0,B.jsx)(Fl,{board:i,name:m,managerName:e=>Nl(i,e)}),(0,B.jsxs)(`div`,{className:`grid grid-cols-1 gap-3 sm:grid-cols-2`,children:[(0,B.jsx)(Il,{board:i}),(0,B.jsx)(Ll,{board:i}),(0,B.jsx)(Rl,{board:i,name:m,managerName:e=>Nl(i,e)}),(0,B.jsx)(zl,{board:i,name:m,managerName:e=>Nl(i,e)})]}),(0,B.jsxs)(`section`,{children:[(0,B.jsxs)(`h3`,{className:`mb-2 text-lg font-semibold`,children:[`Week `,i.selectedWeek,` on the wire`]}),i.selectedWeekComplete?(0,B.jsx)(Bl,{board:i}):(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`Week `,i.selectedWeek,` is still scoring. Weekly started points, Pickup of the Week, and Worst Drop land when the week is final.`]})]}),(0,B.jsxs)(`section`,{className:`space-y-4`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`h3`,{className:`text-lg font-semibold`,children:[`Season through Week `,i.scoringThrough]}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[`Waiver Efficiency Score is net started points divided by rostered pickups. The badge needs `,3,` rostered pickups.             A hit is a waiver/FA pickup with at least one start of `,10,`+ points. Hit rate uses the same pickup count as the Pickups column. Kickers and defenses count.`]})]}),(0,B.jsxs)(`div`,{className:`grid grid-cols-1 gap-4 lg:grid-cols-2`,children:[(0,B.jsxs)(`figure`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-3`,children:[(0,B.jsxs)(`figcaption`,{className:`mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:[`Efficiency through Week `,i.scoringThrough]}),(0,B.jsx)(El,{managers:i.managers,scoringThrough:i.scoringThrough}),(0,B.jsxs)(`p`,{className:`mt-2 text-xs text-[var(--gwb-muted)]`,children:[`Filled bars are in the championship pool. Hollow bars are under`,` `,3,` rostered pickups.`]})]}),(0,B.jsxs)(`figure`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-3`,children:[(0,B.jsx)(`figcaption`,{className:`mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Cumulative started points`}),(0,B.jsx)(Dl,{managers:i.managers,scoringThrough:i.scoringThrough})]})]}),(0,B.jsx)(Vl,{board:i})]}),(0,B.jsxs)(`section`,{children:[(0,B.jsx)(`h3`,{className:`mb-2 text-lg font-semibold`,children:`Move log`}),(0,B.jsxs)(`div`,{className:`mb-3 flex flex-wrap gap-2`,children:[(0,B.jsxs)(`select`,{"aria-label":`Filter moves by manager`,className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-2 py-2 text-sm`,value:a,onChange:e=>o(e.target.value===`all`?`all`:Number(e.target.value)),children:[(0,B.jsx)(`option`,{value:`all`,children:`All managers`}),i.managers.map(e=>(0,B.jsx)(`option`,{value:e.rosterId,children:e.displayName},e.rosterId))]}),(0,B.jsxs)(`select`,{"aria-label":`Filter moves by status`,className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-2 py-2 text-sm`,value:s,onChange:e=>c(e.target.value),children:[(0,B.jsx)(`option`,{value:`all`,children:`All statuses`}),(0,B.jsx)(`option`,{value:`complete`,children:`Complete`}),(0,B.jsx)(`option`,{value:`failed`,children:`Failed`})]}),(0,B.jsxs)(`select`,{"aria-label":`Filter moves by type`,className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-2 py-2 text-sm`,value:l,onChange:e=>u(e.target.value),children:[(0,B.jsx)(`option`,{value:`all`,children:`Waivers and free agents`}),(0,B.jsx)(`option`,{value:`waiver`,children:`Waivers`}),(0,B.jsx)(`option`,{value:`free_agent`,children:`Free agents`})]}),(0,B.jsx)(`button`,{type:`button`,className:`rounded-lg border px-3 py-2 text-sm ${d?`border-[var(--gwb-accent)] text-[var(--gwb-accent)]`:`border-[var(--gwb-border)] text-[var(--gwb-muted)]`}`,onClick:()=>f(e=>!e),children:d?`Showing all weeks`:`Week ${i.selectedWeek} only`})]}),p.length===0?(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`No moves `,d?`match these filters`:`in Week ${i.selectedWeek}`,`.`]}):(0,B.jsx)(`ul`,{className:`space-y-2`,children:p.map(e=>(0,B.jsx)(Ul,{move:e,who:Nl(i,e.rosterId),name:m},e.id))})]})]})}function Fl({board:e,name:t,managerName:n}){let r=e.moves.filter(t=>t.leg===e.selectedWeek&&t.status===`complete`&&t.adds.length>0);if(!r.length)return null;let i=!e.selectedWeekComplete;return(0,B.jsxs)(`section`,{"aria-labelledby":`waiver-week-adds-heading`,children:[(0,B.jsx)(`h3`,{id:`waiver-week-adds-heading`,className:`mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`This week's adds`}),(0,B.jsx)(`ul`,{className:`flex gap-2 overflow-x-auto pb-1`,role:`list`,children:r.map(e=>(0,B.jsxs)(`li`,{className:`min-w-[9.5rem] shrink-0 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2 text-xs`,children:[(0,B.jsx)(`p`,{className:`font-medium`,children:n(e.rosterId)}),(0,B.jsxs)(`p`,{className:`mt-0.5 text-[var(--gwb-muted)]`,children:[`+`,e.adds.map(t).join(`, `)]}),i&&e.pending?(0,B.jsx)(`p`,{className:`mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200`,children:`Pending`}):e.startedPoints==null?null:(0,B.jsxs)(`p`,{className:`mt-1 tabular-nums text-[var(--gwb-accent)]`,children:[kl(e.startedPoints),` started`]})]},e.id))})]})}function Il({board:e}){let t=e.champion;return(0,B.jsxs)(`article`,{className:`rounded-xl border border-[var(--gwb-accent)] bg-[var(--gwb-surface)] p-4`,children:[(0,B.jsx)(`p`,{className:`text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gwb-accent)]`,children:`Waiver Wire Champion`}),t?(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`h3`,{className:`mt-1 font-['Anton'] text-3xl uppercase leading-none`,children:t.displayName}),(0,B.jsx)(`p`,{className:`mt-1 text-sm text-[var(--gwb-muted)]`,children:t.teamName}),(0,B.jsx)(`p`,{className:`mt-3 font-['Anton'] text-4xl tabular-nums text-[var(--gwb-accent)]`,children:kl(t.wes)}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[yl(t),` · through Week `,e.scoringThrough]})]}):(0,B.jsxs)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:[`No manager has `,3,` rostered pickups through Week`,` `,e.scoringThrough,`.`]})]})}function Ll({board:e}){let t=e.cellar;return(0,B.jsxs)(`article`,{className:`rounded-xl border border-red-900/50 bg-red-950/30 p-4`,children:[(0,B.jsx)(`p`,{className:`text-xs font-semibold uppercase tracking-[0.16em] text-red-200`,children:`Waiver Wire Cellar`}),t?(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`h3`,{className:`mt-1 font-['Anton'] text-3xl uppercase leading-none text-red-100`,children:t.displayName}),(0,B.jsx)(`p`,{className:`mt-1 text-sm text-red-200/80`,children:t.teamName}),(0,B.jsx)(`p`,{className:`mt-3 font-['Anton'] text-4xl tabular-nums text-red-200`,children:kl(t.wes)}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-red-200/70`,children:[`Last in the pool · `,yl(t),` · through Week`,` `,e.scoringThrough]})]}):(0,B.jsx)(`p`,{className:`mt-2 text-sm text-red-200/80`,children:`The cellar chip appears once two managers are in the pool.`})]})}function Rl({board:e,name:t,managerName:n}){let r=e.pickupOfWeek;return(0,B.jsxs)(`article`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-4`,children:[(0,B.jsx)(`p`,{className:`text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gwb-muted)]`,children:`Pickup of the Week`}),e.selectedWeekComplete?r?(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`h3`,{className:`mt-1 text-xl font-semibold`,children:t(r.playerId)}),(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:n(r.rosterId)}),(0,B.jsx)(`p`,{className:`mt-2 text-2xl font-semibold tabular-nums text-[var(--gwb-accent)]`,children:kl(r.points)}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Started in Week `,r.week]})]}):(0,B.jsxs)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:[`No pickup started in Week `,e.selectedWeek,`.`]}):(0,B.jsxs)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:[`Week `,e.selectedWeek,` is still scoring.`]})]})}function zl({board:e,name:t,managerName:n}){let r=e.worstDropOfWeek;return(0,B.jsxs)(`article`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-4`,children:[(0,B.jsx)(`p`,{className:`text-xs font-semibold uppercase tracking-[0.16em] text-[var(--gwb-muted)]`,children:`Worst Drop`}),e.selectedWeekComplete?r&&r.startedByRosterId!=null?(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`h3`,{className:`mt-1 text-xl font-semibold`,children:t(r.playerId)}),(0,B.jsxs)(`p`,{className:`mt-1 text-sm`,children:[`Dropped by `,n(r.rosterId)]}),(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`Started by `,n(r.startedByRosterId),` for `,kl(r.points)]})]}):(0,B.jsxs)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:[`No dropped player started for someone else in Week `,e.selectedWeek,`.`]}):(0,B.jsxs)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:[`Week `,e.selectedWeek,` is still scoring.`]})]})}function Bl({board:e}){return(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`div`,{className:`space-y-2 sm:hidden`,children:e.weeklyRanking.map((e,t)=>(0,B.jsxs)(`article`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5`,children:[(0,B.jsxs)(`div`,{className:`flex items-baseline justify-between gap-3`,children:[(0,B.jsxs)(`p`,{className:`font-medium`,children:[(0,B.jsx)(`span`,{className:`mr-2 text-[var(--gwb-accent)]`,children:t+1}),e.displayName]}),(0,B.jsx)(`p`,{className:`tabular-nums font-semibold`,children:kl(e.weeklyNet)})]}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[`Started `,kl(e.weeklyStarted),` · drop regret `,kl(e.weeklyRegret)]})]},e.rosterId))}),(0,B.jsx)(`div`,{className:`hidden overflow-x-auto rounded-xl border border-[var(--gwb-border)] sm:block`,children:(0,B.jsxs)(`table`,{className:`w-full text-left text-sm`,children:[(0,B.jsx)(`thead`,{className:`bg-[var(--gwb-surface)] text-xs uppercase tracking-wider text-[var(--gwb-muted)]`,children:(0,B.jsxs)(`tr`,{children:[(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`#`}),(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`Manager`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Started`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Drop regret`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Net`})]})}),(0,B.jsx)(`tbody`,{children:e.weeklyRanking.map((e,t)=>(0,B.jsxs)(`tr`,{className:`border-t border-[var(--gwb-border)] odd:bg-[#0d1319]`,children:[(0,B.jsx)(`td`,{className:`px-3 py-2.5 font-semibold text-[var(--gwb-accent)]`,children:t+1}),(0,B.jsxs)(`td`,{className:`px-3 py-2.5`,children:[(0,B.jsx)(`div`,{className:`font-medium`,children:e.displayName}),(0,B.jsx)(`div`,{className:`text-xs text-[var(--gwb-muted)]`,children:e.teamName})]}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(e.weeklyStarted)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(e.weeklyRegret)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums font-semibold`,children:kl(e.weeklyNet)})]},e.rosterId))})]})})]})}function Vl({board:e}){return(0,B.jsxs)(B.Fragment,{children:[(0,B.jsx)(`div`,{className:`space-y-2 sm:hidden`,children:e.managers.map(e=>(0,B.jsx)(Hl,{row:e},e.rosterId))}),(0,B.jsx)(`div`,{className:`hidden overflow-x-auto rounded-xl border border-[var(--gwb-border)] sm:block`,children:(0,B.jsxs)(`table`,{className:`w-full min-w-[880px] text-left text-sm`,children:[(0,B.jsx)(`thead`,{className:`bg-[var(--gwb-surface)] text-xs uppercase tracking-wider text-[var(--gwb-muted)]`,children:(0,B.jsxs)(`tr`,{children:[(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`#`}),(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`Manager`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`WES`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Started`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Bench`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Pickups`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Rostered`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Pts/pickup`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Hit`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Net`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Regret`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Failed`}),(0,B.jsx)(`th`,{className:`px-3 py-2 text-right`,children:`Priority`})]})}),(0,B.jsx)(`tbody`,{children:e.managers.map(t=>(0,B.jsxs)(`tr`,{className:`border-t border-[var(--gwb-border)] odd:bg-[#0d1319] ${e.champion?.rosterId===t.rosterId?`outline outline-2 -outline-offset-2 outline-[var(--gwb-accent)]`:e.cellar?.rosterId===t.rosterId?`outline outline-2 -outline-offset-2 outline-red-400/70`:``}`,children:[(0,B.jsx)(`td`,{className:`px-3 py-2.5 font-semibold text-[var(--gwb-accent)]`,children:t.poolRank??`—`}),(0,B.jsxs)(`td`,{className:`px-3 py-2.5`,children:[(0,B.jsxs)(`div`,{className:`font-medium`,children:[t.displayName,` `,!t.eligible&&(0,B.jsx)(`span`,{className:`ml-1 rounded bg-[var(--gwb-border)] px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Small sample`})]}),(0,B.jsx)(`div`,{className:`text-xs text-[var(--gwb-muted)]`,children:t.teamName})]}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums font-semibold`,children:kl(t.wes)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(t.startedPoints)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(t.benchPoints)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:t.pickupCount}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:t.rosteredPickups}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(t.pointsPerPickup)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:Al(t)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(t.netWaiverPoints)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:kl(t.dropRegret)}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:t.failedClaims}),(0,B.jsx)(`td`,{className:`px-3 py-2.5 text-right tabular-nums`,children:t.waiverPriority??`—`})]},t.rosterId))})]})})]})}function Hl({row:e}){return(0,B.jsxs)(`article`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5`,children:[(0,B.jsxs)(`div`,{className:`flex items-start justify-between gap-3`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`p`,{className:`font-medium`,children:[e.poolRank!=null&&(0,B.jsx)(`span`,{className:`mr-2 text-[var(--gwb-accent)]`,children:e.poolRank}),e.displayName]}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:e.teamName}),!e.eligible&&(0,B.jsx)(`p`,{className:`mt-1 text-[10px] uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Small sample`})]}),(0,B.jsx)(`p`,{className:`font-['Anton'] text-2xl tabular-nums text-[var(--gwb-accent)]`,children:kl(e.wes)})]}),(0,B.jsxs)(`p`,{className:`mt-2 text-xs text-[var(--gwb-muted)]`,children:[`Started `,kl(e.startedPoints),` · `,e.pickupCount,` pickups · net `,kl(e.netWaiverPoints),` ·`,` `,e.failedClaims,` failed`]}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[`Bench `,kl(e.benchPoints),` · `,kl(e.pointsPerPickup),` / pickup · hit `,Al(e),` · regret `,kl(e.dropRegret),` · priority `,e.waiverPriority??`—`]})]})}function Ul({move:e,who:t,name:n}){let r=Ol.format(new Date(e.statusUpdated)),i=e.adds.map(n).join(`, `),a=e.drops.map(n).join(`, `);return(0,B.jsxs)(`li`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-sm`,children:[(0,B.jsxs)(`div`,{className:`flex flex-wrap items-baseline justify-between gap-2`,children:[(0,B.jsxs)(`p`,{className:`font-medium`,children:[i&&(0,B.jsxs)(`span`,{children:[`Added `,i]}),i&&a&&(0,B.jsx)(`span`,{className:`text-[var(--gwb-muted)]`,children:` · `}),a&&(0,B.jsxs)(`span`,{children:[`Dropped `,a]}),!i&&!a&&(0,B.jsx)(`span`,{children:`Roster move`})]}),e.status===`failed`?(0,B.jsx)(`span`,{className:`text-xs uppercase tracking-wide text-red-200`,children:`Failed`}):e.pending?(0,B.jsx)(`span`,{className:`text-xs uppercase tracking-wide text-amber-200`,children:`Pending`}):(0,B.jsx)(`span`,{className:`tabular-nums text-[var(--gwb-accent)]`,children:e.startedPoints==null?``:`${kl(e.startedPoints)} started`})]}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[t,` · Week `,e.leg,` · `,e.type===`free_agent`?`Free agent`:`Waiver`,` · `,r,` ET`]}),e.status===`failed`&&e.notes&&(0,B.jsx)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:e.notes})]})}var Wl=6e4;function Gl(e,t,n,r){let[i,a]=(0,v.useState)(n),[o,s]=(0,v.useState)(null),[c,l]=(0,v.useState)(!1),u=(0,v.useRef)(!0);(0,v.useEffect)(()=>{a(n)},[e,n]);let d=(0,v.useCallback)(async()=>{if(t){l(!0);try{let t=await Nc(e);t?.length&&(a(t),s(new Date),r?.(e,t))}catch{}finally{l(!1)}}},[e,t,r]);return(0,v.useEffect)(()=>{if(!t)return;let e=()=>{u.current=document.visibilityState===`visible`};document.addEventListener(`visibilitychange`,e),e();let n=window.setInterval(()=>{u.current&&d()},Wl);return()=>{document.removeEventListener(`visibilitychange`,e),window.clearInterval(n)}},[t,d]),(0,v.useEffect)(()=>{t&&d()},[e,t]),{matchups:i,lastUpdated:o,refreshing:c,refresh:d}}function Kl(e,t){let n=new Map,r=e=>{let t=n.get(e);return t||(t={wins:0,losses:0,ties:0},n.set(e,t)),t};for(let n=1;n<=t;n++){let t=e.get(n);if(!t?.length)continue;let i=t.map(e=>({rosterId:e.roster_id,points:e.points}));for(let{rosterId:e,points:t}of i){let n=r(e);for(let r of i)r.rosterId!==e&&(t>r.points?n.wins+=1:t<r.points?n.losses+=1:n.ties+=1)}}return n}function ql(e){return e.ties>0?`${e.wins}-${e.losses}-${e.ties}`:`${e.wins}-${e.losses}`}function Jl(e){let t=e%100;if(t>=11&&t<=13)return`${e}th`;let n=e%10;return n===1?`${e}st`:n===2?`${e}nd`:n===3?`${e}rd`:`${e}th`}function Yl(e,t){return t<=0||e<=0?null:e<=t?`Would be the ${Jl(e)} seed if the season ended today.`:`Would be ${Jl(e)} overall — outside the top ${t}.`}function Xl(e,t,n){let r=t.filter(e=>e.roster_id!==n).map(e=>e.points);return r.length===0?``:`All-play: would have beaten ${r.filter(t=>e>t).length} of ${r.length} teams.`}function Zl(e){if(!e.length)return null;let t=e[0],n=e[0],r=e[0].teamA.teamName,i=e[0].teamA.points;for(let a of e){a.margin>t.margin&&(t=a),a.margin<n.margin&&(n=a);for(let e of[a.teamA,a.teamB])e.points>i&&(i=e.points,r=e.teamName)}let a=e=>{let t=e.teamA.points>=e.teamB.points?e.teamA:e.teamB,n=e.teamA.points>=e.teamB.points?e.teamB:e.teamA;return`${t.teamName} over ${n.teamName}`};return{biggestWin:{label:a(t),margin:t.margin},closestGame:{label:a(n),margin:n.margin},highestScore:{label:r,points:i}}}function Ql(e){return e.settings.last_scored_leg??e.settings.leg??0}function $l(e){return e.week??e.display_week??1}function eu(e,t){let n=Ql(e);if(n>0)return n;let r=$l(t);return Math.max(1,r-1)}function tu(e,t){let n=$l(t);return ru(n,e,t)?n:eu(e,t)}function nu(e,t,n){let r=$l(n),i=Ql(t);return e>=r&&e>i}function ru(e,t,n){return!nu(e,t,n)&&e<=$l(n)}function iu(e,t,n){return nu(e,t,n)?`LIVE`:`FINAL`}function au(e,t,n){return nu(e,t,n)?eu(t,n):e}function ou(e,t,n){return U(e,t,n,`standings`)}function U(e,t,n,r){return nu(e,t,n)?`Week ${e} in progress, ${r} through Week ${eu(t,n)}.`:null}function su({receipt:e}){return(0,B.jsxs)(`div`,{className:`rounded-xl border border-[var(--gwb-accent)]/40 bg-[#1a1608] px-4 py-3 text-sm`,children:[(0,B.jsx)(`p`,{className:`mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:`Receipt of the week`}),(0,B.jsxs)(`ul`,{className:`space-y-1 text-[var(--gwb-text)]`,children:[(0,B.jsxs)(`li`,{children:[`Biggest win: `,e.biggestWin.label,` (`,e.biggestWin.margin.toFixed(1),` pts)`]}),(0,B.jsxs)(`li`,{children:[`Closest game: `,e.closestGame.label,` (`,e.closestGame.margin.toFixed(1),` pts)`]}),(0,B.jsxs)(`li`,{children:[`High score: `,e.highestScore.label,` (`,e.highestScore.points.toFixed(1),` pts)`]})]})]})}function cu({recap:e}){return(0,B.jsxs)(`article`,{className:`rounded-xl border p-4 ${e.isMatchupOfTheWeek?`border-[var(--gwb-accent)] bg-[#1a1608]`:`border-[var(--gwb-border)] bg-[var(--gwb-surface)]`}`,children:[(0,B.jsxs)(`div`,{className:`mb-2 flex flex-wrap items-center gap-2`,children:[e.isMatchupOfTheWeek&&(0,B.jsx)(`span`,{className:`text-xs font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:`Matchup of the week`}),(0,B.jsx)(`span`,{className:`rounded bg-amber-500/20 px-2 py-0.5 text-xs font-semibold uppercase text-amber-300`,children:`Live`})]}),(0,B.jsx)(`div`,{className:`flex flex-wrap items-baseline justify-between gap-2`,children:(0,B.jsxs)(`h3`,{className:`text-lg font-semibold`,children:[e.teamA.teamName,` `,(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:e.teamA.points.toFixed(1)}),(0,B.jsx)(`span`,{className:`mx-2 text-[var(--gwb-muted)]`,children:`vs`}),e.teamB.teamName,` `,(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:e.teamB.points.toFixed(1)})]})}),(0,B.jsx)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:e.narrative}),e.starsLine&&(0,B.jsx)(`p`,{className:`mt-1 text-sm text-[var(--gwb-text)]`,children:e.starsLine})]})}function lu({week:e,matchups:t,teams:n}){let r=Ss(t);return r.length?(0,B.jsx)(`div`,{className:`space-y-4`,children:r.map(({matchupId:e,home:t,away:r})=>{let i=n.get(t.roster_id),a=n.get(r.roster_id),o=i?.teamName??js(t.roster_id,n),s=a?.teamName??js(r.roster_id,n),c=Math.abs(t.points-r.points).toFixed(1),l=Jo(t.points,r.points)?`Not started`:t.points>=r.points?`${o} is leading ${s} by ${c} points.`:`${s} is leading ${o} by ${c} points.`;return(0,B.jsxs)(`article`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-4`,children:[(0,B.jsx)(`span`,{className:`mb-2 inline-block rounded bg-amber-500/20 px-2 py-0.5 text-xs font-semibold uppercase text-amber-300`,children:`Live`}),(0,B.jsxs)(`h3`,{className:`text-lg font-semibold`,children:[o,` `,(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:t.points.toFixed(1)}),(0,B.jsx)(`span`,{className:`mx-2 text-[var(--gwb-muted)]`,children:`vs`}),s,` `,(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:r.points.toFixed(1)})]}),(0,B.jsx)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:l})]},e)})}):(0,B.jsxs)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:[`Live scores for Week `,e,` are not available yet. Check back after lineups lock.`]})}function uu({recaps:e,week:t,hasScores:n,isLive:r,weekMatchups:i,playersLoading:a,league:o,nflState:s,teams:c,players:l,matchupsByWeek:u,onMatchupsUpdated:d,recapsTabActive:f}){let{matchups:p}=Gl(t,!!(r&&f&&o&&s)&&nu(t,o,s),i,d),m=r?p??i:i,h=(0,v.useMemo)(()=>{if(!r||!m||!Zo(m)||!l||!o||!u)return e;let n=Js(u,c??new Map,Math.max(0,t-1));return Xo(m,c??new Map,l,{rosterPositions:o.roster_positions,preWeekStandings:n,isWeekFinal:!1,week:t})},[r,m,l,o,u,c,t,e]);if(!n&&!r)return(0,B.jsxs)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:[`No scored matchups for Week `,t,` yet. Check back after lineups lock or try an earlier week.`]});if(r){let e=(0,B.jsxs)(`div`,{className:`flex flex-wrap items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100`,role:`status`,children:[(0,B.jsx)(`span`,{className:`rounded bg-amber-500/25 px-2 py-0.5 text-xs font-semibold uppercase text-amber-200`,children:`Live`}),(0,B.jsxs)(`span`,{children:[`Recaps post when Week `,t,` is final. Scores below update from Sleeper.`]})]});return a&&!h.length&&m?.length?(0,B.jsxs)(`div`,{className:`space-y-4`,children:[e,(0,B.jsx)(lu,{week:t,matchups:m,teams:c??new Map})]}):a?(0,B.jsxs)(`div`,{className:`space-y-4`,children:[e,(0,B.jsx)(`p`,{className:`rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`Loading live matchup scores…`})]}):h.length?(0,B.jsxs)(`div`,{className:`space-y-4`,children:[e,h.map(e=>(0,B.jsx)(cu,{recap:e},e.matchupId))]}):m?.length?(0,B.jsxs)(`div`,{className:`space-y-4`,children:[e,(0,B.jsx)(lu,{week:t,matchups:m,teams:c??new Map})]}):(0,B.jsxs)(`div`,{className:`space-y-4`,children:[e,(0,B.jsxs)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:[`No live scores for Week `,t,` yet. Check back after lineups lock.`]})]})}if(a)return(0,B.jsx)(`p`,{className:`rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`Loading player names for recap details…`});let g=Zl(e);return(0,B.jsxs)(`div`,{className:`space-y-4`,children:[g&&(0,B.jsx)(su,{receipt:g}),e.map(e=>(0,B.jsxs)(`article`,{className:`rounded-xl border p-4 ${e.isMatchupOfTheWeek?`border-[var(--gwb-accent)] bg-[#1a1608]`:`border-[var(--gwb-border)] bg-[var(--gwb-surface)]`}`,children:[e.isMatchupOfTheWeek&&(0,B.jsx)(`p`,{className:`mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:`Matchup of the week`}),(0,B.jsxs)(`div`,{className:`flex flex-wrap items-baseline justify-between gap-2`,children:[(0,B.jsxs)(`h3`,{className:`text-lg font-semibold`,children:[e.teamA.teamName,` `,(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:e.teamA.points.toFixed(1)}),(0,B.jsx)(`span`,{className:`mx-2 text-[var(--gwb-muted)]`,children:`vs`}),e.teamB.teamName,` `,(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:e.teamB.points.toFixed(1)})]}),e.tags.length>0&&(0,B.jsx)(`div`,{className:`flex gap-2`,children:e.tags.map(e=>(0,B.jsx)(`span`,{className:`rounded-full bg-[#243040] px-2 py-0.5 text-xs uppercase`,children:e},e))})]}),(0,B.jsx)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:e.narrative}),e.starsLine&&(0,B.jsx)(`p`,{className:`mt-1 text-sm text-[var(--gwb-text)]`,children:e.starsLine}),i&&(0,B.jsx)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:Xl(e.teamA.points,i,e.teamA.rosterId)}),(0,B.jsxs)(`dl`,{className:`mt-3 grid gap-2 text-sm sm:grid-cols-2`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`dt`,{className:`text-xs uppercase text-[var(--gwb-muted)]`,children:[`Top scorer · `,e.teamA.teamName]}),(0,B.jsx)(`dd`,{children:e.teamA.topScorer?`${e.teamA.topScorer.name} · ${e.teamA.topScorer.points.toFixed(1)}`:`—`})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`dt`,{className:`text-xs uppercase text-[var(--gwb-muted)]`,children:[`Top scorer · `,e.teamB.teamName]}),(0,B.jsx)(`dd`,{children:e.teamB.topScorer?`${e.teamB.topScorer.name} · ${e.teamB.topScorer.points.toFixed(1)}`:`—`})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`dt`,{className:`text-xs uppercase text-[var(--gwb-muted)]`,children:[`Bench miss · `,e.teamA.teamName]}),(0,B.jsx)(`dd`,{children:e.teamA.benchMiss?.message??`—`})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`dt`,{className:`text-xs uppercase text-[var(--gwb-muted)]`,children:[`Bench miss · `,e.teamB.teamName]}),(0,B.jsx)(`dd`,{children:e.teamB.benchMiss?.message??`—`})]})]})]},e.matchupId))]})}var du={throughWeek:6,weekNote:``,entries:[{id:`w1-mauricio`,week:1,rosterId:2,manager:`Mauricio`,team:`Los Yajesitos`,out:{name:`A.J. Brown`,position:`WR`,points:5.6},in:{name:`Tre Tucker`,position:`WR`,points:4.7},netImpact:-.9,scoreWith:137.1,scoreWithout:138,opponentScore:124.51,opponentLabel:`Jesus`,opponentRosterId:8,won:!0,flipped:!1,footnote:`Won anyway; the swap actually cost 0.9.`},{id:`w2-manny`,week:2,rosterId:9,manager:`Manny`,team:`Mnny`,out:{name:`Caleb Williams`,position:`QB`,points:8.45},in:{name:`Patrick Mahomes`,position:`QB`,points:45.29},netImpact:36.84,scoreWith:183.99,scoreWithout:147.15,opponentScore:138.89,opponentLabel:`Jamil`,won:!0,flipped:!1},{id:`w2-matt`,week:2,rosterId:12,manager:`Matt`,team:`Gibbs & Grind`,out:{name:`DJ Moore`,position:`WR`,points:-.1},in:{name:`Malachi Fields`,position:`WR`,points:5},netImpact:5.1,scoreWith:130.52,scoreWithout:125.42,opponentScore:134.93,opponentLabel:`Steven`,won:!1,flipped:!1,footnote:`The first failed mulligan.`},{id:`w3-narking`,week:3,rosterId:3,manager:`NarkingR`,team:`Put em down Jeanty`,out:{name:`De'Von Achane`,position:`RB`,points:1.7,note:`knee`},in:{name:`Travis Etienne`,position:`RB`,points:9},netImpact:7.3,netImpactOverride:5.3,scoreWith:136.7,scoreWithout:131.4,opponentScore:167.66,opponentLabel:`Darkseid Jackson`,opponentRosterId:8,won:!1,flipped:!1},{id:`w3-danny`,week:3,rosterId:1,manager:`Santagua`,managerShort:`Danny`,team:`Lambs2Slaughter`,out:{name:`Rashod Bateman`,position:`WR`,points:5.7},in:{name:`Dontayvion Wicks`,position:`WR`,points:5.2},netImpact:-.5,scoreWith:121.69,scoreWithout:122.19,opponentScore:131.97,opponentLabel:`Hady`,opponentRosterId:6,won:!1,flipped:!1},{id:`w4-jesus`,week:4,rosterId:8,manager:`kingCrooke`,managerShort:`Crooke`,team:`Darkseid Jackson`,out:{name:`Parker Washington`,position:`WR`,points:2,team:`JAX`},in:{name:`Mike Evans`,position:`WR`,points:12.6,team:`SF`},netImpact:10.6,scoreWith:121.27,scoreWithout:110.67,opponentScore:163.91,opponentLabel:`Lambs2Slaughter`,opponentRosterId:1,won:!1,flipped:!1},{id:`w4-kayser`,week:4,rosterId:4,manager:`powpeazy`,managerShort:`Kayser`,team:`The Special One`,out:{name:`Rashee Rice`,position:`WR`,points:0,team:`KC`,note:`hamstring`},in:{name:`Brycen Tremayne`,position:`WR`,points:5.2,team:`CAR`},netImpact:5.2,scoreWith:128.44,scoreWithout:123.24,opponentScore:144.8,opponentLabel:`Turn Your Head And Goff`,opponentRosterId:11,won:!1,flipped:!1,footnote:`Vele dropped 17.4 on MNF; lost by 16.36 even with the +5.2.`},{id:`w6-jamil`,week:6,rosterId:10,manager:`BigBlue01`,managerShort:`Jamil`,team:`BigBlue`,out:{name:`Mark Andrews`,position:`TE`,points:1.4,team:`BAL`},in:{name:`Jake Ferguson`,position:`TE`,points:3.3,team:`DAL`},netImpact:1.9,scoreWith:134.98,scoreWithout:133.08,opponentScore:137.59,opponentLabel:`Put em down Jeanty`,opponentRosterId:3,won:!1,flipped:!1}]},fu=du.entries,pu={throughWeek:du.throughWeek,weekNote:du.weekNote};function mu(e,t){return fu.find(n=>n.rosterId===e&&n.week<=t)}function hu(e,t,n){let r=e.in.pointsPending&&t,i=e.resultPending&&e.opponentScoreLive&&n!==void 0;if(r||i)return{playerPoints:r?t:void 0,opponentMatchupPoints:i?n:void 0}}function gu(e,t){return e.resultPending&&e.opponentScoreLive&&t?.opponentMatchupPoints!==void 0?t.opponentMatchupPoints:e.opponentScore}function _u(e){return fu.filter(t=>t.week===e).sort((e,t)=>e.rosterId-t.rosterId)}function vu(e){return fu.filter(t=>t.week<=e).length}function yu(e){return fu.filter(t=>t.week<=e&&t.flipped).length}function bu(e,t){if(!e.pointsPending)return e.points;let n=e.sleeperPlayerId;return t?.playerPoints&&n&&n in t.playerPoints?t.playerPoints[n]:null}function xu(e,t){if(e.netImpactPending||e.in.pointsPending){let n=bu(e.in,t);return n===null?null:n-e.out.points}return e.netImpactOverride===void 0?e.netImpact:e.netImpactOverride}function Su(e,t){if(e.pointsPending){let n=bu(e,t);return n===null?`TBD`:`${ku(n)} (live)`}return ku(e.points)}function Cu(e,t,n=!1){let r=xu(e,t);if(r===null)return`TBD`;let i=Au(r);return n?`${i} so far`:i}function wu(e,t){let n=xu(e,t);return n===null?e.scoreWith:e.scoreWithout+n}function Tu(e,t=1/0,n){let r=mu(e,t);if(!r)return{used:!1};let i=r.out.note?` (${r.out.note})`:``,a=r.resultPending===!0;return{used:!0,week:r.week,outLine:`OUT ${r.out.name} ${ku(r.out.points)}${i}`,inLine:`IN ${r.in.name} ${Su(r.in,n)}`,netLine:`Net ${Cu(r,n,a)}`}}function Eu(e){return xs(e.rosterId,e.managerShort??e.manager)}function Du(e){return e.opponentRosterId==null?e.opponentLabel:xs(e.opponentRosterId,e.opponentLabel)}function Ou(e,t){let n=Eu(e),r=Du(e),i=e.out.note?` (${e.out.note})`:``,a=e.resultPending?`TBD`:e.won?`W`:`L`,o=wu(e,t),s=gu(e,t),c=e.resultPending?`Net so far`:e.won?`Won`:`Lost`,l=e.resultPending||e.won?`vs`:`to`,u=e.resultPending?void 0:e.flipped?`Flipped the result`:`No flip`,d=e.resultPending===!0;return{manager:n,outLine:`OUT ${e.out.name} ${ku(e.out.points)}${i}`,inLine:`IN ${e.in.name} ${Su(e.in,t)}`,netLine:`Net ${Cu(e,t,d)}`,resultLine:`${a} ${ku(o)}–${ku(s)}`,versusLine:`${c} ${l} ${r}`,withoutLine:`Would've been ${ku(e.scoreWithout)} without it`,flipLine:u,footnote:e.footnote}}function ku(e){return e.toFixed(2)}function Au(e){return`${e>=0?`+`:`−`}${ku(Math.abs(e))}`}function ju(e,t){let n=pu.throughWeek;return Math.max(e,Math.min(t,n))}function Mu(e,t,n,r){if(!nu(e,t,n))return null;let i=ju(r,e);return i>eu(t,n)?`Week ${e} in progress. Mulligan status live through Week ${i}.`:`Week ${e} in progress, mulligan status through Week ${i}.`}function Nu(e,t){let n=e.managerShort?`${e.manager} / ${e.managerShort}`:e.manager,r=e.out.note?` (${e.out.note})`:``,i=wu(e,t),a=gu(e,t),o=`${ku(i)}–${ku(a)}`,s=e.resultPending?`Net so far`:e.won?`Won`:`Lost`,c=e.resultPending||e.won?`vs`:`to`,l=e.resultPending?`Outcome TBD`:e.flipped?`Flipped result`:`No flip`,u=e.resultPending===!0,d=e.footnote?` · ${e.footnote}`:``,f=e.out.team?` ${e.out.team}`:``,p=e.in.team?` ${e.in.team}`:``;return`W${e.week} · ${n} (${e.team}) · OUT ${e.out.name} ${e.out.position}${f} ${ku(e.out.points)}${r} → IN ${e.in.name} ${e.in.position}${p} ${Su(e.in,t)} · Net ${Cu(e,t,u)} · ${s} ${o} ${c} ${Du(e)} (would've been ${ku(e.scoreWithout)} without it) · ${l}${d}`}var Pu=12;function Fu({used:e}){return(0,B.jsxs)(`div`,{className:`flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1`,"aria-label":`${e} of ${Pu} mulligans used`,children:[(0,B.jsx)(`div`,{className:`flex max-w-full flex-wrap gap-1`,children:Array.from({length:Pu},(t,n)=>(0,B.jsx)(`span`,{className:`h-3 w-3 shrink-0 rounded-full border ${n<e?`border-amber-400 bg-amber-400`:`border-[var(--gwb-border)] bg-[#0d1319]`}`,"aria-hidden":!0},n))}),(0,B.jsxs)(`span`,{className:`text-xs text-[var(--gwb-muted)]`,children:[e,` used · `,Pu-e,` left`]})]})}function Iu({rows:e,selectedWeek:t,statusThroughWeek:n,deferralNote:r,weekMatchups:i,onNegativeMulliganOpen:a}){let o=_u(t),s=vu(n),c=yu(n),l=[...e].sort((e,t)=>e.teamName.localeCompare(t.teamName)),u=`${c} of ${s} flipped, ${s} used, ${12-s} left.`;return(0,B.jsxs)(`div`,{id:`mulligans-section`,className:`min-w-0 space-y-6`,children:[r&&(0,B.jsx)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:r}),(0,B.jsxs)(`div`,{children:[(0,B.jsx)(`h3`,{className:`mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Mulligan status`}),(0,B.jsx)(Fu,{used:s}),(0,B.jsxs)(`p`,{className:`mb-3 mt-2 break-words text-xs leading-relaxed text-[var(--gwb-muted)]`,children:[`One per manager per season through Week `,n,`. `,u,n>=pu.throughWeek&&pu.weekNote?` ${pu.weekNote}`:``]}),(0,B.jsx)(`ul`,{className:`overflow-hidden rounded-xl border border-[var(--gwb-border)]`,children:l.map(e=>{let r=mu(e.rosterId,n),a;if(r&&r.week===t){let t=i?.find(t=>t.roster_id===e.rosterId),n=r.opponentRosterId==null?void 0:i?.find(e=>e.roster_id===r.opponentRosterId);a=hu(r,t?.players_points,n?.points)}let o=Tu(e.rosterId,n,a);return(0,B.jsxs)(`li`,{className:`min-w-0 border-t border-[var(--gwb-border)] px-3 py-3 first:border-t-0 odd:bg-[#0d1319]`,children:[(0,B.jsx)(`div`,{className:`font-medium break-words`,children:e.teamName}),(0,B.jsx)(`div`,{className:`text-xs text-[var(--gwb-muted)]`,children:xs(e.rosterId,e.displayName)}),o.used?(0,B.jsxs)(`div`,{className:`mt-2 space-y-0.5 text-sm leading-snug`,children:[(0,B.jsxs)(`p`,{className:`text-xs font-semibold uppercase tracking-wide text-amber-300`,children:[`Used · Week `,o.week]}),(0,B.jsx)(`p`,{className:`break-words`,children:o.outLine}),(0,B.jsx)(`p`,{className:`break-words`,children:o.inLine}),(0,B.jsx)(`p`,{className:`break-words text-amber-200`,children:o.netLine})]}):(0,B.jsx)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:`Available`})]},e.rosterId)})})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`h3`,{className:`mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:[`Week `,t,` mulligans`]}),o.length===0?(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`No mulligans used in Week `,t,`.`]}):(0,B.jsx)(`ul`,{className:`space-y-3`,children:o.map(e=>{let t=i?.find(t=>t.roster_id===e.rosterId),n=e.opponentRosterId==null?void 0:i?.find(t=>t.roster_id===e.opponentRosterId),r=hu(e,t?.players_points,n?.points);return(0,B.jsx)(Lu,{entry:e,liveCtx:r,onOpen:a},e.id)})})]})]})}function Lu({entry:e,liveCtx:t,onOpen:n}){let r=xu(e,t),i=r!==null&&r<0,a=Ou(e,t);return(0,B.jsxs)(`li`,{className:`min-w-0 rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-3 text-sm`,onClick:()=>{i&&n?.()},children:[(0,B.jsx)(`p`,{className:`break-words text-base font-semibold leading-snug text-[var(--gwb-text)]`,children:a.manager}),(0,B.jsxs)(`div`,{className:`mt-2 space-y-0.5 leading-snug`,children:[(0,B.jsx)(`p`,{className:`break-words`,children:a.outLine}),(0,B.jsx)(`p`,{className:`break-words`,children:a.inLine}),(0,B.jsx)(`p`,{className:`break-words font-medium text-amber-200`,children:a.netLine}),(0,B.jsx)(`p`,{className:`break-words font-medium`,children:a.resultLine})]}),(0,B.jsxs)(`div`,{className:`mt-2 space-y-0.5 break-words text-xs leading-relaxed text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`p`,{children:a.versusLine}),(0,B.jsx)(`p`,{children:a.withoutLine}),a.flipLine?(0,B.jsx)(`p`,{children:a.flipLine}):null,a.footnote?(0,B.jsx)(`p`,{children:a.footnote}):null]})]})}function Ru({label:e,pressed:t,showTapHint:n,onToggle:r}){return(0,B.jsxs)(`div`,{className:`flex max-w-full flex-col items-end gap-1`,children:[(0,B.jsxs)(`button`,{type:`button`,className:`inline-flex items-center gap-2 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-1.5 text-sm font-medium text-[var(--gwb-text)] hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]`,"aria-pressed":t,"aria-label":e,onClick:r,children:[(0,B.jsx)(`span`,{"aria-hidden":`true`,children:t?`🔊`:`🔇`}),e]}),n&&(0,B.jsx)(`p`,{className:`max-w-[11rem] text-right text-[10px] leading-snug text-[var(--gwb-muted)] sm:max-w-none sm:text-xs`,"aria-live":`polite`,children:`Tap anywhere for sound`})]})}var zu={"results-w1-m1":`FINAL: MAURICIO TAKES IT`,"results-w1-m2":`FINAL: KAYSER TAKES IT`,"results-w1-m3":`FINAL: MATT TAKES IT`,"results-w1-m4":`FINAL: JAMIL TAKES IT`,"results-w1-m5":`FINAL: STEVEN TAKES IT`,"results-w1-m6":`FINAL: MANNY TAKES IT`,"results-w2-m1":`FINAL: Hady TAKES IT`,"results-w2-m2":`FINAL: NARKING TAKES IT`,"results-w2-m3":`FINAL: KAYSER TAKES IT`,"results-w2-m4":`FINAL: STEVEN TAKES IT`,"results-w2-m5":`FINAL: MANNY TAKES IT`,"results-w2-m6":`FINAL: ERIC TAKES IT`,"results-w3-m1":`FINAL: CROOKE TAKES IT`,"results-w3-m2":`FINAL: Hady TAKES IT`,"results-w3-m3":`FINAL: STEVEN TAKES IT`,"results-w3-m4":`FINAL: KAYSER TAKES IT`,"results-w3-m5":`FINAL: ERIC TAKES IT`,"results-w3-m6":`FINAL: JAMIL TAKES IT`,"results-w4-m1":`FINAL: STEVEN TAKES IT`,"results-w4-m2":`FINAL: FRANKIE TAKES IT`,"results-w4-m3":`FINAL: Hady TAKES IT`,"results-w4-m4":`FINAL: JAMIL TAKES IT`,"results-w4-m5":`FINAL: MAURICIO TAKES IT`,"results-w4-m6":`FINAL: DANNY TAKES IT`,"results-w5-m1":`FINAL: CROOKE TAKES IT`,"results-w5-m2":`FINAL: DANNY TAKES IT`,"results-w5-m3":`FINAL: ERIC TAKES IT`,"results-w5-m4":`FINAL: HADY TAKES IT`,"results-w5-m5":`FINAL: MAURICIO TAKES IT`,"results-w5-m6":`FINAL: MATT TAKES IT`,"vs-w1-m1":`Week 1 · Mauricio vs Crooke`,"vs-w1-m2":`Week 1 · Kayser vs Hady`,"vs-w1-m3":`Week 1 · Matt vs Narking`,"vs-w1-m4":`Week 1 · Jamil vs Danny`,"vs-w1-m5":`Week 1 · Steven vs Frankie`,"vs-w1-m6":`Week 1 · Manny vs Eric`,"vs-w2-m1":`Week 2 · Hady vs Crooke`,"vs-w2-m2":`Week 2 · Narking vs Mauricio`,"vs-w2-m3":`Week 2 · Kayser vs Danny`,"vs-w2-m4":`Week 2 · Steven vs Matt`,"vs-w2-m5":`Week 2 · Manny vs Jamil`,"vs-w2-m6":`Week 2 · Eric vs Frankie`,"vs-w3-m1":`Week 3 · Crooke vs Narking`,"vs-w3-m2":`Week 3 · Hady vs Danny`,"vs-w3-m3":`Week 3 · Steven vs Mauricio`,"vs-w3-m4":`Week 3 · Kayser vs Manny`,"vs-w3-m5":`Week 3 · Eric vs Matt`,"vs-w3-m6":`Week 3 · Jamil vs Frankie`,"vs-w4-m1":`Week 4 · Steven vs Narking`,"vs-w4-m2":`Week 4 · Frankie vs Kayser`,"vs-w4-m3":`Week 4 · Hady vs Manny`,"vs-w4-m4":`Week 4 · Jamil vs Matt`,"vs-w4-m5":`Week 4 · Mauricio vs Eric`,"vs-w4-m6":`Week 4 · Danny vs Crooke`,"vs-w5-m1":`Week 5 · Crooke vs Steven`,"vs-w5-m2":`Week 5 · Danny vs Manny`,"vs-w5-m3":`Week 5 · Eric vs Narking`,"vs-w5-m4":`Week 5 · Hady vs Frankie`,"vs-w5-m5":`Week 5 · Mauricio vs Jamil`,"vs-w5-m6":`Week 5 · Matt vs Kayser`,"vs-w6-m1":`Crooke vs Manny`,"vs-w6-m2":`Eric vs Steven`,"vs-w6-m3":`Danny vs Frankie`,"vs-w6-m4":`Narking vs Jamil`,"vs-w6-m5":`Hady vs Matt`,"vs-w6-m6":`Mauricio vs Kayser`,"vs-m1-narking-steven":`NARKING VS STEVEN`,"vs-m2-kayser-frankie":`KAYSER 3-0 vs FRANKIE 0-3`,"vs-m3-hadi-manny":`Hady 2-1 VS MANNY 2-1`,"vs-m4-jamil-matt":`JAMIL VS MATT`,"vs-m5-mauricio-eric":`MAURICIO 1-2 vs ERIC 2-1`,"vs-m6-danny-crooke":`DANNY VS CROOKE`,"w1-slide-01":`We Are So Back`,"w1-slide-02":`199.39: One Point From 200`,"w1-slide-03":`The Lamb Slaughter`,"w1-slide-04":`158 Points. Wasted.`,"w1-slide-05":`Champ Humbled`,"w1-slide-06":`4.09 Points Heartbreak`,"w1-slide-07":`State of the League`,"w1-slide-08":`Steven 199.39 def Frankie`,"w1-slide-09":`Matt 175.08 def Narking`,"w1-slide-10":`Jamil 171.70 def Danny`,"w1-slide-11":`Kayser 138.69 def Hady`,"w1-slide-12":`Mauricio 137.10 def Crooke`,"w1-slide-13":`Manny 133.22 def Eric`,"w1-slide-14":`Final Damage`,"w1-slide-15":`Week 1 Awards`,"w1-slide-16":`Week 2: Overreactions`,"w2-slide-01":`Mulligans, Monday Night Murders`,"w2-slide-02":`The Mulligan Goes Lethal`,"w2-slide-03":`The Failed Mulligan`,"w2-slide-04":`Got the Dub`,"w2-slide-05":`0.89 Was Not Enough`,"w2-slide-06":`2-0 and Unexplained`,"w2-slide-07":`State of the League`,"w2-slide-08":`Manny 183.99 def Jamil`,"w2-slide-09":`Kayser 170.91 def Danny`,"w2-slide-10":`Hady 151.04 def Crooke`,"w2-slide-11":`Steven 134.93 def Matt`,"w2-slide-12":`Eric 142.69 def Frankie`,"w2-slide-13":`Narking 131.93 def Mauricio`,"w2-slide-14":`Final Damage`,"w2-slide-15":`Week 2 Awards`,"w2-slide-16":`Week 3 Lookahead`,"w3-slide-01":`The Receipts Have Been Processed`,"w3-slide-02":`199.19. Again.`,"w3-slide-03":`The Negative Mulligan`,"w3-slide-04":`Branding Matters`,"w3-slide-05":`Frankie Called Out the AI`,"w3-slide-06":`1.82 Points`,"w3-slide-07":`State of the League`,"w3-slide-08":`Steven 199.19 def Mauricio`,"w3-slide-09":`Kayser 151.93 def Manny`,"w3-slide-10":`Crooke 167.66 def Narking`,"w3-slide-11":`Hady 131.97 def Danny`,"w3-slide-12":`Eric 130.39 def Matt`,"w3-slide-13":`Jamil 113.55 def Frankie`,"w3-slide-14":`Final Damage`,"w3-slide-15":`Week 3 Awards`,"w3-slide-16":`The Second Negative Mulligan`,"w4-slide-01":`The Frankie Zone Has Been Evacuated`,"w4-slide-02":`Steven 180.56 def Narking`,"w4-slide-03":`Mauricio 141.24 def Eric`,"w4-slide-04":`Frankie 144.80 def Kayser`,"w4-slide-05":`Danny 163.91 def Crooke`,"w4-slide-06":`Hady 141.65 def Manny`,"w4-slide-07":`Jamil 162.83 def Matt`,"w4-slide-08":`Kayser Mulligan #7: Good Mulligan, Lost Anyway`,"w4-slide-09":`Frankie Zone Temporarily Closed`,"w4-slide-10":`But One Very Nice Website`,"w4-slide-11":`Final Week 4 Scoring`,"w4-slide-12":`Stat of the Week: 0.03`,"w4-slide-13":`Standings After Week 4`,"w4-slide-14":`AI Hady Got Cooked`,"w4-slide-15":`Week 4 Awards`,"w4-slide-16":`Week 5: We Run It Back`,"w5-slide-01":`Steven's Perfect Season Is Over`,"w5-slide-02":`Crooke 159.29 def Steven`,"w5-slide-03":`Hady 212.33 def Frankie`,"w5-slide-04":`Danny 176.78 def Manny`,"w5-slide-05":`Mauricio 204.16 def Jamil`,"w5-slide-06":`Matt 176.87 def Kayser`,"w5-slide-07":`Eric 145.67 def Narking`,"w5-slide-08":`Bench Watch: Left on the Pine`,"w5-slide-09":`Frankie Zone Check-In`,"w5-slide-10":`Week 5 Top Scorers`,"w5-slide-11":`Final Week 5 Scoring`,"w5-slide-12":`Closest Game & Biggest Blowout`,"w5-slide-13":`Standings After Week 5`,"w5-slide-14":`Biggest Blowout: Hady vs Frankie`,"w5-slide-15":`Week 5 Awards`,"w5-slide-16":`Week 6: No Undefeateds`};function Bu(e,t){let n=zu[e]?.trim();return!n||n===e||/^Slide \d+$/i.test(n)?t:n}var Vu=new Set(Uc.map(e=>e.id));function Hu(e){return e.filter(e=>!Vu.has(e.id))}function Uu(e){return Wu(e).flatMap(e=>e.slides)}function Wu(e){let t=[],n={1:Hu(q),2:Hu($u),3:Hu(J),4:Hu(Y),5:Hu(X),6:Hu(ed)}[e];n?.length&&t.push({kind:`matchups`,heading:`Matchups`,slides:n});let r={1:Hu(nd),2:Hu(rd),3:Hu(id),4:Hu(ad),5:Hu(sd)}[e];r?.length&&t.push({kind:`results`,heading:`Results`,slides:r});let i={1:Hu(Xu),2:Hu(Zu),3:Hu(Qu),4:Hu(td),5:Hu(od)}[e];return i?.length&&t.push({kind:`report`,heading:`Report`,slides:i}),t}var Gu={width:1080,height:1350},Ku={width:1e3,height:1400};function qu(e,t,n=Gu){return{id:e,title:Bu(e,t),basename:e,...n}}function W(e,t){return qu(e,t)}function Ju(e,t,n){return qu(`w${e}-slide-${String(t).padStart(2,`0`)}`,n)}function Yu(e,t){return t.map((t,n)=>Ju(e,n+1,t))}var Xu=Yu(1,[`We are so back`,`Slide 2`,`Slide 3`,`Slide 4`,`Slide 5`,`Slide 6`,`Slide 7`,`Slide 8`,`Slide 9`,`Slide 10`,`Slide 11`,`Slide 12`,`Slide 13`,`Slide 14`,`Slide 15`,`Slide 16`]),Zu=Yu(2,[`Week 2 final report`,`Slide 2`,`Slide 3`,`Slide 4`,`Slide 5`,`Slide 6`,`Slide 7`,`Slide 8`,`Slide 9`,`Slide 10`,`Slide 11`,`Slide 12`,`Slide 13`,`Slide 14`,`Slide 15`,`Slide 16`]),Qu=Yu(3,[`Week 3 final report`,`Slide 2`,`Slide 3`,`Slide 4`,`Slide 5`,`Slide 6`,`Slide 7`,`Slide 8`,`Slide 9`,`Slide 10`,`Slide 11`,`Slide 12`,`Slide 13`,`Slide 14`,`Slide 15`,`Slide 16`]);function G(e,t){return qu(e,t,Ku)}function K(e,t){return qu(e,t,Ku)}var q=[G(`vs-w1-m1`,`Mauricio vs Crooke`),G(`vs-w1-m2`,`Kayser vs Hady`),G(`vs-w1-m3`,`Matt vs Narking`),G(`vs-w1-m4`,`Jamil vs Danny`),G(`vs-w1-m5`,`Steven vs Frankie`),G(`vs-w1-m6`,`Manny vs Eric`)],$u=[G(`vs-w2-m1`,`Hady vs Crooke`),G(`vs-w2-m2`,`Narking vs Mauricio`),G(`vs-w2-m3`,`Kayser vs Danny`),G(`vs-w2-m4`,`Steven vs Matt`),G(`vs-w2-m5`,`Manny vs Jamil`),G(`vs-w2-m6`,`Eric vs Frankie`)],J=[G(`vs-w3-m1`,`Crooke vs Narking`),G(`vs-w3-m2`,`Hady vs Danny`),G(`vs-w3-m3`,`Steven vs Mauricio`),G(`vs-w3-m4`,`Kayser vs Manny`),G(`vs-w3-m5`,`Eric vs Matt`),G(`vs-w3-m6`,`Jamil vs Frankie`)],Y=[G(`vs-w4-m1`,`Steven vs Narking`),G(`vs-w4-m2`,`Frankie vs Kayser`),G(`vs-w4-m3`,`Hady vs Manny`),G(`vs-w4-m4`,`Jamil vs Matt`),G(`vs-w4-m5`,`Mauricio vs Eric`),G(`vs-w4-m6`,`Danny vs Crooke`)],X=[G(`vs-w5-m1`,`Crooke vs Steven`),G(`vs-w5-m2`,`Danny vs Manny`),G(`vs-w5-m3`,`Eric vs Narking`),G(`vs-w5-m4`,`Hady vs Frankie`),G(`vs-w5-m5`,`Mauricio vs Jamil`),G(`vs-w5-m6`,`Matt vs Kayser`)],ed=[G(`vs-w6-m1`,`Crooke vs Manny`),G(`vs-w6-m2`,`Eric vs Steven`),G(`vs-w6-m3`,`Danny vs Frankie`),G(`vs-w6-m4`,`Narking vs Jamil`),G(`vs-w6-m5`,`Hady vs Matt`),G(`vs-w6-m6`,`Mauricio vs Kayser`)],td=[W(`w4-slide-01`,`The Frankie Zone Has Been Evacuated`),W(`w4-slide-02`,`Steven 180.56 def Narking`),W(`w4-slide-03`,`Mauricio 141.24 def Eric`),W(`w4-slide-04`,`Frankie 144.80 def Kayser`),W(`w4-slide-05`,`Danny 163.91 def Crooke`),W(`w4-slide-06`,`Hady 141.65 def Manny`),W(`w4-slide-07`,`Jamil 162.83 def Matt`),W(`w4-slide-08`,`Kayser Mulligan #7: Good Mulligan, Lost Anyway`),W(`w4-slide-09`,`Frankie Zone Temporarily Closed`),W(`w4-slide-10`,`But One Very Nice Website`),W(`w4-slide-11`,`Final Week 4 Scoring`),W(`w4-slide-12`,`Stat of the Week: 0.03`),W(`w4-slide-13`,`Standings After Week 4`),W(`w4-slide-14`,`AI Hady Got Cooked`),W(`w4-slide-15`,`Week 4 Awards`),W(`w4-slide-16`,`Week 5: We Run It Back`)],nd=[K(`results-w1-m1`,`Mauricio 137.1 – Crooke 124.5`),K(`results-w1-m2`,`Kayser 138.7 – Hady 119.4`),K(`results-w1-m3`,`Matt 175.1 – Narking 158.2`),K(`results-w1-m4`,`Jamil 171.7 – Danny 111.9`),K(`results-w1-m5`,`Steven 199.4 – Frankie 135.4`),K(`results-w1-m6`,`Manny 133.2 – Eric 129.1`)],rd=[K(`results-w2-m1`,`Hady 151.0 – Crooke 123.7`),K(`results-w2-m2`,`Narking 131.9 – Mauricio 99.8`),K(`results-w2-m3`,`Kayser 170.9 – Danny 143.0`),K(`results-w2-m4`,`Steven 134.9 – Matt 130.5`),K(`results-w2-m5`,`Manny 184.0 – Jamil 138.9`),K(`results-w2-m6`,`Eric 142.7 – Frankie 105.2`)],id=[K(`results-w3-m1`,`Crooke 167.7 – Narking 136.7`),K(`results-w3-m2`,`Hady 132.0 – Danny 121.7`),K(`results-w3-m3`,`Steven 199.2 – Mauricio 123.9`),K(`results-w3-m4`,`Kayser 151.9 – Manny 129.7`),K(`results-w3-m5`,`Eric 130.4 – Matt 128.6`),K(`results-w3-m6`,`Jamil 113.6 – Frankie 95.8`)],ad=[K(`results-w4-m1`,`Steven 180.6 – Narking 141.2`),K(`results-w4-m2`,`Frankie 144.8 – Kayser 128.4`),K(`results-w4-m3`,`Hady 141.7 – Manny 134.9`),K(`results-w4-m4`,`Jamil 162.8 – Matt 143.6`),K(`results-w4-m5`,`Mauricio 141.2 – Eric 123.7`),K(`results-w4-m6`,`Danny 163.9 – Crooke 121.3`)],od=[W(`w5-slide-01`,`Steven's Perfect Season Is Over`),W(`w5-slide-02`,`Crooke 159.29 def Steven`),W(`w5-slide-03`,`Hady 212.33 def Frankie`),W(`w5-slide-04`,`Danny 176.78 def Manny`),W(`w5-slide-05`,`Mauricio 204.16 def Jamil`),W(`w5-slide-06`,`Matt 176.87 def Kayser`),W(`w5-slide-07`,`Eric 145.67 def Narking`),W(`w5-slide-08`,`Bench Watch: Left on the Pine`),W(`w5-slide-09`,`Frankie Zone Check-In`),W(`w5-slide-10`,`Week 5 Top Scorers`),W(`w5-slide-11`,`Final Week 5 Scoring`),W(`w5-slide-12`,`Closest Game & Biggest Blowout`),W(`w5-slide-13`,`Standings After Week 5`),W(`w5-slide-14`,`Biggest Blowout: Hady vs Frankie`),W(`w5-slide-15`,`Week 5 Awards`),W(`w5-slide-16`,`Week 6: No Undefeateds`)],sd=[K(`results-w5-m1`,`Crooke 159.3 – Steven 120.8`),K(`results-w5-m2`,`Danny 176.8 – Manny 122.2`),K(`results-w5-m3`,`Eric 145.7 – Narking 95.9`),K(`results-w5-m4`,`Hady 212.3 – Frankie 101.1`),K(`results-w5-m5`,`Mauricio 204.2 – Jamil 143.5`),K(`results-w5-m6`,`Matt 176.9 – Kayser 150.3`)],cd=`https://api.sleeper.app/projections/nfl`;function ld(e,t){let n=0;for(let r of e.starters??[]){if(!r||r===`0`||/^[A-Z]{2,4}$/.test(r))continue;let e=t[r];typeof e==`number`&&!Number.isNaN(e)&&(n+=e)}return n}async function ud(e,t,n=`regular`){let r=`${cd}/${e}/${t}?season_type=${n}`;try{let e=await fetch(r);if(!e.ok)return null;let t=await e.json(),n={};if(Array.isArray(t)){for(let e of t){let t=e.player_id;if(!t)continue;let r=e.stats?.pts_ppr??e.stats?.pts_half_ppr??e.stats?.pts_std;typeof r==`number`&&!Number.isNaN(r)&&(n[t]=r)}return Object.keys(n).length?n:null}if(t&&typeof t==`object`){for(let[e,r]of Object.entries(t)){let t=r.stats??r.pts_ppr,i=typeof t==`object`?t.pts_ppr??t.pts_std:r.pts_ppr;typeof i==`number`&&!Number.isNaN(i)&&(n[e]=i)}return Object.keys(n).length?n:null}return null}catch{return null}}function dd(e,t){return`proj ${e.toFixed(1)} – ${t.toFixed(1)}`}function fd(e,t,n){if(!t)return!1;let r=Ss(e);if(!r.length)return!1;for(let{home:e,away:i}of r){if(e.points>0||i.points>0)return!1;let r=e.starters?.some((t,n)=>(e.starters_points?.[n]??0)>0),a=i.starters?.some((e,t)=>(i.starters_points?.[t]??0)>0);if(r||a||n?.length&&Is(e,i,t,n))return!1}return!0}function pd(e,t,n){let r=ld(e,n),i=ld(t,n);return r<=0&&i<=0?null:dd(r,i)}function md({basename:e,title:t,className:n=``}){let[r,i]=(0,v.useState)(`idle`);return(0,B.jsx)(`button`,{type:`button`,className:`min-h-11 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--gwb-accent)] disabled:opacity-50 ${n}`,disabled:r===`busy`,onClick:()=>{i(`busy`),qc(e,t).then(e=>{i(e===`error`?`error`:`done`),e!==`error`&&window.setTimeout(()=>i(`idle`),2e3)})},children:r===`busy`?`Preparing…`:r===`done`?`Saved`:r===`error`?`Try again`:`Share card`})}var hd=540;function gd(e){return Math.round(hd*e.height/e.width)}function _d({slide:e,onOpen:t,loadImmediately:n,buttonRef:r,projectionLine:i}){let a=Gc(e.basename,`thumb`,`jpg`),o=(0,v.useRef)(null),[s,c]=(0,v.useState)(n);(0,v.useEffect)(()=>{if(n||s)return;let e=o.current;if(!e||typeof IntersectionObserver>`u`){c(!0);return}let t=new IntersectionObserver(e=>{e.some(e=>e.isIntersecting)&&(c(!0),t.disconnect())},{rootMargin:`240px 0px`});return t.observe(e),()=>t.disconnect()},[n,s]);let l=n||s;return(0,B.jsxs)(`button`,{ref:e=>{o.current=e,r&&`current`in r&&(r.current=e)},type:`button`,className:`group block w-full shrink-0 overflow-hidden rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] text-left transition hover:border-[var(--gwb-accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--gwb-accent)]`,onClick:t,"aria-label":`Open ${e.title}`,children:[l?(0,B.jsx)(`img`,{src:a,alt:``,width:hd,height:gd(e),loading:`lazy`,decoding:`async`,style:{aspectRatio:`${e.width} / ${e.height}`},className:`w-full bg-[#0d1319] object-contain transition group-hover:opacity-95`}):(0,B.jsx)(`div`,{className:`w-full bg-[#0d1319]`,style:{aspectRatio:`${e.width} / ${e.height}`},"aria-hidden":!0}),(0,B.jsx)(`p`,{className:`truncate px-2 py-1.5 text-xs text-[var(--gwb-muted)]`,children:e.title}),i&&(0,B.jsx)(`p`,{className:`px-2 pb-1.5 text-center text-[10px] font-semibold tabular-nums tracking-wide text-amber-200/90`,children:i})]})}function vd(e){let t=/^vs-w\d+-m(\d+)$/.exec(e);return t?Number(t[1])-1:null}function yd({week:e,initialSlideId:t,onSlideUrlChange:n,onDeckKindChange:r,league:i,matchups:a,players:o,ensurePlayers:s,isActive:c}){let l=(0,v.useMemo)(()=>Wu(e),[e]),u=(0,v.useMemo)(()=>Uu(e),[e]),[d,f]=(0,v.useState)(null),p=(0,v.useRef)(null),[m,h]=(0,v.useState)(null),[g,_]=(0,v.useState)(null),y=(0,v.useMemo)(()=>a?Ss(a):[],[a]),b=(0,v.useMemo)(()=>!a?.length||!o?!1:fd(a,o,g),[a,o,g]),x=(0,v.useMemo)(()=>{let e=new Map;if(!b||!m||!y.length)return e;for(let t of u){let n=vd(t.id);if(n==null||n>=y.length)continue;let r=y[n],i=pd(r.home,r.away,m);i&&e.set(t.id,i)}return e},[b,m,y,u]);(0,v.useEffect)(()=>{s()},[s]),(0,v.useEffect)(()=>{if(!c||!a?.length)return;let t=!1;return ud(i.season,e,`regular`).then(e=>{t||h(e)}),kc(i.season,e,`regular`).then(e=>{t||_(e)}).catch(()=>{t||_(null)}),()=>{t=!0}},[c,e,i.season,a?.length]);let S=(0,v.useMemo)(()=>{let e=new Map;return u.forEach((t,n)=>e.set(t.id,n)),e},[u]),C=(0,v.useCallback)(e=>{f(e);let t=u[e];n?.(t?.id??null);let i=l.find(e=>e.slides.some(e=>e.id===t?.id));r?.(i?.kind??null)},[u,n,r,l]),w=(0,v.useCallback)(()=>{f(null),n?.(null),r?.(null)},[n,r]);(0,v.useEffect)(()=>{if(!t)return;let e=S.get(t);e!=null&&C(e)},[t,S,C]);let T=t=>{let n=new URLSearchParams(window.location.search);n.set(`week`,String(e)),n.set(`tab`,`gallery`),n.set(`slide`,t.id);let r=`${window.location.origin}${window.location.pathname}?${n.toString()}`;navigator.clipboard?.writeText(r)};return l.length?(0,B.jsxs)(`div`,{className:`space-y-6`,children:[(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`Week `,e,` graphics. Tap a card for full size; swipe or use arrows in the viewer.`]}),(0,B.jsx)(`div`,{className:`flex flex-col gap-8`,children:l.map(n=>(0,B.jsxs)(`section`,{id:`graphics-week-${e}-${n.kind}`,className:`min-w-0 w-full`,"aria-labelledby":`graphics-heading-${e}-${n.kind}`,children:[(0,B.jsx)(`h3`,{id:`graphics-heading-${e}-${n.kind}`,className:`mb-3 text-sm font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:n.heading}),(0,B.jsx)(`ul`,{className:`grid grid-cols-1 items-start gap-4 sm:grid-cols-2`,role:`list`,children:n.slides.map(e=>{let r=S.get(e.id)??0,i=t===e.id,a=n.kind===`results`||n.kind===`matchups`,o=i||n.slides[0]?.id===e.id&&n.kind===l[0]?.kind;return(0,B.jsxs)(`li`,{className:`flex min-w-0 flex-col gap-2`,"data-slide-id":e.id,children:[(0,B.jsx)(_d,{slide:e,onOpen:()=>C(r),loadImmediately:o,buttonRef:i?p:void 0,projectionLine:n.kind===`matchups`?x.get(e.id):null}),a&&(0,B.jsxs)(`div`,{className:`grid grid-cols-2 gap-2`,children:[(0,B.jsx)(md,{basename:e.basename,title:e.title,className:`w-full`}),(0,B.jsx)(`button`,{type:`button`,className:`min-h-11 w-full rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-2 text-xs font-semibold text-[var(--gwb-accent)]`,onClick:()=>T(e),children:`Copy link`})]}),!a&&(0,B.jsx)(`button`,{type:`button`,className:`min-h-11 w-full text-xs text-[var(--gwb-accent)] underline`,onClick:()=>T(e),children:`Copy link`})]},e.id)})})]},n.kind))}),d!==null&&(0,B.jsx)(Xc,{slides:u,index:d,onClose:w,onIndexChange:e=>{f(e);let t=u[e];n?.(t?.id??null);let i=l.find(e=>e.slides.some(e=>e.id===t?.id));r?.(i?.kind??null)},returnFocusRef:p})]}):(0,B.jsxs)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:[`No published graphics for Week `,e,` yet. Try another week.`]})}function bd(e){return e?{primary:zs(e.sleeperMetadataAvatar??null,e.sleeperUserAvatar??null)??e.avatarUrl,thumb:Rs(e.sleeperUserAvatar??null)??e.avatarThumbUrl}:{primary:null,thumb:null}}function xd(e){return e.primary?`primary`:e.thumb?`fallback`:`initials`}function Sd(e,t){return t===`primary`?e.primary:t===`fallback`?e.thumb:null}function Cd({team:e,size:t=`md`}){let n=t===`sm`?`h-8 w-8`:`h-10 w-10`,r=wd(e),i=(0,v.useMemo)(()=>bd(e),[e?.rosterId,e?.avatarUrl,e?.avatarThumbUrl,e?.sleeperMetadataAvatar,e?.sleeperUserAvatar]),[a,o]=(0,v.useState)(()=>xd(i));(0,v.useEffect)(()=>{o(xd(i))},[i.primary,i.thumb]);let s=Sd(i,a);return a===`initials`||!s?(0,B.jsx)(`div`,{className:`${n} flex shrink-0 items-center justify-center rounded-full border border-[var(--gwb-border)] bg-[#243040] text-xs font-semibold text-[var(--gwb-muted)]`,children:r}):(0,B.jsx)(`img`,{src:s,alt:``,referrerPolicy:`no-referrer`,className:`${n} shrink-0 rounded-full border border-[var(--gwb-border)] object-cover`,onError:()=>{if(a===`primary`&&i.thumb&&i.thumb!==i.primary){o(`fallback`);return}o(`initials`)}})}function wd(e){let t=e?xs(e.rosterId,e.displayName,e.userId):``;if(!t)return`?`;let n=t.trim().split(/\s+/).filter(Boolean);return n.length>=2?(n[0][0]+n[1][0]).toUpperCase():t.slice(0,2).toUpperCase()}function Td(e){return{pf:e.pointsFor.toFixed(2),pa:e.pointsAgainst.toFixed(2)}}function Ed({streak:e}){return e?(0,B.jsx)(`span`,{className:`min-w-[2.25rem] text-center text-xs font-semibold tabular-nums ${e.startsWith(`W`)?`text-emerald-400/90`:e.startsWith(`L`)?`text-rose-400/80`:`text-[var(--gwb-muted)]`}`,children:e}):(0,B.jsx)(`span`,{className:`min-w-[2.25rem] text-center text-xs text-[var(--gwb-muted)]`,children:`—`})}function Dd({rows:e,deferralNote:t,teams:n,playoffTeams:r,matchupsByWeek:i,standingsThroughWeek:a}){let o=e.length?e[e.length-1]:null,s=r&&r>0&&r<e.length?r:null,c=(0,v.useMemo)(()=>Kl(i,a),[i,a]);return(0,B.jsxs)(`div`,{className:`space-y-3`,children:[t&&(0,B.jsx)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:t}),(0,B.jsx)(`ul`,{className:`overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]`,role:`list`,"aria-label":`League standings`,children:e.map((t,i)=>{let a=n.get(t.rosterId),{pf:o,pa:l}=Td(t),u=Ks(t.streak),d=xs(t.rosterId,t.displayName),f=s!==null&&t.rank===s&&i<e.length-1,p=r&&r>0?Yl(t.rank,r):null,m=c.get(t.rosterId),h=m?ql(m):`—`;return(0,B.jsxs)(`li`,{children:[(0,B.jsxs)(`div`,{className:`flex items-start gap-2.5 border-t border-[var(--gwb-border)] px-3 py-2.5 first:border-t-0 sm:items-center sm:gap-3 sm:px-4 sm:py-3 ${i%2==1?`bg-[#0d1319]/60`:``}`,children:[(0,B.jsx)(`span`,{className:`w-5 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)] sm:w-6 sm:pt-0`,"aria-label":`Rank ${t.rank}`,children:t.rank}),(0,B.jsx)(Cd,{team:a,size:`sm`}),(0,B.jsxs)(`div`,{className:`min-w-0 flex-1`,children:[(0,B.jsxs)(`div`,{className:`flex items-start justify-between gap-2 sm:items-center`,children:[(0,B.jsx)(`p`,{className:`min-w-0 flex-1 text-sm font-semibold leading-snug break-words sm:truncate sm:leading-tight sm:text-[15px]`,children:t.teamName}),(0,B.jsxs)(`div`,{className:`flex shrink-0 items-center gap-2 sm:hidden`,children:[(0,B.jsx)(`p`,{className:`text-sm font-semibold tabular-nums leading-tight`,children:Xs(t)}),(0,B.jsx)(Ed,{streak:u})]})]}),(0,B.jsxs)(`p`,{className:`mt-0.5 text-xs leading-snug text-[var(--gwb-muted)] sm:truncate`,children:[(0,B.jsxs)(`span`,{className:`sm:hidden`,children:[d,(0,B.jsxs)(`span`,{className:`text-[var(--gwb-muted)]/80`,children:[` `,`· `,o,` PF · `,l,` PA · AP `,h]})]}),(0,B.jsxs)(`span`,{className:`hidden sm:inline`,children:[d,t.displayName?(0,B.jsxs)(`span`,{className:`text-[var(--gwb-muted)]/75`,children:[` `,`· @`,t.displayName]}):null]})]}),p&&(0,B.jsx)(`p`,{className:`mt-1 text-[0.65rem] leading-snug text-[var(--gwb-muted)]/90 sm:text-xs`,children:p})]}),(0,B.jsxs)(`div`,{className:`hidden shrink-0 items-center gap-3 sm:flex`,children:[(0,B.jsxs)(`div`,{className:`text-right`,children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`All-play`}),(0,B.jsx)(`p`,{className:`text-sm font-semibold tabular-nums leading-tight`,children:h})]}),(0,B.jsxs)(`div`,{className:`text-right`,children:[(0,B.jsx)(`p`,{className:`text-sm font-semibold tabular-nums leading-tight`,children:Xs(t)}),(0,B.jsxs)(`p`,{className:`mt-0.5 text-xs leading-tight text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`span`,{children:`PF `}),(0,B.jsx)(`span`,{className:`tabular-nums`,children:o}),(0,B.jsx)(`span`,{className:`mx-1 text-[var(--gwb-border)]`,children:`·`}),(0,B.jsx)(`span`,{children:`PA `}),(0,B.jsx)(`span`,{className:`tabular-nums`,children:l})]})]}),(0,B.jsx)(Ed,{streak:u})]})]}),f&&(0,B.jsxs)(`div`,{className:`flex items-center gap-2 border-t border-[var(--gwb-accent)]/35 bg-[var(--gwb-accent)]/5 px-3 py-1.5`,role:`separator`,"aria-label":`Playoff cutoff`,children:[(0,B.jsx)(`div`,{className:`h-px flex-1 bg-[var(--gwb-accent)]/40`}),(0,B.jsx)(`span`,{className:`text-[10px] font-semibold uppercase tracking-wider text-[var(--gwb-accent)]`,children:`Playoffs`}),(0,B.jsx)(`div`,{className:`h-px flex-1 bg-[var(--gwb-accent)]/40`})]})]},t.rosterId)})}),o&&(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`Sacko watch: #`,o.rank,` `,o.teamName,` (`,Xs(o),`, PF`,` `,o.pointsFor.toFixed(2),`).`]})]})}({entries:[]}).entries;function Od(e,t){return`${e}-${t}`}function kd(e,t){let n=new Map;for(let r=1;r<t;r++){let t=e.get(r);if(t?.length)for(let{home:e,away:r}of Ss(t)){let t=n.get(e.roster_id)??{wins:0,losses:0},i=n.get(r.roster_id)??{wins:0,losses:0};e.points>r.points?(t.wins++,i.losses++):r.points>e.points&&(i.wins++,t.losses++),n.set(e.roster_id,t),n.set(r.roster_id,i)}}return n}function Ad(e,t,n,r){return r.filter(r=>r.week===e&&(r.rosterId===t||r.rosterId===n))}function jd(e){return e.scoreWithout>e.opponentScore!==e.won}function Md(e,t){if(!t.length)return 0;let n=0,r=!1;for(let r of t){r.flipped&&(n+=30);let t=xu(r);t!==null&&e<Math.abs(t)&&jd(r)&&(n+=20)}return e<15&&t.length>0&&(r=!0),r&&(n+=10),n}function Nd(e,t,n,r,i){let a=Math.abs(e.points-t.points),o=e.points+t.points,s=Math.max(0,40-a),c=o/5,l=e.points>=t.points?e.roster_id:t.roster_id,u=l===e.roster_id?t.roster_id:e.roster_id,d=r.get(l)??{wins:0,losses:0},f=r.get(u)??{wins:0,losses:0},p=Math.max(0,d.losses-f.wins),m=12*p,h=Md(a,Ad(n,e.roster_id,t.roster_id,i));return{closeness:s,shootout:c,upsetUnits:p,upsetBonus:m,mulliganBonus:h,composite:s+c+m+h,margin:a,combinedPoints:o}}function Pd(e){let t=[];return e.margin<=10&&t.push(`Nail-biter`),e.combinedPoints>=270&&t.push(`Shootout`),e.upsetBonus>0&&t.push(`Upset`),e.mulliganBonus>0&&t.push(`Mulligan`),t}function Fd(e,t){return t.breakdown.composite===e.breakdown.composite?e.breakdown.margin===t.breakdown.margin?t.breakdown.combinedPoints-e.breakdown.combinedPoints:e.breakdown.margin-t.breakdown.margin:t.breakdown.composite-e.breakdown.composite}function Id(e,t){let n=[...e].sort(Fd);return(t==null?n:n.slice(0,t)).map((e,t)=>({...e,rank:t+1}))}function Ld(e,t,n){let r=t.get(e);if(!r?.length)return[];let i=kd(t,e),a=[];for(let{matchupId:t,home:o,away:s}of Ss(r)){let r=Nd(o,s,e,i,n),c=o.points>=s.points?o.roster_id:s.roster_id,l=c===o.roster_id?s.roster_id:o.roster_id;a.push({week:e,matchupId:t,matchupKey:Od(e,t),home:o,away:s,winnerRosterId:c,loserRosterId:l,breakdown:r,badges:Pd(r)})}return a}function Rd(e,t,n,r,i,a=3){return nu(e,n,r)?[]:Id(Ld(e,t,i),a)}function zd(e,t,n,r){let i=eu(t,n),a=[];for(let o=i;o>=1;o--){if(nu(o,t,n))continue;let i=Rd(o,e,t,n,r);i.length&&a.push({week:o,games:i})}return a}function Bd({scope:e,maxWeek:t,league:n,nflState:r,onChange:i}){let a=Array.from({length:t},(e,t)=>t+1);return(0,B.jsxs)(`div`,{className:`flex flex-col gap-1`,children:[(0,B.jsx)(`span`,{className:`text-xs font-medium uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Games by week`}),(0,B.jsxs)(`div`,{className:`gwb-week-scope-chips flex gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1`,role:`group`,"aria-label":`Filter best games by week`,children:[(0,B.jsx)(Vd,{label:`All`,active:e===`all`,onClick:()=>i(`all`)}),a.map(t=>{let a=nu(t,n,r);return(0,B.jsx)(Vd,{label:a?`Week ${t} · In progress`:`Week ${t}`,active:e===t,disabled:a,onClick:()=>i(t)},t)})]})]})}function Vd({label:e,active:t,disabled:n,onClick:r}){return(0,B.jsx)(`button`,{type:`button`,disabled:n,className:t?`gwb-week-scope-chip gwb-week-scope-chip--active shrink-0 px-3 py-2 text-xs`:`gwb-week-scope-chip shrink-0 px-3 py-2 text-xs`,"aria-pressed":t,onClick:r,children:e})}function Hd({label:e}){return(0,B.jsx)(`span`,{className:`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${e===`Nail-biter`?`border-rose-400/40 bg-rose-950/40 text-rose-100`:e===`Shootout`?`border-amber-400/40 bg-amber-950/40 text-amber-100`:e===`Upset`?`border-violet-400/40 bg-violet-950/40 text-violet-100`:`border-cyan-400/40 bg-cyan-950/40 text-cyan-100`}`,children:e})}function Ud({rosterId:e,points:t,teams:n,winning:r}){let i=n.get(e),a=xs(e,i?.displayName??``);return(0,B.jsxs)(`div`,{className:`flex min-w-0 flex-1 items-center gap-2 ${r?`rounded-lg ring-1 ring-[var(--gwb-accent)]/50`:``}`,children:[(0,B.jsx)(Cd,{team:i,size:`sm`}),(0,B.jsxs)(`div`,{className:`min-w-0 flex-1`,children:[(0,B.jsx)(`p`,{className:`truncate text-sm font-semibold leading-tight`,children:i?.teamName??`Team ${e}`}),(0,B.jsx)(`p`,{className:`truncate text-xs text-[var(--gwb-muted)]`,children:a})]}),(0,B.jsx)(`p`,{className:`shrink-0 text-lg font-bold tabular-nums ${r?`text-[var(--gwb-accent)]`:`text-[var(--gwb-text)]`}`,children:t.toFixed(1)})]})}function Wd({matchup:e,team:t,slots:n,players:r}){return(0,B.jsxs)(`div`,{className:`min-w-0 flex-1 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-bg)] p-2`,children:[(0,B.jsxs)(`div`,{className:`mb-2 flex items-center gap-2`,children:[(0,B.jsx)(Cd,{team:t,size:`sm`}),(0,B.jsxs)(`div`,{className:`min-w-0`,children:[(0,B.jsx)(`p`,{className:`truncate text-sm font-semibold`,children:t?.teamName??`Team`}),(0,B.jsxs)(`p`,{className:`text-xs font-bold tabular-nums text-[var(--gwb-accent)]`,children:[e.points.toFixed(2),` pts`]})]})]}),(0,B.jsx)(`ul`,{className:`space-y-1`,children:n.map((t,n)=>{let i=e.starters?.[n]??`0`,a=Os(e,i,n);return(0,B.jsxs)(`li`,{className:`flex items-center justify-between gap-2 rounded-md border border-[var(--gwb-border)]/70 bg-[var(--gwb-surface)] px-2 py-1`,children:[(0,B.jsxs)(`div`,{className:`min-w-0`,children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase text-[var(--gwb-muted)]`,children:t}),(0,B.jsx)(`p`,{className:`truncate text-xs font-medium`,children:Es(i,r)}),(0,B.jsx)(`p`,{className:`text-[10px] text-[var(--gwb-muted)]`,children:Ds(i,r)})]}),(0,B.jsx)(`span`,{className:`shrink-0 text-sm font-semibold tabular-nums`,children:a.toFixed(2)})]},`${t}-${n}`)})})]})}function Gd({games:e,teams:t,players:n,slots:r,expandedKey:i,onToggleExpand:a,showWeekOnCard:o,listLabel:s}){return e.length?(0,B.jsx)(`ul`,{className:`overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]`,role:`list`,"aria-label":s,children:e.map((e,s)=>{let{home:c,away:l,breakdown:u}=e,d=c.points>=l.points?c.roster_id:l.roster_id,f=i===e.matchupKey,p=t.get(c.roster_id),m=t.get(l.roster_id);return(0,B.jsxs)(`li`,{children:[(0,B.jsx)(`button`,{type:`button`,className:`w-full border-t border-[var(--gwb-border)] px-3 py-3 text-left first:border-t-0 sm:px-4 ${s%2==1?`bg-[#0d1319]/60`:``}`,"aria-expanded":f,onClick:()=>a(e.matchupKey),children:(0,B.jsxs)(`div`,{className:`flex items-start gap-2`,children:[(0,B.jsx)(`span`,{className:`w-6 shrink-0 pt-0.5 text-center text-sm font-semibold tabular-nums text-[var(--gwb-muted)]`,"aria-label":`Rank ${e.rank}`,children:e.rank}),(0,B.jsxs)(`div`,{className:`min-w-0 flex-1`,children:[(0,B.jsxs)(`div`,{className:`flex flex-wrap items-center gap-2`,children:[o?(0,B.jsxs)(`span`,{className:`rounded-md border border-[var(--gwb-accent)]/45 bg-[var(--gwb-accent)]/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[var(--gwb-accent)]`,"aria-label":`NFL week ${e.week}`,children:[`Week `,e.week]}):null,e.badges.map(e=>(0,B.jsx)(Hd,{label:e},e))]}),(0,B.jsxs)(`div`,{className:`mt-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3`,children:[(0,B.jsx)(Ud,{rosterId:c.roster_id,points:c.points,teams:t,winning:d===c.roster_id}),(0,B.jsx)(`span`,{className:`hidden shrink-0 text-xs font-semibold uppercase text-[var(--gwb-muted)] sm:block`,children:`vs`}),(0,B.jsx)(Ud,{rosterId:l.roster_id,points:l.points,teams:t,winning:d===l.roster_id})]}),(0,B.jsxs)(`p`,{className:`mt-2 text-xs text-[var(--gwb-muted)]`,children:[`Score `,u.composite.toFixed(1),(0,B.jsx)(`span`,{className:`mx-1 text-[var(--gwb-border)]`,children:`·`}),u.margin.toFixed(1),` pt margin`,(0,B.jsx)(`span`,{className:`mx-1 text-[var(--gwb-border)]`,children:`·`}),u.combinedPoints.toFixed(1),` combined`]})]}),(0,B.jsx)(`span`,{className:`shrink-0 pt-1 text-[var(--gwb-muted)]`,"aria-hidden":!0,children:f?`▾`:`▸`})]})}),f&&n&&(0,B.jsx)(`div`,{className:`border-t border-[var(--gwb-border)] bg-[#0a0e12]/90 px-3 pb-4 pt-3 sm:px-4`,children:(0,B.jsxs)(`div`,{className:`grid gap-3 sm:grid-cols-2`,children:[(0,B.jsx)(Wd,{matchup:c,team:p,slots:r,players:n}),(0,B.jsx)(Wd,{matchup:l,team:m,slots:r,players:n})]})})]},e.matchupKey)})}):null}function Kd({matchupsByWeek:e,league:t,nflState:n,maxWeek:r,ledger:i,teams:a,players:o,playersLoading:s,ensurePlayers:c,deferralNote:l,scope:u,onScopeChange:d}){let f=eu(t,n),[p,m]=(0,v.useState)(null);(0,v.useEffect)(()=>{typeof u==`number`&&(nu(u,t,n)||u>f)&&d(f)},[u,f,t,n,d]);let h=(0,v.useMemo)(()=>u===`all`?zd(e,t,n,i):null,[u,e,t,n,i]),g=(0,v.useMemo)(()=>u===`all`?[]:Rd(u,e,t,n,i),[u,e,t,n,i]),_=u===`all`?(h?.length??0)>0:g.length>0,y=(0,v.useMemo)(()=>Cs(t.roster_positions),[t.roster_positions]);(0,v.useEffect)(()=>{c()},[c]);let b=e=>{m(t=>t===e?null:e)};return!_&&u===`all`&&f<1?(0,B.jsx)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`No final matchups ranked yet. Check back after the first full scoring week.`}):(0,B.jsxs)(`div`,{className:`space-y-3`,id:`best-games-panel`,children:[l&&(0,B.jsx)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:l}),(0,B.jsx)(Bd,{scope:u,maxWeek:r,league:t,nflState:n,onChange:e=>{m(null),d(e)}}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:u===`all`?(0,B.jsxs)(B.Fragment,{children:[`Top `,3,` final matchups per week, grouped newest week first — ranked by closeness, shootout, upset, and mulligan drama.`]}):(0,B.jsxs)(B.Fragment,{children:[`Top `,3,` matchups in Week `,u,`, ranked within the week by closeness, shootout, upset, and mulligan drama.`]})}),_?null:(0,B.jsx)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:typeof u==`number`&&nu(u,t,n)?`Week ${u} is still in progress — rankings appear when scoring is final.`:`No scored matchups for this week yet.`}),s||!o?(0,B.jsx)(`p`,{className:`rounded-xl border border-[var(--gwb-border)] p-4 text-center text-sm text-[var(--gwb-muted)]`,children:`Loading starter lines…`}):null,u===`all`&&h&&h.length>0?(0,B.jsx)(`div`,{className:`space-y-5`,children:h.map(({week:e,games:t})=>(0,B.jsxs)(`section`,{"aria-labelledby":`best-games-week-${e}`,children:[(0,B.jsxs)(`h3`,{id:`best-games-week-${e}`,className:`mb-2 font-['Anton'] text-xl uppercase tracking-wide text-[var(--gwb-text)]`,children:[`Week `,e]}),(0,B.jsx)(Gd,{games:t,teams:a,players:o,slots:y,expandedKey:p,onToggleExpand:b,showWeekOnCard:!1,listLabel:`Best games of week ${e}`})]},e))}):null,u!==`all`&&g.length>0?(0,B.jsx)(Gd,{games:g,teams:a,players:o,slots:y,expandedKey:p,onToggleExpand:b,showWeekOnCard:!0,listLabel:`Best games of week ${u}`}):null]})}function qd(e,t,n,r){let i=0;for(let a=0;a<(e.starters?.length??0);a++){let o=e.starters[a];if(!o||o===`0`)continue;let s=Ps(o,t);if(!s||!n.has(s))continue;let c=e.starters_points?.[a]??0,l=r[o];if(typeof l!=`number`||Number.isNaN(l))return null;let u=Math.max(0,l-c);i+=u}return i}function Jd(e,t,n,r,i){if(!i||!r.length||Is(e,t,n,r)||!((e.starters_points?.some(e=>e>0)??!1)||(t.starters_points?.some(e=>e>0)??!1))&&e.points===0&&t.points===0)return null;let a=Ns(r);if(!a.size)return null;let o=qd(e,n,a,i),s=qd(t,n,a,i);if(o===null||s===null||o<=0&&s<=0)return null;let c=e.points>t.points,l=e.points===t.points,u=l?o>=s?e.roster_id:t.roster_id:c?t.roster_id:e.roster_id,d=u===e.roster_id?o:s,f=u===e.roster_id?s:o,p=u===e.roster_id?e.points:t.points,m=u===e.roster_id?t.points:e.points,h=p+d>m+.01,g;return g=h?`Can still flip — ~${d.toFixed(1)} pts still out for the trailing side`:l?`~${o.toFixed(1)} / ~${s.toFixed(1)} pts still out`:`~${f.toFixed(1)} / ~${d.toFixed(1)} pts still out — unlikely to flip`,{matchupId:e.matchup_id,canFlip:h,trailingRosterId:u,trailingStillOut:d,leaderStillOut:f,summary:g}}function Yd(e,t,n,r){if(!n?.length||!r)return[];let i=[];for(let{home:a,away:o}of Ss(e)){let e=Jd(a,o,t,n,r);e&&i.push(e)}return i}var Xd=h();function Zd({matchup:e,team:t,slots:n,players:r,projections:i,showProjections:a,compact:o}){let[s,c]=(0,v.useState)(!1),l=ks(e),u=As(e);return(0,B.jsxs)(`div`,{className:`min-w-0 flex-1 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-bg)] ${o?`p-1.5`:`p-2`}`,children:[(0,B.jsxs)(`div`,{className:`mb-2 flex items-center gap-1.5 ${o?`flex-col text-center`:`gap-2`}`,children:[(0,B.jsx)(Cd,{team:t,size:o?`sm`:`md`}),(0,B.jsxs)(`div`,{className:`min-w-0 w-full`,children:[(0,B.jsx)(`p`,{className:`truncate font-semibold ${o?`text-[11px] leading-tight`:``}`,children:t?.teamName??`Team`}),(0,B.jsx)(`p`,{className:`font-bold tabular-nums text-[var(--gwb-accent)] ${o?`text-lg`:`text-2xl`}`,children:e.points.toFixed(2)})]})]}),(0,B.jsx)(`ul`,{className:`space-y-1`,children:n.map((t,n)=>{let s=e.starters?.[n]??`0`,c=Os(e,s,n),l=a&&i&&!/^[A-Z]{2,4}$/.test(s)?i[s]:void 0;return o?(0,B.jsxs)(`li`,{className:`rounded-md border border-[var(--gwb-border)]/70 bg-[var(--gwb-surface)] px-1.5 py-1`,children:[(0,B.jsxs)(`div`,{className:`flex items-center justify-between gap-1`,children:[(0,B.jsx)(`span`,{className:`text-[9px] font-semibold uppercase text-[var(--gwb-muted)]`,children:t}),(0,B.jsx)(`span`,{className:`shrink-0 text-[11px] font-semibold tabular-nums`,children:c.toFixed(2)})]}),(0,B.jsx)(`p`,{className:`truncate text-[11px] font-medium leading-tight`,children:Es(s,r)}),l!=null&&(0,B.jsxs)(`p`,{className:`text-[9px] text-[var(--gwb-muted)] tabular-nums`,children:[l.toFixed(1),` proj`]})]},`${t}-${n}`):(0,B.jsxs)(`li`,{className:`grid grid-cols-[2.5rem_1fr_auto] items-center gap-2 rounded-lg border border-[var(--gwb-border)]/60 bg-[var(--gwb-surface)] px-2 py-1.5 text-sm`,children:[(0,B.jsx)(`span`,{className:`text-[10px] font-semibold uppercase text-[var(--gwb-muted)]`,children:t}),(0,B.jsxs)(`div`,{className:`min-w-0`,children:[(0,B.jsx)(`p`,{className:`truncate font-medium`,children:Es(s,r)}),(0,B.jsx)(`p`,{className:`truncate text-xs text-[var(--gwb-muted)]`,children:Ds(s,r)})]}),(0,B.jsxs)(`div`,{className:`text-right tabular-nums`,children:[(0,B.jsx)(`p`,{className:`font-semibold`,children:c.toFixed(2)}),l!=null&&(0,B.jsxs)(`p`,{className:`text-[10px] text-[var(--gwb-muted)]`,children:[l.toFixed(1),` proj`]})]})]},`${t}-${n}`)})}),(0,B.jsxs)(`div`,{className:`mt-2`,children:[(0,B.jsxs)(`button`,{type:`button`,className:`flex w-full items-center justify-between rounded-lg border border-[var(--gwb-border)] bg-[#1a222c] text-left font-medium ${o?`px-2 py-1.5 text-[11px]`:`px-3 py-2 text-sm`}`,onClick:()=>c(e=>!e),"aria-expanded":s,children:[(0,B.jsx)(`span`,{children:`Bench`}),(0,B.jsxs)(`span`,{className:`tabular-nums text-[var(--gwb-muted)]`,children:[u.toFixed(2),(0,B.jsx)(`span`,{className:`ml-1 text-[var(--gwb-accent)]`,children:s?`▲`:`▼`})]})]}),s&&(0,B.jsxs)(`ul`,{className:`mt-1 space-y-1`,children:[l.length===0&&(0,B.jsx)(`li`,{className:`px-1 py-1 text-[10px] text-[var(--gwb-muted)]`,children:`No bench`}),l.map(t=>{let n=Os(e,t,null);return(0,B.jsxs)(`li`,{className:`flex items-center justify-between gap-1 rounded-md border border-[var(--gwb-border)]/40 bg-[var(--gwb-surface)] px-1.5 py-1 text-[11px]`,children:[(0,B.jsx)(`p`,{className:`min-w-0 truncate`,children:Es(t,r)}),(0,B.jsx)(`span`,{className:`shrink-0 tabular-nums font-medium`,children:n.toFixed(2)})]},t)})]})]})]})}function Qd({open:e,onClose:t,left:n,right:r,teams:i,rosterPositions:a,players:o,projections:s,showProjections:c}){let l=(0,v.useMemo)(()=>Cs(a),[a]);if((0,v.useEffect)(()=>{if(!e)return;let n=e=>{e.key===`Escape`&&t()};return window.addEventListener(`keydown`,n),()=>window.removeEventListener(`keydown`,n)},[e,t]),(0,v.useEffect)(()=>{if(!e)return;let t=document.body.style.overflow,n=document.body.style.paddingRight,r=window.innerWidth-document.documentElement.clientWidth;return document.body.style.overflow=`hidden`,r>0&&(document.body.style.paddingRight=`${r}px`),()=>{document.body.style.overflow=t,document.body.style.paddingRight=n}},[e]),!e)return null;let u=i.get(n.roster_id),d=i.get(r.roster_id),f=(0,B.jsxs)(`div`,{className:`fixed inset-0 z-[200] flex min-h-0 flex-col bg-[var(--gwb-bg)] isolate`,role:`dialog`,"aria-modal":`true`,"aria-label":`${js(n.roster_id,i)} vs ${js(r.roster_id,i)}`,children:[(0,B.jsxs)(`header`,{className:`flex shrink-0 items-center gap-3 border-b border-[var(--gwb-border)] bg-[var(--gwb-bg)] px-3 py-3`,children:[(0,B.jsx)(`button`,{type:`button`,className:`rounded-lg border border-[var(--gwb-border)] px-3 py-1.5 text-sm font-medium`,onClick:t,children:`Back`}),(0,B.jsxs)(`p`,{className:`min-w-0 flex-1 truncate text-center text-sm font-semibold`,children:[js(n.roster_id,i),` vs`,` `,js(r.roster_id,i)]}),(0,B.jsx)(`div`,{className:`w-[4.5rem]`,"aria-hidden":!0})]}),(0,B.jsx)(`div`,{className:`min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[var(--gwb-bg)] px-2 py-3`,"data-testid":`matchup-detail-scroll`,children:(0,B.jsxs)(`div`,{className:`mx-auto grid max-w-4xl grid-cols-2 gap-2 sm:gap-3`,children:[(0,B.jsx)(Zd,{matchup:n,team:u,slots:l,players:o,projections:s,showProjections:c,compact:!0}),(0,B.jsx)(Zd,{matchup:r,team:d,slots:l,players:o,projections:s,showProjections:c,compact:!0})]})})]});return(0,Xd.createPortal)(f,document.body)}function $d(e){return e?e.toLocaleTimeString(`en-US`,{hour:`numeric`,minute:`2-digit`}):`—`}function ef({week:e,league:t,nflState:n,teams:r,players:i,playersLoading:a,ensurePlayers:o,initialMatchups:s,onMatchupsUpdated:c,isActive:l}){let u=l&&(nu(e,t,n)||e===n.week),{matchups:d,lastUpdated:f,refreshing:p,refresh:m}=Gl(e,u,s,c),[h,g]=(0,v.useState)(null),[_,y]=(0,v.useState)(null),[b,x]=(0,v.useState)(!1),[S,C]=(0,v.useState)(null);(0,v.useEffect)(()=>{o()},[o]),(0,v.useEffect)(()=>{g(null)},[e]),(0,v.useEffect)(()=>{if(!l)return;let r=!1;return ud(t.season,e,n.season_type).then(e=>{r||(e&&Object.keys(e).length>0?y(e):y(null))}),kc(t.season,e,n.season_type).then(e=>{r||C(e)}).catch(()=>{r||C(null)}),()=>{r=!0}},[e,t.season,n.season_type,l]),(0,v.useEffect)(()=>{if(!d||!i){x(!1);return}let e=_!=null&&fd(d,i,S);x(e)},[d,i,_,S]);let w=(0,v.useMemo)(()=>d?Ss(d):[],[d]),T=(0,v.useMemo)(()=>{if(!d||!i||!S?.length||!nu(e,t,n))return new Map;let r=Yd(d,i,S,_),a=new Map;for(let e of r)a.set(e.matchupId,e.summary);return a},[d,i,S,_,e,t,n]),E=w.find(e=>e.matchupId===h);return!d||!Zo(d)?(0,B.jsxs)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:[`No scored matchups for Week `,e,` yet. Check back after lineups lock or try another week.`]}):a||!i?(0,B.jsx)(`p`,{className:`rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`Loading player names…`}):(0,B.jsxs)(`div`,{className:`space-y-4`,id:`live-scoreboard-panel`,children:[(0,B.jsxs)(`div`,{className:`flex flex-wrap items-center justify-between gap-2`,children:[(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Last updated `,$d(f),u&&(0,B.jsx)(`span`,{className:`ml-2 text-amber-300/90`,children:`· auto-refresh 60s`})]}),(0,B.jsx)(`button`,{type:`button`,className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-1.5 text-sm font-medium disabled:opacity-50`,onClick:()=>m(),disabled:p,children:p?`Refreshing…`:`Refresh`})]}),(0,B.jsx)(`ul`,{className:`grid gap-3 sm:grid-cols-2`,children:w.map(({matchupId:e,home:t,away:n})=>{let i=Ms(t,n),a=r.get(t.roster_id),o=r.get(n.roster_id),s=b&&_?pd(t,n,_):null;return(0,B.jsx)(`li`,{children:(0,B.jsxs)(`button`,{type:`button`,className:`w-full rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-4 text-left transition hover:border-[var(--gwb-accent)]/50`,onClick:()=>g(e),children:[(0,B.jsx)(`div`,{className:`flex items-center justify-between gap-2`,children:(0,B.jsxs)(`div`,{className:`flex min-w-0 flex-1 items-center gap-2 ${i===t.roster_id?`rounded-lg ring-1 ring-[var(--gwb-accent)]/60`:``}`,children:[(0,B.jsx)(Cd,{team:a,size:`sm`}),(0,B.jsx)(`span`,{className:`truncate text-sm font-medium`,children:js(t.roster_id,r)}),(0,B.jsx)(`span`,{className:`ml-auto shrink-0 text-lg font-bold tabular-nums ${i===t.roster_id?`text-[var(--gwb-accent)]`:``}`,children:t.points.toFixed(2)})]})}),(0,B.jsx)(`p`,{className:`my-2 text-center text-[10px] font-semibold uppercase tracking-widest text-[var(--gwb-muted)]`,children:`vs`}),(0,B.jsxs)(`div`,{className:`flex items-center gap-2 ${i===n.roster_id?`rounded-lg ring-1 ring-[var(--gwb-accent)]/60`:``}`,children:[(0,B.jsx)(Cd,{team:o,size:`sm`}),(0,B.jsx)(`span`,{className:`truncate text-sm font-medium`,children:js(n.roster_id,r)}),(0,B.jsx)(`span`,{className:`ml-auto shrink-0 text-lg font-bold tabular-nums ${i===n.roster_id?`text-[var(--gwb-accent)]`:``}`,children:n.points.toFixed(2)})]}),s&&(0,B.jsx)(`p`,{className:`mt-2 text-center text-[10px] font-semibold tabular-nums tracking-wide text-amber-200/90`,children:s}),T.get(e)&&(0,B.jsx)(`p`,{className:`mt-2 rounded-md bg-amber-500/15 px-2 py-1 text-center text-[10px] font-medium leading-snug text-amber-100`,role:`status`,children:T.get(e)})]})},e)})}),E&&(0,B.jsx)(Qd,{open:h!==null,onClose:()=>g(null),left:E.home,right:E.away,teams:r,rosterPositions:t.roster_positions,players:i,projections:_,showProjections:b})]})}var tf=`America/New_York`;function nf(e){return new Date(e).toLocaleDateString(`en-US`,{weekday:`short`,month:`short`,day:`numeric`,year:`numeric`,timeZone:tf})}function rf(e,t){return t?.[e]?.full_name?.trim()||(/^[A-Z]{2,4}$/.test(e)?`${e} DEF`:``)}function af(e,t){let n=e.season?.slice(-2)??`?`,r=t.get(e.roster_id),i=r?ys(r.userId,r.displayName):`R${e.roster_id}`;return`${n} Rd ${e.round} (${i})`}function of(e,t,n,r){let i=[],a=[];if(t.adds)for(let[r,a]of Object.entries(t.adds)){if(a!==e)continue;let t=rf(r,n);t&&i.push({label:t,playerId:r})}if(t.drops)for(let[r,i]of Object.entries(t.drops)){if(i!==e)continue;let t=rf(r,n);t&&a.push({label:t,playerId:r})}for(let n of t.draft_picks??[])n.roster_id===e&&i.push({label:af(n,r)});for(let n of t.waiver_budget??[])n.receiver===e&&i.push({label:`$${n.amount} FAAB`}),n.sender===e&&a.push({label:`$${n.amount} FAAB`});return{received:i,sent:a}}function sf(e,t,n,r){let i=n.get(e),{received:a,sent:o}=of(e,t,r,n),s=i?.userId??``;return{rosterId:e,userId:s,managerName:ys(s,i?.displayName??`Team ${e}`),received:a,sent:o}}function cf(e,t,n,r){if(e.type!==`trade`||e.status!==`complete`)return null;let i=e.roster_ids??[];if(i.length<2)return null;let[a,o]=i,s=e.status_updated||e.created||0,c=sf(a,e,n,r),l=sf(o,e,n,r),u=c.received.length||c.sent.length||l.received.length||l.sent.length,d=e.adds&&Object.keys(e.adds).length>0||e.drops&&Object.keys(e.drops).length>0||(e.draft_picks?.length??0)>0||(e.waiver_budget?.length??0)>0;return!u&&!d||!u&&d&&!r?null:{transactionId:e.transaction_id??`${t.league_id}-${s}`,leagueId:t.league_id,season:t.season,week:e.leg,completedAtMs:s,dateLabel:s?nf(s):``,sideA:c,sideB:l}}function lf(e){return[...e].sort((e,t)=>t.completedAtMs===e.completedAtMs?t.season===e.season?t.week-e.week:Number(t.season)-Number(e.season):t.completedAtMs-e.completedAtMs)}function uf(e){return e.length?e.map(e=>e.label).join(`, `):`—`}function df({trades:e,priorSeasonsIncluded:t,priorSeasonsFailed:n,playersLoading:r}){return(0,B.jsxs)(`div`,{className:`space-y-3`,id:`trade-log-panel`,children:[n&&(0,B.jsx)(`p`,{className:`rounded-lg border border-amber-600/40 bg-amber-950/30 px-3 py-2 text-sm text-amber-100`,children:`Prior-season trade history did not load cleanly — showing current season only. (FAIL)`}),(()=>{let n=[...new Set([...t,...e.map(e=>e.season)])].sort();return n.length>0?(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Includes seasons: `,n.join(`, `),` (`,e.length,` trades)`]}):null})(),r?(0,B.jsx)(`p`,{className:`rounded-xl border border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`Loading trade history…`}):e.length?(0,B.jsx)(`ul`,{className:`overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]`,role:`list`,children:e.map(e=>(0,B.jsxs)(`li`,{className:`border-t border-[var(--gwb-border)] px-4 py-3 first:border-t-0`,children:[(0,B.jsxs)(`div`,{className:`flex flex-wrap items-baseline justify-between gap-2`,children:[(0,B.jsxs)(`p`,{className:`font-semibold`,children:[e.sideA.managerName,` ↔ `,e.sideB.managerName]}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[e.dateLabel||`—`,` · `,e.season,` · Week `,e.week]})]}),(0,B.jsxs)(`div`,{className:`mt-2 grid gap-2 text-sm sm:grid-cols-2`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`p`,{className:`text-xs font-semibold uppercase text-[var(--gwb-muted)]`,children:[e.sideA.managerName,` received`]}),(0,B.jsx)(`p`,{children:uf(e.sideA.received)}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[`Sent `,uf(e.sideA.sent)]})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`p`,{className:`text-xs font-semibold uppercase text-[var(--gwb-muted)]`,children:[e.sideB.managerName,` received`]}),(0,B.jsx)(`p`,{children:uf(e.sideB.received)}),(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)]`,children:[`Sent `,uf(e.sideB.sent)]})]})]})]},e.transactionId))}):(0,B.jsx)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`No completed trades yet.`})]})}function ff(e){return e?`${e.managerName} (${e.detail})`:`—`}function pf({weeks:e}){return e.length?(0,B.jsx)(`div`,{className:`overflow-x-auto`,id:`weekly-awards-panel`,children:(0,B.jsxs)(`table`,{className:`w-full min-w-[520px] border-collapse text-sm`,children:[(0,B.jsx)(`thead`,{children:(0,B.jsxs)(`tr`,{className:`border-b border-[var(--gwb-border)] text-left text-xs uppercase text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`Week`}),(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`High score`}),(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`Low score`}),(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`Closest win`}),(0,B.jsx)(`th`,{className:`px-3 py-2`,children:`Most bench`})]})}),(0,B.jsx)(`tbody`,{children:e.map(e=>(0,B.jsxs)(`tr`,{className:`border-t border-[var(--gwb-border)]`,children:[(0,B.jsx)(`td`,{className:`px-3 py-2 font-semibold tabular-nums`,children:e.week}),(0,B.jsx)(`td`,{className:`px-3 py-2`,children:ff(e.highScore)}),(0,B.jsx)(`td`,{className:`px-3 py-2`,children:ff(e.lowScore)}),(0,B.jsx)(`td`,{className:`px-3 py-2`,children:ff(e.closestWin)}),(0,B.jsx)(`td`,{className:`px-3 py-2`,children:ff(e.mostBench)})]},e.week))})]})}):(0,B.jsx)(`p`,{className:`rounded-xl border border-dashed border-[var(--gwb-border)] p-6 text-center text-[var(--gwb-muted)]`,children:`No scored weeks yet for awards.`})}var Z=`Estimate: each remaining scheduled matchup simulated 2,000× on the real Sleeper schedule. Win chance blends points-per-game (55%) with record so far (45%); playoff seeding uses projected wins, with season points for as the tiebreaker. Top six make playoffs.`;function mf(e,t){return t<=0?e.pointsFor:e.pointsFor/t}function hf(e){let t=e;return()=>(t=(t*1664525+1013904223)%4294967296,t/4294967296)}function gf(e){let t=e.wins+e.losses+e.ties;return t<=0?.5:(e.wins+e.ties*.5)/t}function _f(e,t){return 1/(1+10**(-e/t))}function vf(e,t,n,r){let i=_f(n-r,22),a=_f((gf(e)-gf(t))*100,18);return i*.55+a*.45}function yf(e,t){let n=new Map;for(let r of e){let e=vf(r.homeRow,r.awayRow,r.homePpg,r.awayPpg),i=t()<e,a=(t()-.5)*18,o=(t()-.5)*18,s=Math.max(0,r.homePpg+a),c=Math.max(0,r.awayPpg+o),l=(e,t,r,i)=>{let a=n.get(e)??{w:0,l:0,pf:0};n.set(e,{w:a.w+t,l:a.l+r,pf:a.pf+i})};i?(l(r.home,1,0,s),l(r.away,0,1,c)):(l(r.away,1,0,c),l(r.home,0,1,s))}return n}function bf(e){return[...e].sort((e,t)=>t.wins===e.wins?t.pf-e.pf:t.wins-e.wins).map(e=>e.rosterId)}function xf({standings:e,matchupsByWeek:t,throughWeek:n,playoffTeams:r,regularSeasonLastWeek:i,simulations:a=2e3}){let o=new Map;for(let t of e){let e=Math.max(1,t.wins+t.losses+t.ties);o.set(t.rosterId,mf(t,e))}let s=new Map(e.map(e=>[e.rosterId,e])),c=[];for(let e=n+1;e<=i;e++){let n=t.get(e);if(n?.length)for(let{home:e,away:t}of Ss(n)){let n=s.get(e.roster_id),r=s.get(t.roster_id);n&&r&&c.push({home:e.roster_id,away:t.roster_id,homePpg:o.get(e.roster_id)??100,awayPpg:o.get(t.roster_id)??100,homeRow:n,awayRow:r})}}let l=new Map;for(let t of e)l.set(t.rosterId,0);for(let t=0;t<a;t++){let n=hf(1e3+t),i=new Map;for(let t of e)i.set(t.rosterId,{wins:t.wins,losses:t.losses,pf:t.pointsFor});let a=yf(c,n);for(let[e,t]of a){let n=i.get(e);n&&(n.wins+=t.w,n.losses+=t.l,n.pf+=t.pf)}let o=bf(e.map(e=>{let t=i.get(e.rosterId);return{rosterId:e.rosterId,wins:t.wins,pf:e.pointsFor}})),s=new Set(o.slice(0,r));for(let e of s)l.set(e,(l.get(e)??0)+1)}return e.map(e=>({rosterId:e.rosterId,displayName:e.displayName,teamName:e.teamName,wins:e.wins,losses:e.losses,pointsFor:e.pointsFor,playoffPct:(l.get(e.rosterId)??0)/a}))}function Sf({rows:e}){let t=[...e].sort((e,t)=>t.playoffPct-e.playoffPct);return(0,B.jsxs)(`div`,{className:`space-y-2`,id:`playoff-odds-panel`,children:[(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`span`,{className:`font-semibold text-amber-200/90`,children:`Estimate only.`}),` `,Z]}),(0,B.jsx)(`ul`,{className:`overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]`,role:`list`,children:t.map((e,t)=>(0,B.jsxs)(`li`,{className:`flex items-center justify-between gap-3 border-t border-[var(--gwb-border)] px-4 py-2.5 first:border-t-0 ${t%2==1?`bg-[#0d1319]/60`:``}`,children:[(0,B.jsxs)(`div`,{className:`min-w-0`,children:[(0,B.jsx)(`p`,{className:`font-medium`,children:xs(e.rosterId,e.displayName)}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[e.wins,`-`,e.losses,` · `,e.pointsFor.toFixed(2),` PF`]})]}),(0,B.jsxs)(`p`,{className:`shrink-0 text-lg font-bold tabular-nums text-[var(--gwb-accent)]`,children:[(e.playoffPct*100).toFixed(0),`%`]})]},e.rosterId))})]})}var Cf=`40% all-play record, 25% actual record, 20% points per game, 15% last-3-weeks scoring. Updated after each week is final.`;function wf(e,t){return`Rank after Week ${t} vs Week ${e} (▲ moved up)`}function Tf(e,t,n){let r=e+t+n;return r<=0?0:(e+n*.5)/r}function Ef(e,t,n){return n<=t?1:(e-t)/(n-t)}function Df(e,t,n,r){let i=0,a=0;for(let o=n;o<=r;o++){let n=t.get(o)?.find(t=>t.roster_id===e);n&&(i+=n.points,a+=1)}return a>0?i/a:0}function Of(e,t,n){if(n<=0||e.length===0)return[];let r=Kl(t,n),i=Math.max(1,n-2),a=e.map(e=>{let a=e.wins+e.losses+e.ties,o=r.get(e.rosterId)??{wins:0,losses:0,ties:0},s=a>0?e.pointsFor/a:0,c=Df(e.rosterId,t,i,n);return{rosterId:e.rosterId,displayName:e.displayName,teamName:e.teamName,wins:e.wins,losses:e.losses,ties:e.ties,pointsFor:e.pointsFor,allPlayPct:Tf(o.wins,o.losses,o.ties),allPlayLabel:ql(o),winPct:Tf(e.wins,e.losses,e.ties),ppg:s,last3Ppg:c}}),o=a.map(e=>e.ppg),s=a.map(e=>e.last3Ppg),c=Math.min(...o),l=Math.max(...o),u=Math.min(...s),d=Math.max(...s),f=a.map(e=>{let t=.4*e.allPlayPct+.25*e.winPct+.2*Ef(e.ppg,c,l)+.15*Ef(e.last3Ppg,u,d);return{...e,score:t*100}});return f.sort((e,t)=>t.score===e.score?t.pointsFor-e.pointsFor:t.score-e.score),f.map((e,t)=>({rosterId:e.rosterId,displayName:e.displayName,teamName:e.teamName,rank:t+1,prevRank:null,movement:null,score:e.score,wins:e.wins,losses:e.losses,ties:e.ties,allPlayPct:e.allPlayPct,allPlayLabel:e.allPlayLabel,winPct:e.winPct,ppg:e.ppg,last3Ppg:e.last3Ppg,pointsFor:e.pointsFor}))}function kf(e,t){let n=new Map(t.map(e=>[e.rosterId,e.rank]));return e.map(e=>{let t=n.get(e.rosterId)??null,r=t==null?null:t-e.rank;return{...e,prevRank:t,movement:r}})}function Af({matchupsByWeek:e,teams:t,throughWeek:n}){let r=Of(Js(e,t,n),e,n);return n<=1?r:kf(r,Of(Js(e,t,n-1),e,n-1))}function jf(e){return e==null?`—`:e>0?`▲${e}`:e<0?`▼${Math.abs(e)}`:`—`}function Mf({rows:e,teams:t,throughWeek:n}){let r=n>1?n-1:null,i=r==null?null:wf(r,n);return(0,B.jsxs)(`div`,{className:`space-y-2`,id:`power-rankings-panel`,children:[(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:Cf}),i&&(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:i}),(0,B.jsx)(`ul`,{className:`overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)]`,role:`list`,children:e.map((e,i)=>{let a=t.get(e.rosterId),o=xs(e.rosterId,e.displayName,a?.userId),s=r==null?`No prior week`:wf(r,n),c=e.ties>0?`${e.wins}-${e.losses}-${e.ties}`:`${e.wins}-${e.losses}`;return(0,B.jsx)(`li`,{className:`border-t border-[var(--gwb-border)] px-3 py-2.5 first:border-t-0 sm:px-4 sm:py-3 ${i%2==1?`bg-[#0d1319]/60`:``}`,children:(0,B.jsxs)(`div`,{className:`flex items-start gap-2.5 sm:items-center sm:gap-3`,children:[(0,B.jsx)(`span`,{className:`w-6 shrink-0 text-center text-sm font-bold tabular-nums text-[var(--gwb-muted)]`,"aria-hidden":!0,children:e.rank}),(0,B.jsx)(Cd,{team:a,size:`sm`}),(0,B.jsxs)(`div`,{className:`min-w-0 flex-1`,children:[(0,B.jsx)(`p`,{className:`font-medium leading-tight`,children:o}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[c,` · `,e.score.toFixed(1),` score`]}),(0,B.jsxs)(`p`,{className:`mt-1 text-[11px] leading-snug text-[var(--gwb-muted)] sm:text-xs`,children:[`All-play `,e.allPlayLabel,` (`,(e.allPlayPct*100).toFixed(0),`%) · Win `,(e.winPct*100).toFixed(0),`% · PPG `,e.ppg.toFixed(2),` · L3 `,e.last3Ppg.toFixed(2)]})]}),(0,B.jsx)(`span`,{className:`shrink-0 text-xs font-semibold tabular-nums ${e.movement!=null&&e.movement>0?`text-emerald-400/90`:e.movement!=null&&e.movement<0?`text-rose-400/80`:`text-[var(--gwb-muted)]`}`,title:s,"aria-label":s,children:jf(e.movement)})]})},e.rosterId)})}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Through Week `,n,` (completed weeks only).`]})]})}var Nf={meta:{allTimeThrough:`2025 season (regular season; Sleeper)`,source:`Verified league archive (Gmail/Drive); Sleeper 2019+ for live seasons`},champions:[{season:`2012`,champion:`danny`,championRecord:`9-4`,championSeed:`1st`,runnerUp:`juan`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`193.5 - 138.1`},{season:`2013`,champion:`eric`,championRecord:`8-5`,championSeed:`3rd`,runnerUp:`danny`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`169.9 - 115.5`},{season:`2014`,champion:`mauricio`,championRecord:`9-4`,championSeed:`3rd`,runnerUp:`danny`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`150.6 - 122.6`},{season:`2015`,champion:`jesus`,championRecord:`7-6`,championSeed:`6th`,runnerUp:`steven`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`190.7 - 75.10`},{season:`2016`,champion:`narking`,championRecord:`9-4`,championSeed:`1st`,runnerUp:`kayser`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`150.1 - 140.8`},{season:`2017`,champion:`marcos`,championRecord:`11-2`,championSeed:`1st`,runnerUp:`kayser`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`117.2 - 106.8`},{season:`2018`,champion:`narking`,championRecord:`10-3`,championSeed:`1st`,runnerUp:`matt`,runnerUpRecord:null,runnerUpSeed:null,finalScore:`164.3 - 154.10`},{season:`2019`,champion:`narking`,championRecord:`8-5`,championSeed:`3rd`,runnerUp:`matt`,runnerUpRecord:`10-3`,runnerUpSeed:`1st`,finalScore:`135.25 - 132.52`},{season:`2020`,champion:`danny`,championRecord:`9-4`,championSeed:`2nd`,runnerUp:`matt`,runnerUpRecord:`8-5`,runnerUpSeed:`5th`,finalScore:`115.95 - 114.73`},{season:`2021`,champion:`manny`,championRecord:`11-3`,championSeed:`1st`,runnerUp:`matt`,runnerUpRecord:`8-6`,runnerUpSeed:`3rd`,finalScore:`128.27 - 112.44`},{season:`2022`,champion:`steven`,championRecord:`10-4`,championSeed:`2nd`,runnerUp:`danny`,runnerUpRecord:`11-3`,runnerUpSeed:`1st`,finalScore:`124.46 - 113.28`},{season:`2023`,champion:`eric`,championRecord:`7-7`,championSeed:`6th`,runnerUp:`marcos`,runnerUpRecord:`7-7`,runnerUpSeed:`5th`,finalScore:`136.72 - 135.71`,scoreConflictNote:`WhatsApp dispute: corrected scores 137.72–136.71; champion unchanged`},{season:`2024`,champion:`narking`,championRecord:`9-5`,championSeed:`2nd`,runnerUp:`danny`,runnerUpRecord:null,runnerUpSeed:`4th`,finalScore:`150.50 - 134.27`},{season:`2025`,champion:`hady`,championRecord:`7-7`,championSeed:`6th`,runnerUp:`steven`,runnerUpRecord:`10-4`,runnerUpSeed:`1st`,finalScore:`177.10 - 86.47`}],members:{narking:{displayName:`Narking`,userId:`427945970563559424`,joined:2012,currentMember:!0,titleYears:[2016,2018,2019,2024],playoffYears:[2012,2016,2018,2019,2020,2022,2023,2024,2025],finalsWins:4,finalsLosses:0,allTimeRecord:{wins:88,losses:89}},eric:{displayName:`Eric`,userId:`420639669546385408`,joined:2012,currentMember:!0,titleYears:[2013,2023],playoffYears:[2012,2013,2016,2017,2018,2020,2023,2025],finalsWins:2,finalsLosses:0,allTimeRecord:{wins:91,losses:86}},mauricio:{displayName:`Mauricio`,archiveName:`Moe`,userId:`429321092230815744`,joined:2012,currentMember:!0,titleYears:[2014],playoffYears:[2012,2014,2018,2019,2021],finalsWins:1,finalsLosses:0,allTimeRecord:{wins:78,losses:99}},danny:{displayName:`Danny`,userId:`401754707162333184`,joined:2012,currentMember:!0,titleYears:[2012,2020],playoffYears:[2012,2013,2014,2018,2020,2022,2023,2024,2025],finalsWins:2,finalsLosses:4,allTimeRecord:{wins:103,losses:74}},marcos:{displayName:`Marcos`,userId:null,joined:2012,currentMember:!1,formerMember:!0,titleYears:[2017],playoffYears:[2012,2014,2015,2017,2021,2023],finalsWins:1,finalsLosses:1,allTimeRecord:{wins:82,losses:77}},jesus:{displayName:`Crooke`,archiveName:`Jesus`,userId:`427930731889565696`,joined:2013,currentMember:!0,titleYears:[2015],playoffYears:[2013,2015,2017,2021,2024,2025],finalsWins:1,finalsLosses:0,allTimeRecord:{wins:78,losses:86}},matt:{displayName:`Matt`,userId:`427906596501213184`,joined:2013,currentMember:!0,titleYears:[],playoffYears:[2013,2014,2015,2018,2019,2020,2021,2023,2024],finalsWins:0,finalsLosses:4,allTimeRecord:{wins:98,losses:66}},frankie:{displayName:`Frankie`,userId:`475847480039174144`,joined:2013,currentMember:!0,titleYears:[],playoffYears:[2014,2017,2019,2022],finalsWins:0,finalsLosses:0,allTimeRecord:{wins:72,losses:92}},manny:{displayName:`Manny`,userId:`475828957426479104`,joined:2014,currentMember:!0,titleYears:[2021],playoffYears:[2015,2016,2021,2022,2024],finalsWins:1,finalsLosses:0,allTimeRecord:{wins:74,losses:77}},kayser:{displayName:`Kayser`,userId:`475769424679268352`,joined:2014,currentMember:!0,titleYears:[],playoffYears:[2014,2016,2017,2019,2022],finalsWins:0,finalsLosses:2,allTimeRecord:{wins:68,losses:83}},steven:{displayName:`Steven`,userId:`475825464573685760`,joined:2014,currentMember:!0,titleYears:[2022],playoffYears:[2015,2016,2017,2019,2020,2022,2023,2025],finalsWins:1,finalsLosses:2,allTimeRecord:{wins:87,losses:64}},jamil:{displayName:`Jamil`,userId:`427903132685574144`,joined:2017,currentMember:!0,titleYears:[],playoffYears:[2018,2020,2021,2024],finalsWins:0,finalsLosses:0,allTimeRecord:{wins:53,losses:59}},hady:{displayName:`Hady`,userId:`429316063394541568`,joined:2024,currentMember:!0,titleYears:[2025],playoffYears:[2025],finalsWins:1,finalsLosses:0,allTimeRecord:{wins:12,losses:16}},juan:{displayName:`Juan`,userId:null,joined:null,currentMember:!1,formerMember:!0,titleYears:[],playoffYears:[],finalsWins:0,finalsLosses:1,allTimeRecord:null}}},Pf=Nf.champions;Nf.members;var Ff=new Map;for(let[e,t]of Object.entries(Nf.members))t.userId&&Ff.set(t.userId,e);function If(e){return Ff.get(e)??null}function Lf(e){let t=If(e);return t?Nf.members[t]??null:null}function Rf(e){let t=Nf.members[e];return t?t.wallDisplayName??t.displayName:e}function zf(e){let t=Nf.members[e];return!!t?.formerMember||t!=null&&!t.currentMember&&t.userId==null}function Bf(e){if(!e)return null;let t=e.match(/^(\d+)-(\d+)$/);return t?{wins:Number(t[1]),losses:Number(t[2])}:null}function Vf(e){if(!e)return null;let t=e.match(/^(\d+)/);return t?Number(t[1]):null}function Q(e,t){let n=Nf.champions.find(e=>e.season===String(t));return n?.champion===e?`Champion`:n?.runnerUp===e?`Runner-up`:Nf.members[e]?.playoffYears.includes(t)?`Playoffs`:`Missed playoffs`}function Hf(e){return Rf(e)}function Uf(e){if(!Nf.members[e])return[];let t=[];for(let n=2012;n<=2018;n++){let r=String(n),i=Nf.champions.find(e=>e.season===r),a=null,o=null,s=null;if(i?.champion===e){let e=Bf(i.championRecord);e&&(a=e.wins,o=e.losses),s=Vf(i.championSeed)}else if(i?.runnerUp===e){let e=Bf(i.runnerUpRecord);e&&(a=e.wins,o=e.losses),s=Vf(i.runnerUpSeed)}let c=Q(e,n);t.push({season:r,source:`archive`,wins:a,losses:o,ties:0,regularSeasonRank:s,playoffResult:c,leagueName:`GWB (archive)`,championDisplayName:i?Hf(i.champion):`unknown`,runnerUpDisplayName:i?.runnerUp?Hf(i.runnerUp):null,finalScore:i?.finalScore??null})}return t.sort((e,t)=>Number(t.season)-Number(e.season)),t}function Wf(){let e=[];for(let[t,n]of Object.entries(Nf.members)){let r=n.titleYears??[];(r.length||t!==`juan`)&&(r.length||n.currentMember||n.formerMember)&&r.length&&e.push({key:t,displayName:Rf(t),titles:r.length,titleYears:[...r].sort((e,t)=>e-t),formerMember:zf(t)})}return e.sort((e,t)=>t.titles-e.titles||e.displayName.localeCompare(t.displayName)),e}function Gf(e){let t=If(e);return t?Nf.members[t]?.titleYears.length??0:0}function Kf(e){let t=If(e);if(!t)return 0;let n=0;for(let e of Nf.champions)(e.champion===t||e.runnerUp===t)&&n++;return n}function qf(e,t){let n=If(e);if(!n)return 0;let r=Nf.members[n],i=new Set(r?.playoffYears??[]);for(let e of t){let t=Number(e.season);t>=2019&&e.playoffResult&&e.playoffResult!==`Missed playoffs`?i.add(t):t>=2019&&e.playoffResult===`Missed playoffs`&&i.delete(t)}return i.size}function Jf(e,t,n){let r={Champion:1,"Runner-up":2,"3rd place":3,"4th place":4,"5th place":5,"6th place":6,Playoffs:7,"Semifinal exit":7,"Quarterfinal exit":8,"Playoff exit":9,"Missed playoffs":10},i=99,a=`—`,o=e=>{if(!e)return;let t=r[e]??99;t<i&&(i=t,a=e)};for(let e of n)o(e.playoffResult);for(let e of t)o(e.playoffResult);return a}function Yf(e,t){let n=If(e),r=n?Uf(n):[],i=[];for(let e of r)i.push({kind:`archive`,row:e});for(let e of t)i.push({kind:`sleeper`,row:e});return i.sort((e,t)=>{let n=(e.kind,e.row.season),r=(t.kind,t.row.season);return Number(r)-Number(n)}),i}function Xf(e,t){if(!e.allTimeRecord)return{wins:0,losses:0};let n=e.allTimeRecord.wins,r=e.allTimeRecord.losses;for(let e of t){let t=Number(e.season);t>=2019&&t<=2025&&(n-=e.wins,r-=e.losses)}return{wins:Math.max(0,n),losses:Math.max(0,r)}}function Zf(e,t,n){let r=Lf(e),i=0,a=0,o=0;if(r?.allTimeRecord){let e=Xf(r,t);i=e.wins,a=e.losses;for(let e of t)Number(e.season)>=2019&&(i+=e.wins,a+=e.losses,o+=e.ties)}else for(let e of t)i+=e.wins,a+=e.losses,o+=e.ties;n&&(i+=n.wins,a+=n.losses,o+=n.ties);let s=o?`-${o}`:``;return`${i}-${a}${s}`}function Qf(e){let t=[];return e.regularSeasonRank&&t.push(`#${e.regularSeasonRank} reg`),e.wins!=null&&e.losses!=null&&t.push(`${e.wins}-${e.losses}`),t.push(e.playoffResult),e.finalScore&&(e.playoffResult===`Champion`||e.playoffResult===`Runner-up`)&&t.push(`Final ${e.finalScore}`),t.join(` · `)}function $f(e){return Pf.map(t=>{let n={...t};if(Number(n.season)<2019)return n;let r=e.find(e=>e.season===n.season&&e.status===`complete`);if(!r?.championUserId)return n;let i=If(r.championUserId);return i&&(n.champion=i),n})}function ep({keyName:e}){let t=zf(e);return(0,B.jsxs)(`span`,{className:`inline-flex flex-wrap items-center gap-1`,children:[(0,B.jsx)(`span`,{children:Rf(e)}),t&&(0,B.jsx)(`span`,{className:`rounded bg-[var(--gwb-border)] px-1 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`former member`})]})}function $({row:e}){return(0,B.jsxs)(`li`,{className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2 text-sm`,children:[(0,B.jsx)(`p`,{className:`font-['Bebas_Neue'] text-lg tracking-wide text-[var(--gwb-accent)]`,children:e.season}),(0,B.jsxs)(`p`,{className:`mt-0.5`,children:[(0,B.jsx)(`span`,{className:`text-[var(--gwb-muted)]`,children:`Champion: `}),(0,B.jsx)(ep,{keyName:String(e.champion)}),e.championRecord&&(0,B.jsxs)(`span`,{className:`text-[var(--gwb-muted)]`,children:[` (`,e.championRecord,e.championSeed?`, ${e.championSeed} seed`:``,`)`]})]}),(0,B.jsxs)(`p`,{className:`mt-0.5`,children:[(0,B.jsx)(`span`,{className:`text-[var(--gwb-muted)]`,children:`Runner-up: `}),(0,B.jsx)(ep,{keyName:String(e.runnerUp)}),e.runnerUpRecord&&(0,B.jsxs)(`span`,{className:`text-[var(--gwb-muted)]`,children:[` (`,e.runnerUpRecord,e.runnerUpSeed?`, ${e.runnerUpSeed} seed`:``,`)`]})]}),e.finalScore&&(0,B.jsxs)(`p`,{className:`mt-0.5 text-xs text-[var(--gwb-muted)]`,children:[`Final: `,e.finalScore]}),!e.finalScore&&(0,B.jsx)(`p`,{className:`mt-0.5 text-xs text-[var(--gwb-muted)]`,children:`Final score: unknown`})]})}function tp({leagueSeasonSummaries:e}){let t=$f(e),n=Wf();return(0,B.jsxs)(`section`,{id:`champions-wall`,className:`rounded-xl border border-[var(--gwb-border)] bg-gradient-to-br from-[#0d1319] to-[var(--gwb-surface)] p-4`,"aria-labelledby":`champions-wall-heading`,children:[(0,B.jsx)(`h3`,{id:`champions-wall-heading`,className:`font-['Bebas_Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]`,children:`Champions Wall`}),(0,B.jsx)(`p`,{className:`mb-4 text-sm text-[var(--gwb-muted)]`,children:`GWB titles 2012–2025 from the verified archive; 2019+ seasons also tie to Sleeper.`}),(0,B.jsxs)(`div`,{className:`mb-5`,children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Titles leaderboard`}),(0,B.jsx)(`ul`,{className:`mt-2 space-y-1 text-sm`,role:`list`,children:n.map(e=>(0,B.jsxs)(`li`,{className:`flex flex-wrap items-baseline gap-2`,children:[(0,B.jsxs)(`span`,{className:`font-medium`,children:[e.displayName,e.formerMember&&(0,B.jsx)(`span`,{className:`ml-1 text-[9px] font-semibold uppercase text-[var(--gwb-muted)]`,children:`former member`})]}),(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:e.titles}),(0,B.jsxs)(`span`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`(`,e.titleYears.join(`, `),`)`]})]},e.key))})]}),(0,B.jsx)(`ul`,{className:`grid gap-2 sm:grid-cols-2`,role:`list`,children:t.map(e=>(0,B.jsx)($,{row:e},e.season))})]})}function np(e,t){let n=e.metadata?.record?.trim();if(n){let e=n.slice(0,t),r=0,i=0,a=0;for(let t of e)t===`W`?r++:t===`L`?i++:t===`T`&&a++;return{wins:r,losses:i,ties:a}}return{wins:e.settings.wins??0,losses:e.settings.losses??0,ties:e.settings.ties??0}}function rp(e,t){if(e.status!==`complete`)return null;let n=e.metadata?.latest_league_winner_roster_id;if(n){let e=Number(n);if(!Number.isNaN(e)&&e>0)return e}if(!t?.length)return null;let r=t.find(e=>e.p===1);if(r?.w)return r.w;let i=Math.max(...t.map(e=>e.r)),a=t.filter(e=>e.r===i&&e.w);return a.length===1&&a[0].w?a[0].w:null}function ip(e,t,n,r,i,a){if(!a)return``;if(r>n)return`Missed playoffs`;if(i===e)return`Champion`;if(!t?.length)return`Playoffs (bracket unavailable)`;let o=t.find(e=>e.p===1);if(o){if(o.w===e)return`Champion`;if(o.t1===e||o.t2===e)return`Runner-up`}let s=t.find(e=>e.p===3);if(s){if(s.w===e)return`3rd place`;if(s.t1===e||s.t2===e)return`4th place`}let c=t.find(e=>e.p===5);if(c){if(c.w===e)return`5th place`;if(c.t1===e||c.t2===e)return`6th place`}let l=t.filter(t=>t.t1===e||t.t2===e);if(!l.length)return`Missed playoffs`;let u=l.filter(t=>t.w&&t.w!==e);if(u.length){let e=u.reduce((e,t)=>e.r>=t.r?e:t);return e.r>=3?`Semifinal exit`:e.r===2?`Quarterfinal exit`:`Playoff exit`}return`Playoffs`}function ap(e){let{league:t,rosters:n,teams:r}=e,i=$s(t.settings.playoff_week_start??15),a=t.settings.playoff_teams??6,o=t.status===`complete`,s=rp(t,e.winnersBracket),c=qs(n.map(e=>{let t=r.get(e.roster_id),n=np(e,i);return{rosterId:e.roster_id,teamName:t?.teamName??`Team ${e.roster_id}`,displayName:t?.displayName??``,wins:n.wins,losses:n.losses,ties:n.ties,pointsFor:Us(e.settings),pointsAgainst:Ws(e.settings),streak:``}})),l=new Map(c.map(e=>[e.rosterId,e.rank])),u=``,d=o?`unavailable`:``;if(o&&s!=null){let e=r.get(s);u=e?.userId??``,d=e?ys(e.userId,e.displayName):`unavailable`}let f=new Map,p=new Map;for(let i of n){let n=r.get(i.roster_id);if(!n?.userId)continue;let c=l.get(i.roster_id)??0,m={season:t.season,leagueId:t.league_id,leagueName:t.name,rosterId:i.roster_id,userId:n.userId,displayName:ys(n.userId,n.displayName),wins:i.settings.wins??0,losses:i.settings.losses??0,ties:i.settings.ties??0,pointsFor:Us(i.settings),regularSeasonRank:c,playoffResult:ip(i.roster_id,e.winnersBracket,a,c,s,o),championUserId:u,championDisplayName:d,roster:i,rosterPositions:t.roster_positions??[],unavailable:!1};f.set(n.userId,m),p.set(i.roster_id,m)}return{season:t.season,leagueId:t.league_id,leagueName:t.name,status:t.status,championRosterId:s,championUserId:u,championDisplayName:d,byUserId:f,byRosterId:p,unavailable:!1}}function op(e){let t=[];for(let n of e){let e=ap(n);e&&t.push(e)}return t.sort((e,t)=>Number(t.season)-Number(e.season)),t}function sp(e,t){if(!t)return`${e} · in progress`;let n=t.ties?`-${t.ties}`:``;return`${e} · in progress · #${t.rank} · ${t.wins}-${t.losses}${n} · ${t.pointsFor.toFixed(1)} PF`}function cp(e){if(!e.playoffResult){let t=Xs({rank:e.regularSeasonRank,rosterId:e.rosterId,teamName:``,displayName:e.displayName,wins:e.wins,losses:e.losses,ties:e.ties,pointsFor:e.pointsFor,pointsAgainst:0,streak:``});return`#${e.regularSeasonRank} reg · ${t} · ${e.pointsFor.toFixed(1)} PF`}let t=Xs({rank:e.regularSeasonRank,rosterId:e.rosterId,teamName:``,displayName:e.displayName,wins:e.wins,losses:e.losses,ties:e.ties,pointsFor:e.pointsFor,pointsAgainst:0,streak:``});return`#${e.regularSeasonRank} reg · ${t} · ${e.pointsFor.toFixed(1)} PF · ${e.playoffResult}`}function lp(e,t){let n=[];for(let r of e){if(r.status!==`complete`)continue;let e=r.byUserId.get(t);e&&n.push(e)}return n.sort((e,t)=>Number(t.season)-Number(e.season)),n}function up(e,t,n){let r=[];for(let i of e){if(n&&i.season===n||i.status!==`complete`)continue;let e=i.byUserId.get(t);e&&r.push(e)}return r}var dp={2019:{23:`DAL`,24:`ATL`,49:`SF`,58:`CAR`,96:`GB`,167:`NE`,184:`WAS`,223:`ARI`,289:`NO`,331:`LAC`,333:`MIA`,344:`NE`,367:`NO`,538:`SF`,616:`GB`,642:`NYG`,788:`TEN`,899:`MIN`,928:`DAL`,943:`MIN`,947:`ATL`,956:`BAL`,1049:`TEN`,1067:`DET`,1071:`NE`,1110:`IND`,1144:`BUF`,1149:`PHI`,1166:`MIN`,1234:`SEA`,1264:`BAL`,1287:`DAL`,1339:`PHI`,1352:`LAR`,1408:`NYJ`,1425:`NYJ`,1426:`HOU`,1466:`KC`,1476:`NO`,1479:`LAC`,1502:`WAS`,1689:`MIN`,1706:`IND`,1825:`CLE`,1833:`KC`,1848:`NE`,1945:`PIT`,1992:`CHI`,2078:`CLE`,2133:`GB`,2168:`ATL`,2197:`LAR`,2216:`TB`,2257:`HOU`,2306:`TB`,2309:`DAL`,2315:`LAR`,2319:`MIA`,2320:`LAC`,2331:`TB`,2334:`NE`,2374:`SEA`,2382:`HOU`,2449:`MIN`,2505:`OAK`,2671:`JAX`,2747:`SEA`,2749:`SF`,3157:`HOU`,3161:`PHI`,3163:`LAR`,3164:`DAL`,3198:`TEN`,3199:`NO`,3202:`ATL`,3214:`LAC`,3225:`CIN`,3242:`ARI`,3271:`LAR`,3294:`DAL`,3300:`OAK`,3306:`PHI`,3321:`KC`,3423:`NYJ`,3594:`TB`,3678:`NO`,3969:`JAX`,4017:`HOU`,4018:`CIN`,4029:`MIN`,4034:`CAR`,4035:`NO`,4039:`LAR`,4040:`PIT`,4046:`KC`,4066:`NYG`,4068:`LAC`,4082:`CAR`,4098:`CLE`,4131:`DET`,4137:`PIT`,4146:`JAX`,4149:`GB`,4152:`IND`,4157:`CHI`,4187:`ATL`,4199:`GB`,4217:`SF`,4227:`KC`,4233:`ARI`,4273:`SEA`,4319:`IND`,4421:`SEA`,4455:`SF`,4663:`LAC`,4866:`NYG`,4881:`BAL`,4892:`CLE`,4943:`NYJ`,4950:`ARI`,4951:`JAX`,4962:`NE`,4981:`ATL`,4983:`CAR`,4988:`CLE`,4993:`MIA`,4995:`CAR`,5012:`BAL`,5013:`CHI`,5022:`PHI`,5038:`DAL`,5045:`DEN`,5046:`DEN`,5052:`TB`,5068:`DET`,5107:`PIT`,5112:`DET`,5122:`PHI`,5170:`DEN`,5209:`MIN`,5347:`IND`,5844:`DET`,5846:`SEA`,5848:`BAL`,5849:`ARI`,5850:`OAK`,5857:`DEN`,5859:`TEN`,5870:`NYG`,5872:`SF`,5892:`CHI`,5917:`KC`,5927:`WAS`,5967:`DAL`,5980:`MIA`,5987:`MIN`,6083:`TB`,6130:`BUF`,6149:`NYG`,6151:`PHI`,6219:`CLE`,6311:`MIA`,6744:`PHI`,BAL:`BAL`,BUF:`BUF`,CAR:`CAR`,CHI:`CHI`,CLE:`CLE`,DEN:`DEN`,MIN:`MIN`,NE:`NE`,NO:`NO`,NYG:`NYG`,NYJ:`NYJ`,PHI:`PHI`,PIT:`PIT`,SEA:`SEA`,SF:`SF`,TEN:`TEN`},2020:{17:`DET`,96:`GB`,138:`PIT`,167:`TB`,184:`DET`,289:`NO`,331:`IND`,367:`NO`,503:`NYG`,515:`TB`,536:`TB`,538:`NO`,616:`CHI`,943:`MIN`,956:`BAL`,1049:`TEN`,1067:`DET`,1110:`IND`,1144:`BUF`,1166:`MIN`,1234:`SEA`,1264:`BAL`,1339:`PHI`,1348:`WAS`,1352:`LAR`,1386:`CIN`,1408:`KC`,1426:`ARI`,1466:`KC`,1476:`NO`,1479:`LAC`,1689:`MIN`,1825:`CLE`,1911:`BAL`,1992:`CHI`,2028:`LV`,2118:`PIT`,2133:`GB`,2152:`CAR`,2197:`HOU`,2216:`TB`,2251:`WAS`,2257:`SEA`,2309:`DAL`,2315:`ATL`,2320:`DEN`,2325:`LV`,2374:`SEA`,2382:`HOU`,2391:`HOU`,2410:`NYJ`,2431:`CAR`,2449:`BUF`,2505:`LV`,2588:`LAR`,2747:`SEA`,2749:`SF`,3163:`LAR`,3164:`DAL`,3198:`TEN`,3202:`CLE`,3214:`LAC`,3225:`CIN`,3242:`ARI`,3321:`KC`,3423:`CAR`,3664:`WAS`,3895:`CLE`,3969:`TB`,4017:`HOU`,4029:`MIN`,4034:`CAR`,4035:`NO`,4036:`TEN`,4037:`TB`,4039:`LAR`,4040:`PIT`,4046:`KC`,4066:`NYG`,4068:`LAC`,4082:`CAR`,4098:`CLE`,4137:`PIT`,4150:`NYG`,4175:`HOU`,4199:`GB`,4217:`SF`,4273:`SEA`,4381:`NO`,4454:`SF`,4602:`GB`,4622:`JAX`,4663:`LAC`,4666:`ATL`,4881:`BAL`,4892:`CLE`,4950:`ARI`,4973:`ATL`,4981:`ATL`,4983:`CAR`,4984:`BUF`,4988:`CLE`,4993:`MIA`,5e3:`ARI`,5004:`ATL`,5007:`HOU`,5012:`BAL`,5022:`PHI`,5026:`NO`,5052:`TB`,5095:`LV`,5110:`ATL`,5119:`MIA`,5185:`GB`,5248:`BAL`,5284:`SF`,5347:`IND`,5844:`DET`,5846:`SEA`,5848:`BAL`,5849:`ARI`,5850:`LV`,5857:`DEN`,5859:`TEN`,5890:`NE`,5892:`CHI`,5916:`LAR`,5927:`WAS`,5937:`PIT`,5955:`LV`,5967:`DAL`,5980:`MIA`,6059:`PHI`,6063:`LAC`,6083:`LAR`,6126:`MIN`,6130:`BUF`,6149:`NYG`,6151:`PHI`,6156:`PIT`,6528:`CAR`,6786:`DAL`,6790:`DET`,6794:`MIN`,6797:`LAC`,6801:`CIN`,6803:`SF`,6806:`BAL`,6813:`IND`,6819:`IND`,6820:`KC`,6826:`CHI`,6845:`BUF`,6886:`PIT`,6904:`PHI`,6909:`MIA`,6918:`MIA`,6943:`BUF`,6945:`WAS`,6955:`JAX`,7042:`BUF`,7062:`IND`,7090:`CHI`,ARI:`ARI`,BAL:`BAL`,BUF:`BUF`,CHI:`CHI`,CLE:`CLE`,GB:`GB`,HOU:`HOU`,IND:`IND`,LAC:`LAC`,LAR:`LAR`,MIA:`MIA`,NE:`NE`,NO:`NO`,PIT:`PIT`,SEA:`SEA`,WAS:`WAS`},2021:{17:`ARI`,59:`GB`,96:`GB`,138:`PIT`,167:`TB`,367:`LAC`,421:`LAR`,515:`TB`,536:`TB`,538:`BUF`,650:`NE`,956:`NO`,1049:`TEN`,1067:`JAX`,1144:`BUF`,1166:`MIN`,1264:`BAL`,1266:`DAL`,1339:`ARI`,1387:`HOU`,1408:`TB`,1466:`KC`,1479:`LAC`,1535:`ATL`,1825:`CLE`,1837:`SF`,1945:`PIT`,2028:`LV`,2133:`GB`,2168:`BAL`,2197:`HOU`,2216:`TB`,2309:`DAL`,2319:`MIA`,2320:`DEN`,2359:`CAR`,2374:`SEA`,2431:`ATL`,2449:`BUF`,2460:`CIN`,2505:`LV`,3161:`IND`,3163:`DET`,3164:`DAL`,3200:`NYG`,3214:`NE`,3271:`LAR`,3294:`DAL`,3306:`PHI`,3321:`KC`,3423:`CAR`,4018:`CIN`,4029:`MIN`,4035:`NO`,4039:`LAR`,4046:`KC`,4068:`LAC`,4089:`SEA`,4098:`CLE`,4111:`TEN`,4137:`ARI`,4147:`CIN`,4171:`DET`,4195:`PHI`,4197:`BUF`,4199:`GB`,4217:`SF`,4381:`NO`,4455:`BUF`,4663:`LAC`,4718:`JAX`,4866:`NYG`,4881:`BAL`,4950:`ARI`,4962:`LAR`,4983:`CAR`,4984:`BUF`,4985:`SEA`,4988:`CLE`,4993:`MIA`,5e3:`ARI`,5001:`DAL`,5012:`BAL`,5022:`PHI`,5038:`DAL`,5045:`DEN`,5046:`HOU`,5052:`TB`,5086:`GB`,5095:`LV`,5110:`ATL`,5122:`PHI`,5131:`LAC`,5133:`MIN`,5185:`GB`,5272:`MIN`,5284:`SF`,5536:`TEN`,5549:`KC`,5846:`SEA`,5848:`BAL`,5849:`ARI`,5850:`LV`,5857:`DEN`,5859:`TEN`,5872:`SF`,5890:`NE`,5892:`CHI`,5906:`BUF`,5916:`LAR`,5927:`WAS`,5937:`PIT`,5947:`NE`,5955:`LV`,5967:`DAL`,5980:`MIA`,6083:`LAR`,6130:`BUF`,6151:`PHI`,6659:`DET`,6768:`MIA`,6770:`CIN`,6783:`DEN`,6786:`DAL`,6790:`DET`,6794:`MIN`,6797:`LAC`,6801:`CIN`,6803:`SF`,6813:`IND`,6819:`IND`,6820:`KC`,6826:`CHI`,6828:`GB`,6853:`LAR`,6885:`TB`,6886:`PIT`,6904:`PHI`,6955:`JAX`,7042:`BUF`,7066:`MIN`,7083:`BAL`,7090:`CHI`,7525:`PHI`,7526:`MIA`,7527:`NE`,7528:`PIT`,7537:`WAS`,7547:`DET`,7553:`ATL`,7561:`SF`,7564:`CIN`,7588:`DEN`,7591:`CHI`,7594:`CAR`,7600:`PIT`,7601:`ARI`,7607:`NYJ`,7610:`SF`,7611:`NE`,7839:`CIN`,ARI:`ARI`,BUF:`BUF`,CHI:`CHI`,CLE:`CLE`,DAL:`DAL`,GB:`GB`,KC:`KC`,LAC:`LAC`,MIN:`MIN`,NE:`NE`,NO:`NO`,PHI:`PHI`,SF:`SF`,TB:`TB`,TEN:`TEN`},2022:{96:`GB`,167:`TB`,503:`NYG`,1166:`MIN`,1264:`BAL`,1373:`SEA`,1426:`ARI`,1466:`KC`,1476:`DEN`,1479:`LAC`,1535:`ATL`,1689:`MIN`,1992:`LAR`,2028:`LV`,2133:`LV`,2161:`KC`,2197:`HOU`,2216:`TB`,2309:`CLE`,2320:`KC`,2325:`NE`,2374:`SEA`,2449:`BUF`,2505:`LV`,2747:`SEA`,2749:`MIA`,3163:`DET`,3164:`DAL`,3198:`TEN`,3202:`TEN`,3225:`CIN`,3269:`HOU`,3271:`LAR`,3286:`BAL`,3294:`DAL`,3321:`MIA`,3969:`TB`,4017:`CLE`,4018:`CIN`,4029:`MIN`,4033:`CLE`,4034:`SF`,4035:`NO`,4036:`NYJ`,4037:`TB`,4039:`LAR`,4040:`KC`,4046:`KC`,4066:`JAX`,4068:`LAC`,4080:`JAX`,4089:`LAC`,4098:`CLE`,4137:`ARI`,4147:`CIN`,4149:`DET`,4195:`PHI`,4197:`BUF`,4199:`GB`,4217:`SF`,4227:`KC`,4381:`NO`,4455:`NYG`,4663:`LAC`,4666:`ATL`,4866:`NYG`,4881:`BAL`,4950:`JAX`,4951:`DET`,4958:`DAL`,4983:`CAR`,4984:`BUF`,4988:`CLE`,4993:`MIA`,5001:`DAL`,5012:`BAL`,5022:`PHI`,5045:`DEN`,5089:`NYJ`,5095:`LV`,5137:`NYG`,5185:`GB`,5230:`DET`,5248:`BAL`,5284:`MIA`,5844:`MIN`,5846:`SEA`,5848:`ARI`,5850:`LV`,5859:`PHI`,5870:`NYG`,5872:`SF`,5892:`CHI`,5906:`BUF`,5927:`WAS`,5937:`PIT`,5947:`NE`,5967:`DAL`,5985:`LV`,5987:`MIN`,6011:`PHI`,6130:`BUF`,6149:`NYG`,6151:`PHI`,6650:`IND`,6768:`MIA`,6770:`CIN`,6783:`DEN`,6786:`DAL`,6790:`DET`,6794:`MIN`,6797:`LAC`,6801:`CIN`,6803:`SF`,6806:`BAL`,6813:`IND`,6819:`IND`,6826:`CHI`,6828:`GB`,6845:`IND`,6853:`LAR`,6885:`TB`,6904:`PHI`,6938:`LAR`,6943:`BUF`,6945:`WAS`,6996:`JAX`,7002:`NO`,7042:`BUF`,7066:`MIN`,7523:`JAX`,7525:`PHI`,7526:`MIA`,7528:`PIT`,7543:`JAX`,7547:`DET`,7564:`CIN`,7591:`CHI`,7594:`CAR`,7600:`PIT`,7601:`ARI`,7606:`KC`,7608:`CHI`,7611:`NE`,7670:`LAC`,8112:`ATL`,8119:`WAS`,8122:`NYJ`,8123:`TEN`,8129:`HOU`,8132:`ATL`,8136:`TB`,8137:`PIT`,8138:`BUF`,8144:`NO`,8146:`NYJ`,8151:`SEA`,8154:`WAS`,8167:`GB`,8183:`SF`,8205:`KC`,8210:`TEN`,8259:`LAC`,8408:`SF`,BAL:`BAL`,BUF:`BUF`,CAR:`CAR`,CLE:`CLE`,DAL:`DAL`,DET:`DET`,IND:`IND`,JAX:`JAX`,KC:`KC`,LAC:`LAC`,MIA:`MIA`,NE:`NE`,NYG:`NYG`,NYJ:`NYJ`,PHI:`PHI`,PIT:`PIT`,SF:`SF`,TB:`TB`,WAS:`WAS`},2023:{19:`CLE`,96:`NYJ`,421:`LAR`,1264:`BAL`,1348:`CLE`,1373:`SEA`,1426:`TEN`,1433:`JAX`,1466:`KC`,1479:`LAC`,1689:`CAR`,2028:`NO`,2133:`LV`,2161:`KC`,2197:`DAL`,2216:`TB`,2251:`WAS`,2309:`CLE`,2374:`SEA`,2449:`BUF`,2505:`NYG`,2747:`SEA`,2749:`MIA`,3163:`DET`,3164:`NE`,3198:`TEN`,3199:`NO`,3286:`LAR`,3294:`DAL`,3321:`MIA`,3969:`BUF`,4018:`CIN`,4033:`CLE`,4034:`SF`,4035:`NO`,4037:`TB`,4039:`LAR`,4046:`KC`,4066:`JAX`,4082:`WAS`,4098:`CLE`,4137:`ARI`,4195:`PHI`,4199:`GB`,4217:`SF`,4227:`KC`,4234:`HOU`,4663:`LAC`,4666:`ATL`,4866:`NYG`,4881:`BAL`,4892:`TB`,4981:`JAX`,4983:`CHI`,4984:`BUF`,5001:`HOU`,5022:`PHI`,5045:`DEN`,5119:`MIA`,5248:`BAL`,5409:`CIN`,5844:`MIN`,5846:`SEA`,5849:`ARI`,5850:`LV`,5859:`PHI`,5872:`SF`,5892:`DET`,5927:`WAS`,5937:`PIT`,5947:`LV`,5967:`DAL`,5987:`MIN`,6011:`IND`,6083:`IND`,6111:`CIN`,6130:`HOU`,6650:`TB`,6768:`MIA`,6786:`DAL`,6790:`PHI`,6794:`MIN`,6801:`CIN`,6803:`SF`,6804:`GB`,6813:`IND`,6819:`IND`,6820:`KC`,6826:`CHI`,6845:`IND`,6904:`PHI`,6943:`BUF`,6945:`WAS`,6963:`GB`,7042:`BUF`,7066:`MIN`,7523:`JAX`,7525:`PHI`,7526:`MIA`,7528:`PIT`,7543:`JAX`,7547:`DET`,7553:`ATL`,7564:`CIN`,7567:`PHI`,7569:`HOU`,7588:`DEN`,7591:`CHI`,7594:`CAR`,7596:`CLE`,7611:`NE`,7670:`LAC`,8110:`DAL`,8111:`TB`,8112:`ATL`,8121:`GB`,8130:`ARI`,8131:`BAL`,8136:`TB`,8137:`PIT`,8138:`BUF`,8139:`LV`,8143:`CLE`,8144:`NO`,8146:`NYJ`,8150:`LAR`,8151:`SEA`,8154:`WAS`,8155:`NYJ`,8162:`WAS`,8167:`GB`,8183:`SF`,8205:`KC`,8228:`PIT`,8230:`MIN`,8676:`NO`,9221:`DET`,9224:`CIN`,9226:`MIA`,9228:`CAR`,9484:`GB`,9486:`GB`,9487:`JAX`,9488:`SEA`,9493:`LAR`,9501:`NE`,9508:`TEN`,9509:`ATL`,9753:`SEA`,9756:`MIN`,9758:`HOU`,9997:`BAL`,10222:`GB`,10229:`KC`,10235:`CHI`,10236:`BUF`,10859:`DET`,10937:`SF`,11292:`NYG`,11533:`DAL`,ATL:`ATL`,BUF:`BUF`,CHI:`CHI`,CIN:`CIN`,CLE:`CLE`,DAL:`DAL`,DEN:`DEN`,GB:`GB`,HOU:`HOU`,IND:`IND`,JAX:`JAX`,KC:`KC`,LV:`LV`,MIA:`MIA`,NE:`NE`,PHI:`PHI`,PIT:`PIT`,SEA:`SEA`,SF:`SF`},2024:{19:`IND`,96:`NYJ`,421:`LAR`,1264:`BAL`,1339:`WAS`,1433:`GB`,1466:`KC`,1479:`CHI`,1689:`CAR`,1945:`PIT`,2133:`NYJ`,2197:`DAL`,2216:`TB`,2309:`BUF`,2359:`LV`,2374:`SEA`,2749:`MIA`,3163:`DET`,3198:`BAL`,3200:`TB`,3214:`NE`,3321:`MIA`,3451:`HOU`,4018:`HOU`,4035:`NO`,4039:`LAR`,4137:`ARI`,4144:`MIA`,4195:`PHI`,4199:`MIN`,4217:`SF`,4227:`KC`,4574:`DAL`,4866:`PHI`,4881:`BAL`,4892:`TB`,4943:`MIN`,4972:`TEN`,4981:`TEN`,4983:`CHI`,4984:`BUF`,4988:`CLE`,5045:`DEN`,5119:`MIA`,5844:`MIN`,5846:`SEA`,5849:`ARI`,5850:`GB`,5854:`NYG`,5859:`PHI`,5872:`SF`,5906:`BUF`,5927:`WAS`,5947:`LV`,5967:`TEN`,5987:`LV`,5995:`BAL`,6039:`BUF`,6219:`WAS`,6271:`WAS`,6650:`TB`,6768:`MIA`,6770:`CIN`,6783:`CLE`,6794:`MIN`,6797:`LAC`,6801:`CIN`,6804:`GB`,6806:`LAC`,6813:`IND`,6819:`IND`,6904:`PHI`,6945:`NE`,7021:`DAL`,7042:`BUF`,7049:`SF`,7090:`ATL`,7525:`PHI`,7526:`MIA`,7527:`JAX`,7528:`PIT`,7543:`JAX`,7547:`DET`,7553:`ATL`,7564:`CIN`,7569:`HOU`,7588:`DEN`,7594:`CAR`,7600:`PIT`,7611:`NE`,7828:`KC`,8110:`DAL`,8112:`ATL`,8117:`DAL`,8121:`GB`,8125:`PIT`,8130:`ARI`,8134:`BUF`,8136:`TB`,8137:`PIT`,8138:`BUF`,8143:`CLE`,8144:`NO`,8146:`NYJ`,8148:`DET`,8150:`LAR`,8151:`SEA`,8154:`WAS`,8155:`NYJ`,8160:`PHI`,8183:`SF`,8228:`PIT`,8255:`CAR`,8259:`LAC`,8583:`LAC`,9221:`DET`,9224:`CIN`,9225:`JAX`,9226:`MIA`,9228:`CAR`,9229:`IND`,9480:`JAX`,9484:`GB`,9487:`JAX`,9488:`SEA`,9493:`LAR`,9500:`IND`,9502:`HOU`,9508:`TEN`,9509:`ATL`,9753:`SEA`,9754:`LAC`,9756:`MIN`,9757:`NO`,9758:`HOU`,9997:`BAL`,10213:`LV`,10222:`GB`,10226:`CIN`,10859:`DET`,10862:`CLE`,10866:`LV`,11439:`DEN`,11533:`DAL`,11539:`DET`,11559:`ATL`,11560:`CHI`,11562:`NO`,11563:`DEN`,11564:`NE`,11566:`WAS`,11571:`NYJ`,11575:`BUF`,11584:`TB`,11589:`ARI`,11604:`LV`,11618:`TB`,11620:`CHI`,11624:`KC`,11628:`ARI`,11631:`JAX`,11632:`NYG`,11635:`LAC`,11637:`BUF`,11651:`SF`,11655:`NYG`,11792:`MIN`,DAL:`DAL`,DEN:`DEN`,GB:`GB`,HOU:`HOU`,IND:`IND`,KC:`KC`,LAC:`LAC`,LAR:`LAR`,LV:`LV`,MIA:`MIA`,MIN:`MIN`,NO:`NO`,PHI:`PHI`,SEA:`SEA`,TB:`TB`},2025:{96:`PIT`,421:`LAR`,650:`NYJ`,1339:`WAS`,1466:`KC`,1479:`LAC`,1945:`PIT`,2133:`LAR`,2216:`TB`,2449:`NE`,2505:`MIA`,2747:`SEA`,3163:`DET`,3198:`BAL`,3214:`NE`,3257:`ARI`,3294:`DAL`,3451:`HOU`,4018:`HOU`,4034:`SF`,4037:`TB`,4046:`KC`,4066:`DEN`,4098:`KC`,4147:`CIN`,4177:`NE`,4199:`MIN`,4217:`SF`,4381:`NO`,4866:`PHI`,4881:`BAL`,4892:`TB`,4943:`SEA`,4983:`CHI`,4984:`BUF`,5001:`HOU`,5012:`BAL`,5022:`PHI`,5045:`DEN`,5189:`SF`,5844:`MIN`,5846:`PIT`,5850:`GB`,5859:`PHI`,5872:`WAS`,5892:`DET`,5906:`BUF`,5927:`WAS`,5947:`JAX`,5967:`TEN`,6039:`BUF`,6130:`NYG`,6650:`TB`,6770:`CIN`,6786:`DAL`,6790:`CHI`,6794:`MIN`,6797:`LAC`,6801:`CIN`,6813:`IND`,6819:`IND`,6865:`LAR`,6904:`PHI`,7002:`NO`,7021:`CAR`,7049:`SF`,7523:`JAX`,7525:`PHI`,7526:`MIA`,7543:`JAX`,7547:`DET`,7553:`ATL`,7564:`CIN`,7567:`PIT`,7569:`HOU`,7588:`DAL`,7594:`CAR`,7607:`ARI`,7611:`NE`,8112:`ATL`,8121:`GB`,8126:`NYG`,8130:`ARI`,8132:`ATL`,8134:`BUF`,8137:`DAL`,8138:`BUF`,8142:`IND`,8144:`NO`,8146:`NYJ`,8147:`NYJ`,8148:`DET`,8150:`LAR`,8151:`SEA`,8154:`SF`,8155:`NYJ`,8167:`GB`,8183:`SF`,8205:`KC`,8228:`PIT`,8259:`LAC`,8408:`MIN`,9220:`NO`,9221:`DET`,9224:`CIN`,9226:`MIA`,9479:`PIT`,9480:`JAX`,9487:`JAX`,9488:`SEA`,9493:`LAR`,9504:`NE`,9506:`TB`,9509:`ATL`,9753:`SEA`,9754:`LAC`,9756:`MIN`,9997:`BAL`,10213:`LV`,10219:`WAS`,10229:`KC`,10232:`ARI`,10236:`BUF`,11199:`ARI`,11435:`GB`,11533:`DAL`,11539:`DET`,11560:`CHI`,11563:`DEN`,11564:`NE`,11571:`NYJ`,11584:`TB`,11586:`LAR`,11597:`NYG`,11603:`SEA`,11604:`LV`,11620:`CHI`,11624:`KC`,11625:`NYJ`,11628:`ARI`,11631:`JAX`,11635:`LAC`,11638:`SF`,11643:`MIA`,11647:`LAC`,11655:`NYG`,11783:`DAL`,11786:`JAX`,11792:`MIN`,12484:`HOU`,12489:`DEN`,12506:`CLE`,12507:`LAC`,12514:`TB`,12517:`CHI`,12518:`IND`,12519:`CHI`,12526:`CAR`,12527:`LV`,12529:`NE`,12533:`WAS`,12534:`CHI`,12545:`NO`,12711:`BAL`,12713:`NE`,CHI:`CHI`,CIN:`CIN`,DEN:`DEN`,DET:`DET`,GB:`GB`,HOU:`HOU`,JAX:`JAX`,LAR:`LAR`,MIN:`MIN`,NE:`NE`,NO:`NO`,NYG:`NYG`,PHI:`PHI`,PIT:`PIT`,SEA:`SEA`,SF:`SF`,TB:`TB`}};function fp(e,t){return dp[e]?.[t]??null}var pp={QB:0,RB:1,WR:2,TE:3,FLEX:4,K:5,DEF:6,DST:6,DL:7,LB:8,DB:9};function mp(e){return pp[e.toUpperCase()]??50}function hp(e,t){let n=e.roster,r=e.season,i=n.starters??[],a=new Map(i.map((e,t)=>[e,t])),o=[];for(let e of n.players??[]){let n=t?.[e]?.position??`—`,i=fp(r,e);o.push({id:e,name:t?Es(e,t):e,pos:n,nfl:i??`—`,starter:a.has(e)})}return o.sort((e,t)=>{let n=a.get(e.id),r=a.get(t.id);if(n!==void 0&&r!==void 0)return n-r;if(n!==void 0)return-1;if(r!==void 0)return 1;let i=mp(e.pos)-mp(t.pos);return i===0?e.name.localeCompare(t.name):i}),o}function gp(e){let t=new Map;for(let n of e){let e=t.get(n.season)??[];e.push(n),t.set(n.season,e)}return[...t.entries()].sort((e,t)=>Number(t[0])-Number(e[0]))}function _p({label:e,value:t}){return(0,B.jsxs)(`div`,{className:`rounded-lg border border-[var(--gwb-border)] bg-[#0d1319] px-3 py-2 text-center`,children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:e}),(0,B.jsx)(`p`,{className:`mt-0.5 font-['Bebas_Neue'] text-xl leading-none tracking-wide text-[var(--gwb-accent)]`,children:t})]})}function vp({title:e,assets:t}){return(0,B.jsxs)(`div`,{className:`min-w-0 flex-1`,children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:e}),(0,B.jsx)(`ul`,{className:`mt-1 space-y-0.5 text-sm`,role:`list`,children:t.length?t.map(e=>(0,B.jsx)(`li`,{className:`text-[var(--gwb-text)]`,children:e.label},e.label+(e.playerId??``))):(0,B.jsx)(`li`,{className:`text-[var(--gwb-muted)]`,children:`—`})})]})}function yp({rosterId:e,onRosterChange:t,teams:n,rosters:r,standings:i,trades:a,players:o,statusThroughWeek:s,leagueSeasonSummaries:c,currentSeason:l,tradePriorSeasonsFailed:u,tradeHistoryLoading:d=!1}){let f=(0,v.useMemo)(()=>[...n.keys()].sort((e,t)=>e-t),[n]),p=n.get(e),m=p?.userId??``,h=i.find(t=>t.rosterId===e),g=r.find(t=>t.roster_id===e),_=mu(e,s),y=Tu(e,s),b=(0,v.useMemo)(()=>lp(c,m),[c,m]),x=(0,v.useMemo)(()=>up(c,m,l),[c,m,l]),[S,C]=(0,v.useState)(``),w=x.find(e=>e.season===S)??x[0]??null,T=If(m),E=(0,v.useMemo)(()=>T?Uf(T):[],[T]),D=(0,v.useMemo)(()=>Yf(m,b),[m,b]),O=(0,v.useMemo)(()=>Zf(m,b,h?{wins:h.wins,losses:h.losses,ties:h.ties}:null),[m,b,h]),ee=Gf(m),te=qf(m,b),k=Kf(m),ne=Jf(m,b,E),re=a.filter(t=>t.sideA.rosterId===e||t.sideB.rosterId===e),A=(0,v.useMemo)(()=>gp(re),[re]);function j(e,t,n){let r=c.find(t=>t.season===e);if(r)return r.byUserId.get(n)??r.byRosterId.get(t)}function ie(e){if(e===l)return sp(l,h??null);let t=c.find(t=>t.season===e),n=t?.byUserId.get(m),r=[t?.leagueName??`unavailable`];return n&&r.push(`You: ${cp(n)}`),t?.status===`complete`&&r.push(`Champion: ${t.championDisplayName}`),r.join(` · `)}return(0,B.jsxs)(`div`,{className:`space-y-8`,id:`manager-panel`,children:[(0,B.jsx)(tp,{leagueSeasonSummaries:c}),(0,B.jsxs)(`label`,{className:`block text-sm`,children:[(0,B.jsx)(`span`,{className:`text-[var(--gwb-muted)]`,children:`Pick a manager`}),(0,B.jsx)(`select`,{className:`mt-1 w-full rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2 text-base`,value:e,onChange:e=>t(Number(e.target.value)),"aria-label":`Select manager`,children:f.map(e=>{let t=n.get(e);return(0,B.jsx)(`option`,{value:e,children:xs(e,t?.displayName??``,t?.userId)},e)})})]}),p&&(0,B.jsxs)(`section`,{id:`manager-hero`,className:`overflow-hidden rounded-xl border border-[var(--gwb-border)] bg-gradient-to-br from-[var(--gwb-surface)] to-[#0a0f14]`,"aria-labelledby":`manager-profile-heading`,children:[(0,B.jsxs)(`div`,{className:`border-b border-[var(--gwb-border)] bg-[#0d1319]/80 px-4 py-4`,children:[(0,B.jsx)(`p`,{id:`manager-profile-heading`,className:`text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]`,children:`Profile`}),(0,B.jsxs)(`div`,{className:`mt-2 flex items-start gap-3`,children:[(0,B.jsx)(Cd,{team:p,size:`md`}),(0,B.jsxs)(`div`,{className:`min-w-0 flex-1`,children:[(0,B.jsx)(`h4`,{className:`font-['Anton'] text-3xl uppercase leading-none tracking-wide sm:text-4xl`,children:xs(e,p.displayName,p.userId)}),(0,B.jsx)(`p`,{className:`mt-1 font-['Bebas_Neue'] text-lg tracking-wide text-[var(--gwb-muted)]`,children:p.teamName})]})]}),(0,B.jsxs)(`div`,{className:`mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5`,children:[(0,B.jsx)(_p,{label:`Career`,value:O}),(0,B.jsx)(_p,{label:`Titles`,value:String(ee)}),(0,B.jsx)(_p,{label:`Playoff trips`,value:String(te)}),(0,B.jsx)(_p,{label:`Finals apps`,value:String(k)}),(0,B.jsx)(_p,{label:`Best finish`,value:ne})]})]}),(0,B.jsxs)(`div`,{className:`space-y-4 px-4 py-4`,children:[h&&(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:sp(l,h)}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:[`Mulligan (`,l,`)`]}),y.used?(0,B.jsxs)(`div`,{className:`mt-1 space-y-0.5 text-sm`,children:[(0,B.jsxs)(`p`,{children:[`Used Week `,y.week]}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:y.outLine}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:y.inLine}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:y.netLine})]}):(0,B.jsx)(`p`,{className:`mt-1 text-sm`,children:`Chip still in the holster.`}),_&&(0,B.jsx)(`p`,{className:`mt-2 text-xs text-[var(--gwb-muted)]`,children:Nu(_)})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-muted)]`,children:`Current roster`}),g?.players?.length?(0,B.jsx)(`ul`,{className:`mt-2 grid gap-1 text-sm sm:grid-cols-2`,role:`list`,children:g.players.map(e=>(0,B.jsx)(`li`,{className:`truncate text-[var(--gwb-muted)]`,children:o?Es(e,o):e},e))}):(0,B.jsx)(`p`,{className:`mt-1 text-sm text-[var(--gwb-muted)]`,children:`Roster not loaded.`})]})]})]}),(0,B.jsxs)(`section`,{id:`manager-seasons-section`,"aria-labelledby":`manager-seasons-heading`,children:[(0,B.jsx)(`h3`,{id:`manager-seasons-heading`,className:`font-['Bebas_Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]`,children:`Season-by-season`}),(0,B.jsx)(`p`,{className:`mb-3 text-sm text-[var(--gwb-muted)]`,children:`Pre-2019 rows from the verified archive; 2019+ from Sleeper — seed, record, and playoff result.`}),h&&(0,B.jsxs)(`div`,{className:`mb-3 rounded-lg border border-[var(--gwb-accent)]/40 bg-[var(--gwb-accent)]/5 px-3 py-2`,children:[(0,B.jsx)(`p`,{className:`text-[10px] font-semibold uppercase tracking-wide text-[var(--gwb-accent)]`,children:`This season`}),(0,B.jsx)(`p`,{className:`text-sm font-medium`,children:sp(l,h)})]}),D.length>0?(0,B.jsx)(`ul`,{className:`space-y-2`,role:`list`,children:D.map(e=>{if(e.kind===`archive`){let t=e.row,n=t.playoffResult===`Champion`,r=t.playoffResult===`Runner-up`;return(0,B.jsxs)(`li`,{className:`rounded-lg border px-3 py-2 text-sm ${n?`border-[var(--gwb-accent)] bg-[var(--gwb-accent)]/10`:r?`border-amber-500/50 bg-amber-500/5`:`border-[var(--gwb-border)] bg-[var(--gwb-surface)]`}`,children:[(0,B.jsxs)(`p`,{className:`font-medium`,children:[t.season,n&&(0,B.jsx)(`span`,{className:`ml-2 rounded bg-[var(--gwb-accent)] px-1.5 py-0.5 text-[10px] font-bold uppercase text-[#1a1200]`,children:`Champ`}),r&&(0,B.jsx)(`span`,{className:`ml-2 rounded border border-amber-500/60 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-200`,children:`Runner-up`}),(0,B.jsxs)(`span`,{className:`font-normal text-[var(--gwb-muted)]`,children:[` `,`· `,t.leagueName]}),(0,B.jsx)(`span`,{className:`ml-1 text-[10px] uppercase text-[var(--gwb-muted)]`,children:`archive`})]}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:Qf(t)}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Champion: `,t.championDisplayName,t.runnerUpDisplayName&&` · Runner-up: ${t.runnerUpDisplayName}`]})]},`archive-${t.season}`)}let t=e.row,n=t.playoffResult===`Champion`,r=t.playoffResult===`Runner-up`;return(0,B.jsxs)(`li`,{className:`rounded-lg border px-3 py-2 text-sm ${n?`border-[var(--gwb-accent)] bg-[var(--gwb-accent)]/10`:r?`border-amber-500/50 bg-amber-500/5`:`border-[var(--gwb-border)] bg-[var(--gwb-surface)]`}`,children:[(0,B.jsxs)(`p`,{className:`font-medium`,children:[t.season,n&&(0,B.jsx)(`span`,{className:`ml-2 rounded bg-[var(--gwb-accent)] px-1.5 py-0.5 text-[10px] font-bold uppercase text-[#1a1200]`,children:`Champ`}),r&&(0,B.jsx)(`span`,{className:`ml-2 rounded border border-amber-500/60 px-1.5 py-0.5 text-[10px] font-bold uppercase text-amber-200`,children:`Runner-up`}),(0,B.jsxs)(`span`,{className:`font-normal text-[var(--gwb-muted)]`,children:[` `,`· `,t.leagueName]})]}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:cp(t)}),(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Champion: `,t.championDisplayName]})]},`sleeper-${t.season}`)})}):(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:`No completed seasons yet.`})]}),(0,B.jsxs)(`section`,{id:`manager-trades-section`,"aria-labelledby":`manager-trades-heading`,children:[(0,B.jsx)(`h3`,{id:`manager-trades-heading`,className:`font-['Bebas_Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]`,children:`Trades`}),(0,B.jsx)(`p`,{className:`mb-3 text-sm text-[var(--gwb-muted)]`,children:`All-time receipts from Sleeper, tagged by season and NFL week.`}),d&&(0,B.jsx)(`p`,{className:`mb-2 text-sm text-[var(--gwb-muted)]`,children:`Loading trade history from prior seasons…`}),u&&(0,B.jsx)(`p`,{className:`mb-2 text-sm text-amber-400`,children:`Some prior-season trade data is unavailable.`}),re.length?(0,B.jsx)(`div`,{className:`space-y-5`,children:A.map(([t,n])=>(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`div`,{className:`mb-2 border-b border-[var(--gwb-border)] pb-2`,children:[(0,B.jsxs)(`p`,{className:`font-['Bebas_Neue'] text-xl tracking-wide`,children:[t,` season`]}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:ie(t)})]}),(0,B.jsx)(`ul`,{className:`space-y-3 text-sm`,role:`list`,children:n.map(n=>{let r=n.sideA.rosterId===e?n.sideA:n.sideB,i=n.sideA.rosterId===e?n.sideB:n.sideA,a=j(t,i.rosterId,i.userId),o=t!==l&&a?.playoffResult;return(0,B.jsxs)(`li`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-3`,children:[(0,B.jsxs)(`div`,{className:`flex flex-wrap items-center gap-2`,children:[(0,B.jsxs)(`span`,{className:`rounded-full bg-[var(--gwb-accent)] px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-[#1a1200]`,children:[t,` · Wk `,n.week]}),(0,B.jsx)(`span`,{className:`text-xs text-[var(--gwb-muted)]`,children:n.dateLabel})]}),(0,B.jsxs)(`p`,{className:`mt-2 font-medium`,children:[`vs `,i.managerName]}),o&&(0,B.jsxs)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:[`Their `,t,`: `,cp(a)]}),(0,B.jsxs)(`div`,{className:`mt-3 flex flex-col gap-3 border-t border-[var(--gwb-border)] pt-3 sm:flex-row sm:gap-4`,children:[(0,B.jsx)(vp,{title:`Got`,assets:r.received}),(0,B.jsx)(vp,{title:`Sent`,assets:r.sent})]})]},n.transactionId)})})]},t))}):(0,B.jsx)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:`Clean trade sheet — no deals yet.`})]}),x.length>0&&(0,B.jsxs)(`section`,{id:`manager-past-rosters-section`,"aria-labelledby":`manager-past-rosters-heading`,children:[(0,B.jsx)(`h3`,{id:`manager-past-rosters-heading`,className:`font-['Bebas_Neue'] text-2xl tracking-wide text-[var(--gwb-accent)]`,children:`Past rosters`}),(0,B.jsx)(`p`,{className:`mb-3 text-sm text-[var(--gwb-muted)]`,children:`Final roster from each completed season.`}),(0,B.jsxs)(`label`,{className:`mb-3 block text-sm`,children:[(0,B.jsx)(`span`,{className:`text-[var(--gwb-muted)]`,children:`Season`}),(0,B.jsx)(`select`,{className:`mt-1 w-full rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2`,value:w?.season??``,onChange:e=>C(e.target.value),"aria-label":`Select past season roster`,children:x.map(e=>(0,B.jsxs)(`option`,{value:e.season,children:[e.season,` · `,bp(e)]},e.season))})]}),w&&(0,B.jsxs)(`div`,{className:`rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-3`,children:[(0,B.jsx)(`p`,{className:`font-['Bebas_Neue'] text-lg tracking-wide`,children:w.season}),(0,B.jsx)(`p`,{className:`text-xs text-[var(--gwb-muted)]`,children:cp(w)}),(0,B.jsx)(`div`,{className:`mt-3 -mx-3 overflow-x-auto px-3`,children:(0,B.jsxs)(`table`,{className:`w-full min-w-[320px] text-left text-sm`,children:[(0,B.jsx)(`thead`,{children:(0,B.jsxs)(`tr`,{className:`border-b border-[var(--gwb-border)] text-[10px] uppercase tracking-wide text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`th`,{className:`py-2 pr-2 font-semibold`,children:`Player`}),(0,B.jsx)(`th`,{className:`px-2 py-2 font-semibold`,children:`Pos`}),(0,B.jsx)(`th`,{className:`px-2 py-2 font-semibold`,children:`Team`}),(0,B.jsx)(`th`,{className:`py-2 pl-2 text-right font-semibold`,children:`Role`})]})}),(0,B.jsx)(`tbody`,{children:hp(w,o).map(e=>(0,B.jsxs)(`tr`,{className:`border-b border-[var(--gwb-border)]/60 last:border-0`,children:[(0,B.jsx)(`td`,{className:`max-w-[140px] truncate py-2 pr-2`,children:e.name}),(0,B.jsx)(`td`,{className:`whitespace-nowrap px-2 py-2 text-[var(--gwb-muted)]`,children:e.pos}),(0,B.jsx)(`td`,{className:`whitespace-nowrap px-2 py-2 text-[var(--gwb-muted)]`,children:e.nfl}),(0,B.jsx)(`td`,{className:`whitespace-nowrap py-2 pl-2 text-right text-xs uppercase`,children:e.starter?(0,B.jsx)(`span`,{className:`text-[var(--gwb-accent)]`,children:`Start`}):(0,B.jsx)(`span`,{className:`text-[var(--gwb-muted)]`,children:`Bench`})})]},e.id))})]})})]})]})]})}function bp(e){let t=e.ties?`-${e.ties}`:``;return`${e.wins}-${e.losses}${t} · ${e.playoffResult}`}function xp({week:e,maxWeek:t,onChange:n}){let r=Array.from({length:t},(e,t)=>t+1);return(0,B.jsxs)(`label`,{className:`flex flex-col gap-1 text-sm text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`span`,{className:`font-medium uppercase tracking-wide text-xs`,children:`NFL Week`}),(0,B.jsx)(`select`,{className:`rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2.5 text-[var(--gwb-text)] text-base`,value:e,onChange:e=>n(Number(e.target.value)),children:r.map(e=>(0,B.jsxs)(`option`,{value:e,children:[`Week `,e]},e))})]})}var Sp=null,Cp=null;async function wp(e){return Sp?.bundles.length?Sp:Cp||(Cp=Hc(e).then(e=>(Sp={bundles:e.bundles,priorSeasonsFailed:e.priorSeasonsFailed},Cp=null,Sp)),Cp)}function Tp(e,t){return xs(e,t.get(e)?.displayName??``)}function Ep(e,t,n){let r=null,i=null,a=null,o=null;for(let a of t){let t=a.points;if(t<=0)continue;let s=Tp(a.roster_id,n);(!r||t>r.value)&&(r={week:e,rosterId:a.roster_id,managerName:s,value:t,detail:`${t.toFixed(2)} pts`}),(!i||t<i.value)&&(i={week:e,rosterId:a.roster_id,managerName:s,value:t,detail:`${t.toFixed(2)} pts`});let c=As(a);(!o||c>o.value)&&(o={week:e,rosterId:a.roster_id,managerName:s,value:c,detail:`${c.toFixed(2)} on bench`})}for(let{home:r,away:i}of Ss(t)){let t=Math.abs(r.points-i.points);if(t<=0)continue;let o=r.points>i.points?r:i,s=r.points>i.points?i:r;(!a||t<a.value)&&(a={week:e,rosterId:o.roster_id,managerName:Tp(o.roster_id,n),value:t,detail:`${t.toFixed(2)} over ${Tp(s.roster_id,n)}`})}return{week:e,highScore:r,lowScore:i,closestWin:a,mostBench:o}}function Dp(e,t,n,r){let i=[...e.keys()].sort((e,t)=>t-e),a=[];for(let o of i){if(!ru(o,n,r))continue;let i=e.get(o);i?.length&&i.some(e=>e.points>0)&&a.push(Ep(o,i,t))}return a.sort((e,t)=>t.week-e.week)}function Op(){let[e,t]=(0,v.useState)(`idle`),[n,r]=(0,v.useState)(null),[i,a]=(0,v.useState)(null),[o,s]=(0,v.useState)(!1),[c,l]=(0,v.useState)(null),[u,d]=(0,v.useState)(!1),[f,p]=(0,v.useState)(1),m=(0,v.useCallback)((e,t)=>{l(n=>{if(!n)return n;let r=new Map(n.matchupsByWeek);return r.set(e,t),{...n,matchupsByWeek:r}})},[]),h=(0,v.useCallback)(async()=>{t(`loading`),r(null);try{let[e,n,r,i]=await Promise.all([Oc(),Ac(),jc(),Mc()]),a=$l(e),o=eu(n,e),s=Math.max(a,o),c=$s(n.settings.playoff_week_start??15),[u,d,f]=await Promise.all([Ic(s),s<c?Lc(s+1,c):Promise.resolve(new Map),Fc(s).then(e=>({transactions:e,waiverLoadError:null}),e=>({transactions:[],waiverLoadError:e instanceof Error?e.message:`Waiver moves did not load`}))]),m=new Map(u);for(let[e,t]of d)m.has(e)||m.set(e,t);let h=Hs(r,i),g=Ys(i,h),_=g;p(a),l({league:n,nflState:e,rosters:i,matchupsByWeek:m,teams:h,standings:g,seasonStandings:_,transactions:f.transactions,waiverLoadError:f.waiverLoadError,tradeBundles:[],tradePriorSeasonsFailed:!1,tradeHistoryLoaded:!1}),t(`ready`)}catch(e){r(e instanceof Error?e.message:`Failed to load league`),t(`error`)}},[]);(0,v.useEffect)(()=>{h()},[h]);let g=(0,v.useCallback)(()=>{!c||c.tradeHistoryLoaded||u||(d(!0),wp(c.league.league_id).then(({bundles:e,priorSeasonsFailed:t})=>{l(n=>n&&{...n,tradeBundles:e,tradePriorSeasonsFailed:t,tradeHistoryLoaded:!0})}).catch(()=>{l(e=>e&&{...e,tradePriorSeasonsFailed:!0,tradeHistoryLoaded:!0})}).finally(()=>d(!1)))},[c,u]),_=(0,v.useCallback)(()=>{i||o||(s(!0),sl().then(e=>a(e)).catch(()=>a({})).finally(()=>s(!1)))},[i,o]);return{state:e,error:n,data:(0,v.useMemo)(()=>{if(!c)return null;let{rosters:e,matchupsByWeek:t,teams:n,seasonStandings:r,league:a,nflState:s,transactions:l,waiverLoadError:d,tradeBundles:v,tradePriorSeasonsFailed:y}=c,b=eu(a,s),x=au(f,a,s),S=Js(t,n,x),C=ou(f,a,s),w=Mu(f,a,s,x),T=t.get(f),E=Js(t,n,Math.max(0,f-1)),D=T&&Zo(T)&&i?Xo(T,n,i,{rosterPositions:a.roster_positions,preWeekStandings:E,isWeekFinal:ru(f,a,s),week:f}):[],O=nu(f,a,s),ee=ju(x,f),te=iu(f,a,s),k=Sl({transactions:l,matchupsByWeek:t,teams:n,rosters:e,scoringThrough:x,selectedWeek:f,selectedWeekComplete:!O}),ne=U(f,a,s,`waiver scores`),re=[],A=[];for(let e of v){e.league.league_id!==a.league_id&&A.push(e.league.season);for(let t of e.transactions){let n=cf(t,e.league,e.teams,i);n&&re.push(n)}}let j=lf(re),ie=op(v),M=Dp(t,n,a,s),N=$s(a.settings.playoff_week_start??15),ae=xf({standings:S,matchupsByWeek:t,throughWeek:x,playoffTeams:a.settings.playoff_teams??6,regularSeasonLastWeek:N}),oe=b,se=Af({matchupsByWeek:t,teams:n,throughWeek:oe});return{league:a,nflState:s,rosters:e,standings:S,seasonStandings:r,recaps:D,matchupsByWeek:t,players:i,playersLoading:o,ensurePlayers:_,teams:n,selectedWeek:f,setSelectedWeek:p,refresh:h,completedWeek:b,isSelectedWeekLive:O,weekLabel:te,standingsThroughWeek:x,mulliganStatusThroughWeek:ee,standingsDeferralNote:C,mulligansDeferralNote:w,waiverBoard:k,waiverLoadError:d,waiverDeferralNote:ne,updateWeekMatchups:m,tradeLog:j,tradePriorSeasonsIncluded:A,tradePriorSeasonsFailed:y,tradeHistoryLoading:u,ensureTradeHistory:g,leagueSeasonSummaries:ie,weeklyAwards:M,playoffOdds:ae,powerRankings:se,powerRankingsThroughWeek:oe,regularSeasonLastWeek:N}},[c,f,h,i,o,_,g,u,m]),refresh:h}}var kp=`gwb-sound`;function Ap(e,t=`/gwb-fe006a16/`){return`${t.endsWith(`/`)?t:`${t}/`}audio/${e.replace(/^\//,``)}`}var jp={standings:Ap(`impact-loop.mp3`),powerrankings:Ap(`impact-loop.mp3`),bestgames:Ap(`impact-loop.mp3`),live:Ap(`impact-loop.mp3`),gallery:Ap(`impact-loop.mp3`),recaps:Ap(`impact-loop.mp3`),mulligans:Ap(`monkeys-loop.mp3`),frankie:Ap(`sneaky-loop.mp3`),waiver:Ap(`volatile-loop.mp3`),trades:Ap(`impact-loop.mp3`),awards:Ap(`impact-loop.mp3`),managers:Ap(`impact-loop.mp3`)},Mp={matchups:Ap(`sneaky-loop.mp3`),results:Ap(`impact-loop.mp3`),report:Ap(`volatile-loop.mp3`)},Np=Ap(`click.mp3`),Pp=Ap(`buzzer.mp3`);function Fp(){try{return localStorage.getItem(kp)===`off`}catch{return!1}}function Ip(e,t){let n=t.slice(t.lastIndexOf(`/`)+1);return e.src.endsWith(`/${n}`)||e.src.endsWith(n)}function Lp(){let[e,t]=(0,v.useState)(()=>!Fp()),[n,r]=(0,v.useState)(!1),[i,a]=(0,v.useState)(!1),o=(0,v.useRef)(null),s=(0,v.useRef)(null),c=(0,v.useRef)(jp.standings),l=(0,v.useRef)(e),u=(0,v.useRef)(n);l.current=e,u.current=n;let d=(0,v.useCallback)(()=>(o.current||(o.current=new Audio,o.current.preload=`none`,o.current.loop=!0,o.current.volume=.35,o.current.addEventListener(`playing`,()=>a(!0)),o.current.addEventListener(`pause`,()=>a(!1))),s.current||(s.current=new Audio,s.current.preload=`none`,s.current.volume=.5),{bed:o.current,stinger:s.current}),[]),f=(0,v.useCallback)(()=>{let e=o.current;e&&(e.pause(),e.removeAttribute(`src`),e.load()),a(!1)},[]),p=(0,v.useCallback)(()=>{if(!l.current)return;let{bed:e}=d(),t=c.current;Ip(e,t)||(e.src=t),e.play().then(()=>{u.current=!0,r(!0),a(!0)},()=>{(!o.current||o.current.paused)&&(u.current=!1,r(!1))})},[d]),m=(0,v.useCallback)(e=>{l.current&&(c.current=e,u.current&&p())},[p]),h=(0,v.useCallback)(()=>{let e=!l.current;t(e),l.current=e;try{e?localStorage.removeItem(kp):localStorage.setItem(kp,`off`)}catch{}e?p():(u.current=!1,r(!1),f())},[p,f]),g=(0,v.useCallback)(()=>{l.current&&!u.current&&p()},[p]),_=(0,v.useCallback)(e=>{m(jp[e])},[m]),y=(0,v.useCallback)(e=>{if(!e){_(`gallery`);return}m(Mp[e])},[m,_]),b=(0,v.useCallback)(e=>{if(!l.current||!u.current)return;let{stinger:t}=d();t.src=e,t.play().catch(()=>{})},[d]),x=(0,v.useCallback)(()=>{b(Np)},[b]),S=(0,v.useCallback)(()=>{b(Pp)},[b]);return(0,v.useEffect)(()=>{e||(f(),u.current=!1,r(!1))},[e,f]),(0,v.useEffect)(()=>{if(!e||n)return;let t=()=>{if(!l.current||u.current)return;let{bed:e}=d(),t=c.current;Ip(e,t)||(e.src=t),e.play().then(()=>{u.current=!0,r(!0),a(!0)},()=>{(!o.current||o.current.paused)&&(u.current=!1,r(!1))})},i={capture:!0,passive:!0};return window.addEventListener(`pointerdown`,t,i),window.addEventListener(`keydown`,t,i),window.addEventListener(`touchstart`,t,i),window.addEventListener(`click`,t,i),()=>{window.removeEventListener(`pointerdown`,t,i),window.removeEventListener(`keydown`,t,i),window.removeEventListener(`touchstart`,t,i),window.removeEventListener(`click`,t,i)}},[e,n,d]),{armed:e,unlock:h,onUserGesture:g,setTabBed:_,setDeckBed:y,playClick:x,playBuzzer:S,label:e?`Sound on`:`Sound off`,pressed:e,showTapHint:e&&!i}}function Rp(){return(0,B.jsxs)(`p`,{className:`mt-1 text-xs text-[var(--gwb-muted)] [&:has(#gwb-visitor-count:empty)]:hidden`,children:[(0,B.jsx)(`span`,{id:`gwb-visitor-count`}),` `,`site visits (privacy-friendly analytics)`]})}function zp(e){window.goatcounter?.count({path:`/gwb/${e}`})}var Bp=[{id:`standings`,label:`Standings`},{id:`powerrankings`,label:`Power Rankings`},{id:`live`,label:`Live`},{id:`gallery`,label:`Graphics`},{id:`recaps`,label:`Recaps`},{id:`mulligans`,label:`Mulligans`},{id:`frankie`,label:`Frankie Zone`},{id:`waiver`,label:`Waiver Wire Champion`},{id:`bestgames`,label:`Best Games`},{id:`trades`,label:`Trades`},{id:`awards`,label:`Awards`},{id:`managers`,label:`Managers`}],Vp=[`standings`,`powerrankings`,`live`,`gallery`,`recaps`,`mulligans`,`frankie`,`waiver`,`bestgames`,`trades`,`awards`,`managers`];function Hp(){let{state:e,error:t,data:n,refresh:r}=Op(),[i,a]=(0,v.useState)(`standings`),[o,s]=(0,v.useState)(null),[c,l]=(0,v.useState)(null),u=Lp(),[d,f]=(0,v.useState)(null),[p,m]=(0,v.useState)(null),[h,g]=(0,v.useState)(1),_=(0,v.useRef)(null),y=(0,v.useRef)(!1),b=(0,v.useRef)(!0),x=(0,v.useCallback)((e,t)=>{n&&(n.setSelectedWeek(e),l(t),s(null),f(null),a(`recaps`))},[n]),S=(0,v.useMemo)(()=>{if(!n)return rc(`Frankie`);let e=eu(n.league,n.nflState);return xc({teams:n.teams,matchupsByWeek:n.matchupsByWeek,scheduleByWeek:_c(n.matchupsByWeek),completedThroughWeek:e,selectedWeek:n.selectedWeek,weekInProgress:n.isSelectedWeekLive,players:n.players,nflWeekGames:null}).tabLabel},[n]),C=(0,v.useMemo)(()=>Bp.map(e=>e.id===`frankie`?{...e,label:S}:e),[S]),w=Math.max(n?.nflState.week??18,n?.league.settings.last_scored_leg??18),T=p??(n?tu(n.league,n.nflState):1);(0,v.useEffect)(()=>{if(!n)return;let e=new URLSearchParams(window.location.search),t=e.get(`week`),r=e.get(`tab`),i=e.get(`slide`),o=tu(n.league,n.nflState);if(r===`bestgames`){if(t===`all`)m(`all`);else if(t){let e=Number.parseInt(t,10);m(Number.isNaN(e)?o:e)}else m(o)}else if(p===null&&m(o),t){let e=Number.parseInt(t,10);Number.isNaN(e)||n.setSelectedWeek(e)}r&&Vp.includes(r)&&a(r);let c=e.get(`manager`);if(c){let e=Number.parseInt(c,10);Number.isNaN(e)||g(e)}i&&s(i)},[n?.league.league_id]),(0,v.useEffect)(()=>{if(!n)return;let e=new URLSearchParams;i===`bestgames`?e.set(`week`,T===`all`?`all`:String(T)):e.set(`week`,String(n.selectedWeek)),e.set(`tab`,i),o&&e.set(`slide`,o),i===`managers`&&e.set(`manager`,String(h));let t=e.toString();window.history.replaceState(null,``,`${window.location.pathname}?${t}`)},[n?.selectedWeek,i,o,n,T,h]);let E=(0,v.useCallback)(e=>{let t=_.current;t&&t.querySelector(`.gwb-section-tab--active`)?.scrollIntoView({inline:`nearest`,block:`nearest`,behavior:e})},[]);(0,v.useEffect)(()=>{if(e!==`ready`||!n)return;let t=y.current?`smooth`:`instant`;y.current=!0,requestAnimationFrame(()=>E(t))},[i,e,n,E]),(0,v.useEffect)(()=>{if(b.current){b.current=!1;return}zp(i)},[i]),(0,v.useEffect)(()=>{(i===`recaps`||i===`waiver`||i===`live`||i===`bestgames`||i===`trades`||i===`managers`)&&n?.ensurePlayers(),(i===`trades`||i===`managers`)&&n?.ensureTradeHistory()},[i,n]),(0,v.useEffect)(()=>{if(u.armed){if(i===`gallery`&&d){u.setDeckBed(d);return}u.setTabBed(i)}},[i,d,u]);let D=e=>{if(u.playClick(),a(e),e!==`gallery`&&e!==`frankie`&&s(null),e!==`gallery`&&f(null),e===`bestgames`&&n){let e=new URLSearchParams(window.location.search).get(`week`);if(e===`all`)m(`all`);else if(e){let t=Number.parseInt(e,10);Number.isNaN(t)||m(t)}else m(tu(n.league,n.nflState))}},O=e=>{u.playClick(),n?.setSelectedWeek(e)},ee=i===`frankie`?o:null,te=i===`gallery`?o:null;return(0,B.jsxs)(`div`,{className:`mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${i===`gallery`||i===`waiver`?`max-w-6xl`:`max-w-3xl`}`,children:[(0,B.jsxs)(`header`,{className:`mb-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsx)(`p`,{className:`text-xs font-semibold uppercase tracking-[0.2em] text-[var(--gwb-accent)]`,children:`Command Center`}),(0,B.jsxs)(`h1`,{className:`mt-1 font-['Anton'] text-4xl uppercase leading-tight sm:text-5xl`,children:[`GWB`,` League`]}),(0,B.jsx)(`p`,{className:`mt-2 text-sm text-[var(--gwb-muted)]`,children:`REDRAFT · Sleeper public data · Privacy-friendly analytics`}),(0,B.jsx)(Rp,{})]}),(0,B.jsx)(Ru,{label:u.label,pressed:u.pressed,showTapHint:u.showTapHint,onToggle:()=>u.unlock()})]}),e===`loading`&&(0,B.jsxs)(`div`,{className:`flex flex-1 flex-col items-center justify-center gap-3 py-20 text-[var(--gwb-muted)]`,children:[(0,B.jsx)(`div`,{className:`h-10 w-10 animate-spin rounded-full border-2 border-[var(--gwb-accent)] border-t-transparent`}),(0,B.jsx)(`p`,{children:`Loading GWB league data…`})]}),e===`error`&&(0,B.jsxs)(`div`,{className:`rounded-xl border border-red-900/50 bg-red-950/30 p-6 text-center`,children:[(0,B.jsx)(`p`,{className:`font-medium text-red-200`,children:`Could not load league`}),(0,B.jsx)(`p`,{className:`mt-2 text-sm text-red-300/80`,children:t}),(0,B.jsx)(`button`,{type:`button`,className:`mt-4 rounded-lg bg-[var(--gwb-accent)] px-4 py-2 font-semibold text-[#1a1200]`,onClick:()=>r(),children:`Retry`})]}),e===`ready`&&n&&(0,B.jsxs)(B.Fragment,{children:[(0,B.jsxs)(`div`,{className:`mb-4 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between`,children:[(0,B.jsx)(xp,{week:n.selectedWeek,maxWeek:w,onChange:O}),(0,B.jsxs)(`p`,{className:`text-sm text-[var(--gwb-muted)]`,children:[`Season `,n.league.season,` · NFL Week `,n.nflState.week,n.isSelectedWeekLive&&(0,B.jsx)(`span`,{className:`ml-2 rounded bg-amber-500/20 px-2 py-0.5 text-xs font-semibold uppercase text-amber-300`,children:`Live`})]})]}),(0,B.jsx)(`nav`,{ref:_,className:`gwb-section-tabs mb-6 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1`,"aria-label":`Sections`,children:C.map(e=>{let t=i===e.id;return(0,B.jsx)(`button`,{type:`button`,className:t?`gwb-section-tab gwb-section-tab--active`:`gwb-section-tab`,"aria-current":t?`page`:void 0,onClick:()=>D(e.id),children:e.label},e.id)})}),i===`live`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Week `,n.selectedWeek,` scoreboard`,n.isSelectedWeekLive&&(0,B.jsx)(`span`,{className:`ml-2 text-sm font-normal text-amber-300`,children:`LIVE`})]}),(0,B.jsx)(ef,{week:n.selectedWeek,league:n.league,nflState:n.nflState,teams:n.teams,players:n.players,playersLoading:n.playersLoading,ensurePlayers:n.ensurePlayers,initialMatchups:n.matchupsByWeek.get(n.selectedWeek),onMatchupsUpdated:n.updateWeekMatchups,isActive:i===`live`})]}),i===`standings`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Standings`,(0,B.jsxs)(`span`,{className:`ml-2 text-sm font-normal text-[var(--gwb-muted)]`,children:[`through Week `,n.standingsThroughWeek]})]}),(0,B.jsx)(`p`,{className:`mb-3 text-xs text-[var(--gwb-muted)]`,children:`Sorted by wins, then points for (Sleeper-style).`}),(0,B.jsx)(Dd,{rows:n.standings,deferralNote:n.standingsDeferralNote,teams:n.teams,playoffTeams:n.league.settings.playoff_teams??null,matchupsByWeek:n.matchupsByWeek,standingsThroughWeek:n.standingsThroughWeek}),(0,B.jsxs)(`div`,{className:`mt-8`,children:[(0,B.jsx)(`h3`,{className:`mb-3 text-base font-semibold`,children:`Playoff odds`}),(0,B.jsx)(Sf,{rows:n.playoffOdds})]})]}),i===`powerrankings`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Power Rankings`,(0,B.jsxs)(`span`,{className:`ml-2 text-sm font-normal text-[var(--gwb-muted)]`,children:[`through Week `,n.powerRankingsThroughWeek]})]}),(0,B.jsx)(Mf,{rows:n.powerRankings,teams:n.teams,throughWeek:n.powerRankingsThroughWeek})]}),i===`bestgames`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsx)(`h2`,{className:`mb-3 text-lg font-semibold`,children:`Best Games`}),(0,B.jsx)(Kd,{matchupsByWeek:n.matchupsByWeek,league:n.league,nflState:n.nflState,maxWeek:w,ledger:fu,teams:n.teams,players:n.players,playersLoading:n.playersLoading,ensurePlayers:n.ensurePlayers,deferralNote:n.standingsDeferralNote,scope:T,onScopeChange:e=>{u.playClick(),m(e)}})]}),i===`gallery`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Week `,n.selectedWeek,` graphics`]}),(0,B.jsx)(yd,{week:n.selectedWeek,initialSlideId:te,onSlideUrlChange:s,onDeckKindChange:f,league:n.league,matchups:n.matchupsByWeek.get(n.selectedWeek),players:n.players,ensurePlayers:n.ensurePlayers,isActive:i===`gallery`})]}),i===`recaps`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full space-y-8`,children:[(0,B.jsxs)(`div`,{children:[(0,B.jsx)(`h2`,{className:`mb-3 text-lg font-semibold`,children:`Commissioner's recaps`}),(0,B.jsx)(us,{week:n.selectedWeek,focusRecapId:c,onFocusHandled:()=>l(null)})]}),(0,B.jsxs)(`div`,{children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Week `,n.selectedWeek,` matchup recaps`,n.isSelectedWeekLive?` (live scores)`:``]}),(0,B.jsx)(uu,{recaps:n.recaps,week:n.selectedWeek,hasScores:Zo(n.matchupsByWeek.get(n.selectedWeek)),isLive:n.isSelectedWeekLive,weekMatchups:n.matchupsByWeek.get(n.selectedWeek),playersLoading:n.playersLoading,league:n.league,nflState:n.nflState,teams:n.teams,players:n.players,matchupsByWeek:n.matchupsByWeek,onMatchupsUpdated:n.updateWeekMatchups,recapsTabActive:i===`recaps`})]})]}),i===`mulligans`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsx)(`h2`,{className:`mb-3 text-lg font-semibold`,children:`Mulligans`}),(0,B.jsx)(Iu,{rows:n.standings,selectedWeek:n.selectedWeek,statusThroughWeek:n.mulliganStatusThroughWeek,deferralNote:n.mulligansDeferralNote,weekMatchups:n.matchupsByWeek.get(n.selectedWeek),onNegativeMulliganOpen:()=>u.playBuzzer()})]}),i===`frankie`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Frankie Zone`,(0,B.jsxs)(`span`,{className:`ml-2 text-sm font-normal text-[var(--gwb-muted)]`,children:[`through Week `,n.standingsThroughWeek]})]}),(0,B.jsx)(tl,{teams:n.teams,matchupsByWeek:n.matchupsByWeek,selectedWeek:n.selectedWeek,completedThroughWeek:n.standingsThroughWeek,weekInProgress:n.isSelectedWeekLive,nflState:n.nflState,players:n.players,ensurePlayers:n.ensurePlayers,deferralNote:U(n.selectedWeek,n.league,n.nflState,`Frankie Zone`),playoffWeekStart:n.league.settings.playoff_week_start??15,onOpenRecap:x,initialSlideId:ee,onSlideUrlChange:s})]}),i===`trades`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsx)(`h2`,{className:`mb-3 text-lg font-semibold`,children:`Trade log`}),(0,B.jsx)(df,{trades:n.tradeLog,priorSeasonsIncluded:n.tradePriorSeasonsIncluded,priorSeasonsFailed:n.tradePriorSeasonsFailed,playersLoading:n.tradeHistoryLoading||n.playersLoading||!n.players})]}),i===`awards`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsx)(`h2`,{className:`mb-3 text-lg font-semibold`,children:`Weekly awards`}),(0,B.jsx)(pf,{weeks:n.weeklyAwards})]}),i===`managers`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsx)(`h2`,{className:`mb-3 text-lg font-semibold`,children:`Managers`}),(0,B.jsx)(`p`,{className:`mb-4 text-sm text-[var(--gwb-muted)]`,children:`Profiles, history, trades, and archived rosters — one stop for league lore.`}),(0,B.jsx)(yp,{rosterId:h,onRosterChange:e=>{u.playClick(),g(e)},teams:n.teams,rosters:n.rosters,standings:n.standings,trades:n.tradeLog,players:n.players,statusThroughWeek:n.mulliganStatusThroughWeek,leagueSeasonSummaries:n.leagueSeasonSummaries,currentSeason:n.league.season,tradePriorSeasonsFailed:n.tradePriorSeasonsFailed,tradeHistoryLoading:n.tradeHistoryLoading})]}),i===`waiver`&&(0,B.jsxs)(`section`,{className:`min-w-0 w-full`,children:[(0,B.jsxs)(`h2`,{className:`mb-3 text-lg font-semibold`,children:[`Waiver Wire Champion`,(0,B.jsxs)(`span`,{className:`ml-2 text-sm font-normal text-[var(--gwb-muted)]`,children:[`through Week `,n.standingsThroughWeek]})]}),(0,B.jsx)(Pl,{board:n.waiverBoard,players:n.players,deferralNote:n.waiverDeferralNote,loadError:n.waiverLoadError})]}),(0,B.jsx)(nl,{})]})]})}(0,y.createRoot)(document.getElementById(`root`)).render((0,B.jsx)(v.StrictMode,{children:(0,B.jsx)(Hp,{})}));

@@ -130,4 +130,16 @@ describe('commissioner recaps timeline', () => {
       'GWB WEEK 5 MEGA REPORT — WAIVER RECEIPTS',
     )
   })
+
+  it('lists the week 6 final report', () => {
+    const week6Source = readFileSync(
+      join(fixtures, 'week6-commissioner-recap.md'),
+      'utf-8',
+    )
+    const week6 = filterCommissionerRecapsByWeek(recaps, 6)
+    const ids = week6.map((r) => r.id)
+    expect(ids).toEqual(['recap-17'])
+    const final = week6[0]
+    expect(final?.bodyMarkdown).toBe(week6Source)
+  })
 })
