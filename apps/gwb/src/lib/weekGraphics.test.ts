@@ -92,17 +92,36 @@ describe('getWeekGraphicsSections week 4', () => {
     )
   })
 
-  it('lists Matchups only for upcoming Week 6 at Muse card size', () => {
+  it('lists Matchups and Results for finished Week 6 at Muse card size', () => {
     const sections = getWeekGraphicsSections(6)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
-    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w6-m1', 'vs-w6-m1', 'Crooke vs Manny'],
       ['vs-w6-m2', 'vs-w6-m2', 'Eric vs Steven'],
       ['vs-w6-m3', 'vs-w6-m3', 'Danny vs Frankie'],
       ['vs-w6-m4', 'vs-w6-m4', 'Narking vs Jamil'],
       ['vs-w6-m5', 'vs-w6-m5', 'Hady vs Matt'],
       ['vs-w6-m6', 'vs-w6-m6', 'Mauricio vs Kayser'],
+    ])
+    expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    const results = sections.find((s) => s.kind === 'results')
+    expect(results?.slides).toHaveLength(6)
+    expect(results?.slides[0]?.title).toBe('FINAL: CROOKE TAKES IT')
+  })
+
+  it('lists Matchups only for upcoming Week 7 at Muse card size', () => {
+    const sections = getWeekGraphicsSections(7)
+    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
+    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['vs-w7-m1', 'vs-w7-m1', 'Eric vs Crooke'],
+      ['vs-w7-m2', 'vs-w7-m2', 'Manny vs Frankie'],
+      ['vs-w7-m3', 'vs-w7-m3', 'Steven vs Jamil'],
+      ['vs-w7-m4', 'vs-w7-m4', 'Danny vs Matt'],
+      ['vs-w7-m5', 'vs-w7-m5', 'Narking vs Kayser'],
+      ['vs-w7-m6', 'vs-w7-m6', 'Mauricio vs Hady'],
     ])
     expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
