@@ -142,6 +142,29 @@ async function favicons() {
     .toFile(path.join(root, "apple-touch-icon.png"));
 }
 
+const AWNING_EXAMPLES = [
+  ["awning-cafe", "cafe.jpg"],
+  ["awning-storefront", "storefront.jpg"],
+  ["awning-entrance", "entrance.jpg"],
+  ["awning-metal", "metal.jpg"],
+  ["awning-restaurant", "restaurant.jpg"],
+  ["awning-striped", "striped.jpg"],
+];
+
+async function awningExamples() {
+  const dir = path.join(root, "assets", "src", "awning-examples");
+  for (const [name, file] of AWNING_EXAMPLES) {
+    await photo(path.join(dir, file), name, [640, 960, 1400]);
+  }
+}
+
+if (process.argv[2] === "awnings") {
+  await mkdir(out, { recursive: true });
+  await awningExamples();
+  console.log("Awning examples written to", path.relative(root, out));
+  process.exit(0);
+}
+
 await mkdir(out, { recursive: true });
 
 for (const [name, col, row] of SERVICES) {
@@ -153,5 +176,6 @@ await palette(lockup, "logo-lockup-white", [280, 360, 560, 847], LOCKUP_VERSION)
 await ogImage(lockup);
 await transparent(LOGO_ICON, "logo-icon-white", [240]);
 await favicons();
+await awningExamples();
 
 console.log("Images written to", path.relative(root, out));
