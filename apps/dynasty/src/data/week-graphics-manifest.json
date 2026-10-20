@@ -170,31 +170,88 @@
       }
     },
     "6": {
+      "results": [
+        {
+          "id": "results-w6-m1",
+          "title": "Chase\u2019n Dubs 117.32 - MahomiesRidley4MooreJeffe 109.46"
+        },
+        {
+          "id": "results-w6-m2",
+          "title": "A-Lamb-e que tengo hambre 128.44 - Rubuilding 69.44"
+        },
+        {
+          "id": "results-w6-m3",
+          "title": "Wolf Pack 99.32 - ramonguaraguao 129.70"
+        },
+        {
+          "id": "results-w6-m4",
+          "title": "Love Thy Nabers 143.90 - Team Name Hoes 103.18"
+        },
+        {
+          "id": "results-w6-m5",
+          "title": "Saints & Sinners 127.94 - Chalupa Batman 67.02"
+        },
+        {
+          "id": "results-w6-m6",
+          "title": "Nix in 5 116.08 - BigBlue 137.72"
+        }
+      ],
+      "matchups": {
+        "previewWeek": 7,
+        "slides": [
+          {
+            "id": "vs-w7-m1",
+            "title": "Chase\u2019n Dubs vs A-Lamb-e que tengo hambre"
+          },
+          {
+            "id": "vs-w7-m2",
+            "title": "MahomiesRidley4MooreJeffe vs Rubuilding"
+          },
+          {
+            "id": "vs-w7-m3",
+            "title": "Wolf Pack vs Love Thy Nabers"
+          },
+          {
+            "id": "vs-w7-m4",
+            "title": "Team Name Hoes vs ramonguaraguao"
+          },
+          {
+            "id": "vs-w7-m5",
+            "title": "Saints & Sinners vs Nix in 5"
+          },
+          {
+            "id": "vs-w7-m6",
+            "title": "BigBlue vs Chalupa Batman"
+          }
+        ]
+      }
+    },
+    "7": {
       "matchups": {
         "slides": [
           {
-            "id": "vs-w6-m1",
-            "title": "Chase\u2019n Dubs vs MahomiesRidley4MooreJeffe"
+            "id": "vs-w7-m1",
+            "title": "Chase\u2019n Dubs vs A-Lamb-e que tengo hambre"
           },
           {
-            "id": "vs-w6-m2",
-            "title": "A-Lamb-e que tengo hambre vs Rubuilding"
+            "id": "vs-w7-m2",
+            "title": "MahomiesRidley4MooreJeffe vs Rubuilding"
           },
           {
-            "id": "vs-w6-m3",
-            "title": "Wolf Pack vs ramonguaraguao"
+            "id": "vs-w7-m3",
+            "title": "Wolf Pack vs Love Thy Nabers"
           },
           {
-            "id": "vs-w6-m4",
-            "title": "Love Thy Nabers vs Team Name Hoes"
+            "id": "vs-w7-m4",
+            "title": "Team Name Hoes vs ramonguaraguao"
           },
           {
-            "id": "vs-w6-m5",
-            "title": "Saints & Sinners vs Chalupa Batman"
+            "id": "vs-w7-m5",
+            "title": "Saints & Sinners vs Nix in 5"
           },
           {
-            "id": "vs-w6-m6",
-            "title": "Nix in 5 vs BigBlue"
+            "id": "vs-w7-m6",
+            "title": "BigBlue vs Chalupa Batman"
           }
         ]
       }
