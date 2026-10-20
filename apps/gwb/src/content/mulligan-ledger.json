@@ -163,22 +163,17 @@
       "in": {
         "name": "Jake Ferguson",
         "position": "TE",
-        "points": 0,
-        "team": "DAL",
-        "pointsPending": true,
-        "sleeperPlayerId": "8110"
+        "points": 3.3,
+        "team": "DAL"
       },
-      "netImpact": 0,
-      "netImpactPending": true,
-      "scoreWith": 131.68,
+      "netImpact": 1.9,
+      "scoreWith": 134.98,
       "scoreWithout": 133.08,
-      "opponentScore": 95.2,
-      "opponentScoreLive": true,
+      "opponentScore": 137.59,
       "opponentLabel": "Put em down Jeanty",
       "opponentRosterId": 3,
       "won": false,
-      "flipped": false,
-      "resultPending": true
+      "flipped": false
     }
   ]
 }

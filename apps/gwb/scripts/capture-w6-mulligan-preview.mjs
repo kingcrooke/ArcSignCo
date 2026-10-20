@@ -39,7 +39,18 @@ async function main() {
     if (body.includes('pending commish') || body.includes('Called, pending')) {
       throw new Error('Unexpected pending commish copy')
     }
-    if (!body.includes('so far')) throw new Error('Expected net-so-far copy')
+    if (body.includes('TBD') || body.includes('so far')) {
+      throw new Error('Expected finalized mulligan copy')
+    }
+    if (!body.includes('+1.90') && !body.includes('+1.9')) {
+      throw new Error('Expected +1.9 net impact')
+    }
+    if (!body.includes('134.98') || !body.includes('137.59')) {
+      throw new Error('Expected final matchup scores')
+    }
+    if (!body.includes('No flip')) {
+      throw new Error('Expected no-flip result line')
+    }
     const path = join(OUT, `gwb-w6-mulligan-jamil-${width}.png`)
     await page.screenshot({ path, fullPage: true })
     console.log('wrote', path)
