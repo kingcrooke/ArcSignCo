@@ -3,11 +3,11 @@
  *
  * Usage (from apps/dynasty):
  *   node scripts/build-weekly-reports.mjs
- *   node scripts/build-weekly-reports.mjs --season 2026 --weeks 1,2,3,4,5
+ *   node scripts/build-weekly-reports.mjs --season 2026 --weeks 1,2,3,4,5,6
  *
  * Writes src/data/weekly-reports/<season>.json. Facts only: scores, player
  * points, standings, and transactions returned by Sleeper. Re-run to add a
- * later week (for example Week 6) once that week is final.
+ * later week (for example Week 7) once that week is final.
  */
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -42,7 +42,7 @@ function arg(name, fallback) {
 
 const leagueId = arg('league', DEFAULT_LEAGUE)
 const seasonFilter = arg('season', '')
-const weeksArg = arg('weeks', '1,2,3,4,5')
+const weeksArg = arg('weeks', '1,2,3,4,5,6')
 const weeks = weeksArg
   .split(',')
   .map((w) => Number.parseInt(w.trim(), 10))
