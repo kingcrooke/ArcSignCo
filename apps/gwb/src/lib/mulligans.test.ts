@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import {
   formatMulliganLedgerLine,
   formatMulliganReceipt,
-  mulliganLiveContextForEntry,
   mulliganReceiptParts,
   mulliganStatusParts,
   mulliganEntriesForWeek,
@@ -143,27 +142,27 @@ describe('mulligans', () => {
     expect(mulliganStatusThroughWeek(3, 2)).toBe(3)
   })
 
-  it('shows Jamil week 6 swap with live Ferguson points and pending matchup', () => {
+  it('shows Jamil week 6 swap finalized after Monday night', () => {
     const jamil = mulliganForRoster(10)!
     expect(jamil.id).toBe('w6-jamil')
-    expect(jamil.resultPending).toBe(true)
+    expect(jamil.resultPending).toBeUndefined()
     expect(jamil.scoreWithout).toBe(133.08)
-    expect(jamil.in.sleeperPlayerId).toBe('8110')
-    const liveCtx = mulliganLiveContextForEntry(
-      jamil,
-      { '8110': 6.5 },
-      97.4,
-    )
-    const parts = mulliganReceiptParts(jamil, liveCtx)
-    expect(parts.inLine).toContain('6.50 (live)')
-    expect(parts.netLine).toBe('Net +5.10 so far')
-    expect(parts.resultLine).toBe('TBD 138.18–97.40')
-    expect(parts.versusLine).toContain('Net so far vs Narking')
-    expect(parts.flipLine).toBeUndefined()
-    expect(formatMulliganReceipt(jamil, liveCtx)).not.toContain('No flip')
-    expect(formatMulliganLedgerLine(jamil, liveCtx)).toContain('Outcome TBD')
-    expect(formatMulliganLedgerLine(jamil, liveCtx)).not.toContain('Won')
-    expect(formatMulliganLedgerLine(jamil, liveCtx)).not.toContain('Lost')
+    expect(jamil.scoreWith).toBe(134.98)
+    expect(jamil.netImpact).toBe(1.9)
+    expect(jamil.in.points).toBe(3.3)
+    expect(jamil.out.points).toBe(1.4)
+    const parts = mulliganReceiptParts(jamil)
+    expect(parts.inLine).toContain('3.30')
+    expect(parts.netLine).toBe('Net +1.90')
+    expect(parts.resultLine).toBe('L 134.98–137.59')
+    expect(parts.versusLine).toContain('Lost to Narking')
+    expect(parts.flipLine).toBe('No flip')
+    expect(formatMulliganReceipt(jamil)).not.toContain('TBD')
+    expect(formatMulliganReceipt(jamil)).not.toContain('so far')
+    expect(formatMulliganReceipt(jamil)).not.toContain('live')
+    expect(formatMulliganLedgerLine(jamil)).toContain('Lost')
+    expect(formatMulliganLedgerLine(jamil)).toContain('No flip')
+    expect(formatMulliganLedgerLine(jamil)).not.toContain('Outcome TBD')
     expect(mulliganEntriesForWeek(6)).toHaveLength(1)
     expect(mulliganLabel(mulliganStatusForRoster(10))).toContain('Andrews')
   })
