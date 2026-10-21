@@ -40,17 +40,26 @@ const AVIF = { quality: 50, effort: 6 };
 const WEBP = { quality: 74, effort: 6 };
 const JPEG = { quality: 78, mozjpeg: true, progressive: true };
 
-async function photo(input, name, widths, extract) {
+async function photo(input, name, widths, extract, version = VERSION) {
   for (const width of widths) {
     const base = () => {
       let img = sharp(input);
       if (extract) img = img.extract(extract);
       return img.resize({ width, withoutEnlargement: true });
     };
-    const stem = path.join(out, `${name}-${width}.${VERSION}`);
+    const stem = path.join(out, `${name}-${width}.${version}`);
     await base().avif(AVIF).toFile(`${stem}.avif`);
     await base().webp(WEBP).toFile(`${stem}.webp`);
     await base().jpeg(JPEG).toFile(`${stem}.jpg`);
+  }
+}
+
+// JPEG only. A <picture> AVIF source is what Chrome selects, and an offscreen AVIF
+// is still undecoded when a full-page screenshot is taken, so the tile paints white.
+async function jpegOnly(input, name, widths, version) {
+  for (const width of widths) {
+    const stem = path.join(out, `${name}-${width}.${version}`);
+    await sharp(input).resize({ width, withoutEnlargement: true }).jpeg(JPEG).toFile(`${stem}.jpg`);
   }
 }
 
@@ -142,6 +151,74 @@ async function favicons() {
     .toFile(path.join(root, "apple-touch-icon.png"));
 }
 
+const AWNING_EXAMPLES = [
+  ["awning-cafe", "cafe.jpg"],
+  ["awning-storefront", "storefront.jpg"],
+  ["awning-entrance", "entrance.jpg"],
+  ["awning-metal", "metal.jpg"],
+  ["awning-restaurant", "restaurant.jpg"],
+  ["awning-striped", "striped.jpg"],
+];
+
+async function awningExamples() {
+  const dir = path.join(root, "assets", "src", "awning-examples");
+  for (const [name, file] of AWNING_EXAMPLES) {
+    await photo(path.join(dir, file), name, [640, 960, 1400]);
+  }
+}
+
+// New filenames and a v2 suffix so the year-long cache on assets/img does not keep the first set.
+const AWNING_V2 = [
+  ["awning-redcafe", "redcafe.jpg"],
+  ["awning-solid", "solid.jpg"],
+  ["awning-stripes", "stripes.jpg"],
+  ["awning-canopy", "canopy.jpg"],
+  ["awning-dome", "dome.jpg"],
+  ["awning-terrace", "terrace.jpg"],
+];
+
+async function awningExamplesV2() {
+  const dir = path.join(root, "assets", "src", "awning-examples");
+  for (const [name, file] of AWNING_V2) {
+    await photo(path.join(dir, file), name, [640, 960, 1400], undefined, "v2");
+  }
+}
+
+if (process.argv[2] === "awnings") {
+  await mkdir(out, { recursive: true });
+  await awningExamples();
+  console.log("Awning examples written to", path.relative(root, out));
+  process.exit(0);
+}
+
+if (process.argv[2] === "awnings-v2") {
+  await mkdir(out, { recursive: true });
+  await awningExamplesV2();
+  console.log("Awning v2 examples written to", path.relative(root, out));
+  process.exit(0);
+}
+
+// v3: closer hero crop. JPEG only, new filename, so the cached v2 set stays put.
+const AWNING_V3 = [
+  ["awning-close", "close.jpg"],
+  ["awning-quarter", "quarter.jpg"],
+  ["awning-valance", "valance.jpg"],
+];
+
+async function awningExamplesV3() {
+  const dir = path.join(root, "assets", "src", "awning-examples");
+  for (const [name, file] of AWNING_V3) {
+    await jpegOnly(path.join(dir, file), name, [640, 960, 1400], "v3");
+  }
+}
+
+if (process.argv[2] === "awnings-v3") {
+  await mkdir(out, { recursive: true });
+  await awningExamplesV3();
+  console.log("Awning v3 examples written to", path.relative(root, out));
+  process.exit(0);
+}
+
 await mkdir(out, { recursive: true });
 
 for (const [name, col, row] of SERVICES) {
@@ -153,5 +230,6 @@ await palette(lockup, "logo-lockup-white", [280, 360, 560, 847], LOCKUP_VERSION)
 await ogImage(lockup);
 await transparent(LOGO_ICON, "logo-icon-white", [240]);
 await favicons();
+await awningExamples();
 
 console.log("Images written to", path.relative(root, out));

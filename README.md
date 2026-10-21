@@ -81,6 +81,10 @@ If it can't be backed up, soften or remove it.
 - **Notification target: arc@arcsignco.com** (owner decision). Configure it in Netlify under
   Project configuration > Notifications > Emails and webhooks > Form submission notifications, for the
   `quote-request` form.
+- `/awnings/` uses a separate form, `awning-quote`, so its fields do not replace `quote-request`.
+  It posts to `/thank-you`, accepts one photo, and stores the project address in `sessionStorage` the
+  same way. Set the notification email to arc@arcsignco.com for `awning-quote` as well. Styles for that
+  page are in `assets/css/awnings.v1.css`.
 - Public contact emails on the site: jc@arcsignco.com and arc@arcsignco.com (lowercase). Homepage business JSON-LD uses jc@.
 
 ## Location and address
