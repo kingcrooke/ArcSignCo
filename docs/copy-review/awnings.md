@@ -32,7 +32,7 @@ Weather cover and a place for the business name. Pick a style below, then send p
 
 [Button: Free Sign Preview](/tools/sign-mockup/)
 
-[Image, alt text: "Close view of a bright red straight-slope cafe awning. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Close view of a bright red dome cafe awning. Style example, not an Arc Signage Co project."]
 
 Caption: 
 
@@ -227,9 +227,9 @@ _Label: Style examples_
 
 These photos are style examples, not Arc Signage Co projects.
 
-[Image, alt text: "Close view of a bright red straight-slope cafe awning. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Close view of a bright red dome cafe awning. Style example, not an Arc Signage Co project."]
 
-Caption: Straight slope, solid red. Style example.
+Caption: Dome, solid red. Style example.
 
 [Image, alt text: "Solid green fabric awning on a modern glass building. Style example, not an Arc Signage Co project."]
 
@@ -243,9 +243,9 @@ Caption: Striped fabric. Style example.
 
 Caption: Straight slope with valance. Style example.
 
-[Image, alt text: "Quarter-round dome awning in red fabric over a doorway. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Box-style awning in solid red fabric over an arched door. Style example, not an Arc Signage Co project."]
 
-Caption: Quarter-round dome. Style example.
+Caption: Box style, solid red. Style example.
 
 [Image, alt text: "Orange and white striped awnings over a terrace. Style example, not an Arc Signage Co project."]
 
