@@ -32,7 +32,7 @@ Weather cover and a place for the business name. Pick a style below, then send p
 
 [Button: Free Sign Preview](/tools/sign-mockup/)
 
-[Image, alt text: "Bright red cafe awnings over a sidewalk. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Close view of a bright red straight-slope cafe awning. Style example, not an Arc Signage Co project."]
 
 Caption: 
 
@@ -227,11 +227,11 @@ _Label: Style examples_
 
 These photos are style examples, not Arc Signage Co projects.
 
-[Image, alt text: "Bright red cafe awnings over a sidewalk. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Close view of a bright red straight-slope cafe awning. Style example, not an Arc Signage Co project."]
 
-Caption: Cafe, solid red fabric. Style example.
+Caption: Straight slope, solid red. Style example.
 
-[Image, alt text: "Solid green fabric awnings on a modern glass building. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Solid green fabric awning on a modern glass building. Style example, not an Arc Signage Co project."]
 
 Caption: Solid green fabric. Style example.
 
@@ -239,17 +239,17 @@ Caption: Solid green fabric. Style example.
 
 Caption: Striped fabric. Style example.
 
-[Image, alt text: "Modern canopy on a glass building. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Straight-slope cafe awning with a scalloped valance. Style example, not an Arc Signage Co project."]
 
-Caption: Modern canopy. Style example.
+Caption: Straight slope with valance. Style example.
 
-[Image, alt text: "Round dome canopy beside a glass building. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Quarter-round dome awning in red fabric over a doorway. Style example, not an Arc Signage Co project."]
 
-Caption: Dome canopy. Style example.
+Caption: Quarter-round dome. Style example.
 
 [Image, alt text: "Orange and white striped awnings over a terrace. Style example, not an Arc Signage Co project."]
 
-Caption: Striped terrace awnings. Style example.
+Caption: Striped terrace awning. Style example.
 
 _Label: Quote_
 

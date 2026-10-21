@@ -54,6 +54,15 @@ async function photo(input, name, widths, extract, version = VERSION) {
   }
 }
 
+// JPEG only. A <picture> AVIF source is what Chrome selects, and an offscreen AVIF
+// is still undecoded when a full-page screenshot is taken, so the tile paints white.
+async function jpegOnly(input, name, widths, version) {
+  for (const width of widths) {
+    const stem = path.join(out, `${name}-${width}.${version}`);
+    await sharp(input).resize({ width, withoutEnlargement: true }).jpeg(JPEG).toFile(`${stem}.jpg`);
+  }
+}
+
 async function transparent(input, name, widths) {
   for (const width of widths) {
     const stem = path.join(out, `${name}-${width}.${VERSION}`);
@@ -186,6 +195,27 @@ if (process.argv[2] === "awnings-v2") {
   await mkdir(out, { recursive: true });
   await awningExamplesV2();
   console.log("Awning v2 examples written to", path.relative(root, out));
+  process.exit(0);
+}
+
+// v3: closer hero crop. JPEG only, new filename, so the cached v2 set stays put.
+const AWNING_V3 = [
+  ["awning-close", "close.jpg"],
+  ["awning-quarter", "quarter.jpg"],
+  ["awning-valance", "valance.jpg"],
+];
+
+async function awningExamplesV3() {
+  const dir = path.join(root, "assets", "src", "awning-examples");
+  for (const [name, file] of AWNING_V3) {
+    await jpegOnly(path.join(dir, file), name, [640, 960, 1400], "v3");
+  }
+}
+
+if (process.argv[2] === "awnings-v3") {
+  await mkdir(out, { recursive: true });
+  await awningExamplesV3();
+  console.log("Awning v3 examples written to", path.relative(root, out));
   process.exit(0);
 }
 
