@@ -81,28 +81,72 @@ else {
   } else pass("crooke-interview Netlify form");
   if (!/enctype="multipart\/form-data"/.test(interviewHtml)) fail("interview form needs multipart for audio");
   else pass("interview multipart upload");
-  if (!interviewHtml.includes("jesus.crooke@gmail.com")) fail("interview voice fallback mailto");
-  else pass("interview voice mailto fallback");
+  const wizardPath = path.join(base, "interview", "interview-wizard.js");
+  const thanksPath = path.join(base, "interview", "thank-you.html");
+  const wizardSrc = fs.readFileSync(wizardPath, "utf8");
+  const thanksHtml = fs.readFileSync(thanksPath, "utf8");
+  const configPath = path.join(base, "interview", "interview-config.js");
+  if (!fs.existsSync(configPath)) fail("missing interview-config.js");
+  const configSrc = fs.existsSync(configPath) ? fs.readFileSync(configPath, "utf8") : "";
+  const interviewCopy = [interviewHtml, wizardSrc, thanksHtml, configSrc].join("\n");
+  if (/jesus\.crooke@gmail\.com/i.test(interviewCopy)) fail("interview copy must not show an email address");
+  else pass("interview copy omits notification email");
+  if (/Jesús|Jesus|Enviar a Jesús|Send to Jesus|Charles Crooke|Mami y Charles|Mami and Charles/.test(interviewHtml + wizardSrc + thanksHtml)) {
+    fail("interview copy must stay a general family interview and not name Jesus");
+  } else pass("interview copy is general");
+  if (!interviewHtml.includes("Entrevista Familia Morel")) fail("interview title must be Entrevista Familia Morel");
+  else pass("interview page name");
+  if (!interviewHtml.includes("Comparte tu historia")) fail("welcome tagline Comparte tu historia must stay");
+  else pass("Comparte tu historia kept");
+  if (!interviewHtml.includes("← Libro de la familia")) fail("back link must read Libro de la familia");
+  else pass("family book back link");
+  if (!interviewHtml.includes("Vista previa")) fail("preview banner missing");
+  else pass("preview banner");
+  if (!wizardSrc.includes('get("preview") === "1"') && !wizardSrc.includes("isPreviewRequest")) {
+    fail("wizard must recognize ?preview=1");
+  } else pass("preview query");
+  const visibleInterview = [interviewHtml, wizardSrc, thanksHtml, fs.readFileSync(path.join(base, "interview", "thank-you.js"), "utf8")]
+    .join("\n")
+    .replace(/\/crooke-7c3a9e12\/[^\s"'<>]*/g, "")
+    .replace(/crooke-interview/g, "")
+    .replace(/crooke-interview-wizard-v2/g, "");
+  if (/crooke/i.test(visibleInterview)) fail("interview visible copy must not mention Crooke");
+  else pass("interview copy omits Crooke");
+  if (!/noindex/i.test(thanksHtml)) fail("thank-you page must be noindex");
+  else pass("thank-you noindex");
+  if (!wizardSrc.includes("Subir nota de voz / Upload a voice memo")) fail("voice memo upload label missing");
+  else pass("voice memo upload label");
+  if (!/accept="audio\/\*"/.test(wizardSrc)) fail("voice upload must accept audio/*");
+  else pass("voice upload accept");
+  if (/data-voice-upload="\$\{voiceKey\}"[^>]*capture=/.test(wizardSrc) || /accept="audio\/\*"[^>]*capture=/.test(wizardSrc)) {
+    fail("voice upload must not set capture");
+  } else pass("voice upload has no capture");
+  if (!wizardSrc.includes("audio/mp4") || !wizardSrc.includes("audio/aac")) fail("recorder must consider Safari audio types");
+  else pass("Safari audio mime candidates");
   if (!interviewHtml.includes("interview-wizard.js")) fail("interview must load interview-wizard.js");
   else pass("interview wizard script");
   if (!interviewHtml.includes('type="module"')) fail("interview wizard must use module script");
   else pass("interview module script");
-  const configPath = path.join(base, "interview", "interview-config.js");
-  if (!fs.existsSync(configPath)) fail("missing interview-config.js");
-  else {
-    const configSrc = fs.readFileSync(configPath, "utf8");
-    if (!/JESUS_WHATSAPP_E164\s*=\s*""/.test(configSrc)) {
-      fail("JESUS_WHATSAPP_E164 must remain empty placeholder until Jesus sets it");
-    } else pass("JESUS_WHATSAPP_E164 placeholder");
-  }
+  if (!/JESUS_WHATSAPP_E164\s*=\s*""/.test(configSrc)) {
+    fail("JESUS_WHATSAPP_E164 must remain empty placeholder until it is set");
+  } else pass("JESUS_WHATSAPP_E164 placeholder");
   for (const field of [
     "voice_about_you",
+    "voice_loved_ones",
+    "voice_family_stories",
+    "loved_ones",
+    "family_stories",
     "old_photo",
     "relative_1_name",
     "more_stories",
     "para",
   ]) {
     if (!interviewHtml.includes(`name="${field}"`)) fail(`interview Netlify register missing field ${field}`);
+  }
+  for (const retired of ["charles_memorial", "mami_charles_story", "voice_charles_memorial", "voice_mami_charles_story"]) {
+    if (interviewHtml.includes(`name="${retired}"`) || wizardSrc.includes(retired)) {
+      fail(`retired interview field still present: ${retired}`);
+    }
   }
   pass("interview wizard field registration");
   const mainHtml = fs.readFileSync(indexPath, "utf8");

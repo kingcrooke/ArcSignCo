@@ -1,13 +1,38 @@
 import {
   JESUS_WHATSAPP_E164,
-  JESUS_EMAIL_FALLBACK,
   STORAGE_KEY,
   MAX_UPLOAD_BYTES,
   MAX_RECORD_SECONDS,
   SITE_INTERVIEW_PATH,
 } from "./interview-config.js";
 
-const QUESTION_STEPS = [
+export const VOICE_MIME_CANDIDATES = [
+  "audio/webm;codecs=opus",
+  "audio/webm",
+  "audio/mp4",
+  "audio/aac",
+  "audio/ogg;codecs=opus",
+];
+
+export const PAGE_NAME = {
+  es: "Entrevista Familia Morel",
+  en: "Morel Family Interview",
+};
+
+const VOICE_UPLOAD_LABEL = "Subir nota de voz / Upload a voice memo";
+
+const RECORDER_MESSAGES = {
+  noRecorder: {
+    es: "Este navegador no puede grabar voz. Sube una nota de voz, o envíala por WhatsApp a quien te compartió este enlace.",
+    en: "This browser cannot record voice. Upload a voice memo, or send it by WhatsApp to the person who shared this link.",
+  },
+  micDenied: {
+    es: "Permiso de micrófono denegado. Puedes subir una nota de voz, o enviarla por WhatsApp a quien te compartió este enlace.",
+    en: "Microphone permission was denied. You can upload a voice memo, or send it by WhatsApp to the person who shared this link.",
+  },
+};
+
+export const QUESTION_STEPS = [
   {
     id: "about_you",
     field: "about_you",
@@ -36,25 +61,37 @@ const QUESTION_STEPS = [
     id: "places_origins",
     field: "places_origins",
     voice: "voice_places_origins",
-    es: { title: "Lugares y orígenes", hint: "Líneas Morel y Crooke; migración; Nueva York y comunidad." },
-    en: { title: "Places and origins", hint: "Morel and Crooke lines; migration; New York and community." },
+    es: { title: "Lugares y orígenes", hint: "Líneas de la familia, migración y de dónde viene la familia." },
+    en: { title: "Places and origins", hint: "Family lines, migration, and where the family comes from." },
     wa: "Pregunta — orígenes: ",
   },
   {
-    id: "charles_memorial",
-    field: "charles_memorial",
-    voice: "voice_charles_memorial",
-    es: { title: "Charles Crooke — memorial", hint: "Cómo lo describes; historias; lo que enseñó." },
-    en: { title: "Charles Crooke — memorial", hint: "How you describe him; stories; what he taught." },
-    wa: "Pregunta — Charles: ",
+    id: "loved_ones",
+    field: "loved_ones",
+    voice: "voice_loved_ones",
+    es: {
+      title: "Familiares que ya no están",
+      hint: "Recuerdos de seres queridos que ya no están — cómo los recuerdas, historias, lo que enseñaron.",
+    },
+    en: {
+      title: "Relatives we've lost",
+      hint: "Memories of loved ones who have passed — how you remember them, stories, what they taught.",
+    },
+    wa: "Pregunta — familiares que ya no están: ",
   },
   {
-    id: "mami_charles_story",
-    field: "mami_charles_story",
-    voice: "voice_mami_charles_story",
-    es: { title: "Mami y Charles", hint: "Su historia juntos; vida familiar con los hermanos." },
-    en: { title: "Mami and Charles", hint: "Their story; family life with the siblings." },
-    wa: "Pregunta — Mami y Charles: ",
+    id: "family_stories",
+    field: "family_stories",
+    voice: "voice_family_stories",
+    es: {
+      title: "Historias de la familia",
+      hint: "Cómo se conocieron las parejas, la vida en familia, hermanos y momentos importantes.",
+    },
+    en: {
+      title: "Family stories",
+      hint: "How couples met, family life, siblings, and big moments.",
+    },
+    wa: "Pregunta — historias de la familia: ",
   },
   {
     id: "more_stories",
@@ -90,19 +127,19 @@ const COPY = {
     back: "Atrás",
     next: "Siguiente",
     skip: "Saltar",
-    submit: "Enviar a Jesús",
+    submit: "Enviar",
     speak: "Hablar",
     stop: "Detener",
     speakAgain: "Grabar de nuevo",
     waVoice: "Enviar nota de voz por WhatsApp",
-    emailVoice: "O envía un audio por correo a",
+    waFallback: "O envíala por WhatsApp a quien te compartió este enlace.",
     recording: "Grabando…",
     savedClip: "Audio listo para enviar",
     tooBig: "Este audio es muy largo. Graba de nuevo, más breve (máx. ~8 MB).",
     micDenied: "No pudimos usar el micrófono aquí.",
     welcomeTitle: "Comparte tu historia",
     welcomeLead:
-      "Paso a paso, en tu idioma. Jesús revisa todo antes de que algo entre al Libro de los Crooke. Solo tu nombre es obligatorio.",
+      "Paso a paso, en tu idioma. Todo se revisa antes de entrar al libro de la familia. Solo tu nombre es obligatorio.",
     privacyTitle: "Privacidad — no incluyas",
     privacyBody:
       "Nunca escribas ni grabes: Seguro Social; pasaporte o documentos de migración; datos bancarios; fechas de nacimiento completas de personas vivas; direcciones actuales.",
@@ -133,19 +170,19 @@ const COPY = {
     back: "Back",
     next: "Next",
     skip: "Skip",
-    submit: "Send to Jesus",
+    submit: "Submit",
     speak: "Speak",
     stop: "Stop",
     speakAgain: "Record again",
     waVoice: "Send a WhatsApp voice note",
-    emailVoice: "Or email an audio to",
+    waFallback: "Or send it by WhatsApp to the person who shared this link.",
     recording: "Recording…",
     savedClip: "Audio ready to send",
     tooBig: "This recording is too large. Please record again, shorter (max ~8 MB).",
     micDenied: "We could not use the microphone here.",
     welcomeTitle: "Share your story",
     welcomeLead:
-      "One step at a time, in your language. Jesus reviews everything before it goes in the Book of the Crookes. Only your name is required.",
+      "One step at a time, in your language. Everything is reviewed before it goes in the family book. Only your name is required.",
     privacyTitle: "Privacy — do not include",
     privacyBody:
       "Never type or record: Social Security numbers; passport or immigration IDs; bank or card details; full birthdates of living people; current street addresses.",
@@ -171,13 +208,114 @@ const COPY = {
   },
 };
 
+export function isPreviewRequest(search) {
+  const raw = String(search || "");
+  const query = raw.startsWith("?") ? raw.slice(1) : raw;
+  return new URLSearchParams(query).get("preview") === "1";
+}
+
+const previewMode = typeof location !== "undefined" && isPreviewRequest(location.search);
+
 let lang = "es";
 let stepIndex = 0;
 let state = defaultState();
 let mediaRecorder = null;
 let recordChunks = [];
 let recordTimer = null;
-let micAvailable = true;
+let discardRecording = false;
+
+export function pickSupportedMimeType(isTypeSupported) {
+  if (typeof isTypeSupported !== "function") return "";
+  for (const type of VOICE_MIME_CANDIDATES) {
+    try {
+      if (isTypeSupported(type) === true) return type;
+    } catch {
+      /* try the next candidate */
+    }
+  }
+  return "";
+}
+
+export function extensionForMime(mime) {
+  const base = String(mime || "").split(";")[0].trim().toLowerCase();
+  if (base === "audio/webm" || base.includes("webm")) return "webm";
+  if (
+    base === "audio/mp4" ||
+    base === "audio/aac" ||
+    base === "audio/m4a" ||
+    base === "audio/x-m4a" ||
+    base === "audio/mp4a-latm" ||
+    base.includes("mp4") ||
+    base.includes("aac") ||
+    base.includes("m4a")
+  ) {
+    return "m4a";
+  }
+  if (base === "audio/ogg" || base === "audio/opus" || base === "application/ogg" || base.includes("ogg") || base.includes("opus")) {
+    return "ogg";
+  }
+  return "";
+}
+
+export function recorderOptions(mimeType) {
+  const options = { audioBitsPerSecond: 32000 };
+  if (mimeType) options.mimeType = mimeType;
+  return options;
+}
+
+export function fileNameForVoice(field, blob) {
+  const raw = blob && typeof blob.name === "string" ? blob.name.trim() : "";
+  if (raw) {
+    const base = raw.split(/[/\\]/).pop();
+    if (base) return base;
+  }
+  const ext = extensionForMime(blob?.type) || "webm";
+  return `${field}.${ext}`;
+}
+
+export function voiceFileFromChunks(chunks, mime, field) {
+  const type = typeof mime === "string" ? mime : "";
+  const ext = extensionForMime(type) || "webm";
+  const name = `${field}.${ext}`;
+  if (typeof File === "function") {
+    try {
+      return type ? new File(chunks, name, { type }) : new File(chunks, name);
+    } catch {
+      /* Blob fallback below */
+    }
+  }
+  return type ? new Blob(chunks, { type }) : new Blob(chunks);
+}
+
+export function buildInterviewFormData(current, maxBytes = MAX_UPLOAD_BYTES) {
+  const fd = new FormData();
+  fd.append("form-name", "crooke-interview");
+  fd.append("bot-field", "");
+  fd.append("your_name", current.your_name || "");
+  fd.append("relationship", current.relationship || "");
+  fd.append("phone", current.phone || "");
+  fd.append("email", current.email || "");
+  fd.append("para", current.para || "");
+  for (const q of QUESTION_STEPS) {
+    fd.append(q.field, current[q.field] || "");
+    const blob = current.voices?.[q.voice];
+    if (blob && blob.size > 0 && blob.size <= maxBytes) {
+      fd.append(q.voice, blob, fileNameForVoice(q.voice, blob));
+    }
+  }
+  const relatives = current.relatives || [];
+  for (let i = 0; i < 3; i++) {
+    const rel = relatives[i] || { name: "", relation: "", note: "" };
+    const n = i + 1;
+    fd.append(`relative_${n}_name`, rel.name || "");
+    fd.append(`relative_${n}_relation`, rel.relation || "");
+    fd.append(`relative_${n}_note`, rel.note || "");
+  }
+  if (current.photoBlob && current.photoBlob.size > 0 && current.photoBlob.size <= maxBytes) {
+    fd.append("old_photo", current.photoBlob, current.photoName || "old_photo.jpg");
+  }
+  return fd;
+}
 
 function defaultState() {
   return {
@@ -190,8 +328,8 @@ function defaultState() {
     parents: "",
     grandparents: "",
     places_origins: "",
-    charles_memorial: "",
-    mami_charles_story: "",
+    loved_ones: "",
+    family_stories: "",
     more_stories: "",
     relatives: [{ name: "", relation: "", note: "" }, { name: "", relation: "", note: "" }, { name: "", relation: "", note: "" }],
     voices: {},
@@ -211,7 +349,12 @@ function isInAppBrowser() {
   return /WhatsApp|FBAN|FBAV|Instagram|Line\//i.test(ua);
 }
 
+function recorderSupport() {
+  return typeof MediaRecorder !== "undefined" && !!navigator.mediaDevices?.getUserMedia;
+}
+
 function saveProgress() {
+  if (previewMode) return;
   try {
     const { photoBlob, voices, ...rest } = state;
     const voiceMeta = {};
@@ -254,58 +397,78 @@ function questionProgressIndex() {
 
 function waLinkForQuestion(q) {
   const title = lang === "es" ? q.es.title : q.en.title;
-  const text = `${q.wa}${title}. (Historia familiar Crooke — grabación de voz)`;
+  const text = `${q.wa}${title}. (Entrevista Familia Morel — grabación de voz)`;
   if (JESUS_WHATSAPP_E164 && /^\d{10,15}$/.test(JESUS_WHATSAPP_E164)) {
     return `https://wa.me/${JESUS_WHATSAPP_E164}?text=${encodeURIComponent(text)}`;
   }
   return null;
 }
 
-function mailtoVoiceFallback(q) {
-  const title = lang === "es" ? q.es.title : q.en.title;
-  const subject = encodeURIComponent("Crooke family voice note");
-  const body = encodeURIComponent(`${q.wa}${title}\n\n[Attach your voice recording]`);
-  return `mailto:${JESUS_EMAIL_FALLBACK}?subject=${subject}&body=${body}`;
+function applyPageName() {
+  const name = PAGE_NAME[lang] || PAGE_NAME.es;
+  document.title = name;
+  const heading = document.getElementById("interview-heading");
+  if (heading) heading.textContent = name;
 }
 
 async function startRecording(voiceKey) {
-  if (!navigator.mediaDevices?.getUserMedia) {
-    micAvailable = false;
+  if (!recorderSupport()) {
+    state._recordBlock = "no-recorder";
     render();
     return;
   }
+  let stream;
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     recordChunks = [];
-    const mime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
-      ? "audio/webm;codecs=opus"
-      : "audio/webm";
-    mediaRecorder = new MediaRecorder(stream, { mimeType: mime, audioBitsPerSecond: 32000 });
+    discardRecording = false;
+    const preferred = pickSupportedMimeType(type => MediaRecorder.isTypeSupported(type));
+    let recorder;
+    try {
+      recorder = new MediaRecorder(stream, recorderOptions(preferred));
+    } catch (err) {
+      if (!preferred) throw err;
+      recorder = new MediaRecorder(stream, recorderOptions(""));
+    }
+    mediaRecorder = recorder;
     mediaRecorder.ondataavailable = e => {
-      if (e.data.size) recordChunks.push(e.data);
+      if (e.data && e.data.size) recordChunks.push(e.data);
     };
     mediaRecorder.onstop = () => {
       stream.getTracks().forEach(tr => tr.stop());
-      const blob = new Blob(recordChunks, { type: mime });
-      if (blob.size > MAX_UPLOAD_BYTES) {
+      const skipped = discardRecording;
+      discardRecording = false;
+      state._recordingKey = null;
+      if (skipped) return;
+      const actual = mediaRecorder.mimeType || preferred || "";
+      const file = voiceFileFromChunks(recordChunks, actual, voiceKey);
+      if (file.size > MAX_UPLOAD_BYTES) {
         state.voices[voiceKey] = null;
         state._recordError = "tooBig";
-      } else {
-        state.voices[voiceKey] = blob;
+        state._recordErrorKey = voiceKey;
+      } else if (file.size > 0) {
+        state.voices[voiceKey] = file;
         state._recordError = null;
+        state._recordErrorKey = null;
       }
       saveProgress();
       render();
     };
     mediaRecorder.start(250);
     state._recordingKey = voiceKey;
+    state._recordBlock = null;
     clearTimeout(recordTimer);
     recordTimer = setTimeout(() => {
       if (mediaRecorder?.state === "recording") stopRecording();
     }, MAX_RECORD_SECONDS * 1000);
     render();
-  } catch {
-    micAvailable = false;
+  } catch (err) {
+    if (stream) stream.getTracks().forEach(tr => tr.stop());
+    const name = err && err.name;
+    if (name === "NotSupportedError") state._recordBlock = "no-recorder";
+    else if (name === "NotAllowedError" || name === "PermissionDeniedError" || name === "SecurityError") {
+      state._recordBlock = "mic-denied";
+    } else state._recordBlock = "mic-failed";
     render();
   }
 }
@@ -313,38 +476,58 @@ async function startRecording(voiceKey) {
 function stopRecording() {
   clearTimeout(recordTimer);
   if (mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
-  state._recordingKey = null;
+  else state._recordingKey = null;
+}
+
+function bilingualNote(kind) {
+  const msg = RECORDER_MESSAGES[kind];
+  if (!msg) return "";
+  return `<p class="record-warn">${msg.es}</p><p class="record-warn">${msg.en}</p>`;
+}
+
+function renderVoiceUpload(voiceKey) {
+  return `<label class="voice-upload"><span class="voice-upload-label">${VOICE_UPLOAD_LABEL}</span><input type="file" accept="audio/*" data-voice-upload="${voiceKey}" /></label>`;
+}
+
+function renderFallbacks(q) {
+  const wa = waLinkForQuestion(q);
+  if (wa) return `<a class="btn-wa" href="${wa}" target="_blank" rel="noopener">${t("waVoice")}</a>`;
+  return `<p class="audio-fallback">${t("waFallback")}</p>`;
 }
 
 function renderSpeakBlock(q) {
   const voiceKey = q.voice;
   const hasClip = state.voices[voiceKey];
   const recording = state._recordingKey === voiceKey;
-  const showWa = !micAvailable || isInAppBrowser();
+  const inApp = isInAppBrowser();
+  const unsupported = !recorderSupport();
+  const block = unsupported ? "no-recorder" : state._recordBlock;
   let html = "";
-  if (!showWa) {
+  if (!inApp && block !== "no-recorder") {
     html += `<button type="button" class="btn-speak${recording ? " is-recording" : ""}" data-speak="${voiceKey}">
       ${recording ? t("stop") : hasClip ? t("speakAgain") : t("speak")}
     </button>`;
     if (recording) html += `<p class="record-status">${t("recording")}</p>`;
-    if (hasClip && !recording) html += `<p class="record-status">${t("savedClip")} (${Math.round(hasClip.size / 1024)} KB)</p>`;
-    if (state._recordError === "tooBig") html += `<p class="record-warn">${t("tooBig")}</p>`;
-  } else {
-    html += `<p class="record-status">${t("micDenied")}</p>`;
-    const wa = waLinkForQuestion(q);
-    if (wa) {
-      html += `<a class="btn-wa" href="${wa}" target="_blank" rel="noopener">${t("waVoice")}</a>`;
-    } else {
-      html += `<p class="audio-fallback">${t("emailVoice")} <a href="${mailtoVoiceFallback(q)}">${JESUS_EMAIL_FALLBACK}</a></p>`;
-    }
   }
+  if (hasClip && !recording) html += `<p class="record-status">${t("savedClip")} (${Math.round(hasClip.size / 1024)} KB)</p>`;
+  if (block === "no-recorder" && !inApp) html += bilingualNote("noRecorder");
+  else if (block === "mic-denied" && !inApp) html += bilingualNote("micDenied");
+  else if (inApp || block === "mic-failed") html += `<p class="record-status">${t("micDenied")}</p>`;
+  if (state._recordError === "tooBig" && state._recordErrorKey === voiceKey) {
+    html += `<p class="record-warn">${t("tooBig")}</p>`;
+  }
+  html += renderVoiceUpload(voiceKey);
+  if (inApp || block) html += renderFallbacks(q);
   return html;
 }
 
 function render() {
   document.documentElement.lang = lang === "es" ? "es" : "en";
+  applyPageName();
   const banner = document.getElementById("private-banner");
   if (banner) banner.textContent = t("banner");
+  const previewBanner = document.getElementById("preview-banner");
+  if (previewBanner) previewBanner.hidden = !previewMode;
 
   const inApp = document.getElementById("in-app-banner");
   if (inApp) {
@@ -422,7 +605,7 @@ function render() {
       ${stepIndex > 0 ? `<button type="button" class="btn-back" data-nav="back">${t("back")}</button>` : ""}
       ${step.type !== "identity" && step.type !== "review" ? `<button type="button" class="btn-skip" data-nav="skip">${t("skip")}</button>` : ""}
       ${step.type === "review"
-        ? `<button type="button" class="btn-next" data-nav="submit">${t("submit")}</button>`
+        ? `<button type="button" class="btn-next" data-nav="submit"${previewMode ? " disabled" : ""}>${t("submit")}</button>`
         : `<button type="button" class="btn-next" data-nav="next">${t("next")}</button>`}
     </div>
   `;
@@ -468,10 +651,34 @@ function bindStepEvents(step) {
     render();
   });
 
-  document.querySelector('[data-speak]')?.addEventListener("click", () => {
+  document.querySelector("[data-speak]")?.addEventListener("click", () => {
     const key = document.querySelector("[data-speak]").dataset.speak;
     if (state._recordingKey === key) stopRecording();
     else startRecording(key);
+  });
+
+  document.querySelector("[data-voice-upload]")?.addEventListener("change", ev => {
+    const input = ev.target;
+    const key = input.dataset.voiceUpload;
+    const file = input.files?.[0];
+    if (!file || !key) return;
+    if (file.size > MAX_UPLOAD_BYTES) {
+      state._recordError = "tooBig";
+      state._recordErrorKey = key;
+      input.value = "";
+      saveProgress();
+      render();
+      return;
+    }
+    if (state._recordingKey === key) {
+      discardRecording = true;
+      stopRecording();
+    }
+    state.voices[key] = file;
+    state._recordError = null;
+    state._recordErrorKey = null;
+    saveProgress();
+    render();
   });
 
   document.getElementById("f_photo")?.addEventListener("change", async ev => {
@@ -505,7 +712,7 @@ function bindStepEvents(step) {
         return;
       }
       if (action === "next") {
-        if (step.type === "identity" && !state.your_name.trim()) {
+        if (!previewMode && step.type === "identity" && !state.your_name.trim()) {
           alert(t("nameRequired"));
           return;
         }
@@ -520,6 +727,7 @@ function bindStepEvents(step) {
 }
 
 async function submitForm() {
+  if (previewMode) return;
   collectFields();
   if (!state.your_name.trim()) {
     alert(t("nameRequired"));
@@ -534,30 +742,7 @@ async function submitForm() {
     btn.textContent = t("sending");
   }
 
-  const fd = new FormData();
-  fd.append("form-name", "crooke-interview");
-  fd.append("bot-field", "");
-  fd.append("your_name", state.your_name);
-  fd.append("relationship", state.relationship);
-  fd.append("phone", state.phone);
-  fd.append("email", state.email);
-  fd.append("para", state.para || "");
-  for (const q of QUESTION_STEPS) {
-    fd.append(q.field, state[q.field] || "");
-    const blob = state.voices[q.voice];
-    if (blob && blob.size <= MAX_UPLOAD_BYTES) {
-      fd.append(q.voice, blob, `${q.voice}.webm`);
-    }
-  }
-  state.relatives.forEach((rel, i) => {
-    const n = i + 1;
-    fd.append(`relative_${n}_name`, rel.name);
-    fd.append(`relative_${n}_relation`, rel.relation);
-    fd.append(`relative_${n}_note`, rel.note);
-  });
-  if (state.photoBlob && state.photoBlob.size <= MAX_UPLOAD_BYTES) {
-    fd.append("old_photo", state.photoBlob, state.photoName || "old_photo.jpg");
-  }
+  const fd = buildInterviewFormData(state);
 
   try {
     await fetch("/", { method: "POST", body: fd });
@@ -578,9 +763,11 @@ async function submitForm() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  parsePara();
-  loadProgress();
-  if (lang !== "en" && lang !== "es") lang = "es";
-  render();
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("DOMContentLoaded", () => {
+    parsePara();
+    if (!previewMode) loadProgress();
+    if (lang !== "en" && lang !== "es") lang = "es";
+    render();
+  });
+}

@@ -11,6 +11,25 @@
   display: none !important;
 }
 
+.preview-banner {
+  background: #1a5c4a;
+  color: #fff;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.22rem 0.75rem;
+}
+
+.preview-banner[hidden] {
+  display: none !important;
+}
+
+.btn-next:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .wizard-shell {
   max-width: 28rem;
   margin: 0 auto;
@@ -166,6 +185,29 @@
   color: #8b4513;
   font-size: 0.88rem;
   margin-top: 0.35rem;
+}
+
+.voice-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0.85rem 0 0.35rem;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.voice-upload input[type="file"] {
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  width: 100%;
+}
+
+.interview-wizard-body .brand-text h1 {
+  font-size: 1rem;
+  line-height: 1.25;
 }
 
 .privacy-wizard {

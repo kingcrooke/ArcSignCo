@@ -7,7 +7,7 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "test": "node --test ./tools/sign-mockup-pricing.test.mjs ./tools/sign-proofs.test.mjs && node tools/check-sign-mockup.mjs && node tools/check-service-pages.mjs && node tools/check-crooke-site.mjs && npm run test:browser",
+    "test": "node --test ./tools/crooke-interview-voice.test.mjs ./tools/sign-mockup-pricing.test.mjs ./tools/sign-proofs.test.mjs && node tools/check-sign-mockup.mjs && node tools/check-service-pages.mjs && node tools/check-crooke-site.mjs && npm run test:browser",
     "test:browser": "node tools/check-sign-mockup-browser.mjs"
   },
   "dependencies": {

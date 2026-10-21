@@ -1,7 +1,5 @@
 /** @typedef {typeof import('./interview-config.js')} */
-export const JESUS_WHATSAPP_E164 = ""; // PLACEHOLDER — set digits only, e.g. "13474502110" (no +). Until set, voice fallback uses mailto.
-
-export const JESUS_EMAIL_FALLBACK = "jesus.crooke@gmail.com";
+export const JESUS_WHATSAPP_E164 = ""; // PLACEHOLDER — set digits only (no +). Until set, the page asks them to WhatsApp whoever shared the link.
 
 export const STORAGE_KEY = "crooke-interview-wizard-v2";
 
