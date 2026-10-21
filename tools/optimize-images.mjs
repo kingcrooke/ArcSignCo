@@ -40,14 +40,14 @@ const AVIF = { quality: 50, effort: 6 };
 const WEBP = { quality: 74, effort: 6 };
 const JPEG = { quality: 78, mozjpeg: true, progressive: true };
 
-async function photo(input, name, widths, extract) {
+async function photo(input, name, widths, extract, version = VERSION) {
   for (const width of widths) {
     const base = () => {
       let img = sharp(input);
       if (extract) img = img.extract(extract);
       return img.resize({ width, withoutEnlargement: true });
     };
-    const stem = path.join(out, `${name}-${width}.${VERSION}`);
+    const stem = path.join(out, `${name}-${width}.${version}`);
     await base().avif(AVIF).toFile(`${stem}.avif`);
     await base().webp(WEBP).toFile(`${stem}.webp`);
     await base().jpeg(JPEG).toFile(`${stem}.jpg`);
@@ -158,10 +158,34 @@ async function awningExamples() {
   }
 }
 
+// New filenames and a v2 suffix so the year-long cache on assets/img does not keep the first set.
+const AWNING_V2 = [
+  ["awning-redcafe", "redcafe.jpg"],
+  ["awning-solid", "solid.jpg"],
+  ["awning-stripes", "stripes.jpg"],
+  ["awning-canopy", "canopy.jpg"],
+  ["awning-dome", "dome.jpg"],
+  ["awning-terrace", "terrace.jpg"],
+];
+
+async function awningExamplesV2() {
+  const dir = path.join(root, "assets", "src", "awning-examples");
+  for (const [name, file] of AWNING_V2) {
+    await photo(path.join(dir, file), name, [640, 960, 1400], undefined, "v2");
+  }
+}
+
 if (process.argv[2] === "awnings") {
   await mkdir(out, { recursive: true });
   await awningExamples();
   console.log("Awning examples written to", path.relative(root, out));
+  process.exit(0);
+}
+
+if (process.argv[2] === "awnings-v2") {
+  await mkdir(out, { recursive: true });
+  await awningExamplesV2();
+  console.log("Awning v2 examples written to", path.relative(root, out));
   process.exit(0);
 }
 

@@ -32,7 +32,7 @@ Weather cover and a place for the business name. Pick a style below, then send p
 
 [Button: Free Sign Preview](/tools/sign-mockup/)
 
-[Image, alt text: "Red cafe awning with a scalloped edge over outdoor tables. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Bright red cafe awnings over a sidewalk. Style example, not an Arc Signage Co project."]
 
 Caption: 
 
@@ -80,7 +80,7 @@ The cover sags inward, the reverse of a quarter-round.
 
 ### Waterfall
 
-A short roof and a tall front face for graphics.
+A sloped top that curves down into a vertical front.
 
 - Retail
 - Restaurant
@@ -108,21 +108,21 @@ A quarter-sphere over a door or a short window.
 
 ### Elongated Dome
 
-The dome curve stretched across a longer front.
+A long half-cylinder with quarter-dome ends.
 
 - Retail
 - Restaurant
 
 ### Circular
 
-A round cover, circular in plan rather than a wall dome.
+A half-round fan over an arched window.
 
 - Cafe
 - Entrance
 
 ### Bullnose
 
-A straight roof that rolls into a rounded front edge.
+A slope that ends in a rounded quarter-round nose.
 
 - Retail
 - Cafe
@@ -227,29 +227,29 @@ _Label: Style examples_
 
 These photos are style examples, not Arc Signage Co projects.
 
-[Image, alt text: "Red cafe awning with a scalloped edge over outdoor tables. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Bright red cafe awnings over a sidewalk. Style example, not an Arc Signage Co project."]
 
-Caption: Cafe, scalloped edge. Style example.
+Caption: Cafe, solid red fabric. Style example.
 
-[Image, alt text: "Yellow fabric awning across a retail storefront window. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Solid green fabric awnings on a modern glass building. Style example, not an Arc Signage Co project."]
 
-Caption: Retail storefront. Style example.
+Caption: Solid green fabric. Style example.
 
-[Image, alt text: "Green awning over a building entrance with planters. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Black and white striped cafe awnings. Style example, not an Arc Signage Co project."]
 
-Caption: Entrance awning. Style example.
+Caption: Striped fabric. Style example.
 
-[Image, alt text: "Orange metal canopy over a sidewalk. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Modern canopy on a glass building. Style example, not an Arc Signage Co project."]
 
-Caption: Metal canopy. Style example.
+Caption: Modern canopy. Style example.
 
-[Image, alt text: "Striped awning over sidewalk seating at a cafe. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Round dome canopy beside a glass building. Style example, not an Arc Signage Co project."]
 
-Caption: Cafe seating, striped awning. Style example.
+Caption: Dome canopy. Style example.
 
-[Image, alt text: "Red and white striped cafe awning. Style example, not an Arc Signage Co project."]
+[Image, alt text: "Orange and white striped awnings over a terrace. Style example, not an Arc Signage Co project."]
 
-Caption: Striped cafe awning. Style example.
+Caption: Striped terrace awnings. Style example.
 
 _Label: Quote_
 

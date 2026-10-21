@@ -41,7 +41,7 @@ const STYLES = [
   {
     id: "waterfall",
     name: "Waterfall",
-    desc: "A short roof and a tall front face for graphics.",
+    desc: "A sloped top that curves down into a vertical front.",
     tags: ["Retail", "Restaurant"],
     sample: "edge",
   },
@@ -69,21 +69,21 @@ const STYLES = [
   {
     id: "elongated-dome",
     name: "Elongated Dome",
-    desc: "The dome curve stretched across a longer front.",
+    desc: "A long half-cylinder with quarter-dome ends.",
     tags: ["Retail", "Restaurant"],
     sample: "wide",
   },
   {
     id: "circular",
     name: "Circular",
-    desc: "A round cover, circular in plan rather than a wall dome.",
+    desc: "A half-round fan over an arched window.",
     tags: ["Cafe", "Entrance"],
     sample: null,
   },
   {
     id: "bullnose",
     name: "Bullnose",
-    desc: "A straight roof that rolls into a rounded front edge.",
+    desc: "A slope that ends in a rounded quarter-round nose.",
     tags: ["Retail", "Cafe"],
     sample: null,
   },
@@ -289,6 +289,48 @@ function cylinderX(ctx, x0, x1, y, z, r, segs = 12) {
   }
 }
 
+// Long half-cylinder with quarter-sphere ends.
+// Profile is a quarter-circle (phi 0 at the wall head, phi1 at the front lip)
+// so the cover bulges out and up. The cylinder has to be much longer than
+// its radius or the ends swallow it and it reads as a saucer.
+function barrelWithCaps(ctx, { x0, x1, R, zBase = 0, nuCyl = 8, nuCap = 6, nv = 8, phi1 = Math.PI / 2 }) {
+  const cols = nuCap + nuCyl + nuCap;
+  const g = [];
+  for (let j = 0; j <= nv; j++) {
+    const phi = (j / nv) * phi1;
+    const s = Math.sin(phi);
+    const c = Math.cos(phi);
+    const row = [];
+    for (let i = 0; i <= cols; i++) {
+      let x;
+      let y;
+      if (i <= nuCap) {
+        const theta = (i / nuCap) * (Math.PI / 2);
+        x = x0 - R * Math.cos(theta) * s;
+        y = R * Math.sin(theta) * s;
+      } else if (i <= nuCap + nuCyl) {
+        const t = (i - nuCap) / nuCyl;
+        x = x0 + t * (x1 - x0);
+        y = R * s;
+      } else {
+        const theta = ((i - nuCap - nuCyl) / nuCap) * (Math.PI / 2);
+        x = x1 + R * Math.sin(theta) * s;
+        y = R * Math.cos(theta) * s;
+      }
+      row.push([x, y, zBase + R * c]);
+    }
+    g.push(row);
+  }
+  for (let j = 0; j < nv; j++) {
+    for (let i = 0; i < cols; i++) {
+      ctx.addFace([g[j][i], g[j][i + 1], g[j + 1][i + 1], g[j + 1][i]]);
+    }
+  }
+  ctx.addStroke(g[nv], "awning-accent", 2.2);
+  const mid = g[Math.max(1, Math.floor(nv * 0.72))][Math.floor(cols / 2)];
+  ctx.textAt = [mid[0], mid[1], mid[2] - R * 0.18];
+}
+
 function quarterDome(ctx, { cx, rx, ry, rz, nu, nv, zBase = 0 }) {
   const g = [];
   for (let j = 0; j <= nv; j++) {
@@ -330,15 +372,16 @@ function build(id, ctx) {
       return [u * W, 8 + v * 70, z];
     }, { thickness: 9, textZ: 18, edgeBand: false });
   } else if (id === "bullnose") {
-    heightfield(ctx, 1, 20, (u, v) => {
-      if (v <= 0.42) {
-        const t = v / 0.42;
-        return [u * W, t * 28, 58 - t * 4];
+    // Straight slope, then a 90-degree round nose at the bottom front.
+    heightfield(ctx, 1, 22, (u, v) => {
+      const split = 0.68;
+      if (v <= split) {
+        const t = v / split;
+        return [u * W, t * 40, 60 - t * 12];
       }
-      const t = (v - 0.42) / 0.58;
-      const ang = t * Math.PI;
-      return [u * W, 28 + Math.sin(ang) * 26, 54 - (1 - Math.cos(ang)) * 26];
-    }, { thickness: 8, textZ: 20, edgeBand: false });
+      const ang = ((v - split) / (1 - split)) * (Math.PI / 2);
+      return [u * W, 40 + Math.sin(ang) * 26, 48 - (1 - Math.cos(ang)) * 26];
+    }, { thickness: 7, textZ: 18, edgeBand: false });
   } else if (id === "casement-hip") {
     const ridgeL = [30, 22, 56];
     const ridgeR = [96, 26, 56];
@@ -356,11 +399,17 @@ function build(id, ctx) {
   } else if (id === "entrance-canopy") {
     box(ctx, 8, 10, 18, 118, 48, 30, { top: "awning-face", front: "awning-body" });
   } else if (id === "waterfall") {
-    heightfield(ctx, 1, 1, (u, v) => [u * W, v * 22, 46 - v * 4], {
-      frontClass: "awning-face",
-      z0: 0,
-      textZ: 24,
-    });
+    // Convex slope that rolls into a vertical front drop.
+    heightfield(ctx, 1, 20, (u, v) => {
+      const split = 0.56;
+      if (v <= split) {
+        const ang = (v / split) * (Math.PI / 2);
+        return [u * W, Math.sin(ang) * 32, 66 - (1 - Math.cos(ang)) * 14];
+      }
+      const t = (v - split) / (1 - split);
+      const ease = t * t * (3 - 2 * t);
+      return [u * W, 32 + ease * 4, 52 - ease * 46];
+    }, { textZ: 26, z0: 2 });
   } else if (id === "gable") {
     heightfield(ctx, 2, 1, (u, v) => {
       const peak = 1 - Math.abs(u - 0.5) * 2;
@@ -369,29 +418,41 @@ function build(id, ctx) {
   } else if (id === "dome") {
     quarterDome(ctx, { cx: 60, rx: 52, ry: 50, rz: 50, nu: 14, nv: 8 });
   } else if (id === "elongated-dome") {
-    quarterDome(ctx, { cx: 78, rx: 86, ry: 42, rz: 40, nu: 16, nv: 8 });
+    barrelWithCaps(ctx, {
+      x0: 34,
+      x1: 166,
+      R: 28,
+      zBase: 22,
+      nuCyl: 18,
+      nuCap: 8,
+      nv: 12,
+      phi1: Math.PI * 0.58,
+    });
   } else if (id === "circular") {
-    const nu = 18, nv = 8, R = 48, Hh = 34;
-    const g = [];
-    for (let j = 0; j <= nv; j++) {
-      const phi = (j / nv) * (Math.PI / 2);
-      const row = [];
-      for (let i = 0; i <= nu; i++) {
-        const theta = (i / nu) * Math.PI * 2;
-        row.push([
-          56 + R * Math.cos(theta) * Math.sin(phi),
-          36 + R * 0.78 * Math.sin(theta) * Math.sin(phi),
-          Hh * Math.cos(phi),
+    // Quarter-sphere fan over an arched window, not a flat disc.
+    const cx = 62, rx = 50, ry = 48, rz = 50, zBase = 16;
+    quarterDome(ctx, { cx, rx, ry, rz, nu: 16, nv: 10, zBase });
+    for (let k = 1; k <= 4; k++) {
+      const theta = Math.PI * (k / 5);
+      const rib = [];
+      for (let j = 0; j <= 8; j++) {
+        const phi = (j / 8) * (Math.PI / 2);
+        rib.push([
+          cx + rx * Math.sin(phi) * Math.cos(theta),
+          ry * Math.sin(phi) * Math.sin(theta),
+          zBase + rz * Math.cos(phi),
         ]);
       }
-      g.push(row);
+      ctx.addStroke(rib, "awning-accent", 1.35);
     }
-    const pole = g[0][0];
-    for (let i = 0; i < nu; i++) ctx.addFace([pole, g[1][i], g[1][i + 1]]);
-    for (let j = 1; j < nv; j++) {
-      for (let i = 0; i < nu; i++) ctx.addFace([g[j][i], g[j + 1][i], g[j + 1][i + 1], g[j][i + 1]]);
+    const arch = [];
+    for (let i = 0; i <= 18; i++) {
+      const a = Math.PI * (i / 18);
+      arch.push([cx - Math.cos(a) * 32, 3, zBase + Math.sin(a) * 28]);
     }
-    ctx.textAt = [56, 36 + R * 0.78, 12];
+    ctx.addStroke(arch, "awning-arm", 3.6);
+    ctx.addStroke([[cx - 32, 3, zBase], [cx - 32, 3, 0]], "awning-arm", 3.6);
+    ctx.addStroke([[cx + 32, 3, zBase], [cx + 32, 3, 0]], "awning-arm", 3.6);
   } else if (id === "sign-box") {
     box(ctx, 0, 0, 0, 140, 36, 42, { front: "awning-face", top: "awning-body" });
   } else if (id === "backlit-popup") {
@@ -400,10 +461,27 @@ function build(id, ctx) {
     ctx.addStroke([[12, 42, 33], [124, 42, 33], [124, 42, 7], [12, 42, 7], [12, 42, 33]], "awning-accent", 1.8);
     ctx.textAt = [68, 42, 20];
   } else if (id === "rounded-entrance") {
-    heightfield(ctx, 12, 1, (u, v) => {
-      const z = Math.sin(u * Math.PI) * 30 + 10;
-      return [10 + u * 100, v * 42, z];
-    }, { textZ: 16 });
+    // Barrel vault: the arch faces the street, the cylinder runs out from the door.
+    const cx = 70, R = 32, y0 = 2, y1 = 62, zBase = 6;
+    const nu = 16, nv = 7;
+    const g = [];
+    for (let j = 0; j <= nv; j++) {
+      const y = y0 + (j / nv) * (y1 - y0);
+      const row = [];
+      for (let i = 0; i <= nu; i++) {
+        const theta = Math.PI * (1 - i / nu);
+        row.push([cx + R * Math.cos(theta), y, zBase + R * Math.sin(theta)]);
+      }
+      g.push(row);
+    }
+    for (let j = 0; j < nv; j++) {
+      for (let i = 0; i < nu; i++) {
+        ctx.addFace([g[j][i], g[j][i + 1], g[j + 1][i + 1], g[j + 1][i]]);
+      }
+    }
+    ctx.addStroke(g[0], "awning-arm", 2.6);
+    ctx.addStroke(g[nv], "awning-accent", 2.4);
+    ctx.textAt = [cx, y1, zBase + R * 0.42];
   } else if (id === "pyramid-cabana") {
     const S = 96;
     const apex = [S / 2, 34, 62];
