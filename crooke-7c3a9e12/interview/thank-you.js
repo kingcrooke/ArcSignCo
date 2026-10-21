@@ -7,8 +7,8 @@ const linkWithPara = para
   : interviewUrl;
 
 const shareText =
-  `Hola — te invito a compartir recuerdos para el libro familiar Crooke (paso a paso, en español o inglés). Solo tu nombre es obligatorio.\n\n` +
-  `Hi — I'm inviting you to share memories for the Crooke family book (step by step, Spanish or English). Only your name is required.\n\n` +
+  `Hola — te invito a compartir recuerdos para el libro de la familia (paso a paso, en español o inglés). Solo tu nombre es obligatorio.\n\n` +
+  `Hi — I'm inviting you to share memories for the family book (step by step, Spanish or English). Only your name is required.\n\n` +
   linkWithPara;
 
 const waShare = document.getElementById("wa-share");

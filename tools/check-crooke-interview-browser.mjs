@@ -90,15 +90,15 @@ async function run() {
     });
 
     await page.goto(PAGE, { waitUntil: "networkidle" });
-    if ((await page.title()) !== "Entrevista Familiar Crooke") fail(`title ${await page.title()}`);
+    if ((await page.title()) !== "Entrevista Familia Morel") fail(`title ${await page.title()}`);
     else ok("Spanish page title");
     const h1 = (await page.locator("#interview-heading").textContent())?.trim();
-    if (h1 !== "Entrevista Familiar Crooke") fail(`heading ${h1}`);
+    if (h1 !== "Entrevista Familia Morel") fail(`heading ${h1}`);
     else ok("Spanish heading");
     const welcome = await page.locator("#wizard-mount").innerText();
     if (!welcome.includes("Comparte tu historia")) fail("missing Comparte tu historia");
     else ok("welcome title kept");
-    if (!welcome.includes("Todo se revisa antes de entrar al Libro de los Crooke")) fail("welcome still names a reviewer");
+    if (!welcome.includes("Todo se revisa antes de entrar al libro de la familia")) fail("welcome book wording");
     else ok("general welcome");
     if (!welcome.includes("Privacidad — no incluyas")) fail("privacy box missing");
     else ok("privacy box");
@@ -110,8 +110,11 @@ async function run() {
     const nav = await page.locator('a[aria-current="page"]').innerText();
     if (!nav.includes("Entrevista")) fail(`nav ${nav}`);
     else ok("short nav label");
-    if ((await page.locator("body").innerText()).includes("Libro de los Crooke") === false) fail("book name missing");
-    else ok("book name kept");
+    const visible = await page.locator("body").innerText();
+    if (!visible.includes("← Libro de la familia")) fail("back link label");
+    else ok("family book back link");
+    if (/crooke/i.test(visible)) fail("visible copy still mentions Crooke");
+    else ok("visible copy omits Crooke");
 
     await page.getByRole("button", { name: "Siguiente" }).click();
     await page.locator("#f_name").fill("Ana");
@@ -183,18 +186,18 @@ async function run() {
     else ok("no person-focused question");
 
     await page.getByRole("button", { name: "English" }).click();
-    if ((await page.title()) !== "Crooke Family Interview") fail(`english title ${await page.title()}`);
+    if ((await page.title()) !== "Morel Family Interview") fail(`english title ${await page.title()}`);
     else ok("English page title");
-    if ((await page.locator("#interview-heading").innerText()).trim() !== "Crooke Family Interview") fail("english heading");
+    if ((await page.locator("#interview-heading").innerText()).trim() !== "Morel Family Interview") fail("english heading");
     else ok("English heading");
     const submit = page.getByRole("button", { name: "Submit", exact: true });
     await submit.click();
     await page.waitForURL("**/thank-you.html");
     const thanks = await page.locator("body").innerText();
-    if (/Jesus|Jesús|@/.test(thanks)) fail("thank-you names a person or shows an email");
+    if (/Jesus|Jesús|@|crooke/i.test(thanks)) fail("thank-you names a person, shows an email, or mentions Crooke");
     else ok("thank-you is general");
-    if (!thanks.includes("Libro de los Crooke")) fail("thank-you book name");
-    else ok("thank-you keeps the book name");
+    if (!thanks.includes("libro de la familia") || !thanks.includes("the family book")) fail("thank-you book wording");
+    else ok("thank-you says the family book");
 
     if (posts.length !== 1) fail(`expected 1 submit, got ${posts.length}`);
     else {

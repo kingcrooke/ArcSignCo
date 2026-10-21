@@ -77,8 +77,11 @@ test("seven general questions, with no single person as the focus", () => {
       ["Tradiciones, comida, dichos y más", "Traditions, food, sayings & more"],
     ],
   );
-  const blob = JSON.stringify(QUESTION_STEPS);
-  assert.equal(/Charles|Mami|Jesús|Jesus|Morel/.test(blob), false);
+  const places = QUESTION_STEPS.find(q => q.id === "places_origins");
+  assert.equal(places.es.hint, "Líneas de la familia, migración y de dónde viene la familia.");
+  assert.equal(places.en.hint, "Family lines, migration, and where the family comes from.");
+  assert.equal(/Crooke|Morel/.test(`${places.es.hint} ${places.en.hint}`), false);
+  assert.equal(/Charles|Mami|Jesús|Jesus/.test(JSON.stringify(QUESTION_STEPS)), false);
 });
 
 test("submission FormData includes each voice file with the recorder extension", async () => {

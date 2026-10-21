@@ -94,15 +94,24 @@ else {
   if (/Jesús|Jesus|Enviar a Jesús|Send to Jesus|Charles Crooke|Mami y Charles|Mami and Charles/.test(interviewHtml + wizardSrc + thanksHtml)) {
     fail("interview copy must stay a general family interview and not name Jesus");
   } else pass("interview copy is general");
-  if (!interviewHtml.includes("Entrevista Familiar Crooke")) fail("interview title must be Entrevista Familiar Crooke");
+  if (!interviewHtml.includes("Entrevista Familia Morel")) fail("interview title must be Entrevista Familia Morel");
   else pass("interview page name");
+  if (!interviewHtml.includes("Comparte tu historia")) fail("welcome tagline Comparte tu historia must stay");
+  else pass("Comparte tu historia kept");
+  if (!interviewHtml.includes("← Libro de la familia")) fail("back link must read Libro de la familia");
+  else pass("family book back link");
   if (!interviewHtml.includes("Vista previa")) fail("preview banner missing");
   else pass("preview banner");
   if (!wizardSrc.includes('get("preview") === "1"') && !wizardSrc.includes("isPreviewRequest")) {
     fail("wizard must recognize ?preview=1");
   } else pass("preview query");
-  if (!interviewHtml.includes("Libro de los Crooke")) fail("book name Libro de los Crooke must stay");
-  else pass("book name kept");
+  const visibleInterview = [interviewHtml, wizardSrc, thanksHtml, fs.readFileSync(path.join(base, "interview", "thank-you.js"), "utf8")]
+    .join("\n")
+    .replace(/\/crooke-7c3a9e12\/[^\s"'<>]*/g, "")
+    .replace(/crooke-interview/g, "")
+    .replace(/crooke-interview-wizard-v2/g, "");
+  if (/crooke/i.test(visibleInterview)) fail("interview visible copy must not mention Crooke");
+  else pass("interview copy omits Crooke");
   if (!/noindex/i.test(thanksHtml)) fail("thank-you page must be noindex");
   else pass("thank-you noindex");
   if (!wizardSrc.includes("Subir nota de voz / Upload a voice memo")) fail("voice memo upload label missing");

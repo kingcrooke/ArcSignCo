@@ -15,8 +15,8 @@ export const VOICE_MIME_CANDIDATES = [
 ];
 
 export const PAGE_NAME = {
-  es: "Entrevista Familiar Crooke",
-  en: "Crooke Family Interview",
+  es: "Entrevista Familia Morel",
+  en: "Morel Family Interview",
 };
 
 const VOICE_UPLOAD_LABEL = "Subir nota de voz / Upload a voice memo";
@@ -61,8 +61,8 @@ export const QUESTION_STEPS = [
     id: "places_origins",
     field: "places_origins",
     voice: "voice_places_origins",
-    es: { title: "Lugares y orígenes", hint: "De dónde viene la familia; migración; Nueva York y la comunidad." },
-    en: { title: "Places and origins", hint: "Where the family comes from; migration; New York and the community." },
+    es: { title: "Lugares y orígenes", hint: "Líneas de la familia, migración y de dónde viene la familia." },
+    en: { title: "Places and origins", hint: "Family lines, migration, and where the family comes from." },
     wa: "Pregunta — orígenes: ",
   },
   {
@@ -139,7 +139,7 @@ const COPY = {
     micDenied: "No pudimos usar el micrófono aquí.",
     welcomeTitle: "Comparte tu historia",
     welcomeLead:
-      "Paso a paso, en tu idioma. Todo se revisa antes de entrar al Libro de los Crooke. Solo tu nombre es obligatorio.",
+      "Paso a paso, en tu idioma. Todo se revisa antes de entrar al libro de la familia. Solo tu nombre es obligatorio.",
     privacyTitle: "Privacidad — no incluyas",
     privacyBody:
       "Nunca escribas ni grabes: Seguro Social; pasaporte o documentos de migración; datos bancarios; fechas de nacimiento completas de personas vivas; direcciones actuales.",
@@ -182,7 +182,7 @@ const COPY = {
     micDenied: "We could not use the microphone here.",
     welcomeTitle: "Share your story",
     welcomeLead:
-      "One step at a time, in your language. Everything is reviewed before it goes in the Book of the Crookes. Only your name is required.",
+      "One step at a time, in your language. Everything is reviewed before it goes in the family book. Only your name is required.",
     privacyTitle: "Privacy — do not include",
     privacyBody:
       "Never type or record: Social Security numbers; passport or immigration IDs; bank or card details; full birthdates of living people; current street addresses.",
@@ -397,7 +397,7 @@ function questionProgressIndex() {
 
 function waLinkForQuestion(q) {
   const title = lang === "es" ? q.es.title : q.en.title;
-  const text = `${q.wa}${title}. (Historia familiar Crooke — grabación de voz)`;
+  const text = `${q.wa}${title}. (Entrevista Familia Morel — grabación de voz)`;
   if (JESUS_WHATSAPP_E164 && /^\d{10,15}$/.test(JESUS_WHATSAPP_E164)) {
     return `https://wa.me/${JESUS_WHATSAPP_E164}?text=${encodeURIComponent(text)}`;
   }
