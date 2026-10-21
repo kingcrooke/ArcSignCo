@@ -442,7 +442,7 @@
 }
 @media (max-width: 720px) {
   .handles .glance ul { grid-template-columns: 1fr; }
-  .style-grid { gap: 10px; }
+  .style-grid { grid-template-columns: 1fr; gap: 10px; }
   .style-name { font-size: 14px; }
   .style-desc { font-size: 12px; min-height: 0; -webkit-line-clamp: 4; }
   .style-copy { padding: 10px; }
