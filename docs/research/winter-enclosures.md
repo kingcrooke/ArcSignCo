@@ -162,22 +162,27 @@ The name on the header is the usual layout in the reference photos. This page do
 
 ## Photos
 
-Pexels License, commercial use allowed, attribution not required. Captioned as style examples, not Arc projects. Derivatives are 640, 960, and 1400 JPEG and WebP. No AVIF encoder was available.
+Pexels License, commercial use allowed, attribution not required. Captioned with the nearest chart type, as style examples, not Arc projects. Derivatives are 640, 960, and 1400 JPEG and WebP. No AVIF encoder was available. Content images use `decoding="sync"`.
 
-| File | Photographer | Pexels |
-| --- | --- | --- |
-| pods | Imthiyaz Syed | https://www.pexels.com/photo/the-glass-pods-restaurant-in-dubai-15293961/ (15293961) |
-| tent | Anastasia Shuraeva | https://www.pexels.com/photo/a-dining-table-inside-a-tent-4989511/ (4989511) |
-| glass | Helena Jankovičová Kováčová | https://www.pexels.com/photo/restaurant-in-a-glass-building-17621583/ (17621583) |
-| cafe | Azli Nawawi | https://www.pexels.com/photo/modern-beachside-cafe-with-glass-exterior-32163936/ (32163936) |
-| pergola | Rahib Hamidov | https://www.pexels.com/photo/a-glass-building-with-a-small-garden-in-the-front-19691942/ (19691942) |
-| room | Kiran More | https://www.pexels.com/photo/modern-glass-restaurant-interior-with-elegant-decor-31249590/ (31249590) |
+Searches of Pexels and Unsplash on October 21, 2026 did not turn up a free-license photo of a standard New York fabric vestibule (box frame, solid fabric, clear vinyl windows, name on the header). Commercial shop galleries have that subject and are not free licenses. The page uses the closest ordinary covers instead.
 
-Rejected as worn, dated, or not an enclosure: Pexels 9396397, 14874282, 17056983, 12103061, 375895, 28603916.
+| File | Nearest chart type | Photographer | Pexels |
+| --- | --- | --- | --- |
+| roof (hero) | Acrylic glass-look | Jan van der Wolf | https://www.pexels.com/photo/modern-wooden-outdoor-patio-with-red-building-38573335/ (38573335). Title: wooden patio on a red building with a transparent roof. |
+| awning | Sidewalk cafe screen | Sakina Mammadli | https://www.pexels.com/photo/table-and-chairs-under-an-awning-of-a-restaurant-17016358/ (17016358). Street cafe under a blue awning. File EXIF artist is ILHAM BALIYEV. |
+| storefront | Awning with roll-down curtains | Faruk Tokluoğlu | https://www.pexels.com/photo/a-restaurant-with-a-green-awning-on-the-side-of-the-road-27916610/ (27916610). Fixed green street awning. Roll-down vinyl is not in the frame. |
+| tent | Tent with sidewalls | Paulina Korobkiewicz | https://www.pexels.com/photo/dining-area-of-a-restaurant-5923472/ (5923472). Tented dining cover. Name is the file copyright line. |
+| glasshouse | Glass and aluminum entry | Carl-Emil Jørgensen | https://www.pexels.com/photo/glass-greenhouse-roof-against-clear-blue-sky-31572630/ (31572630). Glass greenhouse exterior, Paris. File EXIF artist is Sebastian Frederik Holleufer. |
+| panels | Polycarbonate panels | Anna Zhilina | https://www.pexels.com/photo/steel-beams-and-glass-roofing-of-a-green-house-5512097/ (5512097). Steel and glass greenhouse roof. |
+
+Removed after review as too fancy: Dubai glass pods (15293961), floral event tent (4989511), Helsinki glass restaurant (17621583), beachside glass cafe (32163936), glass building with garden (19691942), glass-wall dining room (31249590).
+
+Also rejected earlier as worn, dated, or not an enclosure: Pexels 9396397, 14874282, 17056983, 12103061, 375895, 28603916.
 
 ## Page decisions
 
 - Slug `/winter-enclosures/`. Form name `enclosure-quote`.
 - No prices, no testimonials, no past-job claims.
 - Exact line on the permits section and in two answers: “Arc does not file permits; licensed partners file.”
-- Hero photo stays visible on small screens. Gallery images use `loading="eager"` so a full-page screenshot taken before scroll still has pixels.
+- Hero photo stays visible on small screens. Gallery images use `loading="eager"` and `decoding="sync"` so a full-page screenshot taken before scroll still has pixels.
+- Type drawings use one isometric angle and a separate scale per drawing, so a small entry fills its card instead of shrinking to the cafe room.

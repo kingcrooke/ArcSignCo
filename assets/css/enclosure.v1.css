@@ -185,7 +185,7 @@
   --frame: #0b1d33;
   --panel: #163454;
   --panel-side: #10263d;
-  --glass: #d7e6f2;
+  --glass: #b9daf6;
   --header: #d4a843;
   --ink: #0b1d33;
 }
@@ -198,17 +198,20 @@
 .glass { fill: var(--glass); stroke: #0b1d33; stroke-width: 1.15; }
 .header { fill: var(--header); }
 .goldline { fill: none; stroke: #d4a843; stroke-width: 2; }
-.mullion { fill: none; stroke: #0b1d33; stroke-width: 1.5; }
-.zip { fill: none; stroke: #d4a843; stroke-width: 1.6; stroke-dasharray: 1.4 1.2; }
+.mullion { fill: none; stroke: #0b1d33; stroke-width: 1.8; }
+.rib { fill: #6d879c; stroke: none; }
+.siding { fill: #e7eef6; stroke: none; }
+.zip { fill: none; stroke: #d4a843; stroke-width: 2.4; stroke-dasharray: 0.55 0.38; }
 .name {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
   fill: #0b1d33;
   pointer-events: none;
 }
-.panel, .side, .roof, .roofside, .frame, .glass, .facade, .mullion, .goldline, .zip {
+.panel, .side, .roof, .roofside, .frame, .glass, .facade, .mullion, .goldline, .zip, .rib, .siding {
   vector-effect: non-scaling-stroke;
 }
+.style-card .enclosure-svg { aspect-ratio: 320 / 384; }
 
 .handles { background: var(--navy); padding: 28px 0 32px; }
 .handles .glance {
@@ -225,7 +228,7 @@
   display: grid;
   grid-template-columns: minmax(280px, 1.15fr) minmax(280px, 0.85fr);
   gap: 16px 22px;
-  align-items: center;
+  align-items: stretch;
   background: var(--white);
   border: 1px solid var(--line);
   border-top: 4px solid var(--gold);
@@ -240,8 +243,17 @@
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow: hidden;
+  min-height: 460px;
+  height: 100%;
+  display: flex;
 }
-.preview-frame .enclosure-svg { width: 100%; height: auto; display: block; }
+.preview-frame .enclosure-svg {
+  width: 100%;
+  height: 100%;
+  min-height: 460px;
+  display: block;
+  aspect-ratio: auto;
+}
 .swatch-set { border: 0; margin: 12px 0 0; padding: 0; min-width: 0; }
 .swatch-set legend {
   color: var(--navy);
@@ -426,6 +438,7 @@
 }
 @media (max-width: 800px) {
   .style-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .preview-frame, .preview-frame .enclosure-svg { min-height: 320px; }
 }
 @media (max-width: 720px) {
   .handles .glance ul { grid-template-columns: 1fr; }
