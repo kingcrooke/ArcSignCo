@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#1a5c4a" />
     <meta name="description" content="Formulario privado de historia oral — familia Crooke." />
-    <title>Comparte tu historia — Crooke</title>
+    <title>Entrevista Familiar Crooke</title>
     <link rel="icon" type="image/svg+xml" href="/crooke-7c3a9e12/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,6 +20,7 @@
   <body class="interview-wizard-body">
     <a class="skip-link" href="#main">Saltar al formulario</a>
     <div id="private-banner" class="private-banner" role="status"></div>
+    <div id="preview-banner" class="preview-banner" hidden>Vista previa</div>
     <div id="in-app-banner" class="in-app-banner" role="alert" hidden>
       <p>
         Parece que abriste esto dentro de WhatsApp u otra app. Para grabar voz aquí, abre este enlace en Safari o
@@ -36,7 +37,7 @@
         <a class="brand" href="/crooke-7c3a9e12/">
           <div class="brand-mark" aria-hidden="true">Build</div>
           <div class="brand-text">
-            <h1>Crooke</h1>
+            <h1 id="interview-heading">Entrevista Familiar Crooke</h1>
             <p>Comparte tu historia</p>
           </div>
         </a>
@@ -79,15 +80,15 @@
       <textarea name="parents"></textarea>
       <textarea name="grandparents"></textarea>
       <textarea name="places_origins"></textarea>
-      <textarea name="charles_memorial"></textarea>
-      <textarea name="mami_charles_story"></textarea>
+      <textarea name="loved_ones"></textarea>
+      <textarea name="family_stories"></textarea>
       <textarea name="more_stories"></textarea>
       <input type="file" name="voice_about_you" />
       <input type="file" name="voice_parents" />
       <input type="file" name="voice_grandparents" />
       <input type="file" name="voice_places_origins" />
-      <input type="file" name="voice_charles_memorial" />
-      <input type="file" name="voice_mami_charles_story" />
+      <input type="file" name="voice_loved_ones" />
+      <input type="file" name="voice_family_stories" />
       <input type="file" name="voice_more_stories" />
       <input type="file" name="old_photo" />
       <input name="relative_1_name" />
@@ -99,10 +100,6 @@
       <input name="relative_3_name" />
       <input name="relative_3_relation" />
       <input name="relative_3_note" />
-      <p class="audio-fallback">
-        Voice fallback:
-        <a href="mailto:jesus.crooke@gmail.com?subject=Crooke%20family%20voice%20note">jesus.crooke@gmail.com</a>
-      </p>
     </form>
 
     <script type="module" src="/crooke-7c3a9e12/interview/interview-wizard.js"></script>
