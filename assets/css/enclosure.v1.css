@@ -211,7 +211,7 @@
 .panel, .side, .roof, .roofside, .frame, .glass, .facade, .mullion, .goldline, .zip, .rib, .siding {
   vector-effect: non-scaling-stroke;
 }
-.style-card .enclosure-svg { aspect-ratio: 320 / 384; }
+.style-card .enclosure-svg { aspect-ratio: 320 / 480; }
 
 .handles { background: var(--navy); padding: 28px 0 32px; }
 .handles .glance {

@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 const COS = Math.cos(Math.PI / 6);
 const SIN = 0.5;
 const VB_W = 320;
-const VB_H = 384;
+const VB_H = 480;
 
 function P(x, y, z) {
   return [(x - y) * COS, (x + y) * SIN - z];
@@ -612,7 +612,7 @@ const sheetCss = `
   .style-desc { margin: 4px 0; font-size: 12px; color: #526072; }
   .style-tags { display: flex; gap: 4px; flex-wrap: wrap; padding: 0; margin: 0; list-style: none; }
   .style-tags li { font-size: 10px; border: 1px solid #d5dde6; border-radius: 99px; padding: 2px 6px; }
-  .enclosure-svg { width: 280px; height: auto; aspect-ratio: 320 / 384; background: #f4f6f8; display: block; --frame:#0b1d33; --panel:#163454; --panel-side:#10263d; --glass:#b9daf6; --header:#d4a843; }
+  .enclosure-svg { width: 280px; height: auto; aspect-ratio: 320 / 480; background: #f4f6f8; display: block; --frame:#0b1d33; --panel:#163454; --panel-side:#10263d; --glass:#b9daf6; --header:#d4a843; }
   .pad { fill: #e3ebf3; }
   .facade { fill: #f7f4ee; stroke: #0b1d33; stroke-width: 1.25; }
   .panel, .roof { fill: var(--panel); stroke: #0b1d33; stroke-width: 1.25; }
