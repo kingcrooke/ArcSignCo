@@ -126,6 +126,21 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
 
+  it('lists Matchups only for upcoming Week 8 at Muse card size', () => {
+    const sections = getWeekGraphicsSections(8)
+    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
+    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['vs-w8-m1', 'vs-w8-m1', 'Crooke vs Frankie'],
+      ['vs-w8-m2', 'vs-w8-m2', 'Eric vs Jamil'],
+      ['vs-w8-m3', 'vs-w8-m3', 'Manny vs Matt'],
+      ['vs-w8-m4', 'vs-w8-m4', 'Kayser vs Steven'],
+      ['vs-w8-m5', 'vs-w8-m5', 'Danny vs Mauricio'],
+      ['vs-w8-m6', 'vs-w8-m6', 'Narking vs Hady'],
+    ])
+    expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+  })
+
   it('publishes the six final result cards with approved headlines', () => {
     const results = getWeekGraphicsSections(4).find((s) => s.kind === 'results')
     expect(results?.slides.map((s) => [s.id, s.title])).toEqual([
