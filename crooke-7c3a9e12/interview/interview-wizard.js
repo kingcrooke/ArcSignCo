@@ -212,13 +212,22 @@ const COPY = {
   },
 };
 
+export const TEST_MODE_BANNER = "Modo de prueba: nada se envía / Test mode: nothing is sent";
+
 export function isPreviewRequest(search) {
   const raw = String(search || "");
   const query = raw.startsWith("?") ? raw.slice(1) : raw;
   return new URLSearchParams(query).get("preview") === "1";
 }
 
+export function isTestRequest(search) {
+  const raw = String(search || "");
+  const query = raw.startsWith("?") ? raw.slice(1) : raw;
+  return new URLSearchParams(query).get("test") === "1";
+}
+
 const previewMode = typeof location !== "undefined" && isPreviewRequest(location.search);
+const testMode = typeof location !== "undefined" && isTestRequest(location.search);
 
 let lang = "es";
 let stepIndex = 0;
@@ -476,7 +485,7 @@ function recorderSupport() {
 }
 
 function saveProgress() {
-  if (previewMode) return;
+  if (previewMode || testMode) return;
   try {
     const { photoBlob, voices, ...rest } = state;
     const voiceMeta = {};
@@ -729,6 +738,11 @@ function render() {
   if (banner) banner.textContent = t("banner");
   const previewBanner = document.getElementById("preview-banner");
   if (previewBanner) previewBanner.hidden = !previewMode;
+  const testBanner = document.getElementById("test-banner");
+  if (testBanner) {
+    testBanner.hidden = !testMode;
+    testBanner.textContent = TEST_MODE_BANNER;
+  }
 
   const inApp = document.getElementById("in-app-banner");
   if (inApp) {
@@ -807,7 +821,9 @@ function render() {
       ${stepIndex > 0 ? `<button type="button" class="btn-back" data-nav="back">${t("back")}</button>` : ""}
       ${step.type !== "identity" && step.type !== "review" ? `<button type="button" class="btn-skip" data-nav="skip">${t("skip")}</button>` : ""}
       ${step.type === "review"
-        ? `<button type="button" class="btn-next" data-nav="submit"${previewMode ? " disabled" : ""}>${t("submit")}</button>`
+        ? testMode
+          ? `<p class="test-banner test-banner--inline" role="status">${TEST_MODE_BANNER}</p>`
+          : `<button type="button" class="btn-next" data-nav="submit"${previewMode ? " disabled" : ""}>${t("submit")}</button>`
         : `<button type="button" class="btn-next" data-nav="next">${t("next")}</button>`}
     </div>
   `;
@@ -931,7 +947,7 @@ function bindStepEvents(step) {
         return;
       }
       if (action === "next") {
-        if (!previewMode && step.type === "identity" && !state.your_name.trim()) {
+        if (!previewMode && !testMode && step.type === "identity" && !state.your_name.trim()) {
           alert(t("nameRequired"));
           return;
         }
@@ -946,7 +962,7 @@ function bindStepEvents(step) {
 }
 
 async function submitForm() {
-  if (previewMode) return;
+  if (previewMode || testMode) return;
   await finishActiveTake(false);
   collectFields();
   if (!state.your_name.trim()) {
@@ -986,7 +1002,7 @@ async function submitForm() {
 if (typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
     parsePara();
-    if (!previewMode) loadProgress();
+    if (!previewMode && !testMode) loadProgress();
     if (lang !== "en" && lang !== "es") lang = "es";
     render();
   });

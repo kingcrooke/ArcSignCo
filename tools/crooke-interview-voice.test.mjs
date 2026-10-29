@@ -8,6 +8,8 @@ import {
   extensionForMime,
   fileNameForVoice,
   isPreviewRequest,
+  isTestRequest,
+  TEST_MODE_BANNER,
   formatClock,
   pickSupportedMimeType,
   recorderOptions,
@@ -30,6 +32,18 @@ test("preview=1 is the only review-mode switch", () => {
   assert.equal(isPreviewRequest(""), false);
   assert.equal(isPreviewRequest("?preview=0"), false);
   assert.equal(isPreviewRequest("?preview=true"), false);
+  assert.equal(isPreviewRequest("?test=1"), false);
+});
+
+test("test=1 is the only test-mode switch", () => {
+  assert.equal(TEST_MODE_BANNER, "Modo de prueba: nada se envía / Test mode: nothing is sent");
+  assert.equal(isTestRequest("?test=1"), true);
+  assert.equal(isTestRequest("test=1"), true);
+  assert.equal(isTestRequest("?para=Ana&test=1"), true);
+  assert.equal(isTestRequest(""), false);
+  assert.equal(isTestRequest("?test=0"), false);
+  assert.equal(isTestRequest("?test=true"), false);
+  assert.equal(isTestRequest("?preview=1"), false);
 });
 
 test("picks the first supported voice mime, including iPhone audio/mp4", () => {

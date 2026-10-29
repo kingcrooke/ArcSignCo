@@ -308,6 +308,8 @@ async function run() {
     await plainPage.locator("#wizard-mount h2").waitFor();
     if (await plainPage.locator("#preview-banner").isVisible()) fail("preview banner shows without ?preview=1");
     else ok("normal link hides the preview banner");
+    if (await plainPage.locator("#test-banner").isVisible()) fail("test banner shows without ?test=1");
+    else ok("normal link hides the test banner");
     await plainPage.getByRole("button", { name: "Siguiente" }).click();
     await plainPage.getByRole("button", { name: "Siguiente" }).click();
     if (!plainDialogs.some(msg => msg.includes("nombre"))) fail("name is not required without preview");
@@ -344,6 +346,58 @@ async function run() {
     await previewPage.waitForTimeout(300);
     if (previewPosts.length || /thank-you/.test(previewPage.url())) fail("preview submitted a form");
     else ok("preview cannot submit");
+
+    const testPosts = [];
+    const testCtx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    await testCtx.addInitScript(safariRecorder);
+    const testPage = await testCtx.newPage();
+    await testPage.route("**/*", route => {
+      if (route.request().method() === "POST") {
+        testPosts.push(route.request().url());
+        return route.fulfill({ status: 200, body: "ok" });
+      }
+      return route.continue();
+    });
+    await testPage.goto(`${PAGE}?test=1`, { waitUntil: "domcontentloaded" });
+    await testPage.locator("#wizard-mount h2").waitFor();
+    const testBanner = testPage.locator("#test-banner");
+    const testBannerText = (await testBanner.innerText()).replace(/\s+/g, " ").trim();
+    if (!(await testBanner.isVisible()) || testBannerText !== "Modo de prueba: nada se envía / Test mode: nothing is sent") {
+      fail(`test banner ${testBannerText}`);
+    } else ok("test banner is bilingual");
+    await testPage.screenshot({ path: "/opt/cursor/artifacts/interview_test_banner_390.png" });
+    const testHeadings = [(await testPage.locator(".wizard-card h2").innerText()).trim()];
+    await testPage.getByRole("button", { name: "Siguiente" }).click();
+    testHeadings.push((await testPage.locator(".wizard-card h2").innerText()).trim());
+    await testPage.getByRole("button", { name: "Siguiente" }).click();
+    await testPage.getByRole("heading", { name: "Sobre ti y tu niñez" }).waitFor();
+    testHeadings.push((await testPage.locator(".wizard-card h2").innerText()).trim());
+    await testPage.getByRole("button", { name: "Toca para grabar" }).click();
+    await testPage.getByRole("button", { name: "Detener" }).click();
+    await testPage.locator(".voice-player").waitFor();
+    await testPage.getByRole("button", { name: "Borrar" }).click();
+    await testPage.getByRole("button", { name: "Toca para grabar" }).waitFor();
+    ok("test mode recorder can record, play back, and delete");
+    for (let i = 0; i < 9; i++) {
+      await testPage.getByRole("button", { name: "Siguiente" }).click();
+      testHeadings.push((await testPage.locator(".wizard-card h2").innerText()).trim());
+    }
+    if (testHeadings.length !== 12 || new Set(testHeadings).size !== 12) {
+      fail(`test screens: ${testHeadings.join(" | ")}`);
+    } else ok("test mode walks every screen without answers");
+    await testPage.getByRole("button", { name: "Atrás" }).click();
+    if ((await testPage.locator(".wizard-card h2").innerText()).includes("¿Listo para enviar?")) {
+      fail("back did not leave the summary");
+    } else ok("test mode back leaves the summary");
+    await testPage.getByRole("button", { name: "Siguiente" }).click();
+    await testPage.getByRole("heading", { name: "¿Listo para enviar?" }).waitFor();
+    if (await testPage.getByRole("button", { name: "Enviar" }).count()) fail("test mode still shows Enviar");
+    else ok("test mode replaces Enviar");
+    if ((await testPage.locator("[data-nav='submit']").count()) !== 0) fail("test mode still has a submit control");
+    else ok("test mode has no submit control");
+    await testPage.waitForTimeout(300);
+    if (testPosts.length || /thank-you/.test(testPage.url())) fail("test mode submitted a form");
+    else ok("test mode cannot submit");
 
     await page.setViewportSize({ width: 1280, height: 900 });
 

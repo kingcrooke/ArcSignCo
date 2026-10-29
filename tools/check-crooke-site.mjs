@@ -102,9 +102,15 @@ else {
   else pass("family book back link");
   if (!interviewHtml.includes("Vista previa")) fail("preview banner missing");
   else pass("preview banner");
+  if (!interviewHtml.includes("Modo de prueba: nada se envía / Test mode: nothing is sent")) {
+    fail("test-mode banner missing");
+  } else pass("test-mode banner");
   if (!wizardSrc.includes('get("preview") === "1"') && !wizardSrc.includes("isPreviewRequest")) {
     fail("wizard must recognize ?preview=1");
   } else pass("preview query");
+  if (!wizardSrc.includes('get("test") === "1"') && !wizardSrc.includes("isTestRequest")) {
+    fail("wizard must recognize ?test=1");
+  } else pass("test query");
   const visibleInterview = [interviewHtml, wizardSrc, thanksHtml, fs.readFileSync(path.join(base, "interview", "thank-you.js"), "utf8")]
     .join("\n")
     .replace(/\/crooke-7c3a9e12\/[^\s"'<>]*/g, "")
