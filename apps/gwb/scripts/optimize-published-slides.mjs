@@ -28,16 +28,16 @@ const SLIDE_BASENAMES = [
       `w${w}-slide-${String(i + 1).padStart(2, '0')}`,
     ),
   ),
-  ...[1, 2, 3, 4, 5, 6, 7].flatMap((w) =>
+  ...[1, 2, 3, 4, 5, 6, 7, 8].flatMap((w) =>
     [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
   ),
   ...RESULTS_BASENAMES,
 ]
 
-/** Muse designer cards (results-w1..w6 + vs-w1..w7 previews). */
+/** Muse designer cards (results-w1..w6 + vs-w1..w8 previews). */
 export const MUSE_CARD_BASENAMES = [
   ...RESULTS_BASENAMES,
-  ...[1, 2, 3, 4, 5, 6, 7].flatMap((w) =>
+  ...[1, 2, 3, 4, 5, 6, 7, 8].flatMap((w) =>
     [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
   ),
 ]
