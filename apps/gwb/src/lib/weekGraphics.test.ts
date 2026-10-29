@@ -111,11 +111,12 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(results?.slides[0]?.title).toBe('FINAL: CROOKE TAKES IT')
   })
 
-  it('lists Matchups only for upcoming Week 7 at Muse card size', () => {
+  it('lists Matchups then Results for finished Week 7 at Muse card size', () => {
     const sections = getWeekGraphicsSections(7)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
-    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w7-m1', 'vs-w7-m1', 'Eric vs Crooke'],
       ['vs-w7-m2', 'vs-w7-m2', 'Manny vs Frankie'],
       ['vs-w7-m3', 'vs-w7-m3', 'Steven vs Jamil'],
@@ -123,7 +124,17 @@ describe('getWeekGraphicsSections week 4', () => {
       ['vs-w7-m5', 'vs-w7-m5', 'Narking vs Kayser'],
       ['vs-w7-m6', 'vs-w7-m6', 'Mauricio vs Hady'],
     ])
-    expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    const results = sections.find((s) => s.kind === 'results')
+    expect(results?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['results-w7-m1', 'results-w7-m1', 'Crooke beats Eric 136.45-110.86'],
+      ['results-w7-m2', 'results-w7-m2', 'Frankie beats Manny 161.66-124.44'],
+      ['results-w7-m3', 'results-w7-m3', 'Steven beats Jamil 187.82-163.40'],
+      ['results-w7-m4', 'results-w7-m4', 'Matt beats Danny 139.98-135.83'],
+      ['results-w7-m5', 'results-w7-m5', 'Narking beats Kayser 129.7-87.97'],
+      ['results-w7-m6', 'results-w7-m6', 'Hady beats Mauricio 141.51-118.3'],
+    ])
+    expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
 
   it('lists Matchups only for upcoming Week 8 at Muse card size', () => {

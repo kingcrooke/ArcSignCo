@@ -46,6 +46,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     4: publish(RESULTS_W4),
     5: publish(RESULTS_W5),
     6: publish(RESULTS_W6),
+    7: publish(RESULTS_W7),
   }
   const results = resultsByWeek[week]
   if (results?.length) {
@@ -326,4 +327,13 @@ const RESULTS_W6: PublishedSlide[] = [
   result('results-w6-m4', 'Narking 137.59 – Jamil 134.98'),
   result('results-w6-m5', 'Hady 144.85 – Matt 125.69'),
   result('results-w6-m6', 'Mauricio 143.21 – Kayser 93.27'),
+]
+
+const RESULTS_W7: PublishedSlide[] = [
+  result('results-w7-m1', 'Crooke beats Eric 136.45-110.86'),
+  result('results-w7-m2', 'Frankie beats Manny 161.66-124.44'),
+  result('results-w7-m3', 'Steven beats Jamil 187.82-163.40'),
+  result('results-w7-m4', 'Matt beats Danny 139.98-135.83'),
+  result('results-w7-m5', 'Narking beats Kayser 129.7-87.97'),
+  result('results-w7-m6', 'Hady beats Mauricio 141.51-118.3'),
 ]
