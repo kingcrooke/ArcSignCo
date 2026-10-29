@@ -163,6 +163,58 @@ if (!html.includes("Charles Crooke")) fail("missing Charles Crooke seed");
 if (!html.includes("Mary Thelma Morel")) fail("missing Mami seed");
 pass("core family seed names referenced");
 
+if (!html.includes("/crooke-7c3a9e12/elizabeth/")) fail("main crooke nav must link Elizabeth");
+else pass("main site links Elizabeth");
+
+const elizabethPath = path.join(base, "elizabeth", "index.html");
+if (!fs.existsSync(elizabethPath)) fail("missing elizabeth/index.html");
+else {
+  const elizabethHtml = fs.readFileSync(elizabethPath, "utf8");
+  if (!/noindex/i.test(elizabethHtml)) fail("elizabeth page must be noindex");
+  else pass("elizabeth noindex");
+  const audioCount = (elizabethHtml.match(/<audio\b/g) || []).length;
+  if (audioCount !== 5) fail(`elizabeth page expected 5 audio players, found ${audioCount}`);
+  else pass("elizabeth has five audio players");
+  for (const clip of [
+    "voice_about_you.mp3",
+    "voice_places_origins.mp3",
+    "voice_loved_ones.mp3",
+    "voice_family_stories.mp3",
+    "voice_more_stories.mp3",
+  ]) {
+    if (!elizabethHtml.includes(clip)) fail(`elizabeth page missing ${clip}`);
+    if (!fs.existsSync(path.join(base, "elizabeth", "audio", clip))) fail(`missing audio file ${clip}`);
+  }
+  pass("elizabeth audio files referenced");
+  for (const phrase of ["Moca", "Trujillo", "pelo de ángel", "Ana Luisa", "Georgie", "Cheche", "Yencenia", "Tavárez", "Roque"]) {
+    if (!elizabethHtml.includes(phrase)) fail(`elizabeth page missing ${phrase}`);
+  }
+  if (!elizabethHtml.includes("(?)")) fail("uncertain words should stay marked with (?)");
+  else pass("elizabeth transcript keeps uncertain words");
+}
+
+const mainJs = fs.readFileSync(path.join(base, "main.js"), "utf8");
+for (const id of ["crooke-grandfather", "tavarez-grandmother", "ana-luisa", "manuel", "georgie", "charlie", "cecilia", "yencenia", "hilda"]) {
+  if (!mainJs.includes(`id: '${id}'`)) fail(`family tree missing ${id}`);
+}
+if (mainJs.includes("id: 'crooke-ancestor'")) fail("placeholder crooke ancestor should be replaced by Elizabeth's grandfather");
+else pass("family tree includes relatives Elizabeth named");
+
+function walkText(dir) {
+  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, ent.name);
+    if (ent.isDirectory()) {
+      walkText(full);
+      continue;
+    }
+    if (!/\.(html|js|css|md|txt|json)$/i.test(ent.name)) continue;
+    const body = fs.readFileSync(full, "utf8");
+    if (/347[-.\s]?520[-.\s]?9203/.test(body)) fail(`phone number published in ${path.relative(root, full)}`);
+  }
+}
+walkText(base);
+pass("crooke folder does not publish Elizabeth's phone number");
+
 const robotsTxt = fs.readFileSync(path.join(root, "robots.txt"), "utf8");
 if (robotsTxt.includes(SLUG)) fail("robots.txt must not mention the crooke path");
 else pass("robots.txt omits crooke path");

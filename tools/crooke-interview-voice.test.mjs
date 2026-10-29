@@ -4,6 +4,7 @@ import {
   QUESTION_STEPS,
   VOICE_MIME_CANDIDATES,
   buildInterviewFormData,
+  commitVoiceTake,
   extensionForMime,
   fileNameForVoice,
   isPreviewRequest,
@@ -127,4 +128,19 @@ test("submission FormData includes each voice file with the recorder extension",
   assert.equal(await upload.text(), "CROOKE-UPLOAD-MARKER");
   assert.equal(fd.get("voice_loved_ones"), null);
   assert.equal(fileNameForVoice("voice_family_stories", { type: "audio/ogg;codecs=opus" }), "voice_family_stories.ogg");
+});
+
+test("a new take replaces the previous file for that question only", async () => {
+  const state = { voices: {} };
+  const first = commitVoiceTake(state, "voice_about_you", [new Blob(["TAKE-A"])], "audio/webm;codecs=opus");
+  assert.equal(first.error, null);
+  assert.equal(first.file.type, "audio/webm;codecs=opus");
+  assert.equal(first.file.name, "voice_about_you.webm");
+  commitVoiceTake(state, "voice_about_you", [new Blob(["TAKE-B-ONLY"])], "audio/webm");
+  commitVoiceTake(state, "voice_parents", [new Blob(["PARENTS-ONLY"])], "audio/mp4");
+  assert.equal(await state.voices.voice_about_you.text(), "TAKE-B-ONLY");
+  assert.equal(state.voices.voice_about_you.name, "voice_about_you.webm");
+  assert.equal(await state.voices.voice_parents.text(), "PARENTS-ONLY");
+  assert.equal(state.voices.voice_parents.name, "voice_parents.m4a");
+  assert.equal(state.voices.voice_about_you.size, "TAKE-B-ONLY".length);
 });

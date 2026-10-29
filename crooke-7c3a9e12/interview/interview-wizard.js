@@ -219,10 +219,66 @@ const previewMode = typeof location !== "undefined" && isPreviewRequest(location
 let lang = "es";
 let stepIndex = 0;
 let state = defaultState();
-let mediaRecorder = null;
-let recordChunks = [];
-let recordTimer = null;
-let discardRecording = false;
+/** The take that is recording right now. Null when the mic is idle. */
+let activeTake = null;
+
+function stopStream(stream) {
+  if (!stream || typeof stream.getTracks !== "function") return;
+  for (const track of stream.getTracks()) {
+    try {
+      track.stop();
+    } catch {
+      /* already stopped */
+    }
+  }
+}
+
+/**
+ * Stop the active take. discard=true drops its chunks so they cannot land in
+ * the next question. Tracks stop in onstop, after the recorder has flushed
+ * its last chunk (that chunk carries a webm/mp4 header only if it stays
+ * with its own take).
+ */
+function finishActiveTake(discard) {
+  const take = activeTake;
+  if (!take) return Promise.resolve();
+  take.discarded = !!discard;
+  if (take.timer) {
+    clearTimeout(take.timer);
+    take.timer = null;
+  }
+  const rec = take.recorder;
+  if (!rec || rec.state === "inactive") {
+    take.closed = true;
+    stopStream(take.stream);
+    if (activeTake === take) activeTake = null;
+    if (state._recordingKey === take.voiceKey) state._recordingKey = null;
+    take.resolveDone?.();
+    return Promise.resolve();
+  }
+  try {
+    rec.stop();
+  } catch {
+    take.closed = true;
+    stopStream(take.stream);
+    if (activeTake === take) activeTake = null;
+    if (state._recordingKey === take.voiceKey) state._recordingKey = null;
+    take.resolveDone?.();
+    return Promise.resolve();
+  }
+  return Promise.race([
+    take.done,
+    new Promise(resolve => {
+      setTimeout(() => {
+        take.closed = true;
+        stopStream(take.stream);
+        if (activeTake === take) activeTake = null;
+        if (state._recordingKey === take.voiceKey) state._recordingKey = null;
+        resolve();
+      }, 2000);
+    }),
+  ]);
+}
 
 export function pickSupportedMimeType(isTypeSupported) {
   if (typeof isTypeSupported !== "function") return "";
@@ -274,17 +330,30 @@ export function fileNameForVoice(field, blob) {
 }
 
 export function voiceFileFromChunks(chunks, mime, field) {
+  const parts = Array.isArray(chunks) ? chunks : [];
   const type = typeof mime === "string" ? mime : "";
   const ext = extensionForMime(type) || "webm";
   const name = `${field}.${ext}`;
   if (typeof File === "function") {
     try {
-      return type ? new File(chunks, name, { type }) : new File(chunks, name);
+      return type ? new File(parts, name, { type }) : new File(parts, name);
     } catch {
       /* Blob fallback below */
     }
   }
-  return type ? new Blob(chunks, { type }) : new Blob(chunks);
+  return type ? new Blob(parts, { type }) : new Blob(parts);
+}
+
+/** Save one take onto a question. A later take replaces that field; it does not append. */
+export function commitVoiceTake(current, voiceKey, chunks, mime, maxBytes = MAX_UPLOAD_BYTES) {
+  const voices = current.voices || (current.voices = {});
+  const file = voiceFileFromChunks(chunks, mime, voiceKey);
+  if (file.size > maxBytes) {
+    voices[voiceKey] = null;
+    return { error: "tooBig", file };
+  }
+  if (file.size > 0) voices[voiceKey] = file;
+  return { error: null, file };
 }
 
 export function buildInterviewFormData(current, maxBytes = MAX_UPLOAD_BYTES) {
@@ -412,16 +481,19 @@ function applyPageName() {
 }
 
 async function startRecording(voiceKey) {
-  if (!recorderSupport()) {
-    state._recordBlock = "no-recorder";
-    render();
-    return;
-  }
-  let stream;
+  if (state._recordingStarting) return;
+  state._recordingStarting = true;
+  let stream = null;
   try {
+    // Drop any recorder that is still running so its chunks cannot join this take.
+    await finishActiveTake(true);
+    if (!recorderSupport()) {
+      state._recordBlock = "no-recorder";
+      render();
+      return;
+    }
     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    recordChunks = [];
-    discardRecording = false;
+    const chunks = [];
     const preferred = pickSupportedMimeType(type => MediaRecorder.isTypeSupported(type));
     let recorder;
     try {
@@ -430,53 +502,84 @@ async function startRecording(voiceKey) {
       if (!preferred) throw err;
       recorder = new MediaRecorder(stream, recorderOptions(""));
     }
-    mediaRecorder = recorder;
-    mediaRecorder.ondataavailable = e => {
-      if (e.data && e.data.size) recordChunks.push(e.data);
+    let resolveDone = () => {};
+    const done = new Promise(resolve => {
+      resolveDone = resolve;
+    });
+    const take = {
+      voiceKey,
+      stream,
+      recorder,
+      chunks,
+      preferred,
+      discarded: false,
+      closed: false,
+      done,
+      resolveDone,
+      timer: null,
     };
-    mediaRecorder.onstop = () => {
-      stream.getTracks().forEach(tr => tr.stop());
-      const skipped = discardRecording;
-      discardRecording = false;
-      state._recordingKey = null;
-      if (skipped) return;
-      const actual = mediaRecorder.mimeType || preferred || "";
-      const file = voiceFileFromChunks(recordChunks, actual, voiceKey);
-      if (file.size > MAX_UPLOAD_BYTES) {
-        state.voices[voiceKey] = null;
-        state._recordError = "tooBig";
-        state._recordErrorKey = voiceKey;
-      } else if (file.size > 0) {
-        state.voices[voiceKey] = file;
-        state._recordError = null;
-        state._recordErrorKey = null;
+    recorder.ondataavailable = event => {
+      if (take.closed) return;
+      if (event.data && event.data.size) chunks.push(event.data);
+    };
+    recorder.onstop = () => {
+      take.closed = true;
+      stopStream(stream);
+      if (take.timer) clearTimeout(take.timer);
+      if (activeTake === take) activeTake = null;
+      if (state._recordingKey === take.voiceKey) state._recordingKey = null;
+      try {
+        if (!take.discarded) {
+          const mime = recorder.mimeType || take.preferred || "";
+          const result = commitVoiceTake(state, take.voiceKey, chunks.slice(), mime);
+          if (result.error) {
+            state._recordError = result.error;
+            state._recordErrorKey = take.voiceKey;
+          } else if (result.file && result.file.size > 0) {
+            state._recordError = null;
+            state._recordErrorKey = null;
+          }
+          saveProgress();
+          render();
+        }
+      } finally {
+        take.resolveDone();
       }
-      saveProgress();
-      render();
     };
-    mediaRecorder.start(250);
+    activeTake = take;
+    try {
+      recorder.start(250);
+    } catch {
+      recorder.start();
+    }
+    take.timer = setTimeout(() => {
+      if (recorder.state === "recording") {
+        try {
+          recorder.stop();
+        } catch {
+          /* onstop still owns the tracks */
+        }
+      }
+    }, MAX_RECORD_SECONDS * 1000);
     state._recordingKey = voiceKey;
     state._recordBlock = null;
-    clearTimeout(recordTimer);
-    recordTimer = setTimeout(() => {
-      if (mediaRecorder?.state === "recording") stopRecording();
-    }, MAX_RECORD_SECONDS * 1000);
     render();
   } catch (err) {
-    if (stream) stream.getTracks().forEach(tr => tr.stop());
+    stopStream(stream);
+    if (activeTake && activeTake.stream === stream) activeTake = null;
     const name = err && err.name;
     if (name === "NotSupportedError") state._recordBlock = "no-recorder";
     else if (name === "NotAllowedError" || name === "PermissionDeniedError" || name === "SecurityError") {
       state._recordBlock = "mic-denied";
     } else state._recordBlock = "mic-failed";
     render();
+  } finally {
+    state._recordingStarting = false;
   }
 }
 
 function stopRecording() {
-  clearTimeout(recordTimer);
-  if (mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop();
-  else state._recordingKey = null;
+  return finishActiveTake(false);
 }
 
 function bilingualNote(kind) {
@@ -653,11 +756,12 @@ function bindStepEvents(step) {
 
   document.querySelector("[data-speak]")?.addEventListener("click", () => {
     const key = document.querySelector("[data-speak]").dataset.speak;
+    if (state._recordingStarting) return;
     if (state._recordingKey === key) stopRecording();
     else startRecording(key);
   });
 
-  document.querySelector("[data-voice-upload]")?.addEventListener("change", ev => {
+  document.querySelector("[data-voice-upload]")?.addEventListener("change", async ev => {
     const input = ev.target;
     const key = input.dataset.voiceUpload;
     const file = input.files?.[0];
@@ -670,10 +774,7 @@ function bindStepEvents(step) {
       render();
       return;
     }
-    if (state._recordingKey === key) {
-      discardRecording = true;
-      stopRecording();
-    }
+    if (activeTake && activeTake.voiceKey === key) await finishActiveTake(true);
     state.voices[key] = file;
     state._recordError = null;
     state._recordErrorKey = null;
@@ -696,9 +797,12 @@ function bindStepEvents(step) {
   });
 
   document.querySelectorAll("[data-nav]").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       collectFields();
       const action = btn.dataset.nav;
+      if (action === "back" || action === "skip" || action === "next" || action === "submit") {
+        await finishActiveTake(false);
+      }
       if (action === "back") {
         stepIndex = Math.max(0, stepIndex - 1);
         saveProgress();
@@ -728,6 +832,7 @@ function bindStepEvents(step) {
 
 async function submitForm() {
   if (previewMode) return;
+  await finishActiveTake(false);
   collectFields();
   if (!state.your_name.trim()) {
     alert(t("nameRequired"));
