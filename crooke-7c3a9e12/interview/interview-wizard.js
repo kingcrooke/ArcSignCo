@@ -30,6 +30,10 @@ const RECORDER_MESSAGES = {
     es: "Permiso de micrófono denegado. Puedes subir una nota de voz, o enviarla por WhatsApp a quien te compartió este enlace.",
     en: "Microphone permission was denied. You can upload a voice memo, or send it by WhatsApp to the person who shared this link.",
   },
+  micFailed: {
+    es: "No se pudo grabar. Revisa el micrófono e inténtalo de nuevo.",
+    en: "Could not record. Check the microphone and try again.",
+  },
 };
 
 export const QUESTION_STEPS = [
@@ -221,6 +225,54 @@ let stepIndex = 0;
 let state = defaultState();
 /** The take that is recording right now. Null when the mic is idle. */
 let activeTake = null;
+const playbackUrls = new Map();
+let recordClock = null;
+
+export function formatClock(totalSeconds) {
+  const s = Math.max(0, Math.round(Number(totalSeconds) || 0));
+  const m = Math.floor(s / 60);
+  const r = s % 60;
+  return `${m}:${String(r).padStart(2, "0")}`;
+}
+
+export function savedVoiceLabel(seconds) {
+  if (seconds == null || !Number.isFinite(Number(seconds))) {
+    return "Grabación guardada / Recording saved";
+  }
+  const clock = formatClock(seconds);
+  return `Grabación guardada (${clock}) / Recording saved (${clock})`;
+}
+
+function playbackUrl(key, blob) {
+  const prev = playbackUrls.get(key);
+  if (prev && prev.blob === blob) return prev.url;
+  if (prev) URL.revokeObjectURL(prev.url);
+  const url = URL.createObjectURL(blob);
+  playbackUrls.set(key, { blob, url });
+  return url;
+}
+
+function dropPlayback(key) {
+  const prev = playbackUrls.get(key);
+  if (!prev) return;
+  URL.revokeObjectURL(prev.url);
+  playbackUrls.delete(key);
+}
+
+function ensureRecordClock() {
+  if (recordClock) return;
+  recordClock = setInterval(() => {
+    const el = document.querySelector("[data-record-timer]");
+    if (!el || !activeTake?.startedAt) return;
+    el.textContent = formatClock((Date.now() - activeTake.startedAt) / 1000);
+  }, 250);
+}
+
+function clearRecordClock() {
+  if (!recordClock) return;
+  clearInterval(recordClock);
+  recordClock = null;
+}
 
 function stopStream(stream) {
   if (!stream || typeof stream.getTracks !== "function") return;
@@ -402,6 +454,7 @@ function defaultState() {
     more_stories: "",
     relatives: [{ name: "", relation: "", note: "" }, { name: "", relation: "", note: "" }, { name: "", relation: "", note: "" }],
     voices: {},
+    voiceSeconds: {},
     photoBlob: null,
     photoName: "",
   };
@@ -514,6 +567,7 @@ async function startRecording(voiceKey) {
       preferred,
       discarded: false,
       closed: false,
+      startedAt: Date.now(),
       done,
       resolveDone,
       timer: null,
@@ -536,6 +590,9 @@ async function startRecording(voiceKey) {
             state._recordError = result.error;
             state._recordErrorKey = take.voiceKey;
           } else if (result.file && result.file.size > 0) {
+            const elapsed = take.startedAt ? Math.max(1, Math.round((Date.now() - take.startedAt) / 1000)) : null;
+            state.voiceSeconds = state.voiceSeconds || {};
+            if (elapsed != null) state.voiceSeconds[take.voiceKey] = elapsed;
             state._recordError = null;
             state._recordErrorKey = null;
           }
@@ -585,7 +642,29 @@ function stopRecording() {
 function bilingualNote(kind) {
   const msg = RECORDER_MESSAGES[kind];
   if (!msg) return "";
-  return `<p class="record-warn">${msg.es}</p><p class="record-warn">${msg.en}</p>`;
+  return `<div class="record-alert" role="alert"><p>${msg.es}</p><p>${msg.en}</p></div>`;
+}
+
+function renderVoiceChecklist(currentId) {
+  const saved = QUESTION_STEPS.filter(q => state.voices?.[q.voice] && state.voices[q.voice].size > 0).length;
+  const items = QUESTION_STEPS.map(q => {
+    const clip = state.voices?.[q.voice];
+    const has = !!(clip && clip.size > 0);
+    const title = esc(lang === "es" ? q.es.title : q.en.title);
+    const seconds = Number.isFinite(state.voiceSeconds?.[q.voice]) ? state.voiceSeconds[q.voice] : null;
+    const status = has ? savedVoiceLabel(seconds) : "Sin nota / No voice note";
+    const current = q.id === currentId ? " is-current" : "";
+    return `<li class="${has ? "is-saved" : "is-empty"}${current}">
+      <span class="${has ? "record-check" : "voice-empty"}" aria-hidden="true">${has ? "✓" : ""}</span>
+      <span class="voice-check-title">${title}</span>
+      <span class="voice-check-state">${status}</span>
+    </li>`;
+  }).join("");
+  return `<div class="voice-checklist-wrap">
+    <p class="voice-checklist-heading">Notas de voz / Voice notes</p>
+    <p class="voice-checklist-count">${saved} de 7 con nota de voz / ${saved} of 7 with a voice note</p>
+    <ul class="voice-checklist">${items}</ul>
+  </div>`;
 }
 
 function renderVoiceUpload(voiceKey) {
@@ -600,25 +679,44 @@ function renderFallbacks(q) {
 
 function renderSpeakBlock(q) {
   const voiceKey = q.voice;
-  const hasClip = state.voices[voiceKey];
+  const clip = state.voices[voiceKey];
+  const hasClip = !!(clip && clip.size > 0);
   const recording = state._recordingKey === voiceKey;
   const inApp = isInAppBrowser();
   const unsupported = !recorderSupport();
   const block = unsupported ? "no-recorder" : state._recordBlock;
-  let html = "";
-  if (!inApp && block !== "no-recorder") {
-    html += `<button type="button" class="btn-speak${recording ? " is-recording" : ""}" data-speak="${voiceKey}">
-      ${recording ? t("stop") : hasClip ? t("speakAgain") : t("speak")}
-    </button>`;
-    if (recording) html += `<p class="record-status">${t("recording")}</p>`;
-  }
-  if (hasClip && !recording) html += `<p class="record-status">${t("savedClip")} (${Math.round(hasClip.size / 1024)} KB)</p>`;
+  const stateName = recording ? "recording" : hasClip ? "saved" : "idle";
+  let html = `<div class="recorder" data-recorder-state="${stateName}">`;
   if (block === "no-recorder" && !inApp) html += bilingualNote("noRecorder");
   else if (block === "mic-denied" && !inApp) html += bilingualNote("micDenied");
-  else if (inApp || block === "mic-failed") html += `<p class="record-status">${t("micDenied")}</p>`;
-  if (state._recordError === "tooBig" && state._recordErrorKey === voiceKey) {
-    html += `<p class="record-warn">${t("tooBig")}</p>`;
+  else if (inApp || block === "mic-failed") html += bilingualNote("micFailed");
+  if (!inApp && block !== "no-recorder") {
+    if (recording) {
+      const elapsed = activeTake?.startedAt ? (Date.now() - activeTake.startedAt) / 1000 : 0;
+      html += `<p class="record-live" role="status">
+        <span class="record-dot" aria-hidden="true"></span>
+        <span class="record-live-label">Grabando… / Recording…</span>
+        <span class="record-timer" data-record-timer>${formatClock(elapsed)}</span>
+      </p>
+      <button type="button" class="btn-speak is-recording" data-speak="${voiceKey}">Detener / Stop</button>`;
+    } else if (hasClip) {
+      const seconds = Number.isFinite(state.voiceSeconds?.[voiceKey]) ? state.voiceSeconds[voiceKey] : null;
+      html += `<p class="record-saved" role="status">
+        <span class="record-check" aria-hidden="true">✓</span>
+        <span>${savedVoiceLabel(seconds)}</span>
+      </p>
+      <audio class="voice-player" controls preload="metadata" src="${playbackUrl(voiceKey, clip)}" aria-label="Grabación guardada / Recording saved"></audio>
+      <button type="button" class="btn-rerecord" data-speak="${voiceKey}" aria-describedby="replace-${voiceKey}">Grabar de nuevo / Re-record</button>
+      <p class="record-replace" id="replace-${voiceKey}">Esto reemplaza la toma guardada. / This replaces the saved take.</p>
+      <button type="button" class="btn-delete-voice" data-delete-voice="${voiceKey}">Borrar / Delete</button>`;
+    } else {
+      html += `<button type="button" class="btn-speak" data-speak="${voiceKey}">Toca para grabar / Tap to record</button>`;
+    }
   }
+  if (state._recordError === "tooBig" && state._recordErrorKey === voiceKey) {
+    html += `<p class="record-alert">${t("tooBig")}</p>`;
+  }
+  html += "</div>";
   html += renderVoiceUpload(voiceKey);
   if (inApp || block) html += renderFallbacks(q);
   return html;
@@ -673,6 +771,7 @@ function render() {
       <h2>${pack.title}</h2>
       <p class="wizard-lead">${pack.hint}</p>
       ${renderSpeakBlock(q)}
+      ${renderVoiceChecklist(q.id)}
       <label class="wizard-lead">${t("typeAnswer")}</label>
       <textarea class="wizard-textarea" id="f_field" data-field="${q.field}">${esc(state[q.field] || "")}</textarea>
     `;
@@ -695,7 +794,7 @@ function render() {
         </div>`;
     });
   } else if (step.type === "review") {
-    body = `<h2>${t("reviewTitle")}</h2><p class="wizard-lead">${t("reviewLead")}</p><p><strong>${esc(state.your_name)}</strong></p>`;
+    body = `<h2>${t("reviewTitle")}</h2><p class="wizard-lead">${t("reviewLead")}</p><p><strong>${esc(state.your_name)}</strong></p>${renderVoiceChecklist(null)}`;
   }
 
   mount.innerHTML = `
@@ -714,6 +813,8 @@ function render() {
   `;
 
   bindStepEvents(step);
+  if (state._recordingKey && activeTake?.startedAt) ensureRecordClock();
+  else clearRecordClock();
   if (state.photoBlob) {
     const img = document.getElementById("photo-preview");
     if (img && !img.src) {
@@ -761,6 +862,18 @@ function bindStepEvents(step) {
     else startRecording(key);
   });
 
+  document.querySelector("[data-delete-voice]")?.addEventListener("click", () => {
+    const key = document.querySelector("[data-delete-voice]").dataset.deleteVoice;
+    if (!key) return;
+    state.voices[key] = null;
+    if (state.voiceSeconds) delete state.voiceSeconds[key];
+    dropPlayback(key);
+    state._recordError = null;
+    state._recordErrorKey = null;
+    saveProgress();
+    render();
+  });
+
   document.querySelector("[data-voice-upload]")?.addEventListener("change", async ev => {
     const input = ev.target;
     const key = input.dataset.voiceUpload;
@@ -776,6 +889,8 @@ function bindStepEvents(step) {
     }
     if (activeTake && activeTake.voiceKey === key) await finishActiveTake(true);
     state.voices[key] = file;
+    if (state.voiceSeconds) delete state.voiceSeconds[key];
+    dropPlayback(key);
     state._recordError = null;
     state._recordErrorKey = null;
     saveProgress();

@@ -134,14 +134,44 @@ async function run() {
     if (wide) fail("question step scrolls sideways");
     else ok("mobile question does not scroll sideways");
 
-    await page.getByRole("button", { name: "Hablar" }).click();
+    const idleLabel = await page.getByRole("button", { name: "Toca para grabar" }).innerText();
+    if (!idleLabel.includes("Tap to record")) fail(`idle label ${idleLabel}`);
+    else ok("idle button is bilingual");
+    await page.getByRole("button", { name: "Toca para grabar" }).click();
     await page.getByRole("button", { name: "Detener" }).waitFor();
+    const live = await page.locator(".record-live").innerText();
+    if (!live.includes("Grabando") || !live.includes("Recording")) fail(`recording label ${live}`);
+    else ok("recording label is bilingual");
+    const timer1 = (await page.locator("[data-record-timer]").innerText()).trim();
+    if (!/^\d+:\d{2}$/.test(timer1)) fail(`timer ${timer1}`);
+    else ok("recording timer is mm:ss");
+    await page.waitForTimeout(1100);
+    const timer2 = (await page.locator("[data-record-timer]").innerText()).trim();
+    if (timer2 === timer1) fail(`timer did not advance (${timer1})`);
+    else ok("recording timer advances");
     const options = await page.evaluate(() => window.__recorderOptions);
     if (!options || options.mimeType !== "audio/mp4") fail(`recorder options ${JSON.stringify(options)}`);
     else ok("recorder uses audio/mp4 on Safari");
     await page.getByRole("button", { name: "Detener" }).click();
-    await page.getByText("Audio listo para enviar").waitFor();
-    ok("recorded clip ready");
+    await page.locator(".record-saved").waitFor();
+    const saved = await page.locator(".record-saved").innerText();
+    if (!/Grabación guardada \(\d+:\d{2}\) \/ Recording saved \(\d+:\d{2}\)/.test(saved)) {
+      fail(`saved state ${saved}`);
+    } else ok("saved state shows duration in both languages");
+    if ((await page.locator(".voice-player").count()) !== 1) fail("saved state has no player");
+    else ok("saved state has an audio player");
+    const replace = await page.locator(".record-replace").innerText();
+    if (!replace.includes("reemplaza") || !replace.includes("replaces")) fail(`rerecord warning ${replace}`);
+    else ok("re-record warns that it replaces the take");
+    if (!(await page.getByRole("button", { name: "Borrar" }).count())) fail("delete button missing");
+    else ok("delete button is present");
+    const onCard = await page.locator(".voice-checklist").innerText();
+    if (!onCard.includes("Sobre ti y tu niñez") || !onCard.includes("Grabación guardada")) {
+      fail("question card does not list the saved voice note");
+    } else ok("question card lists the saved voice note");
+    const wideSaved = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+    if (wideSaved) fail("saved recorder scrolls sideways");
+    else ok("saved recorder does not scroll sideways");
 
     await page.getByRole("button", { name: "Siguiente" }).click();
     await page.getByRole("heading", { name: "Padres" }).waitFor();
@@ -153,7 +183,7 @@ async function run() {
       mimeType: "audio/mp4",
       buffer: Buffer.from("CROOKE-UPLOAD-MARKER"),
     });
-    await page.getByText("Audio listo para enviar").waitFor();
+    await page.locator('[data-recorder-state="saved"]').waitFor();
     ok("uploaded voice memo");
 
     const titles = ["Padres"];
@@ -165,6 +195,10 @@ async function run() {
       else break;
     }
     await page.getByRole("heading", { name: "¿Listo para enviar?" }).waitFor();
+    const reviewNotes = await page.locator(".voice-checklist").innerText();
+    if (!reviewNotes.includes("Sobre ti y tu niñez") || !reviewNotes.includes("Padres") || !reviewNotes.includes("Grabación guardada")) {
+      fail("summary does not list saved voice notes");
+    } else ok("summary lists saved voice notes before submit");
     const expected = [
       "Sobre ti y tu niñez",
       "Padres",
@@ -236,7 +270,7 @@ async function run() {
     await deniedPage.getByRole("button", { name: "Saltar" }).click();
     await deniedPage.locator("#f_name").fill("Ana");
     await deniedPage.getByRole("button", { name: "Siguiente" }).click();
-    await deniedPage.getByRole("button", { name: "Hablar" }).click();
+    await deniedPage.getByRole("button", { name: "Toca para grabar" }).click();
     const deniedText = await deniedPage.locator("#wizard-mount").innerText();
     if (!deniedText.includes("Permiso de micrófono denegado") || !deniedText.includes("Microphone permission was denied")) {
       fail("mic denial is not bilingual");
@@ -260,7 +294,7 @@ async function run() {
     if (!missingText.includes("Este navegador no puede grabar voz") || !missingText.includes("This browser cannot record voice")) {
       fail(`missing recorder message: ${missingText.slice(0, 400)}`);
     } else ok("missing MediaRecorder is bilingual");
-    if (await missingPage.getByRole("button", { name: "Hablar" }).count()) fail("speak button shown without MediaRecorder");
+    if (await missingPage.getByRole("button", { name: "Toca para grabar" }).count()) fail("speak button shown without MediaRecorder");
     else ok("speak button hidden when recording is unavailable");
 
     const plainDialogs = [];
@@ -399,7 +433,7 @@ async function run() {
     await isoPage.locator("#f_name").fill("Ana");
     await isoPage.getByRole("button", { name: "Siguiente" }).click();
     await isoPage.getByRole("heading", { name: "Sobre ti y tu niñez" }).waitFor();
-    await isoPage.getByRole("button", { name: "Hablar" }).click();
+    await isoPage.getByRole("button", { name: "Toca para grabar" }).click();
     await isoPage.waitForFunction(() => window.__recorders.some(r => r.state === "recording" && r.ticks >= 2));
     await isoPage.getByRole("button", { name: "Siguiente" }).click();
     await isoPage.getByRole("heading", { name: "Padres" }).waitFor();
@@ -412,17 +446,17 @@ async function run() {
       fail(`recorder kept running after leaving the question: ${JSON.stringify(afterLeave)}`);
     } else ok("leaving a question stops that take and its mic track");
 
-    await isoPage.getByRole("button", { name: "Hablar" }).click();
+    await isoPage.getByRole("button", { name: "Toca para grabar" }).click();
     await isoPage.waitForFunction(() => window.__recorders.filter(r => r.state === "recording").length === 1 && window.__recorders.some(r => r.ticks >= 2));
     await isoPage.getByRole("button", { name: "Detener" }).click();
-    await isoPage.getByText("Audio listo para enviar").waitFor();
+    await isoPage.locator('[data-recorder-state="saved"]').waitFor();
     await isoPage.getByRole("button", { name: "Grabar de nuevo" }).click();
     await isoPage.waitForFunction(() => {
       const live = window.__recorders.filter(r => r.state === "recording");
       return live.length === 1 && live[0].ticks >= 2 && window.__recorders.length === 3;
     });
     await isoPage.getByRole("button", { name: "Detener" }).click();
-    await isoPage.getByText("Audio listo para enviar").waitFor();
+    await isoPage.locator('[data-recorder-state="saved"]').waitFor();
     const replaced = await isoPage.evaluate(() => ({
       recording: window.__recorders.filter(r => r.state === "recording").length,
       gum: window.__gumCalls,

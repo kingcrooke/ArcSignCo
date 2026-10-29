@@ -8,10 +8,20 @@ import {
   extensionForMime,
   fileNameForVoice,
   isPreviewRequest,
+  formatClock,
   pickSupportedMimeType,
   recorderOptions,
+  savedVoiceLabel,
   voiceFileFromChunks,
 } from "../crooke-7c3a9e12/interview/interview-wizard.js";
+
+test("voice clock reads as minutes and seconds", () => {
+  assert.equal(formatClock(0), "0:00");
+  assert.equal(formatClock(42), "0:42");
+  assert.equal(formatClock(90), "1:30");
+  assert.equal(savedVoiceLabel(42), "Grabación guardada (0:42) / Recording saved (0:42)");
+  assert.equal(savedVoiceLabel(null), "Grabación guardada / Recording saved");
+});
 
 test("preview=1 is the only review-mode switch", () => {
   assert.equal(isPreviewRequest("?preview=1"), true);
