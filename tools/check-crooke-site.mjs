@@ -102,9 +102,15 @@ else {
   else pass("family book back link");
   if (!interviewHtml.includes("Vista previa")) fail("preview banner missing");
   else pass("preview banner");
+  if (!interviewHtml.includes("Modo de prueba: nada se envía / Test mode: nothing is sent")) {
+    fail("test-mode banner missing");
+  } else pass("test-mode banner");
   if (!wizardSrc.includes('get("preview") === "1"') && !wizardSrc.includes("isPreviewRequest")) {
     fail("wizard must recognize ?preview=1");
   } else pass("preview query");
+  if (!wizardSrc.includes('get("test") === "1"') && !wizardSrc.includes("isTestRequest")) {
+    fail("wizard must recognize ?test=1");
+  } else pass("test query");
   const visibleInterview = [interviewHtml, wizardSrc, thanksHtml, fs.readFileSync(path.join(base, "interview", "thank-you.js"), "utf8")]
     .join("\n")
     .replace(/\/crooke-7c3a9e12\/[^\s"'<>]*/g, "")
@@ -163,8 +169,14 @@ if (!html.includes("Charles Crooke")) fail("missing Charles Crooke seed");
 if (!html.includes("Mary Thelma Morel")) fail("missing Mami seed");
 pass("core family seed names referenced");
 
-if (!html.includes("/crooke-7c3a9e12/elizabeth/")) fail("main crooke nav must link Elizabeth");
-else pass("main site links Elizabeth");
+if (/data-i18n="nav\.elizabeth"/.test(html)) fail("home nav must not name a person");
+else pass("home nav has no person tab");
+if (html.includes("home.elizabeth")) fail("home notes still link Elizabeth by name");
+else pass("home notes do not link Elizabeth");
+if (!html.includes('data-i18n="nav.members"') || !html.includes('id="panel-members"')) fail("members tab or panel missing");
+else pass("members tab and panel");
+if (!html.includes("/crooke-7c3a9e12/elizabeth/")) fail("book must still link Elizabeth's chapter");
+else pass("book links Elizabeth's chapter");
 
 const elizabethPath = path.join(base, "elizabeth", "index.html");
 if (!fs.existsSync(elizabethPath)) fail("missing elizabeth/index.html");
@@ -172,6 +184,11 @@ else {
   const elizabethHtml = fs.readFileSync(elizabethPath, "utf8");
   if (!/noindex/i.test(elizabethHtml)) fail("elizabeth page must be noindex");
   else pass("elizabeth noindex");
+  if (/<a[^>]*>\s*Elizabeth\s*<\/a>/.test(elizabethHtml)) fail("elizabeth chapter nav still uses her name as a tab");
+  else pass("elizabeth chapter nav has no person tab");
+  if (!elizabethHtml.includes("Miembros") || !elizabethHtml.includes("Árbol familiar")) {
+    fail("elizabeth chapter nav missing Members or Family Tree");
+  } else pass("elizabeth chapter nav uses section titles");
   const audioCount = (elizabethHtml.match(/<audio\b/g) || []).length;
   if (audioCount !== 5) fail(`elizabeth page expected 5 audio players, found ${audioCount}`);
   else pass("elizabeth has five audio players");
@@ -199,6 +216,14 @@ for (const id of ["crooke-grandfather", "tavarez-grandmother", "ana-luisa", "man
 }
 if (mainJs.includes("id: 'crooke-ancestor'")) fail("placeholder crooke ancestor should be replaced by Elizabeth's grandfather");
 else pass("family tree includes relatives Elizabeth named");
+if (!mainJs.includes("page: '/crooke-7c3a9e12/elizabeth/'") || !mainJs.includes("storyEn: 'View her story'")) {
+  fail("tree must open Elizabeth's chapter with a story button");
+} else pass("tree story button points at Elizabeth's chapter");
+if (!mainJs.includes("'nav.members': 'Miembros'") || !mainJs.includes("'nav.tree': 'Árbol familiar'")) {
+  fail("spanish nav missing Miembros or Árbol familiar");
+} else pass("spanish section titles");
+if (mainJs.includes("nav.elizabeth") || mainJs.includes("home.elizabeth")) fail("elizabeth name link copy remains");
+else pass("elizabeth name links removed from nav and home notes");
 
 function walkText(dir) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {

@@ -144,6 +144,8 @@ const PEOPLE = [
     source: 'told',
     sourceWho: 'Elizabeth Crooke',
     page: '/crooke-7c3a9e12/elizabeth/',
+    storyEn: 'View her story',
+    storyEs: 'Ver su historia',
   },
   {
     id: 'yodernis',
@@ -205,12 +207,12 @@ const I18N = {
     'brand.sub': 'Book of the Crookes',
     'nav.home': 'Home',
     'nav.book': 'The Book',
+    'nav.members': 'Members',
     'nav.tree': 'Family Tree',
     'nav.origins': 'Origins',
     'nav.memorial': 'Memorial',
     'nav.recipes': 'Recipes & Stories',
     'nav.vault': 'Vault',
-    'nav.elizabeth': 'Elizabeth',
     'nav.interview': 'Share your story',
     'lang.en': 'EN',
     'lang.es': 'ES',
@@ -224,9 +226,9 @@ const I18N = {
     'home.blazon': 'Emblem symbolism and blazon: [BLAZON — TO BE ADDED]',
     'home.disclaimer':
       'Crest artwork: art coming from Build. Every fact on this site carries an archive source label.',
-    'home.elizabeth':
-      'Elizabeth Crooke, sister of Jesus and daughter of Mami and the late Charles Crooke, recorded her interview on 26 October 2026. She talks about growing up in Moca, her dance career, and the Crooke grandfather who cooked in the Trujillo era.',
-    'home.elizabeth.link': 'Her chapter',
+    'members.title': 'Members',
+    'members.lead': 'Every name in the archive, in alphabetical order. A name with a chapter opens that page.',
+    'members.noChapter': 'No chapter yet',
     'source.told': 'Told by {name}',
     'source.paper': 'Paper we hold',
     'source.notAsked': 'Not yet asked',
@@ -247,7 +249,6 @@ const I18N = {
     'tree.hint':
       'Tap a name to see notes. The Morel ancestor above Mami is still a placeholder. The last row is named by Elizabeth; their branch is not recorded, so they are not tied to a parent.',
     'tree.unplaced': 'Named by Elizabeth. Branch not recorded — not tied to a parent.',
-    'tree.open': 'Open her chapter',
     'tree.detail.title': 'Profile notes',
     'tree.detail.empty': 'Select a family member in the tree.',
     'origins.title': 'Two origin tracks',
@@ -291,12 +292,12 @@ const I18N = {
     'brand.sub': 'Libro de los Crooke',
     'nav.home': 'Inicio',
     'nav.book': 'El Libro',
-    'nav.tree': 'Árbol',
+    'nav.members': 'Miembros',
+    'nav.tree': 'Árbol familiar',
     'nav.origins': 'Orígenes',
     'nav.memorial': 'Memorial',
     'nav.recipes': 'Recetas e historias',
     'nav.vault': 'Archivo',
-    'nav.elizabeth': 'Elizabeth',
     'nav.interview': 'Comparte tu historia',
     'lang.en': 'EN',
     'lang.es': 'ES',
@@ -310,9 +311,9 @@ const I18N = {
     'home.blazon': 'Simbolismo del emblema y blasón: [BLASÓN — POR AÑADIR]',
     'home.disclaimer':
       'Arte del escudo: art coming from Build. Cada dato en el sitio lleva una etiqueta de fuente de archivo.',
-    'home.elizabeth':
-      'Elizabeth Crooke, hermana de Jesus e hija de Mami y del fallecido Charles Crooke, grabó su entrevista el 26 de octubre de 2026. Habla de crecer en Moca, de su carrera de danza y del abuelo Crooke que cocinaba en la época de Trujillo.',
-    'home.elizabeth.link': 'Su capítulo',
+    'members.title': 'Miembros',
+    'members.lead': 'Cada nombre del archivo, en orden alfabético. Un nombre con capítulo abre esa página.',
+    'members.noChapter': 'Sin capítulo',
     'source.told': 'Lo contó {name}',
     'source.paper': 'Documento en familia',
     'source.notAsked': 'Aún no preguntado',
@@ -333,7 +334,6 @@ const I18N = {
     'tree.hint':
       'Toca un nombre para ver notas. El antepasado Morel sobre Mami sigue siendo provisional. La última fila la nombró Elizabeth; no se registró su rama, así que no se atan a un padre o una madre.',
     'tree.unplaced': 'Los nombró Elizabeth. Rama no registrada: no se atan a un padre o una madre.',
-    'tree.open': 'Abrir su capítulo',
     'tree.detail.title': 'Notas del perfil',
     'tree.detail.empty': 'Elige un familiar en el árbol.',
     'origins.title': 'Dos líneas de origen',
@@ -374,7 +374,7 @@ const I18N = {
   },
 };
 
-const PANELS = ['home', 'book', 'tree', 'origins', 'memorial', 'recipes', 'vault'];
+const PANELS = ['home', 'book', 'members', 'tree', 'origins', 'memorial', 'recipes', 'vault'];
 
 let lang = 'en';
 let selectedPersonId = null;
@@ -418,6 +418,7 @@ function applyI18n() {
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
   renderTree();
+  renderMembers();
   if (selectedPersonId) showPersonDetail(selectedPersonId);
 }
 
@@ -443,6 +444,44 @@ function personTag(p) {
   if (p.tagEn) return lang === 'es' ? p.tagEs : p.tagEn;
   if (p.living) return lang === 'es' ? 'Viva — sin datos sensibles' : 'Living — private details omitted';
   return lang === 'es' ? 'Antepasado provisional' : 'Placeholder ancestor';
+}
+
+function esc(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/"/g, '&quot;');
+}
+
+function storyButtonLabel(p) {
+  if (lang === 'es') return p.storyEs || 'Ver su historia';
+  return p.storyEn || 'View their story';
+}
+
+function memberSortKey(p) {
+  return personLabel(p)
+    .replace(/[\[\]]/g, '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function renderMembers() {
+  const mount = document.getElementById('members-mount');
+  if (!mount) return;
+  const people = [...PEOPLE].sort((a, b) =>
+    memberSortKey(a).localeCompare(memberSortKey(b), lang === 'es' ? 'es' : 'en', { sensitivity: 'base' }),
+  );
+  mount.innerHTML = `<ul class="member-list">${people
+    .map(p => {
+      const name = esc(personLabel(p));
+      const tag = esc(personTag(p));
+      if (p.page) {
+        return `<li><a class="member-row" href="${esc(p.page)}"><span class="member-copy"><span class="member-name">${name}</span><span class="member-tag">${tag}</span></span><span class="btn-story">${esc(storyButtonLabel(p))}</span></a></li>`;
+      }
+      return `<li><div class="member-row"><span class="member-copy"><span class="member-name">${name}</span><span class="member-tag">${tag}</span></span><span class="member-none">${esc(t('members.noChapter'))}</span></div></li>`;
+    })
+    .join('')}</ul>`;
 }
 
 function renderTree() {
@@ -489,8 +528,10 @@ function showPersonDetail(id) {
   const note = lang === 'es' ? p.noteEs : p.noteEn;
   const src = p.source || 'not-asked';
   const who = p.sourceWho || '';
-  const link = p.page ? `<p><a href="${p.page}">${t('tree.open')}</a></p>` : '';
-  box.innerHTML = `${sourceTagHtml(src, who)}<p><strong>${personLabel(p)}</strong></p><p>${note}</p>${link}`;
+  const link = p.page
+    ? `<a class="btn-story" href="${esc(p.page)}">${esc(storyButtonLabel(p))}</a>`
+    : '';
+  box.innerHTML = `${sourceTagHtml(src, who)}<p><strong>${esc(personLabel(p))}</strong></p><p>${esc(note)}</p>${link}`;
   renderTree();
 }
 

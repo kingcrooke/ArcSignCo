@@ -8,10 +8,22 @@ import {
   extensionForMime,
   fileNameForVoice,
   isPreviewRequest,
+  isTestRequest,
+  TEST_MODE_BANNER,
+  formatClock,
   pickSupportedMimeType,
   recorderOptions,
+  savedVoiceLabel,
   voiceFileFromChunks,
 } from "../crooke-7c3a9e12/interview/interview-wizard.js";
+
+test("voice clock reads as minutes and seconds", () => {
+  assert.equal(formatClock(0), "0:00");
+  assert.equal(formatClock(42), "0:42");
+  assert.equal(formatClock(90), "1:30");
+  assert.equal(savedVoiceLabel(42), "Grabación guardada (0:42) / Recording saved (0:42)");
+  assert.equal(savedVoiceLabel(null), "Grabación guardada / Recording saved");
+});
 
 test("preview=1 is the only review-mode switch", () => {
   assert.equal(isPreviewRequest("?preview=1"), true);
@@ -20,6 +32,18 @@ test("preview=1 is the only review-mode switch", () => {
   assert.equal(isPreviewRequest(""), false);
   assert.equal(isPreviewRequest("?preview=0"), false);
   assert.equal(isPreviewRequest("?preview=true"), false);
+  assert.equal(isPreviewRequest("?test=1"), false);
+});
+
+test("test=1 is the only test-mode switch", () => {
+  assert.equal(TEST_MODE_BANNER, "Modo de prueba: nada se envía / Test mode: nothing is sent");
+  assert.equal(isTestRequest("?test=1"), true);
+  assert.equal(isTestRequest("test=1"), true);
+  assert.equal(isTestRequest("?para=Ana&test=1"), true);
+  assert.equal(isTestRequest(""), false);
+  assert.equal(isTestRequest("?test=0"), false);
+  assert.equal(isTestRequest("?test=true"), false);
+  assert.equal(isTestRequest("?preview=1"), false);
 });
 
 test("picks the first supported voice mime, including iPhone audio/mp4", () => {
