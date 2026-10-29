@@ -312,6 +312,148 @@ async function run() {
     else ok("preview cannot submit");
 
     await page.setViewportSize({ width: 1280, height: 900 });
+
+    const iso = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    await iso.addInitScript(() => {
+      window.__recorders = [];
+      window.__recId = 0;
+      window.__gumCalls = 0;
+      window.__stoppedTracks = 0;
+      class LeakyRecorder {
+        constructor(_stream, options) {
+          this.mimeType = options && options.mimeType ? options.mimeType : "audio/webm";
+          this.state = "inactive";
+          this.ondataavailable = null;
+          this.onstop = null;
+          this.ticks = 0;
+          this.id = ++window.__recId;
+          window.__recorders.push(this);
+        }
+        start() {
+          this.state = "recording";
+          const emit = () => {
+            if (this.state !== "recording") return;
+            this.ticks += 1;
+            const data = new Blob([`R${this.id}C${this.ticks}|`], { type: this.mimeType });
+            if (this.ondataavailable) this.ondataavailable({ data });
+          };
+          emit();
+          this._timer = setInterval(emit, 30);
+        }
+        stop() {
+          clearInterval(this._timer);
+          this.state = "inactive";
+          const data = new Blob([`R${this.id}END|`], { type: this.mimeType });
+          if (this.ondataavailable) this.ondataavailable({ data });
+          queueMicrotask(() => {
+            if (this.onstop) this.onstop();
+          });
+        }
+        static isTypeSupported(type) {
+          return type === "audio/webm;codecs=opus" || type === "audio/webm";
+        }
+      }
+      window.MediaRecorder = LeakyRecorder;
+      if (!navigator.mediaDevices) navigator.mediaDevices = {};
+      navigator.mediaDevices.getUserMedia = async () => {
+        window.__gumCalls += 1;
+        const track = {
+          stop() {
+            window.__stoppedTracks += 1;
+          },
+        };
+        return { getTracks: () => [track] };
+      };
+    });
+    const isoPage = await iso.newPage();
+    const isoPosts = [];
+    await isoPage.route("**/*", route => {
+      const req = route.request();
+      if (req.method() === "POST") {
+        isoPosts.push(req.postDataBuffer());
+        return route.fulfill({ status: 200, body: "ok" });
+      }
+      return route.continue();
+    });
+
+    await isoPage.goto(`${BASE}/crooke-7c3a9e12/elizabeth/`, { waitUntil: "networkidle" });
+    if ((await isoPage.locator("audio").count()) !== 5) fail("elizabeth page should have 5 audio players");
+    else ok("elizabeth page has 5 audio players");
+    const elizabethText = await isoPage.locator("body").innerText();
+    if (!elizabethText.includes("pelo de ángel") || !elizabethText.includes("Moca")) fail("elizabeth transcript text missing");
+    else ok("elizabeth transcript is on the page");
+    if (/347[-.\s]?520[-.\s]?9203/.test(elizabethText)) fail("elizabeth page shows a phone number");
+    else ok("elizabeth page hides contact details");
+    const elizabethWide = await isoPage.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    );
+    if (elizabethWide) fail("elizabeth page scrolls sideways on a phone");
+    else ok("elizabeth page does not scroll sideways");
+    await isoPage.getByRole("button", { name: "ES" }).click();
+    const spanishBio = await isoPage.locator("body").innerText();
+    if (!spanishBio.includes("nació en Moca") || !spanishBio.includes("tobogán")) fail("spanish chapter did not switch");
+    else ok("elizabeth chapter switches to Spanish");
+
+    await isoPage.goto(PAGE, { waitUntil: "networkidle" });
+    await isoPage.getByRole("button", { name: "Siguiente" }).click();
+    await isoPage.locator("#f_name").fill("Ana");
+    await isoPage.getByRole("button", { name: "Siguiente" }).click();
+    await isoPage.getByRole("heading", { name: "Sobre ti y tu niñez" }).waitFor();
+    await isoPage.getByRole("button", { name: "Hablar" }).click();
+    await isoPage.waitForFunction(() => window.__recorders.some(r => r.state === "recording" && r.ticks >= 2));
+    await isoPage.getByRole("button", { name: "Siguiente" }).click();
+    await isoPage.getByRole("heading", { name: "Padres" }).waitFor();
+    const afterLeave = await isoPage.evaluate(() => ({
+      recording: window.__recorders.filter(r => r.state === "recording").length,
+      gum: window.__gumCalls,
+      stopped: window.__stoppedTracks,
+    }));
+    if (afterLeave.recording !== 0 || afterLeave.gum !== 1 || afterLeave.stopped < 1) {
+      fail(`recorder kept running after leaving the question: ${JSON.stringify(afterLeave)}`);
+    } else ok("leaving a question stops that take and its mic track");
+
+    await isoPage.getByRole("button", { name: "Hablar" }).click();
+    await isoPage.waitForFunction(() => window.__recorders.filter(r => r.state === "recording").length === 1 && window.__recorders.some(r => r.ticks >= 2));
+    await isoPage.getByRole("button", { name: "Detener" }).click();
+    await isoPage.getByText("Audio listo para enviar").waitFor();
+    await isoPage.getByRole("button", { name: "Grabar de nuevo" }).click();
+    await isoPage.waitForFunction(() => {
+      const live = window.__recorders.filter(r => r.state === "recording");
+      return live.length === 1 && live[0].ticks >= 2 && window.__recorders.length === 3;
+    });
+    await isoPage.getByRole("button", { name: "Detener" }).click();
+    await isoPage.getByText("Audio listo para enviar").waitFor();
+    const replaced = await isoPage.evaluate(() => ({
+      recording: window.__recorders.filter(r => r.state === "recording").length,
+      gum: window.__gumCalls,
+      stopped: window.__stoppedTracks,
+    }));
+    if (replaced.recording !== 0 || replaced.gum !== 3 || replaced.stopped < 3) {
+      fail(`re-record did not isolate takes: ${JSON.stringify(replaced)}`);
+    } else ok("each question starts a fresh recorder and stops the previous tracks");
+
+    for (let i = 0; i < 8; i++) {
+      const skip = isoPage.getByRole("button", { name: "Saltar" });
+      if (await skip.count()) await skip.click();
+      else break;
+    }
+    await isoPage.getByRole("heading", { name: "¿Listo para enviar?" }).waitFor();
+    await isoPage.getByRole("button", { name: "Enviar" }).click();
+    await isoPage.waitForURL("**/thank-you.html");
+    if (isoPosts.length !== 1) fail(`isolation submit count ${isoPosts.length}`);
+    else {
+      const body = isoPosts[0].toString("latin1");
+      const keptFirst = body.includes("R1END|");
+      const droppedRerecord = !body.includes("R2C") && !body.includes("R2END|");
+      const keptReplacement = body.includes("R3END|");
+      const aboutFile = body.includes('name="voice_about_you"') && body.includes("voice_about_you.webm");
+      const parentFile = body.includes('name="voice_parents"') && body.includes("voice_parents.webm");
+      if (!keptFirst || !droppedRerecord || !keptReplacement || !aboutFile || !parentFile) {
+        fail(
+          `takes were mixed or mis-filed (R1=${keptFirst} noR2=${droppedRerecord} R3=${keptReplacement} about=${aboutFile} parents=${parentFile})`,
+        );
+      } else ok("re-record replaces the take and each file stays on its question");
+    }
   } finally {
     await browser.close();
     server.kill();

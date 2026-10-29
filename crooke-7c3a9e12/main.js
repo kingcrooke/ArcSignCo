@@ -6,18 +6,37 @@ const PEOPLE = [
     living: false,
     nameEn: '[MOREL ANCESTOR — TO BE ADDED]',
     nameEs: '[ANTEPASADO MOREL — POR AÑADIR]',
-    noteEn: 'Placeholder branch above Mary Thelma Morel de Crooke.',
-    noteEs: 'Rama provisional sobre Mary Thelma Morel de Crooke.',
+    noteEn: 'Placeholder branch above Mary Thelma Morel de Crooke. Elizabeth’s interview does not name Mami’s parents.',
+    noteEs: 'Rama provisional sobre Mary Thelma Morel de Crooke. La entrevista de Elizabeth no nombra a los padres de Mami.',
     source: 'not-asked',
   },
   {
-    id: 'crooke-ancestor',
+    id: 'crooke-grandfather',
     living: false,
-    nameEn: '[CROOKE ANCESTOR — TO BE ADDED]',
-    nameEs: '[ANTEPASADO CROOKE — POR AÑADIR]',
-    noteEn: 'Placeholder branch above Charles Crooke.',
-    noteEs: 'Rama provisional sobre Charles Crooke.',
-    source: 'not-asked',
+    nameEn: 'Crooke grandfather',
+    nameEs: 'Abuelo Crooke',
+    tagEn: 'Name not recorded',
+    tagEs: 'Nombre no registrado',
+    noteEn:
+      'English-speaking Black Caribbean chef in the Trujillo era. Elizabeth says the family may have been in textiles (?), that they settled in the Caribbean (radicaron ?), that he met her grandmother in the Dominican Republic, did not adjust to the country, and left three children: Charles, Ana Luisa, and Georgie. No dates recorded.',
+    noteEs:
+      'Chef caribeño de habla inglesa, negro, en la época de Trujillo. Elizabeth dice que la familia pudo ser textilera (?), que se radicaron (?) en el Caribe, que él conoció a su abuela en la República Dominicana, no se acostumbró al país y dejó tres hijos: Charles, Ana Luisa y Georgie. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'tavarez-grandmother',
+    living: false,
+    nameEn: 'Tavárez (?) grandmother',
+    nameEs: 'Abuela Tavárez (?)',
+    tagEn: 'Name not recorded',
+    tagEs: 'Nombre no registrado',
+    noteEn:
+      'Paternal grandmother, of the Tavárez (?) family. Elizabeth connects them with the historic Tavárez Justo (?) family. They lived around La México (?). No dates recorded.',
+    noteEs:
+      'Abuela paterna, de la familia Tavárez (?). Elizabeth la relaciona con la familia histórica Tavárez Justo (?). Vivían por La México (?). Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
   },
   {
     id: 'charles',
@@ -27,9 +46,12 @@ const PEOPLE = [
     nameEs: 'Charles Crooke',
     tagEn: 'In memoriam',
     tagEs: 'En memoria',
-    noteEn: 'Memorial chapter holds tributes. Dates: [DATES — TO BE ADDED].',
-    noteEs: 'El capítulo memorial guarda tributos. Fechas: [FECHAS — POR AÑADIR].',
-    source: 'not-asked',
+    noteEn:
+      'Elizabeth remembers her father as a great dancer. He was born and raised in a barrio near La México (?) whose name she could not recall. He was not very involved in her dance career at first and accepted it later. He died about six years before her October 2026 interview. Exact dates: [DATES — TO BE ADDED].',
+    noteEs:
+      'Elizabeth recuerda a su padre como un gran bailarín. Nació y se crio en un barrio cerca de La México (?) cuyo nombre no pudo recordar. Al principio no estuvo muy metido en su carrera de danza y después lo aceptó. Murió unos seis años antes de la entrevista de octubre de 2026. Fechas exactas: [FECHAS — POR AÑADIR].',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
   },
   {
     id: 'mami',
@@ -38,9 +60,64 @@ const PEOPLE = [
     nameEs: "Mary Thelma Morel de Crooke ('Mami')",
     tagEn: 'Living — private details omitted',
     tagEs: 'Viva — sin datos sensibles',
-    noteEn: 'Oral history and recipes to be gathered with her consent.',
-    noteEs: 'Historias y recetas por recoger con su consentimiento.',
-    source: 'not-asked',
+    noteEn:
+      'Elizabeth’s mother, and the main support for her dance career. She kept the December traditions: new clothes for Christmas, Three Kings’ Day gifts, and a twig tree with cotton and angel hair (pelo de ángel). Elizabeth hopes to interview her next.',
+    noteEs:
+      'Madre de Elizabeth y el apoyo principal de su carrera de danza. Mantuvo las tradiciones de diciembre: ropa nueva para Navidad, regalos de Reyes y un árbol de palitos con algodón y pelo de ángel. Elizabeth quiere entrevistarla después.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'ana-luisa',
+    living: false,
+    nameEn: 'Ana Luisa',
+    nameEs: 'Ana Luisa',
+    tagEn: 'Sister of Charles',
+    tagEs: 'Hermana de Charles',
+    noteEn: 'Paternal aunt. With Mami and Manuel, she supported Elizabeth’s dance career. Married to Manuel. No dates recorded.',
+    noteEs: 'Tía paterna. Junto con Mami y Manuel, apoyó la carrera de danza de Elizabeth. Casada con Manuel. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'manuel',
+    living: false,
+    deceased: true,
+    nameEn: 'Manuel',
+    nameEs: 'Manuel',
+    tagEn: 'In memoriam · husband of Ana Luisa',
+    tagEs: 'En memoria · esposo de Ana Luisa',
+    noteEn: 'Uncle by marriage. Elizabeth has lovely memories of him and names him among those who supported her dancing. No dates recorded.',
+    noteEs: 'Tío político. Elizabeth guarda lindos recuerdos de él y lo cuenta entre quienes apoyaron su danza. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'georgie',
+    living: false,
+    nameEn: 'Georgie',
+    nameEs: 'Georgie',
+    tagEn: 'Brother of Charles',
+    tagEs: 'Hermano de Charles',
+    noteEn: 'Paternal uncle. One of the three children the Crooke grandfather left in the Dominican Republic. No dates recorded.',
+    noteEs: 'Tío paterno. Uno de los tres hijos que el abuelo Crooke dejó en la República Dominicana. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'charlie',
+    living: false,
+    deceased: true,
+    nameEn: "Charlie ('Cheche' ?)",
+    nameEs: "Charlie ('Cheche' ?)",
+    tagEn: 'In memoriam · half-brother',
+    tagEs: 'En memoria · medio hermano',
+    noteEn:
+      'Elizabeth’s older half-brother on her father’s side. She gives the names Charlie and Cheche (?). The other parent is not recorded. No dates recorded.',
+    noteEs:
+      'Medio hermano mayor de Elizabeth, por parte de su padre. Ella da los nombres Charlie y Cheche (?). El otro padre o la otra madre no está registrado. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
   },
   {
     id: 'jesus',
@@ -49,8 +126,8 @@ const PEOPLE = [
     nameEs: 'Jesus Crooke',
     tagEn: 'Living — site steward',
     tagEs: 'Vivo — custodio del sitio',
-    noteEn: '[BIO — TO BE ADDED]',
-    noteEs: '[BIOGRAFÍA — POR AÑADIR]',
+    noteEn: 'Brother of Elizabeth and Yodernis. [BIO — TO BE ADDED]',
+    noteEs: 'Hermano de Elizabeth y Yodernis. [BIOGRAFÍA — POR AÑADIR]',
     source: 'not-asked',
   },
   {
@@ -60,9 +137,13 @@ const PEOPLE = [
     nameEs: 'Elizabeth Crooke',
     tagEn: 'Living — private details omitted',
     tagEs: 'Viva — sin datos sensibles',
-    noteEn: '[BIO — TO BE ADDED]',
-    noteEs: '[BIOGRAFÍA — POR AÑADIR]',
-    source: 'not-asked',
+    noteEn:
+      'Sister of Jesus. Born in Moca, Dominican Republic, barrio Roque (?). Dance career, supported above all by Mami, Ana Luisa, and Manuel. Her chapter holds the interview.',
+    noteEs:
+      'Hermana de Jesus. Nació en Moca, República Dominicana, barrio Roque (?). Carrera de danza, con apoyo sobre todo de Mami, Ana Luisa y Manuel. Su capítulo guarda la entrevista.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+    page: '/crooke-7c3a9e12/elizabeth/',
   },
   {
     id: 'yodernis',
@@ -71,9 +152,50 @@ const PEOPLE = [
     nameEs: 'Yodernis Crooke',
     tagEn: 'Living — private details omitted',
     tagEs: 'Viva — sin datos sensibles',
-    noteEn: '[BIO — TO BE ADDED]',
-    noteEs: '[BIOGRAFÍA — POR AÑADIR]',
+    noteEn: 'Sister of Jesus and Elizabeth. [BIO — TO BE ADDED]',
+    noteEs: 'Hermana de Jesus y Elizabeth. [BIOGRAFÍA — POR AÑADIR]',
     source: 'not-asked',
+  },
+  {
+    id: 'cecilia',
+    living: false,
+    nameEn: 'Tía Cecilia',
+    nameEs: 'Tía Cecilia',
+    tagEn: 'Branch not recorded',
+    tagEs: 'Rama no registrada',
+    noteEn:
+      'Aunt in Moca and mother of cousins Elizabeth grew up near, including Yencenia (?). Which side of the family is not recorded, so she is not tied to a parent here.',
+    noteEs:
+      'Tía en Moca y madre de primas con las que Elizabeth creció, entre ellas Yencenia (?). No se registró de qué lado de la familia, así que aquí no se ata a un padre o una madre.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'yencenia',
+    living: false,
+    nameEn: 'Yencenia (?)',
+    nameEs: 'Yencenia (?)',
+    tagEn: 'Cousin in Moca · branch not recorded',
+    tagEs: 'Prima en Moca · rama no registrada',
+    noteEn:
+      'Daughter of Tía Cecilia, about Elizabeth’s age when they were children in Moca. They drifted apart as their schooling and upbringing diverged. The name is uncertain. No dates recorded.',
+    noteEs:
+      'Hija de tía Cecilia, más o menos de la edad de Elizabeth cuando eran niñas en Moca. Se fueron alejando porque la educación y la formación se separaron. El nombre es incierto. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
+  },
+  {
+    id: 'hilda',
+    living: false,
+    nameEn: 'Tía Hilda',
+    nameEs: 'Tía Hilda',
+    tagEn: 'Branch not recorded',
+    tagEs: 'Rama no registrada',
+    noteEn: 'Aunt Elizabeth hopes to interview, so she can talk about her own childhood. Side of the family not recorded. No dates recorded.',
+    noteEs:
+      'Tía a quien Elizabeth quiere entrevistar, para que hable de su propia infancia. No se registró de qué lado de la familia. Sin fechas registradas.',
+    source: 'told',
+    sourceWho: 'Elizabeth Crooke',
   },
 ];
 
@@ -88,6 +210,7 @@ const I18N = {
     'nav.memorial': 'Memorial',
     'nav.recipes': 'Recipes & Stories',
     'nav.vault': 'Vault',
+    'nav.elizabeth': 'Elizabeth',
     'nav.interview': 'Share your story',
     'lang.en': 'EN',
     'lang.es': 'ES',
@@ -101,6 +224,9 @@ const I18N = {
     'home.blazon': 'Emblem symbolism and blazon: [BLAZON — TO BE ADDED]',
     'home.disclaimer':
       'Crest artwork: art coming from Build. Every fact on this site carries an archive source label.',
+    'home.elizabeth':
+      'Elizabeth Crooke, sister of Jesus and daughter of Mami and the late Charles Crooke, recorded her interview on 26 October 2026. She talks about growing up in Moca, her dance career, and the Crooke grandfather who cooked in the Trujillo era.',
+    'home.elizabeth.link': 'Her chapter',
     'source.told': 'Told by {name}',
     'source.paper': 'Paper we hold',
     'source.notAsked': 'Not yet asked',
@@ -110,14 +236,18 @@ const I18N = {
     'book.ch1': 'Prologue — why this archive exists',
     'book.ch2': 'Mary Thelma Morel de Crooke (Mami)',
     'book.ch3': 'Charles Crooke — remembrance',
-    'book.ch4': 'Siblings — Elizabeth & Yodernis',
+    'book.ch4': 'Elizabeth Crooke — voice and memories',
+    'book.yodernis': 'Yodernis Crooke — [CHAPTER — TO BE ADDED]',
     'book.ch5': 'Morel roots (Dominican line)',
     'book.ch6': 'Crooke roots',
     'book.ch7': 'Migration stories',
     'book.ch8': 'Kitchen & table',
     'book.body.placeholder': '[CHAPTER TEXT — TO BE ADDED]',
     'tree.title': 'Interactive family tree',
-    'tree.hint': 'Tap a name to see notes. Ancestors above Charles and Mami are placeholders only.',
+    'tree.hint':
+      'Tap a name to see notes. The Morel ancestor above Mami is still a placeholder. The last row is named by Elizabeth; their branch is not recorded, so they are not tied to a parent.',
+    'tree.unplaced': 'Named by Elizabeth. Branch not recorded — not tied to a parent.',
+    'tree.open': 'Open her chapter',
     'tree.detail.title': 'Profile notes',
     'tree.detail.empty': 'Select a family member in the tree.',
     'origins.title': 'Two origin tracks',
@@ -127,6 +257,8 @@ const I18N = {
     'origins.crooke.title': 'Crooke track',
     'origins.crooke.body':
       'Crooke family line through Charles Crooke. Places, names, and stories: [CROOKE ORIGINS — TO BE RESEARCHED].',
+    'origins.crooke.elizabeth':
+      'Elizabeth says her Crooke grandfather was an English-speaking Black Caribbean chef in the Trujillo era. He met her Tavárez (?) grandmother in the Dominican Republic, did not adjust, and left three children: Charles, Ana Luisa, and Georgie. They lived around La México (?). No dates recorded.',
     'origins.map': 'Migration map: [ROUTES — TO BE ADDED] (no coordinates until verified).',
     'memorial.title': 'In memory of Charles Crooke',
     'memorial.lead':
@@ -135,19 +267,23 @@ const I18N = {
       'Photo mosaic: art coming from Build · [PHOTOS — TO BE ADDED] (no family scans on this shareable page)',
     'memorial.timeline': 'Life timeline: [EVENTS — TO BE ADDED]',
     'memorial.tribute': 'Family tributes: [TRIBUTES — TO BE ADDED]',
+    'memorial.elizabeth':
+      'Elizabeth remembers her father as a great dancer. He died about six years before she recorded her interview in October 2026. Exact dates are still not recorded.',
     'recipes.title': 'Recipes & stories',
     'recipes.lead': 'Kitchen chapter excerpts and short oral-history clips (transcripts required).',
     'recipes.r1': '[RECIPE NAME — TO BE ADDED]',
     'recipes.r2': '[STORY TITLE — TO BE ADDED]',
     'recipes.r3': '[RECIPE NAME — TO BE ADDED]',
+    'recipes.elizabeth':
+      'Family recipes — Elizabeth said there are many more. The one she started to tell was in a part of the recording that did not survive.',
     'vault.title': 'Document vault',
     'vault.lead':
       'Scans, audio, and albums will be linked here when ready — never committed to the public git repo. Password protection is planned for a later phase.',
     'vault.status': '[VAULT — COMING SOON]',
     'vault.policy':
-      'No birthdates, street addresses, document numbers, DNA results, or photo scans on shareable pages. Originals stay offline or in a future private vault.',
+      'No birthdates, phone numbers, email addresses, street addresses, document numbers, DNA results, or photo scans on shareable pages. Originals stay offline or in a future private vault.',
     'footer.privacy':
-      'Privacy: no birthdates, addresses, document numbers, DNA, or photo scans on these pages; family photos and scans are not stored in the public repository. Do not share this URL publicly.',
+      'Privacy: no birthdates, phone numbers, email addresses, street addresses, document numbers, DNA, or photo scans on these pages; family photos and scans are not stored in the public repository. Do not share this URL publicly.',
     'footer.steward': 'Family steward: Jesus Crooke',
   },
   es: {
@@ -160,6 +296,7 @@ const I18N = {
     'nav.memorial': 'Memorial',
     'nav.recipes': 'Recetas e historias',
     'nav.vault': 'Archivo',
+    'nav.elizabeth': 'Elizabeth',
     'nav.interview': 'Comparte tu historia',
     'lang.en': 'EN',
     'lang.es': 'ES',
@@ -173,6 +310,9 @@ const I18N = {
     'home.blazon': 'Simbolismo del emblema y blasón: [BLASÓN — POR AÑADIR]',
     'home.disclaimer':
       'Arte del escudo: art coming from Build. Cada dato en el sitio lleva una etiqueta de fuente de archivo.',
+    'home.elizabeth':
+      'Elizabeth Crooke, hermana de Jesus e hija de Mami y del fallecido Charles Crooke, grabó su entrevista el 26 de octubre de 2026. Habla de crecer en Moca, de su carrera de danza y del abuelo Crooke que cocinaba en la época de Trujillo.',
+    'home.elizabeth.link': 'Su capítulo',
     'source.told': 'Lo contó {name}',
     'source.paper': 'Documento en familia',
     'source.notAsked': 'Aún no preguntado',
@@ -182,14 +322,18 @@ const I18N = {
     'book.ch1': 'Prólogo — por qué existe este archivo',
     'book.ch2': 'Mary Thelma Morel de Crooke (Mami)',
     'book.ch3': 'Charles Crooke — recuerdo',
-    'book.ch4': 'Hermanas — Elizabeth y Yodernis',
+    'book.ch4': 'Elizabeth Crooke — voz y recuerdos',
+    'book.yodernis': 'Yodernis Crooke — [CAPÍTULO — POR AÑADIR]',
     'book.ch5': 'Raíces Morel (línea dominicana)',
     'book.ch6': 'Raíces Crooke',
     'book.ch7': 'Historias de migración',
     'book.ch8': 'Cocina y mesa',
     'book.body.placeholder': '[TEXTO DEL CAPÍTULO — POR AÑADIR]',
     'tree.title': 'Árbol familiar interactivo',
-    'tree.hint': 'Toca un nombre para ver notas. Los antepasados sobre Charles y Mami son provisionales.',
+    'tree.hint':
+      'Toca un nombre para ver notas. El antepasado Morel sobre Mami sigue siendo provisional. La última fila la nombró Elizabeth; no se registró su rama, así que no se atan a un padre o una madre.',
+    'tree.unplaced': 'Los nombró Elizabeth. Rama no registrada: no se atan a un padre o una madre.',
+    'tree.open': 'Abrir su capítulo',
     'tree.detail.title': 'Notas del perfil',
     'tree.detail.empty': 'Elige un familiar en el árbol.',
     'origins.title': 'Dos líneas de origen',
@@ -199,6 +343,8 @@ const I18N = {
     'origins.crooke.title': 'Línea Crooke',
     'origins.crooke.body':
       'Línea Crooke a través de Charles Crooke. Lugares, nombres e historias: [ORÍGENES CROOKE — POR INVESTIGAR].',
+    'origins.crooke.elizabeth':
+      'Elizabeth cuenta que su abuelo Crooke fue un chef caribeño de habla inglesa, negro, en la época de Trujillo. Conoció a su abuela Tavárez (?) en la República Dominicana, no se acostumbró y dejó tres hijos: Charles, Ana Luisa y Georgie. Vivían por La México (?). Sin fechas registradas.',
     'origins.map': 'Mapa de migración: [RUTAS — POR AÑADIR] (sin coordenadas hasta verificar).',
     'memorial.title': 'En memoria de Charles Crooke',
     'memorial.lead':
@@ -207,19 +353,23 @@ const I18N = {
       'Mosaico de fotos: art coming from Build · [FOTOS — POR AÑADIR] (sin escaneos familiares en esta página compartible)',
     'memorial.timeline': 'Línea de vida: [EVENTOS — POR AÑADIR]',
     'memorial.tribute': 'Tributos familiares: [TRIBUTOS — POR AÑADIR]',
+    'memorial.elizabeth':
+      'Elizabeth recuerda a su padre como un gran bailarín. Murió unos seis años antes de que ella grabara su entrevista, en octubre de 2026. Las fechas exactas siguen sin registrarse.',
     'recipes.title': 'Recetas e historias',
     'recipes.lead': 'Extractos de cocina y relatos breves (con transcripción).',
     'recipes.r1': '[NOMBRE DE RECETA — POR AÑADIR]',
     'recipes.r2': '[TÍTULO DE HISTORIA — POR AÑADIR]',
     'recipes.r3': '[NOMBRE DE RECETA — POR AÑADIR]',
+    'recipes.elizabeth':
+      'Recetas de la familia — Elizabeth dijo que hay muchísimas más. La que empezó a contar estaba en un tramo de la grabación que no sobrevivió.',
     'vault.title': 'Archivo documental',
     'vault.lead':
       'Aquí enlazaremos escaneos, audio y álbumes cuando estén listos — nunca en el repositorio git público. Contraseña en una fase posterior.',
     'vault.status': '[ARCHIVO — PRÓXIMAMENTE]',
     'vault.policy':
-      'Sin fechas de nacimiento, direcciones, números de documento, ADN ni escaneos de fotos en páginas compartibles. Los originales quedan fuera de línea o en un archivo privado futuro.',
+      'Sin fechas de nacimiento, teléfonos, correos, direcciones, números de documento, ADN ni escaneos de fotos en páginas compartibles. Los originales quedan fuera de línea o en un archivo privado futuro.',
     'footer.privacy':
-      'Privacidad: sin fechas de nacimiento, direcciones, números de documento, ADN ni escaneos en estas páginas; fotos y escaneos familiares no se guardan en el repositorio público. No compartas esta URL en público.',
+      'Privacidad: sin fechas de nacimiento, teléfonos, correos, direcciones, números de documento, ADN ni escaneos en estas páginas; fotos y escaneos familiares no se guardan en el repositorio público. No compartas esta URL en público.',
     'footer.steward': 'Custodio familiar: Jesus Crooke',
   },
 };
@@ -304,7 +454,7 @@ function renderTree() {
       .map(id => {
         const p = personById(id);
         if (!p) return '';
-        const dead = p.deceased || (!p.living && !id.includes('ancestor'));
+        const dead = p.deceased === true;
         return `<button type="button" class="tree-node${dead ? ' deceased' : ''}${selectedPersonId === id ? ' is-selected' : ''}" data-person="${id}">
           <span class="name">${personLabel(p)}</span>
           <span class="tag">${personTag(p)}</span>
@@ -316,11 +466,13 @@ function renderTree() {
 
   mount.innerHTML = `
     <div class="tree-canvas">
-      ${row(['morel-ancestor', 'crooke-ancestor'])}
+      ${row(['morel-ancestor', 'crooke-grandfather', 'tavarez-grandmother'])}
       <div class="tree-connector" aria-hidden="true"></div>
-      ${row(['mami', 'charles'])}
+      ${row(['mami', 'charles', 'ana-luisa', 'manuel', 'georgie'])}
       <div class="tree-connector" aria-hidden="true"></div>
-      ${row(['jesus', 'elizabeth', 'yodernis'])}
+      ${row(['charlie', 'jesus', 'elizabeth', 'yodernis'])}
+      <p class="tree-branch-label">${t('tree.unplaced')}</p>
+      ${row(['cecilia', 'yencenia', 'hilda'], 'tree-row--unplaced')}
     </div>
   `;
 
@@ -337,7 +489,8 @@ function showPersonDetail(id) {
   const note = lang === 'es' ? p.noteEs : p.noteEn;
   const src = p.source || 'not-asked';
   const who = p.sourceWho || '';
-  box.innerHTML = `${sourceTagHtml(src, who)}<p><strong>${personLabel(p)}</strong></p><p>${note}</p>`;
+  const link = p.page ? `<p><a href="${p.page}">${t('tree.open')}</a></p>` : '';
+  box.innerHTML = `${sourceTagHtml(src, who)}<p><strong>${personLabel(p)}</strong></p><p>${note}</p>${link}`;
   renderTree();
 }
 
