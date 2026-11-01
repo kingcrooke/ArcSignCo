@@ -111,8 +111,15 @@ async function run() {
     if (!nav.includes("Entrevista")) fail(`nav ${nav}`);
     else ok("short nav label");
     const visible = await page.locator("body").innerText();
-    if (!visible.includes("← Libro de la familia")) fail("back link label");
-    else ok("family book back link");
+    if (!visible.includes("Entrevista privada")) fail("neutral footer missing");
+    else ok("neutral footer");
+    if (await page.locator('a[href="/crooke-7c3a9e12/"]').count()) fail("interview still links to the book");
+    else ok("interview has no book link");
+    if ((await page.locator(".brand-monogram").innerText()).trim() !== "M") fail("interview monogram");
+    else ok("interview monogram is M");
+    if (/Build/.test(await page.locator(".brand-mark").innerText())) fail("Build placeholder remains on the interview");
+    else ok("interview logo is not Build");
+    await page.screenshot({ path: "/opt/cursor/artifacts/interview_normal.png" });
     if (/crooke/i.test(visible)) fail("visible copy still mentions Crooke");
     else ok("visible copy omits Crooke");
 
@@ -130,6 +137,16 @@ async function run() {
     if (!(await page.locator(".voice-upload-label").innerText()).includes("Subir nota de voz / Upload a voice memo")) {
       fail("upload label");
     } else ok("bilingual upload label");
+    const room = await page.locator(".record-room").allInnerTexts();
+    const roomText = room.join(" ");
+    if (!roomText.includes("90 segundos") || !roomText.includes("90 seconds") || !/MB/.test(roomText)) {
+      fail(`recording room copy missing: ${roomText}`);
+    } else ok("recording room is described in plain words");
+    if (!(await page.locator(".audio-fallback").innerText()).includes("Si el micrófono no funciona")) {
+      fail("upload hint missing on a working recorder");
+    } else ok("empty WhatsApp number points at the upload");
+    if (await page.locator("a.btn-wa").count()) fail("WhatsApp button visible with an empty number");
+    else ok("WhatsApp button stays hidden");
     const wide = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
     if (wide) fail("question step scrolls sideways");
     else ok("mobile question does not scroll sideways");
@@ -232,6 +249,8 @@ async function run() {
     else ok("thank-you is general");
     if (!thanks.includes("libro de la familia") || !thanks.includes("the family book")) fail("thank-you book wording");
     else ok("thank-you says the family book");
+    if (await page.locator('a[href="/crooke-7c3a9e12/"]').count()) fail("thank-you still links to the book");
+    else ok("thank-you has no book link");
 
     if (posts.length !== 1) fail(`expected 1 submit, got ${posts.length}`);
     else {
@@ -275,8 +294,13 @@ async function run() {
     if (!deniedText.includes("Permiso de micrófono denegado") || !deniedText.includes("Microphone permission was denied")) {
       fail("mic denial is not bilingual");
     } else ok("mic denial is bilingual");
-    if (!deniedText.includes("O envíala por WhatsApp a quien te compartió este enlace.")) fail("WhatsApp fallback missing");
-    else ok("WhatsApp fallback without an email");
+    if (!deniedText.includes("Si el micrófono no funciona, puedes subir un archivo de audio aquí")) {
+      fail("Spanish upload hint missing");
+    } else if (!deniedText.includes("If the mic doesn't work, you can upload an audio file here")) {
+      fail("English upload hint missing");
+    } else ok("mic fallback points at the audio upload");
+    if (await deniedPage.locator("a.btn-wa").count()) fail("WhatsApp button shows without a number");
+    else ok("WhatsApp button hidden while the number is empty");
     if ((await deniedPage.locator("[data-voice-upload]").count()) !== 1) fail("upload missing after denial");
     else ok("upload remains after mic denial");
 
@@ -398,6 +422,181 @@ async function run() {
     await testPage.waitForTimeout(300);
     if (testPosts.length || /thank-you/.test(testPage.url())) fail("test mode submitted a form");
     else ok("test mode cannot submit");
+
+    await testPage.getByRole("button", { name: "Simular error de envío" }).click();
+    await testPage.locator(".send-error").waitFor();
+    const simulatedError = await testPage.locator(".send-error").innerText();
+    if (!simulatedError.includes("No se pudo enviar") || !simulatedError.includes("Your answers are still here")) {
+      fail(`simulated error copy: ${simulatedError}`);
+    } else ok("test mode previews the send error");
+    if (await testPage.locator("[data-nav='submit']").count()) fail("simulated error added a submit control");
+    else ok("simulated error does not submit");
+
+    await testPage.getByRole("button", { name: "Simular aviso de tamaño" }).click();
+    await testPage.locator(".size-warn").first().waitFor();
+    const sizeCopy = await testPage.locator("#wizard-mount").innerText();
+    if (!sizeCopy.includes("Te estás acercando al límite de 8 MB") || !sizeCopy.includes("getting close to the 8 MB limit")) {
+      fail("size warning missing");
+    } else if (!sizeCopy.includes("se enviará en 2 partes") || !sizeCopy.includes("sent in 2 parts")) {
+      fail("split warning missing");
+    } else ok("test mode previews the size warning");
+    await testPage.screenshot({ path: "/opt/cursor/artifacts/interview_size_warning.png" });
+
+    await testPage.getByRole("button", { name: "Simular envío en partes" }).click();
+    await testPage.getByText("Enviando parte 1 de 2").waitFor();
+    await testPage.getByText("Enviando parte 2 de 2").waitFor();
+    await testPage.getByText("Modo de prueba: no se envió nada.").waitFor();
+    if (testPosts.length || /thank-you/.test(testPage.url())) fail("split preview sent the form");
+    else ok("split preview stays on the page and does not send");
+
+    await testPage.getByRole("button", { name: "Simular respuestas guardadas" }).click();
+    await testPage.locator("#resume-prompt").waitFor();
+    const simulatedResume = await testPage.locator("#resume-text").innerText();
+    if (!simulatedResume.includes("Tienes respuestas guardadas de Ana") || !simulatedResume.includes("You have saved answers from Ana")) {
+      fail(`simulated resume: ${simulatedResume}`);
+    } else ok("test mode previews the resume prompt");
+    await testPage.getByRole("button", { name: "Continuar / Continue" }).click();
+    if (await testPage.locator("#resume-prompt").isVisible()) fail("continue left the simulated prompt open");
+    else ok("simulated resume can be dismissed");
+    if (testPosts.length) fail("test previews posted the form");
+    else ok("test previews never submit");
+
+    const failedPosts = [];
+    const failedCtx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const failedPage = await failedCtx.newPage();
+    await failedPage.route("**/*", route => {
+      if (route.request().method() === "POST") {
+        failedPosts.push(route.request().url());
+        const status = failedPosts.length === 1 ? 500 : 200;
+        return route.fulfill({ status, body: status === 200 ? "ok" : "no" });
+      }
+      return route.continue();
+    });
+    await failedPage.goto(PAGE, { waitUntil: "domcontentloaded" });
+    await failedPage.getByRole("button", { name: "Siguiente" }).click();
+    await failedPage.locator("#f_name").fill("Ana");
+    await failedPage.getByRole("button", { name: "Siguiente" }).click();
+    for (let i = 0; i < 9; i++) {
+      const skip = failedPage.getByRole("button", { name: "Saltar" });
+      if (await skip.count()) await skip.click();
+      else break;
+    }
+    await failedPage.getByRole("heading", { name: "¿Listo para enviar?" }).waitFor();
+    await failedPage.getByRole("button", { name: "Enviar" }).click();
+    await failedPage.locator(".send-error").waitFor();
+    const errorText = await failedPage.locator(".send-error").innerText();
+    if (!errorText.includes("No se pudo enviar. Tus respuestas siguen aquí.") || !errorText.includes("We couldn't send this. Your answers are still here.")) {
+      fail(`real send error: ${errorText}`);
+    } else ok("a non-2xx response keeps the answers and explains the failure");
+    if (/thank-you/.test(failedPage.url())) fail("failed send opened the thank-you page");
+    else ok("failed send stays on the interview");
+    if (!(await failedPage.getByText("Ana").count())) fail("failed send dropped the name");
+    else ok("failed send keeps the name");
+    await failedPage.screenshot({ path: "/opt/cursor/artifacts/interview_error.png" });
+    await failedPage.getByRole("button", { name: "Reintentar / Retry" }).click();
+    await failedPage.waitForURL("**/thank-you.html");
+    if (failedPosts.length !== 2) fail(`retry count ${failedPosts.length}`);
+    else ok("retry sends again and the 2xx response opens thanks");
+
+    const resumeCtx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const resumePage = await resumeCtx.newPage();
+    await resumePage.goto(PAGE, { waitUntil: "domcontentloaded" });
+    await resumePage.evaluate(async () => {
+      localStorage.setItem(
+        "crooke-interview-wizard-v2",
+        JSON.stringify({
+          lang: "es",
+          stepIndex: 2,
+          state: {
+            your_name: "Luis",
+            about_you: "crecí en el barrio",
+            relatives: [
+              { name: "", relation: "", note: "" },
+              { name: "", relation: "", note: "" },
+              { name: "", relation: "", note: "" },
+            ],
+          },
+          voiceMeta: { voice_about_you: { size: 5, type: "audio/webm" } },
+          savedAt: Date.now(),
+        }),
+      );
+      await new Promise((resolve, reject) => {
+        const req = indexedDB.open("crooke-interview-media", 1);
+        req.onupgradeneeded = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains("files")) db.createObjectStore("files");
+        };
+        req.onsuccess = () => {
+          const db = req.result;
+          const tx = db.transaction("files", "readwrite");
+          tx.objectStore("files").put(new Blob(["nota"]), "voice_about_you");
+          tx.oncomplete = () => {
+            db.close();
+            resolve();
+          };
+          tx.onerror = () => reject(tx.error);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    });
+    await resumePage.reload({ waitUntil: "domcontentloaded" });
+    await resumePage.locator("#resume-text").waitFor();
+    const resumeText = await resumePage.locator("#resume-text").innerText();
+    if (!resumeText.includes("Tienes respuestas guardadas de Luis") || !resumeText.includes("You have saved answers from Luis")) {
+      fail(`resume prompt: ${resumeText}`);
+    } else ok("reload offers to continue a saved draft");
+    await resumePage.screenshot({ path: "/opt/cursor/artifacts/interview_resume_prompt.png" });
+    await resumePage.getByRole("button", { name: "Continuar / Continue" }).click();
+    await resumePage.getByRole("heading", { name: "Sobre ti y tu niñez" }).waitFor();
+    const restored = await resumePage.locator("#f_field").inputValue();
+    if (restored !== "crecí en el barrio") fail(`restored answer: ${restored}`);
+    else ok("continue restores the saved answer");
+    await resumePage.locator(".record-saved").waitFor();
+    ok("continue restores the saved recording");
+    await resumePage.getByRole("button", { name: "Empezar de nuevo / Start fresh" }).click();
+    await resumePage.getByRole("heading", { name: "Comparte tu historia" }).waitFor();
+    const cleared = await resumePage.evaluate(async () => {
+      const draft = localStorage.getItem("crooke-interview-wizard-v2");
+      const blobLeft = await new Promise(resolve => {
+        const req = indexedDB.open("crooke-interview-media");
+        req.onsuccess = () => {
+          const db = req.result;
+          if (!db.objectStoreNames.contains("files")) {
+            db.close();
+            resolve(false);
+            return;
+          }
+          const tx = db.transaction("files", "readonly");
+          const get = tx.objectStore("files").get("voice_about_you");
+          get.onsuccess = () => {
+            db.close();
+            resolve(!!get.result);
+          };
+          get.onerror = () => {
+            db.close();
+            resolve(false);
+          };
+        };
+        req.onerror = () => resolve(false);
+      });
+      return { draft, blobLeft };
+    });
+    if (cleared.draft || cleared.blobLeft) fail(`start fresh left data ${JSON.stringify(cleared)}`);
+    else ok("start fresh clears saved answers and recordings");
+
+    const homeCtx = await browser.newContext({ viewport: { width: 1100, height: 800 } });
+    const homePage = await homeCtx.newPage();
+    await homePage.goto(`${BASE}/crooke-7c3a9e12/`, { waitUntil: "networkidle" });
+    const homeMark = (await homePage.locator(".brand-mark").innerText()).trim();
+    if (homeMark !== "C") fail(`home monogram ${homeMark}`);
+    else ok("home monogram is C");
+    if (!/Members/.test(await homePage.locator("nav").innerText()) || !/Family Tree/.test(await homePage.locator("nav").innerText())) {
+      fail("home nav lost Members or Family Tree");
+    } else ok("home keeps Members and Family Tree");
+    await homePage.screenshot({ path: "/opt/cursor/artifacts/home_header.png", clip: { x: 0, y: 0, width: 1100, height: 150 } });
+    await homeCtx.close();
+    await resumeCtx.close();
+    await failedCtx.close();
 
     await page.setViewportSize({ width: 1280, height: 900 });
 

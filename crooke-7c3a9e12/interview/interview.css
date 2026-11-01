@@ -221,9 +221,15 @@
 }
 
 .btn-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  box-sizing: border-box;
   font: inherit;
   font-weight: 700;
+  text-align: center;
+  text-decoration: none;
   padding: 0.75rem;
   border-radius: 12px;
   border: 0;
@@ -430,18 +436,202 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  margin: 0.85rem 0 0.35rem;
+  margin: 0.35rem 0 0.15rem;
   font-weight: 700;
   font-size: 1rem;
   line-height: 1.35;
   color: var(--ink);
 }
 
+.voice-upload-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.voice-upload-block input[type="file"],
 .voice-upload input[type="file"] {
   font: inherit;
   font-size: 1rem;
   font-weight: 600;
   width: 100%;
+  max-width: 100%;
+}
+
+.audio-fallback,
+.record-room,
+.size-warn,
+.send-error,
+.send-progress {
+  overflow-wrap: anywhere;
+}
+
+.audio-fallback {
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.record-room {
+  margin: 0.15rem 0;
+  color: var(--ink);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.size-warn,
+.send-error,
+.send-progress {
+  margin: 0.75rem 0;
+  padding: 0.85rem 0.9rem;
+  border-radius: 12px;
+  line-height: 1.4;
+  font-weight: 700;
+}
+
+.size-warn {
+  background: #fff8e8;
+  border: 2px solid var(--gold);
+  color: #6b4e12;
+}
+
+.send-error {
+  background: #fdecea;
+  border: 2px solid #c62828;
+  color: #7f1d1d;
+}
+
+.send-error p,
+.size-warn p,
+.send-progress p {
+  margin: 0.2rem 0;
+}
+
+.send-progress {
+  background: #e8f0ea;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+}
+
+.send-progress-track {
+  height: 0.7rem;
+  background: #fff;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 0.55rem;
+}
+
+.send-progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+}
+
+.fresh-row {
+  text-align: center;
+  margin: 0.35rem 0 0;
+}
+
+.link-fresh {
+  background: none;
+  border: 0;
+  padding: 0.45rem 0.2rem;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.98rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.brand-static {
+  cursor: default;
+}
+
+.resume-prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(28, 36, 32, 0.46);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.resume-prompt[hidden] {
+  display: none !important;
+}
+
+.resume-card {
+  width: min(100%, 28rem);
+  background: #fffef9;
+  border-radius: 16px;
+  padding: 1.25rem 1.15rem;
+  border: 2px solid var(--gold);
+  box-shadow: var(--shadow);
+}
+
+.resume-card p {
+  margin: 0 0 1rem;
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+
+.resume-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.resume-actions button {
+  min-height: 3.25rem;
+  font: inherit;
+  font-weight: 700;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  cursor: pointer;
+}
+
+#resume-continue {
+  background: var(--accent);
+  color: #fff;
+}
+
+#resume-fresh {
+  background: #fffef9;
+  color: var(--accent);
+}
+
+.test-panel {
+  max-width: 28rem;
+  margin: 0.5rem auto 0;
+  padding: 0.75rem;
+  border: 2px dashed var(--gold);
+  border-radius: 12px;
+  background: #fffef9;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.test-panel[hidden] {
+  display: none !important;
+}
+
+.test-panel-title {
+  margin: 0 0 0.15rem;
+  font-weight: 700;
+}
+
+.test-panel button {
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  cursor: pointer;
 }
 
 .interview-wizard-body .brand-text h1 {

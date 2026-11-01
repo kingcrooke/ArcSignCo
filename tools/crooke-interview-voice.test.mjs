@@ -7,14 +7,21 @@ import {
   commitVoiceTake,
   extensionForMime,
   fileNameForVoice,
+  hasUnsentDraft,
+  interviewTotalBytes,
   isPreviewRequest,
   isTestRequest,
   TEST_MODE_BANNER,
   formatClock,
   pickSupportedMimeType,
+  planInterviewParts,
   recorderOptions,
+  recordingRoomCopy,
+  resumePromptCopy,
   savedVoiceLabel,
   voiceFileFromChunks,
+  whatsAppVoiceHref,
+  WHATSAPP_PREFILL,
 } from "../crooke-7c3a9e12/interview/interview-wizard.js";
 
 test("voice clock reads as minutes and seconds", () => {
@@ -45,6 +52,84 @@ test("test=1 is the only test-mode switch", () => {
   assert.equal(isTestRequest("?test=true"), false);
   assert.equal(isTestRequest("?preview=1"), false);
 });
+
+test("an empty WhatsApp number hides the button and a set number prefills the note", () => {
+  assert.equal(whatsAppVoiceHref(""), "");
+  assert.equal(whatsAppVoiceHref("123"), "");
+  assert.equal(whatsAppVoiceHref("++"), "");
+  const href = whatsAppVoiceHref("1 809 555 1212");
+  assert.equal(href, `https://wa.me/18095551212?text=${encodeURIComponent(WHATSAPP_PREFILL)}`);
+  assert.equal(WHATSAPP_PREFILL, "Hola, aquí están mis notas de voz para la Entrevista Familia Morel");
+});
+
+test("saved drafts are detected and described with the person's name", () => {
+  assert.equal(hasUnsentDraft(null), false);
+  assert.equal(hasUnsentDraft({ state: { your_name: "  " }, voiceMeta: {} }), false);
+  assert.equal(hasUnsentDraft({ state: { your_name: "Luis" } }), true);
+  assert.equal(hasUnsentDraft({ state: {}, voiceMeta: { voice_about_you: { size: 12 } } }), true);
+  assert.equal(
+    resumePromptCopy("Luis"),
+    "Tienes respuestas guardadas de Luis. ¿Continuar o empezar de nuevo? / You have saved answers from Luis. Continue or start fresh?",
+  );
+  assert.match(resumePromptCopy(""), /sin nombre/);
+  assert.match(resumePromptCopy(""), /someone/);
+});
+
+test("totals include text, voice, and photo, and oversized sets split into parts", async () => {
+  const voice = new Blob([new Uint8Array(400)]);
+  const photo = new Blob([new Uint8Array(10)]);
+  const current = {
+    your_name: "Ana",
+    about_you: "hola",
+    voices: {
+      voice_about_you: voice,
+      voice_parents: voice,
+      voice_grandparents: voice,
+    },
+    photoBlob: photo,
+    relatives: [],
+  };
+  const total = interviewTotalBytes(current);
+  assert.equal(total, textSize("Ana") + textSize("hola") + 400 * 3 + 10);
+  const one = planInterviewParts(current, 8 * 1024 * 1024);
+  assert.equal(one.parts.length, 1);
+  assert.equal(one.blocked.length, 0);
+  const split = planInterviewParts(current, 1000);
+  assert.equal(split.parts.length, 2);
+  assert.equal(split.blocked.length, 0);
+  assert.deepEqual(split.parts[0].files, ["voice_about_you", "voice_parents"]);
+  assert.equal(split.parts[0].includeAnswers, true);
+  assert.deepEqual(split.parts[1].files, ["voice_grandparents", "old_photo"]);
+  const partTwo = buildInterviewFormData(current, 8 * 1024 * 1024, {
+    ...split.parts[1],
+    submissionId: "shared-id",
+    partNumber: 2,
+    partCount: split.parts.length,
+  });
+  assert.equal(partTwo.get("form-name"), "crooke-interview");
+  assert.equal(partTwo.get("submission_id"), "shared-id");
+  assert.equal(partTwo.get("part_number"), "2");
+  assert.equal(partTwo.get("part_count"), "2");
+  assert.equal(partTwo.get("your_name"), "Ana");
+  assert.equal(partTwo.get("about_you"), "");
+  assert.equal(partTwo.get("voice_about_you"), null);
+  assert.ok(partTwo.get("voice_grandparents"));
+  assert.ok(partTwo.get("old_photo"));
+  const blocked = planInterviewParts(
+    { your_name: "Ana", voices: { voice_about_you: new Blob([new Uint8Array(960)]) }, relatives: [] },
+    1000,
+  );
+  assert.equal(blocked.blocked.length, 1);
+  assert.equal(blocked.parts.some(part => part.files.includes("voice_about_you")), false);
+  const room = recordingRoomCopy({ your_name: "Ana", voices: {}, relatives: [] }, "voice_about_you", 0);
+  assert.match(room.es, /90 segundos/);
+  assert.match(room.en, /90 seconds/);
+  assert.match(room.es, /MB/);
+});
+
+function textSize(value) {
+  return new TextEncoder().encode(value).length;
+}
 
 test("picks the first supported voice mime, including iPhone audio/mp4", () => {
   assert.deepEqual(VOICE_MIME_CANDIDATES, [
@@ -137,6 +222,8 @@ test("submission FormData includes each voice file with the recorder extension",
     24,
   );
   assert.equal(fd.get("form-name"), "crooke-interview");
+  assert.equal(fd.get("part_number"), "1");
+  assert.equal(fd.get("part_count"), "1");
   assert.equal(fd.get("your_name"), "Ana");
   assert.equal(fd.get("about_you"), "crecí en el barrio");
   assert.equal(fd.get("loved_ones"), "un tío");

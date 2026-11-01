@@ -37,17 +37,16 @@
 
     <header class="site-header wizard-header">
       <div class="header-inner">
-        <a class="brand" href="/crooke-7c3a9e12/">
-          <div class="brand-mark" aria-hidden="true">Build</div>
+        <div class="brand brand-static">
+          <div class="brand-mark" aria-hidden="true"><span class="brand-monogram">M</span></div>
           <div class="brand-text">
             <h1 id="interview-heading">Entrevista Familia Morel</h1>
             <p>Comparte tu historia</p>
           </div>
-        </a>
+        </div>
         <nav class="nav-scroll" aria-label="Primary">
           <ul class="nav-tabs">
             <li><a class="nav-external" href="/crooke-7c3a9e12/interview/" aria-current="page">Entrevista</a></li>
-            <li><a href="/crooke-7c3a9e12/">Libro</a></li>
           </ul>
         </nav>
       </div>
@@ -55,10 +54,27 @@
 
     <main id="main" class="page interview-main wizard-main">
       <div id="wizard-mount" class="wizard-mount" aria-live="polite"></div>
+      <div id="test-panel" class="test-panel" hidden>
+        <p class="test-panel-title">Vista de prueba / Test preview</p>
+        <button type="button" id="test-sim-error">Simular error de envío</button>
+        <button type="button" id="test-sim-size">Simular aviso de tamaño</button>
+        <button type="button" id="test-sim-split">Simular envío en partes</button>
+        <button type="button" id="test-sim-resume">Simular respuestas guardadas</button>
+      </div>
     </main>
 
+    <div id="resume-prompt" class="resume-prompt" hidden>
+      <div class="resume-card" role="dialog" aria-modal="true" aria-labelledby="resume-text">
+        <p id="resume-text"></p>
+        <div class="resume-actions">
+          <button type="button" id="resume-continue">Continuar / Continue</button>
+          <button type="button" id="resume-fresh">Empezar de nuevo / Start fresh</button>
+        </div>
+      </div>
+    </div>
+
     <footer class="site-footer">
-      <p><a href="/crooke-7c3a9e12/">← Libro de la familia</a></p>
+      <p>Entrevista privada / Private interview</p>
     </footer>
 
     <!-- Netlify form registration (fields detected at build). Submissions via JS FormData POST. -->
@@ -103,6 +119,9 @@
       <input name="relative_3_name" />
       <input name="relative_3_relation" />
       <input name="relative_3_note" />
+      <input name="submission_id" />
+      <input name="part_number" />
+      <input name="part_count" />
     </form>
 
     <script type="module" src="/crooke-7c3a9e12/interview/interview-wizard.js"></script>

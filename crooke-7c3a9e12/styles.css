@@ -89,16 +89,22 @@ body {
 .brand-mark {
   width: 44px;
   height: 44px;
-  border-radius: 8px;
-  border: 2px dashed var(--gold);
+  border-radius: 50%;
+  border: 2px solid var(--gold);
   display: grid;
   place-items: center;
-  font-size: 0.55rem;
-  text-align: center;
-  line-height: 1.15;
-  color: var(--muted);
-  background: #fff;
+  background: var(--accent);
+  color: #f4efe4;
   flex-shrink: 0;
+  box-shadow: inset 0 0 0 3px rgba(255, 254, 249, 0.16);
+}
+
+.brand-monogram {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  transform: translateY(-1px);
 }
 
 .brand-text h1 {

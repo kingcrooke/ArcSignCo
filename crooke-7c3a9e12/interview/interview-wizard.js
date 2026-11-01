@@ -1,7 +1,11 @@
 import {
-  JESUS_WHATSAPP_E164,
+  WHATSAPP_NUMBER,
   STORAGE_KEY,
+  MEDIA_DB_NAME,
   MAX_UPLOAD_BYTES,
+  FORM_HEADROOM_BYTES,
+  SIZE_WARN_BYTES,
+  AUDIO_BITS_PER_SECOND,
   MAX_RECORD_SECONDS,
   SITE_INTERVIEW_PATH,
 } from "./interview-config.js";
@@ -21,14 +25,19 @@ export const PAGE_NAME = {
 
 const VOICE_UPLOAD_LABEL = "Subir nota de voz / Upload a voice memo";
 
+export const WHATSAPP_PREFILL = "Hola, aquí están mis notas de voz para la Entrevista Familia Morel";
+
+export const MIC_UPLOAD_HINT =
+  "Si el micrófono no funciona, puedes subir un archivo de audio aquí / If the mic doesn't work, you can upload an audio file here";
+
 const RECORDER_MESSAGES = {
   noRecorder: {
-    es: "Este navegador no puede grabar voz. Sube una nota de voz, o envíala por WhatsApp a quien te compartió este enlace.",
-    en: "This browser cannot record voice. Upload a voice memo, or send it by WhatsApp to the person who shared this link.",
+    es: "Este navegador no puede grabar voz. Puedes subir un archivo de audio aquí.",
+    en: "This browser cannot record voice. You can upload an audio file here.",
   },
   micDenied: {
-    es: "Permiso de micrófono denegado. Puedes subir una nota de voz, o enviarla por WhatsApp a quien te compartió este enlace.",
-    en: "Microphone permission was denied. You can upload a voice memo, or send it by WhatsApp to the person who shared this link.",
+    es: "Permiso de micrófono denegado. Puedes subir un archivo de audio aquí.",
+    en: "Microphone permission was denied. You can upload an audio file here.",
   },
   micFailed: {
     es: "No se pudo grabar. Revisa el micrófono e inténtalo de nuevo.",
@@ -136,7 +145,6 @@ const COPY = {
     stop: "Detener",
     speakAgain: "Grabar de nuevo",
     waVoice: "Enviar nota de voz por WhatsApp",
-    waFallback: "O envíala por WhatsApp a quien te compartió este enlace.",
     recording: "Grabando…",
     savedClip: "Audio listo para enviar",
     tooBig: "Este audio es muy largo. Graba de nuevo, más breve (máx. ~8 MB).",
@@ -179,7 +187,6 @@ const COPY = {
     stop: "Stop",
     speakAgain: "Record again",
     waVoice: "Send a WhatsApp voice note",
-    waFallback: "Or send it by WhatsApp to the person who shared this link.",
     recording: "Recording…",
     savedClip: "Audio ready to send",
     tooBig: "This recording is too large. Please record again, shorter (max ~8 MB).",
@@ -271,9 +278,15 @@ function dropPlayback(key) {
 function ensureRecordClock() {
   if (recordClock) return;
   recordClock = setInterval(() => {
+    if (!activeTake?.startedAt) return;
+    const elapsed = (Date.now() - activeTake.startedAt) / 1000;
     const el = document.querySelector("[data-record-timer]");
-    if (!el || !activeTake?.startedAt) return;
-    el.textContent = formatClock((Date.now() - activeTake.startedAt) / 1000);
+    if (el) el.textContent = formatClock(elapsed);
+    const room = recordingRoomCopy(state, activeTake.voiceKey, elapsed);
+    const es = document.querySelector("[data-room-es]");
+    const en = document.querySelector("[data-room-en]");
+    if (es) es.textContent = room.es;
+    if (en) en.textContent = room.en;
   }, 250);
 }
 
@@ -417,19 +430,188 @@ export function commitVoiceTake(current, voiceKey, chunks, mime, maxBytes = MAX_
   return { error: null, file };
 }
 
-export function buildInterviewFormData(current, maxBytes = MAX_UPLOAD_BYTES) {
+export function textByteLength(value) {
+  const text = String(value ?? "");
+  if (typeof TextEncoder !== "undefined") return new TextEncoder().encode(text).length;
+  return text.length;
+}
+
+function identityFieldBytes(current) {
+  let n = 0;
+  for (const key of ["your_name", "relationship", "phone", "email", "para"]) {
+    n += textByteLength(current?.[key]);
+  }
+  return n;
+}
+
+export function interviewTextBytes(current) {
+  let n = identityFieldBytes(current);
+  for (const q of QUESTION_STEPS) n += textByteLength(current?.[q.field]);
+  const relatives = current?.relatives || [];
+  for (let i = 0; i < 3; i++) {
+    const rel = relatives[i] || {};
+    n += textByteLength(rel.name) + textByteLength(rel.relation) + textByteLength(rel.note);
+  }
+  return n;
+}
+
+export function interviewFileEntries(current) {
+  const files = [];
+  for (const q of QUESTION_STEPS) {
+    const blob = current?.voices?.[q.voice];
+    if (blob && blob.size > 0) files.push({ field: q.voice, size: blob.size, kind: "voice" });
+  }
+  if (current?.photoBlob && current.photoBlob.size > 0) {
+    files.push({ field: "old_photo", size: current.photoBlob.size, kind: "photo" });
+  }
+  return files;
+}
+
+export function interviewTotalBytes(current) {
+  return interviewTextBytes(current) + interviewFileEntries(current).reduce((sum, file) => sum + file.size, 0);
+}
+
+export function partBudget(maxBytes = MAX_UPLOAD_BYTES) {
+  const headroom = maxBytes >= 1024 * 1024 ? FORM_HEADROOM_BYTES : Math.min(FORM_HEADROOM_BYTES, Math.floor(maxBytes * 0.05));
+  return Math.max(1, maxBytes - headroom);
+}
+
+/**
+ * Split voice notes, the photo, and text into crooke-interview posts that each
+ * stay under Netlify's submission cap. One part when everything fits.
+ */
+export function planInterviewParts(current, maxBytes = MAX_UPLOAD_BYTES) {
+  const budget = partBudget(maxBytes);
+  const files = interviewFileEntries(current);
+  const blocked = [];
+  const packable = [];
+  for (const file of files) {
+    if (file.size > budget) blocked.push(file);
+    else packable.push(file);
+  }
+  const textBytes = interviewTextBytes(current);
+  const nameBytes = identityFieldBytes(current);
+  const totalBytes = interviewTotalBytes(current);
+  if (textBytes > budget) {
+    return { parts: [], blocked, totalBytes, textTooBig: true };
+  }
+  const packedBytes = textBytes + packable.reduce((sum, file) => sum + file.size, 0);
+  if (!blocked.length && packedBytes <= budget) {
+    return {
+      parts: [{ files: packable.map(file => file.field), includeAnswers: true }],
+      blocked,
+      totalBytes,
+      textTooBig: false,
+    };
+  }
+  const parts = [];
+  let bin = [];
+  let used = 0;
+  let answersPlaced = false;
+  const flush = () => {
+    if (!bin.length && answersPlaced) return;
+    parts.push({ files: bin.map(file => file.field), includeAnswers: !answersPlaced });
+    answersPlaced = true;
+    bin = [];
+    used = 0;
+  };
+  for (const file of packable) {
+    const base = answersPlaced ? nameBytes : textBytes;
+    if (bin.length && used + file.size > budget) flush();
+    if (!bin.length && base + file.size > budget) {
+      if (!answersPlaced) {
+        parts.push({ files: [], includeAnswers: true });
+        answersPlaced = true;
+      }
+      if (file.size + nameBytes <= budget) {
+        parts.push({ files: [file.field], includeAnswers: false });
+        continue;
+      }
+      blocked.push(file);
+      continue;
+    }
+    if (!bin.length) used = answersPlaced ? nameBytes : textBytes;
+    bin.push(file);
+    used += file.size;
+  }
+  if (bin.length || !answersPlaced) flush();
+  return { parts, blocked, totalBytes, textTooBig: false };
+}
+
+export function formatPlainMegabytes(bytes) {
+  const mb = Math.max(0, Number(bytes) || 0) / (1024 * 1024);
+  if (mb < 0.1) return { es: "queda menos de 0,1 MB", en: "Less than 0.1 MB left in total" };
+  const rounded = mb >= 10 ? Math.round(mb) : Math.round(mb * 10) / 10;
+  const esNum = String(rounded).replace(".", ",");
+  return { es: `quedan unos ${esNum} MB`, en: `About ${rounded} MB left in total` };
+}
+
+export function recordingRoomCopy(current, voiceKey, elapsedSeconds = 0) {
+  const perSecond = AUDIO_BITS_PER_SECOND / 8;
+  const cap = Math.min(MAX_RECORD_SECONDS, Math.floor(partBudget() / perSecond));
+  const elapsed = Math.max(0, Math.round(Number(elapsedSeconds) || 0));
+  const noteLeft = Math.max(0, cap - (voiceKey ? elapsed : 0));
+  const total = interviewTotalBytes(current);
+  const totalLeft = Math.max(0, MAX_UPLOAD_BYTES - total);
+  const over = total > partBudget();
+  const close = !over && total >= SIZE_WARN_BYTES;
+  const mb = formatPlainMegabytes(totalLeft);
+  const esNote = noteLeft === 1 ? "queda cerca de 1 segundo" : `quedan unos ${noteLeft} segundos`;
+  const enNote = noteLeft === 1 ? "About 1 second left" : `About ${noteLeft} seconds left`;
+  const es = over
+    ? `En esta nota ${esNote}. En total ya no cabe en un solo envío; se dividirá.`
+    : `En esta nota ${esNote}. En total ${mb.es}.`;
+  const en = over
+    ? `${enNote} in this note. The total no longer fits in one send; it will be split.`
+    : `${enNote} in this note. ${mb.en}.`;
+  return { es, en, over, close, noteLeft, totalLeft, total };
+}
+
+export function whatsAppVoiceHref(number = WHATSAPP_NUMBER) {
+  const digits = String(number ?? "").replace(/\D/g, "");
+  if (!/^\d{10,15}$/.test(digits)) return "";
+  return `https://wa.me/${digits}?text=${encodeURIComponent(WHATSAPP_PREFILL)}`;
+}
+
+export function hasUnsentDraft(data) {
+  if (!data || typeof data !== "object") return false;
+  const saved = data.state || {};
+  if (String(saved.your_name || "").trim()) return true;
+  if (String(saved.relationship || saved.phone || saved.email || "").trim()) return true;
+  for (const q of QUESTION_STEPS) {
+    if (String(saved[q.field] || "").trim()) return true;
+  }
+  if ((saved.relatives || []).some(rel => String(rel?.name || rel?.relation || rel?.note || "").trim())) return true;
+  if (Object.values(data.voiceMeta || {}).some(meta => meta && meta.size > 0)) return true;
+  if (data.photoMeta && data.photoMeta.size > 0) return true;
+  return false;
+}
+
+export function resumePromptCopy(name) {
+  const given = String(name || "").trim();
+  const esName = given || "sin nombre";
+  const enName = given || "someone";
+  return `Tienes respuestas guardadas de ${esName}. ¿Continuar o empezar de nuevo? / You have saved answers from ${enName}. Continue or start fresh?`;
+}
+
+export function buildInterviewFormData(current, maxBytes = MAX_UPLOAD_BYTES, part = null) {
+  const includeAnswers = !part || part.includeAnswers !== false;
+  const allow = field => !part || !Array.isArray(part.files) || part.files.includes(field);
   const fd = new FormData();
   fd.append("form-name", "crooke-interview");
   fd.append("bot-field", "");
+  fd.append("submission_id", part?.submissionId || "");
+  fd.append("part_number", String(part?.partNumber || 1));
+  fd.append("part_count", String(part?.partCount || 1));
   fd.append("your_name", current.your_name || "");
   fd.append("relationship", current.relationship || "");
   fd.append("phone", current.phone || "");
   fd.append("email", current.email || "");
   fd.append("para", current.para || "");
   for (const q of QUESTION_STEPS) {
-    fd.append(q.field, current[q.field] || "");
+    fd.append(q.field, includeAnswers ? current[q.field] || "" : "");
     const blob = current.voices?.[q.voice];
-    if (blob && blob.size > 0 && blob.size <= maxBytes) {
+    if (allow(q.voice) && blob && blob.size > 0 && blob.size <= maxBytes) {
       fd.append(q.voice, blob, fileNameForVoice(q.voice, blob));
     }
   }
@@ -437,11 +619,12 @@ export function buildInterviewFormData(current, maxBytes = MAX_UPLOAD_BYTES) {
   for (let i = 0; i < 3; i++) {
     const rel = relatives[i] || { name: "", relation: "", note: "" };
     const n = i + 1;
-    fd.append(`relative_${n}_name`, rel.name || "");
-    fd.append(`relative_${n}_relation`, rel.relation || "");
-    fd.append(`relative_${n}_note`, rel.note || "");
+    const answer = includeAnswers ? rel : { name: "", relation: "", note: "" };
+    fd.append(`relative_${n}_name`, answer.name || "");
+    fd.append(`relative_${n}_relation`, answer.relation || "");
+    fd.append(`relative_${n}_note`, answer.note || "");
   }
-  if (current.photoBlob && current.photoBlob.size > 0 && current.photoBlob.size <= maxBytes) {
+  if (allow("old_photo") && current.photoBlob && current.photoBlob.size > 0 && current.photoBlob.size <= maxBytes) {
     fd.append("old_photo", current.photoBlob, current.photoName || "old_photo.jpg");
   }
   return fd;
@@ -484,34 +667,170 @@ function recorderSupport() {
   return typeof MediaRecorder !== "undefined" && !!navigator.mediaDevices?.getUserMedia;
 }
 
-function saveProgress() {
-  if (previewMode || testMode) return;
+let mediaGeneration = 0;
+let mediaDbPromise = null;
+let pendingDraft = null;
+
+function readDraft() {
   try {
-    const { photoBlob, voices, ...rest } = state;
-    const voiceMeta = {};
-    for (const [k, blob] of Object.entries(voices)) {
-      if (blob) voiceMeta[k] = { size: blob.size, type: blob.type };
-    }
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ lang, stepIndex, state: rest, voiceMeta, savedAt: Date.now() }),
-    );
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
   } catch {
-    /* ignore */
+    return null;
   }
 }
 
-function loadProgress() {
+function saveProgress() {
+  if (previewMode || testMode) return;
+  const generation = ++mediaGeneration;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (data.lang === "en" || data.lang === "es") lang = data.lang;
-    if (typeof data.stepIndex === "number") stepIndex = data.stepIndex;
-    if (data.state) state = { ...defaultState(), ...data.state, voices: state.voices || {}, photoBlob: state.photoBlob };
+    const rest = {};
+    for (const [key, value] of Object.entries(state)) {
+      if (key === "photoBlob" || key === "voices" || key.startsWith("_")) continue;
+      rest[key] = value;
+    }
+    const voiceMeta = {};
+    for (const [key, blob] of Object.entries(state.voices || {})) {
+      if (blob && blob.size > 0) voiceMeta[key] = { size: blob.size, type: blob.type || "" };
+    }
+    const photoMeta = state.photoBlob && state.photoBlob.size > 0
+      ? { size: state.photoBlob.size, type: state.photoBlob.type || "", name: state.photoName || "" }
+      : null;
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ lang, stepIndex, state: rest, voiceMeta, photoMeta, savedAt: Date.now() }),
+    );
+  } catch {
+    /* ignore quota or private mode */
+  }
+  persistMedia(generation).catch(() => {});
+}
+
+function applyDraft(data) {
+  if (!data) return;
+  if (data.lang === "en" || data.lang === "es") lang = data.lang;
+  if (typeof data.stepIndex === "number" && Number.isFinite(data.stepIndex)) {
+    stepIndex = Math.max(0, Math.min(STEP_ORDER.length - 1, data.stepIndex));
+  }
+  if (data.state && typeof data.state === "object") {
+    const saved = {};
+    for (const [key, value] of Object.entries(data.state)) {
+      if (key === "photoBlob" || key === "voices" || key.startsWith("_")) continue;
+      saved[key] = value;
+    }
+    state = { ...defaultState(), ...saved, voices: {}, photoBlob: null };
+    if (!Array.isArray(state.relatives) || state.relatives.length !== 3) {
+      state.relatives = defaultState().relatives;
+    }
+  }
+}
+
+function openMediaDb() {
+  if (typeof indexedDB === "undefined") return Promise.resolve(null);
+  if (!mediaDbPromise) {
+    mediaDbPromise = new Promise((resolve, reject) => {
+      const req = indexedDB.open(MEDIA_DB_NAME, 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains("files")) db.createObjectStore("files");
+      };
+      req.onsuccess = () => {
+        const db = req.result;
+        db.onversionchange = () => {
+          db.close();
+          mediaDbPromise = null;
+        };
+        resolve(db);
+      };
+      req.onerror = () => {
+        mediaDbPromise = null;
+        reject(req.error);
+      };
+    });
+  }
+  return mediaDbPromise;
+}
+
+async function persistMedia(generation) {
+  if (generation !== mediaGeneration) return;
+  const db = await openMediaDb();
+  if (!db || generation !== mediaGeneration) return;
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction("files", "readwrite");
+    const store = tx.objectStore("files");
+    for (const q of QUESTION_STEPS) {
+      const blob = state.voices?.[q.voice];
+      if (blob && blob.size > 0) store.put(blob, q.voice);
+      else store.delete(q.voice);
+    }
+    if (state.photoBlob && state.photoBlob.size > 0) store.put(state.photoBlob, "old_photo");
+    else store.delete("old_photo");
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+}
+
+async function loadMediaIntoState() {
+  const db = await openMediaDb();
+  if (!db) return;
+  const keys = [...QUESTION_STEPS.map(q => q.voice), "old_photo"];
+  const rows = await new Promise(resolve => {
+    const tx = db.transaction("files", "readonly");
+    const store = tx.objectStore("files");
+    const out = {};
+    let pending = keys.length;
+    if (!pending) {
+      resolve(out);
+      return;
+    }
+    for (const key of keys) {
+      const req = store.get(key);
+      req.onsuccess = () => {
+        out[key] = req.result || null;
+        if (--pending === 0) resolve(out);
+      };
+      req.onerror = () => {
+        out[key] = null;
+        if (--pending === 0) resolve(out);
+      };
+    }
+  });
+  state.voices = state.voices || {};
+  for (const q of QUESTION_STEPS) {
+    const blob = rows[q.voice];
+    if (blob && blob.size > 0) state.voices[q.voice] = blob;
+  }
+  if (rows.old_photo && rows.old_photo.size > 0) {
+    state.photoBlob = rows.old_photo;
+    if (!state.photoName) state.photoName = "old_photo.jpg";
+  }
+}
+
+async function clearSavedInterview() {
+  mediaGeneration += 1;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
   } catch {
     /* ignore */
   }
+  if (typeof indexedDB === "undefined") return;
+  const db = await mediaDbPromise;
+  if (db) {
+    try {
+      db.close();
+    } catch {
+      /* ignore */
+    }
+  }
+  mediaDbPromise = null;
+  await new Promise(resolve => {
+    const req = indexedDB.deleteDatabase(MEDIA_DB_NAME);
+    req.onsuccess = () => resolve();
+    req.onerror = () => resolve();
+    req.onblocked = () => resolve();
+  });
 }
 
 function parsePara() {
@@ -526,13 +845,18 @@ function questionProgressIndex() {
   return i >= 0 ? i + 1 : null;
 }
 
-function waLinkForQuestion(q) {
-  const title = lang === "es" ? q.es.title : q.en.title;
-  const text = `${q.wa}${title}. (Entrevista Familia Morel — grabación de voz)`;
-  if (JESUS_WHATSAPP_E164 && /^\d{10,15}$/.test(JESUS_WHATSAPP_E164)) {
-    return `https://wa.me/${JESUS_WHATSAPP_E164}?text=${encodeURIComponent(text)}`;
-  }
-  return null;
+function showResume(name, draft) {
+  pendingDraft = draft || null;
+  const text = document.getElementById("resume-text");
+  const dialog = document.getElementById("resume-prompt");
+  if (text) text.textContent = resumePromptCopy(name);
+  if (dialog) dialog.hidden = false;
+}
+
+function hideResume() {
+  pendingDraft = null;
+  const dialog = document.getElementById("resume-prompt");
+  if (dialog) dialog.hidden = true;
 }
 
 function applyPageName() {
@@ -677,13 +1001,72 @@ function renderVoiceChecklist(currentId) {
 }
 
 function renderVoiceUpload(voiceKey) {
-  return `<label class="voice-upload"><span class="voice-upload-label">${VOICE_UPLOAD_LABEL}</span><input type="file" accept="audio/*" data-voice-upload="${voiceKey}" /></label>`;
+  const href = whatsAppVoiceHref();
+  const alternate = href
+    ? `<a class="btn-wa" href="${esc(href)}" target="_blank" rel="noopener noreferrer">${t("waVoice")}</a>`
+    : `<p class="audio-fallback">${MIC_UPLOAD_HINT}</p>`;
+  return `<div class="voice-upload-block">${alternate}<label class="voice-upload" for="voice-file-${voiceKey}"><span class="voice-upload-label">${VOICE_UPLOAD_LABEL}</span></label><input id="voice-file-${voiceKey}" type="file" accept="audio/*" data-voice-upload="${voiceKey}" /></div>`;
 }
 
-function renderFallbacks(q) {
-  const wa = waLinkForQuestion(q);
-  if (wa) return `<a class="btn-wa" href="${wa}" target="_blank" rel="noopener">${t("waVoice")}</a>`;
-  return `<p class="audio-fallback">${t("waFallback")}</p>`;
+function renderRoomCopy(voiceKey) {
+  const elapsed = state._recordingKey === voiceKey && activeTake?.startedAt ? (Date.now() - activeTake.startedAt) / 1000 : 0;
+  const room = recordingRoomCopy(state, voiceKey, elapsed);
+  return `<p class="record-room" data-room-es>${esc(room.es)}</p><p class="record-room" data-room-en>${esc(room.en)}</p>`;
+}
+
+function renderSizeNotice() {
+  if (state._forceSizeWarn) {
+    return `<p class="size-warn" role="status">Te estás acercando al límite de 8 MB. / You are getting close to the 8 MB limit.</p><p class="size-warn">El total pasa de 8 MB, así que se enviará en 2 partes. / The total is over 8 MB, so it will be sent in 2 parts.</p>`;
+  }
+  const plan = planInterviewParts(state);
+  if (plan.textTooBig || plan.blocked.length) {
+    return `<div class="send-error" role="alert"><p>Hay un archivo que no cabe en un envío (límite de unos 8 MB). Quítalo para poder enviar.</p><p>A file does not fit in one submission (about an 8 MB limit). Remove it before sending.</p></div>`;
+  }
+  if (plan.parts.length > 1) {
+    const n = plan.parts.length;
+    return `<p class="size-warn" role="status">El total pasa de 8 MB, así que se enviará en ${n} partes. / The total is over 8 MB, so it will be sent in ${n} parts.</p>`;
+  }
+  if (plan.totalBytes >= SIZE_WARN_BYTES) {
+    return `<p class="size-warn" role="status">Te estás acercando al límite de 8 MB. / You are getting close to the 8 MB limit.</p>`;
+  }
+  return "";
+}
+
+function sendErrorCopy(error) {
+  if (error?.blocked) {
+    return {
+      es: "Hay un archivo que no cabe en un envío (límite de unos 8 MB). Quítalo y vuelve a intentar. Tus respuestas siguen aquí.",
+      en: "A file does not fit in one submission (about an 8 MB limit). Remove it and try again. Your answers are still here.",
+    };
+  }
+  if (error?.sent > 0) {
+    return {
+      es: `Se envió la parte ${error.sent} de ${error.total}, pero el resto no llegó. Tus respuestas siguen aquí.`,
+      en: `Part ${error.sent} of ${error.total} was sent, but the rest did not arrive. Your answers are still here.`,
+    };
+  }
+  return {
+    es: "No se pudo enviar. Tus respuestas siguen aquí.",
+    en: "We couldn't send this. Your answers are still here.",
+  };
+}
+
+function renderSendPanel() {
+  if (state._sending) {
+    const part = state._sending.part;
+    const total = state._sending.total;
+    const pct = total > 1 ? Math.max(8, Math.round(((part - 1) / total) * 100)) : 40;
+    const label = total > 1
+      ? `Enviando parte ${part} de ${total}… / Sending part ${part} of ${total}…`
+      : "Enviando… / Sending…";
+    return `<div class="send-progress" role="status" aria-live="polite"><p>${label}</p><div class="send-progress-track" aria-hidden="true"><div class="send-progress-bar" style="width:${pct}%"></div></div></div>`;
+  }
+  if (state._sendError) {
+    const copy = sendErrorCopy(state._sendError);
+    return `<div class="send-error" role="alert"><p>${esc(copy.es)}</p><p>${esc(copy.en)}</p></div>`;
+  }
+  if (state._simNote) return `<p class="test-banner test-banner--inline" role="status">${esc(state._simNote)}</p>`;
+  return "";
 }
 
 function renderSpeakBlock(q) {
@@ -726,9 +1109,16 @@ function renderSpeakBlock(q) {
     html += `<p class="record-alert">${t("tooBig")}</p>`;
   }
   html += "</div>";
+  html += renderRoomCopy(voiceKey);
   html += renderVoiceUpload(voiceKey);
-  if (inApp || block) html += renderFallbacks(q);
   return html;
+}
+
+function reviewAction() {
+  if (state._sending) return "";
+  if (state._sendError) return `<button type="button" class="btn-next" data-nav="retry">Reintentar / Retry</button>`;
+  if (testMode) return `<p class="test-banner test-banner--inline" role="status">${TEST_MODE_BANNER}</p>`;
+  return `<button type="button" class="btn-next" data-nav="submit"${previewMode ? " disabled" : ""}>${t("submit")}</button>`;
 }
 
 function render() {
@@ -743,6 +1133,8 @@ function render() {
     testBanner.hidden = !testMode;
     testBanner.textContent = TEST_MODE_BANNER;
   }
+  const testPanel = document.getElementById("test-panel");
+  if (testPanel) testPanel.hidden = !testMode;
 
   const inApp = document.getElementById("in-app-banner");
   if (inApp) {
@@ -785,6 +1177,7 @@ function render() {
       <h2>${pack.title}</h2>
       <p class="wizard-lead">${pack.hint}</p>
       ${renderSpeakBlock(q)}
+      ${renderSizeNotice()}
       ${renderVoiceChecklist(q.id)}
       <label class="wizard-lead">${t("typeAnswer")}</label>
       <textarea class="wizard-textarea" id="f_field" data-field="${q.field}">${esc(state[q.field] || "")}</textarea>
@@ -794,7 +1187,9 @@ function render() {
       <h2>${t("photoTitle")}</h2>
       <p class="wizard-lead">${t("photoHint")}</p>
       <input type="file" id="f_photo" accept="image/*" capture="environment" />
+      ${state._photoError ? `<div class="send-error" role="alert"><p>Esta foto pasa del límite de unos 8 MB. Elige una más pequeña.</p><p>This photo is over the about-8 MB limit. Choose a smaller one.</p></div>` : ""}
       ${state.photoBlob ? `<img class="photo-preview" id="photo-preview" alt="" />` : ""}
+      ${renderSizeNotice()}
     `;
   } else if (step.type === "relatives") {
     body = `<h2>${t("relativesTitle")}</h2><p class="wizard-lead">${t("relativesHint")}</p>`;
@@ -808,7 +1203,7 @@ function render() {
         </div>`;
     });
   } else if (step.type === "review") {
-    body = `<h2>${t("reviewTitle")}</h2><p class="wizard-lead">${t("reviewLead")}</p><p><strong>${esc(state.your_name)}</strong></p>${renderVoiceChecklist(null)}`;
+    body = `<h2>${t("reviewTitle")}</h2><p class="wizard-lead">${t("reviewLead")}</p><p><strong>${esc(state.your_name)}</strong></p>${renderSizeNotice()}${renderVoiceChecklist(null)}${renderSendPanel()}`;
   }
 
   mount.innerHTML = `
@@ -820,12 +1215,9 @@ function render() {
     <div class="wizard-nav">
       ${stepIndex > 0 ? `<button type="button" class="btn-back" data-nav="back">${t("back")}</button>` : ""}
       ${step.type !== "identity" && step.type !== "review" ? `<button type="button" class="btn-skip" data-nav="skip">${t("skip")}</button>` : ""}
-      ${step.type === "review"
-        ? testMode
-          ? `<p class="test-banner test-banner--inline" role="status">${TEST_MODE_BANNER}</p>`
-          : `<button type="button" class="btn-next" data-nav="submit"${previewMode ? " disabled" : ""}>${t("submit")}</button>`
-        : `<button type="button" class="btn-next" data-nav="next">${t("next")}</button>`}
+      ${step.type === "review" ? reviewAction() : `<button type="button" class="btn-next" data-nav="next">${t("next")}</button>`}
     </div>
+    ${state._sending ? "" : `<p class="fresh-row"><button type="button" class="link-fresh" data-nav="fresh">Empezar de nuevo / Start fresh</button></p>`}
   `;
 
   bindStepEvents(step);
@@ -917,10 +1309,12 @@ function bindStepEvents(step) {
     const file = ev.target.files?.[0];
     if (!file) return;
     if (file.size > MAX_UPLOAD_BYTES) {
-      alert(t("tooBig"));
+      state._photoError = "tooBig";
       ev.target.value = "";
+      render();
       return;
     }
+    state._photoError = null;
     state.photoBlob = file;
     state.photoName = file.name;
     saveProgress();
@@ -931,8 +1325,17 @@ function bindStepEvents(step) {
     btn.addEventListener("click", async () => {
       collectFields();
       const action = btn.dataset.nav;
-      if (action === "back" || action === "skip" || action === "next" || action === "submit") {
+      if (action === "back" || action === "skip" || action === "next" || action === "submit" || action === "retry" || action === "fresh") {
         await finishActiveTake(false);
+      }
+      if (action === "fresh") {
+        await startFresh();
+        return;
+      }
+      if (action === "back" || action === "skip" || action === "next") {
+        state._sendError = null;
+        state._forceSizeWarn = false;
+        state._simNote = null;
       }
       if (action === "back") {
         stepIndex = Math.max(0, stepIndex - 1);
@@ -956,8 +1359,107 @@ function bindStepEvents(step) {
         render();
         return;
       }
-      if (action === "submit") submitForm();
+      if (action === "retry") {
+        if (previewMode || testMode) return;
+        submitForm();
+        return;
+      }
+      if (action === "submit") {
+        if (previewMode || testMode) return;
+        submitForm();
+      }
     });
+  });
+}
+
+function newSubmissionId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  return `m-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+async function startFresh() {
+  await finishActiveTake(true);
+  for (const key of [...playbackUrls.keys()]) dropPlayback(key);
+  const para = state.para;
+  state = defaultState();
+  state.para = para;
+  stepIndex = 0;
+  hideResume();
+  if (!previewMode && !testMode) await clearSavedInterview();
+  render();
+}
+
+async function continueDraft() {
+  const draft = pendingDraft;
+  hideResume();
+  if (!draft || previewMode || testMode) {
+    render();
+    return;
+  }
+  applyDraft(draft);
+  parsePara();
+  try {
+    await loadMediaIntoState();
+  } catch {
+    /* text answers still load */
+  }
+  render();
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function simulateSplitProgress() {
+  state._sendError = null;
+  state._simNote = null;
+  state._forceSizeWarn = false;
+  stepIndex = STEP_ORDER.findIndex(step => step.type === "review");
+  state._sending = { part: 1, total: 2, simulated: true };
+  render();
+  await delay(650);
+  if (!state._sending?.simulated) return;
+  state._sending = { part: 2, total: 2, simulated: true };
+  render();
+  await delay(650);
+  if (!state._sending?.simulated) return;
+  state._sending = null;
+  state._simNote = "Modo de prueba: no se envió nada. / Test mode: nothing was sent.";
+  render();
+}
+
+function wireStaticControls() {
+  document.getElementById("resume-continue")?.addEventListener("click", () => {
+    continueDraft();
+  });
+  document.getElementById("resume-fresh")?.addEventListener("click", () => {
+    startFresh();
+  });
+  document.getElementById("test-sim-error")?.addEventListener("click", () => {
+    if (!testMode) return;
+    state._sending = null;
+    state._simNote = null;
+    state._forceSizeWarn = false;
+    state._sendError = { sent: 0, total: 1, simulated: true };
+    stepIndex = STEP_ORDER.findIndex(step => step.type === "review");
+    render();
+  });
+  document.getElementById("test-sim-size")?.addEventListener("click", () => {
+    if (!testMode) return;
+    state._sending = null;
+    state._sendError = null;
+    state._simNote = null;
+    state._forceSizeWarn = true;
+    stepIndex = STEP_ORDER.findIndex(step => step.type === "review");
+    render();
+  });
+  document.getElementById("test-sim-split")?.addEventListener("click", () => {
+    if (!testMode) return;
+    simulateSplitProgress();
+  });
+  document.getElementById("test-sim-resume")?.addEventListener("click", () => {
+    if (!testMode) return;
+    showResume("Ana", null);
   });
 }
 
@@ -968,42 +1470,83 @@ async function submitForm() {
   if (!state.your_name.trim()) {
     alert(t("nameRequired"));
     stepIndex = STEP_ORDER.findIndex(s => s.type === "identity");
+    state._sending = null;
     render();
     return;
   }
-
-  const btn = document.querySelector('[data-nav="submit"]');
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = t("sending");
+  const plan = planInterviewParts(state);
+  if (plan.textTooBig || plan.blocked.length || !plan.parts.length) {
+    state._sending = null;
+    state._sendError = { sent: 0, total: Math.max(1, plan.parts.length), blocked: true };
+    render();
+    return;
   }
+  const signature = JSON.stringify(plan.parts);
+  if (state._planSignature !== signature) {
+    state._planSignature = signature;
+    state._partsSent = 0;
+    state._submissionId = newSubmissionId();
+  }
+  if (!state._submissionId) state._submissionId = newSubmissionId();
+  const total = plan.parts.length;
+  let sent = Number(state._partsSent) || 0;
+  if (sent > total) sent = 0;
+  state._sendError = null;
 
-  const fd = buildInterviewFormData(state);
-
-  try {
-    await fetch("/", { method: "POST", body: fd });
+  for (let index = sent; index < total; index += 1) {
+    state._sending = { part: index + 1, total };
+    render();
+    const fd = buildInterviewFormData(state, MAX_UPLOAD_BYTES, {
+      ...plan.parts[index],
+      submissionId: state._submissionId,
+      partNumber: index + 1,
+      partCount: total,
+    });
+    let response = null;
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      response = await fetch("/", { method: "POST", body: fd });
     } catch {
-      /* ignore */
+      response = null;
     }
-    const thanks = new URL("/crooke-7c3a9e12/interview/thank-you.html", location.origin);
-    if (state.para) thanks.searchParams.set("para", state.para);
-    location.href = thanks.pathname + thanks.search;
-  } catch {
-    alert(lang === "es" ? "No se pudo enviar. Intenta de nuevo." : "Could not send. Please try again.");
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = t("submit");
+    if (!response || !response.ok) {
+      state._sending = null;
+      state._partsSent = index;
+      state._sendError = { sent: index, total, blocked: false };
+      render();
+      return;
     }
+    state._partsSent = index + 1;
   }
+
+  state._sending = null;
+  state._sendError = null;
+  const para = state.para;
+  await clearSavedInterview();
+  for (const key of [...playbackUrls.keys()]) dropPlayback(key);
+  const thanks = new URL("/crooke-7c3a9e12/interview/thank-you.html", location.origin);
+  if (para) thanks.searchParams.set("para", para);
+  location.href = thanks.pathname + thanks.search;
 }
 
 if (typeof document !== "undefined") {
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     parsePara();
-    if (!previewMode && !testMode) loadProgress();
+    wireStaticControls();
     if (lang !== "en" && lang !== "es") lang = "es";
+    if (!previewMode && !testMode) {
+      const draft = readDraft();
+      if (hasUnsentDraft(draft)) {
+        showResume(draft?.state?.your_name, draft);
+        render();
+        return;
+      }
+      if (draft) applyDraft(draft);
+      try {
+        await loadMediaIntoState();
+      } catch {
+        /* keep the text draft */
+      }
+    }
     render();
   });
 }
