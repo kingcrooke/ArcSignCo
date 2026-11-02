@@ -41,12 +41,21 @@ function starterPointsStillOut(
   return sum
 }
 
+function rosterLabel(
+  rosterId: number,
+  rosterName?: (rosterId: number) => string,
+): string {
+  const name = rosterName?.(rosterId)?.trim()
+  return name || `Roster ${rosterId}`
+}
+
 export function liveFlipForPair(
   home: SleeperMatchup,
   away: SleeperMatchup,
   players: PlayersMap,
   nflGames: NflWeekGame[],
   projections: ProjectionsMap | null,
+  rosterName?: (rosterId: number) => string,
 ): LiveFlipInsight | null {
   if (!projections || !nflGames.length) return null
   if (isMatchupPairFinal(home, away, players, nflGames)) return null
@@ -80,14 +89,18 @@ export function liveFlipForPair(
   const leaderPts = trailerId === home.roster_id ? away.points : home.points
 
   const canFlip = trailerPts + trailerStill > leaderPts + 0.01
+  const homeName = rosterLabel(home.roster_id, rosterName)
+  const awayName = rosterLabel(away.roster_id, rosterName)
+  const trailerName = trailerId === home.roster_id ? homeName : awayName
+  const leaderName = trailerId === home.roster_id ? awayName : homeName
 
   let summary: string
   if (canFlip) {
-    summary = `Can still flip — ~${trailerStill.toFixed(1)} pts still out for the trailing side`
+    summary = `Can still flip — ~${trailerStill.toFixed(1)} pts still out for ${trailerName}`
   } else if (tied) {
-    summary = `~${homeStill.toFixed(1)} / ~${awayStill.toFixed(1)} pts still out`
+    summary = `~${homeStill.toFixed(1)} pts still out for ${homeName} / ~${awayStill.toFixed(1)} pts still out for ${awayName}`
   } else {
-    summary = `~${leaderStill.toFixed(1)} / ~${trailerStill.toFixed(1)} pts still out — unlikely to flip`
+    summary = `~${leaderStill.toFixed(1)} pts still out for ${leaderName} / ~${trailerStill.toFixed(1)} pts still out for ${trailerName} — unlikely to flip`
   }
 
   return {
@@ -105,11 +118,19 @@ export function liveFlipsForWeek(
   players: PlayersMap,
   nflGames: NflWeekGame[] | null,
   projections: ProjectionsMap | null,
+  rosterName?: (rosterId: number) => string,
 ): LiveFlipInsight[] {
   if (!nflGames?.length || !projections) return []
   const out: LiveFlipInsight[] = []
   for (const { home, away } of groupMatchupPairs(matchups)) {
-    const insight = liveFlipForPair(home, away, players, nflGames, projections)
+    const insight = liveFlipForPair(
+      home,
+      away,
+      players,
+      nflGames,
+      projections,
+      rosterName,
+    )
     if (insight) out.push(insight)
   }
   return out

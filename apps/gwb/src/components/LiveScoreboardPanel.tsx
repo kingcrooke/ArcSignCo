@@ -119,11 +119,17 @@ export function LiveScoreboardPanel({
   const liveFlips = useMemo(() => {
     if (!matchups || !players || !nflGames?.length) return new Map<number, string>()
     if (!isWeekLive(week, league, nflState)) return new Map<number, string>()
-    const insights = liveFlipsForWeek(matchups, players, nflGames, projections)
+    const insights = liveFlipsForWeek(
+      matchups,
+      players,
+      nflGames,
+      projections,
+      (rosterId) => teamLabel(rosterId, teams),
+    )
     const map = new Map<number, string>()
     for (const i of insights) map.set(i.matchupId, i.summary)
     return map
-  }, [matchups, players, nflGames, projections, week, league, nflState])
+  }, [matchups, players, nflGames, projections, week, league, nflState, teams])
 
   const detailPair = pairs.find((p) => p.matchupId === detailId)
 

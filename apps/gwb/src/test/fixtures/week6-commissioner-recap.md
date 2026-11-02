@@ -404,7 +404,7 @@ Final margin:
 
 Meaning Jamil’s Mulligan got him to within:
 
-0.71 POINTS
+2.61 POINTS
 
 of actually changing the result.
 
@@ -440,7 +440,7 @@ Confidence restored to championship levels.
 
 ⸻
 
-🐑🔥 @⁨Santagua⁩ 131.40 — @222062761251006111.23
+🐑🔥 @⁨Santagua⁩ 131.40 — Frankie 111.23
 
 Remember when Danny was:
 
@@ -590,7 +590,7 @@ Sometimes you fix four leaks and the boat finds three new holes.
 
 ⸻
 
-👑 @⁨Bro steven Buffet⁩ 119.93 — @18558558721655099.59
+👑 @⁨Bro steven Buffet⁩ 119.93 — Eric 99.59
 
 Steven finally gave the league an opportunity.
 
@@ -839,7 +839,7 @@ Observing everybody else’s disaster while his own team quietly sits 2-4.
 
 ⸻
 
-👶🔥 @⁨Bro Mauricio⁩ 143.21 — @13332013017093993.27
+👶🔥 @⁨Bro Mauricio⁩ 143.21 — Kayser 93.27
 
 Imagine spending Sunday afternoon fighting an ethics case…
 
@@ -977,7 +977,7 @@ But watching 25.7 from the bench while Najee produces POINT TWO is spiritually d
 
 ⸻
 
-😈 @⁨Jesus Crooke⁩ 128.80 — @33006890831959124.52
+😈 @⁨Jesus Crooke⁩ 128.80 — Manny 124.52
 
 Crooke did it again.
 
@@ -1464,7 +1464,7 @@ The Mulligan has become less of an advantage and more of a GWB psychological exp
 
 😡 MOST LEGITIMATELY ANGRY: Mauricio
 
-🎰 CLOSEST MULLIGAN: Jamil — 0.71 short of changing the result
+🎰 CLOSEST MULLIGAN: Jamil — 2.61 short of changing the result
 
 🐑 RESURRECTION AWARD: Danny — 0-3 → 3-3
 

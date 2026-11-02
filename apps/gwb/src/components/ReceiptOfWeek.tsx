@@ -1,4 +1,5 @@
 import type { WeekReceipt } from '../lib/receiptOfWeek'
+import { formatMargin } from '../lib/recaps'
 
 export function ReceiptOfWeek({ receipt }: { receipt: WeekReceipt }) {
   return (
@@ -8,10 +9,10 @@ export function ReceiptOfWeek({ receipt }: { receipt: WeekReceipt }) {
       </p>
       <ul className="space-y-1 text-[var(--gwb-text)]">
         <li>
-          Biggest win: {receipt.biggestWin.label} ({receipt.biggestWin.margin.toFixed(1)} pts)
+          Biggest win: {receipt.biggestWin.label} ({formatMargin(receipt.biggestWin.margin)} pts)
         </li>
         <li>
-          Closest game: {receipt.closestGame.label} ({receipt.closestGame.margin.toFixed(1)} pts)
+          Closest game: {receipt.closestGame.label} ({formatMargin(receipt.closestGame.margin)} pts)
         </li>
         <li>
           High score: {receipt.highestScore.label} ({receipt.highestScore.points.toFixed(1)} pts)

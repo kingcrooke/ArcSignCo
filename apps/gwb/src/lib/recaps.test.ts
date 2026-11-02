@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import commissionerRecaps from '../content/commissioner-recaps.json'
 import {
   buildWeekRecaps,
+  displayMargin,
   filterCommissionerRecapsByWeek,
   type CommissionerRecap,
 } from './recaps'
@@ -23,6 +24,16 @@ const fixtures = join(dir, '../test/fixtures')
 function load<T>(name: string): T {
   return JSON.parse(readFileSync(join(fixtures, name), 'utf-8')) as T
 }
+
+describe('displayMargin', () => {
+  it('subtracts raw scores and rounds once to two decimals', () => {
+    expect(displayMargin(161.66, 124.44)).toBe('37.22')
+    expect(displayMargin(139.98, 135.83)).toBe('4.15')
+    expect(displayMargin(122.0, 121.92)).toBe('0.08')
+    expect(displayMargin(60.16, 60.1)).toBe('0.06')
+    expect(displayMargin(137.59, 134.98)).toBe('2.61')
+  })
+})
 
 describe('buildWeekRecaps', () => {
   it('builds narratives and tags blowouts', () => {

@@ -23,6 +23,11 @@ function pts(n: number | null | undefined): string {
   return n.toFixed(2)
 }
 
+/** Completed adds whose points are not in yet. Sleeper status is already complete. */
+function scoresAfterLabel(week: number): string {
+  return `Scores after W${week}`
+}
+
 function hitLabel(row: ManagerWaiverRow): string {
   if (!row.pickupCount) return '—'
   return `${row.hitPickups}/${row.pickupCount}`
@@ -271,7 +276,7 @@ function WeeklyAddsStrip({
             </p>
             {showPending && m.pending ? (
               <p className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-200">
-                Pending
+                {scoresAfterLabel(m.leg)}
               </p>
             ) : m.startedPoints != null ? (
               <p className="mt-1 tabular-nums text-[var(--gwb-accent)]">
@@ -602,7 +607,9 @@ function MoveRow({
         {move.status === 'failed' ? (
           <span className="text-xs uppercase tracking-wide text-red-200">Failed</span>
         ) : move.pending ? (
-          <span className="text-xs uppercase tracking-wide text-amber-200">Pending</span>
+          <span className="text-xs uppercase tracking-wide text-amber-200">
+            {scoresAfterLabel(move.leg)}
+          </span>
         ) : (
           <span className="tabular-nums text-[var(--gwb-accent)]">
             {move.startedPoints == null ? '' : `${pts(move.startedPoints)} started`}

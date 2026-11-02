@@ -13,6 +13,7 @@ import {
   starterPositions,
 } from '../lib/matchupBoard'
 import { managerNickname } from '../lib/nicknames'
+import { formatMargin } from '../lib/recaps'
 import type {
   NflState,
   PlayersMap,
@@ -223,7 +224,7 @@ function GamesList({
                   <p className="mt-2 text-xs text-[var(--gwb-muted)]">
                     Score {breakdown.composite.toFixed(1)}
                     <span className="mx-1 text-[var(--gwb-border)]">·</span>
-                    {breakdown.margin.toFixed(1)} pt margin
+                    {formatMargin(breakdown.margin)} pt margin
                     <span className="mx-1 text-[var(--gwb-border)]">·</span>
                     {breakdown.combinedPoints.toFixed(1)} combined
                   </p>

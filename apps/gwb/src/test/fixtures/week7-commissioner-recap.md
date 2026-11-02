@@ -213,7 +213,7 @@ But the Tradegate Avengers haven't assembled yet.
 
 ⸻
 
-🐿️ @125327212859529139.98 — @Santagua 135.83
+🐿️ Matt 139.98 — @Santagua 135.83
 
 This may be the funniest receipt of the week.
 
@@ -317,7 +317,7 @@ Welcome to how the other half lives.
 
 ⸻
 
-🦹‍♂️🔥 @Narking 129.70 — @13332013017093987.97
+🦹‍♂️🔥 @Narking 129.70 — Kayser 87.97
 
 Remember on October 20 when Narking said:
 
