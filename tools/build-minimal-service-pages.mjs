@@ -26,6 +26,10 @@ const NAV = `
 
 function pageHtml(p) {
   const url = `https://arcsignco.com/${p.slug}/`;
+  const ogImage =
+    p.slug === "window-graphics"
+      ? "https://arcsignco.com/assets/img/window-graphics-og-1200x630.v1.jpg"
+      : "https://arcsignco.com/assets/img/og-image-1200x630.v1.png";
   const faqJson = p.faqs
     .map(
       ([q, a]) =>
@@ -35,13 +39,57 @@ function pageHtml(p) {
   const faqHtml = p.faqs
     .map(([q, a]) => `<article class="faq-item"><h3>${q}</h3><p>${a}</p></article>`)
     .join("\n        ");
-  const cards = (p.cards || [
-    ["Scope", "Layout and shop drawings in-house when the job needs them."],
-    ["Partners", "Fabrication and installation through Arc's licensed partners."],
-    ["Coordination", "Permit information coordinated with the licensed applicant. Arc does not file permits or stamp drawings."],
-  ])
-    .map(([h, t]) => `<article class="info-card"><h3>${h}</h3><p>${t}</p></article>`)
-    .join("\n        ");
+  const cards = p.cards;
+  const scopeBlock = cards?.length
+    ? `  <section class="section" id="scope">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Scope</span>
+        <h2>${p.scopeH2 || "Typical scope"}</h2>
+      </div>
+      <div class="card-grid three">
+        ${cards.map(([h, t]) => `<article class="info-card"><h3>${h}</h3><p>${t}</p></article>`).join("\n        ")}
+      </div>
+    </div>
+  </section>`
+    : "";
+
+  const cycloneBlock =
+    p.slug === "window-graphics"
+      ? `  <section class="section alt" id="arc-project">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Arc project</span>
+        <h2>Completed Arc job: Cyclone Bagels window graphic</h2>
+        <p class="lead">One example of a completed Arc Signage Co window graphic in New York / Tri-State.</p>
+      </div>
+      <div class="split">
+        <figure class="figure">
+          <img src="/assets/portfolio/cyclone-bagels-dimensional-sign-shop-800.v2.jpg" srcset="/assets/portfolio/cyclone-bagels-dimensional-sign-shop-480.v2.jpg 480w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-800.v2.jpg 800w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-1200.v2.jpg 1200w" sizes="(max-width: 720px) 100vw, 420px" width="810" height="1800" loading="lazy" decoding="async" alt="Cyclone Bagels window graphic. Completed Arc Signage Co job.">
+          <figcaption>Completed Arc Signage Co job.</figcaption>
+        </figure>
+        <div class="prose">
+          <p>A Coney Island storefront window graphic for Cyclone Bagels — layout and production for a completed Arc Signage Co job.</p>
+          <p><a href="/portfolio/#arc-projects-heading">See more Arc projects on the portfolio page</a></p>
+        </div>
+      </div>
+    </div>
+  </section>`
+      : "";
+
+  const checklist = (
+    p.quoteChecklist || [
+      "Photos or drawings with measurements when you have them",
+      "Logo or message artwork",
+      "Landlord or agency criteria if known",
+      "Target date",
+      "Street address of the project",
+    ]
+  )
+    .map((li) => `<li>${li}</li>`)
+    .join("\n          ");
+
+  const subjectLine = p.sendSubjectLine || "the project address";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -57,7 +105,7 @@ function pageHtml(p) {
 <meta property="og:title" content="${p.title}">
 <meta property="og:description" content="${p.meta}">
 <meta property="og:url" content="${url}">
-<meta property="og:image" content="https://arcsignco.com/assets/img/og-image-1200x630.v1.png">
+<meta property="og:image" content="${ogImage}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Arc Signage Co: full-service signage for New York / Tri-State">
@@ -131,7 +179,7 @@ ${faqJson}
           </div>
         </div>
         <a href="/#work">Scopes</a>
-        <a href="/portfolio">Prior signage work</a>
+        <a href="/portfolio/">Prior signage work</a>
         <a href="/#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/">Free Sign Preview</a>
       </div>
@@ -169,18 +217,9 @@ ${faqJson}
       </aside>
     </div>
   </section>
-  <section class="section" id="scope">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Scope</span>
-        <h2>${p.scopeH2 || "Typical scope"}</h2>
-      </div>
-      <div class="card-grid three">
-        ${cards}
-      </div>
-    </div>
-  </section>
-  <section class="section alt" id="what-to-send">
+${scopeBlock}
+${cycloneBlock}
+  <section class="section${p.slug === "window-graphics" ? "" : " alt"}" id="what-to-send">
     <div class="wrap">
       <div class="section-head">
         <span class="eyebrow">Quote</span>
@@ -188,15 +227,11 @@ ${faqJson}
       </div>
       <div class="send-grid">
         <ul class="checklist">
-          <li>Photos or drawings with measurements when you have them</li>
-          <li>Logo or message artwork</li>
-          <li>Landlord or agency criteria if known</li>
-          <li>Target date</li>
-          <li>Street address of the project</li>
+          ${checklist}
         </ul>
         <div class="send-card">
           <h3>Send it to Arc</h3>
-          <p>Email files to jc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.</p>
+          <p>Email files to jc@arcsignco.com with ${subjectLine} in the subject line. Put URGENT in the subject for active jobsites.</p>
           <div class="contact-strip">
             <a href="tel:+13474502110">(347) 450-2110</a> (call or text) · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
             <span class="hours">Hours: Mon–Fri 8 AM–6 PM</span>
