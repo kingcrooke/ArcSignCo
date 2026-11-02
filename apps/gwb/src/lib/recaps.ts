@@ -63,10 +63,16 @@ function buildStarsLine(lines: string[]): string | undefined {
   return `Top scorers — ${lines.join(' · ')}`
 }
 
-function displayMargin(aPts: number, bPts: number): string {
-  const a = Math.round(aPts * 10) / 10
-  const b = Math.round(bPts * 10) / 10
-  return Math.abs(a - b).toFixed(1)
+/**
+ * Point margin from raw scores, rounded once to two decimals.
+ * Do not round each score first — 161.66 vs 124.44 is 37.22, not 37.3.
+ */
+export function formatMargin(margin: number): string {
+  return Math.abs(margin).toFixed(2)
+}
+
+export function displayMargin(aPts: number, bPts: number): string {
+  return formatMargin(aPts - bPts)
 }
 
 export function isMatchupNotStarted(aPts: number, bPts: number): boolean {

@@ -131,8 +131,8 @@ describe('getWeekGraphicsSections week 4', () => {
       ['results-w7-m2', 'results-w7-m2', 'Frankie beats Manny 161.66-124.44'],
       ['results-w7-m3', 'results-w7-m3', 'Steven beats Jamil 187.82-163.40'],
       ['results-w7-m4', 'results-w7-m4', 'Matt beats Danny 139.98-135.83'],
-      ['results-w7-m5', 'results-w7-m5', 'Narking beats Kayser 129.7-87.97'],
-      ['results-w7-m6', 'results-w7-m6', 'Hady beats Mauricio 141.51-118.3'],
+      ['results-w7-m5', 'results-w7-m5', 'Narking beats Kayser 129.70-87.97'],
+      ['results-w7-m6', 'results-w7-m6', 'Hady beats Mauricio 141.51-118.30'],
     ])
     expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })

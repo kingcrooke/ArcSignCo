@@ -334,6 +334,6 @@ const RESULTS_W7: PublishedSlide[] = [
   result('results-w7-m2', 'Frankie beats Manny 161.66-124.44'),
   result('results-w7-m3', 'Steven beats Jamil 187.82-163.40'),
   result('results-w7-m4', 'Matt beats Danny 139.98-135.83'),
-  result('results-w7-m5', 'Narking beats Kayser 129.7-87.97'),
-  result('results-w7-m6', 'Hady beats Mauricio 141.51-118.3'),
+  result('results-w7-m5', 'Narking beats Kayser 129.70-87.97'),
+  result('results-w7-m6', 'Hady beats Mauricio 141.51-118.30'),
 ]

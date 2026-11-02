@@ -2,7 +2,12 @@ import { useMemo } from 'react'
 import { useLiveWeekPolling } from '../hooks/useLiveWeekPolling'
 import { allPlayLine } from '../lib/allPlay'
 import { groupMatchupPairs, teamLabel } from '../lib/matchupBoard'
-import { buildWeekRecaps, isMatchupNotStarted, weekHasMatchups } from '../lib/recaps'
+import {
+  buildWeekRecaps,
+  displayMargin,
+  isMatchupNotStarted,
+  weekHasMatchups,
+} from '../lib/recaps'
 import { buildWeekReceipt } from '../lib/receiptOfWeek'
 import { computeStandingsThroughWeek } from '../lib/standings'
 import type {
@@ -39,12 +44,12 @@ function LiveMatchupCard({ recap }: { recap: MatchupRecap }) {
         <h3 className="text-lg font-semibold">
           {recap.teamA.teamName}{' '}
           <span className="text-[var(--gwb-accent)]">
-            {recap.teamA.points.toFixed(1)}
+            {recap.teamA.points.toFixed(2)}
           </span>
           <span className="mx-2 text-[var(--gwb-muted)]">vs</span>
           {recap.teamB.teamName}{' '}
           <span className="text-[var(--gwb-accent)]">
-            {recap.teamB.points.toFixed(1)}
+            {recap.teamB.points.toFixed(2)}
           </span>
         </h3>
       </div>
@@ -81,7 +86,7 @@ function LiveScoresFallback({
         const awayTeam = teams.get(away.roster_id)
         const homeName = homeTeam?.teamName ?? teamLabel(home.roster_id, teams)
         const awayName = awayTeam?.teamName ?? teamLabel(away.roster_id, teams)
-        const margin = Math.abs(home.points - away.points).toFixed(1)
+        const margin = displayMargin(home.points, away.points)
         const statusLine = isMatchupNotStarted(home.points, away.points)
           ? 'Not started'
           : home.points >= away.points
@@ -98,12 +103,12 @@ function LiveScoresFallback({
             <h3 className="text-lg font-semibold">
               {homeName}{' '}
               <span className="text-[var(--gwb-accent)]">
-                {home.points.toFixed(1)}
+                {home.points.toFixed(2)}
               </span>
               <span className="mx-2 text-[var(--gwb-muted)]">vs</span>
               {awayName}{' '}
               <span className="text-[var(--gwb-accent)]">
-                {away.points.toFixed(1)}
+                {away.points.toFixed(2)}
               </span>
             </h3>
             <p className="mt-2 text-sm text-[var(--gwb-muted)]">{statusLine}</p>
@@ -296,12 +301,12 @@ export function RecapsPanel({
             <h3 className="text-lg font-semibold">
               {r.teamA.teamName}{' '}
               <span className="text-[var(--gwb-accent)]">
-                {r.teamA.points.toFixed(1)}
+                {r.teamA.points.toFixed(2)}
               </span>
               <span className="mx-2 text-[var(--gwb-muted)]">vs</span>
               {r.teamB.teamName}{' '}
               <span className="text-[var(--gwb-accent)]">
-                {r.teamB.points.toFixed(1)}
+                {r.teamB.points.toFixed(2)}
               </span>
             </h3>
             {r.tags.length > 0 && (

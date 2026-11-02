@@ -1,4 +1,5 @@
 import { benchPointsTotal, groupMatchupPairs } from './matchupBoard'
+import { formatMargin } from './recaps'
 import { managerNickname } from './nicknames'
 import type { SleeperLeague, SleeperMatchup, TeamInfo } from './types'
 import { isWeekComplete } from './weeks'
@@ -68,7 +69,7 @@ export function computeWeeklyAwardsForWeek(
         rosterId: winner.roster_id,
         managerName: teamName(winner.roster_id, teams),
         value: margin,
-        detail: `${margin.toFixed(2)} over ${teamName(loser.roster_id, teams)}`,
+        detail: `${formatMargin(margin)} over ${teamName(loser.roster_id, teams)}`,
       }
     }
   }
