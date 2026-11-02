@@ -33,7 +33,7 @@ export const CONTACT = {
   site: "arcsignco.com",
   area: "New York / Tri-State",
   name: "Arc Signage Co",
-  legal: "Arc Signage Co LLC",
+  legal: "Arc Signage Co. LLC",
 };
 export const DISCLAIMER = "Concept only – not a shop drawing";
 

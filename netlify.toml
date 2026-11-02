@@ -280,6 +280,42 @@
   [headers.values]
     Content-Type = "text/plain; charset=utf-8"
 
+# Marketing redirects
+[[redirects]]
+  from = "/quote/"
+  to = "/#quote"
+  status = 301
+
+[[redirects]]
+  from = "/quote"
+  to = "/#quote"
+  status = 301
+
+[[redirects]]
+  from = "/contact/"
+  to = "/#quote"
+  status = 301
+
+[[redirects]]
+  from = "/contact"
+  to = "/#quote"
+  status = 301
+
+[[redirects]]
+  from = "/services/"
+  to = "/#services"
+  status = 301
+
+[[redirects]]
+  from = "/services"
+  to = "/#services"
+  status = 301
+
+[[redirects]]
+  from = "/portfolio"
+  to = "/portfolio/"
+  status = 301
+
 # Block internal repo files and image masters (site pages use /assets/* only).
 [[redirects]]
   from = "/README.md"

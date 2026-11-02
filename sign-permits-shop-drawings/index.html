@@ -109,6 +109,7 @@
   document.head.appendChild(s);
 })();
 </script>
+<script src="/assets/js/arc-site-config.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -134,10 +135,18 @@
             <a href="/digital-signage/">Digital signage</a>
             <a href="/awnings/">Storefront awnings</a>
             <a href="/winter-enclosures/">Winter enclosures</a>
+            <a href="/window-graphics/">Window graphics</a>
+            <a href="/vehicle-wraps/">Vehicle wraps</a>
+            <a href="/traffic-signs/">Traffic signs</a>
+            <a href="/blade-signs/">Blade signs</a>
+            <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+            <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+            <a href="/design-consulting/">Design consulting</a>
+            <a href="/agencies-institutions/">Agencies &amp; institutions</a>
           </div>
         </div>
         <a href="/#work">Scopes</a>
-        <a href="/portfolio">Prior signage work</a>
+        <a href="/portfolio/">Prior signage work</a>
         <a href="/#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/">Free Sign Preview</a>
       </div>
@@ -214,7 +223,7 @@
             <tr><th scope="col">Party</th><th scope="col">Typical role</th></tr>
           </thead>
           <tbody>
-            <tr class="arc-row"><th scope="row">Arc Signage Co</th><td>Sign design, shop drawings, sign and message schedules, fabrication, and install coordination. Arc coordinates with the licensed parties below where the job requires them, instead of filing as one of them.</td></tr>
+            <tr class="arc-row"><th scope="row">Arc Signage Co</th><td>Sign design, shop drawings, sign and message schedules, and fabrication and install coordination. Arc coordinates with the licensed parties below where the job requires them, instead of filing as one of them.</td></tr>
             <tr><th scope="row">Licensed Sign Hanger (Master or Special)</th><td>Performs or directly supervises exterior sign installation, except for the signs exempted in Construction Code §28-415.2. Can also act as the permit applicant for smaller wall-mounted accessory signs: up to 150 square feet and 300 pounds, projecting no more than 18 inches, and mounted entirely below the second-story ceiling (1 RCNY §105-04).</td></tr>
             <tr><th scope="row">Registered design professional (PE or RA)</th><td>Files the sign permit when the sign falls outside the Licensed Sign Hanger limits, and designs any structural work beyond a basic frame or support.</td></tr>
             <tr><th scope="row">Licensed electrician</th><td>Files the electrical permit for an illuminated sign through DOB NOW: Build and makes the electrical connection.</td></tr>
@@ -406,7 +415,7 @@
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
       <a href="/#work">Scopes</a>
-      <a href="/portfolio">Prior signage work</a>
+      <a href="/portfolio/">Prior signage work</a>
       <a href="/#faq">FAQ</a>
       <a href="/#selector">Scope Finder</a>
       <a href="/tools/sign-mockup/">Free Sign Preview</a>
@@ -422,12 +431,20 @@
     <a href="/channel-letters/">Channel letters</a>
     <a href="/construction-signs/">Construction site signs</a>
     <a href="/wayfinding-signs/">Interior wayfinding</a>
-            <a href="/digital-signage/">Digital signage</a>
+    <a href="/digital-signage/">Digital signage</a>
     <a href="/awnings/">Storefront awnings</a>
     <a href="/winter-enclosures/">Winter enclosures</a>
+    <a href="/window-graphics/">Window graphics</a>
+    <a href="/vehicle-wraps/">Vehicle wraps</a>
+    <a href="/traffic-signs/">Traffic signs</a>
+    <a href="/blade-signs/">Blade signs</a>
+    <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+    <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+    <a href="/design-consulting/">Design consulting</a>
+    <a href="/agencies-institutions/">Agencies &amp; institutions</a>
   </nav>
   <div class="wrap footer-meta">
-    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
+    <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
     <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
@@ -437,8 +454,10 @@
 </div>
 
 <script>
+const cfg = window.ARC_SITE_CONFIG || {};
 const gbpLink = document.getElementById("gbpLink");
-if (/^https:\/\//.test(gbpLink.getAttribute("href") || "")) gbpLink.hidden = false;
+const gbpUrl = (cfg.gbpUrl || "").trim();
+if (gbpLink && /^https:\/\//.test(gbpUrl)) { gbpLink.href = gbpUrl; gbpLink.hidden = false; }
 
 // Phone bar shows only when no other quote/call buttons are on screen.
 const mobileCta = document.getElementById("mobileCta");

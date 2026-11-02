@@ -296,7 +296,7 @@ check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof
 check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
 check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
 check(/id="approveBtn">Concept approved, request a formal estimate</.test(proofHtml), "the approve button reads \"Concept approved, request a formal estimate\"");
-check(html.includes("Upload a storefront photo, see your sign in 2 minutes. Free, no account."), "step 1 opens with the Arc intro line");
+check(html.includes("Upload a storefront photo and see your sign. Free, no account."), "step 1 opens with the Arc intro line");
 check(/<strong>Concept approved, request a formal estimate<\/strong>/.test(proofHtml), "the approval confirmation reads \"Concept approved, request a formal estimate\"");
 check(STAMP_TITLE === "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE", "the PDF approval stamp reads \"Concept approved, request a formal estimate\"");
 for (const f of own) {

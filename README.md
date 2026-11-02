@@ -1,6 +1,6 @@
 # Arc Signage Co
 
-Website for Arc Signage Co (legal name: Arc Signage Co LLC), live at https://arcsignco.com.
+Website for Arc Signage Co (legal name: Arc Signage Co. LLC), live at https://arcsignco.com.
 
 Static HTML hosted on Netlify (site name `arcsign`). There is no framework and no build step:
 Netlify publishes the repository root as-is. The one server piece is a Netlify Function for the sign

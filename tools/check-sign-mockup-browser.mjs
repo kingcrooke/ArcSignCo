@@ -334,8 +334,12 @@ async function run() {
       await ep.waitForFunction(() => window.signMockup.state.photo && window.signMockup.state.calInches > 0, { timeout: 30000 });
       await ep.evaluate(() => window.signMockup.setStep("sign"));
       await ep.waitForFunction(() => window.signMockup.sizeInfo(), { timeout: 15000 });
-      await ep.click("#estimateCta").catch(() => {});
-      await ep.evaluate(() => window.signMockup.estimate.prefill());
+      await ep.evaluate(() => {
+        window.signMockup.setStep("export");
+        const panel = document.getElementById("estimate");
+        if (panel) panel.hidden = false;
+        window.signMockup.estimate.prefill();
+      });
       const f = "#estimateForm .ef-form";
       const val = n => ep.$eval(`${f} [name="${n}"]`, el => el.value);
       const pre = {

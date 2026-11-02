@@ -1763,8 +1763,13 @@ const estimate = mountEstimateForm($("estimateForm"), {
     };
   },
 });
-$("estimateCta").addEventListener("click", () => estimate.prefill());
-new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) estimate.prefill(); }).observe($("estimate"));
+const estimatePanel = $("estimate");
+$("estimateCta").addEventListener("click", () => {
+  estimate.prefill();
+  estimatePanel.hidden = false;
+  estimatePanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+});
+new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) estimate.prefill(); }).observe(estimatePanel);
 
 // /tools/sign-mockup/?tab=<category>&type=<type id>&src=<tag>: opens that tab and type. Unknown
 // or coming-soon values fall back to the default tab rather than failing.

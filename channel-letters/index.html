@@ -109,6 +109,7 @@
   document.head.appendChild(s);
 })();
 </script>
+<script src="/assets/js/arc-site-config.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -134,10 +135,18 @@
             <a href="/digital-signage/">Digital signage</a>
             <a href="/awnings/">Storefront awnings</a>
             <a href="/winter-enclosures/">Winter enclosures</a>
+            <a href="/window-graphics/">Window graphics</a>
+            <a href="/vehicle-wraps/">Vehicle wraps</a>
+            <a href="/traffic-signs/">Traffic signs</a>
+            <a href="/blade-signs/">Blade signs</a>
+            <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+            <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+            <a href="/design-consulting/">Design consulting</a>
+            <a href="/agencies-institutions/">Agencies &amp; institutions</a>
           </div>
         </div>
         <a href="/#work">Scopes</a>
-        <a href="/portfolio">Prior signage work</a>
+        <a href="/portfolio/">Prior signage work</a>
         <a href="/#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/">Free Sign Preview</a>
       </div>
@@ -161,7 +170,7 @@
       <div>
         <span class="eyebrow">LED &amp; Illuminated | New York / Tri-State</span>
         <h1>Front-lit, halo-lit, and reverse channel letters for New York storefronts</h1>
-        <p class="answer">Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and engineering drawings in-house (stamped by a third-party licensed PE when the job needs it), coordinates fabrication and installation through Arc's licensed partners, coordinates the sign permit with the licensed applicant, and coordinates the power handoff with the project's electrician. Arc does not file permits or stamp drawings.</p>
+        <p class="answer">Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and shop drawings in-house (third-party PE stamping when required), coordinates fabrication and installation through Arc's licensed partners, coordinates the sign permit with the licensed applicant, and coordinates the power handoff with the project's electrician. Arc does not file permits or stamp drawings.</p>
         <div class="hero-actions" id="heroActions">
           <a class="btn gold lg" href="/#quote">Request a quote</a>
           <a class="btn ghost lg" href="tel:+13474502110">Call or text (347) 450-2110</a>
@@ -388,7 +397,7 @@
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
       <a href="/#work">Scopes</a>
-      <a href="/portfolio">Prior signage work</a>
+      <a href="/portfolio/">Prior signage work</a>
       <a href="/#faq">FAQ</a>
       <a href="/#selector">Scope Finder</a>
       <a href="/tools/sign-mockup/">Free Sign Preview</a>
@@ -404,12 +413,20 @@
     <a href="/channel-letters/">Channel letters</a>
     <a href="/construction-signs/">Construction site signs</a>
     <a href="/wayfinding-signs/">Interior wayfinding</a>
-            <a href="/digital-signage/">Digital signage</a>
+    <a href="/digital-signage/">Digital signage</a>
     <a href="/awnings/">Storefront awnings</a>
     <a href="/winter-enclosures/">Winter enclosures</a>
+    <a href="/window-graphics/">Window graphics</a>
+    <a href="/vehicle-wraps/">Vehicle wraps</a>
+    <a href="/traffic-signs/">Traffic signs</a>
+    <a href="/blade-signs/">Blade signs</a>
+    <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+    <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+    <a href="/design-consulting/">Design consulting</a>
+    <a href="/agencies-institutions/">Agencies &amp; institutions</a>
   </nav>
   <div class="wrap footer-meta">
-    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
+    <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
     <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
@@ -419,8 +436,10 @@
 </div>
 
 <script>
+const cfg = window.ARC_SITE_CONFIG || {};
 const gbpLink = document.getElementById("gbpLink");
-if (/^https:\/\//.test(gbpLink.getAttribute("href") || "")) gbpLink.hidden = false;
+const gbpUrl = (cfg.gbpUrl || "").trim();
+if (gbpLink && /^https:\/\//.test(gbpUrl)) { gbpLink.href = gbpUrl; gbpLink.hidden = false; }
 
 // Phone bar shows only when no other quote/call buttons are on screen.
 const mobileCta = document.getElementById("mobileCta");
