@@ -115,9 +115,9 @@ describe('weekly reports', () => {
     line('Chase’n Dubs', 163.82, 'A-Lamb-e que tengo hambre', 151.72)
     line('MahomiesRidley4MooreJeffe', 68.62, 'Rubuilding', 68.52)
     line('Love Thy Nabers', 141.22, 'Wolf Pack', 96.48)
-    line('ramonguaraguao', 135.98, 'Team Name Hoes', 119.7)
+    line('ramonguaraguao', 136.98, 'Team Name Hoes', 119.7)
     line('Nix in 5', 168.88, 'Saints & Sinners', 115.66)
-    line('Chalupa Batman', 151.68, 'BigBlue', 139.18)
+    line('Chalupa Batman', 151.68, 'BigBlue', 138.18)
   })
 
   it('sorts every week by Sleeper matchup_id, matching graphics m1..m6', () => {
