@@ -13,7 +13,23 @@ const require = createRequire(import.meta.url);
 const { JSDOM } = require("jsdom");
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-export const SERVICE_SLUGS = ["sign-permits-shop-drawings", "ada-signs", "channel-letters", "construction-signs", "wayfinding-signs", "digital-signage", "awnings"];
+export const SERVICE_SLUGS = [
+  "sign-permits-shop-drawings",
+  "ada-signs",
+  "channel-letters",
+  "construction-signs",
+  "wayfinding-signs",
+  "digital-signage",
+  "awnings",
+  "window-graphics",
+  "vehicle-wraps",
+  "traffic-signs",
+  "sign-repair-maintenance",
+  "restaurant-storefront-signs",
+  "blade-signs",
+  "design-consulting",
+  "agencies-institutions",
+];
 const pages = [{ slug: "", file: "index.html" }, ...SERVICE_SLUGS.map(slug => ({ slug, file: `${slug}/index.html` }))];
 
 const BUSINESS_ID = "https://arcsignco.com/#business";
@@ -202,7 +218,7 @@ for (const { slug, file } of pages) {
       },
       "digital-signage": {
         title: "Digital Signage NYC | Arc Signage Co",
-        description: "Digital signage for NY and tri-state: touch directories, kiosks, wayfinding, room and event boards, donor walls, and video walls. Get a quote.",
+        description: "Digital signage for New York / Tri-State: touch directories, kiosks, wayfinding, room and event boards, donor walls, and video walls. Get a quote.",
         h1: "Digital signage for touch directories, wayfinding, and video walls",
       },
       awnings: {
@@ -222,7 +238,7 @@ for (const { slug, file } of pages) {
 if (sitemap.includes("sign-mockup/proof")) fail("sitemap", "proof pages are listed");
 else pass("sitemap", "proof pages are not listed");
 const homeNav = fs.readFileSync(path.join(root, "index.html"), "utf8");
-for (const href of ["/wayfinding-signs/", "/digital-signage/", "/awnings/"]) {
+for (const href of ["/wayfinding-signs/", "/digital-signage/", "/awnings/", "/window-graphics/", "/vehicle-wraps/"]) {
   if (!homeNav.includes(`href="${href}"`)) fail("/", `homepage missing link to ${href}`);
 }
 pass("/", "homepage links to service pages");

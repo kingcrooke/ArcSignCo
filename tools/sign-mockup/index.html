@@ -52,6 +52,11 @@
 <link rel="stylesheet" href="/tools/sign-mockup/sign-mockup.css">
 <link rel="stylesheet" href="/tools/sign-mockup/estimate-form.css">
 <link rel="modulepreload" href="/tools/sign-mockup/js/app.js">
+<style>
+/* Shared .hours only applies inside .contact-strip. Match that scale on this dark banner. */
+.cta-band p:has(.hours) { margin-top: 6px; font-size: 13px; font-weight: 700; line-height: 1.4; color: #b9c7d8; }
+</style>
+<script src="/assets/js/arc-site-config.js"></script>
 </head>
 <body class="sm-page">
 <a class="skip-link" href="#tool">Skip to the mockup tool</a>
@@ -77,10 +82,18 @@
             <a href="/digital-signage/">Digital signage</a>
             <a href="/awnings/">Storefront awnings</a>
             <a href="/winter-enclosures/">Winter enclosures</a>
+            <a href="/window-graphics/">Window graphics</a>
+            <a href="/vehicle-wraps/">Vehicle wraps</a>
+            <a href="/traffic-signs/">Traffic signs</a>
+            <a href="/blade-signs/">Blade signs</a>
+            <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+            <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+            <a href="/design-consulting/">Design consulting</a>
+            <a href="/agencies-institutions/">Agencies &amp; institutions</a>
           </div>
         </div>
         <a href="/#work">Scopes</a>
-        <a href="/portfolio">Prior signage work</a>
+        <a href="/portfolio/">Prior signage work</a>
         <a href="/#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/" aria-current="page">Free Sign Preview</a>
       </div>
@@ -143,7 +156,7 @@
       <div class="sm-panel">
         <section class="sm-card" data-panel="photo" aria-labelledby="p-photo">
           <h2 id="p-photo"><b>1</b> Storefront photo</h2>
-          <p class="sm-lead" id="stepIntro">Upload a storefront photo, see your sign in 2 minutes. Free, no account.</p>
+          <p class="sm-lead" id="stepIntro">Upload a storefront photo and see your sign. Free, no account.</p>
           <p>Use a straight-on photo of the facade with the whole sign area in view. Shooting from across the street keeps distortion low.</p>
           <div class="sm-actions">
             <label class="btn gold sm-file" for="photoInput">Choose photo</label>
@@ -300,23 +313,20 @@
               </div>
             </div>
           </div>
-          <a class="btn gold lg sm-estimate-cta" id="estimateCta" href="#estimate">Request a formal estimate</a>
-          <p class="note">Want Arc to price it? Email the PDF and project address to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> or <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
+          <button type="button" class="btn gold lg sm-estimate-cta" id="estimateCta">Request a formal estimate</button>
+          <div class="sm-estimate-wrap sm-estimate-inline" id="estimate" aria-labelledby="estimateTitle" hidden>
+            <div class="section-head">
+              <span class="eyebrow">Free, no obligation</span>
+              <h2 id="estimateTitle">Request a formal estimate</h2>
+              <p>Tell Arc about the job. The sign type, size and lighting are filled in from your mockup; change anything that's off.</p>
+            </div>
+            <div id="estimateForm"></div>
+          </div>
+          <p class="note">Want Arc to price it? Use the form above after you finish the mockup, or email the PDF and project address to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
         </section>
 
         <p class="sm-status" id="status" role="status" aria-live="polite"></p>
       </div>
-    </div>
-  </section>
-
-  <section class="section sm-estimate" id="estimate" aria-labelledby="estimateTitle">
-    <div class="wrap sm-estimate-wrap">
-      <div class="section-head">
-        <span class="eyebrow">Free, no obligation</span>
-        <h2 id="estimateTitle">Request a formal estimate</h2>
-        <p>Tell Arc about the job. The sign type, size and lighting are filled in from your mockup; change anything that's off.</p>
-      </div>
-      <div id="estimateForm"></div>
     </div>
   </section>
 
@@ -352,7 +362,8 @@
       <div>
         <span class="eyebrow">Next step</span>
         <h2>Want Arc to price it?</h2>
-        <p>Email the PDF and project address to jc@arcsignco.com or arc@arcsignco.com, or call or text (347) 450-2110.</p>
+        <p>Email the PDF and project address to jc@arcsignco.com, or call or text (347) 450-2110.</p>
+        <p><span class="hours">Hours: Mon–Fri 8 AM–6 PM</span></p>
       </div>
       <div class="hero-actions">
         <a class="btn gold lg" href="/#quote">Request a quote</a>
@@ -425,7 +436,7 @@
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
       <a href="/#work">Scopes</a>
-      <a href="/portfolio">Prior signage work</a>
+      <a href="/portfolio/">Prior signage work</a>
       <a href="/#faq">FAQ</a>
       <a href="/#selector">Scope Finder</a>
       <a href="/tools/sign-mockup/">Free Sign Preview</a>
@@ -441,20 +452,30 @@
     <a href="/channel-letters/">Channel letters</a>
     <a href="/construction-signs/">Construction site signs</a>
     <a href="/wayfinding-signs/">Interior wayfinding</a>
-            <a href="/digital-signage/">Digital signage</a>
+    <a href="/digital-signage/">Digital signage</a>
     <a href="/awnings/">Storefront awnings</a>
     <a href="/winter-enclosures/">Winter enclosures</a>
+    <a href="/window-graphics/">Window graphics</a>
+    <a href="/vehicle-wraps/">Vehicle wraps</a>
+    <a href="/traffic-signs/">Traffic signs</a>
+    <a href="/blade-signs/">Blade signs</a>
+    <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+    <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+    <a href="/design-consulting/">Design consulting</a>
+    <a href="/agencies-institutions/">Agencies &amp; institutions</a>
   </nav>
   <div class="wrap footer-meta">
-    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
+    <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
     <span><a href="tel:+13474502110">Call or text (347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
 
 <noscript><p class="sm-noscript">The mockup tool needs JavaScript. You can still email facade photos to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>.</p></noscript>
 <script>
+const cfg = window.ARC_SITE_CONFIG || {};
 const gbpLink = document.getElementById("gbpLink");
-if (/^https:\/\//.test(gbpLink.getAttribute("href") || "")) gbpLink.hidden = false;
+const gbpUrl = (cfg.gbpUrl || "").trim();
+if (gbpLink && /^https:\/\//.test(gbpUrl)) { gbpLink.href = gbpUrl; gbpLink.hidden = false; }
 
 const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("nav-menu");

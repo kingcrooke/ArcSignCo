@@ -110,6 +110,7 @@
   document.head.appendChild(s);
 })();
 </script>
+<script src="/assets/js/arc-site-config.js"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -135,10 +136,18 @@
             <a href="/digital-signage/">Digital signage</a>
             <a href="/awnings/">Storefront awnings</a>
             <a href="/winter-enclosures/">Winter enclosures</a>
+            <a href="/window-graphics/">Window graphics</a>
+            <a href="/vehicle-wraps/">Vehicle wraps</a>
+            <a href="/traffic-signs/">Traffic signs</a>
+            <a href="/blade-signs/">Blade signs</a>
+            <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+            <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+            <a href="/design-consulting/">Design consulting</a>
+            <a href="/agencies-institutions/">Agencies &amp; institutions</a>
           </div>
         </div>
         <a href="/#work">Scopes</a>
-        <a href="/portfolio">Prior signage work</a>
+        <a href="/portfolio/">Prior signage work</a>
         <a href="/#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/">Free Sign Preview</a>
       </div>
@@ -241,7 +250,7 @@
         <article class="info-card"><h3>Floor, elevator, and stair IDs</h3><p>Elevator jamb designations with tactile floor identifiers on both jambs, including a star at the main entry. Stair doors get the floor-identification sign the Building Code sizes and places, plus a separate tactile floor sign. These are not the lobby directory.</p></article>
         <article class="info-card"><h3>Corridor decision points</h3><p>Corridor signs where the path splits, at elevator lobbies, and along the accessible route.</p></article>
         <article class="info-card"><h3>Room ID signs</h3><p>Room names and numbers for offices, suites, and service rooms. Permanent room signs are planned apart from the directional signs.</p></article>
-        <article class="info-card"><h3>Restrooms and exits</h3><p>Restroom signs that identify a permanent room are tactile. Stair doors get the floor-identification sign the Building Code sizes and places, plus a separate tactile floor sign. Illuminated exit signs follow the egress rules for letter size and emergency power. They are not the tactile room sign.</p></article>
+        <article class="info-card"><h3>Restrooms and exits</h3><p>Restroom signs that identify a permanent room are tactile. Illuminated exit signs follow the egress rules for letter size and emergency power. They are not the tactile room sign.</p></article>
         <article class="info-card"><h3>Phased openings</h3><p>Directory inserts, temporary directions, and later message updates when floors or tenants open in phases.</p></article>
       </div>
       <p class="note"><strong>Navigation is not the same as room identification.</strong> Directional and informational signs generally use visual characters. Signs that identify a permanent room or space can require tactile characters and Grade 2 Braille. A directory is not automatically a tactile sign. The architect or code professional decides which signs need Braille, sign by sign.</p>
@@ -467,7 +476,7 @@
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
       <a href="/#work">Scopes</a>
-      <a href="/portfolio">Prior signage work</a>
+      <a href="/portfolio/">Prior signage work</a>
       <a href="/#faq">FAQ</a>
       <a href="/#selector">Scope Finder</a>
       <a href="/tools/sign-mockup/">Free Sign Preview</a>
@@ -483,12 +492,20 @@
     <a href="/channel-letters/">Channel letters</a>
     <a href="/construction-signs/">Construction site signs</a>
     <a href="/wayfinding-signs/">Interior wayfinding</a>
-            <a href="/digital-signage/">Digital signage</a>
+    <a href="/digital-signage/">Digital signage</a>
     <a href="/awnings/">Storefront awnings</a>
     <a href="/winter-enclosures/">Winter enclosures</a>
+    <a href="/window-graphics/">Window graphics</a>
+    <a href="/vehicle-wraps/">Vehicle wraps</a>
+    <a href="/traffic-signs/">Traffic signs</a>
+    <a href="/blade-signs/">Blade signs</a>
+    <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
+    <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
+    <a href="/design-consulting/">Design consulting</a>
+    <a href="/agencies-institutions/">Agencies &amp; institutions</a>
   </nav>
   <div class="wrap footer-meta">
-    <span>&copy; 2026 Arc Signage Co LLC &mdash; New York / Tri-State</span>
+    <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
     <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
@@ -498,8 +515,10 @@
 </div>
 
 <script>
+const cfg = window.ARC_SITE_CONFIG || {};
 const gbpLink = document.getElementById("gbpLink");
-if (/^https:\/\//.test(gbpLink.getAttribute("href") || "")) gbpLink.hidden = false;
+const gbpUrl = (cfg.gbpUrl || "").trim();
+if (gbpLink && /^https:\/\//.test(gbpUrl)) { gbpLink.href = gbpUrl; gbpLink.hidden = false; }
 
 // Phone bar shows only when no other quote/call buttons are on screen.
 const mobileCta = document.getElementById("mobileCta");
