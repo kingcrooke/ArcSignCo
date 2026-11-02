@@ -12,7 +12,7 @@
   --shadow: 0 8px 24px rgba(0, 45, 98, 0.12);
   --radius: 12px;
   --max: 68rem;
-  --header-h: 5rem;
+  --header-h: 9rem;
   --draft-h: 2.25rem;
   --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
 }
@@ -61,6 +61,9 @@ summary:focus-visible {
   left: -9999px;
   top: 0;
   z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0.5rem 1rem;
   background: var(--dr-blue);
   color: #fff;
@@ -69,6 +72,22 @@ summary:focus-visible {
 .skip-link:focus {
   left: 0.5rem;
   top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .draft-banner {
@@ -96,6 +115,7 @@ summary:focus-visible {
 }
 
 .header-inner {
+  position: relative;
   max-width: var(--max);
   margin: 0 auto;
   padding: 0.65rem 1rem;
@@ -175,7 +195,9 @@ summary:focus-visible {
 .lang-toggle button {
   border: 0;
   background: transparent;
-  padding: 0.35rem 0.7rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0.5rem 0.85rem;
   font-size: 0.8125rem;
   font-weight: 600;
   cursor: pointer;
@@ -187,21 +209,92 @@ summary:focus-visible {
   color: #fff;
 }
 
-.nav-desktop {
+.lang-toggle button:focus-visible {
+  outline-offset: -3px;
+}
+
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid var(--dr-blue);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--dr-blue);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.nav-toggle-icon,
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+  position: relative;
+}
+
+.nav-toggle-icon::before,
+.nav-toggle-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-icon::before {
+  top: -6px;
+}
+
+.nav-toggle-icon::after {
+  top: 6px;
+}
+
+.site-nav {
   display: none;
-  gap: 0.35rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.15rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  z-index: 40;
+  margin: 0;
+  padding: 0.5rem;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  max-height: min(70vh, 28rem);
+  overflow: auto;
 }
 
-.nav-desktop a {
-  font-size: 0.8125rem;
+.site-nav.is-open {
+  display: flex;
+}
+
+.site-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   text-decoration: none;
-  padding: 0.35rem 0.5rem;
-  border-radius: 6px;
+  color: var(--dr-blue);
 }
 
-.nav-desktop a:hover {
+.site-nav a:hover {
   background: #eef4fb;
+}
+
+body.nav-open {
+  overflow: hidden;
 }
 
 main {
@@ -309,10 +402,10 @@ main {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  background: #e8f8ef;
-  color: #0d5c36;
-  border: 1px solid #b8e6cc;
-  padding: 0.35rem 0.65rem;
+  background: #f8f1de;
+  color: #6b5314;
+  border: 1px solid #e6d7a8;
+  padding: 0.5rem 0.75rem;
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -324,7 +417,8 @@ main {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #22a06b;
+  background: var(--gold);
+  flex-shrink: 0;
 }
 
 .cta-row {
@@ -338,6 +432,8 @@ main {
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0.65rem 1rem;
   border-radius: 10px;
   font-weight: 600;
@@ -379,11 +475,9 @@ main {
   border-color: var(--border);
 }
 
-.btn[disabled],
-.btn.is-placeholder {
+.btn[disabled] {
   opacity: 0.85;
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 .verse-block {
@@ -526,6 +620,9 @@ main {
 }
 
 .faq summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-weight: 600;
   cursor: pointer;
   color: var(--dr-blue);
@@ -552,6 +649,7 @@ main {
 .contact-form select,
 .contact-form textarea {
   font: inherit;
+  min-height: 44px;
   padding: 0.55rem 0.65rem;
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -608,15 +706,123 @@ main {
 
 .official-links {
   font-size: 0.9375rem;
+  padding-left: 0;
+  list-style: none;
 }
 
 .official-links li {
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.15rem;
+}
+
+.official-links a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.35rem 0;
+}
+
+.verify-box {
+  margin-top: 1rem;
+  padding: 1rem 1rem 0.5rem;
+  background: var(--surface);
+  border: 2px solid var(--dr-blue);
+  border-radius: var(--radius);
+}
+
+.verify-box h3 {
+  margin-top: 0;
+}
+
+.pending-dialog {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  max-width: min(24rem, calc(100vw - 2rem));
+  background: #fff;
+  color: var(--ink);
+}
+
+.pending-dialog::backdrop {
+  background: rgba(26, 35, 50, 0.45);
+}
+
+.pending-dialog p {
+  margin: 0 0 1rem;
+}
+
+.pending-dialog form {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  main {
+    padding-top: 0.5rem;
+  }
+
+  .header-inner {
+    gap: 0.35rem;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .brand-verse,
+  .brand-motto {
+    margin-top: 0;
+  }
+
+  .hero {
+    padding: 0.85rem 1rem 0.75rem;
+  }
+
+  .hero h2 {
+    margin-bottom: 0.35rem;
+  }
+
+  .hero-lead,
+  .availability,
+  .hero-facts {
+    margin-bottom: 0.65rem;
+  }
+
+  .hero-facts {
+    gap: 0.3rem;
+  }
+
+  /* The sticky bar already offers WhatsApp and Llamar. Keeping them in the hero
+     as well pushes Pedir una visita under that bar on a 375px phone. */
+  .cta-row [data-contact] {
+    display: none;
+  }
 }
 
 @media (min-width: 768px) {
-  .nav-desktop {
+  .nav-toggle {
+    display: none;
+  }
+
+  .site-nav,
+  .site-nav.is-open {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+    gap: 0.15rem;
+  }
+
+  .site-nav a {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 0.35rem 0.55rem;
+  }
+
+  body.nav-open {
+    overflow: auto;
   }
 
   .hero-grid {
@@ -639,19 +845,20 @@ main {
 }
 
 .music-fab {
-  position: fixed;
-  right: 0.75rem;
-  bottom: 4.25rem;
-  z-index: 55;
+  position: static;
+  flex: 0 0 auto;
+  z-index: 1;
   border: 2px solid var(--dr-blue);
   background: #fff;
   color: var(--dr-blue);
   border-radius: 999px;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0.5rem 0.85rem;
   font-size: 0.8125rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 45, 98, 0.18);
+  box-shadow: none;
   font-family: inherit;
 }
 
@@ -669,7 +876,11 @@ main {
 
 @media (min-width: 768px) {
   .music-fab {
+    position: fixed;
+    right: 1rem;
     bottom: 1rem;
+    z-index: 55;
+    box-shadow: 0 4px 14px rgba(0, 45, 98, 0.18);
   }
 }
 

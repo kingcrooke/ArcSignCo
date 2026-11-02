@@ -1,3 +1,11 @@
+// WHATSAPP_NUMBER = 'PENDIENTE'
+// Digits only, with country code, once the number is ready. Example: 17185551212
+const WHATSAPP_NUMBER = 'PENDIENTE';
+
+// PHONE_NUMBER = 'PENDIENTE'
+// Digits only, with country code. Example: 17185551212
+const PHONE_NUMBER = 'PENDIENTE';
+
 window.GUARDERIA_SITE = {
   id: 'v4',
   basePath: '/guarderia-dfe200bb/v4',
@@ -17,6 +25,9 @@ window.GUARDERIA_SITE = {
     },
   },
 };
+
+window.GUARDERIA_SITE.whatsappNumber = WHATSAPP_NUMBER;
+window.GUARDERIA_SITE.phoneNumber = PHONE_NUMBER;
 
 window.GUARDERIA_COPY_OVERRIDES = {
   es: {
