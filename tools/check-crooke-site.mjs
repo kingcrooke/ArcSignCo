@@ -98,8 +98,19 @@ else {
   else pass("interview page name");
   if (!interviewHtml.includes("Comparte tu historia")) fail("welcome tagline Comparte tu historia must stay");
   else pass("Comparte tu historia kept");
-  if (!interviewHtml.includes("← Libro de la familia")) fail("back link must read Libro de la familia");
-  else pass("family book back link");
+  if (interviewHtml.includes("← Libro de la familia") || />\s*Libro\s*</.test(interviewHtml)) {
+    fail("interview must not link to the family book");
+  } else pass("interview has no book link");
+  if (/<a[^>]+href="\/crooke-7c3a9e12\/"/.test(interviewHtml)) fail("interview must not link to the Crooke book");
+  else pass("interview brand does not open the book");
+  if (!interviewHtml.includes('class="brand-monogram">M<')) fail("interview monogram missing");
+  else pass("interview monogram");
+  if (/class="brand-mark"[^>]*>\s*Build\s*</.test(interviewHtml)) fail("interview logo still says Build");
+  else pass("interview logo is not the Build placeholder");
+  const thanksBook = fs.readFileSync(thanksPath, "utf8");
+  if (/href="\/crooke-7c3a9e12\/"/.test(thanksBook) || thanksBook.includes("Volver al libro")) {
+    fail("thank-you must not link back to the book");
+  } else pass("thank-you has no book link");
   if (!interviewHtml.includes("Vista previa")) fail("preview banner missing");
   else pass("preview banner");
   if (!interviewHtml.includes("Modo de prueba: nada se envía / Test mode: nothing is sent")) {
@@ -133,9 +144,11 @@ else {
   else pass("interview wizard script");
   if (!interviewHtml.includes('type="module"')) fail("interview wizard must use module script");
   else pass("interview module script");
-  if (!/JESUS_WHATSAPP_E164\s*=\s*""/.test(configSrc)) {
-    fail("JESUS_WHATSAPP_E164 must remain empty placeholder until it is set");
-  } else pass("JESUS_WHATSAPP_E164 placeholder");
+  if (!/WHATSAPP_NUMBER\s*=\s*""/.test(configSrc)) {
+    fail("WHATSAPP_NUMBER must remain empty until it is set in interview-config.js");
+  } else pass("WHATSAPP_NUMBER placeholder");
+  if (/JESUS_WHATSAPP_E164/.test(configSrc + wizardSrc)) fail("WhatsApp number must be the single WHATSAPP_NUMBER constant");
+  else pass("single WhatsApp constant");
   for (const field of [
     "voice_about_you",
     "voice_loved_ones",
@@ -146,6 +159,9 @@ else {
     "relative_1_name",
     "more_stories",
     "para",
+    "submission_id",
+    "part_number",
+    "part_count",
   ]) {
     if (!interviewHtml.includes(`name="${field}"`)) fail(`interview Netlify register missing field ${field}`);
   }
@@ -165,6 +181,10 @@ for (const name of ["Charles Crooke", "Mary Thelma Morel", "Elizabeth Crooke", "
     /* Jesus / Mary partial ok */
   }
 }
+if (!html.includes('class="brand-monogram">C<')) fail("home header monogram missing");
+else pass("home header monogram");
+if (/class="brand-mark"[^>]*>\s*Build\s*</.test(html)) fail("home logo still says Build");
+else pass("home logo is not the Build placeholder");
 if (!html.includes("Charles Crooke")) fail("missing Charles Crooke seed");
 if (!html.includes("Mary Thelma Morel")) fail("missing Mami seed");
 pass("core family seed names referenced");
@@ -184,6 +204,10 @@ else {
   const elizabethHtml = fs.readFileSync(elizabethPath, "utf8");
   if (!/noindex/i.test(elizabethHtml)) fail("elizabeth page must be noindex");
   else pass("elizabeth noindex");
+  if (!elizabethHtml.includes('class="brand-monogram">C<')) fail("elizabeth header monogram missing");
+  else pass("elizabeth header monogram");
+  if (/class="brand-mark"[^>]*>\s*Build\s*</.test(elizabethHtml)) fail("elizabeth logo still says Build");
+  else pass("elizabeth logo is not the Build placeholder");
   if (/<a[^>]*>\s*Elizabeth\s*<\/a>/.test(elizabethHtml)) fail("elizabeth chapter nav still uses her name as a tab");
   else pass("elizabeth chapter nav has no person tab");
   if (!elizabethHtml.includes("Miembros") || !elizabethHtml.includes("Árbol familiar")) {
