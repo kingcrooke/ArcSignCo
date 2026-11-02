@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/guarderia-dfe200bb/v1/theme.css" />
   </head>
   <body class="version-v1">
-    <a class="skip-link" href="#contenido" data-i18n="nav.hero">Inicio</a>
+    <a class="skip-link" href="#contenido" data-i18n="nav.skip">Saltar al contenido</a>
 
     <div class="draft-banner" role="status" data-i18n="draft.banner">BORRADOR PRIVADO — no publicar</div>
 
@@ -31,7 +31,7 @@
             <p class="brand-verse" id="verse-text">Salmo 119:105 — «Lámpara es a mis pies tu palabra»</p>
           </div>
         </a>
-        <nav class="nav-desktop" aria-label="Principal">
+        <nav id="site-nav" class="site-nav" aria-label="Principal" data-i18n-aria="nav.aria">
           <a href="#contenido" data-i18n="nav.hero">Inicio</a>
           <a href="#sobre-mi" data-i18n="nav.about">Sobre mí</a>
           <a href="#programa" data-i18n="nav.program">Programa</a>
@@ -40,10 +40,22 @@
           <a href="#tarifas" data-i18n="nav.rates">Tarifas</a>
           <a href="#galeria" data-i18n="nav.gallery">Galería</a>
           <a href="#faq" data-i18n="nav.faq">FAQ</a>
+          <a href="#fotos" data-i18n="nav.photos">Política de fotos</a>
           <a href="#contacto" data-i18n="nav.contact">Contacto</a>
         </nav>
         <div class="header-actions">
-          <div class="lang-toggle" role="group" aria-label="Idioma">
+          <button
+            type="button"
+            class="nav-toggle"
+            aria-expanded="false"
+            aria-controls="site-nav"
+            data-i18n-aria="nav.menu.open"
+          >
+            <span class="nav-toggle-icon" aria-hidden="true"></span>
+            <span class="visually-hidden" data-i18n="nav.menu">Menú</span>
+          </button>
+          <button type="button" id="music-toggle" class="music-fab" aria-pressed="false">Música</button>
+          <div class="lang-toggle" role="group" aria-label="Idioma" data-i18n-aria="lang.group">
             <button type="button" data-lang-btn="es" aria-pressed="true" data-i18n="lang.es">ES</button>
             <button type="button" data-lang-btn="en" aria-pressed="false" data-i18n="lang.en">EN</button>
           </div>
@@ -58,14 +70,19 @@
             <span class="hero-kicker" data-i18n="hero.kicker">Guardería Cristiana en el Bronx</span>
             <h2 id="hero-heading" data-i18n="hero.title">Cuidado cálido, bilingüe y centrado en Cristo</h2>
             <p class="hero-lead" data-i18n="hero.lead">
-              Family Day Care en hogar para hasta 6 niños (aprox. 6 semanas a 5 años), cerca de Crotona Ave,
-              10457. Dirigida por Yodernis Crooke.
+              Yodernis Crooke está solicitando el registro de guardería familiar en el hogar (Family Day Care) ante NYS
+              OCFS. El cuidado sería en su hogar, cerca de Crotona Ave, 10457, para hasta 6 niños (aprox. de 6 semanas a
+              5 años), máximo 2 menores de 2 años.
             </p>
-            <p class="availability" data-i18n="hero.spots.val">Cupos disponibles / lista de espera — confirmar al visitar</p>
+            <p class="availability" data-i18n="hero.spots.val">Lista de interés / pre-inscripción</p>
             <ul class="hero-facts">
               <li>
                 <strong data-i18n="hero.ages">Edades</strong>
-                <span data-i18n="hero.ages.val">6 semanas – 5 años (hasta 6 niños)</span>
+                <span data-i18n="hero.ages.val">6 semanas – 5 años</span>
+              </li>
+              <li>
+                <strong data-i18n="hero.capacity">Capacidad</strong>
+                <span data-i18n="hero.capacity.val">Hasta 6 niños, máximo 2 menores de 2 años</span>
               </li>
               <li>
                 <strong data-i18n="hero.area">Zona</strong>
@@ -77,15 +94,15 @@
               </li>
             </ul>
             <div class="cta-row">
-              <a class="btn btn-accent is-placeholder" href="#" aria-disabled="true"
-                ><span data-i18n="hero.cta.wa">WhatsApp</span> [WHATSAPP]</a
+              <a class="btn btn-accent" href="#contacto" data-contact="whatsapp"
+                ><span data-i18n="hero.cta.wa">WhatsApp</span></a
               >
-              <a class="btn btn-primary is-placeholder" href="#" aria-disabled="true"
-                ><span data-i18n="hero.cta.call">Llamar</span> [TELÉFONO]</a
+              <a class="btn btn-primary" href="#contacto" data-contact="phone"
+                ><span data-i18n="hero.cta.call">Llamar</span></a
               >
               <a class="btn btn-outline" href="#contacto" data-i18n="hero.cta.visit">Pedir una visita</a>
             </div>
-            <blockquote class="verse-block" aria-label="Versículo">
+            <blockquote class="verse-block" aria-label="Versículo" data-i18n-aria="verse.aria">
               <p class="hero-verse-quote" data-i18n="hero.verse.quote">«en su brazo llevará los corderos»</p>
               <cite data-i18n="hero.verse.cite">Isaías 40:11 (Reina-Valera 1960)</cite>
             </blockquote>
@@ -108,7 +125,8 @@
           <article class="pillar-card">
             <h3 data-i18n="pillar.1.title">Hogar seguro</h3>
             <p data-i18n="pillar.1.body">
-              Registro OCFS en proceso. Máximo ~6 niños en ambiente familiar, con rutinas claras y supervisión cercana.
+              Registro OCFS en trámite. Hasta 6 niños en un ambiente familiar, máximo 2 menores de 2 años, con rutinas
+              claras y supervisión cercana.
             </p>
           </article>
           <article class="pillar-card">
@@ -129,10 +147,10 @@
       <section id="sobre-mi" class="section" aria-labelledby="about-heading">
         <h2 id="about-heading" data-i18n="about.title">Sobre mí — Yodernis Crooke</h2>
         <div class="about-grid">
-          <div class="placeholder-box" style="min-height: 12rem">[FOTO DE YODERNIS]</div>
+          <div class="placeholder-box" style="min-height: 12rem" data-i18n="about.photo">[FOTO DE YODERNIS]</div>
           <div>
             <p data-i18n="about.p1">
-              Soy dominicana, madre y educadora del hogar con el corazón puesto en servir a las familias del Bronx.
+              Soy dominicana, madre, cuidadora y educadora en mi hogar, con el corazón puesto en servir a las familias del Bronx.
             </p>
             <p data-i18n="about.p2">Este espacio es un borrador para compartir nuestra visión antes del lanzamiento público.</p>
             <h3 data-i18n="about.creds">Credenciales y formación</h3>
@@ -190,35 +208,48 @@
       <section id="seguridad" class="section" aria-labelledby="safety-heading">
         <h2 id="safety-heading" data-i18n="safety.title">Seguridad y registro</h2>
         <p data-i18n="safety.p1">
-          Programa Family Day Care de NYS OCFS (hasta ~6 niños). El registro está en proceso; no afirmamos estar registrados
-          hasta que el número oficial esté publicado.
-        </p>
-        <p>
-          <strong data-i18n="safety.reg">Registro OCFS</strong>:
-          <span class="placeholder-tag" data-i18n="safety.reg.val">[NÚMERO DE REGISTRO OCFS — PENDIENTE]</span>
+          Yodernis Crooke está solicitando el registro de guardería familiar en el hogar (Family Day Care) ante NYS OCFS.
+          Registro OCFS en trámite. Hasta 6 niños, máximo 2 menores de 2 años. No decimos que el hogar está registrado
+          hasta que OCFS publique el número oficial.
         </p>
         <p data-i18n="safety.p2">
-          Políticas de salud, sueño seguro, alergias y emergencias se comparten por escrito con las familias al inscribirse.
+          Las políticas de salud, sueño seguro, alergias y emergencias se comparten por escrito con las familias al inscribirse.
         </p>
-        <p>
-          <a href="https://ocfs.ny.gov/programs/childcare/" rel="noopener noreferrer" data-i18n="safety.link"
-            >Buscar programas en OCFS</a
-          >
-        </p>
+        <aside class="verify-box" aria-labelledby="verify-heading">
+          <h3 id="verify-heading" data-i18n="safety.verify.title">Cómo verificarnos</h3>
+          <p data-i18n="safety.verify.body">
+            Usted puede verificar cualquier guardería del estado de Nueva York en el buscador oficial de NYS OCFS. El número
+            de registro se mostrará aquí cuando OCFS lo emita.
+          </p>
+          <p>
+            <strong data-i18n="safety.reg">Registro OCFS</strong>:
+            <span class="placeholder-tag" data-i18n="safety.reg.val">[NÚMERO DE REGISTRO OCFS — PENDIENTE]</span>
+          </p>
+          <p>
+            <a
+              class="btn btn-outline"
+              href="https://hs.ocfs.ny.gov/dcfs"
+              rel="noopener noreferrer"
+              data-i18n="safety.link"
+              >Buscador oficial de NYS OCFS</a
+            >
+          </p>
+        </aside>
       </section>
 
       <section id="tarifas" class="section" aria-labelledby="rates-heading">
-        <h2 id="rates-heading" data-i18n="rates.title">Tarifas y vouchers de ACS</h2>
+        <h2 id="rates-heading" data-i18n="rates.title">Tarifas y vales (vouchers) de ACS</h2>
         <p data-i18n="rates.p1">
-          Muchas familias en el Bronx usan vouchers de cuidado infantil. Esta página es solo informativa — no es asesoría
-          legal ni garantía de elegibilidad.
+          Muchas familias en el Bronx usan vales (vouchers) de cuidado infantil. Esta página es solo informativa: no es
+          asesoría legal ni garantía de elegibilidad.
         </p>
         <p>
           <strong data-i18n="rates.fees">Tarifas semanales / mensuales</strong>:
           <span class="placeholder-tag" data-i18n="rates.fees.val">[TARIFAS]</span>
         </p>
         <p data-i18n="rates.p2">
-          Si aceptamos vouchers de ACS/HRA, lo indicaremos claramente aquí cuando el proceso de proveedor esté completo.
+          Aceptar vales (vouchers) de cuidado infantil de ACS/HRA está previsto después de la inscripción como proveedora
+          de ACS. Todavía no los aceptamos.
         </p>
         <h3 data-i18n="rates.links">Enlaces oficiales de NYC</h3>
         <ul class="official-links">
@@ -251,9 +282,9 @@
           Solo espacios del hogar por ahora. No publicamos rostros de niños sin consentimiento firmado de los padres.
         </p>
         <div class="gallery-grid">
-          <div class="placeholder-box">[FOTOS DEL ESPACIO]</div>
-          <div class="placeholder-box">[FOTOS DEL ESPACIO]</div>
-          <div class="placeholder-box">[FOTOS DEL ESPACIO]</div>
+          <div class="placeholder-box" data-i18n="gallery.photo">[FOTOS DEL ESPACIO]</div>
+          <div class="placeholder-box" data-i18n="gallery.photo">[FOTOS DEL ESPACIO]</div>
+          <div class="placeholder-box" data-i18n="gallery.photo">[FOTOS DEL ESPACIO]</div>
         </div>
       </section>
 
@@ -265,25 +296,27 @@
       <section id="faq" class="section faq" aria-labelledby="faq-heading">
         <h2 id="faq-heading" data-i18n="faq.title">Preguntas frecuentes</h2>
         <details>
-          <summary data-i18n="faq.q1">¿Cómo solicito una visita?</summary>
+          <summary data-i18n="faq.q1">¿Cómo solicita una visita?</summary>
           <p data-i18n="faq.a1">
-            Escríbenos por WhatsApp o llama a [TELÉFONO]. La dirección exacta se comparte al confirmar la cita.
+            Escríbanos por WhatsApp o llame al [TELÉFONO]. La dirección exacta se comparte al confirmar la cita.
           </p>
         </details>
         <details>
-          <summary data-i18n="faq.q2">¿Qué edades aceptan?</summary>
-          <p data-i18n="faq.a2">Aproximadamente de 6 semanas a 5 años, hasta 6 niños en total.</p>
+          <summary data-i18n="faq.q2">¿Qué edades acepta?</summary>
+          <p data-i18n="faq.a2">Aproximadamente de 6 semanas a 5 años. Hasta 6 niños, máximo 2 menores de 2 años.</p>
         </details>
         <details>
           <summary data-i18n="faq.q3">¿Es un programa cristiano?</summary>
           <p data-i18n="faq.a3">Sí, centrado en Jesús con tono suave e inclusivo.</p>
         </details>
         <details>
-          <summary data-i18n="faq.q4">¿Aceptan vouchers?</summary>
-          <p data-i18n="faq.a4">Estamos preparando la información de vouchers.</p>
+          <summary data-i18n="faq.q4">¿Acepta vales (vouchers) de cuidado infantil?</summary>
+          <p data-i18n="faq.a4">
+            Está previsto después de la inscripción como proveedora de ACS. Todavía no los aceptamos.
+          </p>
         </details>
         <details>
-          <summary data-i18n="faq.q5">¿Qué debo traer el primer día?</summary>
+          <summary data-i18n="faq.q5">¿Qué debe traer el primer día?</summary>
           <p data-i18n="faq.a5">Lista personalizada al inscribirse.</p>
         </details>
       </section>
@@ -318,7 +351,7 @@
             <input type="date" name="start_date" />
           </label>
           <label>
-            <span data-i18n="form.voucher">¿Planea usar voucher?</span>
+            <span data-i18n="form.voucher">¿Planea usar un vale (voucher) de cuidado infantil?</span>
             <select name="voucher">
               <option value="yes" data-i18n="form.voucher.yes">Sí</option>
               <option value="no" data-i18n="form.voucher.no">No</option>
@@ -352,12 +385,18 @@
       <p data-i18n="footer.note">Página privada para revisión. No indexada en buscadores.</p>
     </footer>
 
-    <button type="button" id="music-toggle" class="music-fab" aria-pressed="false" data-i18n="music.label">Música</button>
     <audio id="bg-music" preload="none"></audio>
 
-    <div class="mobile-bar" aria-label="Acciones rápidas">
-      <a class="btn btn-accent is-placeholder" href="#" aria-disabled="true" data-i18n="mobile.wa">WhatsApp</a>
-      <a class="btn btn-primary is-placeholder" href="#" aria-disabled="true" data-i18n="mobile.call">Llamar</a>
+    <dialog id="contact-pending" class="pending-dialog" aria-labelledby="contact-pending-text">
+      <p id="contact-pending-text"></p>
+      <form method="dialog">
+        <button type="submit" class="btn btn-primary" data-i18n="contact.pending.close">Entendido</button>
+      </form>
+    </dialog>
+
+    <div class="mobile-bar" aria-label="Acciones rápidas" data-i18n-aria="mobile.aria">
+      <a class="btn btn-accent" href="#contacto" data-contact="whatsapp" data-i18n="mobile.wa">WhatsApp</a>
+      <a class="btn btn-primary" href="#contacto" data-contact="phone" data-i18n="mobile.call">Llamar</a>
       <a class="btn btn-outline" href="#contacto" data-i18n="mobile.visit">Visita</a>
     </div>
 
