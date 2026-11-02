@@ -5229,10 +5229,10 @@
         },
         {
           "matchupId": 6,
-          "margin": 12.5,
+          "margin": 13.5,
           "upset": false,
           "tie": false,
-          "recap": "Chalupa Batman 151.68 defeated BigBlue 139.18 by 12.50. Chalupa Batman top scorers: Dak Prescott 29.28, Amon-Ra St. Brown 26.20. BigBlue top scorers: Tre Tucker 23.30, Colston Loveland 19.90.",
+          "recap": "Chalupa Batman 151.68 defeated BigBlue 138.18 by 13.50. Chalupa Batman top scorers: Dak Prescott 29.28, Amon-Ra St. Brown 26.20. BigBlue top scorers: Tre Tucker 23.30, Colston Loveland 19.90.",
           "winner": {
             "rosterId": 8,
             "userId": "427956169848401920",
@@ -5258,7 +5258,7 @@
             "rosterId": 4,
             "userId": "427903132685574144",
             "name": "BigBlue",
-            "score": 139.18,
+            "score": 138.18,
             "topScorers": [
               {
                 "playerId": "10213",
@@ -5325,15 +5325,15 @@
         },
         {
           "matchupId": 4,
-          "margin": 16.28,
+          "margin": 17.28,
           "upset": false,
           "tie": false,
-          "recap": "ramonguaraguao 135.98 defeated Team Name Hoes 119.70 by 16.28. ramonguaraguao top scorers: Geno Smith 27.48, Bucky Irving 23.00. Team Name Hoes top scorers: Jameson Williams 26.10, Matthew Stafford 22.50.",
+          "recap": "ramonguaraguao 136.98 defeated Team Name Hoes 119.70 by 17.28. ramonguaraguao top scorers: Geno Smith 27.48, Bucky Irving 23.00. Team Name Hoes top scorers: Jameson Williams 26.10, Matthew Stafford 22.50.",
           "winner": {
             "rosterId": 10,
             "userId": "570012643529134080",
             "name": "ramonguaraguao",
-            "score": 135.98,
+            "score": 136.98,
             "recordAfter": "5-2",
             "topScorers": [
               {
@@ -5511,7 +5511,7 @@
           "wins": 5,
           "losses": 2,
           "ties": 0,
-          "pointsFor": 915.08
+          "pointsFor": 916.08
         },
         {
           "rank": 5,
@@ -5591,7 +5591,7 @@
           "wins": 1,
           "losses": 6,
           "ties": 0,
-          "pointsFor": 834.56
+          "pointsFor": 833.56
         }
       ],
       "waivers": [
