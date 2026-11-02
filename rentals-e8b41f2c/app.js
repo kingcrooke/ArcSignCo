@@ -60,12 +60,23 @@
     );
   }
 
+  function isUnavailable(listing) {
+    return listing.status === "unavailable" || listing.status === "occupied";
+  }
+
   function statusClass(listing) {
-    return listing.status === "occupied" ? "badge-occupied" : "badge-available";
+    return isUnavailable(listing) ? "badge-occupied" : "badge-available";
   }
 
   function statusLabel(listing) {
-    return listing.status === "occupied" ? t("statusOccupied") : t("statusAvailable");
+    return isUnavailable(listing) ? t("statusOccupied") : t("statusAvailable");
+  }
+
+  function mediaHtml(item, label) {
+    if (item && item.src) {
+      return '<img src="' + esc(item.src) + '" alt="' + esc(label) + '">';
+    }
+    return placeholderSvg(item && item.motif, label);
   }
 
   function addressLines(listing) {
@@ -166,14 +177,10 @@
 
   function renderHero() {
     var listing = window.RENTALS.listings[0];
-    var link = document.getElementById("hero-media");
-    var caption = tr(listing.name);
-    link.href = "#listing-" + listing.id;
-    link.setAttribute("aria-label", caption + " PLACEHOLDER");
-    link.innerHTML =
-      placeholderSvg(listing.media[0].motif, caption) +
-      '<span class="hero-badge badge ' + statusClass(listing) + '">' + esc(statusLabel(listing)) + "</span>" +
-      '<span class="hero-caption"><span>' + esc(caption) + '</span><span>PLACEHOLDER</span></span>';
+    var badge = document.getElementById("hero-badge");
+    if (!badge) return;
+    badge.className = "badge " + statusClass(listing);
+    badge.textContent = statusLabel(listing);
   }
 
   function renderIndex() {
@@ -205,7 +212,7 @@
       var n = String(index + 1).padStart(2, "0");
       var thumbs = listing.media.map(function (item, i) {
         return '<li><button type="button" data-go="' + i + '" aria-current="' + (i === at ? "true" : "false") + '" aria-label="' + esc(tr(item.caption)) + '">' +
-          placeholderSvg(item.motif, tr(item.caption)) + "</button></li>";
+          mediaHtml(item, tr(item.caption)) + "</button></li>";
       }).join("");
       var amenities = listing.amenities.length
         ? "<h3>" + esc(t("amenTitle")) + "</h3><ul class=\"amenities\">" + listing.amenities.map(function (item) {
@@ -224,18 +231,17 @@
         '<div class="gallery" data-gallery="' + listing.id + '" tabindex="0">' +
         '<div class="stage">' +
         '<button type="button" class="stage-open" data-open="1" aria-label="' + esc(t("galleryOpen")) + " " + esc(label) + '">' +
-        (slide.kind === "video" && slide.src
-          ? '<video controls src="' + esc(slide.src) + '"></video>'
-          : placeholderSvg(slide.motif, label)) +
+        mediaHtml(slide, label) +
         "</button>" +
         '<button type="button" class="g-nav prev" data-dir="-1" aria-label="' + esc(t("galleryPrev")) + '">‹</button>' +
         '<button type="button" class="g-nav next" data-dir="1" aria-label="' + esc(t("galleryNext")) + '">›</button>' +
         '<p class="g-count">' + esc(t("count", { n: at + 1, m: listing.media.length })) + "</p>" +
         "</div>" +
         '<ul class="thumbs">' + thumbs + "</ul>" +
-        '<p class="caption">' + esc(label) + " · PLACEHOLDER</p>" +
-        (slide.kind === "video" && !slide.src ? '<p class="video-note">' + esc(t("videoMissing")) + "</p>" : "") +
+        '<p class="caption">' + esc(label) + "</p>" +
+        '<p class="meta photo-note">' + esc(t("photoNote")) + "</p>" +
         "</div>" +
+        calendarBlock(listing) +
         '<div class="listing-grid"><div class="prose">' +
         "<p>" + esc(tr(listing.description)) + "</p>" +
         "<h3>" + esc(t("layoutTitle")) + "</h3><p>" + esc(tr(listing.layout)) + "</p>" +
@@ -400,9 +406,14 @@
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errors.push(t("formNeedEmail")); mark("in-email"); }
     if (phone.replace(/\D/g, "").length < 6) { errors.push(t("formNeedPhone")); mark("in-phone"); }
     if (!apt) { errors.push(t("formNeedApt")); mark("in-apt"); }
-    if (!arrive) { errors.push(t("formNeedArrive")); mark("in-arrive"); }
-    if (!depart) { errors.push(t("formNeedDepart")); mark("in-depart"); }
-    if (arrive && depart && depart <= arrive) { errors.push(t("formNeedOrder")); mark("in-depart"); }
+    if (!arrive) { errors.push(t("formNeedArrive")); }
+    if (!depart) { errors.push(t("formNeedDepart")); }
+    if (arrive && depart && depart <= arrive) errors.push(t("formNeedOrder"));
+    if (arrive && depart && depart > arrive) {
+      var listing = listingById(apt);
+      if (listing && (rangeHitsBlock(listing, arrive, depart) || isBlocked(listing, arrive))) errors.push(t("formNeedOpen"));
+      if (stayParts(arrive, depart).tooLong) errors.push(t("formNeedYear"));
+    }
     if (mode === "slot" && !form.slot.value) errors.push(t("formNeedSlot"));
     if (mode === "own" && (!form["own-date"].value || !form["own-time"].value)) {
       errors.push(t("formNeedOwn"));
@@ -431,6 +442,7 @@
       t("labelPhone") + ": " + form.phone.value.trim(),
       t("labelArrive") + ": " + form.arrival.value,
       t("labelDepart") + ": " + form.departure.value,
+      formatStay(form.arrival.value, form.departure.value),
       t("visitLegend") + ": " + visit,
       (hold ? t("holdYes") : t("holdWordNo")),
       t("labelNote") + ": " + form.note.value.trim(),
@@ -439,6 +451,204 @@
       "Language: " + lang
     ].join("\r\n");
     return { subject: subject, body: body };
+  }
+
+  var calMonth = {};
+  var formPick = { start: "", end: "" };
+
+  function todayIso() {
+    return isoDate(new Date());
+  }
+
+  function blockedRanges(listing) {
+    return (listing && listing.blocked) || [];
+  }
+
+  function isBlocked(listing, iso) {
+    return blockedRanges(listing).some(function (range) {
+      return iso >= range.start && iso <= range.end;
+    });
+  }
+
+  function rangeHitsBlock(listing, start, end) {
+    var a = start < end ? start : end;
+    var b = start < end ? end : start;
+    var cursor = parseIso(a);
+    var last = parseIso(b);
+    while (cursor < last) {
+      if (isBlocked(listing, isoDate(cursor))) return true;
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    return false;
+  }
+
+  function parseIso(iso) {
+    var parts = iso.split("-");
+    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  }
+
+  function stayParts(start, end) {
+    var a = parseIso(start);
+    var b = parseIso(end);
+    var months = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
+    var days = b.getDate() - a.getDate();
+    if (days < 0) {
+      months -= 1;
+      days += new Date(b.getFullYear(), b.getMonth(), 0).getDate();
+    }
+    var nights = Math.round((b.getTime() - a.getTime()) / 86400000);
+    return { months: months, days: days, nights: nights, tooLong: months > 11 };
+  }
+
+  function formatStay(start, end) {
+    if (!start || !end || end <= start) return "";
+    var parts = stayParts(start, end);
+    var monthText = parts.months === 1 ? t("stayMonth") : parts.months > 1 ? t("stayMonths", { n: parts.months }) : "";
+    var dayText = parts.days === 1 ? t("stayDay") : parts.days > 1 ? t("stayDays", { n: parts.days }) : "";
+    var length = monthText && dayText ? t("stayJoin", { months: monthText, days: dayText }) : (monthText || dayText);
+    var nights = parts.nights === 1 ? t("stayNight") : t("stayNights", { n: parts.nights });
+    return t("stayLength") + ": " + length + " · " + nights;
+  }
+
+  function monthKey(date) {
+    return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0");
+  }
+
+  function cursorDate(id) {
+    if (!calMonth[id]) {
+      var listing = listingById(id === "form" ? document.getElementById("in-apt").value : id);
+      var seed = listing && listing.blocked && listing.blocked[0] ? listing.blocked[0].start : todayIso();
+      calMonth[id] = seed.slice(0, 7);
+    }
+    return parseIso(calMonth[id] + "-01");
+  }
+
+  function shiftMonth(id, step) {
+    var date = cursorDate(id);
+    date.setMonth(date.getMonth() + step);
+    calMonth[id] = monthKey(date);
+  }
+
+  function weekHeads() {
+    return ["weekMon", "weekTue", "weekWed", "weekThu", "weekFri", "weekSat", "weekSun"].map(function (key) {
+      return "<span>" + esc(t(key)) + "</span>";
+    }).join("");
+  }
+
+  function monthHtml(listing, id, date, pick) {
+    var year = date.getFullYear();
+    var month = date.getMonth();
+    var title = new Intl.DateTimeFormat(locale(), { month: "long", year: "numeric" }).format(date);
+    var pad = (new Date(year, month, 1).getDay() + 6) % 7;
+    var count = new Date(year, month + 1, 0).getDate();
+    var cells = "";
+    var i;
+    for (i = 0; i < pad; i += 1) cells += '<span class="cal-empty"></span>';
+    for (i = 1; i <= count; i += 1) {
+      var iso = isoDate(new Date(year, month, i));
+      var blocked = listing && isBlocked(listing, iso);
+      var past = iso < todayIso();
+      var cls = "cal-day";
+      if (blocked) cls += " is-blocked";
+      if (iso === todayIso()) cls += " is-today";
+      if (pick.start === iso) cls += " is-start";
+      if (pick.end === iso) cls += " is-end";
+      if (pick.start && pick.end && iso > pick.start && iso < pick.end) cls += " is-between";
+      var disabled = blocked || past || (listing && listing.comingSoon);
+      cells += '<button type="button" class="' + cls + '" data-cal-day="' + iso + '" data-cal-id="' + esc(id) + '"' +
+        (disabled ? " disabled" : "") + '><span>' + i + "</span></button>";
+    }
+    return '<div class="cal-month"><p class="cal-title">' + esc(title) + "</p><div class=\"cal-grid\">" + weekHeads() + cells + "</div></div>";
+  }
+
+  function calendarHtml(listing, id, pick) {
+    var start = cursorDate(id);
+    var next = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+    var hint = listing && listing.comingSoon ? t("calSoon") : t("calHint");
+    return (
+      '<section class="cal-block">' +
+      "<h3>" + esc(t("calTitle")) + "</h3>" +
+      '<p class="meta">' + esc(hint) + "</p>" +
+      '<div class="cal-tools">' +
+      '<button type="button" class="button button-ghost" data-cal-nav="-1" data-cal-id="' + esc(id) + '">' + esc(t("calPrev")) + "</button>" +
+      '<button type="button" class="button button-ghost" data-cal-nav="1" data-cal-id="' + esc(id) + '">' + esc(t("calNext")) + "</button>" +
+      "</div>" +
+      '<div class="cal-months">' + monthHtml(listing, id, start, pick) + monthHtml(listing, id, next, pick) + "</div>" +
+      (id !== "form" && pick.start && pick.end ? '<p class="stay-length">' + esc(formatStay(pick.start, pick.end)) + "</p>" : "") +
+      "</section>"
+    );
+  }
+
+  function calendarBlock(listing) {
+    var pick = formPick.listingId === listing.id ? formPick : { start: "", end: "" };
+    return calendarHtml(listing, listing.id, pick);
+  }
+
+  function activeListing() {
+    var id = document.getElementById("in-apt").value;
+    return listingById(id) || window.RENTALS.listings[0];
+  }
+
+  function syncStayFields() {
+    document.getElementById("in-arrive").value = formPick.start || "";
+    document.getElementById("in-depart").value = formPick.end || "";
+    var node = document.getElementById("stay-length");
+    if (!formPick.start || !formPick.end) {
+      node.textContent = "";
+      return;
+    }
+    var parts = stayParts(formPick.start, formPick.end);
+    node.textContent = formatStay(formPick.start, formPick.end);
+    node.dataset.tooLong = parts.tooLong ? "1" : "";
+  }
+
+  function renderFormCalendar() {
+    var listing = activeListing();
+    document.getElementById("stay-calendar").innerHTML = calendarHtml(listing, "form", formPick);
+    syncStayFields();
+  }
+
+  function chooseDay(id, iso) {
+    var listing = id === "form" ? activeListing() : listingById(id);
+    if (!listing || listing.comingSoon || isBlocked(listing, iso) || iso < todayIso()) return;
+    var pick = id === "form" ? formPick : { start: formPick.listingId === id ? formPick.start : "", end: formPick.listingId === id ? formPick.end : "" };
+    if (!pick.start || (pick.start && pick.end)) {
+      formPick = { start: iso, end: "", listingId: listing.id };
+    } else if (iso <= pick.start) {
+      formPick = { start: iso, end: "", listingId: listing.id };
+    } else if (rangeHitsBlock(listing, pick.start, iso) || isBlocked(listing, iso)) {
+      formPick = { start: pick.start, end: "", listingId: listing.id, error: "overlap" };
+    } else {
+      formPick = { start: pick.start, end: iso, listingId: listing.id };
+    }
+    if (id !== "form") document.getElementById("in-apt").value = listing.id;
+    renderSheets();
+    renderFormCalendar();
+    if (formPick.error) {
+      document.getElementById("stay-length").textContent = t("formNeedOpen");
+    }
+  }
+
+  function renderNeighborhood() {
+    var items = window.RENTALS.neighborhood || [];
+    document.getElementById("neighborhood").innerHTML = items.map(function (item) {
+      return '<figure><img src="' + esc(item.src) + '" alt="' + esc(tr(item.caption)) + '"><figcaption>' + esc(tr(item.caption)) + "</figcaption></figure>";
+    }).join("");
+  }
+
+  function renderSamples() {
+    var notes = window.RENTALS.samples || [];
+    document.getElementById("sample-notes").innerHTML = notes.map(function (note) {
+      return '<blockquote><p>' + esc(tr(note.text)) + "</p><footer>" + esc(note.name) + "</footer></blockquote>";
+    }).join("");
+  }
+
+  function renderCredits() {
+    var rows = window.RENTALS.credits || [];
+    document.getElementById("credits").innerHTML = rows.map(function (row) {
+      return "<li><a href=\"" + esc(row.url) + "\" target=\"_blank\" rel=\"noopener noreferrer\">" +
+        esc(row.work) + " · " + esc(row.name) + " · " + esc(row.source) + "</a></li>";
+    }).join("");
   }
 
   function render() {
@@ -452,10 +662,30 @@
     fillApartments();
     renderSlots();
     syncVisitMode();
+    renderNeighborhood();
+    renderSamples();
+    renderCredits();
+    renderFormCalendar();
     ["contact-email", "footer-email"].forEach(function (id) {
       var link = document.getElementById(id);
       link.href = "mailto:" + window.RENTALS.email;
       link.textContent = window.RENTALS.email;
+    });
+    watchReveal();
+  }
+
+  function watchReveal() {
+    if (reduce) return;
+    if (!watchReveal.observer) {
+      watchReveal.observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) entry.target.classList.add("is-in");
+        });
+      }, { threshold: 0.12 });
+    }
+    document.querySelectorAll(".section, .listing, .neighborhood figure, .samples blockquote").forEach(function (el) {
+      el.classList.add("reveal");
+      watchReveal.observer.observe(el);
     });
   }
 
@@ -467,6 +697,18 @@
   }
 
   document.addEventListener("click", function (event) {
+    var calNav = event.target.closest("[data-cal-nav]");
+    if (calNav) {
+      shiftMonth(calNav.getAttribute("data-cal-id"), Number(calNav.getAttribute("data-cal-nav")));
+      if (calNav.getAttribute("data-cal-id") === "form") renderFormCalendar();
+      else renderSheets();
+      return;
+    }
+    var calDay = event.target.closest("[data-cal-day]");
+    if (calDay && !calDay.disabled) {
+      chooseDay(calDay.getAttribute("data-cal-id"), calDay.getAttribute("data-cal-day"));
+      return;
+    }
     var langButton = event.target.closest("[data-set-lang]");
     if (langButton) {
       setLang(langButton.getAttribute("data-set-lang"));
@@ -513,8 +755,9 @@
       renderSheets();
     } else if (open) {
       var slide = listing.media[galleryAt[id] || 0];
-      document.getElementById("lightbox-caption").textContent = tr(slide.caption) + " · PLACEHOLDER";
-      document.getElementById("lightbox-stage").innerHTML = placeholderSvg(slide.motif, tr(slide.caption));
+      lightboxId = id;
+      document.getElementById("lightbox-caption").textContent = tr(slide.caption);
+      document.getElementById("lightbox-stage").innerHTML = mediaHtml(slide, tr(slide.caption));
       document.getElementById("lightbox").showModal();
     }
   });
@@ -533,6 +776,30 @@
     var fresh = document.querySelector('[data-gallery="' + id + '"]');
     if (fresh) fresh.focus();
   });
+
+  document.getElementById("in-apt").addEventListener("change", function () {
+    formPick = { start: "", end: "", listingId: document.getElementById("in-apt").value };
+    renderFormCalendar();
+    renderSheets();
+  });
+
+  document.getElementById("lightbox-prev").addEventListener("click", function () { stepLightbox(-1); });
+  document.getElementById("lightbox-next").addEventListener("click", function () { stepLightbox(1); });
+
+  function stepLightbox(step) {
+    var dialog = document.getElementById("lightbox");
+    if (!dialog.open || !lightboxId) return;
+    var listing = listingById(lightboxId);
+    galleryAt[lightboxId] = (galleryAt[lightboxId] || 0) + step;
+    if (galleryAt[lightboxId] < 0) galleryAt[lightboxId] = listing.media.length - 1;
+    if (galleryAt[lightboxId] >= listing.media.length) galleryAt[lightboxId] = 0;
+    var slide = listing.media[galleryAt[lightboxId]];
+    document.getElementById("lightbox-caption").textContent = tr(slide.caption);
+    document.getElementById("lightbox-stage").innerHTML = mediaHtml(slide, tr(slide.caption));
+    renderSheets();
+  }
+
+  var lightboxId = "";
 
   document.getElementById("lightbox-close").addEventListener("click", function () {
     document.getElementById("lightbox").close();
@@ -598,10 +865,7 @@
   if (window.I18N[fromQuery]) lang = fromQuery;
   else if (window.I18N[stored]) lang = stored;
 
-  var today = isoDate(new Date());
-  document.getElementById("in-arrive").min = today;
-  document.getElementById("in-depart").min = today;
-  document.getElementById("own-date").min = today;
+  document.getElementById("own-date").min = isoDate(new Date());
 
   render();
 })();

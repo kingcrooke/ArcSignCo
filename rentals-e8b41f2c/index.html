@@ -9,7 +9,7 @@
   <meta name="description" content="Apartamentos amueblados en Gazcue, Santo Domingo. Elizabeth Crooke. La tarifa se pide por correo; no está en la página.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -34,17 +34,22 @@
 
   <main id="content">
     <section class="hero" id="top">
+      <video class="hero-video" autoplay muted loop playsinline poster="media/hero-poster.webp">
+        <source src="media/hero.mp4" type="video/mp4">
+      </video>
+      <div class="hero-shade"></div>
       <div class="hero-copy">
         <p class="kicker" data-i18n="heroKicker"></p>
         <h1 data-i18n="heroTitle"></h1>
         <p class="lede" data-i18n="heroLede"></p>
         <p class="hero-text" data-i18n="heroText"></p>
+        <p class="badge" id="hero-badge"></p>
         <div class="hero-actions">
           <a class="button" href="#listings" data-i18n="ctaListings"></a>
           <a class="button button-ghost" href="#contact" data-i18n="ctaWrite"></a>
         </div>
+        <p class="hero-credit" data-i18n="heroVideo"></p>
       </div>
-      <a class="hero-media" id="hero-media" href="#listing-apt-12"></a>
     </section>
 
     <section class="section" id="about">
@@ -90,7 +95,19 @@
           <h2 data-i18n="areaTitle"></h2>
         </div>
         <p class="intro" data-i18n="areaBody"></p>
+        <div id="neighborhood" class="neighborhood"></div>
         <div id="area-map"></div>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no">·</span>
+          <h2 data-i18n="sampleTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="sampleNote"></p>
+        <div id="sample-notes" class="samples"></div>
       </div>
     </section>
 
@@ -168,14 +185,13 @@
               <span data-i18n="labelApt"></span>
               <select id="in-apt" name="apartment" required></select>
             </label>
-            <label class="field req">
-              <span data-i18n="labelArrive"></span>
-              <input id="in-arrive" name="arrival" type="date" required>
-            </label>
-            <label class="field req">
-              <span data-i18n="labelDepart"></span>
-              <input id="in-depart" name="departure" type="date" required>
-            </label>
+          </div>
+          <div class="stay-box" id="stay-box">
+            <h3 data-i18n="calTitle"></h3>
+            <div id="stay-calendar"></div>
+            <p class="stay-length" id="stay-length" aria-live="polite"></p>
+            <input id="in-arrive" name="arrival" type="hidden">
+            <input id="in-depart" name="departure" type="hidden">
           </div>
 
           <fieldset class="visit">
@@ -229,6 +245,8 @@
     </div>
     <div class="wrap">
       <p class="meta" data-i18n="footerNote"></p>
+      <h2 class="credits-title" data-i18n="creditsTitle"></h2>
+      <ul id="credits" class="credits"></ul>
     </div>
   </footer>
 
@@ -238,6 +256,10 @@
       <button type="button" class="button button-ghost" id="lightbox-close" data-i18n="close"></button>
     </div>
     <div id="lightbox-stage"></div>
+    <div class="lb-nav">
+      <button type="button" class="button button-ghost" id="lightbox-prev" data-i18n="galleryPrev"></button>
+      <button type="button" class="button button-ghost" id="lightbox-next" data-i18n="galleryNext"></button>
+    </div>
   </dialog>
 
   <noscript>

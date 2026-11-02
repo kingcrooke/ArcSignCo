@@ -1,8 +1,10 @@
 /**
  * Elizabeth: edite ESTE archivo para cambiar los apartamentos.
  *
- * status: "available" o "occupied"
- *   → la etiqueta Disponible / Available / Disponible (FR: Disponible) u Ocupado.
+ * status: "available" o "unavailable"
+ *   → Disponible, u Ocupado · No disponible.
+ * blocked: fechas que no se pueden elegir, inclusive.
+ *   Ejemplo del 12: 2026-10-29 a 2027-03-30.
  * comingSoon: true → además muestra "Próximamente".
  * aptNumber: "12" y "D2" ya están. En las fichas vacías, deje "PLACEHOLDER".
  * No escriba tarifas, depósitos ni montos en este archivo. La tarifa se pide
@@ -35,7 +37,8 @@
     listings: [
       {
         id: "apt-12",
-        status: "available",
+        status: "unavailable",
+        blocked: [{ start: "2026-10-29", end: "2027-03-30" }],
         comingSoon: false,
         diagram: "levels",
         geo: { lat: BUILDING.lat, lng: BUILDING.lng },
@@ -137,18 +140,20 @@
           { es: "No hay camas individuales", en: "No single beds", fr: "Pas de lits simples" },
         ],
         media: [
-          { kind: "photo", motif: "living", caption: { es: "Sala y cocina abierta", en: "Living room and open kitchen", fr: "Séjour et cuisine ouverte" } },
-          { kind: "photo", motif: "sitting", caption: { es: "Área de estar", en: "Sitting area", fr: "Coin salon" } },
-          { kind: "photo", motif: "loft", caption: { es: "Habitación principal, piso y techo de madera", en: "Master bedroom, wood floor and ceiling", fr: "Chambre principale, parquet et plafond en bois" } },
-          { kind: "photo", motif: "bedroom", caption: { es: "Segunda habitación", en: "Second bedroom", fr: "Seconde chambre" } },
-          { kind: "photo", motif: "stair", caption: { es: "Escalera de caracol, hierro y madera", en: "Spiral staircase, iron and wood", fr: "Colimaçon, fer et bois" } },
-          { kind: "photo", motif: "terrace", caption: { es: "Terraza en la azotea", en: "Rooftop terrace", fr: "Terrasse sur le toit" } },
-          { kind: "video", motif: "video", src: "", caption: { es: "Recorrido en video", en: "Video walkthrough", fr: "Visite en vidéo" } },
+          { kind: "photo", src: "media/living.webp", caption: { es: "Sala luminosa", en: "Bright living room", fr: "Séjour lumineux" } },
+          { kind: "photo", src: "media/kitchen.webp", caption: { es: "Cocina", en: "Kitchen", fr: "Cuisine" } },
+          { kind: "photo", src: "media/sofa.webp", caption: { es: "Área de estar", en: "Sitting area", fr: "Coin salon" } },
+          { kind: "photo", src: "media/bedroom.webp", caption: { es: "Habitación con piso de madera", en: "Bedroom with a wood floor", fr: "Chambre avec parquet" } },
+          { kind: "photo", src: "media/closet.webp", caption: { es: "Vestidor", en: "Walk-in closet", fr: "Dressing" } },
+          { kind: "photo", src: "media/stair.webp", caption: { es: "Escalera de caracol", en: "Spiral staircase", fr: "Escalier en colimaçon" } },
+          { kind: "photo", src: "media/terrace.webp", caption: { es: "Terraza", en: "Terrace", fr: "Terrasse" } },
+          { kind: "photo", src: "media/balcony.webp", caption: { es: "Balcones", en: "Balconies", fr: "Balcons" } },
         ],
       },
       {
         id: "d2",
         status: "available",
+        blocked: [],
         comingSoon: false,
         diagram: "d2",
         geo: { lat: BUILDING.lat, lng: BUILDING.lng },
@@ -229,18 +234,19 @@
           { es: "Respaldo para cortes de luz: detalle por confirmar (PLACEHOLDER)", en: "Backup for power outages: details to be confirmed (PLACEHOLDER)", fr: "Secours pour les coupures de courant : détail à confirmer (PLACEHOLDER)" },
         ],
         media: [
-          { kind: "photo", motif: "living", caption: { es: "Sala", en: "Living room", fr: "Séjour" } },
-          { kind: "photo", motif: "kitchen", caption: { es: "Cocina y comedor abierto", en: "Kitchen and open dining", fr: "Cuisine et salle à manger ouverte" } },
-          { kind: "photo", motif: "mezz", caption: { es: "Entrepiso, oficina o estudio", en: "Mezzanine, office or study", fr: "Mezzanine, bureau ou étude" } },
-          { kind: "photo", motif: "bedroom", caption: { es: "Habitación", en: "Bedroom", fr: "Chambre" } },
-          { kind: "photo", motif: "laundry", caption: { es: "Lavado con lavadora", en: "Laundry with washer", fr: "Buanderie avec machine à laver" } },
-          { kind: "photo", motif: "terrace", caption: { es: "Terraza", en: "Terrace", fr: "Terrasse" } },
-          { kind: "video", motif: "video", src: "", caption: { es: "Recorrido en video", en: "Video walkthrough", fr: "Visite en vidéo" } },
+          { kind: "photo", src: "media/living.webp", caption: { es: "Sala", en: "Living room", fr: "Séjour" } },
+          { kind: "photo", src: "media/kitchen.webp", caption: { es: "Cocina y comedor", en: "Kitchen and dining", fr: "Cuisine et salle à manger" } },
+          { kind: "photo", src: "media/office.webp", caption: { es: "Escritorio, referencia de un estudio", en: "Desk, a study reference", fr: "Bureau, référence d’une étude" } },
+          { kind: "photo", src: "media/bedroom.webp", caption: { es: "Habitación", en: "Bedroom", fr: "Chambre" } },
+          { kind: "photo", src: "media/laundry.webp", caption: { es: "Lavadora", en: "Washer", fr: "Machine à laver" } },
+          { kind: "photo", src: "media/terrace.webp", caption: { es: "Terraza", en: "Terrace", fr: "Terrasse" } },
+          { kind: "photo", src: "media/rooftop.webp", caption: { es: "Azoteas", en: "Rooftops", fr: "Toits" } },
         ],
       },
       {
         id: "italo-block-c",
         status: "available",
+        blocked: [],
         comingSoon: true,
         diagram: false,
         geo: { lat: BUILDING.lat, lng: BUILDING.lng },
@@ -308,14 +314,13 @@
         },
         amenities: [],
         media: [
-          { kind: "photo", motif: "emptyA", caption: { es: "Foto por agregar", en: "Photo to be added", fr: "Photo à ajouter" } },
-          { kind: "photo", motif: "block", caption: { es: "El edificio, sin foto todavía", en: "The building, no photo yet", fr: "L’immeuble, pas encore de photo" } },
-          { kind: "video", motif: "video", src: "", caption: { es: "Video por agregar", en: "Video to be added", fr: "Vidéo à ajouter" } },
+          { kind: "photo", src: "media/colonial.webp", caption: { es: "Zona Colonial. No es el apartamento.", en: "Colonial Zone. Not the apartment.", fr: "Zone coloniale. Ce n’est pas l’appartement." } },
         ],
       },
       {
         id: "address-tbd",
         status: "available",
+        blocked: [],
         comingSoon: true,
         diagram: false,
         geo: null,
@@ -383,11 +388,65 @@
         },
         amenities: [],
         media: [
-          { kind: "photo", motif: "grid", caption: { es: "Zona por confirmar", en: "Area to be confirmed", fr: "Quartier à confirmer" } },
-          { kind: "photo", motif: "emptyB", caption: { es: "Foto por agregar", en: "Photo to be added", fr: "Photo à ajouter" } },
-          { kind: "video", motif: "video", src: "", caption: { es: "Video por agregar", en: "Video to be added", fr: "Vidéo à ajouter" } },
+          { kind: "photo", src: "media/zona.webp", caption: { es: "Calle colonial. La dirección de este espacio no está confirmada.", en: "A colonial street. This apartment’s address is not confirmed.", fr: "Une rue coloniale. L’adresse de cet appartement n’est pas confirmée." } },
         ],
       },
+    ],
+    neighborhood: [
+      {
+        src: "media/colonial.webp",
+        caption: { es: "Zona Colonial, Santo Domingo", en: "Colonial Zone, Santo Domingo", fr: "Zone coloniale, Santo Domingo" },
+      },
+      {
+        src: "media/zona.webp",
+        caption: { es: "Calle de la Zona Colonial", en: "A street in the Colonial Zone", fr: "Une rue de la zone coloniale" },
+      },
+      {
+        src: "media/malecon.webp",
+        caption: { es: "Costa de Santo Domingo", en: "The Santo Domingo coast", fr: "Le littoral de Santo Domingo" },
+      },
+    ],
+    samples: [
+      {
+        name: "Ejemplo · M.",
+        text: {
+          es: "Ejemplo, no es una reseña real. Miré el mapa y las fechas antes de escribir.",
+          en: "Sample, not a real review. I looked at the map and the dates before writing.",
+          fr: "Exemple, pas un vrai avis. J’ai regardé la carte et les dates avant d’écrire.",
+        },
+      },
+      {
+        name: "Ejemplo · A.",
+        text: {
+          es: "Ejemplo, no es una reseña real. Quería saber de una vez para quién no sirve el apartamento 12.",
+          en: "Sample, not a real review. I wanted to know right away who apartment 12 is not for.",
+          fr: "Exemple, pas un vrai avis. Je voulais savoir tout de suite pour qui l’appartement 12 ne convient pas.",
+        },
+      },
+      {
+        name: "Ejemplo · L.",
+        text: {
+          es: "Ejemplo, no es una reseña real. Pedí la tarifa por correo. En la página no hay precios.",
+          en: "Sample, not a real review. I asked for the rate by email. The page has no prices.",
+          fr: "Exemple, pas un vrai avis. J’ai demandé le tarif par e-mail. La page n’a pas de prix.",
+        },
+      },
+    ],
+    credits: [
+      { name: "Florian Koetter", source: "Pexels", work: "Video de Santo Domingo", url: "https://www.pexels.com/video/9754299/" },
+      { name: "Magdalena Roepke", source: "Pexels", work: "Sala", url: "https://www.pexels.com/photo/19239905/" },
+      { name: "Hugo Lutcherath", source: "Pexels", work: "Cocina", url: "https://www.pexels.com/photo/19899084/" },
+      { name: "Pexels", source: "Pexels", work: "Estar", url: "https://www.pexels.com/photo/13086783/" },
+      { name: "Max Vakhtbovych", source: "Pexels", work: "Habitación y vestidor", url: "https://www.pexels.com/photo/7587481/" },
+      { name: "Pexels", source: "Pexels", work: "Escalera de caracol", url: "https://www.pexels.com/photo/39625372/" },
+      { name: "Pexels", source: "Pexels", work: "Terraza", url: "https://www.pexels.com/photo/18129811/" },
+      { name: "Laura Paredis", source: "Pexels", work: "Balcones", url: "https://www.pexels.com/photo/21255184/" },
+      { name: "Pexels", source: "Pexels", work: "Lavadora", url: "https://www.pexels.com/photo/11899611/" },
+      { name: "Pexels", source: "Pexels", work: "Escritorio", url: "https://www.pexels.com/photo/1128207/" },
+      { name: "Diego F. Parra", source: "Pexels", work: "Azoteas", url: "https://www.pexels.com/photo/16934110/" },
+      { name: "Hoteles Sublimes", source: "Pexels", work: "Zona Colonial", url: "https://www.pexels.com/photo/29141847/" },
+      { name: "Victor Rosario", source: "Unsplash", work: "Calle colonial", url: "https://unsplash.com/photos/pdzOfrfY7Pw" },
+      { name: "Dangelie Perez", source: "Pexels", work: "Costa de Santo Domingo", url: "https://www.pexels.com/photo/17070246/" },
     ],
   };
 })();
