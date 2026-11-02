@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#ffffff">
+  <title>Elizabeth Crooke – Alquiler de apartamentos</title>
+  <meta name="description" content="Apartamentos amueblados en Gazcue, Santo Domingo. Elizabeth Crooke. La tarifa se pide por correo; no está en la página.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#content" data-i18n="skip"></a>
+  <header class="site-header">
+    <a class="brand" href="#top">Elizabeth Crooke</a>
+    <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" data-i18n="menu"></button>
+    <nav id="site-nav" class="site-nav" aria-label="Elizabeth Crooke">
+      <a href="#about" data-i18n="navAbout"></a>
+      <a href="#listings" data-i18n="navApartments"></a>
+      <a href="#area" data-i18n="navArea"></a>
+      <a href="#rules" data-i18n="navRules"></a>
+      <a href="#hold" data-i18n="navHold"></a>
+      <a href="#contact" data-i18n="navContact"></a>
+    </nav>
+    <div class="lang" role="group" data-i18n-aria="langLabel">
+      <button type="button" data-set-lang="es" lang="es">ES</button>
+      <button type="button" data-set-lang="en" lang="en">EN</button>
+      <button type="button" data-set-lang="fr" lang="fr">FR</button>
+    </div>
+  </header>
+
+  <main id="content">
+    <section class="hero" id="top">
+      <video class="hero-video" autoplay muted loop playsinline poster="media/hero-poster.webp">
+        <source src="media/hero.mp4" type="video/mp4">
+      </video>
+      <div class="hero-shade"></div>
+      <div class="hero-copy">
+        <p class="kicker" data-i18n="heroKicker"></p>
+        <h1 data-i18n="heroTitle"></h1>
+        <p class="lede" data-i18n="heroLede"></p>
+        <p class="hero-text" data-i18n="heroText"></p>
+        <p class="badge" id="hero-badge"></p>
+        <div class="hero-actions">
+          <a class="button" href="#listings" data-i18n="ctaListings"></a>
+          <a class="button button-ghost" href="#contact" data-i18n="ctaWrite"></a>
+        </div>
+        <p class="hero-credit" data-i18n="heroVideo"></p>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="aboutNo"></span>
+          <h2 data-i18n="aboutTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="aboutIntro"></p>
+        <div class="principles">
+          <article>
+            <h3 data-i18n="careTitle"></h3>
+            <p data-i18n="careBody"></p>
+          </article>
+          <article>
+            <h3 data-i18n="dedTitle"></h3>
+            <p data-i18n="dedBody"></p>
+          </article>
+          <article>
+            <h3 data-i18n="comTitle"></h3>
+            <p data-i18n="comBody"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="listings">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="listNo"></span>
+          <h2 data-i18n="listTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="listIntro"></p>
+        <div id="listing-index"></div>
+        <div id="listing-sheets"></div>
+      </div>
+    </section>
+
+    <section class="section" id="area">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="areaNo"></span>
+          <h2 data-i18n="areaTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="areaBody"></p>
+        <div id="neighborhood" class="neighborhood"></div>
+        <div id="area-map"></div>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no">·</span>
+          <h2 data-i18n="sampleTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="sampleNote"></p>
+        <div id="sample-notes" class="samples"></div>
+      </div>
+    </section>
+
+    <section class="section" id="rules">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="rulesNo"></span>
+          <h2 data-i18n="rulesTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="rulesIntro"></p>
+        <div id="rules-from-listings"></div>
+      </div>
+    </section>
+
+    <section class="section" id="hold">
+      <div class="wrap hold-grid">
+        <div>
+          <div class="section-title">
+            <span class="sec-no" data-i18n="holdNo"></span>
+            <h2 data-i18n="holdTitle"></h2>
+          </div>
+          <p data-i18n="holdBody"></p>
+          <p data-i18n="holdFee"></p>
+          <p class="rate-note" data-i18n="rateNote"></p>
+          <button type="button" class="button" id="hold-jump" data-i18n="holdButton"></button>
+        </div>
+        <div class="slip-wrap">
+          <dl class="slip">
+            <div><dt data-i18n="bankName"></dt><dd>PLACEHOLDER</dd></div>
+            <div><dt data-i18n="bankBank"></dt><dd>PLACEHOLDER</dd></div>
+            <div><dt data-i18n="bankAccount"></dt><dd>PLACEHOLDER</dd></div>
+          </dl>
+          <p class="meta"><span data-i18n="bankNote"></span> <span class="todo-tag">TODO</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="contactNo"></span>
+          <h2 data-i18n="contactTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="contactIntro"></p>
+        <p class="email-line">
+          <a id="contact-email" href="mailto:rentals@example.com">rentals@example.com</a>
+          <span class="todo-tag">TODO</span>
+        </p>
+        <p class="meta" data-i18n="emailTodo"></p>
+        <p class="rate-note" data-i18n="rateNote"></p>
+        <p class="meta" id="viewing-summary"></p>
+        <p class="meta" data-i18n="tzNote"></p>
+        <p class="meta" data-i18n="requiredHint"></p>
+
+        <form id="inquiry-form" novalidate>
+          <div id="form-errors" role="alert"></div>
+          <div class="form-grid two">
+            <label class="field req">
+              <span data-i18n="labelName"></span>
+              <input id="in-name" name="name" autocomplete="name" required>
+            </label>
+            <label class="field req">
+              <span data-i18n="labelCountry"></span>
+              <input id="in-country" name="country" autocomplete="country-name" required>
+            </label>
+            <label class="field req">
+              <span data-i18n="labelEmail"></span>
+              <input id="in-email" name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" required>
+            </label>
+            <label class="field req">
+              <span data-i18n="labelPhone"></span>
+              <input id="in-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
+            </label>
+            <label class="field req">
+              <span data-i18n="labelApt"></span>
+              <select id="in-apt" name="apartment" required></select>
+            </label>
+          </div>
+          <div class="stay-box" id="stay-box">
+            <h3 data-i18n="calTitle"></h3>
+            <div id="stay-calendar"></div>
+            <p class="stay-length" id="stay-length" aria-live="polite"></p>
+            <input id="in-arrive" name="arrival" type="hidden">
+            <input id="in-depart" name="departure" type="hidden">
+          </div>
+
+          <fieldset class="visit">
+            <legend data-i18n="visitLegend"></legend>
+            <label class="choice"><input type="radio" name="visit-mode" value="none" checked> <span data-i18n="visitNone"></span></label>
+            <label class="choice"><input type="radio" name="visit-mode" value="slot"> <span data-i18n="visitSlot"></span></label>
+            <label class="choice"><input type="radio" name="visit-mode" value="own"> <span data-i18n="visitOwn"></span></label>
+            <div id="slot-list" hidden></div>
+            <div id="own-time" class="form-grid two" hidden>
+              <label class="field">
+                <span data-i18n="ownDate"></span>
+                <input id="own-date" name="own-date" type="date">
+              </label>
+              <label class="field">
+                <span data-i18n="ownTime"></span>
+                <input id="own-time-input" name="own-time" type="time">
+              </label>
+            </div>
+          </fieldset>
+
+          <label class="choice hold-choice">
+            <input id="want-hold" name="hold" type="checkbox">
+            <span data-i18n="holdCheck"></span>
+          </label>
+
+          <label class="field">
+            <span data-i18n="labelNote"></span>
+            <textarea id="in-note" name="note" rows="4" maxlength="2000"></textarea>
+          </label>
+
+          <button class="button" type="submit" data-i18n="submit"></button>
+        </form>
+
+        <div id="form-success" class="success" hidden role="status">
+          <h3 data-i18n="successTitle"></h3>
+          <p data-i18n="successBody"></p>
+          <textarea id="success-text" readonly rows="12"></textarea>
+          <button type="button" class="button button-ghost" id="copy-mail" data-i18n="copyButton"></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-row">
+      <p><strong>Elizabeth Crooke</strong><br>Gazcue, Santo Domingo</p>
+      <p>
+        <a id="footer-email" href="mailto:rentals@example.com">rentals@example.com</a>
+        <span class="todo-tag">TODO</span>
+      </p>
+    </div>
+    <div class="wrap">
+      <p class="meta" data-i18n="footerNote"></p>
+      <h2 class="credits-title" data-i18n="creditsTitle"></h2>
+      <ul id="credits" class="credits"></ul>
+    </div>
+  </footer>
+
+  <dialog id="lightbox">
+    <div class="lb-bar">
+      <p id="lightbox-caption"></p>
+      <button type="button" class="button button-ghost" id="lightbox-close" data-i18n="close"></button>
+    </div>
+    <div id="lightbox-stage"></div>
+    <div class="lb-nav">
+      <button type="button" class="button button-ghost" id="lightbox-prev" data-i18n="galleryPrev"></button>
+      <button type="button" class="button button-ghost" id="lightbox-next" data-i18n="galleryNext"></button>
+    </div>
+  </dialog>
+
+  <noscript>
+    <p>Elizabeth Crooke, Gazcue, Santo Domingo. Apartamento 12 y D2. Correo: rentals@example.com (TODO). Esta página necesita JavaScript para el idioma y el formulario.</p>
+  </noscript>
+
+  <script src="listings.js"></script>
+  <script src="i18n.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
