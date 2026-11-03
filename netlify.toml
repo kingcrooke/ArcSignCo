@@ -119,7 +119,7 @@
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
 
-# Arc Visualizer. The public page is indexable. The leads list is not.
+# Arc Visualizer. Leads are a Netlify Form, not a page.
 [[headers]]
   for = "/visualize/"
   [headers.values]
@@ -129,23 +129,6 @@
   for = "/visualize/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/visualize/admin/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-
-[[headers]]
-  for = "/visualize/admin/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    X-Robots-Tag = "noindex, nofollow"
-
-[[headers]]
-  for = "/visualize/admin/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
   for = "/gwb-fe006a16/"

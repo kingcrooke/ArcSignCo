@@ -1,8 +1,7 @@
 // Request logic for /api/visualize/*, independent of the Netlify runtime so tests can call it
 // with an in-memory database and blob store.
-import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { compositeLogo } from "../../../visualize/js/composite.js";
-import { sendLeadEmail } from "./email.mjs";
 import { decodeImage, generateImage, extractWithModel, imageBackend, toPng } from "./images.mjs";
 import { isPng } from "./png.mjs";
 import { quoteFor } from "./pricing.mjs";
@@ -14,17 +13,13 @@ export const BLOB_STORE = "arc-visualizer";
 export const DISCLAIMER = "AI-generated visual reference. Concept only, not a proof or a quote.";
 export const LIMITS = {
   minSessionMs: 3000,
-  ip: { scan: 30, render: 8, edit: 4, lead: 5, upload: 40, login: 10 },
+  ip: { scan: 30, render: 8, edit: 4, lead: 5, upload: 40 },
   sessionVariants: 2,
   sessionEdits: 1,
   imageBytes: 4_500_000,
 };
 export const ENV_KEYS = [
-  "VISUALIZER_ADMIN_PASSWORD",
-  "VISUALIZER_LEAD_TO",
-  "VISUALIZER_EMAIL_FROM",
   "VISUALIZER_IP_SALT",
-  "RESEND_API_KEY",
   "TURNSTILE_SECRET_KEY",
   "TURNSTILE_SITE_KEY",
   "ARC_VISUALIZER_ESTIMATES",
@@ -90,31 +85,6 @@ function sniff(bytes) {
   if (bytes.length > 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "image/jpeg";
   if (bytes.length > 12 && Buffer.from(bytes).toString("ascii", 0, 4) === "RIFF" && Buffer.from(bytes).toString("ascii", 8, 12) === "WEBP") return "image/webp";
   return "";
-}
-
-function safeEqual(a, b) {
-  const left = Buffer.from(String(a));
-  const right = Buffer.from(String(b));
-  if (left.length !== right.length) return false;
-  return timingSafeEqual(left, right);
-}
-
-function adminToken(password) {
-  return createHmac("sha256", password).update("arc-visualizer-admin-v1").digest("hex");
-}
-
-function hasAdminCookie(req, password) {
-  if (!password) return false;
-  const raw = req.headers.get("cookie") || "";
-  const m = /(?:^|;\s*)arc_viz_admin=([a-f0-9]{64})/.exec(raw);
-  return !!(m && safeEqual(m[1], adminToken(password)));
-}
-
-function cookie(password, url, clear = false) {
-  const secure = url.protocol === "https:" ? "; Secure" : "";
-  const value = clear ? "" : adminToken(password);
-  const age = clear ? 0 : 60 * 60 * 12;
-  return `arc_viz_admin=${value}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${age}${secure}`;
 }
 
 async function readJson(req) {
@@ -326,42 +296,6 @@ export async function handleVisualizer(req, deps) {
     });
   }
 
-  if (path === "/api/visualize/admin/login" && method === "POST") {
-    const blocked = needRecords(deps.records);
-    if (blocked) return blocked;
-    if (!env.VISUALIZER_ADMIN_PASSWORD) return fail(503, "The leads list is locked until VISUALIZER_ADMIN_PASSWORD is set.");
-    const cur = await deps.records.getUsage(ipHash, day);
-    if ((cur.logins || 0) >= LIMITS.ip.login) return fail(429, "Too many sign-in attempts. Try again tomorrow.");
-    const body = await readJson(req);
-    if (!body || !safeEqual(body.password || "", env.VISUALIZER_ADMIN_PASSWORD)) {
-      await deps.records.bumpUsage(ipHash, day, "logins", 1);
-      return fail(401, "That password is not right.");
-    }
-    return json(200, { ok: true }, { "Set-Cookie": cookie(env.VISUALIZER_ADMIN_PASSWORD, url) });
-  }
-
-  if (path === "/api/visualize/admin/logout" && method === "POST") {
-    return json(200, { ok: true }, { "Set-Cookie": cookie(env.VISUALIZER_ADMIN_PASSWORD || "x", url, true) });
-  }
-
-  if (path === "/api/visualize/admin/leads" && method === "GET") {
-    const blocked = needRecords(deps.records);
-    if (blocked) return blocked;
-    if (!hasAdminCookie(req, env.VISUALIZER_ADMIN_PASSWORD)) return fail(401, "Sign in required.");
-    const leads = await deps.records.listLeads();
-    return json(200, { leads: leads.map(publicLead) });
-  }
-
-  const oneLead = path.match(/^\/api\/visualize\/admin\/leads\/([0-9a-f]{32})$/);
-  if (oneLead && method === "GET") {
-    const blocked = needRecords(deps.records);
-    if (blocked) return blocked;
-    if (!hasAdminCookie(req, env.VISUALIZER_ADMIN_PASSWORD)) return fail(401, "Sign in required.");
-    const lead = await deps.records.getLead(oneLead[1]);
-    if (!lead) return fail(404, "Lead not found.");
-    return json(200, { lead: publicLead(lead) });
-  }
-
   if (!deps.records && method === "POST") return needRecords(deps.records);
 
   if (path === "/api/visualize/session" && method === "POST") {
@@ -535,7 +469,7 @@ export async function handleVisualizer(req, deps) {
   if (path === "/api/visualize/lead" && method === "POST") {
     const body = await readJson(req);
     if (!body) return fail(400, "Send JSON.");
-    if (clean(body.fax, 80)) return json(200, { ok: true });
+    if (clean(body.fax, 80) || clean(body["bot-field"], 80)) return json(200, { ok: true });
     const session = await deps.records.getSession(clean(body.sessionId, 32));
     if (!session) return fail(404, "Start a new preview.");
     if (session.leadId) return fail(409, "This preview was already sent.");
@@ -573,51 +507,46 @@ export async function handleVisualizer(req, deps) {
         model: "composite", outputKey: compositeKey, zone: render.zone, quad, ms: 0, stub: false, createdAt: now.toISOString(),
       });
     }
-    const id = makeId();
-    const links = [
-      { label: "Preview", url: `${url.origin}${assetPath(render.id)}` },
-      { label: "With logo", url: `${url.origin}${assetPath(compositeKey)}` },
-    ];
-    if (session.logoKey) links.push({ label: "Logo file", url: `${url.origin}${assetPath(session.logoKey)}` });
-    if (session.photoKey) links.push({ label: "Original photo", url: `${url.origin}${assetPath(session.photoKey)}` });
-    const files = [];
-    const composed = compositeKey === render.id ? baseFile : await loadFile(deps.blobs, ns, compositeKey, session.id);
-    if (composed) files.push({ filename: "preview.png", bytes: composed.bytes });
-    if (logo) files.push({ filename: "logo.png", bytes: logo.bytes });
-    const leadCore = {
-      name, phone, email, timing, timingLabel: TIMING[timing], category: session.category,
-      business: session.business, subject: session.subject, quote, links, files,
+    const seen = new Set();
+    const links = [];
+    const addLink = (id) => {
+      if (!id || seen.has(id)) return;
+      seen.add(id);
+      links.push(`${url.origin}${assetPath(id)}`);
     };
-    const mailed = await (deps.sendEmail || sendLeadEmail)(env, leadCore, deps.fetchImpl);
-    const lead = {
-      id, sessionId: session.id, createdAt: now.toISOString(), name, phone, email, timing,
-      category: session.category, renderId: render.id, compositeKey, quoteLabel: quote.label,
-      emailStatus: mailed.status, payload: { business: session.business, subject: session.subject, quote, links, model: render.model, stub: render.stub },
-    };
-    await deps.records.addLead(lead);
-    await deps.records.updateSession(session.id, { leadId: id });
-    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "lead", createdAt: now.toISOString(), detail: { emailStatus: mailed.status } });
-    return json(201, { ok: true, id, url: assetPath(compositeKey), quote, disclaimer: DISCLAIMER });
+    const renders = await deps.records.listRenders(session.id);
+    for (const row of renders) {
+      if (row.kind === "variant" || row.kind === "edit" || row.kind === "layout") addLink(row.outputKey || row.id);
+    }
+    addLink(compositeKey);
+    if (session.photoKey) addLink(session.photoKey);
+    await deps.records.updateSession(session.id, { leadId: compositeKey });
+    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "lead", createdAt: now.toISOString(), detail: { links: links.length } });
+    return json(201, {
+      ok: true,
+      url: `${url.origin}${assetPath(compositeKey)}`,
+      links,
+      notes: projectNotes({ name, phone, email, timing: TIMING[timing], category: session.category, business: session.business, subject: session.subject, quote }),
+      quote,
+      disclaimer: DISCLAIMER,
+    });
   }
 
   return fail(404, "Not found.");
 }
 
-function publicLead(lead) {
-  return {
-    id: lead.id,
-    createdAt: lead.createdAt,
-    name: lead.name,
-    phone: lead.phone,
-    email: lead.email,
-    timing: TIMING[lead.timing] || lead.timing,
-    category: lead.category,
-    quoteLabel: lead.quoteLabel,
-    emailStatus: lead.emailStatus,
-    renderUrl: lead.renderId ? assetPath(lead.renderId) : "",
-    compositeUrl: lead.compositeKey ? assetPath(lead.compositeKey) : "",
-    payload: lead.payload || {},
-  };
+function projectNotes({ timing, category, business, subject, quote }) {
+  const lines = [
+    `Category: ${category}`,
+    timing ? `Timing: ${timing}` : "",
+    business?.name ? `Business: ${business.name}` : "",
+    business?.phone ? `Business phone: ${business.phone}` : "",
+    business?.web ? `Website: ${business.web}` : "",
+    business?.services ? `Services: ${business.services}` : "",
+    subject && Object.keys(subject).length ? `Subject: ${JSON.stringify(subject)}` : "",
+    quote?.label ? `Quote: ${quote.label}` : "",
+  ];
+  return lines.filter(Boolean).join("\n");
 }
 
 async function optionalFile(deps, ns, id, sessionId) {

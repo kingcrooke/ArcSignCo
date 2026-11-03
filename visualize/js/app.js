@@ -54,7 +54,7 @@ function formBody(extra = {}) {
   return {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...extra, fax: $("fax").value }),
+    body: JSON.stringify({ ...extra, "bot-field": $("bot-field").value }),
   };
 }
 
@@ -378,6 +378,23 @@ async function sendLead(ev) {
       quad: state.logoId ? state.quad : null,
       turnstileToken: turnstileToken(),
     }));
+    const timingLabel = $("timing").selectedOptions[0]?.text || "";
+    const notes = [$("leadNotes").value.trim(), data.notes, timingLabel && !String(data.notes || "").includes(timingLabel) ? `Timing: ${timingLabel}` : ""].filter(Boolean).join("\n\n");
+    const params = new URLSearchParams();
+    params.set("form-name", "visualizer-lead");
+    params.set("subject", `Arc Visualizer lead: ${$("leadName").value.trim()}`);
+    params.set("name", $("leadName").value.trim());
+    params.set("email", $("leadEmail").value.trim());
+    params.set("phone", $("leadPhone").value.trim());
+    params.set("notes", notes);
+    params.set("image-links", (data.links || []).join("\n"));
+    params.set("bot-field", $("bot-field").value);
+    const posted = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString(),
+    });
+    if (!posted.ok) throw new Error("The form could not be sent. Try again.");
     paintQuote(data.quote, data.disclaimer);
     $("shareLink").href = data.url;
     $("shareLink").textContent = data.url;

@@ -247,17 +247,19 @@
             <label class="viz-field">What should change?<textarea id="editRequest" maxlength="400" placeholder="Make the van white and the lettering larger"></textarea></label>
             <div class="viz-actions"><button class="btn ghost" id="editBtn" type="button">Apply revision</button></div>
           </div>
-          <form class="viz-panel" id="leadForm" style="margin-top:14px">
+          <form class="viz-panel" id="leadForm" name="visualizer-lead" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="margin-top:14px">
+            <input type="hidden" name="form-name" value="visualizer-lead">
+            <input type="hidden" name="subject" value="Arc Visualizer lead">
             <h2>Send this to Arc</h2>
-            <p>Name, phone, email, and timing. Arc reads it at arc@arcsignco.com.</p>
-            <div class="viz-hp" aria-hidden="true"><label>Fax<input id="fax" name="fax" tabindex="-1" autocomplete="off"></label></div>
+            <p>Name, phone, email, and a note. The preview links go with the form. Arc reads submissions in the site form inbox.</p>
+            <div class="viz-hp" aria-hidden="true"><label>Don't fill this out<input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off"></label></div>
             <div class="viz-grid">
               <div class="viz-row two">
-                <label class="viz-field">Your name<input id="leadName" required autocomplete="name"></label>
-                <label class="viz-field">Phone<input id="leadPhone" type="tel" required autocomplete="tel"></label>
+                <label class="viz-field">Your name<input id="leadName" name="name" required autocomplete="name"></label>
+                <label class="viz-field">Phone<input id="leadPhone" name="phone" type="tel" required autocomplete="tel"></label>
               </div>
               <div class="viz-row two">
-                <label class="viz-field">Email<input id="leadEmail" type="email" required autocomplete="email"></label>
+                <label class="viz-field">Email<input id="leadEmail" name="email" type="email" required autocomplete="email"></label>
                 <label class="viz-field">Timing
                   <select id="timing" required>
                     <option value="">Choose</option>
@@ -268,7 +270,9 @@
                   </select>
                 </label>
               </div>
+              <label class="viz-field">Project notes<textarea id="leadNotes" name="notes" maxlength="2000" placeholder="Address, fleet count, or anything Arc should know"></textarea></label>
             </div>
+            <textarea name="image-links" id="imageLinks" hidden></textarea>
             <div id="turnstileLead"></div>
             <div class="viz-actions"><button class="btn gold" type="submit">Send preview</button></div>
           </form>

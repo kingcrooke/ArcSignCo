@@ -1,6 +1,6 @@
 # Arc Visualizer
 
-Concept previews for vehicle wraps, storefront signs, and window graphics. The page is `/visualize/`. Leads are listed at `/visualize/admin/` (noindex, not in the sitemap).
+Concept previews for vehicle wraps, storefront signs, and window graphics. The page is `/visualize/`. Leads are the Netlify Form `visualizer-lead`, read in the Netlify Forms dashboard.
 
 The logo file is pasted by `visualize/js/composite.js` (the same module on the page and in the function), using the sign mockup's quad math in `tools/sign-mockup/js/geometry.js`. The image model is told to leave that area blank. It is never given the logo to redraw. Photos are opened with `tools/sign-mockup/js/images.js`, including iPhone HEIC. Prices stay on the sign mockup rule: the label is **Custom quote** until `ARC_VISUALIZER_ESTIMATES=1` and a rate exists in `netlify/lib/visualizer/pricing.mjs`. That rate table is empty. Do not type a dollar amount into it without Jesus's rates.
 
@@ -19,10 +19,6 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `VISUALIZER_ADMIN_PASSWORD` | Yes, for the leads list | Password for `/visualize/admin/`. If unset, sign-in returns 503. |
-| `RESEND_API_KEY` | Yes, to email leads | [Resend](https://resend.com) API key. Without it the lead is still stored and the admin row says `saved-no-email-key`. |
-| `VISUALIZER_EMAIL_FROM` | Yes, to email leads | From address Resend will accept, for example `Arc Signage Co <arc@arcsignco.com>` after the domain is verified. |
-| `VISUALIZER_LEAD_TO` | No | Inbox. Defaults to `arc@arcsignco.com`. |
 | `VISUALIZER_IP_SALT` | No | Salt for the daily IP hash. Defaults to a fixed string. |
 | `XAI_API_KEY` | No, for Grok images | xAI API key. When set, image generation uses Grok Imagine first. |
 | `XAI_BASE_URL` | No | Defaults to `https://api.x.ai/v1`. |
@@ -41,6 +37,14 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `TURNSTILE_SECRET_KEY` | No | Verified on generate and on the lead form. Other limits still apply when this is unset. |
 
 Missing image keys do not break the flow. The function draws a layout placeholder, says so on the page, and still pastes the uploaded logo.
+
+## Leads
+
+The send button posts the Netlify Form `visualizer-lead`. The static form is in `visualize/index.html` (`data-netlify="true"`, honeypot `bot-field`) so the build can detect it. Fields are name, email, phone, notes, and image-links. Image files stay in the Blobs store. The form only carries their public `/api/visualize/asset/…` URLs.
+
+There is no Resend key and no password-protected leads page. Open the submissions under Forms in the Netlify dashboard.
+
+One dashboard step: Forms → notifications → email to arc@arcsignco.com. The form includes a hidden `subject` field, `Arc Visualizer lead: <name>`.
 
 ## Grok Imagine
 

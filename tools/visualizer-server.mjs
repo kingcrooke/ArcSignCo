@@ -1,5 +1,5 @@
 // Local preview of /visualize and /api/visualize without Netlify.
-//   VISUALIZER_ADMIN_PASSWORD=local node tools/visualizer-server.mjs
+//   node tools/visualizer-server.mjs
 import http from "node:http";
 import fs from "node:fs";
 import path from "node:path";
