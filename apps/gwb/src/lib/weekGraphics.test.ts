@@ -137,17 +137,43 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
 
-  it('lists Matchups only for upcoming Week 8 at Muse card size', () => {
+  it('lists Matchups then Results for finished Week 8 at Muse card size', () => {
     const sections = getWeekGraphicsSections(8)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
-    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w8-m1', 'vs-w8-m1', 'Crooke vs Frankie'],
       ['vs-w8-m2', 'vs-w8-m2', 'Eric vs Jamil'],
       ['vs-w8-m3', 'vs-w8-m3', 'Manny vs Matt'],
       ['vs-w8-m4', 'vs-w8-m4', 'Kayser vs Steven'],
       ['vs-w8-m5', 'vs-w8-m5', 'Danny vs Mauricio'],
       ['vs-w8-m6', 'vs-w8-m6', 'Narking vs Hady'],
+    ])
+    expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    const results = sections.find((s) => s.kind === 'results')
+    expect(results?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['results-w8-m1', 'results-w8-m1', 'Frankie beats Crooke 234.85-116.83'],
+      ['results-w8-m2', 'results-w8-m2', 'Eric beats Jamil 162.00-141.62'],
+      ['results-w8-m3', 'results-w8-m3', 'Matt beats Manny 151.46-97.85'],
+      ['results-w8-m4', 'results-w8-m4', 'Steven beats Kayser 137.64-94.32'],
+      ['results-w8-m5', 'results-w8-m5', 'Mauricio beats Danny 121.69-112.27'],
+      ['results-w8-m6', 'results-w8-m6', 'Hady beats Narking 179.93-97.97'],
+    ])
+    expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+  })
+
+  it('lists Matchups only for upcoming Week 9 at Muse card size', () => {
+    const sections = getWeekGraphicsSections(9)
+    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
+    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['vs-w9-m1', 'vs-w9-m1', 'Crooke vs Jamil'],
+      ['vs-w9-m2', 'vs-w9-m2', 'Frankie vs Matt'],
+      ['vs-w9-m3', 'vs-w9-m3', 'Kayser vs Eric'],
+      ['vs-w9-m4', 'vs-w9-m4', 'Mauricio vs Manny'],
+      ['vs-w9-m5', 'vs-w9-m5', 'Hady vs Steven'],
+      ['vs-w9-m6', 'vs-w9-m6', 'Danny vs Narking'],
     ])
     expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })

@@ -15,7 +15,7 @@ export function ReceiptOfWeek({ receipt }: { receipt: WeekReceipt }) {
           Closest game: {receipt.closestGame.label} ({formatMargin(receipt.closestGame.margin)} pts)
         </li>
         <li>
-          High score: {receipt.highestScore.label} ({receipt.highestScore.points.toFixed(1)} pts)
+          High score: {receipt.highestScore.label} ({receipt.highestScore.points.toFixed(2)} pts)
         </li>
       </ul>
     </div>
