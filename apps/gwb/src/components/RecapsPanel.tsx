@@ -338,7 +338,7 @@ export function RecapsPanel({
               </dt>
               <dd>
                 {r.teamA.topScorer
-                  ? `${r.teamA.topScorer.name} · ${r.teamA.topScorer.points.toFixed(1)}`
+                  ? `${r.teamA.topScorer.name} · ${r.teamA.topScorer.points.toFixed(2)}`
                   : '—'}
               </dd>
             </div>
@@ -348,7 +348,7 @@ export function RecapsPanel({
               </dt>
               <dd>
                 {r.teamB.topScorer
-                  ? `${r.teamB.topScorer.name} · ${r.teamB.topScorer.points.toFixed(1)}`
+                  ? `${r.teamB.topScorer.name} · ${r.teamB.topScorer.points.toFixed(2)}`
                   : '—'}
               </dd>
             </div>

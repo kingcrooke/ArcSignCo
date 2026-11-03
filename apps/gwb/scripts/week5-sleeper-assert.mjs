@@ -5,7 +5,8 @@
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { loadWeekMatchupFacts } from './lib/sleeper-week-facts.mjs'
+import { LEAGUE_ID, MANAGER_BY_USER_ID } from './lib/gwb-managers.mjs'
+import { fetchJson, loadWeekMatchupFacts } from './lib/sleeper-week-facts.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -42,8 +43,56 @@ function jerseyMatch(j, [name, num, team]) {
   return j.name === name && j.team === team && Number(j.number) === num
 }
 
+/** W-L from completed matchups through `week`. Roster settings are season-to-date. */
+async function recordsThroughWeek(week) {
+  const rosters = await fetchJson(
+    `https://api.sleeper.app/v1/league/${LEAGUE_ID}/rosters`,
+  )
+  const nameByRoster = new Map(
+    rosters.map((r) => [r.roster_id, MANAGER_BY_USER_ID[r.owner_id]]),
+  )
+  const rec = new Map(
+    Object.values(MANAGER_BY_USER_ID).map((name) => [name, { w: 0, l: 0, t: 0 }]),
+  )
+  for (let w = 1; w <= week; w++) {
+    const matchups = await fetchJson(
+      `https://api.sleeper.app/v1/league/${LEAGUE_ID}/matchups/${w}`,
+    )
+    const pairs = new Map()
+    for (const m of matchups) {
+      const list = pairs.get(m.matchup_id) ?? []
+      list.push(m)
+      pairs.set(m.matchup_id, list)
+    }
+    for (const pair of pairs.values()) {
+      if (pair.length !== 2) continue
+      const [a, b] = pair
+      const an = nameByRoster.get(a.roster_id)
+      const bn = nameByRoster.get(b.roster_id)
+      const ar = rec.get(an)
+      const br = rec.get(bn)
+      if (!ar || !br) continue
+      if (a.points > b.points) {
+        ar.w += 1
+        br.l += 1
+      } else if (b.points > a.points) {
+        br.w += 1
+        ar.l += 1
+      } else {
+        ar.t += 1
+        br.t += 1
+      }
+    }
+  }
+  const out = new Map()
+  for (const [name, { w, l, t }] of rec) {
+    out.set(name, t ? `${w}-${l}-${t}` : `${w}-${l}`)
+  }
+  return out
+}
+
 async function main() {
-  const { results, rosters } = await loadWeekMatchupFacts(5)
+  const { results } = await loadWeekMatchupFacts(5)
   const errors = []
 
   // Sleeper truth by matchup_id (m1..m6)
@@ -95,14 +144,11 @@ async function main() {
     }
   }
 
-  for (const r of results) {
-    const w = STANDINGS_AFTER[r.winner]
-    const l = STANDINGS_AFTER[r.loser]
-    if (w !== r.winnerRecord) {
-      errors.push(`${r.winner} record ${r.winnerRecord} !== standings ${w}`)
-    }
-    if (l !== r.loserRecord) {
-      errors.push(`${r.loser} record ${r.loserRecord} !== standings ${l}`)
+  const recordsAfterWeek5 = await recordsThroughWeek(5)
+  for (const [name, expected] of Object.entries(STANDINGS_AFTER)) {
+    const got = recordsAfterWeek5.get(name)
+    if (got !== expected) {
+      errors.push(`${name} record through week 5 ${got} !== standings ${expected}`)
     }
   }
 

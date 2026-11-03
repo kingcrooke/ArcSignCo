@@ -52,8 +52,8 @@ function buildScorerLines(
   const wTeam = aWins ? teamAName : teamBName
   const lTop = aWins ? topB : topA
   const lTeam = aWins ? teamBName : teamAName
-  if (wTop) lines.push(`${wTeam}: ${wTop.name} ${wTop.points.toFixed(1)}`)
-  if (lTop) lines.push(`${lTeam}: ${lTop.name} ${lTop.points.toFixed(1)}`)
+  if (wTop) lines.push(`${wTeam}: ${wTop.name} ${wTop.points.toFixed(2)}`)
+  if (lTop) lines.push(`${lTeam}: ${lTop.name} ${lTop.points.toFixed(2)}`)
   return lines
 }
 
