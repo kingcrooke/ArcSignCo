@@ -10,7 +10,6 @@ import { quoteFor, QUOTE_LABEL } from "../netlify/lib/visualizer/pricing.mjs";
 import { renderPrompt, editPrompt } from "../netlify/lib/visualizer/prompts.mjs";
 import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/lib/visualizer/scrape.mjs";
 import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
-import { leadEmail } from "../netlify/lib/visualizer/email.mjs";
 import { ENV_KEYS, handleVisualizer } from "../netlify/lib/visualizer/handle.mjs";
 import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
 
@@ -205,7 +204,10 @@ test("a session can render, place the real logo, and store a lead without a pric
   assert.equal(leadRes.status, 201, await leadRes.clone().text());
   const lead = await leadRes.json();
   assert.equal(lead.quote.label, "Custom quote");
-  const image = await call(lead.url);
+  assert.ok(lead.links.every(link => link.startsWith("https://preview.test/api/visualize/asset/")));
+  assert.match(lead.notes, /Custom quote/);
+  assert.equal((await deps.records.listLeads()).length, 0);
+  const image = await call(new URL(lead.url).pathname);
   const png = decodePng(Buffer.from(await image.arrayBuffer()));
   const at = (x, y) => { const i = (y * png.width + x) * 4; return [png.data[i], png.data[i + 1], png.data[i + 2], png.data[i + 3]]; };
   assert.deepEqual(at(8, 8), [200, 10, 20, 255]);
@@ -215,43 +217,11 @@ test("a session can render, place the real logo, and store a lead without a pric
   const fresh = await (await early.call("/api/visualize/session", { method: "POST", body: { category: "sign" } })).json();
   const rushed = await early.call("/api/visualize/lead", { method: "POST", body: { sessionId: fresh.id, name: "A", phone: "7185551212", email: "a@b.co", timing: "exploring", renderId: "0".repeat(32) } });
   assert.equal(rushed.status, 400);
-  const honey = await call("/api/visualize/lead", { method: "POST", body: { fax: "filled", sessionId: session.id, name: "Bot" } });
+  const honey = await call("/api/visualize/lead", { method: "POST", body: { "bot-field": "filled", sessionId: session.id, name: "Bot" } });
   assert.equal(honey.status, 200);
-  assert.equal((await deps.records.listLeads()).length, 1);
-  const denied = await call("/api/visualize/admin/leads");
-  assert.equal(denied.status, 401);
-  const bad = await call("/api/visualize/admin/login", { method: "POST", body: { password: "nope" } });
-  assert.equal(bad.status, 503);
-});
-
-test("lead email goes to arc@ and is skipped cleanly without a key", async () => {
-  const message = leadEmail({}, { name: "Ada", phone: "1", email: "a@b.co", category: "vehicle", quote: { label: "Custom quote", message: "Custom quote" }, links: [{ label: "Preview", url: "https://preview.test/api/visualize/asset/abc" }] });
-  assert.equal(message.to, "arc@arcsignco.com");
-  assert.match(message.html, /Custom quote/);
-  assert.doesNotMatch(message.html, /\$\d/);
-  const { call, later, deps } = harness({ RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>", VISUALIZER_ADMIN_PASSWORD: "correct horse" });
-  let posted;
-  deps.fetchImpl = async (url, opts) => {
-    posted = { url, body: JSON.parse(opts.body) };
-    return new Response("{}", { status: 200 });
-  };
-  deps.imageClient = async (spec) => ({ bytes: Buffer.from(toPng(blankScene(spec.category, 0))), model: "test-model", stub: false });
-  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
-  later();
-  const preview = await (await call("/api/visualize/render", { method: "POST", body: { sessionId: session.id, business: { name: "North" }, subject: { year: "2022", make: "Ram", model: "ProMaster" } } })).json();
-  const lead = await call("/api/visualize/lead", { method: "POST", body: { sessionId: session.id, name: "Ada Baker", phone: "7185551212", email: "ada@north.example", timing: "few-months", renderId: preview.variants[0].id } });
-  assert.equal(lead.status, 201, await lead.clone().text());
-  assert.equal(posted.url, "https://api.resend.com/emails");
-  assert.deepEqual(posted.body.to, ["arc@arcsignco.com"]);
-  assert.equal(posted.body.attachments[0].filename, "preview.png");
-  const login = await call("/api/visualize/admin/login", { method: "POST", body: { password: "correct horse" } });
-  assert.equal(login.status, 200);
-  const cookie = login.headers.get("set-cookie");
-  const list = await call("/api/visualize/admin/leads", { headers: { cookie: cookie.split(";")[0] } });
-  const rows = await list.json();
-  assert.equal(rows.leads.length, 1);
-  assert.equal(rows.leads[0].emailStatus, "sent");
-  assert.equal(rows.leads[0].quoteLabel, "Custom quote");
+  assert.equal((await deps.records.listLeads()).length, 0);
+  const gone = await call("/api/visualize/admin/leads");
+  assert.equal(gone.status, 404);
 });
 
 test("blob records keep a lead without a database", async () => {
@@ -273,9 +243,17 @@ test("docs name every env key and the page does not invent a price", () => {
   assert.match(page, /AI-generated visual reference/);
   assert.doesNotMatch(page, /\$\d/);
   assert.doesNotMatch(page + fs.readFileSync(path.join(root, "visualize/js/app.js"), "utf8"), /wraplab/i);
+  assert.match(page, /name="visualizer-lead"/);
+  assert.match(page, /data-netlify="true"/);
+  assert.match(page, /netlify-honeypot="bot-field"/);
+  for (const field of ["name", "email", "phone", "notes", "image-links", "form-name"]) {
+    assert.match(page, new RegExp(`name="${field}"`));
+  }
+  const handler = fs.readFileSync(path.join(root, "netlify/lib/visualizer/handle.mjs"), "utf8");
+  assert.doesNotMatch(handler, /RESEND_API_KEY|VISUALIZER_EMAIL_FROM|VISUALIZER_ADMIN_PASSWORD|sendLeadEmail/);
   const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
   assert.match(sitemap, /https:\/\/arcsignco\.com\/visualize\/</);
   assert.doesNotMatch(sitemap, /visualize\/admin/);
   const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
-  assert.match(toml, /\/visualize\/admin/);
+  assert.doesNotMatch(toml, /\/visualize\/admin/);
 });

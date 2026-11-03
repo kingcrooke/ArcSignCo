@@ -1,5 +1,5 @@
 // Exercises /visualize in a browser against tools/visualizer-server.mjs.
-//   VISUALIZER_ADMIN_PASSWORD=local node tools/check-visualizer-browser.mjs
+//   node tools/check-visualizer-browser.mjs
 import { spawn } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
@@ -21,7 +21,7 @@ fs.writeFileSync(logoPath, encodePng(32, 32, logo));
 
 const server = spawn(process.execPath, ["tools/visualizer-server.mjs"], {
   cwd: root,
-  env: { ...process.env, PORT: String(port), VISUALIZER_ADMIN_PASSWORD: "local-preview" },
+  env: { ...process.env, PORT: String(port) },
   stdio: ["ignore", "pipe", "inherit"],
 });
 await new Promise((resolve, reject) => {
@@ -87,18 +87,6 @@ await page.screenshot({ path: path.join(outDir, "visualize-mobile.png"), fullPag
 await page.getByRole("button", { name: "Menu" }).click();
 await page.getByRole("link", { name: "Free Sign Preview" }).first().waitFor();
 await page.keyboard.press("Escape");
-
-const admin = await browser.newPage({ viewport: { width: 1100, height: 800 } });
-await admin.goto(`${base}/visualize/admin/`);
-await admin.getByLabel("Password").fill("wrong");
-await admin.getByRole("button", { name: "Open leads" }).click();
-await admin.getByText("That password is not right.").waitFor();
-await admin.getByLabel("Password").fill("local-preview");
-await admin.getByRole("button", { name: "Open leads" }).click();
-await admin.getByText("Ada Baker").waitFor();
-await admin.getByText("Custom quote").waitFor();
-await admin.getByText("sent").waitFor({ timeout: 2000 }).catch(() => admin.getByText("saved-no-email-key").waitFor());
-await admin.screenshot({ path: path.join(outDir, "visualize-admin.png"), fullPage: true });
 
 if (errors.length) throw new Error(errors.join("\n"));
 await browser.close();
