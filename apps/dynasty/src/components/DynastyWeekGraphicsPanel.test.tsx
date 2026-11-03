@@ -8,17 +8,17 @@ describe('DynastyWeekGraphicsPanel empty week', () => {
     render(
       <DynastyWeekGraphicsPanel
         season="2026"
-        week={9}
+        week={10}
         weekComplete={false}
-        latestContentWeek={8}
+        latestContentWeek={9}
         onSelectWeek={onSelectWeek}
       />,
     )
-    const links = screen.getAllByRole('button', { name: 'View Week 8' })
+    const links = screen.getAllByRole('button', { name: 'View Week 9' })
     expect(links.length).toBeGreaterThan(0)
-    expect(screen.getByText(/Week 9 cards aren't posted yet/)).toBeInTheDocument()
+    expect(screen.getByText(/Week 10 cards aren't posted yet/)).toBeInTheDocument()
     fireEvent.click(links[0])
-    expect(onSelectWeek).toHaveBeenCalledWith(8)
+    expect(onSelectWeek).toHaveBeenCalledWith(9)
   })
 
   it('does not offer a jump link on a week that already has cards', () => {
