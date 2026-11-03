@@ -65,14 +65,16 @@
   }
 
   function statusClass(listing) {
-    if (listing.badge === "unavailable") return "badge-occupied";
-    if (listing.badge === "decorating") return "badge-decorating";
-    if (listing.badge === "soon") return "badge-soon";
-    return "badge-available";
+    if (listing.status === "decorating") return "badge-decorating";
+    if (listing.status === "soon") return "badge-soon";
+    return isUnavailable(listing) ? "badge-occupied" : "badge-available";
   }
 
   function statusLabel(listing) {
-    return tr(listing.badgeLabel) || t("statusAvailable");
+    if (listing.badgeLabel) return tr(listing.badgeLabel);
+    if (listing.status === "decorating") return t("statusDecorating");
+    if (listing.status === "soon") return t("statusSoon");
+    return isUnavailable(listing) ? t("statusOccupied") : t("statusAvailable");
   }
 
   function mediaHtml(item, label) {
@@ -89,18 +91,18 @@
   }
 
   function thumbHtml(item, label) {
-    if (item && item.kind === "video" && item.poster) {
-      return '<img src="' + esc(item.poster) + '" alt="' + esc(label) + '">';
-    }
+    if (item && item.kind === "video" && item.poster) return '<img src="' + esc(item.poster) + '" alt="' + esc(label) + '">';
     return mediaHtml(item, label);
   }
 
   function addressLines(listing) {
-    var a = listing.address || {};
-    var lines = [];
-    if (a.area) lines.push(a.area + (a.city ? ", " + a.city : ""));
-    if (a.district) lines.push(a.district + (a.country ? ", " + tr(a.country) : ""));
-    return lines;
+    var a = listing.address;
+    return [
+      a.street,
+      a.building,
+      a.area + ", " + a.city,
+      a.district + ", " + tr(a.country)
+    ];
   }
 
   function mapSrc(query, zoom) {
@@ -132,11 +134,12 @@
   }
 
   function diagram(listing) {
-    if (!listing.lower && !listing.upper) return "";
-    var html = '<div class="levels">';
-    if (listing.upperTitle) html += level(tr(listing.upperTitle));
-    if (listing.lowerTitle) html += level(tr(listing.lowerTitle));
-    return html + "</div>";
+    if (listing.levelLabels && listing.levelLabels.length) {
+      return '<div class="levels">' + listing.levelLabels.map(function (label) {
+        return level(tr(label));
+      }).join("") + "</div>";
+    }
+    return "";
   }
 
   function level(text) {
@@ -213,7 +216,7 @@
         return '<li><button type="button" data-go="' + i + '" aria-current="' + (i === at ? "true" : "false") + '" aria-label="' + esc(tr(item.caption)) + '">' +
           thumbHtml(item, tr(item.caption)) + "</button></li>";
       }).join("");
-      var amenities = listing.amenities && listing.amenities.length
+      var amenities = listing.amenities.length
         ? "<h3>" + esc(t("amenTitle")) + "</h3><ul class=\"amenities\">" + listing.amenities.map(function (item) {
           return "<li>" + esc(tr(item)) + "</li>";
         }).join("") + "</ul>"
@@ -222,7 +225,7 @@
         '<article class="listing" id="listing-' + listing.id + '">' +
         '<header class="listing-head"><p class="kicker">' + n + "</p><h3>" + esc(tr(listing.name)) + "</h3>" +
         '<div class="badges">' +
-        (listing.comingSoon ? '<p class="soon">' + esc(t("comingSoon")) + "</p>" : "") +
+        (listing.comingSoon && listing.status !== "decorating" && listing.status !== "soon" ? '<p class="soon">' + esc(t("comingSoon")) + "</p>" : "") +
         '<p class="badge ' + statusClass(listing) + '" data-status="' + esc(listing.status) + '">' + esc(statusLabel(listing)) + "</p>" +
         "</div></header>" +
         "<p class=\"summary\">" + esc(tr(listing.summary)) + "</p>" +
@@ -245,20 +248,21 @@
         "<p>" + esc(tr(listing.description)) + "</p>" +
         "<h3>" + esc(t("layoutTitle")) + "</h3><p>" + esc(tr(listing.layout)) + "</p>" +
         diagram(listing) +
-        (listing.lower && listing.lower.length ? "<h3>" + esc(tr(listing.lowerTitle)) + "</h3>" + listHtml(listing.lower) : "") +
-        (listing.upper && listing.upper.length ? "<h3>" + esc(tr(listing.upperTitle)) + "</h3>" + listHtml(listing.upper) : "") +
-        (listing.includes && listing.includes.length ? "<h3>" + esc(t("amenTitle")) + "</h3>" + listHtml(listing.includes) : "") +
+        (tr(listing.stay) ? "<h3>" + esc(t("stayTitle")) + "</h3><p>" + esc(tr(listing.stay)) + "</p>" : "") +
+        (listing.fitFor.length ? "<h3>" + esc(t("fitTitle")) + "</h3>" + listHtml(listing.fitFor) : "") +
+        (listing.notFor.length ? "<h3>" + esc(t("notTitle")) + "</h3>" + listHtml(listing.notFor) : "") +
+        (tr(listing.pet) ? "<h3>" + esc(t("petTitle")) + "</h3><p>" + esc(tr(listing.pet)) + "</p>" : "") +
         amenities +
         "</div><aside class=\"facts\">" +
         "<h3>" + esc(t("addressTitle")) + "</h3>" +
         "<p class=\"address\">" + addressLines(listing).map(esc).join("<br>") + "</p>" +
         "<p><strong>" + esc(t("aptLabel")) + " " + esc(listing.aptNumber) + "</strong></p>" +
         "<p>" + esc(tr(listing.floorNote)) + "</p>" +
-        (listing.mapQuery
-          ? '<div class="map-frame"><iframe title="' + esc(tr(listing.name)) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' + esc(mapSrc(listing.mapQuery, listing.mapZoom || 16)) + '"></iframe></div>' +
-            "<p class=\"meta\">" + esc(tr(listing.mapNote)) + "</p>" +
-            '<p class="map-links"><a href="' + esc(mapsLink(listing.mapQuery)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a></p>"
-          : "") +
+        '<div class="map-frame"><iframe title="' + esc(tr(listing.name)) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' + esc(mapSrc(listing.mapQuery, listing.mapZoom || 16)) + '"></iframe></div>' +
+        "<p class=\"meta\">" + esc(tr(listing.mapNote)) + "</p>" +
+        '<p class="map-links"><a href="' + esc(mapsLink(listing.mapQuery)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a>" +
+        '<a href="' + esc(streetLink(listing)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openStreet")) + "</a></p>" +
+        '<p class="meta">' + esc(t("mapFallback")) + "</p>" +
         '<p class="rate-note">' + esc(t("rateNote")) + "</p>" +
         '<div class="listing-actions"><a class="button" href="' + esc(infoMailto(listing)) + '">' + esc(t("moreInfo")) + "</a>" +
         '<button type="button" class="button button-ghost" data-select-apt="' + listing.id + '">' + esc(t("useForm")) + "</button></div>" +
@@ -268,16 +272,26 @@
   }
 
   function renderRules() {
-    var node = document.getElementById("rules-from-listings");
-    if (!node) return;
+    document.getElementById("rules-from-listings").innerHTML = window.RENTALS.listings.map(function (listing) {
+      var stay = tr(listing.stay);
+      return (
+        '<section class="rule-block"><h3>' + esc(tr(listing.name)) + "</h3>" +
+        (listing.comingSoon ? "<p>" + esc(t("notOffer")) + "</p>" : "") +
+        "<p><strong>" + esc(t("stayTitle")) + ".</strong> " + esc(stay || t("stayUnpublished")) + "</p>" +
+        (listing.fitFor.length ? "<p><strong>" + esc(t("fitTitle")) + ".</strong></p>" + listHtml(listing.fitFor) : "") +
+        (listing.notFor.length ? "<p><strong>" + esc(t("notTitle")) + ".</strong></p>" + listHtml(listing.notFor) : "") +
+        (tr(listing.pet) ? "<p><strong>" + esc(t("petTitle")) + ".</strong> " + esc(tr(listing.pet)) + "</p>" : "") + "</section>"
+      );
+    }).join("");
   }
 
   function renderArea() {
-    var query = window.RENTALS.mapQuery;
+    var query = window.RENTALS.building.query;
     document.getElementById("area-map").innerHTML =
       '<div class="map-frame"><iframe title="' + esc(t("areaMapLabel")) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' +
       esc(mapSrc(query, 15)) + '"></iframe></div>' +
-      '<p class="map-links"><a href="' + esc(mapsLink(query)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a></p>" +
+      '<p class="map-links"><a href="' + esc(mapsLink(query)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a>" +
+      '<a href="' + esc(streetLink({ geo: window.RENTALS.building, mapQuery: query })) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openStreet")) + "</a></p>" +
       '<p class="meta">' + esc(t("mapFallback")) + "</p>";
   }
 
@@ -290,8 +304,6 @@
   }
 
   function renderViewingSummary() {
-    var node = document.getElementById("viewing-summary");
-    if (!node) return;
     var view = window.RENTALS.viewing;
     var days = view.weekdays.map(weekdayName).join(", ");
     document.getElementById("viewing-summary").textContent = t("viewingSummary", {
@@ -330,8 +342,6 @@
   }
 
   function renderSlots() {
-    var list = document.getElementById("slot-list");
-    if (!list) return;
     var selected = "";
     var current = document.querySelector('input[name="slot"]:checked');
     if (current) selected = current.value;
@@ -344,8 +354,7 @@
       }).join("");
       return "<fieldset class=\"day\"><legend>" + esc(legend) + "</legend>" + radios + "</fieldset>";
     }).join("") + "</div>";
-    if (!list) return;
-    list.innerHTML = html;
+    document.getElementById("slot-list").innerHTML = html;
   }
 
   function fillApartments() {
@@ -360,8 +369,6 @@
   }
 
   function syncVisitMode() {
-    var chosen = document.querySelector('input[name="visit-mode"]:checked');
-    if (!chosen) return;
     var mode = document.querySelector('input[name="visit-mode"]:checked').value;
     document.getElementById("slot-list").hidden = mode !== "slot";
     document.getElementById("own-time").hidden = mode !== "own";
@@ -395,8 +402,7 @@
     var apt = form.apartment.value;
     var arrive = form.arrival.value;
     var depart = form.departure.value;
-    var modeInput = form["visit-mode"];
-    var mode = modeInput ? modeInput.value : "none";
+    var mode = form["visit-mode"].value;
     if (name.length < 2) { errors.push(t("formNeedName")); mark("in-name"); }
     if (country.length < 2) { errors.push(t("formNeedCountry")); mark("in-country"); }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errors.push(t("formNeedEmail")); mark("in-email"); }
@@ -421,13 +427,12 @@
 
   function composeMail(form) {
     var listing = listingById(form.apartment.value);
-    var modeInput = form["visit-mode"];
-    var mode = modeInput ? modeInput.value : "none";
+    var mode = form["visit-mode"].value;
     var visit = t("noVisit");
-    if (mode === "slot" && form.slot) visit = t("slotWord") + ": " + form.slot.value.replace("|", " ");
-    if (mode === "own" && form["own-date"]) visit = t("proposed") + ": " + form["own-date"].value + " " + form["own-time"].value;
-    var access = form.access && form.access.checked;
-    var subjectBase = mode === "none" ? t("mailSubject") : t("mailVisitSubject");
+    if (mode === "slot") visit = t("slotWord") + ": " + form.slot.value.replace("|", " ");
+    if (mode === "own") visit = t("proposed") + ": " + form["own-date"].value + " " + form["own-time"].value;
+    var hold = form.hold.checked;
+    var subjectBase = hold ? t("mailHoldSubject") : (mode === "none" ? t("mailSubject") : t("mailVisitSubject"));
     var subject = subjectBase + " — " + tr(listing.name);
     var body = [
       tr(listing.name),
@@ -442,7 +447,7 @@
       t("labelDepart") + ": " + form.departure.value,
       formatStay(form.arrival.value, form.departure.value),
       t("visitLegend") + ": " + visit,
-      (access ? t("warnCheck") : t("formNeedAccess")),
+      (hold ? t("holdYes") : t("holdWordNo")),
       t("labelNote") + ": " + form.note.value.trim(),
       "",
       t("mailBody"),
@@ -635,10 +640,8 @@
   }
 
   function renderSamples() {
-    var node = document.getElementById("sample-notes");
-    if (!node) return;
     var notes = window.RENTALS.samples || [];
-    node.innerHTML = notes.map(function (note) {
+    document.getElementById("sample-notes").innerHTML = notes.map(function (note) {
       return '<blockquote><p>' + esc(tr(note.text)) + "</p><footer>" + esc(note.name) + "</footer></blockquote>";
     }).join("");
   }
@@ -842,8 +845,8 @@
     }
   });
 
-  var holdJump = document.getElementById("hold-jump");
-  if (holdJump) holdJump.addEventListener("click", function () {
+  document.getElementById("hold-jump").addEventListener("click", function () {
+    document.getElementById("want-hold").checked = true;
     document.getElementById("contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
     document.getElementById("in-name").focus();
   });
@@ -865,8 +868,7 @@
   if (window.I18N[fromQuery]) lang = fromQuery;
   else if (window.I18N[stored]) lang = stored;
 
-  var ownDate = document.getElementById("own-date");
-  if (ownDate) ownDate.min = isoDate(new Date());
+  document.getElementById("own-date").min = isoDate(new Date());
 
   render();
 })();

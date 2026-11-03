@@ -332,53 +332,50 @@ h1 {
   background: #3c241c;
   color: #fffaf4;
   border-radius: 28px;
-  padding: 1.6rem 1.3rem 1.5rem;
+  padding: 1.7rem 1.4rem 1.6rem;
   box-shadow: var(--shadow);
 }
-.warn-card h2 { color: #fff; font-size: clamp(2rem, 4vw, 3rem); margin: 0.2rem 0 0.6rem; }
-.warn-card .kicker { color: #e7b089; }
-.warn-card ul { margin: 0.8rem 0 0; padding-left: 1.1rem; }
+.warn-card h2 { color: #fff; margin: 0 0 0.7rem; font-size: clamp(2.1rem, 4vw, 3.1rem); }
+.warn-card ul { margin: 0.9rem 0 0; padding-left: 1.15rem; }
 .warn-card li { margin: 0.55rem 0; }
 
 .pattern-placeholder {
   display: grid;
   place-items: center;
-  min-height: 22rem;
   width: 100%;
+  min-height: 22rem;
   aspect-ratio: 16 / 10;
   background:
-    radial-gradient(circle at 20% 20%, rgba(196, 98, 58, 0.18), transparent 32%),
+    radial-gradient(circle at 18% 20%, rgba(196, 98, 58, 0.16), transparent 34%),
     repeating-linear-gradient(135deg, #f6efe6 0 14px, #efe4d4 14px 28px);
-  color: var(--ink);
 }
 .pattern-placeholder span {
   font-family: var(--serif);
-  font-size: clamp(2rem, 5vw, 3.2rem);
-  background: rgba(255, 250, 244, 0.82);
-  padding: 0.4rem 0.9rem;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  background: rgba(255, 250, 244, 0.86);
+  padding: 0.35rem 0.9rem;
   border-radius: 999px;
 }
 .pattern-placeholder.mini { min-height: 4rem; aspect-ratio: auto; }
-.pattern-placeholder.mini span { font-size: 0.7rem; }
+.pattern-placeholder.mini span { font-size: 0.68rem; }
 
 .stage.is-portrait {
   display: flex;
   justify-content: center;
-  align-items: center;
   background: #1c1612;
 }
-.stage.is-portrait .tour-video,
-.stage.is-portrait video {
+.stage.is-portrait video,
+.tour-video {
   width: min(440px, 100%);
-  max-width: 100%;
   height: auto;
   max-height: 78vh;
   aspect-ratio: 480 / 848;
   object-fit: contain;
+  background: #1c1612;
 }
-.stage.is-pattern .stage-open { cursor: default; }
+.contact-name { font-family: var(--serif); font-size: 1.35rem; }
 
-.brand { font-size: clamp(0.92rem, 2.2vw, 1.2rem); }
+.brand { font-size: clamp(0.92rem, 2vw, 1.15rem); }
 .hero .badge-occupied, .hero .badge-available {
   color: #fff;
   background: rgba(255, 250, 244, 0.16);
