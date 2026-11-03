@@ -78,8 +78,14 @@ export async function placeholderRender({ category, variant, photoBytes }) {
   return { bytes: Buffer.from(toPng(image)), model: "stub", stub: true, zone: zoneFor(category) };
 }
 
+export const XAI_IMAGE_MODEL = "grok-imagine-image-2.0";
+
 function geminiReady(env) {
   return !!(env.GEMINI_API_KEY || env.GOOGLE_GEMINI_BASE_URL);
+}
+
+function xaiReady(env) {
+  return !!env.XAI_API_KEY;
 }
 
 function openaiDirect(env) {
@@ -89,15 +95,75 @@ function openaiDirect(env) {
   return true;
 }
 
-export function imageBackend(env) {
+/** Preferred order: xAI, then Gemini, then direct OpenAI, then the layout placeholder. */
+export function imageChain(env) {
   const force = env.ARC_IMAGE_PROVIDER || "auto";
-  if (force === "stub") return "stub";
-  if (force === "gemini" && geminiReady(env)) return "gemini";
-  if (force === "openai" && env.OPENAI_API_KEY) return "openai";
-  if (force !== "auto") return "stub";
-  if (geminiReady(env)) return "gemini";
-  if (openaiDirect(env)) return "openai";
-  return "stub";
+  const known = {
+    xai: xaiReady(env),
+    gemini: geminiReady(env),
+    openai: !!env.OPENAI_API_KEY && (force === "openai" || openaiDirect(env)),
+  };
+  if (force === "stub") return ["stub"];
+  if (force !== "auto") return known[force] ? [force, "stub"] : ["stub"];
+  const chain = ["xai", "gemini", "openai"].filter(name => known[name]);
+  chain.push("stub");
+  return chain;
+}
+
+export function imageBackend(env) {
+  return imageChain(env).find(name => name !== "stub") || "stub";
+}
+
+function dataUri(ref) {
+  const mime = ref.mime || "image/png";
+  return `data:${mime};base64,${Buffer.from(ref.bytes).toString("base64")}`;
+}
+
+/**
+ * Build the xAI Imagine request. A photo, inspiration image, or previous render
+ * goes to /images/edits. The logo is never included. With no picture, this is
+ * a text generation.
+ */
+export function xaiImagePlan(env, { prompt, references = [] }) {
+  const model = env.ARC_XAI_IMAGE_MODEL || XAI_IMAGE_MODEL;
+  const base = (env.XAI_BASE_URL || "https://api.x.ai/v1").replace(/\/$/, "");
+  const resolution = env.ARC_XAI_IMAGE_RESOLUTION === "2k" ? "2k" : "1k";
+  const pictures = references.filter(ref => ref && ref.role !== "logo" && ref.bytes).slice(0, 3);
+  if (!pictures.length) {
+    return {
+      url: `${base}/images/generations`,
+      body: { model, prompt, response_format: "b64_json", aspect_ratio: "3:2", resolution, n: 1 },
+    };
+  }
+  const images = pictures.map(ref => ({ type: "image_url", url: dataUri(ref) }));
+  const body = { model, prompt, response_format: "b64_json", resolution };
+  if (images.length === 1) body.image = images[0];
+  else body.images = images;
+  return { url: `${base}/images/edits`, body };
+}
+
+async function readXaiImage(res, fetchImpl) {
+  if (!res.ok) throw new Error(`xai image ${res.status}`);
+  const json = await res.json();
+  const first = json.data?.[0];
+  if (first?.b64_json) return Buffer.from(first.b64_json, "base64");
+  if (first?.url) {
+    const file = await fetchImpl(first.url);
+    if (!file.ok) throw new Error(`xai image download ${file.status}`);
+    return Buffer.from(await file.arrayBuffer());
+  }
+  throw new Error("xai image empty");
+}
+
+async function xaiImage(env, spec, fetchImpl) {
+  const plan = xaiImagePlan(env, spec);
+  const res = await fetchImpl(plan.url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.XAI_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify(plan.body),
+    signal: AbortSignal.timeout(50000),
+  });
+  return { bytes: await readXaiImage(res, fetchImpl), model: plan.body.model, stub: false };
 }
 
 async function geminiImage(env, { prompt, references }) {
@@ -140,13 +206,22 @@ async function openaiImage(env, { prompt, references }) {
   return { bytes: Buffer.from(b64, "base64"), model, stub: false };
 }
 
-export async function generateImage(env, { prompt, references = [], category, variant, photoBytes }) {
-  const backend = imageBackend(env);
-  try {
-    if (backend === "gemini") return { ...(await geminiImage(env, { prompt, references })), zone: zoneFor(category) };
-    if (backend === "openai") return { ...(await openaiImage(env, { prompt, references })), zone: zoneFor(category) };
-  } catch (err) {
-    console.error("visualizer image", backend, err?.message || err);
+export async function generateImage(env, spec, fetchImpl = fetch) {
+  const { prompt, references = [], category, variant, photoBytes } = spec;
+  const pictures = references.filter(ref => ref?.role !== "logo");
+  const zone = zoneFor(category);
+  for (const backend of imageChain(env)) {
+    if (backend === "stub") break;
+    try {
+      const out = backend === "xai"
+        ? await xaiImage(env, { prompt, references: pictures }, fetchImpl)
+        : backend === "gemini"
+          ? await geminiImage(env, { prompt, references: pictures })
+          : await openaiImage(env, { prompt, references: pictures });
+      return { ...out, zone };
+    } catch (err) {
+      console.error("visualizer image", backend, err?.message || err);
+    }
   }
   return placeholderRender({ category, variant, photoBytes });
 }
