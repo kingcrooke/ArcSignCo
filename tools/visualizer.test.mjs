@@ -9,7 +9,7 @@ import { decodePng, encodePng } from "../netlify/lib/visualizer/png.mjs";
 import { quoteFor, QUOTE_LABEL } from "../netlify/lib/visualizer/pricing.mjs";
 import { renderPrompt, editPrompt } from "../netlify/lib/visualizer/prompts.mjs";
 import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/lib/visualizer/scrape.mjs";
-import { blankScene, toPng, imageBackend } from "../netlify/lib/visualizer/images.mjs";
+import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
 import { leadEmail } from "../netlify/lib/visualizer/email.mjs";
 import { ENV_KEYS, handleVisualizer } from "../netlify/lib/visualizer/handle.mjs";
 import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
@@ -68,6 +68,54 @@ test("prompts leave a blank logo area and estimates invent no price", () => {
   }
   assert.equal(imageBackend({}), "stub");
   assert.equal(imageBackend({ GEMINI_API_KEY: "x", OPENAI_API_KEY: "y", OPENAI_BASE_URL: "https://ai-gateway.netlify.app/v1" }), "gemini");
+  assert.equal(imageBackend({ XAI_API_KEY: "x", GEMINI_API_KEY: "y" }), "xai");
+  assert.deepEqual(imageChain({ XAI_API_KEY: "x", GEMINI_API_KEY: "y" }), ["xai", "gemini", "stub"]);
+});
+
+test("xAI edits an uploaded photo and never sends the logo", async () => {
+  const png = Buffer.from(toPng(blankScene("sign", 0)));
+  const plan = xaiImagePlan({ XAI_API_KEY: "test" }, {
+    prompt: "leave the logo area blank",
+    references: [
+      { role: "photo", bytes: png, mime: "image/png" },
+      { role: "logo", bytes: png, mime: "image/png" },
+      { role: "inspo", bytes: png, mime: "image/png" },
+    ],
+  });
+  assert.equal(plan.body.model, XAI_IMAGE_MODEL);
+  assert.match(plan.url, /\/images\/edits$/);
+  assert.equal(plan.body.images.length, 2);
+  assert.equal(plan.body.image, undefined);
+  assert.equal(plan.body.images.some(img => img.url.startsWith("data:image/png;base64,")), true);
+  const textOnly = xaiImagePlan({}, { prompt: "a white van", references: [{ role: "logo", bytes: png }] });
+  assert.match(textOnly.url, /\/images\/generations$/);
+  assert.equal(textOnly.body.aspect_ratio, "3:2");
+
+  let seen;
+  const out = await generateImage({ XAI_API_KEY: "test" }, {
+    prompt: "leave the logo area blank",
+    category: "vehicle",
+    variant: 0,
+    references: [{ role: "photo", bytes: png, mime: "image/png" }, { role: "logo", bytes: png, mime: "image/png" }],
+  }, async (url, opts) => {
+    seen = { url, body: JSON.parse(opts.body), auth: opts.headers.Authorization };
+    return new Response(JSON.stringify({ data: [{ b64_json: png.toString("base64") }] }), { status: 200 });
+  });
+  assert.match(seen.url, /api\.x\.ai\/v1\/images\/edits$/);
+  assert.equal(seen.body.image.type, "image_url");
+  assert.equal(seen.body.images, undefined);
+  assert.equal(seen.auth, "Bearer test");
+  assert.equal(out.stub, false);
+  assert.equal(out.model, XAI_IMAGE_MODEL);
+
+  const fallback = await generateImage({ XAI_API_KEY: "test", GEMINI_API_KEY: "" }, {
+    prompt: "van",
+    category: "vehicle",
+    variant: 1,
+    references: [],
+  }, async () => new Response("no", { status: 503 }));
+  assert.equal(fallback.stub, true);
+  assert.equal(fallback.model, "stub");
 });
 
 test("website scan rejects private addresses and reads a public page", async () => {

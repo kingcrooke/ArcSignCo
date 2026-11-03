@@ -24,11 +24,15 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `VISUALIZER_EMAIL_FROM` | Yes, to email leads | From address Resend will accept, for example `Arc Signage Co <arc@arcsignco.com>` after the domain is verified. |
 | `VISUALIZER_LEAD_TO` | No | Inbox. Defaults to `arc@arcsignco.com`. |
 | `VISUALIZER_IP_SALT` | No | Salt for the daily IP hash. Defaults to a fixed string. |
-| `GEMINI_API_KEY` | No | Direct Gemini key. On Netlify, leave this unset and enable AI Gateway instead. The gateway injects `GEMINI_API_KEY` and `GOOGLE_GEMINI_BASE_URL`. Image model: `gemini-2.5-flash-image`. Text scan: `gemini-2.5-flash`. |
+| `XAI_API_KEY` | No, for Grok images | xAI API key. When set, image generation uses Grok Imagine first. |
+| `XAI_BASE_URL` | No | Defaults to `https://api.x.ai/v1`. |
+| `ARC_XAI_IMAGE_MODEL` | No | Defaults to `grok-imagine-image-2.0`, the current Imagine image model in the xAI docs. |
+| `ARC_XAI_IMAGE_RESOLUTION` | No | `1k` (default) or `2k`. |
+| `GEMINI_API_KEY` | No | Fallback image model, and the website-scan text model. On Netlify, leave this unset and enable AI Gateway instead. The gateway injects `GEMINI_API_KEY` and `GOOGLE_GEMINI_BASE_URL`. Image model: `gemini-2.5-flash-image`. Text scan: `gemini-2.5-flash`. |
 | `GOOGLE_GEMINI_BASE_URL` | Automatic with AI Gateway | Do not set this yourself if you want gateway routing. |
 | `OPENAI_API_KEY` | No | Chat extraction, and image generation only when the base URL is OpenAI's own (the gateway does not serve image models). A gateway placeholder key is ignored for images. |
 | `OPENAI_BASE_URL` | Automatic with AI Gateway | Direct OpenAI image calls are skipped when this host is Netlify. |
-| `ARC_IMAGE_PROVIDER` | No | `auto` (default), `gemini`, `openai`, or `stub`. `auto` prefers Gemini, then direct OpenAI images, then a layout placeholder. |
+| `ARC_IMAGE_PROVIDER` | No | `auto` (default), `xai`, `gemini`, `openai`, or `stub`. `auto` tries xAI, then Gemini, then direct OpenAI images, then a layout placeholder. A failed call falls through to the next one. |
 | `ARC_GEMINI_IMAGE_MODEL` | No | Defaults to `gemini-2.5-flash-image`. |
 | `ARC_GEMINI_TEXT_MODEL` | No | Defaults to `gemini-2.5-flash`. |
 | `ARC_OPENAI_IMAGE_MODEL` | No | Defaults to `gpt-image-1`. |
@@ -37,6 +41,16 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `TURNSTILE_SECRET_KEY` | No | Verified on generate and on the lead form. Other limits still apply when this is unset. |
 
 Missing image keys do not break the flow. The function draws a layout placeholder, says so on the page, and still pastes the uploaded logo.
+
+## Grok Imagine
+
+Image calls go to `https://api.x.ai/v1` with model `grok-imagine-image-2.0` ([xAI image generation](https://docs.x.ai/developers/model-capabilities/images/generation), [image editing](https://docs.x.ai/developers/model-capabilities/images/editing)).
+
+- No uploaded photo: `POST /v1/images/generations`.
+- A vehicle photo, storefront photo, or a previous preview: `POST /v1/images/edits`. The picture is a base64 data URI (`image.url` plus `type: "image_url"`). An optional inspiration image is a second source. The API accepts up to five source images. The logo file is not one of them.
+- The OpenAI SDK's multipart `images.edit()` is not the xAI edit call. xAI wants JSON.
+- Output is requested as `b64_json` because returned URLs are temporary. Resolution is `1k` unless `ARC_XAI_IMAGE_RESOLUTION=2k`. Text-only generations use aspect `3:2`. Edits leave aspect ratio unset so the uploaded photo's aspect is kept.
+- The real logo is still pasted afterward by `visualize/js/composite.js`. The prompt tells the model to leave that area blank.
 
 ## Limits
 
