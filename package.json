@@ -8,19 +8,14 @@
   },
   "scripts": {
     "test": "node --test ./tools/crooke-interview-voice.test.mjs ./tools/sign-mockup-pricing.test.mjs ./tools/sign-proofs.test.mjs ./tools/visualizer.test.mjs && node tools/check-sign-mockup.mjs && node tools/check-service-pages.mjs && node tools/check-crooke-site.mjs && npm run test:browser",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "netlify database migrations apply",
     "test:browser": "node tools/check-sign-mockup-browser.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.32.0",
     "@netlify/blobs": "11.1.3",
-    "@netlify/database": "^2.0.1",
-    "drizzle-orm": "^1.0.0-beta.22",
     "sharp": "^0.35.5"
   },
   "devDependencies": {
-    "drizzle-kit": "^1.0.0-beta.22",
     "jsdom": "26.1.0",
     "playwright": "1.63.0"
   }

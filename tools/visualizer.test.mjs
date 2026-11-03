@@ -12,7 +12,7 @@ import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/l
 import { blankScene, toPng, imageBackend } from "../netlify/lib/visualizer/images.mjs";
 import { leadEmail } from "../netlify/lib/visualizer/email.mjs";
 import { ENV_KEYS, handleVisualizer } from "../netlify/lib/visualizer/handle.mjs";
-import { memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
+import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -204,6 +204,17 @@ test("lead email goes to arc@ and is skipped cleanly without a key", async () =>
   assert.equal(rows.leads.length, 1);
   assert.equal(rows.leads[0].emailStatus, "sent");
   assert.equal(rows.leads[0].quoteLabel, "Custom quote");
+});
+
+test("blob records keep a lead without a database", async () => {
+  const records = blobRecords(memoryBlobs(), "v1/production");
+  await records.createSession({ id: "abc", createdAt: "2026-11-03T00:00:00.000Z", category: "window" });
+  await records.addLead({ id: "lead1", sessionId: "abc", createdAt: "2026-11-03T00:00:01.000Z", name: "Ada" });
+  const leads = await records.listLeads();
+  assert.equal(leads.length, 1);
+  assert.equal(leads[0].name, "Ada");
+  assert.equal(await records.bumpUsage("ip", "2026-11-03", "renders", 2), 2);
+  assert.equal((await records.getUsage("ip", "2026-11-03")).renders, 2);
 });
 
 test("docs name every env key and the page does not invent a price", () => {

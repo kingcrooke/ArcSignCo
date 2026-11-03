@@ -20,7 +20,6 @@ export const LIMITS = {
   imageBytes: 4_500_000,
 };
 export const ENV_KEYS = [
-  "NETLIFY_DB_URL",
   "VISUALIZER_ADMIN_PASSWORD",
   "VISUALIZER_LEAD_TO",
   "VISUALIZER_EMAIL_FROM",
@@ -65,7 +64,7 @@ function clean(value, max) {
   return String(value ?? "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").replace(/\s+/g, " ").trim().slice(0, max);
 }
 
-function slug(ctx) {
+export function contextSlug(ctx) {
   const s = String(ctx || "dev").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 32);
   return s || "dev";
 }
@@ -295,7 +294,7 @@ export async function handleVisualizer(req, deps) {
   const url = new URL(req.url);
   const path = url.pathname.replace(/\/+$/, "");
   const method = req.method.toUpperCase();
-  const ns = `v1/${slug(deps.deployContext)}`;
+  const ns = `v1/${contextSlug(deps.deployContext)}`;
   const ipHash = hashIp(deps.ip, env.VISUALIZER_IP_SALT);
   const day = dayOf(now);
 
@@ -305,7 +304,7 @@ export async function handleVisualizer(req, deps) {
       turnstileSiteKey: env.TURNSTILE_SITE_KEY || "",
       quote: quoteFor("vehicle", env),
       disclaimer: DISCLAIMER,
-      storage: deps.records ? "database" : "unconfigured",
+      storage: deps.records ? "blobs" : "unconfigured",
     });
   }
 
@@ -377,7 +376,7 @@ export async function handleVisualizer(req, deps) {
       photoKey: null,
       inspoKey: null,
       ipHash,
-      deployContext: slug(deps.deployContext),
+      deployContext: contextSlug(deps.deployContext),
       rendersUsed: 0,
       editsUsed: 0,
       leadId: null,

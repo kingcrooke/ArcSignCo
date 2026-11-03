@@ -1,6 +1,8 @@
-// Arc Visualizer API. Records go to Netlify Database. Image files go to Netlify Blobs.
+// Arc Visualizer API. Images and lead records both live in one Netlify Blobs store.
+// This account cannot provision Netlify Database, so records are JSON in Blobs.
 import { getStore } from "@netlify/blobs";
-import { BLOB_STORE, ENV_KEYS, handleVisualizer } from "../lib/visualizer/handle.mjs";
+import { BLOB_STORE, ENV_KEYS, contextSlug, handleVisualizer } from "../lib/visualizer/handle.mjs";
+import { blobRecords } from "../lib/visualizer/records.mjs";
 
 function envGet(name) {
   try {
@@ -14,17 +16,8 @@ function envGet(name) {
 
 export default async (req, context) => {
   const env = Object.fromEntries(ENV_KEYS.map(key => [key, envGet(key)]));
-  if (env.NETLIFY_DB_URL && !process.env.NETLIFY_DB_URL) process.env.NETLIFY_DB_URL = env.NETLIFY_DB_URL;
   const blobs = getStore({ name: BLOB_STORE, consistency: "strong" });
-  let records = null;
-  if (env.NETLIFY_DB_URL) {
-    try {
-      const { drizzleRecords } = await import("../lib/visualizer/db-records.mjs");
-      records = drizzleRecords();
-    } catch (err) {
-      console.error("visualizer database", err?.message || err);
-    }
-  }
+  const records = blobRecords(blobs, `v1/${contextSlug(context.deploy?.context)}`);
   try {
     return await handleVisualizer(req, {
       blobs,

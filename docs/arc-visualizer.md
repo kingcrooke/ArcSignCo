@@ -6,10 +6,12 @@ The logo file is pasted by `visualize/js/composite.js` (the same module on the p
 
 ## What is stored
 
-- Image files: Netlify Blobs store `arc-visualizer`, separate from sign-mockup proofs. Keys are `v1/<deploy context>/files/<id>`.
-- Sessions, renders, leads, usage counters, and events: Netlify Database (`db/schema.js`, migration under `netlify/database/migrations/`). Installing `@netlify/database` provisions it on deploy. Preview branches get their own database branch.
+Images, sessions, renders, leads, and usage counters all live in the Netlify Blobs store `arc-visualizer`, separate from sign-mockup proofs.
 
-If `NETLIFY_DB_URL` is missing, the page still loads and `GET /api/visualize/config` answers, but starting a preview returns 503.
+- Images: `v1/<deploy context>/files/<id>`
+- Records: `v1/<deploy context>/records/<kind>/<id>.json`
+
+Netlify Database is not used. This account returns "database feature not available" and that failed the deploy, so records follow the same Blobs pattern as the sign-mockup approval links.
 
 ## Environment variables
 
@@ -17,7 +19,6 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 
 | Variable | Required | Purpose |
 |---|---|---|
-| `NETLIFY_DB_URL` | Automatic | Injected when Netlify Database is provisioned. Do not copy a production URL into a laptop. |
 | `VISUALIZER_ADMIN_PASSWORD` | Yes, for the leads list | Password for `/visualize/admin/`. If unset, sign-in returns 503. |
 | `RESEND_API_KEY` | Yes, to email leads | [Resend](https://resend.com) API key. Without it the lead is still stored and the admin row says `saved-no-email-key`. |
 | `VISUALIZER_EMAIL_FROM` | Yes, to email leads | From address Resend will accept, for example `Arc Signage Co <arc@arcsignco.com>` after the domain is verified. |
