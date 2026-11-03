@@ -19,9 +19,11 @@
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" data-i18n="menu"></button>
     <nav id="site-nav" class="site-nav" aria-label="Elizabeth Crooke">
       <a href="#about" data-i18n="navAbout"></a>
+      <a href="#guests" data-i18n="navGuests"></a>
       <a href="#listings" data-i18n="navApartments"></a>
       <a href="#area" data-i18n="navArea"></a>
       <a href="#rules" data-i18n="navRules"></a>
+      <a href="#warnings" data-i18n="navWarnings"></a>
       <a href="#hold" data-i18n="navHold"></a>
       <a href="#contact" data-i18n="navContact"></a>
     </nav>
@@ -52,20 +54,6 @@
       </div>
     </section>
 
-    <section class="section warn-section" id="warnings">
-      <div class="wrap">
-        <div class="warn-card">
-          <h2 data-i18n="warnTitle"></h2>
-          <p data-i18n="warnLead"></p>
-          <ul>
-            <li data-i18n="warn1"></li>
-            <li data-i18n="warn2"></li>
-            <li data-i18n="warn3"></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
     <section class="section" id="about">
       <div class="wrap">
         <div class="section-title">
@@ -90,6 +78,29 @@
       </div>
     </section>
 
+    <section class="section" id="guests">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="guestsNo"></span>
+          <h2 data-i18n="guestsTitle"></h2>
+        </div>
+        <div class="principles">
+          <article>
+            <h3 data-i18n="fitTitle"></h3>
+            <p data-i18n="fitBody"></p>
+          </article>
+          <article>
+            <h3 data-i18n="notTitle"></h3>
+            <p data-i18n="notBody"></p>
+          </article>
+          <article>
+            <h3 data-i18n="whyTitle"></h3>
+            <p data-i18n="whyBody"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="listings">
       <div class="wrap">
         <div class="section-title">
@@ -99,6 +110,17 @@
         <p class="intro" data-i18n="listIntro"></p>
         <div id="listing-index"></div>
         <div id="listing-sheets"></div>
+      </div>
+    </section>
+
+    <section class="section" id="notes">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no">·</span>
+          <h2 data-i18n="sampleTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="sampleNote"></p>
+        <div id="sample-notes" class="samples"></div>
       </div>
     </section>
 
@@ -114,17 +136,6 @@
       </div>
     </section>
 
-    <section class="section" id="notes">
-      <div class="wrap">
-        <div class="section-title">
-          <span class="sec-no">·</span>
-          <h2 data-i18n="sampleTitle"></h2>
-        </div>
-        <p class="intro" data-i18n="sampleNote"></p>
-        <div id="sample-notes" class="samples"></div>
-      </div>
-    </section>
-
     <section class="section" id="rules">
       <div class="wrap">
         <div class="section-title">
@@ -136,6 +147,24 @@
       </div>
     </section>
 
+    <section class="section warn-section" id="warnings">
+      <div class="wrap">
+        <div class="warn-card">
+          <div class="section-title">
+            <span class="sec-no" data-i18n="warnNo"></span>
+            <h2 data-i18n="warnTitle"></h2>
+          </div>
+          <p data-i18n="warnLead"></p>
+          <ul>
+            <li data-i18n="warn1"></li>
+            <li data-i18n="warn2"></li>
+            <li data-i18n="warn3"></li>
+            <li data-i18n="warn4"></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="hold">
       <div class="wrap hold-grid">
         <div>
@@ -143,9 +172,11 @@
             <span class="sec-no" data-i18n="holdNo"></span>
             <h2 data-i18n="holdTitle"></h2>
           </div>
+          <p data-i18n="holdAll"></p>
           <p data-i18n="holdBody"></p>
           <p data-i18n="holdFee"></p>
-          <p class="rate-note" data-i18n="rateNote"></p>
+          <p class="meta" id="viewing-summary"></p>
+          <p class="meta" data-i18n="tzNote"></p>
           <button type="button" class="button" id="hold-jump" data-i18n="holdButton"></button>
         </div>
         <div class="slip-wrap">
@@ -171,8 +202,6 @@
           <a id="contact-email" href="mailto:elicrooke25@gmail.com">elicrooke25@gmail.com</a>
         </p>
         <p class="meta" data-i18n="emailTodo"></p>
-        <p class="rate-note" data-i18n="rateNote"></p>
-        <p class="meta" id="viewing-summary"></p>
         <p class="meta" data-i18n="tzNote"></p>
         <p class="meta" data-i18n="requiredHint"></p>
 
@@ -226,9 +255,9 @@
             </div>
           </fieldset>
 
-          <label class="choice hold-choice">
-            <input id="access-ok" name="access" type="checkbox">
-            <span data-i18n="warnCheck"></span>
+          <label class="choice hold-choice" id="warn-check">
+            <input id="access-ok" name="access" type="checkbox" required>
+            <a id="warn-check-link" href="#warnings"></a>
           </label>
 
           <label class="choice hold-choice">
@@ -241,7 +270,7 @@
             <textarea id="in-note" name="note" rows="4" maxlength="2000"></textarea>
           </label>
 
-          <button class="button" type="submit" data-i18n="submit"></button>
+          <button class="button" type="submit" data-i18n="submit" disabled></button>
         </form>
 
         <div id="form-success" class="success" hidden role="status">
@@ -268,20 +297,19 @@
     </div>
   </footer>
 
-  <dialog id="lightbox">
-    <div class="lb-bar">
-      <p id="lightbox-caption"></p>
-      <button type="button" class="button button-ghost" id="lightbox-close" data-i18n="close"></button>
-    </div>
-    <div id="lightbox-stage"></div>
-    <div class="lb-nav">
-      <button type="button" class="button button-ghost" id="lightbox-prev" data-i18n="galleryPrev"></button>
-      <button type="button" class="button button-ghost" id="lightbox-next" data-i18n="galleryNext"></button>
-    </div>
-  </dialog>
+  <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+    <button type="button" class="lb-backdrop" id="lightbox-backdrop" data-i18n-aria="close"></button>
+    <figure class="lb-frame">
+      <img id="lightbox-img" alt="">
+      <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+    <button type="button" class="lb-close" id="lightbox-close" data-i18n="close"></button>
+    <button type="button" class="lb-arrow prev" id="lightbox-prev" data-i18n-aria="galleryPrev">‹</button>
+    <button type="button" class="lb-arrow next" id="lightbox-next" data-i18n-aria="galleryNext">›</button>
+  </div>
 
   <noscript>
-    <p>EC Boutique Apartments. Elizabeth Crooke, Gazcue, Santo Domingo. D12, D2 y D1. Correo: elicrooke25@gmail.com. Esta página necesita JavaScript.</p>
+    <p>EC Boutique Apartments. Elizabeth Crooke, Gazcue, Santo Domingo. D12, D2, D1 y Apartamento 4. Correo: elicrooke25@gmail.com. Esta página necesita JavaScript.</p>
   </noscript>
 
   <script src="listings.js"></script>

@@ -1,6 +1,8 @@
 (function () {
   var lang = "es";
   var galleryAt = {};
+  var lb = { items: [], index: 0, galleryId: "" };
+  var lbScroll = 0;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   var MOTIFS = {
@@ -65,14 +67,11 @@
   }
 
   function statusClass(listing) {
-    if (listing.status === "decorating") return "badge-decorating";
     if (listing.status === "soon") return "badge-soon";
     return isUnavailable(listing) ? "badge-occupied" : "badge-available";
   }
 
   function statusLabel(listing) {
-    if (listing.badgeLabel) return tr(listing.badgeLabel);
-    if (listing.status === "decorating") return t("statusDecorating");
     if (listing.status === "soon") return t("statusSoon");
     return isUnavailable(listing) ? t("statusOccupied") : t("statusAvailable");
   }
@@ -97,6 +96,7 @@
 
   function addressLines(listing) {
     var a = listing.address;
+    if (!a) return [];
     return [
       a.street,
       a.building,
@@ -193,9 +193,7 @@
         "<td>" + n + "</td>" +
         '<td><a href="#listing-' + listing.id + '">' + esc(tr(listing.name)) + "</a></td>" +
         "<td>" + esc(tr(listing.layoutShort)) + "</td>" +
-        "<td><span class=\"badge " + statusClass(listing) + "\">" + esc(statusLabel(listing)) + "</span>" +
-        (listing.comingSoon ? " <span class=\"soon\">" + esc(t("comingSoon")) + "</span>" : "") +
-        "</td>" +
+        "<td><span class=\"badge " + statusClass(listing) + "\">" + esc(statusLabel(listing)) + "</span></td>" +
         "<td>" + esc(tr(listing.addressShort)) + "</td>" +
         "</tr>"
       );
@@ -221,20 +219,44 @@
           return "<li>" + esc(tr(item)) + "</li>";
         }).join("") + "</ul>"
         : "";
+      var stageInner = mediaHtml(slide, label);
+      if (slide.src && slide.kind !== "video" && slide.kind !== "pattern") {
+        stageInner = '<button type="button" class="stage-open" data-open="1" aria-label="' + esc(t("galleryOpen")) + " " + esc(label) + '">' + stageInner + "</button>";
+      }
+      var todo = listing.media.filter(function (item) { return item.todo; }).map(function (item) {
+        return "<!-- TODO: " + String(item.todo).replace(/[^-.\w]/g, "") + " -->";
+      }).join("");
+      var actions = '<div class="listing-actions">' +
+        (listing.status === "available" ? '<a class="button" href="#hold">' + esc(t("holdButton")) + "</a>" : "") +
+        '<a class="button' + (listing.status === "available" ? " button-ghost" : "") + '" href="' + esc(infoMailto(listing)) + '">' + esc(t("moreInfo")) + "</a>" +
+        '<button type="button" class="button button-ghost" data-select-apt="' + listing.id + '">' + esc(t("useForm")) + "</button></div>";
+      var facts = "";
+      if (listing.address && !listing.hideLocation) {
+        facts = "<aside class=\"facts\">" +
+          "<h3>" + esc(t("addressTitle")) + "</h3>" +
+          "<p class=\"address\">" + addressLines(listing).map(esc).join("<br>") + "</p>" +
+          "<p><strong>" + esc(t("aptLabel")) + " " + esc(listing.aptNumber) + "</strong></p>" +
+          '<div class="map-frame"><iframe title="' + esc(tr(listing.name)) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' + esc(mapSrc(listing.mapQuery, listing.mapZoom || 16)) + '"></iframe></div>' +
+          "<p class=\"meta\">" + esc(tr(listing.mapNote)) + "</p>" +
+          '<p class="map-links"><a href="' + esc(mapsLink(listing.mapQuery)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a>" +
+          '<a href="' + esc(streetLink(listing)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openStreet")) + "</a></p>" +
+          '<p class="meta">' + esc(t("mapFallback")) + "</p>" +
+          actions +
+          "</aside>";
+      }
       return (
         '<article class="listing" id="listing-' + listing.id + '">' +
         '<header class="listing-head"><p class="kicker">' + n + "</p><h3>" + esc(tr(listing.name)) + "</h3>" +
         '<div class="badges">' +
-        (listing.comingSoon && listing.status !== "decorating" && listing.status !== "soon" ? '<p class="soon">' + esc(t("comingSoon")) + "</p>" : "") +
         '<p class="badge ' + statusClass(listing) + '" data-status="' + esc(listing.status) + '">' + esc(statusLabel(listing)) + "</p>" +
         "</div></header>" +
+        (tr(listing.floorChip) ? '<p class="floor-chip">' + esc(tr(listing.floorChip)) + "</p>" : "") +
+        (tr(listing.blockNote) ? '<p class="block-note">' + esc(tr(listing.blockNote)) + "</p>" : "") +
         "<p class=\"summary\">" + esc(tr(listing.summary)) + "</p>" +
-        (listing.comingSoon ? "<p>" + esc(t("notOffer")) + "</p>" : "") +
         '<div class="gallery" data-gallery="' + listing.id + '" tabindex="0">' +
+        todo +
         '<div class="stage' + (slide.kind === "video" ? " is-portrait" : "") + (slide.kind === "pattern" ? " is-pattern" : "") + '">' +
-        '<button type="button" class="stage-open" data-open="1" aria-label="' + esc(t("galleryOpen")) + " " + esc(label) + '">' +
-        mediaHtml(slide, label) +
-        "</button>" +
+        stageInner +
         '<button type="button" class="g-nav prev" data-dir="-1" aria-label="' + esc(t("galleryPrev")) + '">‹</button>' +
         '<button type="button" class="g-nav next" data-dir="1" aria-label="' + esc(t("galleryNext")) + '">›</button>' +
         '<p class="g-count">' + esc(t("count", { n: at + 1, m: listing.media.length })) + "</p>" +
@@ -245,44 +267,19 @@
         "</div>" +
         calendarBlock(listing) +
         '<div class="listing-grid"><div class="prose">' +
-        "<p>" + esc(tr(listing.description)) + "</p>" +
-        "<h3>" + esc(t("layoutTitle")) + "</h3><p>" + esc(tr(listing.layout)) + "</p>" +
+        (tr(listing.description) ? "<p>" + esc(tr(listing.description)) + "</p>" : "") +
+        (tr(listing.kitchen) ? "<p class=\"kitchen-line\">" + esc(tr(listing.kitchen)) + "</p>" : "") +
+        (tr(listing.layout) ? "<h3>" + esc(t("layoutTitle")) + "</h3><p>" + esc(tr(listing.layout)) + "</p>" : "") +
         diagram(listing) +
-        (tr(listing.stay) ? "<h3>" + esc(t("stayTitle")) + "</h3><p>" + esc(tr(listing.stay)) + "</p>" : "") +
-        (listing.fitFor.length ? "<h3>" + esc(t("fitTitle")) + "</h3>" + listHtml(listing.fitFor) : "") +
-        (listing.notFor.length ? "<h3>" + esc(t("notTitle")) + "</h3>" + listHtml(listing.notFor) : "") +
-        (tr(listing.pet) ? "<h3>" + esc(t("petTitle")) + "</h3><p>" + esc(tr(listing.pet)) + "</p>" : "") +
         amenities +
-        "</div><aside class=\"facts\">" +
-        "<h3>" + esc(t("addressTitle")) + "</h3>" +
-        "<p class=\"address\">" + addressLines(listing).map(esc).join("<br>") + "</p>" +
-        "<p><strong>" + esc(t("aptLabel")) + " " + esc(listing.aptNumber) + "</strong></p>" +
-        "<p>" + esc(tr(listing.floorNote)) + "</p>" +
-        '<div class="map-frame"><iframe title="' + esc(tr(listing.name)) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' + esc(mapSrc(listing.mapQuery, listing.mapZoom || 16)) + '"></iframe></div>' +
-        "<p class=\"meta\">" + esc(tr(listing.mapNote)) + "</p>" +
-        '<p class="map-links"><a href="' + esc(mapsLink(listing.mapQuery)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a>" +
-        '<a href="' + esc(streetLink(listing)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openStreet")) + "</a></p>" +
-        '<p class="meta">' + esc(t("mapFallback")) + "</p>" +
-        '<p class="rate-note">' + esc(t("rateNote")) + "</p>" +
-        '<div class="listing-actions"><a class="button" href="' + esc(infoMailto(listing)) + '">' + esc(t("moreInfo")) + "</a>" +
-        '<button type="button" class="button button-ghost" data-select-apt="' + listing.id + '">' + esc(t("useForm")) + "</button></div>" +
-        "</aside></div></article>"
+        (facts ? "" : actions) +
+        "</div>" + facts + "</div></article>"
       );
     }).join("");
   }
 
   function renderRules() {
-    document.getElementById("rules-from-listings").innerHTML = window.RENTALS.listings.map(function (listing) {
-      var stay = tr(listing.stay);
-      return (
-        '<section class="rule-block"><h3>' + esc(tr(listing.name)) + "</h3>" +
-        (listing.comingSoon ? "<p>" + esc(t("notOffer")) + "</p>" : "") +
-        "<p><strong>" + esc(t("stayTitle")) + ".</strong> " + esc(stay || t("stayUnpublished")) + "</p>" +
-        (listing.fitFor.length ? "<p><strong>" + esc(t("fitTitle")) + ".</strong></p>" + listHtml(listing.fitFor) : "") +
-        (listing.notFor.length ? "<p><strong>" + esc(t("notTitle")) + ".</strong></p>" + listHtml(listing.notFor) : "") +
-        (tr(listing.pet) ? "<p><strong>" + esc(t("petTitle")) + ".</strong> " + esc(tr(listing.pet)) + "</p>" : "") + "</section>"
-      );
-    }).join("");
+    document.getElementById("rules-from-listings").innerHTML = "<p>" + esc(t("rulesBody")) + "</p>";
   }
 
   function renderArea() {
@@ -361,7 +358,7 @@
     var select = document.getElementById("in-apt");
     var current = select.value;
     var options = '<option value="">' + esc(t("selectApt")) + "</option>" + window.RENTALS.listings.map(function (listing) {
-      var suffix = listing.comingSoon ? " — " + t("comingSoon") : "";
+      var suffix = listing.status === "soon" ? " — " + t("futureInterest") : "";
       return '<option value="' + esc(listing.id) + '">' + esc(tr(listing.name) + suffix) + "</option>";
     }).join("");
     select.innerHTML = options;
@@ -448,6 +445,9 @@
       formatStay(form.arrival.value, form.departure.value),
       t("visitLegend") + ": " + visit,
       (hold ? t("holdYes") : t("holdWordNo")),
+      "Advertencia confirmada: Sí",
+      "acepta_advertencias: sí",
+      t("confirmStamp") + ": " + confirmStamp(),
       t("labelNote") + ": " + form.note.value.trim(),
       "",
       t("mailBody"),
@@ -557,7 +557,7 @@
       if (pick.start === iso) cls += " is-start";
       if (pick.end === iso) cls += " is-end";
       if (pick.start && pick.end && iso > pick.start && iso < pick.end) cls += " is-between";
-      var disabled = blocked || past || (listing && listing.comingSoon);
+      var disabled = blocked || past;
       cells += '<button type="button" class="' + cls + '" data-cal-day="' + iso + '" data-cal-id="' + esc(id) + '"' +
         (disabled ? " disabled" : "") + '><span>' + i + "</span></button>";
     }
@@ -567,7 +567,7 @@
   function calendarHtml(listing, id, pick) {
     var start = cursorDate(id);
     var next = new Date(start.getFullYear(), start.getMonth() + 1, 1);
-    var hint = listing && listing.comingSoon ? t("calSoon") : t("calHint");
+    var hint = t("calHint");
     return (
       '<section class="cal-block">' +
       "<h3>" + esc(t("calTitle")) + "</h3>" +
@@ -583,8 +583,25 @@
   }
 
   function calendarBlock(listing) {
+    if (listing.status === "soon") return "";
     var pick = formPick.listingId === listing.id ? formPick : { start: "", end: "" };
     return calendarHtml(listing, listing.id, pick);
+  }
+
+  function confirmStamp() {
+    var zone = (window.RENTALS.viewing && window.RENTALS.viewing.timeZone) || "America/Santo_Domingo";
+    var parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: zone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(new Date());
+    var bag = {};
+    parts.forEach(function (part) { bag[part.type] = part.value; });
+    return bag.year + "-" + bag.month + "-" + bag.day + " " + bag.hour + ":" + bag.minute + " AST";
   }
 
   function activeListing() {
@@ -613,7 +630,7 @@
 
   function chooseDay(id, iso) {
     var listing = id === "form" ? activeListing() : listingById(id);
-    if (!listing || listing.comingSoon || isBlocked(listing, iso) || iso < todayIso()) return;
+    if (!listing || isBlocked(listing, iso) || iso < todayIso()) return;
     var pick = id === "form" ? formPick : { start: formPick.listingId === id ? formPick.start : "", end: formPick.listingId === id ? formPick.end : "" };
     if (!pick.start || (pick.start && pick.end)) {
       formPick = { start: iso, end: "", listingId: listing.id };
@@ -634,8 +651,8 @@
 
   function renderNeighborhood() {
     var items = window.RENTALS.neighborhood || [];
-    document.getElementById("neighborhood").innerHTML = items.map(function (item) {
-      return '<figure><img src="' + esc(item.src) + '" alt="' + esc(tr(item.caption)) + '"><figcaption>' + esc(tr(item.caption)) + "</figcaption></figure>";
+    document.getElementById("neighborhood").innerHTML = items.map(function (item, i) {
+      return '<figure><button type="button" data-area-open="' + i + '" aria-label="' + esc(t("galleryOpen")) + " " + esc(tr(item.caption)) + '"><img src="' + esc(item.src) + '" alt="' + esc(tr(item.caption)) + '"></button><figcaption>' + esc(tr(item.caption)) + "</figcaption></figure>";
     }).join("");
   }
 
@@ -674,7 +691,16 @@
       link.href = "mailto:" + window.RENTALS.email;
       link.textContent = window.RENTALS.email;
     });
+    var warnLink = document.getElementById("warn-check-link");
+    if (warnLink) warnLink.textContent = t("warnCheck");
+    syncSubmit();
     watchReveal();
+  }
+
+  function syncSubmit() {
+    var button = document.querySelector("#inquiry-form button[type='submit']");
+    var box = document.getElementById("access-ok");
+    if (button && box) button.disabled = !box.checked;
   }
 
   function watchReveal() {
@@ -738,6 +764,14 @@
       document.getElementById("in-name").focus();
       return;
     }
+    var areaOpen = event.target.closest("[data-area-open]");
+    if (areaOpen) {
+      var areaItems = (window.RENTALS.neighborhood || []).map(function (item) {
+        return { kind: "photo", src: item.src, caption: item.caption };
+      });
+      openLightbox(areaItems, Number(areaOpen.getAttribute("data-area-open")), "");
+      return;
+    }
     var gallery = event.target.closest("[data-gallery]");
     if (!gallery) return;
     var id = gallery.getAttribute("data-gallery");
@@ -757,15 +791,18 @@
       galleryAt[id] = Number(go.getAttribute("data-go"));
       renderSheets();
     } else if (open) {
-      var slide = listing.media[galleryAt[id] || 0];
-      lightboxId = id;
-      document.getElementById("lightbox-caption").textContent = tr(slide.caption);
-      document.getElementById("lightbox-stage").innerHTML = mediaHtml(slide, tr(slide.caption));
-      document.getElementById("lightbox").showModal();
+      var photos = photoItems(listing.media);
+      var current = listing.media[galleryAt[id] || 0];
+      var start = 0;
+      photos.forEach(function (item, i) {
+        if (current && item.src === current.src) start = i;
+      });
+      openLightbox(photos, start, id);
     }
   });
 
   document.getElementById("listing-sheets").addEventListener("keydown", function (event) {
+    if (!document.getElementById("lightbox").hidden) return;
     var gallery = event.target.closest("[data-gallery]");
     if (!gallery) return;
     if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
@@ -786,32 +823,108 @@
     renderSheets();
   });
 
-  document.getElementById("lightbox-prev").addEventListener("click", function () { stepLightbox(-1); });
-  document.getElementById("lightbox-next").addEventListener("click", function () { stepLightbox(1); });
-
-  function stepLightbox(step) {
-    var dialog = document.getElementById("lightbox");
-    if (!dialog.open || !lightboxId) return;
-    var listing = listingById(lightboxId);
-    galleryAt[lightboxId] = (galleryAt[lightboxId] || 0) + step;
-    if (galleryAt[lightboxId] < 0) galleryAt[lightboxId] = listing.media.length - 1;
-    if (galleryAt[lightboxId] >= listing.media.length) galleryAt[lightboxId] = 0;
-    var slide = listing.media[galleryAt[lightboxId]];
-    document.getElementById("lightbox-caption").textContent = tr(slide.caption);
-    document.getElementById("lightbox-stage").innerHTML = mediaHtml(slide, tr(slide.caption));
-    renderSheets();
+  function photoItems(list) {
+    return (list || []).filter(function (item) {
+      return item && item.src && item.kind !== "video" && item.kind !== "pattern";
+    });
   }
 
-  var lightboxId = "";
+  function lockPage() {
+    lbScroll = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.classList.add("lb-open");
+    document.body.style.top = "-" + lbScroll + "px";
+  }
 
-  document.getElementById("lightbox-close").addEventListener("click", function () {
-    document.getElementById("lightbox").close();
+  function unlockPage() {
+    document.body.classList.remove("lb-open");
+    document.body.style.top = "";
+    window.scrollTo(0, lbScroll);
+  }
+
+  function showLightbox() {
+    var item = lb.items[lb.index];
+    if (!item) return;
+    var img = document.getElementById("lightbox-img");
+    img.src = item.src;
+    img.alt = tr(item.caption);
+    document.getElementById("lightbox-caption").textContent = tr(item.caption);
+    var box = document.getElementById("lightbox");
+    box.hidden = false;
+    if (!document.body.classList.contains("lb-open")) lockPage();
+  }
+
+  function openLightbox(items, index, galleryId) {
+    if (!items || !items.length) return;
+    lb.items = items;
+    lb.index = (index + items.length) % items.length;
+    lb.galleryId = galleryId || "";
+    showLightbox();
+  }
+
+  function closeLightbox() {
+    var box = document.getElementById("lightbox");
+    if (!box || box.hidden) return;
+    box.hidden = true;
+    document.getElementById("lightbox-img").removeAttribute("src");
+    unlockPage();
+    if (lb.galleryId) renderSheets();
+  }
+
+  function stepLightbox(step) {
+    var box = document.getElementById("lightbox");
+    if (!box || box.hidden || !lb.items.length) return;
+    lb.index = (lb.index + step + lb.items.length) % lb.items.length;
+    if (lb.galleryId) {
+      var listing = listingById(lb.galleryId);
+      var src = lb.items[lb.index].src;
+      listing.media.forEach(function (item, i) {
+        if (item.src === src) galleryAt[lb.galleryId] = i;
+      });
+    }
+    showLightbox();
+  }
+
+  document.getElementById("lightbox-prev").addEventListener("click", function (event) {
+    event.stopPropagation();
+    stepLightbox(-1);
+  });
+  document.getElementById("lightbox-next").addEventListener("click", function (event) {
+    event.stopPropagation();
+    stepLightbox(1);
+  });
+  document.getElementById("lightbox-close").addEventListener("click", function (event) {
+    event.stopPropagation();
+    closeLightbox();
+  });
+  document.getElementById("lightbox-backdrop").addEventListener("click", function () {
+    closeLightbox();
   });
   document.getElementById("lightbox").addEventListener("click", function (event) {
-    if (event.target === event.currentTarget) event.currentTarget.close();
+    if (event.target === event.currentTarget) closeLightbox();
   });
 
-  document.getElementById("inquiry-form").addEventListener("change", syncVisitMode);
+  var touchX = 0;
+  var touchY = 0;
+  document.getElementById("lightbox").addEventListener("touchstart", function (event) {
+    if (!event.changedTouches || !event.changedTouches.length) return;
+    touchX = event.changedTouches[0].clientX;
+    touchY = event.changedTouches[0].clientY;
+  }, { passive: true });
+  document.getElementById("lightbox").addEventListener("touchend", function (event) {
+    if (!event.changedTouches || !event.changedTouches.length) return;
+    var dx = event.changedTouches[0].clientX - touchX;
+    var dy = event.changedTouches[0].clientY - touchY;
+    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+    stepLightbox(dx < 0 ? 1 : -1);
+  }, { passive: true });
+
+  document.getElementById("inquiry-form").addEventListener("change", function () {
+    syncVisitMode();
+    syncSubmit();
+  });
+  document.getElementById("warn-check-link").addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
 
   document.getElementById("inquiry-form").addEventListener("submit", function (event) {
     event.preventDefault();
@@ -852,6 +965,13 @@
   });
 
   document.addEventListener("keydown", function (event) {
+    var box = document.getElementById("lightbox");
+    if (box && !box.hidden) {
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowRight") { event.preventDefault(); stepLightbox(1); }
+      if (event.key === "ArrowLeft") { event.preventDefault(); stepLightbox(-1); }
+      return;
+    }
     if (event.key !== "Escape") return;
     var toggle = document.querySelector(".nav-toggle");
     if (toggle.getAttribute("aria-expanded") === "true") {
