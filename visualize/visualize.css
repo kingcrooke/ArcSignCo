@@ -1,0 +1,162 @@
+/* Arc Visualizer. The header and footer come from service-page.v6.css. */
+.viz-hero .wrap { grid-template-columns: 1fr; padding: 22px 0 36px; gap: 10px; }
+.viz-hero h1 { margin-top: 14px; max-width: 16ch; }
+.viz-hero .answer { margin: 14px 0 0; max-width: 720px; }
+.viz-note {
+  margin-top: 14px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--gold);
+  color: #d5deea;
+  font-size: 14px;
+}
+.viz-shell { padding: 28px 0 64px; }
+.viz-layout { display: grid; gap: 18px; }
+.viz-main { min-width: 0; }
+.viz-assist {
+  background: var(--navy);
+  color: #e7eef6;
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow);
+}
+.viz-assist p { margin: 0; font-size: 15px; line-height: 1.45; }
+.viz-assist-kicker {
+  color: var(--gold-2);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 8px !important;
+}
+.viz-steps { display: flex; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
+.viz-steps li { flex: 1; }
+.viz-steps button {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 6px;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 13px;
+}
+.viz-steps button[aria-current="step"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.viz-steps button:disabled { opacity: .55; }
+.viz-cards { display: grid; gap: 14px; }
+.viz-card {
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--soft);
+  cursor: pointer;
+}
+.viz-card:hover, .viz-card:focus-visible { border-color: var(--gold); }
+.viz-card b { display: block; font-size: 20px; margin: 8px 0 6px; }
+.viz-card span { display: block; color: var(--muted); font-size: 14px; line-height: 1.4; }
+.viz-kicker { color: var(--gold-ink); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.viz-panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--soft);
+}
+.viz-panel h2 { font-size: 26px; line-height: 1.15; margin-bottom: 6px; }
+.viz-panel > p { color: var(--muted); margin-bottom: 14px; }
+.viz-grid { display: grid; gap: 12px; }
+.viz-field { display: flex; flex-direction: column; gap: 6px; font-weight: 700; font-size: 14px; }
+.viz-field input, .viz-field select, .viz-field textarea {
+  font: inherit;
+  font-weight: 400;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+  background: #fff;
+  width: 100%;
+}
+.viz-field textarea { min-height: 72px; resize: vertical; }
+.viz-row { display: grid; gap: 12px; }
+.viz-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.viz-actions .btn { min-height: 46px; }
+.viz-scan { display: flex; gap: 8px; align-items: end; }
+.viz-scan .viz-field { flex: 1; }
+.viz-colors { display: flex; gap: 10px; align-items: center; }
+.viz-colors input[type="color"] { width: 52px; height: 42px; padding: 4px; }
+.viz-alert {
+  background: #fff6e8;
+  border: 1px solid #efd3a4;
+  color: #6a4b12;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 0 0 12px;
+}
+.viz-banner {
+  background: var(--navy-2);
+  color: #f3f6fa;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.viz-quote {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--cream);
+  border: 1px dashed var(--gold);
+}
+.viz-quote strong { display: block; font-size: 18px; }
+.viz-quote p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.viz-stage { position: relative; background: var(--navy); border-radius: 14px; overflow: hidden; }
+.viz-stage canvas, .viz-stage img.viz-base { width: 100%; height: auto; display: block; }
+.viz-stage img.viz-base { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; pointer-events: none; }
+.viz-handle {
+  position: absolute;
+  width: 22px; height: 22px;
+  margin: -11px 0 0 -11px;
+  border-radius: 50%;
+  border: 2px solid var(--navy);
+  background: var(--gold);
+  touch-action: none;
+  padding: 0;
+}
+.viz-thumbs { display: flex; gap: 8px; margin: 12px 0; overflow-x: auto; }
+.viz-thumbs button { border: 2px solid transparent; padding: 0; border-radius: 10px; background: none; }
+.viz-thumbs button[aria-checked="true"] { border-color: var(--gold); }
+.viz-thumbs img { width: 120px; height: 78px; object-fit: cover; border-radius: 8px; display: block; }
+.viz-compare { display: flex; align-items: center; gap: 10px; margin: 8px 0 0; color: #d5deea; font-size: 13px; }
+.viz-compare input { flex: 1; }
+.viz-busy[hidden] { display: none !important; }
+.viz-busy {
+  position: fixed; inset: 0; z-index: 40;
+  background: rgba(11, 29, 51, .72);
+  display: grid; place-items: center; text-align: center; color: #fff; padding: 24px;
+}
+.viz-busy p { margin: 8px 0 0; }
+.viz-ring {
+  width: 58px; height: 58px; margin: 0 auto 8px; border-radius: 50%;
+  border: 4px solid rgba(240, 208, 128, .28); border-top-color: var(--gold-2);
+  animation: viz-spin .9s linear infinite;
+}
+@keyframes viz-spin { to { transform: rotate(360deg); } }
+.viz-hp { position: absolute; left: -9999px; height: 0; overflow: hidden; }
+.viz-disclaimer { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.viz-link { color: var(--gold-ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 720px) {
+  .viz-cards { grid-template-columns: repeat(3, 1fr); }
+  .viz-row.two { grid-template-columns: 1fr 1fr; }
+  .viz-row.three { grid-template-columns: 1.2fr 1fr 1fr; }
+}
+@media (min-width: 980px) {
+  .viz-layout { grid-template-columns: minmax(0, 1fr) 300px; align-items: start; }
+  .viz-assist { position: sticky; top: 124px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .viz-ring { animation: none; border-color: var(--gold-2); }
+}
+@media (max-width: 720px) {
+  .viz-hero h1 { font-size: 34px; }
+  .viz-actions .btn { width: 100%; }
+}

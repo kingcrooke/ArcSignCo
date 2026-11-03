@@ -178,6 +178,15 @@ If it can't be backed up, soften or remove it.
 
 - HTML is always revalidated, so page edits appear as soon as a deploy finishes.
 
+## Arc Visualizer
+
+`/visualize/` is a concept preview for a vehicle wrap, a storefront sign, or window graphics.
+It reuses the sign mockup's photo loader and quad math. The uploaded logo is pasted in code.
+Leads go to Netlify Database and, when email is configured, to arc@arcsignco.com.
+`/visualize/admin/` is the password-protected list (noindex, not in the sitemap).
+See `docs/arc-visualizer.md` for environment variables. Estimates stay off (`Custom quote`)
+until Jesus enters rates. The homepage and service pages do not link here yet.
+
 ## Sign mockup tool
 
 `/tools/sign-mockup/` lets a visitor upload a storefront photo, set the scale by drawing a line over

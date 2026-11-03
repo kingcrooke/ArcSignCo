@@ -8,6 +8,8 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+  # sharp is native. Netlify installs it; esbuild must not bundle it.
+  external_node_modules = ["sharp"]
 
 # Header rules below never set the same header name on overlapping paths, because Netlify
 # combines values when several rules match one URL.
@@ -115,6 +117,34 @@
 [[headers]]
   for = "/quote-engine/*"
   [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Arc Visualizer. The public page is indexable. The leads list is not.
+[[headers]]
+  for = "/visualize/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/visualize/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/visualize/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/visualize/admin/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/visualize/admin/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
     X-Robots-Tag = "noindex, nofollow"
 
 [[headers]]
