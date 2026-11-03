@@ -6,8 +6,8 @@ import {
 } from './weeklyReport'
 
 describe('weekly reports', () => {
-  it('has a Sleeper-backed report for 2026 weeks 1–7 and none after', () => {
-    for (const week of [1, 2, 3, 4, 5, 6, 7]) {
+  it('has a Sleeper-backed report for 2026 weeks 1–8 and none after', () => {
+    for (const week of [1, 2, 3, 4, 5, 6, 7, 8]) {
       const report = getWeeklyReport(2026, week)
       expect(report?.week).toBe(week)
       expect(report?.leagueId).toBe('1312077668782473216')
@@ -30,9 +30,9 @@ describe('weekly reports', () => {
         }
       }
     }
-    expect(getWeeklyReport(2026, 8)).toBeNull()
+    expect(getWeeklyReport(2026, 9)).toBeNull()
     expect(getWeeklyReport(2025, 5)).toBeNull()
-    expect(weeklyReportEmptyMessage(8)).toBe("Week 8 report isn't posted yet.")
+    expect(weeklyReportEmptyMessage(9)).toBe("Week 9 report isn't posted yet.")
   })
 
   it('records week 5 lines that match Sleeper scores', () => {
@@ -120,8 +120,55 @@ describe('weekly reports', () => {
     line('Chalupa Batman', 151.68, 'BigBlue', 138.18)
   })
 
+  it('records week 8 final scores and league highlights', () => {
+    const report = getWeeklyReport('2026', 8)
+    expect(report?.highScore).toMatchObject({ name: 'ramonguaraguao', points: 209.96 })
+    expect(report?.lowScore).toMatchObject({ name: 'Rubuilding', points: 57.06 })
+    expect(report?.topPlayer).toMatchObject({
+      name: 'Joe Burrow',
+      points: 46.48,
+      manager: 'Wolf Pack',
+      started: true,
+    })
+    expect(report?.closest).toMatchObject({ margin: 9.16, matchupId: 3 })
+    expect(report?.blowout).toMatchObject({ margin: 100.32, matchupId: 2 })
+    expect(report?.waivers).toHaveLength(13)
+    expect(report?.trades).toEqual([])
+    const line = (winner: string, w: number, loser: string, l: number, margin: number) => {
+      const game = report?.matchups.find(
+        (g) => g.winner.name === winner && g.loser.name === loser,
+      )
+      expect(game?.winner.score).toBe(w)
+      expect(game?.loser.score).toBe(l)
+      expect(game?.margin).toBe(margin)
+      expect(game?.tie).toBe(false)
+    }
+    line('Chase’n Dubs', 128.16, 'Chalupa Batman', 86.4, 41.76)
+    line('Nix in 5', 157.38, 'Rubuilding', 57.06, 100.32)
+    line('MahomiesRidley4MooreJeffe', 148.34, 'Wolf Pack', 139.18, 9.16)
+    line('A-Lamb-e que tengo hambre', 166.3, 'Team Name Hoes', 96, 70.3)
+    line('ramonguaraguao', 209.96, 'Saints & Sinners', 165.62, 44.34)
+    line('Love Thy Nabers', 118.76, 'BigBlue', 83.38, 35.38)
+    const mahomies = report?.matchups.find((g) => g.matchupId === 3)
+    expect(mahomies?.upset).toBe(true)
+    expect(report?.standings.map((s) => [s.name, s.wins, s.losses, s.pointsFor])).toEqual([
+      ['Chase’n Dubs', 7, 1, 1128.86],
+      ['Nix in 5', 6, 2, 1214.2],
+      ['ramonguaraguao', 6, 2, 1126.04],
+      ['Saints & Sinners', 5, 3, 1092.42],
+      ['A-Lamb-e que tengo hambre', 5, 3, 1084.24],
+      ['Wolf Pack', 4, 4, 1044.52],
+      ['Love Thy Nabers', 4, 4, 925.22],
+      ['MahomiesRidley4MooreJeffe', 4, 4, 917.74],
+      ['Chalupa Batman', 3, 5, 967.24],
+      ['Rubuilding', 2, 6, 841.26],
+      ['Team Name Hoes', 1, 7, 949.18],
+      ['BigBlue', 1, 7, 916.94],
+    ])
+  })
+
   it('sorts every week by Sleeper matchup_id, matching graphics m1..m6', () => {
-    for (const week of [1, 2, 3, 4, 5, 6, 7]) {
+    for (const week of [1, 2, 3, 4, 5, 6, 7, 8]) {
       const report = getWeeklyReport(2026, week)!
       const ordered = reportMatchupsBySleeperId(report.matchups)
       expect(ordered.map((g) => g.matchupId)).toEqual([1, 2, 3, 4, 5, 6])
