@@ -113,6 +113,27 @@
       </div>
     </section>
 
+    <section class="section" id="for-all">
+      <div class="wrap all-block">
+        <div class="section-title">
+          <span class="sec-no">·</span>
+          <h2 data-i18n="allTitle"></h2>
+        </div>
+        <h3 data-i18n="allPetsTitle"></h3>
+        <p data-i18n="allPets"></p>
+        <h3 data-i18n="allFeeTitle"></h3>
+        <p data-i18n="allFee"></p>
+        <h3 data-i18n="allPayTitle"></h3>
+        <p data-i18n="allPay"></p>
+        <h3 data-i18n="allRecTitle"></h3>
+        <p data-i18n="allRec"></p>
+        <h3 data-i18n="allWhyTitle"></h3>
+        <p data-i18n="allWhy"></p>
+        <h3 data-i18n="allKitchenTitle"></h3>
+        <p data-i18n="allKitchen"></p>
+      </div>
+    </section>
+
     <section class="section" id="notes">
       <div class="wrap">
         <div class="section-title">
@@ -174,18 +195,9 @@
           </div>
           <p data-i18n="holdAll"></p>
           <p data-i18n="holdBody"></p>
-          <p data-i18n="holdFee"></p>
           <p class="meta" id="viewing-summary"></p>
           <p class="meta" data-i18n="tzNote"></p>
           <button type="button" class="button" id="hold-jump" data-i18n="holdButton"></button>
-        </div>
-        <div class="slip-wrap">
-          <dl class="slip">
-            <div><dt data-i18n="bankName"></dt><dd>PLACEHOLDER</dd></div>
-            <div><dt data-i18n="bankBank"></dt><dd>PLACEHOLDER</dd></div>
-            <div><dt data-i18n="bankAccount"></dt><dd>PLACEHOLDER</dd></div>
-          </dl>
-          <p class="meta"><span data-i18n="bankNote"></span> <span class="todo-tag">TODO</span></p>
         </div>
       </div>
     </section>
@@ -231,6 +243,7 @@
           </div>
           <div class="stay-box" id="stay-box">
             <h3 data-i18n="calTitle"></h3>
+            <p class="meta" data-i18n="startDateLegend"></p>
             <div id="stay-calendar"></div>
             <p class="stay-length" id="stay-length" aria-live="polite"></p>
             <input id="in-arrive" name="arrival" type="hidden">
@@ -255,10 +268,48 @@
             </div>
           </fieldset>
 
-          <label class="choice hold-choice" id="warn-check">
-            <input id="access-ok" name="access" type="checkbox" required>
-            <a id="warn-check-link" href="#warnings"></a>
-          </label>
+          <fieldset class="visit" id="pets-field">
+            <legend data-i18n="petsLegend"></legend>
+            <label class="choice"><input type="radio" name="pets" value="no"> <span data-i18n="noWord"></span></label>
+            <label class="choice"><input type="radio" name="pets" value="yes"> <span data-i18n="yesWord"></span></label>
+            <div id="pet-types" hidden>
+              <p class="meta" data-i18n="petTypeLabel"></p>
+              <label class="choice"><input type="checkbox" name="pet-type" value="perro"> <span data-i18n="petDog"></span></label>
+              <label class="choice"><input type="checkbox" name="pet-type" value="gato"> <span data-i18n="petCat"></span></label>
+              <label class="choice"><input type="checkbox" name="pet-type" value="conejo"> <span data-i18n="petRabbit"></span></label>
+              <label class="choice"><input type="checkbox" name="pet-type" value="pajaritos"> <span data-i18n="petBirds"></span></label>
+              <label class="choice"><input type="checkbox" name="pet-type" value="cotorras"> <span data-i18n="petParrots"></span></label>
+              <label class="choice"><input type="checkbox" name="pet-type" value="otros"> <span data-i18n="petOther"></span></label>
+              <label class="field" id="pet-other-wrap" hidden>
+                <span data-i18n="petWhich"></span>
+                <input id="pet-other" name="pet-other" maxlength="80">
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="visit" id="kids-field">
+            <legend data-i18n="kidsLegend"></legend>
+            <label class="choice"><input type="radio" name="kids" value="no"> <span data-i18n="noWord"></span></label>
+            <label class="choice"><input type="radio" name="kids" value="yes"> <span data-i18n="yesWord"></span></label>
+            <div id="kids-detail" class="form-grid two" hidden>
+              <label class="field">
+                <span data-i18n="kidsCountLabel"></span>
+                <input id="kids-count" name="kids-count" type="number" min="1" step="1" inputmode="numeric">
+              </label>
+              <label class="field">
+                <span data-i18n="kidsAgesLabel"></span>
+                <input id="kids-ages" name="kids-ages" maxlength="80" autocomplete="off">
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="visit" id="term-field">
+            <legend data-i18n="termLegend"></legend>
+            <label class="choice"><input type="radio" name="term" value="year"> <span data-i18n="termYear"></span></label>
+            <label class="choice"><input type="radio" name="term" value="less"> <span data-i18n="termLess"></span></label>
+            <label class="choice"><input type="radio" name="term" value="exact"> <span data-i18n="termExact"></span></label>
+            <label class="choice"><input type="radio" name="term" value="unsure"> <span data-i18n="termUnsure"></span></label>
+          </fieldset>
 
           <label class="choice hold-choice">
             <input id="want-hold" name="hold" type="checkbox">
@@ -270,8 +321,16 @@
             <textarea id="in-note" name="note" rows="4" maxlength="2000"></textarea>
           </label>
 
+          <p class="rate-note" data-i18n="holdNotice"></p>
+
+          <label class="choice hold-choice" id="warn-check">
+            <input id="access-ok" name="access" type="checkbox" required>
+            <a id="warn-check-link" href="#warnings"></a>
+          </label>
+
           <button class="button" type="submit" data-i18n="submit" disabled></button>
         </form>
+        <p class="meta" data-i18n="afterForm"></p>
 
         <div id="form-success" class="success" hidden role="status">
           <h3 data-i18n="successTitle"></h3>

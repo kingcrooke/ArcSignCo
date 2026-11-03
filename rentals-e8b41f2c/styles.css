@@ -352,6 +352,10 @@ h1 {
 }
 .block-note { margin: 0 0 0.4rem; font-weight: 650; }
 .kitchen-line { font-weight: 650; }
+.all-block h3 { font-size: 1.35rem; margin: 1.5rem 0 0.35rem; }
+.all-block p { max-width: 46rem; }
+#pet-types, #kids-detail { margin-top: 0.6rem; }
+#pet-other-wrap { margin-top: 0.6rem; max-width: 22rem; }
 #warn-check a { text-underline-offset: 0.18em; }
 .button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 

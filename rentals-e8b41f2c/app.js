@@ -413,6 +413,25 @@
       if (listing && (rangeHitsBlock(listing, arrive, depart) || isBlocked(listing, arrive))) errors.push(t("formNeedOpen"));
       if (stayParts(arrive, depart).tooLong) errors.push(t("formNeedYear"));
     }
+    var pets = form.pets ? form.pets.value : "";
+    if (pets !== "yes" && pets !== "no") errors.push(t("formNeedPets"));
+    if (pets === "yes") {
+      var petTypes = Array.prototype.filter.call(form.querySelectorAll('input[name="pet-type"]:checked'), function () { return true; });
+      if (!petTypes.length) errors.push(t("formNeedPetType"));
+      var otherPet = form.querySelector('input[name="pet-type"][value="otros"]');
+      if (otherPet && otherPet.checked && !form["pet-other"].value.trim()) {
+        errors.push(t("formNeedPetOther"));
+        mark("pet-other");
+      }
+    }
+    var kids = form.kids ? form.kids.value : "";
+    if (kids !== "yes" && kids !== "no") errors.push(t("formNeedKids"));
+    if (kids === "yes") {
+      var count = Number(form["kids-count"].value);
+      if (!count || count < 1) { errors.push(t("formNeedKidsCount")); mark("kids-count"); }
+      if (!form["kids-ages"].value.trim()) { errors.push(t("formNeedKidsAges")); mark("kids-ages"); }
+    }
+    if (!form.term || !form.term.value) errors.push(t("formNeedTerm"));
     if (form.access && !form.access.checked) errors.push(t("formNeedAccess"));
     if (mode === "slot" && !form.slot.value) errors.push(t("formNeedSlot"));
     if (mode === "own" && (!form["own-date"].value || !form["own-time"].value)) {
@@ -445,6 +464,11 @@
       formatStay(form.arrival.value, form.departure.value),
       t("visitLegend") + ": " + visit,
       (hold ? t("holdYes") : t("holdWordNo")),
+      petMailLine(form),
+      kidsMailLine(form),
+      "Fecha de interés: " + form.arrival.value,
+      termMailLine(form),
+      "Aviso de fee de bloqueo: leído",
       "Advertencia confirmada: Sí",
       "acepta_advertencias: sí",
       t("confirmStamp") + ": " + confirmStamp(),
@@ -500,7 +524,51 @@
       days += new Date(b.getFullYear(), b.getMonth(), 0).getDate();
     }
     var nights = Math.round((b.getTime() - a.getTime()) / 86400000);
-    return { months: months, days: days, nights: nights, tooLong: months > 11 };
+    return { months: months, days: days, nights: nights, tooLong: months > 12 || (months === 12 && days > 0) };
+  }
+
+  var PET_MAIL = {
+    perro: "Perro",
+    gato: "Gato",
+    conejo: "Conejo",
+    pajaritos: "Pajaritos",
+    cotorras: "Cotorras"
+  };
+
+  function petMailLine(form) {
+    if (!form.pets || form.pets.value !== "yes") return "Mascotas: No";
+    var names = [];
+    Array.prototype.forEach.call(form.querySelectorAll('input[name="pet-type"]:checked'), function (box) {
+      if (box.value === "otros") names.push("Otros (" + form["pet-other"].value.trim() + ")");
+      else if (PET_MAIL[box.value]) names.push(PET_MAIL[box.value]);
+    });
+    return "Mascotas: Sí — " + names.join(", ");
+  }
+
+  function kidsMailLine(form) {
+    if (!form.kids || form.kids.value !== "yes") return "Niños: No";
+    return "Niños: Sí — " + String(form["kids-count"].value).trim() + " (edades: " + form["kids-ages"].value.trim() + ")";
+  }
+
+  function termMailLine(form) {
+    var value = form.term ? form.term.value : "";
+    if (value === "year") return "Tiempo de contrato: Un año";
+    if (value === "less") return "Tiempo de contrato: Menos de un año";
+    if (value === "unsure") return "Tiempo de contrato: Todavía no lo sé";
+    return "Tiempo de contrato: " + form.arrival.value + " a " + form.departure.value;
+  }
+
+  function syncExtras() {
+    var pets = document.querySelector('input[name="pets"]:checked');
+    var petYes = !!(pets && pets.value === "yes");
+    var petTypes = document.getElementById("pet-types");
+    if (petTypes) petTypes.hidden = !petYes;
+    var other = document.querySelector('input[name="pet-type"][value="otros"]');
+    var otherWrap = document.getElementById("pet-other-wrap");
+    if (otherWrap) otherWrap.hidden = !(petYes && other && other.checked);
+    var kids = document.querySelector('input[name="kids"]:checked');
+    var kidsDetail = document.getElementById("kids-detail");
+    if (kidsDetail) kidsDetail.hidden = !(kids && kids.value === "yes");
   }
 
   function formatStay(start, end) {
@@ -694,6 +762,7 @@
     var warnLink = document.getElementById("warn-check-link");
     if (warnLink) warnLink.textContent = t("warnCheck");
     syncSubmit();
+    syncExtras();
     watchReveal();
   }
 
@@ -920,6 +989,7 @@
 
   document.getElementById("inquiry-form").addEventListener("change", function () {
     syncVisitMode();
+    syncExtras();
     syncSubmit();
   });
   document.getElementById("warn-check-link").addEventListener("click", function (event) {
