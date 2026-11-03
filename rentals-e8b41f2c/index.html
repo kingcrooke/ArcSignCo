@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#ffffff">
   <title>EC Boutique Apartments</title>
-  <meta name="description" content="Apartamentos loft amueblados en Gazcue, Santo Domingo. EC Boutique Apartments.">
+  <meta name="description" content="Apartamentos amueblados en Gazcue, Santo Domingo. Elizabeth Crooke. La tarifa se pide por correo; no está en la página.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -17,11 +17,12 @@
   <header class="site-header">
     <a class="brand" href="#top">EC Boutique Apartments</a>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" data-i18n="menu"></button>
-    <nav id="site-nav" class="site-nav" aria-label="EC Boutique Apartments">
+    <nav id="site-nav" class="site-nav" aria-label="Elizabeth Crooke">
       <a href="#about" data-i18n="navAbout"></a>
-      <a href="#warnings" data-i18n="navRules"></a>
       <a href="#listings" data-i18n="navApartments"></a>
       <a href="#area" data-i18n="navArea"></a>
+      <a href="#rules" data-i18n="navRules"></a>
+      <a href="#hold" data-i18n="navHold"></a>
       <a href="#contact" data-i18n="navContact"></a>
     </nav>
     <div class="lang" role="group" data-i18n-aria="langLabel">
@@ -113,6 +114,51 @@
       </div>
     </section>
 
+    <section class="section" id="notes">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no">·</span>
+          <h2 data-i18n="sampleTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="sampleNote"></p>
+        <div id="sample-notes" class="samples"></div>
+      </div>
+    </section>
+
+    <section class="section" id="rules">
+      <div class="wrap">
+        <div class="section-title">
+          <span class="sec-no" data-i18n="rulesNo"></span>
+          <h2 data-i18n="rulesTitle"></h2>
+        </div>
+        <p class="intro" data-i18n="rulesIntro"></p>
+        <div id="rules-from-listings"></div>
+      </div>
+    </section>
+
+    <section class="section" id="hold">
+      <div class="wrap hold-grid">
+        <div>
+          <div class="section-title">
+            <span class="sec-no" data-i18n="holdNo"></span>
+            <h2 data-i18n="holdTitle"></h2>
+          </div>
+          <p data-i18n="holdBody"></p>
+          <p data-i18n="holdFee"></p>
+          <p class="rate-note" data-i18n="rateNote"></p>
+          <button type="button" class="button" id="hold-jump" data-i18n="holdButton"></button>
+        </div>
+        <div class="slip-wrap">
+          <dl class="slip">
+            <div><dt data-i18n="bankName"></dt><dd>PLACEHOLDER</dd></div>
+            <div><dt data-i18n="bankBank"></dt><dd>PLACEHOLDER</dd></div>
+            <div><dt data-i18n="bankAccount"></dt><dd>PLACEHOLDER</dd></div>
+          </dl>
+          <p class="meta"><span data-i18n="bankNote"></span> <span class="todo-tag">TODO</span></p>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="contact">
       <div class="wrap">
         <div class="section-title">
@@ -121,10 +167,13 @@
         </div>
         <p class="intro" data-i18n="contactIntro"></p>
         <p class="email-line">
+          <span class="contact-name">Elizabeth Crooke</span><br>
           <a id="contact-email" href="mailto:elicrooke25@gmail.com">elicrooke25@gmail.com</a>
         </p>
         <p class="meta" data-i18n="emailTodo"></p>
         <p class="rate-note" data-i18n="rateNote"></p>
+        <p class="meta" id="viewing-summary"></p>
+        <p class="meta" data-i18n="tzNote"></p>
         <p class="meta" data-i18n="requiredHint"></p>
 
         <form id="inquiry-form" novalidate>
@@ -159,9 +208,32 @@
             <input id="in-depart" name="departure" type="hidden">
           </div>
 
+          <fieldset class="visit">
+            <legend data-i18n="visitLegend"></legend>
+            <label class="choice"><input type="radio" name="visit-mode" value="none" checked> <span data-i18n="visitNone"></span></label>
+            <label class="choice"><input type="radio" name="visit-mode" value="slot"> <span data-i18n="visitSlot"></span></label>
+            <label class="choice"><input type="radio" name="visit-mode" value="own"> <span data-i18n="visitOwn"></span></label>
+            <div id="slot-list" hidden></div>
+            <div id="own-time" class="form-grid two" hidden>
+              <label class="field">
+                <span data-i18n="ownDate"></span>
+                <input id="own-date" name="own-date" type="date">
+              </label>
+              <label class="field">
+                <span data-i18n="ownTime"></span>
+                <input id="own-time-input" name="own-time" type="time">
+              </label>
+            </div>
+          </fieldset>
+
           <label class="choice hold-choice">
-            <input id="access-ok" name="access" type="checkbox" required>
+            <input id="access-ok" name="access" type="checkbox">
             <span data-i18n="warnCheck"></span>
+          </label>
+
+          <label class="choice hold-choice">
+            <input id="want-hold" name="hold" type="checkbox">
+            <span data-i18n="holdCheck"></span>
           </label>
 
           <label class="field">
@@ -184,7 +256,7 @@
 
   <footer class="site-footer">
     <div class="wrap footer-row">
-      <p><strong>EC Boutique Apartments</strong><br>Gazcue, Santo Domingo</p>
+      <p><strong>EC Boutique Apartments</strong><br>Elizabeth Crooke<br>Gazcue, Santo Domingo</p>
       <p>
         <a id="footer-email" href="mailto:elicrooke25@gmail.com">elicrooke25@gmail.com</a>
       </p>
@@ -209,7 +281,7 @@
   </dialog>
 
   <noscript>
-    <p>EC Boutique Apartments, Gazcue, Santo Domingo. D12, D2 y D1. Correo: elicrooke25@gmail.com. Esta página necesita JavaScript.</p>
+    <p>EC Boutique Apartments. Elizabeth Crooke, Gazcue, Santo Domingo. D12, D2 y D1. Correo: elicrooke25@gmail.com. Esta página necesita JavaScript.</p>
   </noscript>
 
   <script src="listings.js"></script>
