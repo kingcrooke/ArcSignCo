@@ -1234,7 +1234,7 @@ $("category").addEventListener("keydown", e => {
   $("category").querySelector(`[data-cat="${currentCat().id}"]`).focus();
 });
 
-const CONTACT_LINE = 'Need one now? Call or text <a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>';
+const CONTACT_LINE = 'Need one now? Call or text <a href="tel:+13474502110">(347) 450-2110</a> · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>';
 let libraryCat = currentCat().id;
 
 function buildTypeList() {

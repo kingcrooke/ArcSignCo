@@ -140,7 +140,8 @@ for (const { slug, file } of pages) {
   for (const re of BANNED) if (re.test(visible)) fail(label, `visible text matches banned claim ${re}`);
   for (const re of EDITOR_NOTE_SCAN) if (re.test(html)) fail(label, `page HTML contains editor note ${re}`);
   if (/\d+\s+[A-Z][a-z]+ (Street|St\.|Avenue|Ave\.|Blvd|Road)/.test(visible)) fail(label, "visible text looks like it contains a street address");
-  if (!visible.includes("arc@arcsignco.com") || !visible.includes("jc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
+  if (!visible.includes("jc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
+  if (html.includes("mailto:arc@arcsignco.com")) fail(label, "page still has an arc@ mailto link");
   if (visible.includes("+13474502110")) fail(label, "visible text contains raw E.164 phone");
   if (slug && !visible.includes("Hours: Mon–Fri 8 AM–6 PM")) fail(label, "missing contact-strip hours");
   if (slug && !/Call or text \(347\) 450-2110/.test(visible)) fail(label, "nav/hero/mobile call wording missing");
@@ -191,8 +192,9 @@ for (const { slug, file } of pages) {
   }
 
   if (slug) {
-    const quoteLinks = [...document.querySelectorAll('a[href="/#quote"]')].length;
-    if (!quoteLinks) fail(label, "no link to the quote form");
+    const quoteHref = `/?type=${slug}#quote`;
+    const quoteLinks = [...document.querySelectorAll(`a[href="${quoteHref}"]`)].filter(a => a.textContent.includes("Request a quote")).length;
+    if (!quoteLinks) fail(label, `no Request a quote link to ${quoteHref}`);
     const extLinks = [...document.querySelectorAll('a[target="_blank"]')];
     if (extLinks.some(a => !(a.rel || "").includes("noopener"))) fail(label, 'a target="_blank" link lacks rel="noopener"');
   }
@@ -203,10 +205,10 @@ for (const { slug, file } of pages) {
     } else pass(label, 'does not target "awning permit NYC"');
     const hrefs = new Set([...document.querySelectorAll("a")].map(a => a.getAttribute("href")));
     const required = slug === "awnings"
-      ? ["/sign-permits-shop-drawings/", "/channel-letters/", "/ada-signs/", "/wayfinding-signs/", "/digital-signage/", "/construction-signs/", "/#quote", "/tools/sign-mockup/"]
+      ? ["/sign-permits-shop-drawings/", "/channel-letters/", "/ada-signs/", "/wayfinding-signs/", "/digital-signage/", "/construction-signs/", "/?type=awnings#quote", "/tools/sign-mockup/"]
       : slug === "digital-signage"
-        ? ["/wayfinding-signs/", "/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/construction-signs/", "/awnings/", "/#quote"]
-        : ["/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/awnings/", "/construction-signs/", "/#quote"];
+        ? ["/wayfinding-signs/", "/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/construction-signs/", "/awnings/", "/?type=digital-signage#quote"]
+        : ["/ada-signs/", "/sign-permits-shop-drawings/", "/channel-letters/", "/awnings/", "/construction-signs/", "/?type=wayfinding-signs#quote"];
     const missing = required.filter(href => !hrefs.has(href));
     if (missing.length) fail(label, `missing internal links: ${missing.join(", ")}`);
     else pass(label, "required internal links are present");
@@ -238,10 +240,10 @@ for (const { slug, file } of pages) {
 if (sitemap.includes("sign-mockup/proof")) fail("sitemap", "proof pages are listed");
 else pass("sitemap", "proof pages are not listed");
 const homeNav = fs.readFileSync(path.join(root, "index.html"), "utf8");
-for (const href of ["/wayfinding-signs/", "/digital-signage/", "/awnings/", "/window-graphics/", "/vehicle-wraps/"]) {
+for (const href of ["/wayfinding-signs/", "/digital-signage/", "/awnings/", "/window-graphics/", "/vehicle-wraps/", "/visualize/"]) {
   if (!homeNav.includes(`href="${href}"`)) fail("/", `homepage missing link to ${href}`);
 }
-pass("/", "homepage links to service pages");
+pass("/", "homepage links to service pages and the visualizer");
 
 console.log(failures ? `\n${failures} check(s) failed` : "\nAll checks passed");
 process.exit(failures ? 1 : 0);

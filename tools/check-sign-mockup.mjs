@@ -203,7 +203,7 @@ const strings = [...raw.matchAll(/\((?:\\.|[^\\)])*\)/g)].map(m =>
   .map(s => fromWinAnsi([...s].map(c => c.charCodeAt(0))));
 const text = strings.join("\n");
 const flowing = strings.join(" ");
-for (const needle of [DISCLAIMER, `Call or text ${CONTACT.phone}`, "jc@arcsignco.com", "arc@arcsignco.com", "arcsignco.com", `12' 4"`, `2' 6"`, `Door width = 3' 0"`,
+for (const needle of [DISCLAIMER, `Call or text ${CONTACT.phone}`, "jc@arcsignco.com", "arcsignco.com", `12' 4"`, `2' 6"`, `Door width = 3' 0"`,
   halo.name, "Night view and construction", "Flat artwork", "NIGHT VIEW, SAME SPOT AS PAGE 1", STAMP_TITLE, STAMP_NOTE, "José Muñoz Ibáñez",
   "Panadería Núñez (sample)", "¿Letras más grandes? ¡Sí!", "Page 3 of 3"]) {
   check(flowing.includes(needle), `PDF text includes ${JSON.stringify(needle)}`);
@@ -227,7 +227,7 @@ check(/Preliminary estimate valid 30 days from October 3, 2026/.test(livePdf) &&
   "with real rates on, the PDF carries the range lines, tax and valid-days note");
 const onePage = Buffer.from(buildProofPdf({ logo: fakeJpeg(847, 174), mockup: fakeJpeg(800, 600), size: null })).toString("latin1");
 check(/\/Count 1 >>/.test(onePage), "PDF without night view or artwork stays one page");
-check(raw.includes("/URI (tel:+13474502110)") && raw.includes("/URI (mailto:jc@arcsignco.com)") && raw.includes("/URI (mailto:arc@arcsignco.com)"), "PDF has phone and email links");
+check(raw.includes("/URI (tel:+13474502110)") && raw.includes("/URI (mailto:jc@arcsignco.com)") && !raw.includes("/URI (mailto:arc@arcsignco.com)"), "PDF has phone and jc@ email link");
 check(!/\bApt\b/i.test(text), "PDF has no \"Apt\"");
 const pdfStrings = bytes => [...Buffer.from(bytes).toString("latin1").matchAll(/\((?:\\.|[^\\)])*\)/g)].map(m =>
   fromWinAnsi([...m[0].slice(1, -1).replace(/\\([0-7]{3})/g, (_, o) => String.fromCharCode(parseInt(o, 8))).replace(/\\(.)/g, "$1")].map(c => c.charCodeAt(0))))
@@ -293,7 +293,7 @@ check(!/<meta name="robots" content="noindex/.test(html), "tool page is indexabl
 check(/<link rel="canonical" href="https:\/\/arcsignco\.com\/tools\/sign-mockup\/">/.test(html), "tool page has canonical URL");
 const proofHtml = fs.readFileSync(path.join(toolDir, "proof/index.html"), "utf8");
 check(/<meta name="robots" content="noindex, nofollow">/.test(proofHtml), "proof page is noindex");
-check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and both emails");
+check(proofHtml.includes("tel:+13474502110") && proofHtml.includes("mailto:jc@arcsignco.com") && !proofHtml.includes("mailto:arc@arcsignco.com"), "proof page shows phone and jc@");
 check(proofHtml.includes("Concept only – not a shop drawing"), "proof page carries the disclaimer");
 check(/id="approveBtn">Concept approved, request a formal estimate</.test(proofHtml), "the approve button reads \"Concept approved, request a formal estimate\"");
 check(html.includes("Upload a storefront photo and see your sign. Free, no account."), "step 1 opens with the Arc intro line");
@@ -342,7 +342,7 @@ check(READY.every(c => c.pricing && Object.keys(c.pricing).join() === "row"), "e
 const PRICE_NUM = /\b(base|rate|projRate|low|high):\s*\d{2,}|\brange:\s*\[\s*\d{2,}/;
 const strayRates = own.filter(f => f.endsWith(".js") && !["js/pricing-config.js", "js/pricing.js"].includes(f) && PRICE_NUM.test(fs.readFileSync(path.join(toolDir, f), "utf8")));
 check(!strayRates.length, `no price numbers in sign-mockup js except pricing-config metadata${strayRates.length ? ` (${strayRates.join(", ")})` : ""}`);
-check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && html.includes("mailto:arc@arcsignco.com"), "page shows phone and both emails");
+check(html.includes("tel:+13474502110") && html.includes("mailto:jc@arcsignco.com") && !html.includes("mailto:arc@arcsignco.com"), "page shows phone and jc@");
 check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");

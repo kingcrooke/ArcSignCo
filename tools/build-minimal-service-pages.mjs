@@ -54,28 +54,8 @@ function pageHtml(p) {
   </section>`
     : "";
 
-  const cycloneBlock =
-    p.slug === "window-graphics"
-      ? `  <section class="section alt" id="arc-project">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">Arc project</span>
-        <h2>Completed Arc job: Cyclone Bagels window graphic</h2>
-        <p class="lead">One example of a completed Arc Signage Co window graphic in New York / Tri-State.</p>
-      </div>
-      <div class="split">
-        <figure class="figure">
-          <img src="/assets/portfolio/cyclone-bagels-dimensional-sign-shop-800.v2.jpg" srcset="/assets/portfolio/cyclone-bagels-dimensional-sign-shop-480.v2.jpg 480w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-800.v2.jpg 800w, /assets/portfolio/cyclone-bagels-dimensional-sign-shop-1200.v2.jpg 1200w" sizes="(max-width: 720px) 100vw, 420px" width="810" height="1800" loading="lazy" decoding="async" alt="Cyclone Bagels window graphic. Completed Arc Signage Co job.">
-          <figcaption>Completed Arc Signage Co job.</figcaption>
-        </figure>
-        <div class="prose">
-          <p>A Coney Island storefront window graphic for Cyclone Bagels — layout and production for a completed Arc Signage Co job.</p>
-          <p><a href="/portfolio/#arc-projects-heading">See more Arc projects on the portfolio page</a></p>
-        </div>
-      </div>
-    </div>
-  </section>`
-      : "";
+  // Cyclone Bagels shop photo stays off window-graphics until a good exterior photo exists.
+  const cycloneBlock = "";
 
   const checklist = (
     p.quoteChecklist || [
@@ -179,12 +159,13 @@ ${faqJson}
           </div>
         </div>
         <a href="/#work">Scopes</a>
-        <a href="/portfolio/">Prior signage work</a>
+        <a href="/portfolio">Prior signage work</a>
         <a href="/#selector">Scope Finder</a>
         <a href="/tools/sign-mockup/">Free Sign Preview</a>
+        <a href="/visualize/">Arc Visualizer</a>
       </div>
       <a href="tel:+13474502110" class="btn ghost nav-call" aria-label="Call or text (347) 450-2110"><span class="call-long">Call or text (347) 450-2110</span><span class="call-short">Call or text</span></a>
-      <a href="/#quote" class="btn gold nav-cta">Request a quote</a>
+      <a href="/?type=${p.slug}#quote" class="btn gold nav-cta">Request a quote</a>
       <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
     </nav>
   </div>
@@ -204,7 +185,7 @@ ${faqJson}
         <h1>${p.h1}</h1>
         <p class="answer">${p.answer}</p>
         <div class="hero-actions" id="heroActions">
-          <a class="btn gold lg" href="/#quote">Request a quote</a>
+          <a class="btn gold lg" href="/?type=${p.slug}#quote">Request a quote</a>
           <a class="btn ghost lg" href="tel:+13474502110">Call or text (347) 450-2110</a>
         </div>
       </div>
@@ -233,10 +214,10 @@ ${cycloneBlock}
           <h3>Send it to Arc</h3>
           <p>Email files to jc@arcsignco.com with ${subjectLine} in the subject line. Put URGENT in the subject for active jobsites.</p>
           <div class="contact-strip">
-            <a href="tel:+13474502110">(347) 450-2110</a> (call or text) · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
+            <a href="tel:+13474502110">(347) 450-2110</a> (call or text) · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>
             <span class="hours">Hours: Mon–Fri 8 AM–6 PM</span>
           </div>
-          <a class="btn gold" href="/#quote">Request a quote</a>
+          <a class="btn gold" href="/?type=${p.slug}#quote">Request a quote</a>
         </div>
       </div>
     </div>
@@ -261,7 +242,7 @@ ${cycloneBlock}
         <p><span class="hours">Hours: Mon–Fri 8 AM–6 PM</span></p>
       </div>
       <div class="hero-actions">
-        <a class="btn gold" href="/#quote">Request a quote</a>
+        <a class="btn gold" href="/?type=${p.slug}#quote">Request a quote</a>
         <a class="btn ghost" href="mailto:jc@arcsignco.com">Email jc@arcsignco.com</a>
       </div>
     </div>
@@ -274,13 +255,13 @@ ${cycloneBlock}
         <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-560.v2.webp 560w" sizes="134px">
         <img src="/assets/img/logo-lockup-white-280.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="134px" width="847" height="174" loading="lazy" decoding="async" alt="Arc Signage Co">
       </picture>
-      <p>Full-service signage for New York / Tri-State: design, permit coordination, and ADA signage. Larger fabrication and installation are through Arc's licensed partners. Arc does not file permits or stamp drawings.</p>
+      <p>Full-service signage for New York / Tri-State: design, permit coordination, and ADA signage. Larger fabrication is through Arc's licensed partners. Vinyl, window graphics, and wrap installation are in-house. Electrical and structural installation are through Arc's licensed partners. Arc does not file permits or stamp drawings.</p>
     </div>
     <div class="footer-links">
       <a href="/#about">About</a>
       <a href="/#services">Services</a>
       <a href="/portfolio">Prior signage work</a>
-      <a href="/#quote">Contact</a>
+      <a href="/?type=${p.slug}#quote">Contact</a>
       <a id="gbpLink" href="" rel="noopener" target="_blank" hidden>Google Business Profile</a>
     </div>
   </div>
@@ -289,11 +270,11 @@ ${cycloneBlock}
   </nav>
   <div class="wrap footer-meta">
     <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
-    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
+    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a></span>
   </div>
 </footer>
 <div class="mobile-cta" id="mobileCta">
-  <a class="btn gold" href="/#quote">Request a quote</a>
+  <a class="btn gold" href="/?type=${p.slug}#quote">Request a quote</a>
   <a class="btn ghost" href="tel:+13474502110">Call or text (347) 450-2110</a>
 </div>
 <script>
