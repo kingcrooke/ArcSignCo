@@ -290,6 +290,62 @@
       '<p class="map-links"><a href="' + esc(mapsLink(query)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a>" +
       '<a href="' + esc(streetLink({ geo: window.RENTALS.building, mapQuery: query })) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openStreet")) + "</a></p>" +
       '<p class="meta">' + esc(t("mapFallback")) + "</p>";
+    renderNearby();
+  }
+
+  function nearbyAnchor(query) {
+    return mapsLink(query + ", Gazcue, Santo Domingo");
+  }
+
+  function nearbyItemHtml(item) {
+    var children = (item.children || []).map(function (child) {
+      return "<li><strong>" + esc(child.title) + "</strong>" +
+        (child.note ? ' <span class="meta">' + esc(child.note) + "</span>" : "") +
+        ' <a href="' + esc(nearbyAnchor(child.query)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("nearbyMaps")) + "</a></li>";
+    }).join("");
+    return "<li><strong>" + esc(item.title) + "</strong>" +
+      (item.note ? '<p class="meta">' + esc(item.note) + "</p>" : "") +
+      '<p><a href="' + esc(nearbyAnchor(item.query)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("nearbyMaps")) + "</a></p>" +
+      (children ? '<ul class="nearby-sub">' + children + "</ul>" : "") +
+      "</li>";
+  }
+
+  function renderNearby() {
+    var pack = window.I18N[lang] || window.I18N.es;
+    var items = pack.nearbyItems || [];
+    var favorites = window.RENTALS.nearbyFavorites || [];
+    var extra = favorites.map(function (item) {
+      return nearbyItemHtml({ title: tr(item.title), query: item.query, note: tr(item.note) });
+    }).join("");
+    document.getElementById("nearby").innerHTML =
+      "<h3>" + esc(t("nearbyTitle")) + "</h3>" +
+      '<p class="intro">' + esc(t("nearbyIntro")) + "</p>" +
+      '<ul class="nearby-list">' + items.map(nearbyItemHtml).join("") + extra + "</ul>";
+  }
+
+  function renderFaq() {
+    var pack = window.I18N[lang] || window.I18N.es;
+    var items = pack.faq || [];
+    document.getElementById("faq-list").innerHTML = items.map(function (item) {
+      return "<details><summary>" + esc(item.q) + "</summary><p>" + esc(item.a) + "</p></details>";
+    }).join("");
+  }
+
+  function renderReviews() {
+    var section = document.getElementById("reviews");
+    var reviews = window.RENTALS.reviews || [];
+    if (!reviews.length) {
+      section.hidden = true;
+      document.getElementById("review-list").innerHTML = "";
+      return;
+    }
+    section.hidden = false;
+    document.getElementById("review-list").innerHTML = reviews.map(function (review) {
+      var n = Math.max(0, Math.min(5, Number(review.stars) || 0));
+      var stars = "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(n);
+      return '<article class="review"><p class="stars" aria-label="' + n + ' / 5">' + stars + "</p><p>" +
+        esc(tr(review.text)) + '</p><p class="meta">' + esc(review.name) + " · " + esc(tr(review.stay)) + " · " + esc(review.apartment) + "</p></article>";
+    }).join("");
   }
 
   function weekdayName(dayIndex) {
@@ -746,6 +802,8 @@
     renderSheets();
     renderRules();
     renderArea();
+    renderFaq();
+    renderReviews();
     renderViewingSummary();
     fillApartments();
     renderSlots();
