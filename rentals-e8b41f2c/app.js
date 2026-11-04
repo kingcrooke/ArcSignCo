@@ -162,6 +162,9 @@
     document.querySelectorAll("[data-i18n]").forEach(function (el) {
       el.textContent = t(el.getAttribute("data-i18n"));
     });
+    document.querySelectorAll("[data-i18n-opt]").forEach(function (el) {
+      el.textContent = t(el.getAttribute("data-i18n-opt"));
+    });
     document.querySelectorAll("[data-i18n-aria]").forEach(function (el) {
       el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
     });
@@ -186,6 +189,7 @@
   }
 
   function renderIndex() {
+    if (!document.getElementById("listing-index")) return;
     var rows = window.RENTALS.listings.map(function (listing, index) {
       var n = String(index + 1).padStart(2, "0");
       return (
@@ -205,6 +209,7 @@
   }
 
   function renderSheets() {
+    if (!document.getElementById("listing-sheets")) return;
     document.getElementById("listing-sheets").innerHTML = window.RENTALS.listings.map(function (listing, index) {
       var at = galleryAt[listing.id] || 0;
       var slide = listing.media[at];
@@ -227,7 +232,7 @@
         return "<!-- TODO: " + String(item.todo).replace(/[^-.\w]/g, "") + " -->";
       }).join("");
       var actions = '<div class="listing-actions">' +
-        (listing.status === "available" ? '<a class="button" href="#hold">' + esc(t("holdButton")) + "</a>" : "") +
+        (listing.status === "available" ? '<a class="button" href="solicitud/">' + esc(t("holdButton")) + "</a>" : "") +
         '<a class="button' + (listing.status === "available" ? " button-ghost" : "") + '" href="' + esc(infoMailto(listing)) + '">' + esc(t("moreInfo")) + "</a>" +
         '<button type="button" class="button button-ghost" data-select-apt="' + listing.id + '">' + esc(t("useForm")) + "</button></div>";
       var facts = "";
@@ -279,10 +284,13 @@
   }
 
   function renderRules() {
-    document.getElementById("rules-from-listings").innerHTML = "<p>" + esc(t("rulesBody")) + "</p>";
+    var host = document.getElementById("rules-from-listings");
+    if (!host) return;
+    host.innerHTML = "<p>" + esc(t("rulesBody")) + "</p>";
   }
 
   function renderArea() {
+    if (!document.getElementById("area-map")) return;
     var query = window.RENTALS.building.query;
     document.getElementById("area-map").innerHTML =
       '<div class="map-frame"><iframe title="' + esc(t("areaMapLabel")) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' +
@@ -301,6 +309,7 @@
   }
 
   function renderViewingSummary() {
+    if (!document.getElementById("viewing-summary")) return;
     var view = window.RENTALS.viewing;
     var days = view.weekdays.map(weekdayName).join(", ");
     document.getElementById("viewing-summary").textContent = t("viewingSummary", {
@@ -339,6 +348,7 @@
   }
 
   function renderSlots() {
+    if (!document.getElementById("slot-list")) return;
     var selected = "";
     var current = document.querySelector('input[name="slot"]:checked');
     if (current) selected = current.value;
@@ -354,8 +364,8 @@
     document.getElementById("slot-list").innerHTML = html;
   }
 
-  function fillApartments() {
-    var select = document.getElementById("in-apt");
+  function fillOneApartmentSelect(select) {
+    if (!select) return;
     var current = select.value;
     var options = '<option value="">' + esc(t("selectApt")) + "</option>" + window.RENTALS.listings.map(function (listing) {
       var suffix = listing.status === "soon" ? " — " + t("futureInterest") : "";
@@ -365,10 +375,18 @@
     if (current) select.value = current;
   }
 
+  function fillApartments() {
+    fillOneApartmentSelect(document.getElementById("in-apt"));
+    fillOneApartmentSelect(document.getElementById("info-apt"));
+  }
+
   function syncVisitMode() {
-    var mode = document.querySelector('input[name="visit-mode"]:checked').value;
-    document.getElementById("slot-list").hidden = mode !== "slot";
-    document.getElementById("own-time").hidden = mode !== "own";
+    var chosen = document.querySelector('input[name="visit-mode"]:checked');
+    var slotList = document.getElementById("slot-list");
+    var ownTime = document.getElementById("own-time");
+    if (!chosen || !slotList || !ownTime) return;
+    slotList.hidden = chosen.value !== "slot";
+    ownTime.hidden = chosen.value !== "own";
   }
 
   function listingById(id) {
@@ -376,7 +394,8 @@
   }
 
   function clearErrors() {
-    document.getElementById("form-errors").innerHTML = "";
+    var box = document.getElementById("form-errors");
+    if (box) box.innerHTML = "";
     document.querySelectorAll(".field.is-invalid").forEach(function (field) {
       field.classList.remove("is-invalid");
     });
@@ -392,13 +411,13 @@
 
   function validate(form) {
     var errors = [];
-    var name = form.name.value.trim();
-    var country = form.country.value.trim();
-    var email = form.email.value.trim();
-    var phone = form.phone.value.trim();
-    var apt = form.apartment.value;
-    var arrive = form.arrival.value;
-    var depart = form.departure.value;
+    var name = document.getElementById("in-name").value.trim();
+    var country = document.getElementById("in-country").value.trim();
+    var email = document.getElementById("in-email").value.trim();
+    var phone = document.getElementById("in-phone").value.trim();
+    var apt = document.getElementById("in-apt").value;
+    var arrive = document.getElementById("in-arrive") ? document.getElementById("in-arrive").value : "";
+    var depart = document.getElementById("in-depart") ? document.getElementById("in-depart").value : "";
     var mode = form["visit-mode"].value;
     if (name.length < 2) { errors.push(t("formNeedName")); mark("in-name"); }
     if (country.length < 2) { errors.push(t("formNeedCountry")); mark("in-country"); }
@@ -423,6 +442,8 @@
         errors.push(t("formNeedPetOther"));
         mark("pet-other");
       }
+      var petCount = Number(form["pet-count"] && form["pet-count"].value);
+      if (!petCount || petCount < 1) { errors.push(t("formNeedPetCount")); mark("pet-count"); }
     }
     var kids = form.kids ? form.kids.value : "";
     if (kids !== "yes" && kids !== "no") errors.push(t("formNeedKids"));
@@ -431,7 +452,20 @@
       if (!count || count < 1) { errors.push(t("formNeedKidsCount")); mark("kids-count"); }
       if (!form["kids-ages"].value.trim()) { errors.push(t("formNeedKidsAges")); mark("kids-ages"); }
     }
-    if (!form.term || !form.term.value) errors.push(t("formNeedTerm"));
+    if (!form.term || (form.term.value !== "year" && form.term.value !== "less")) errors.push(t("formNeedTerm"));
+    if (form.term && (form.term.value === "year" || form.term.value === "less")) {
+      var blockStart = document.getElementById("block-start");
+      var blockEnd = document.getElementById("block-end");
+      var start = blockStart ? blockStart.value : arrive;
+      var end = blockEnd ? blockEnd.value : depart;
+      if (!start || !end) errors.push(t("formNeedBlock"));
+      else if (end <= start) errors.push(t("formNeedOrder"));
+      else if (stayParts(start, end).tooLong) errors.push(t("formNeedYear"));
+    }
+    var party = document.getElementById("in-party");
+    if (party && apt && !party.value) { errors.push(t("formNeedParty")); mark("in-party"); }
+    var pay = document.getElementById("pay-fee");
+    if (pay && !pay.checked) errors.push(t("formNeedPay"));
     if (form.access && !form.access.checked) errors.push(t("formNeedAccess"));
     if (mode === "slot" && !form.slot.value) errors.push(t("formNeedSlot"));
     if (mode === "own" && (!form["own-date"].value || !form["own-time"].value)) {
@@ -550,6 +584,25 @@
     return "Niños: Sí — " + String(form["kids-count"].value).trim() + " (edades: " + form["kids-ages"].value.trim() + ")";
   }
 
+  function feeResumen(form) {
+    var listing = listingById(document.getElementById("in-apt").value);
+    var party = document.getElementById("in-party");
+    var start = document.getElementById("block-start");
+    var end = document.getElementById("block-end");
+    return [
+      listing ? listing.name.es : "",
+      "Personas: " + (party ? party.value : ""),
+      petMailLine(form),
+      "Cuántos animales: " + (form["pet-count"] ? form["pet-count"].value : ""),
+      kidsMailLine(form),
+      termMailLine(form),
+      "Fechas exactas: " + (start ? start.value : "") + " a " + (end ? end.value : ""),
+      document.getElementById("block-duration") ? document.getElementById("block-duration").value : "",
+      "Fee de bloqueo: quiere pagar",
+      "Advertencia confirmada: Sí"
+    ].filter(Boolean).join("\n");
+  }
+
   function termMailLine(form) {
     var value = form.term ? form.term.value : "";
     if (value === "year") return "Tiempo de contrato: Un año";
@@ -569,6 +622,12 @@
     var kids = document.querySelector('input[name="kids"]:checked');
     var kidsDetail = document.getElementById("kids-detail");
     if (kidsDetail) kidsDetail.hidden = !(kids && kids.value === "yes");
+    var partyWrap = document.getElementById("party-wrap");
+    var aptSelect = document.getElementById("in-apt");
+    if (partyWrap && aptSelect) partyWrap.hidden = !aptSelect.value;
+    var term = document.querySelector('input[name="term"]:checked');
+    var block = document.getElementById("block-dates");
+    if (block) block.hidden = !(term && (term.value === "year" || term.value === "less"));
   }
 
   function formatStay(start, end) {
@@ -640,6 +699,7 @@
       '<section class="cal-block">' +
       "<h3>" + esc(t("calTitle")) + "</h3>" +
       '<p class="meta">' + esc(hint) + "</p>" +
+      (id === "form" ? '<p class="meta">' + esc(t("calMoveNote")) + "</p>" : "") +
       '<div class="cal-tools">' +
       '<button type="button" class="button button-ghost" data-cal-nav="-1" data-cal-id="' + esc(id) + '">' + esc(t("calPrev")) + "</button>" +
       '<button type="button" class="button button-ghost" data-cal-nav="1" data-cal-id="' + esc(id) + '">' + esc(t("calNext")) + "</button>" +
@@ -673,14 +733,30 @@
   }
 
   function activeListing() {
-    var id = document.getElementById("in-apt").value;
-    return listingById(id) || window.RENTALS.listings[0];
+    var select = document.getElementById("in-apt");
+    if (!select) return window.RENTALS.listings[0];
+    return listingById(select.value) || window.RENTALS.listings[0];
   }
 
   function syncStayFields() {
-    document.getElementById("in-arrive").value = formPick.start || "";
-    document.getElementById("in-depart").value = formPick.end || "";
+    var arriveInput = document.getElementById("in-arrive");
+    var departInput = document.getElementById("in-depart");
+    if (arriveInput) arriveInput.value = formPick.start || "";
+    if (departInput) departInput.value = formPick.end || "";
+    var blockStart = document.getElementById("block-start");
+    var blockEnd = document.getElementById("block-end");
+    if (blockStart && formPick.start) blockStart.value = formPick.start;
+    if (blockEnd && formPick.end) blockEnd.value = formPick.end;
+    var duration = formPick.start && formPick.end ? formatStay(formPick.start, formPick.end) : "";
+    var blockLength = document.getElementById("block-length");
+    var blockDuration = document.getElementById("block-duration");
+    if (blockLength) blockLength.textContent = duration;
+    if (blockDuration) blockDuration.value = duration;
+    try {
+      sessionStorage.setItem("rentals-e8b41f2c-stay", JSON.stringify(formPick));
+    } catch (err) { /* ignore */ }
     var node = document.getElementById("stay-length");
+    if (!node) return;
     if (!formPick.start || !formPick.end) {
       node.textContent = "";
       return;
@@ -691,6 +767,7 @@
   }
 
   function renderFormCalendar() {
+    if (!document.getElementById("stay-calendar")) return;
     var listing = activeListing();
     document.getElementById("stay-calendar").innerHTML = calendarHtml(listing, "form", formPick);
     syncStayFields();
@@ -709,7 +786,8 @@
     } else {
       formPick = { start: pick.start, end: iso, listingId: listing.id };
     }
-    if (id !== "form") document.getElementById("in-apt").value = listing.id;
+    var aptSelect = document.getElementById("in-apt");
+    if (id !== "form" && aptSelect) aptSelect.value = listing.id;
     renderSheets();
     renderFormCalendar();
     if (formPick.error) {
@@ -718,6 +796,7 @@
   }
 
   function renderNeighborhood() {
+    if (!document.getElementById("neighborhood")) return;
     var items = window.RENTALS.neighborhood || [];
     document.getElementById("neighborhood").innerHTML = items.map(function (item, i) {
       return '<figure><button type="button" data-area-open="' + i + '" aria-label="' + esc(t("galleryOpen")) + " " + esc(tr(item.caption)) + '"><img src="' + esc(item.src) + '" alt="' + esc(tr(item.caption)) + '"></button><figcaption>' + esc(tr(item.caption)) + "</figcaption></figure>";
@@ -725,6 +804,7 @@
   }
 
   function renderSamples() {
+    if (!document.getElementById("sample-notes")) return;
     var notes = window.RENTALS.samples || [];
     document.getElementById("sample-notes").innerHTML = notes.map(function (note) {
       return '<blockquote><p>' + esc(tr(note.text)) + "</p><footer>" + esc(note.name) + "</footer></blockquote>";
@@ -732,6 +812,7 @@
   }
 
   function renderCredits() {
+    if (!document.getElementById("credits")) return;
     var rows = window.RENTALS.credits || [];
     document.getElementById("credits").innerHTML = rows.map(function (row) {
       return "<li><a href=\"" + esc(row.url) + "\" target=\"_blank\" rel=\"noopener noreferrer\">" +
@@ -769,7 +850,8 @@
   function syncSubmit() {
     var button = document.querySelector("#inquiry-form button[type='submit']");
     var box = document.getElementById("access-ok");
-    if (button && box) button.disabled = !box.checked;
+    var pay = document.getElementById("pay-fee");
+    if (button && box) button.disabled = !box.checked || (pay ? !pay.checked : false);
   }
 
   function watchReveal() {
@@ -828,9 +910,12 @@
     }
     var selectApt = event.target.closest("[data-select-apt]");
     if (selectApt) {
-      document.getElementById("in-apt").value = selectApt.getAttribute("data-select-apt");
-      document.getElementById("contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-      document.getElementById("in-name").focus();
+      var infoApt = document.getElementById("info-apt");
+      if (infoApt) infoApt.value = selectApt.getAttribute("data-select-apt");
+      var contact = document.getElementById("contact");
+      if (contact) contact.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+      var infoName = document.getElementById("info-name");
+      if (infoName) infoName.focus();
       return;
     }
     var areaOpen = event.target.closest("[data-area-open]");
@@ -870,7 +955,8 @@
     }
   });
 
-  document.getElementById("listing-sheets").addEventListener("keydown", function (event) {
+  var listingSheets = document.getElementById("listing-sheets");
+  if (listingSheets) listingSheets.addEventListener("keydown", function (event) {
     if (!document.getElementById("lightbox").hidden) return;
     var gallery = event.target.closest("[data-gallery]");
     if (!gallery) return;
@@ -886,10 +972,12 @@
     if (fresh) fresh.focus();
   });
 
-  document.getElementById("in-apt").addEventListener("change", function () {
+  var aptInput = document.getElementById("in-apt");
+  if (aptInput) aptInput.addEventListener("change", function () {
     formPick = { start: "", end: "", listingId: document.getElementById("in-apt").value };
     renderFormCalendar();
     renderSheets();
+    syncExtras();
   });
 
   function photoItems(list) {
@@ -953,33 +1041,38 @@
     showLightbox();
   }
 
-  document.getElementById("lightbox-prev").addEventListener("click", function (event) {
+  var lightboxPrev = document.getElementById("lightbox-prev");
+  if (lightboxPrev) lightboxPrev.addEventListener("click", function (event) {
     event.stopPropagation();
     stepLightbox(-1);
   });
-  document.getElementById("lightbox-next").addEventListener("click", function (event) {
+  var lightboxNext = document.getElementById("lightbox-next");
+  if (lightboxNext) lightboxNext.addEventListener("click", function (event) {
     event.stopPropagation();
     stepLightbox(1);
   });
-  document.getElementById("lightbox-close").addEventListener("click", function (event) {
+  var lightboxClose = document.getElementById("lightbox-close");
+  if (lightboxClose) lightboxClose.addEventListener("click", function (event) {
     event.stopPropagation();
     closeLightbox();
   });
-  document.getElementById("lightbox-backdrop").addEventListener("click", function () {
+  var lightboxBackdrop = document.getElementById("lightbox-backdrop");
+  if (lightboxBackdrop) lightboxBackdrop.addEventListener("click", function () {
     closeLightbox();
   });
-  document.getElementById("lightbox").addEventListener("click", function (event) {
+  var lightboxBox = document.getElementById("lightbox");
+  if (lightboxBox) lightboxBox.addEventListener("click", function (event) {
     if (event.target === event.currentTarget) closeLightbox();
   });
 
   var touchX = 0;
   var touchY = 0;
-  document.getElementById("lightbox").addEventListener("touchstart", function (event) {
+  if (lightboxBox) lightboxBox.addEventListener("touchstart", function (event) {
     if (!event.changedTouches || !event.changedTouches.length) return;
     touchX = event.changedTouches[0].clientX;
     touchY = event.changedTouches[0].clientY;
   }, { passive: true });
-  document.getElementById("lightbox").addEventListener("touchend", function (event) {
+  if (lightboxBox) lightboxBox.addEventListener("touchend", function (event) {
     if (!event.changedTouches || !event.changedTouches.length) return;
     var dx = event.changedTouches[0].clientX - touchX;
     var dy = event.changedTouches[0].clientY - touchY;
@@ -987,16 +1080,26 @@
     stepLightbox(dx < 0 ? 1 : -1);
   }, { passive: true });
 
-  document.getElementById("inquiry-form").addEventListener("change", function () {
+  var inquiryForm = document.getElementById("inquiry-form");
+  if (inquiryForm) inquiryForm.addEventListener("change", function () {
     syncVisitMode();
     syncExtras();
     syncSubmit();
   });
-  document.getElementById("warn-check-link").addEventListener("click", function (event) {
+  var warnLinkEl = document.getElementById("warn-check-link");
+  if (warnLinkEl) warnLinkEl.addEventListener("click", function (event) {
     event.stopPropagation();
   });
 
-  document.getElementById("inquiry-form").addEventListener("submit", function (event) {
+  function postNetlify(form) {
+    return fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(new FormData(form)).toString()
+    });
+  }
+
+  if (inquiryForm) inquiryForm.addEventListener("submit", function (event) {
     event.preventDefault();
     clearErrors();
     var errors = validate(event.currentTarget);
@@ -1008,30 +1111,59 @@
       if (first) first.focus();
       return;
     }
-    var mail = composeMail(event.currentTarget);
+    var resumen = document.getElementById("fee-resumen");
+    if (resumen) resumen.value = feeResumen(event.currentTarget);
     var success = document.getElementById("form-success");
-    document.getElementById("success-text").value = mail.subject + "\n\n" + mail.body;
-    success.hidden = false;
-    window.location.href = "mailto:" + window.RENTALS.email + "?subject=" + encodeURIComponent(mail.subject) + "&body=" + encodeURIComponent(mail.body);
+    postNetlify(event.currentTarget).then(function (response) {
+      if (!response.ok) throw new Error("form");
+      event.currentTarget.hidden = true;
+      success.hidden = false;
+    }).catch(function () {
+      document.getElementById("form-errors").innerHTML = "<p>" + esc(t("formNeedSend")) + "</p>";
+    });
   });
 
-  document.getElementById("copy-mail").addEventListener("click", function () {
-    var text = document.getElementById("success-text").value;
-    var button = document.getElementById("copy-mail");
-    function done() { button.textContent = t("copied"); }
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(done).catch(function () {
-        document.getElementById("success-text").select();
-      });
-    } else {
-      document.getElementById("success-text").select();
+  ["block-start", "block-end"].forEach(function (id) {
+    var field = document.getElementById(id);
+    if (!field) return;
+    field.addEventListener("change", function () {
+      formPick.start = document.getElementById("block-start").value;
+      formPick.end = document.getElementById("block-end").value;
+      var apt = document.getElementById("in-apt");
+      formPick.listingId = apt ? apt.value : "";
+      syncStayFields();
+      renderFormCalendar();
+    });
+  });
+
+  var infoForm = document.getElementById("info-form");
+  if (infoForm) infoForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var errors = [];
+    var name = document.getElementById("info-name").value.trim();
+    var email = document.getElementById("info-email").value.trim();
+    var apt = document.getElementById("info-apt").value;
+    if (name.length < 2) errors.push(t("formNeedName"));
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push(t("formNeedEmail"));
+    if (!apt) errors.push(t("formNeedApt"));
+    var box = document.getElementById("info-errors");
+    if (errors.length) {
+      box.innerHTML = "<ul>" + errors.map(function (item) { return "<li>" + esc(item) + "</li>"; }).join("") + "</ul>";
+      return;
     }
+    box.innerHTML = "";
+    postNetlify(event.currentTarget).then(function (response) {
+      if (!response.ok) throw new Error("form");
+      event.currentTarget.hidden = true;
+      document.getElementById("info-success").hidden = false;
+    }).catch(function () {
+      box.innerHTML = "<p>" + esc(t("formNeedSend")) + "</p>";
+    });
   });
 
-  document.getElementById("hold-jump").addEventListener("click", function () {
-    document.getElementById("want-hold").checked = true;
-    document.getElementById("contact").scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-    document.getElementById("in-name").focus();
+  var holdJump = document.getElementById("hold-jump");
+  if (holdJump) holdJump.addEventListener("click", function () {
+    window.location.href = "solicitud/";
   });
 
   document.addEventListener("keydown", function (event) {
@@ -1044,7 +1176,7 @@
     }
     if (event.key !== "Escape") return;
     var toggle = document.querySelector(".nav-toggle");
-    if (toggle.getAttribute("aria-expanded") === "true") {
+    if (toggle && toggle.getAttribute("aria-expanded") === "true") {
       toggle.setAttribute("aria-expanded", "false");
       document.getElementById("site-nav").classList.remove("is-open");
       toggle.textContent = t("menu");
@@ -1058,7 +1190,18 @@
   if (window.I18N[fromQuery]) lang = fromQuery;
   else if (window.I18N[stored]) lang = stored;
 
-  document.getElementById("own-date").min = isoDate(new Date());
+  var ownDate = document.getElementById("own-date");
+  if (ownDate) ownDate.min = isoDate(new Date());
+  try {
+    var savedStay = JSON.parse(sessionStorage.getItem("rentals-e8b41f2c-stay") || "");
+    if (savedStay && savedStay.start) formPick = savedStay;
+  } catch (err) { /* ignore */ }
 
   render();
+  var aptParam = params.get("apt");
+  var aptField = document.getElementById("in-apt");
+  if (aptParam && aptField) {
+    aptField.value = aptParam;
+    syncExtras();
+  }
 })();

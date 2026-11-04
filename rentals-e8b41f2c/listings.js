@@ -54,7 +54,7 @@
         mapQuery: BUILDING.query,
         mapZoom: 17,
         aptNumber: "D12",
-        name: { es: "D12 · dos niveles", en: "D12 · two levels", fr: "D12 · deux niveaux" },
+        name: { es: "D12 · dos habitaciones", en: "D12 · two bedrooms", fr: "D12 · deux chambres" },
         layoutShort: { es: "2 niveles · loft", en: "2 levels · loft", fr: "2 niveaux · loft" },
         addressShort: { es: "César Nicolás Penson #38", en: "César Nicolás Penson #38", fr: "César Nicolás Penson n° 38" },
         floorChip: FLOOR_CHIP,
@@ -118,7 +118,6 @@
           },
           { kind: "photo", src: "media/d12-terraza-dia.webp", caption: { es: "Terraza en la azotea, de día", en: "Rooftop terrace, daytime", fr: "Terrasse sur le toit, de jour" } },
           { kind: "photo", src: "media/d12-terraza-noche.webp", caption: { es: "Terraza de noche", en: "Terrace at night", fr: "Terrasse de nuit" } },
-          { kind: "video", src: "media/d12-recorrido.mp4", poster: "media/d12-recorrido-poster.webp", caption: { es: "Recorrido del D12", en: "D12 tour", fr: "Visite du D12" } },
         ],
       },
       {
