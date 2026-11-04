@@ -341,10 +341,19 @@
   to = "/#services"
   status = 301
 
+# portfolio.html is served at /portfolio (200, no redirect). /portfolio/ is the
+# trailing-slash form and must point at /portfolio. The reverse rule loops:
+# the host already sends /portfolio/ to /portfolio.
 [[redirects]]
-  from = "/portfolio"
-  to = "/portfolio/"
+  from = "/portfolio/"
+  to = "/portfolio"
   status = 301
+
+[[redirects]]
+  from = "/portfolio.html"
+  to = "/portfolio"
+  status = 301
+  force = true
 
 # Block internal repo files and image masters (site pages use /assets/* only).
 [[redirects]]
