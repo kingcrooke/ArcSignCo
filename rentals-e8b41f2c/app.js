@@ -232,9 +232,8 @@
         return "<!-- TODO: " + String(item.todo).replace(/[^-.\w]/g, "") + " -->";
       }).join("");
       var actions = '<div class="listing-actions">' +
-        (listing.status === "available" ? '<a class="button" href="solicitud/">' + esc(t("holdButton")) + "</a>" : "") +
-        '<a class="button' + (listing.status === "available" ? " button-ghost" : "") + '" href="' + esc(infoMailto(listing)) + '">' + esc(t("moreInfo")) + "</a>" +
-        '<button type="button" class="button button-ghost" data-select-apt="' + listing.id + '">' + esc(t("useForm")) + "</button></div>";
+        '<a class="button" href="#contact" data-select-apt="' + listing.id + '">' + esc(t("moreInfo")) + "</a>" +
+        '<a class="button button-ghost" href="solicitud/?apt=' + encodeURIComponent(listing.id) + '">' + esc(t("holdButton")) + "</a></div>";
       var facts = "";
       if (listing.address && !listing.hideLocation) {
         facts = "<aside class=\"facts\">" +
@@ -319,6 +318,7 @@
   }
 
   function renderNearby() {
+    if (!document.getElementById("nearby")) return;
     var pack = window.I18N[lang] || window.I18N.es;
     var items = pack.nearbyItems || [];
     var favorites = window.RENTALS.nearbyFavorites || [];
@@ -332,6 +332,7 @@
   }
 
   function renderFaq() {
+    if (!document.getElementById("faq-list")) return;
     var pack = window.I18N[lang] || window.I18N.es;
     var items = pack.faq || [];
     document.getElementById("faq-list").innerHTML = items.map(function (item) {
@@ -341,6 +342,7 @@
 
   function renderReviews() {
     var section = document.getElementById("reviews");
+    if (!section) return;
     var reviews = window.RENTALS.reviews || [];
     if (!reviews.length) {
       section.hidden = true;
@@ -438,11 +440,11 @@
 
   function syncVisitMode() {
     var chosen = document.querySelector('input[name="visit-mode"]:checked');
-    var slotList = document.getElementById("slot-list");
     var ownTime = document.getElementById("own-time");
-    if (!chosen || !slotList || !ownTime) return;
-    slotList.hidden = chosen.value !== "slot";
-    ownTime.hidden = chosen.value !== "own";
+    if (!ownTime) return;
+    ownTime.hidden = !chosen || chosen.value !== "own";
+    var visitField = document.getElementById("visit-choice");
+    if (visitField) visitField.value = visitChoiceEs(chosen ? chosen.value : "");
   }
 
   function listingById(id) {
@@ -474,7 +476,8 @@
     var apt = document.getElementById("in-apt").value;
     var arrive = document.getElementById("in-arrive") ? document.getElementById("in-arrive").value : "";
     var depart = document.getElementById("in-depart") ? document.getElementById("in-depart").value : "";
-    var mode = form["visit-mode"].value;
+    var visitChosen = document.querySelector('input[name="visit-mode"]:checked');
+    var mode = visitChosen ? visitChosen.value : "";
     if (name.length < 2) { errors.push(t("formNeedName")); mark("in-name"); }
     if (country.length < 2) { errors.push(t("formNeedCountry")); mark("in-country"); }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errors.push(t("formNeedEmail")); mark("in-email"); }
@@ -523,10 +526,23 @@
     var pay = document.getElementById("pay-fee");
     if (pay && !pay.checked) errors.push(t("formNeedPay"));
     if (form.access && !form.access.checked) errors.push(t("formNeedAccess"));
-    if (mode === "slot" && !form.slot.value) errors.push(t("formNeedSlot"));
-    if (mode === "own" && (!form["own-date"].value || !form["own-time"].value)) {
-      errors.push(t("formNeedOwn"));
-      mark("own-date");
+    if (!mode) errors.push(t("formNeedVisit"));
+    if (mode === "own") {
+      var proposedDay = form["own-date"].value;
+      var proposedTime = form["own-time"].value;
+      if (!proposedDay || !proposedTime) {
+        errors.push(t("formNeedOwn"));
+        mark("own-date");
+      } else if (proposedDay < isoDate(new Date())) {
+        errors.push(t("formNeedVisitFuture"));
+        mark("own-date");
+      } else {
+        var moveIn = document.getElementById("block-start") ? document.getElementById("block-start").value : "";
+        if (moveIn && Math.round((parseIso(moveIn) - parseIso(proposedDay)) / 86400000) < 15) {
+          errors.push(t("formNeedVisitEarly"));
+          mark("own-date");
+        }
+      }
     }
     return errors;
   }
@@ -640,6 +656,18 @@
     return "Niños: Sí — " + String(form["kids-count"].value).trim() + " (edades: " + form["kids-ages"].value.trim() + ")";
   }
 
+  function visitChoiceEs(mode) {
+    if (mode === "none") return "No necesito visita, elijo con las fotos y videos bloquear mis fechas, mi estancia es corta.";
+    if (mode === "send") return "Envíeme la opción de día y hora para una visita en relación a mi fecha de bloqueo.";
+    if (mode === "own") {
+      var day = document.getElementById("own-date");
+      var time = document.getElementById("own-time-input");
+      return "Me gustaría proponer día y hora para la visita." +
+        (day && day.value ? " " + day.value + (time && time.value ? " " + time.value : "") : "");
+    }
+    return "";
+  }
+
   function feeResumen(form) {
     var listing = listingById(document.getElementById("in-apt").value);
     var party = document.getElementById("in-party");
@@ -652,6 +680,7 @@
       "Cuántos animales: " + (form["pet-count"] ? form["pet-count"].value : ""),
       kidsMailLine(form),
       termMailLine(form),
+      "Opción de Visita: " + visitChoiceEs(document.querySelector('input[name="visit-mode"]:checked') ? document.querySelector('input[name="visit-mode"]:checked').value : ""),
       "Fechas exactas: " + (start ? start.value : "") + " a " + (end ? end.value : ""),
       document.getElementById("block-duration") ? document.getElementById("block-duration").value : "",
       "Fee de bloqueo: quiere pagar",
@@ -808,6 +837,17 @@
     var blockDuration = document.getElementById("block-duration");
     if (blockLength) blockLength.textContent = duration;
     if (blockDuration) blockDuration.value = duration;
+    var ownDate = document.getElementById("own-date");
+    if (ownDate) {
+      ownDate.min = isoDate(new Date());
+      if (formPick.start) {
+        var latest = parseIso(formPick.start);
+        latest.setDate(latest.getDate() - 15);
+        var latestIso = isoDate(latest);
+        if (latestIso >= ownDate.min) ownDate.max = latestIso;
+        else ownDate.removeAttribute("max");
+      }
+    }
     try {
       sessionStorage.setItem("rentals-e8b41f2c-stay", JSON.stringify(formPick));
     } catch (err) { /* ignore */ }
