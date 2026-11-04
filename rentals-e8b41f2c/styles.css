@@ -309,9 +309,12 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 0.68rem;
-  padding: 0.38rem 0.65rem;
-  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  line-height: 1.35;
+  padding: 0.38rem 0.7rem;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.16);
   border: 1px solid transparent;
 }
@@ -361,6 +364,27 @@ h1 {
   width: 1px;
   overflow: hidden;
   clip: rect(1px, 1px, 1px, 1px);
+}
+.sector-gazcue { background: #fff6ea; }
+.sector-honduras { background: #e4f3f8; }
+.sector-bellavista { background: #eeecea; }
+.apt-cards { display: grid; gap: 1rem; }
+.apt-card {
+  background: rgba(255, 250, 244, 0.92);
+  border-radius: 22px;
+  padding: 1.2rem 1.15rem 1.35rem;
+  box-shadow: var(--shadow-soft);
+}
+.apt-card h3 { font-size: clamp(1.6rem, 3vw, 2.1rem); margin-bottom: 0.45rem; }
+.apt-card .badge { margin: 0.7rem 0 1rem; }
+.marked-placeholder {
+  border: 1px dashed rgba(36, 28, 22, 0.35);
+  border-radius: 16px;
+  padding: 0.85rem 1rem;
+  color: var(--ink-soft);
+}
+@media (min-width: 800px) {
+  #cards-gazcue { grid-template-columns: repeat(3, 1fr); }
 }
 #pet-types, #kids-detail { margin-top: 0.6rem; }
 #pet-other-wrap { margin-top: 0.6rem; max-width: 22rem; }
@@ -877,6 +901,8 @@ body.lb-open {
   .form-grid.two, .days { grid-template-columns: 1fr 1fr; }
   .days { grid-template-columns: repeat(3, 1fr); }
   .principles, .samples { grid-template-columns: repeat(3, 1fr); }
+  .principles.pair { grid-template-columns: 1fr 1fr; }
+  .invite { margin-top: 1.5rem; }
   .neighborhood { grid-template-columns: 1.1fr 0.9fr 1fr; }
   .cal-months { grid-template-columns: 1fr 1fr; }
   .section { padding: 6rem 0; }

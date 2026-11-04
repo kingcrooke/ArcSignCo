@@ -96,10 +96,10 @@
 
           <fieldset class="visit">
             <legend data-i18n="visitLegend"></legend>
-            <label class="choice"><input type="radio" name="visit-mode" value="none" checked> <span data-i18n="visitNone"></span></label>
-            <label class="choice"><input type="radio" name="visit-mode" value="slot"> <span data-i18n="visitSlot"></span></label>
+            <label class="choice"><input type="radio" name="visit-mode" value="none"> <span data-i18n="visitNone"></span></label>
+            <label class="choice"><input type="radio" name="visit-mode" value="send"> <span data-i18n="visitSend"></span></label>
             <label class="choice"><input type="radio" name="visit-mode" value="own"> <span data-i18n="visitOwn"></span></label>
-            <div id="slot-list" hidden></div>
+            <p class="meta" data-i18n="visitProposal"></p>
             <div id="own-time" class="form-grid two" hidden>
               <label class="field">
                 <span data-i18n="ownDate"></span>
@@ -110,6 +110,9 @@
                 <input id="own-time-input" name="own-time" type="time">
               </label>
             </div>
+            <p class="meta" data-i18n="visitBefore"></p>
+            <p class="meta" data-i18n="visitKeepsBlock"></p>
+            <input type="hidden" name="opcion_visita" id="visit-choice" value="">
           </fieldset>
 
           <fieldset class="visit" id="pets-field">
