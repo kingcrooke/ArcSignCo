@@ -72,16 +72,23 @@
   }
 
   function statusLabel(listing) {
+    if (listing.badgeLabel) return tr(listing.badgeLabel);
     if (listing.status === "soon") return t("statusSoon");
     return isUnavailable(listing) ? t("statusOccupied") : t("statusAvailable");
   }
 
+  function asset(src) {
+    if (!src) return "";
+    if (/^(https?:|data:|mailto:|\.\.)/.test(src)) return src;
+    return (document.body.getAttribute("data-root") || "") + src;
+  }
+
   function mediaHtml(item, label) {
     if (item && item.kind === "video" && item.src) {
-      return '<video class="tour-video" controls muted playsinline preload="none" poster="' + esc(item.poster || "") + '" src="' + esc(item.src) + '" aria-label="' + esc(label) + '"></video>';
+      return '<video class="tour-video" controls muted playsinline preload="none" poster="' + esc(asset(item.poster || "")) + '" src="' + esc(asset(item.src)) + '" aria-label="' + esc(label) + '"></video>';
     }
     if (item && item.src) {
-      return '<img src="' + esc(item.src) + '" alt="' + esc(label) + '">';
+      return '<img src="' + esc(asset(item.src)) + '" alt="' + esc(label) + '">';
     }
     if (item && item.kind === "pattern") {
       return '<div class="pattern-placeholder" role="img" aria-label="' + esc(label) + '"><span>' + esc(label) + "</span></div>";
@@ -90,7 +97,7 @@
   }
 
   function thumbHtml(item, label) {
-    if (item && item.kind === "video" && item.poster) return '<img src="' + esc(item.poster) + '" alt="' + esc(label) + '">';
+    if (item && item.kind === "video" && item.poster) return '<img src="' + esc(asset(item.poster)) + '" alt="' + esc(label) + '">';
     return mediaHtml(item, label);
   }
 
@@ -102,7 +109,7 @@
       a.building,
       a.area + ", " + a.city,
       a.district + ", " + tr(a.country)
-    ];
+    ].filter(function (line) { return line && String(line).trim(); });
   }
 
   function mapSrc(query, zoom) {
@@ -895,7 +902,7 @@
     if (!document.getElementById("neighborhood")) return;
     var items = window.RENTALS.neighborhood || [];
     document.getElementById("neighborhood").innerHTML = items.map(function (item, i) {
-      return '<figure><button type="button" data-area-open="' + i + '" aria-label="' + esc(t("galleryOpen")) + " " + esc(tr(item.caption)) + '"><img src="' + esc(item.src) + '" alt="' + esc(tr(item.caption)) + '"></button><figcaption>' + esc(tr(item.caption)) + "</figcaption></figure>";
+      return '<figure><button type="button" data-area-open="' + i + '" aria-label="' + esc(t("galleryOpen")) + " " + esc(tr(item.caption)) + '"><img src="' + esc(asset(item.src)) + '" alt="' + esc(tr(item.caption)) + '"></button><figcaption>' + esc(tr(item.caption)) + "</figcaption></figure>";
     }).join("");
   }
 
@@ -920,7 +927,8 @@
     applyStatic();
     renderHero();
     renderIndex();
-    renderSheets();
+    if (document.getElementById("cards-gazcue")) renderHomeCards();
+    else renderSheets();
     renderRules();
     renderArea();
     renderFaq();
@@ -935,6 +943,7 @@
     renderFormCalendar();
     ["contact-email", "footer-email"].forEach(function (id) {
       var link = document.getElementById(id);
+      if (!link) return;
       link.href = "mailto:" + window.RENTALS.email;
       link.textContent = window.RENTALS.email;
     });
@@ -942,7 +951,117 @@
     if (warnLink) warnLink.textContent = t("warnCheck");
     syncSubmit();
     syncExtras();
+    var pageApt = document.body.getAttribute("data-apt");
+    if (pageApt) renderApartment(pageApt);
     watchReveal();
+  }
+
+  function refreshListingView() {
+    var pageApt = document.body.getAttribute("data-apt");
+    if (pageApt) renderApartment(pageApt);
+    else renderSheets();
+  }
+
+  function renderHomeCards() {
+    ["gazcue", "honduras", "bellavista"].forEach(function (sector) {
+      var host = document.getElementById("cards-" + sector);
+      if (!host) return;
+      host.innerHTML = window.RENTALS.listings.filter(function (listing) {
+        return listing.sector === sector;
+      }).map(function (listing) {
+        var summary = tr(listing.summary);
+        var onlyAddress = !summary && listing.cardAddress;
+        return '<article class="apt-card" id="card-' + listing.id + '">' +
+          "<h3>" + esc(tr(listing.name)) + "</h3>" +
+          (summary ? "<p>" + esc(summary) + "</p>" : "") +
+          (onlyAddress ? '<p class="address">' + esc(tr(listing.cardAddress)) + "</p>" : "") +
+          '<p><span class="badge ' + statusClass(listing) + '">' + esc(statusLabel(listing)) + "</span></p>" +
+          '<a class="button" href="' + esc(listing.page) + '">' + esc(t("viewApt")) + "</a></article>";
+      }).join("");
+    });
+  }
+
+  function pageButtons(listing) {
+    var root = document.body.getAttribute("data-root") || "";
+    return '<div class="listing-actions">' +
+      '<a class="button" href="' + root + "?apt=" + encodeURIComponent(listing.id) + '#contact">' + esc(t("moreInfo")) + "</a>" +
+      '<a class="button button-ghost" href="' + root + "solicitud/?apt=" + encodeURIComponent(listing.id) + '">' + esc(t("feeAvail")) + "</a></div>";
+  }
+
+  function renderApartment(id) {
+    var host = document.getElementById("apt-page");
+    var listing = listingById(id);
+    if (!host || !listing) return;
+    document.title = tr(listing.name) + " — EC Boutique Apartments";
+    host.innerHTML = oneApartment(listing) + sectorBlock(listing);
+    if (listing.sector === "gazcue") {
+      renderNeighborhood();
+      renderNearby();
+    }
+  }
+
+  function sectorBlock(listing) {
+    if (listing.sector === "gazcue") {
+      return '<section class="section sector-gazcue"><div class="wrap"><h2>' + esc(t("areaTitle")) + '</h2><p class="intro">' +
+        esc(t("areaBody")) + '</p><div id="neighborhood" class="neighborhood"></div><div id="nearby" class="nearby"></div></div></section>';
+    }
+    return '<section class="section"><div class="wrap"><p class="marked-placeholder">' + esc(t("sectorMissing")) + "</p></div></section>";
+  }
+
+  function oneApartment(listing) {
+    var at = galleryAt[listing.id] || 0;
+    var slide = listing.media[at] || { kind: "pattern", caption: listing.summary };
+    var label = tr(slide.caption);
+    var stageInner = mediaHtml(slide, label);
+    if (slide.src && slide.kind !== "video" && slide.kind !== "pattern") {
+      stageInner = '<button type="button" class="stage-open" data-open="1" aria-label="' + esc(t("galleryOpen")) + " " + esc(label) + '">' + stageInner + "</button>";
+    }
+    var thumbs = (listing.media || []).map(function (item, i) {
+      return '<li><button type="button" data-go="' + i + '" aria-current="' + (i === at ? "true" : "false") + '" aria-label="' + esc(tr(item.caption)) + '">' +
+        thumbHtml(item, tr(item.caption)) + "</button></li>";
+    }).join("");
+    var todo = (listing.media || []).filter(function (item) { return item.todo; }).map(function (item) {
+      return "<!-- TODO: " + String(item.todo).replace(/[^-.\w]/g, "") + " -->";
+    }).join("");
+    var amenities = listing.amenities && listing.amenities.length
+      ? "<h3>" + esc(t("amenTitle")) + "</h3><ul class=\"amenities\">" + listing.amenities.map(function (item) {
+        return "<li>" + esc(tr(item)) + "</li>";
+      }).join("") + "</ul>"
+      : (listing.missingDetail ? '<p class="marked-placeholder">' + esc(tr(listing.missingDetail)) + "</p>" : "");
+    var facts = "";
+    if (listing.address && !listing.hideLocation) {
+      facts = "<aside class=\"facts\">" +
+        "<h3>" + esc(t("addressTitle")) + "</h3>" +
+        "<p class=\"address\">" + addressLines(listing).map(esc).join("<br>") + "</p>" +
+        "<p><strong>" + esc(t("aptLabel")) + " " + esc(listing.aptNumber) + "</strong></p>" +
+        '<div class="map-frame"><iframe title="' + esc(tr(listing.name)) + '" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="' + esc(mapSrc(listing.mapQuery, listing.mapZoom || 16)) + '"></iframe></div>' +
+        "<p class=\"meta\">" + esc(tr(listing.mapNote)) + "</p>" +
+        '<p class="map-links"><a href="' + esc(mapsLink(listing.mapQuery)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openMaps")) + "</a>" +
+        '<a href="' + esc(streetLink(listing)) + '" target="_blank" rel="noopener noreferrer">' + esc(t("openStreet")) + "</a></p>" +
+        '<p class="meta">' + esc(t("mapFallback")) + "</p></aside>";
+    }
+    return '<article class="listing" id="listing-' + listing.id + '"><div class="wrap">' +
+      '<header class="listing-head"><h2>' + esc(tr(listing.name)) + "</h2>" +
+      '<p class="badge ' + statusClass(listing) + '">' + esc(statusLabel(listing)) + "</p></header>" +
+      (tr(listing.floorChip) ? '<p class="floor-chip">' + esc(tr(listing.floorChip)) + "</p>" : "") +
+      (tr(listing.blockNote) ? '<p class="block-note">' + esc(tr(listing.blockNote)) + "</p>" : "") +
+      (tr(listing.summary) ? "<p class=\"summary\">" + esc(tr(listing.summary)) + "</p>" : "") +
+      '<div class="gallery" data-gallery="' + listing.id + '" tabindex="0">' +
+      todo +
+      '<div class="stage' + (slide.kind === "pattern" ? " is-pattern" : "") + '">' + stageInner +
+      '<button type="button" class="g-nav prev" data-dir="-1" aria-label="' + esc(t("galleryPrev")) + '">‹</button>' +
+      '<button type="button" class="g-nav next" data-dir="1" aria-label="' + esc(t("galleryNext")) + '">›</button>' +
+      '<p class="g-count">' + esc(t("count", { n: at + 1, m: listing.media.length })) + "</p></div>" +
+      '<ul class="thumbs">' + thumbs + "</ul>" +
+      '<p class="caption">' + esc(label) + "</p>" +
+      (tr(listing.photoNote) ? '<p class="meta photo-note">' + esc(tr(listing.photoNote)) + "</p>" : "") +
+      "</div>" +
+      '<div class="listing-grid"><div class="prose">' +
+      (tr(listing.description) ? "<p>" + esc(tr(listing.description)) + "</p>" : "") +
+      (tr(listing.kitchen) ? "<p class=\"kitchen-line\">" + esc(tr(listing.kitchen)) + "</p>" : "") +
+      (tr(listing.layout) ? "<h3>" + esc(t("layoutTitle")) + "</h3><p>" + esc(tr(listing.layout)) + "</p>" : "") +
+      diagram(listing) + amenities + "</div>" + facts + "</div>" +
+      pageButtons(listing) + "</div></article>";
   }
 
   function syncSubmit() {
@@ -1036,12 +1155,12 @@
       galleryAt[id] = (galleryAt[id] || 0) + step;
       if (galleryAt[id] < 0) galleryAt[id] = listing.media.length - 1;
       if (galleryAt[id] >= listing.media.length) galleryAt[id] = 0;
-      renderSheets();
+      refreshListingView();
       var next = document.querySelector('[data-gallery="' + id + '"] [data-dir="' + step + '"]');
       if (next) next.focus();
     } else if (go) {
       galleryAt[id] = Number(go.getAttribute("data-go"));
-      renderSheets();
+      refreshListingView();
     } else if (open) {
       var photos = photoItems(listing.media);
       var current = listing.media[galleryAt[id] || 0];
@@ -1065,7 +1184,7 @@
     galleryAt[id] = (galleryAt[id] || 0) + (event.key === "ArrowRight" ? 1 : -1);
     if (galleryAt[id] < 0) galleryAt[id] = listing.media.length - 1;
     if (galleryAt[id] >= listing.media.length) galleryAt[id] = 0;
-    renderSheets();
+    refreshListingView();
     var fresh = document.querySelector('[data-gallery="' + id + '"]');
     if (fresh) fresh.focus();
   });
@@ -1122,7 +1241,7 @@
     box.hidden = true;
     document.getElementById("lightbox-img").removeAttribute("src");
     unlockPage();
-    if (lb.galleryId) renderSheets();
+    if (lb.galleryId) refreshListingView();
   }
 
   function stepLightbox(step) {
@@ -1298,6 +1417,8 @@
   render();
   var aptParam = params.get("apt");
   var aptField = document.getElementById("in-apt");
+  var infoApt = document.getElementById("info-apt");
+  if (aptParam && infoApt) infoApt.value = aptParam;
   if (aptParam && aptField) {
     aptField.value = aptParam;
     syncExtras();

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>EC Boutique Apartments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,680&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body data-apt="d2" data-root="../">
+  <a class="skip" href="#content" data-i18n="skip"></a>
+  <header class="site-header">
+    <a class="brand" href="../">EC Boutique Apartments</a>
+    <div class="lang" role="group" data-i18n-aria="langLabel">
+      <button type="button" data-set-lang="es" lang="es">ES</button>
+      <button type="button" data-set-lang="en" lang="en">EN</button>
+      <button type="button" data-set-lang="fr" lang="fr">FR</button>
+    </div>
+  </header>
+  <main id="content"><div id="apt-page"></div></main>
+  <div id="lightbox" class="lightbox" hidden role="dialog" aria-modal="true" aria-labelledby="lightbox-caption">
+    <button type="button" class="lb-backdrop" id="lightbox-backdrop" data-i18n-aria="close"></button>
+    <figure class="lb-frame">
+      <img id="lightbox-img" alt="">
+      <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+    <button type="button" class="lb-close" id="lightbox-close" data-i18n="close"></button>
+    <button type="button" class="lb-arrow prev" id="lightbox-prev" data-i18n-aria="galleryPrev">‹</button>
+    <button type="button" class="lb-arrow next" id="lightbox-next" data-i18n-aria="galleryNext">›</button>
+  </div>
+  <script src="../listings.js"></script>
+  <script src="../i18n.js"></script>
+  <script src="../app.js"></script>
+</body>
+</html>
