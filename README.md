@@ -182,7 +182,8 @@ If it can't be backed up, soften or remove it.
 
 `/visualize/` is a concept preview for a vehicle wrap, a storefront sign, or window graphics.
 It reuses the sign mockup's photo loader and quad math. The uploaded logo is pasted in code.
-Leads are stored in Netlify Blobs and, when email is configured, sent to arc@arcsignco.com.
+A session returns 3 concepts. Leads are stored in Netlify Blobs, posted to the Netlify Form
+`visualizer-quote`, and, when email is configured, sent to arc@arcsignco.com.
 `/visualize/admin/` is the password-protected list (noindex, not in the sitemap).
 See `docs/arc-visualizer.md` for environment variables. Estimates stay off (`Custom quote`)
 until Jesus enters rates. The homepage and service pages do not link here yet.

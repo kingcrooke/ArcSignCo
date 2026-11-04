@@ -20,6 +20,8 @@ export function leadEmail(env, lead) {
     ["Services", lead.business?.services],
     ["Quote", lead.quote?.label],
     ["Quote note", lead.quote?.message],
+    ["SMS updates", lead.smsTransactional ? "yes" : "no"],
+    ["SMS promos", lead.smsPromo ? "yes" : "no"],
   ];
   const html = [
     "<p>New Arc Visualizer lead.</p>",

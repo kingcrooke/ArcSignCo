@@ -180,16 +180,18 @@ test("a session can render, place the real logo, and store a lead without a pric
   });
   assert.equal(rendered.status, 200, await rendered.clone().text());
   const preview = await rendered.json();
-  assert.equal(preview.variants.length, 2);
+  assert.equal(preview.variants.length, 3);
+  assert.equal(preview.count, 3);
   assert.equal(preview.quote.label, "Custom quote");
   assert.equal(Object.hasOwn(preview.quote, "low"), false);
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.deepEqual(calls[0].roles, []);
   assert.match(calls[0].prompt, /do not draw any logo/i);
   assert.notEqual(calls[0].prompt, calls[1].prompt);
+  assert.notEqual(calls[1].prompt, calls[2].prompt);
   const edited = await call("/api/visualize/edit", { method: "POST", body: { sessionId: session.id, renderId: preview.variants[0].id, request: "make the van white" } });
   assert.equal(edited.status, 200);
-  assert.deepEqual((await edited.json(), calls[2].roles), ["previous"]);
+  assert.deepEqual((await edited.json(), calls[3].roles), ["previous"]);
   const again = await call("/api/visualize/edit", { method: "POST", body: { sessionId: session.id, renderId: preview.variants[0].id, request: "again" } });
   assert.equal(again.status, 409);
   const quad = [
@@ -222,6 +224,63 @@ test("a session can render, place the real logo, and store a lead without a pric
   assert.equal(denied.status, 401);
   const bad = await call("/api/visualize/admin/login", { method: "POST", body: { password: "nope" } });
   assert.equal(bad.status, 503);
+});
+
+test("a vehicle shot is the reference for all 3 concepts and identify invents nothing", async () => {
+  const { call, calls, later } = harness();
+  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  later();
+  const shot = await call("/api/visualize/vehicle", {
+    method: "POST",
+    body: { sessionId: session.id, subject: { year: "2022", make: "Ford", model: "Transit", color: "white" } },
+  });
+  assert.equal(shot.status, 200, await shot.clone().text());
+  const vehicle = await shot.json();
+  assert.equal(vehicle.stub, false);
+  assert.match(vehicle.label, /2022 Ford Transit/);
+  const wrapped = await call("/api/visualize/render", {
+    method: "POST",
+    body: {
+      sessionId: session.id,
+      business: { name: "Acme Plumbing Co Extra Words Here", phone: "555 123 4567 extra", colors: ["#e23b3b", "#163a78", "#d4a53c", "#ffffff"] },
+      subject: { coverage: "full", style: "bold", namePlaces: ["side", "doors"] },
+    },
+  });
+  assert.equal(wrapped.status, 200, await wrapped.clone().text());
+  const preview = await wrapped.json();
+  assert.equal(preview.variants.length, 3);
+  assert.deepEqual(calls[1].roles, ["photo"]);
+  assert.deepEqual(calls[2].roles, ["photo"]);
+  assert.deepEqual(calls[3].roles, ["photo"]);
+  assert.match(calls[1].prompt, /bold and sporty/i);
+  assert.match(calls[1].prompt, /Acme Plumbing Co Extra Words/);
+  assert.doesNotMatch(calls[1].prompt, /Here/);
+  assert.doesNotMatch(calls[1].prompt, /#ffffff/);
+  const named = await call("/api/visualize/identify", { method: "POST", body: { sessionId: session.id } });
+  assert.equal(named.status, 200);
+  const id = await named.json();
+  assert.equal(id.label, "your vehicle");
+  assert.equal(id.vehicle.make, "");
+});
+
+test("a failed concept still comes back so the set stays at 3", async () => {
+  const h = harness();
+  let n = 0;
+  h.deps.imageClient = async (spec) => {
+    n += 1;
+    if (n === 2) throw new Error("model down");
+    return { bytes: Buffer.from(toPng(blankScene(spec.category, spec.variant || 0))), model: "test-model", stub: false };
+  };
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  h.later();
+  const rendered = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { stock: true, coverage: "half", style: "clean" } },
+  });
+  assert.equal(rendered.status, 200, await rendered.clone().text());
+  const preview = await rendered.json();
+  assert.equal(preview.variants.length, 3);
+  assert.equal(preview.variants.filter(item => item.stub).length, 1);
 });
 
 test("lead email goes to arc@ and is skipped cleanly without a key", async () => {

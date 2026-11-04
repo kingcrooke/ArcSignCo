@@ -19,7 +19,15 @@ const BODIES = {
 const COVERAGE = {
   lettering: "lettering",
   partial: "partial",
+  half: "half",
   full: "full",
+};
+
+const STYLES = {
+  clean: "Style direction: clean and minimal, open space, one type family.",
+  bold: "Style direction: bold and sporty, strong diagonals, large type.",
+  tech: "Style direction: tech and futuristic, thin lines, a precise grid.",
+  classic: "Style direction: classic and professional, calm alignment.",
 };
 
 const SIGNS = {
@@ -56,9 +64,31 @@ function colorsOf(colors) {
 }
 
 function layoutLine(variant) {
-  return variant === 0
-    ? "Layout A: company name as the largest line, phone and website smaller beneath it."
-    : "Layout B: a short services column, with the company name as the headline.";
+  if (variant === 1) return "Layout B: a short services column, with the company name as the headline.";
+  if (variant === 2) return "Layout C: the company name as a large side wordmark, with phone and website in a lower band.";
+  return "Layout A: company name as the largest line, phone and website smaller beneath it.";
+}
+
+function styleLine(style) {
+  return STYLES[style] || "";
+}
+
+function placementLine(subject) {
+  const bits = [];
+  if (subject.namePlaces?.length) bits.push(`Place the business name on the ${subject.namePlaces.join(" and ")}.`);
+  if (subject.phonePlaces?.length) bits.push(`Place the phone on the ${subject.phonePlaces.join(" and ")}.`);
+  if (subject.webPlaces?.length) bits.push(`Place the website on the ${subject.webPlaces.join(" and ")}.`);
+  return bits.join(" ");
+}
+
+export function vehiclePrompt(subject = {}) {
+  const year = clean(subject.year, 4);
+  const make = clean(subject.make, 40);
+  const model = clean(subject.model, 40);
+  const named = [year, make, model].filter(Boolean).join(" ");
+  const bodyType = BODIES[subject.body] || "cargo van";
+  const color = clean(subject.color, 40) || "white";
+  return `Studio product photo of a ${named || "modern"} ${bodyType}, ${color} paint, exact side profile facing right, plain light-gray seamless background, even soft lighting. No wrap, no lettering, no logo, no people. Photoreal, the full vehicle in frame.`;
 }
 
 function blankLogo(zone) {
@@ -92,12 +122,14 @@ export function renderPrompt({ category, business = {}, subject = {}, variant = 
     const year = clean(subject.year, 4);
     const make = clean(subject.make, 40);
     const model = clean(subject.model, 40);
-    const bodyType = BODIES[subject.body] || "van";
+    const named = [year, make, model].filter(Boolean).join(" ");
+    const bodyType = BODIES[subject.body] || "cargo van";
     const color = clean(subject.color, 40) || "white";
     const coverage = COVERAGE[subject.coverage] || "partial";
-    body = `Studio product photo of a ${[year, make, model].filter(Boolean).join(" ")} ${bodyType}, ${color} paint, 3/4 front-left view, plain light-gray background, even lighting. Apply a professional commercial ${coverage} vinyl wrap. Brand: ${name}. Colors: ${colors}. Include company name '${name}'${phone ? `, phone '${phone}'` : ""}${web ? `, website '${web}'` : ""}${services ? `, services '${services}'` : ""} as clean legible lettering on the side panels. Leave a clear rectangular area on the ${zone.name} for the logo; do not draw any logo. Style: ${brief}. Photoreal, print-ready look.`;
+    body = `Studio product photo of a ${named ? `${named} ` : ""}${bodyType}, ${color} paint, side profile, plain light-gray background, even lighting. Apply a professional commercial ${coverage} vinyl wrap. Brand: ${name}. Colors: ${colors}. Include company name '${name}'${phone ? `, phone '${phone}'` : ""}${web ? `, website '${web}'` : ""}${services ? `, services '${services}'` : ""} as clean legible lettering on the side panels. Leave a clear rectangular area on the ${zone.name} for the logo; do not draw any logo. Style: ${brief}. Photoreal, print-ready look.`;
   }
-  return `${body} ${blankLogo(zone)} ${layoutLine(variant)} No watermark text, no mockup frame.`;
+  const extra = [styleLine(subject.style), placementLine(subject)].filter(Boolean).join(" ");
+  return `${body} ${extra} ${blankLogo(zone)} ${layoutLine(variant)} No watermark text, no mockup frame.`.replace(/[ \t]{2,}/g, " ").trim();
 }
 
 export function editPrompt(request) {

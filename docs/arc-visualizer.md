@@ -54,7 +54,9 @@ Image calls go to `https://api.x.ai/v1` with model `grok-imagine-image-2.0` ([xA
 
 ## Limits
 
-Per session: 2 variants and 1 chat revision. Per IP per UTC day: 30 scans, 8 preview images, 4 revisions, 5 leads, 40 uploads, 10 admin sign-in failures. A lead or a preview sooner than 3 seconds after the session starts is rejected. A hidden fax field is dropped. The function also has a Netlify rate limit of 40 requests a minute per IP.
+Per session: 3 concepts each time (a second set is allowed once), 4 bare-vehicle studio shots, and 1 written revision that changes only the concept it was asked to change. The function always returns all 3 concepts; a failed image call is replaced with the layout placeholder so the count does not drop. Per IP per UTC day: 30 scans, 16 preview images (vehicle shots and concepts share this), 4 revisions, 5 leads, 40 uploads, 10 admin sign-in failures. A lead, a vehicle shot, or a concept set sooner than 3 seconds after the session starts is rejected. A hidden fax field is dropped. The function also has a Netlify rate limit of 40 requests a minute per IP.
+
+The page also posts the quote to the Netlify Form `visualizer-quote` (and problem notes to `visualizer-report`). Add an email notification for `visualizer-quote` to arc@arcsignco.com in Site configuration → Forms, the same place as `quote-request`. The existing Resend lead email still goes to arc@arcsignco.com when `RESEND_API_KEY` is set. SMS consent checkboxes are optional and start unchecked.
 
 ## Later
 

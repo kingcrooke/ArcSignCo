@@ -41,6 +41,8 @@ export const config = {
     "/api/visualize/session",
     "/api/visualize/scan",
     "/api/visualize/upload",
+    "/api/visualize/vehicle",
+    "/api/visualize/identify",
     "/api/visualize/render",
     "/api/visualize/edit",
     "/api/visualize/lead",
