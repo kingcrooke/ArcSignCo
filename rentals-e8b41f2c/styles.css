@@ -354,6 +354,14 @@ h1 {
 .kitchen-line { font-weight: 650; }
 .all-block h3 { font-size: 1.35rem; margin: 1.5rem 0 0.35rem; }
 .all-block p { max-width: 46rem; }
+[hidden] { display: none !important; }
+.hp {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
 #pet-types, #kids-detail { margin-top: 0.6rem; }
 #pet-other-wrap { margin-top: 0.6rem; max-width: 22rem; }
 

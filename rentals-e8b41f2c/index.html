@@ -45,10 +45,10 @@
         <h1 data-i18n="heroTitle"></h1>
         <p class="lede" data-i18n="heroLede"></p>
         <p class="hero-text" data-i18n="heroText"></p>
-        <p class="badge" id="hero-badge"></p>
         <div class="hero-actions">
           <a class="button" href="#listings" data-i18n="ctaListings"></a>
           <a class="button button-ghost" href="#contact" data-i18n="ctaWrite"></a>
+          <a class="button button-ghost" href="solicitud/" data-i18n="ctaFee"></a>
         </div>
         <p class="hero-credit" data-i18n="heroVideo"></p>
       </div>
@@ -236,133 +236,44 @@
         </p>
         <p class="meta" data-i18n="emailTodo"></p>
         <p class="meta" data-i18n="tzNote"></p>
-        <p class="meta" data-i18n="requiredHint"></p>
+        <p class="meta"><span data-i18n="infoOrWrite"></span> <a href="mailto:elicrooke25@gmail.com">elicrooke25@gmail.com</a></p>
 
-        <form id="inquiry-form" novalidate>
-          <div id="form-errors" role="alert"></div>
+        <form id="info-form" name="info-request" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="info-request">
+          <p class="hp"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <div id="info-errors" role="alert"></div>
           <div class="form-grid two">
             <label class="field req">
-              <span data-i18n="labelName"></span>
-              <input id="in-name" name="name" autocomplete="name" required>
-            </label>
-            <label class="field req">
-              <span data-i18n="labelCountry"></span>
-              <input id="in-country" name="country" autocomplete="country-name" required>
+              <span data-i18n="labelFullName"></span>
+              <input id="info-name" name="nombre" autocomplete="name" required>
             </label>
             <label class="field req">
               <span data-i18n="labelEmail"></span>
-              <input id="in-email" name="email" type="email" inputmode="email" autocomplete="email" spellcheck="false" required>
+              <input id="info-email" name="correo" type="email" inputmode="email" autocomplete="email" spellcheck="false" required>
             </label>
             <label class="field req">
-              <span data-i18n="labelPhone"></span>
-              <input id="in-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required>
-            </label>
-            <label class="field req">
-              <span data-i18n="labelApt"></span>
-              <select id="in-apt" name="apartment" required></select>
+              <span data-i18n="labelInterest"></span>
+              <select id="info-apt" name="apartamento" required>
+                <option value="">Elija un apartamento</option>
+                <option value="d12">D12 · dos habitaciones</option>
+                <option value="d2">D2 · una habitación</option>
+                <option value="d1">D1 · una habitación</option>
+                <option value="apt4">Apartamento 4</option>
+              </select>
             </label>
           </div>
-          <div class="stay-box" id="stay-box">
-            <h3 data-i18n="calTitle"></h3>
-            <p class="meta" data-i18n="startDateLegend"></p>
-            <div id="stay-calendar"></div>
-            <p class="stay-length" id="stay-length" aria-live="polite"></p>
-            <input id="in-arrive" name="arrival" type="hidden">
-            <input id="in-depart" name="departure" type="hidden">
-          </div>
-
-          <fieldset class="visit">
-            <legend data-i18n="visitLegend"></legend>
-            <label class="choice"><input type="radio" name="visit-mode" value="none" checked> <span data-i18n="visitNone"></span></label>
-            <label class="choice"><input type="radio" name="visit-mode" value="slot"> <span data-i18n="visitSlot"></span></label>
-            <label class="choice"><input type="radio" name="visit-mode" value="own"> <span data-i18n="visitOwn"></span></label>
-            <div id="slot-list" hidden></div>
-            <div id="own-time" class="form-grid two" hidden>
-              <label class="field">
-                <span data-i18n="ownDate"></span>
-                <input id="own-date" name="own-date" type="date">
-              </label>
-              <label class="field">
-                <span data-i18n="ownTime"></span>
-                <input id="own-time-input" name="own-time" type="time">
-              </label>
-            </div>
-          </fieldset>
-
-          <fieldset class="visit" id="pets-field">
-            <legend data-i18n="petsLegend"></legend>
-            <label class="choice"><input type="radio" name="pets" value="no"> <span data-i18n="noWord"></span></label>
-            <label class="choice"><input type="radio" name="pets" value="yes"> <span data-i18n="yesWord"></span></label>
-            <div id="pet-types" hidden>
-              <p class="meta" data-i18n="petTypeLabel"></p>
-              <label class="choice"><input type="checkbox" name="pet-type" value="perro"> <span data-i18n="petDog"></span></label>
-              <label class="choice"><input type="checkbox" name="pet-type" value="gato"> <span data-i18n="petCat"></span></label>
-              <label class="choice"><input type="checkbox" name="pet-type" value="conejo"> <span data-i18n="petRabbit"></span></label>
-              <label class="choice"><input type="checkbox" name="pet-type" value="pajaritos"> <span data-i18n="petBirds"></span></label>
-              <label class="choice"><input type="checkbox" name="pet-type" value="cotorras"> <span data-i18n="petParrots"></span></label>
-              <label class="choice"><input type="checkbox" name="pet-type" value="otros"> <span data-i18n="petOther"></span></label>
-              <label class="field" id="pet-other-wrap" hidden>
-                <span data-i18n="petWhich"></span>
-                <input id="pet-other" name="pet-other" maxlength="80">
-              </label>
-            </div>
-          </fieldset>
-
-          <fieldset class="visit" id="kids-field">
-            <legend data-i18n="kidsLegend"></legend>
-            <label class="choice"><input type="radio" name="kids" value="no"> <span data-i18n="noWord"></span></label>
-            <label class="choice"><input type="radio" name="kids" value="yes"> <span data-i18n="yesWord"></span></label>
-            <div id="kids-detail" class="form-grid two" hidden>
-              <label class="field">
-                <span data-i18n="kidsCountLabel"></span>
-                <input id="kids-count" name="kids-count" type="number" min="1" step="1" inputmode="numeric">
-              </label>
-              <label class="field">
-                <span data-i18n="kidsAgesLabel"></span>
-                <input id="kids-ages" name="kids-ages" maxlength="80" autocomplete="off">
-              </label>
-            </div>
-          </fieldset>
-
-          <fieldset class="visit" id="term-field">
-            <legend data-i18n="termLegend"></legend>
-            <label class="choice"><input type="radio" name="term" value="year"> <span data-i18n="termYear"></span></label>
-            <label class="choice"><input type="radio" name="term" value="less"> <span data-i18n="termLess"></span></label>
-            <label class="choice"><input type="radio" name="term" value="exact"> <span data-i18n="termExact"></span></label>
-            <label class="choice"><input type="radio" name="term" value="unsure"> <span data-i18n="termUnsure"></span></label>
-          </fieldset>
-
-          <label class="choice hold-choice">
-            <input id="want-hold" name="hold" type="checkbox">
-            <span data-i18n="holdCheck"></span>
-          </label>
-
           <label class="field">
             <span data-i18n="labelNote"></span>
-            <textarea id="in-note" name="note" rows="4" maxlength="2000"></textarea>
+            <textarea id="info-note" name="nota" rows="4" maxlength="2000"></textarea>
           </label>
-
-          <p class="rate-note" data-i18n="holdNotice"></p>
-
-          <label class="choice hold-choice" id="warn-check">
-            <input id="access-ok" name="access" type="checkbox" required>
-            <a id="warn-check-link" href="#warnings"></a>
-          </label>
-
-          <button class="button" type="submit" data-i18n="submit" disabled></button>
+          <button class="button" type="submit" data-i18n="submitInfo"></button>
         </form>
-        <p class="meta" data-i18n="afterForm"></p>
-
-        <div id="form-success" class="success" hidden role="status">
-          <h3 data-i18n="successTitle"></h3>
-          <p data-i18n="successBody"></p>
-          <textarea id="success-text" readonly rows="12"></textarea>
-          <button type="button" class="button button-ghost" id="copy-mail" data-i18n="copyButton"></button>
+        <div id="info-success" class="success" hidden role="status">
+          <p data-i18n="thanksBody"></p>
         </div>
       </div>
     </section>
   </main>
-
   <footer class="site-footer">
     <div class="wrap footer-row">
       <p><strong>EC Boutique Apartments</strong><br>Elizabeth Crooke<br>Gazcue, Santo Domingo</p>
