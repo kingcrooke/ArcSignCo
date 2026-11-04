@@ -997,13 +997,16 @@
     if (listing.sector === "gazcue") {
       renderNeighborhood();
       renderNearby();
+      renderFaq();
     }
   }
 
   function sectorBlock(listing) {
     if (listing.sector === "gazcue") {
       return '<section class="section sector-gazcue"><div class="wrap"><h2>' + esc(t("areaTitle")) + '</h2><p class="intro">' +
-        esc(t("areaBody")) + '</p><div id="neighborhood" class="neighborhood"></div><div id="nearby" class="nearby"></div></div></section>';
+        esc(t("areaBody")) + '</p><div id="neighborhood" class="neighborhood"></div><div id="nearby" class="nearby"></div></div></section>' +
+        '<section class="section" id="faq"><div class="wrap"><div class="section-title"><span class="sec-no">·</span><h2>' +
+        esc(t("faqTitle")) + '</h2></div><div id="faq-list" class="faq"></div></div></section>';
     }
     return '<section class="section"><div class="wrap"><p class="marked-placeholder">' + esc(t("sectorMissing")) + "</p></div></section>";
   }

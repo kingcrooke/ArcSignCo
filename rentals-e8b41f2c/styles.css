@@ -901,6 +901,8 @@ body.lb-open {
   .form-grid.two, .days { grid-template-columns: 1fr 1fr; }
   .days { grid-template-columns: repeat(3, 1fr); }
   .principles, .samples { grid-template-columns: repeat(3, 1fr); }
+  .principles.pair { grid-template-columns: 1fr 1fr; }
+  .invite { margin-top: 1.5rem; }
   .neighborhood { grid-template-columns: 1.1fr 0.9fr 1fr; }
   .cal-months { grid-template-columns: 1fr 1fr; }
   .section { padding: 6rem 0; }
