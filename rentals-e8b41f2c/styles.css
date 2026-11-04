@@ -356,6 +356,37 @@ h1 {
 .all-block p { max-width: 46rem; }
 #pet-types, #kids-detail { margin-top: 0.6rem; }
 #pet-other-wrap { margin-top: 0.6rem; max-width: 22rem; }
+
+.nearby { margin-top: 2.2rem; }
+.nearby h3 { font-size: clamp(1.8rem, 3vw, 2.4rem); }
+.nearby-list, .nearby-sub { list-style: none; margin: 0; padding: 0; }
+.nearby-list > li { padding: 0.95rem 0; border-top: 1px solid var(--line); }
+.nearby-list a { font-weight: 650; }
+.nearby-sub { margin-top: 0.35rem; padding-left: 0.2rem; }
+.nearby-sub li { padding: 0.35rem 0 0.35rem 0.8rem; }
+.faq details {
+  background: var(--ivory);
+  border-radius: 18px;
+  margin: 0.7rem 0;
+  padding: 0.15rem 1rem;
+  box-shadow: var(--shadow-soft);
+}
+.faq summary {
+  cursor: pointer;
+  font-weight: 650;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+.faq details p { max-width: 46rem; margin: 0 0 0.9rem; }
+.review {
+  background: var(--ivory);
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  margin: 0.8rem 0;
+  box-shadow: var(--shadow-soft);
+}
+.stars { letter-spacing: 0.14em; color: var(--gold); font-size: 1.15rem; }
 #warn-check a { text-underline-offset: 0.18em; }
 .button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 

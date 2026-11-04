@@ -265,6 +265,12 @@
       { src: "media/zona.webp", caption: { es: "Calle de la Zona Colonial", en: "A street in the Colonial Zone", fr: "Une rue de la zone coloniale" } },
       { src: "media/malecon.webp", caption: { es: "Costa de Santo Domingo", en: "The Santo Domingo coast", fr: "Le littoral de Santo Domingo" } },
     ],
+    // Real guest reviews. Leave this empty until one exists.
+    // { name, stay: { es, en, fr }, apartment, stars (1–5), text: { es, en, fr } }
+    reviews: [],
+    // Local favorites Elizabeth will send later. Not shown while empty.
+    // { title: { es, en, fr }, query: "place name" }
+    nearbyFavorites: [],
     samples: [
       {
         name: "Ejemplo · M.",

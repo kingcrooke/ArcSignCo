@@ -224,6 +224,45 @@
       weekFri: "Vie",
       weekSat: "Sáb",
       weekSun: "Dom",
+      nearbyTitle: "Cerca de aquí",
+      nearbyIntro: "Todo esto queda cerca y muchas cosas se pueden hacer a pie.",
+      nearbyMaps: "Ver en Google Maps",
+      nearbyItems: [
+        {
+          title: "Palacio Nacional (Palacio de la Presidencia)",
+          query: "Palacio Nacional"
+        },
+        {
+          title: "Plaza de la Cultura Juan Pablo Duarte",
+          query: "Plaza de la Cultura Juan Pablo Duarte",
+          note: "Entre la avenida Máximo Gómez, la avenida México y la calle César Nicolás Penson.",
+          children: [
+            { title: "Teatro Nacional Eduardo Brito", query: "Teatro Nacional Eduardo Brito" },
+            { title: "Biblioteca Nacional Pedro Henríquez Ureña", query: "Biblioteca Nacional Pedro Henríquez Ureña" },
+            { title: "Museo del Hombre Dominicano", query: "Museo del Hombre Dominicano" },
+            { title: "Museo de Historia y Geografía", query: "Museo de Historia y Geografía", note: "Hay un café y un restaurante dentro de la plaza." }
+          ]
+        },
+        {
+          title: "Restaurantes italianos, españoles y criollos, y pizzerías, camino a la Plaza de la Cultura",
+          query: "restaurantes cerca de Gazcue"
+        },
+        { title: "Colmados y minimercados cercanos", query: "colmados y minimercados" },
+        { title: "Farmacias a poca distancia, a pie", query: "farmacias" },
+        { title: "Bancos en la avenida Bolívar", query: "bancos Avenida Bolívar", note: "Están los principales, por ejemplo el BHD." }
+      ],
+      faqTitle: "Preguntas frecuentes",
+      faq: [
+        {
+          q: "¿Cómo llego desde el aeropuerto?",
+          a: "En llegadas hay una fila de taxis del sindicato oficial del aeropuerto. También puede usar Uber."
+        },
+        {
+          q: "¿Cómo me muevo por la ciudad?",
+          a: "Cerca de la Plaza de la Cultura hay una línea del metro, a pie. También circulan los corredores, autobuses con los colores de la bandera y rutas fijas, y los carros públicos. Puede usar Uber, Uber Moto y Uber Eats, y taxis que se piden por teléfono. El transporte público es muy económico."
+        }
+      ],
+      reviewsTitle: "Reseñas de huéspedes",
     },
     en: {
       skip: "Skip to content",
@@ -448,6 +487,45 @@
       weekFri: "Fri",
       weekSat: "Sat",
       weekSun: "Sun",
+      nearbyTitle: "Nearby",
+      nearbyIntro: "All of this is close by, and much of it is walkable.",
+      nearbyMaps: "View on Google Maps",
+      nearbyItems: [
+        {
+          title: "National Palace (Palacio de la Presidencia)",
+          query: "Palacio Nacional"
+        },
+        {
+          title: "Plaza de la Cultura Juan Pablo Duarte",
+          query: "Plaza de la Cultura Juan Pablo Duarte",
+          note: "Between Máximo Gómez Avenue, México Avenue, and Calle César Nicolás Penson.",
+          children: [
+            { title: "Teatro Nacional Eduardo Brito", query: "Teatro Nacional Eduardo Brito" },
+            { title: "Biblioteca Nacional Pedro Henríquez Ureña", query: "Biblioteca Nacional Pedro Henríquez Ureña" },
+            { title: "Museo del Hombre Dominicano", query: "Museo del Hombre Dominicano" },
+            { title: "Museo de Historia y Geografía", query: "Museo de Historia y Geografía", note: "There is a café and a restaurant inside the plaza." }
+          ]
+        },
+        {
+          title: "Italian, Spanish, and Dominican restaurants, and pizzerias, on the walk toward the Plaza de la Cultura",
+          query: "restaurantes cerca de Gazcue"
+        },
+        { title: "Corner shops and mini-markets nearby", query: "colmados y minimercados" },
+        { title: "Pharmacies within walking distance", query: "farmacias" },
+        { title: "Banks on Bolívar Avenue", query: "bancos Avenida Bolívar", note: "The major banks are there, for example BHD." }
+      ],
+      faqTitle: "FAQ",
+      faq: [
+        {
+          q: "How do I get here from the airport?",
+          a: "At arrivals there is a queue for the official airport taxi union. You can also use Uber."
+        },
+        {
+          q: "How do I get around the city?",
+          a: "A metro line is within walking distance, near the Plaza de la Cultura. There are also corredores, buses in the colors of the flag with fixed routes, and public cars (carros públicos). You can use Uber, Uber Moto, and Uber Eats, and taxis dispatched by phone. Public transit is very inexpensive."
+        }
+      ],
+      reviewsTitle: "Guest reviews",
     },
     fr: {
       skip: "Aller au contenu",
@@ -672,6 +750,45 @@
       weekFri: "Ven",
       weekSat: "Sam",
       weekSun: "Dim",
+      nearbyTitle: "À proximité",
+      nearbyIntro: "Tout cela est à proximité, et beaucoup se fait à pied.",
+      nearbyMaps: "Voir sur Google Maps",
+      nearbyItems: [
+        {
+          title: "Palais national (Palacio de la Presidencia)",
+          query: "Palacio Nacional"
+        },
+        {
+          title: "Plaza de la Cultura Juan Pablo Duarte",
+          query: "Plaza de la Cultura Juan Pablo Duarte",
+          note: "Entre l’avenue Máximo Gómez, l’avenue México et la calle César Nicolás Penson.",
+          children: [
+            { title: "Teatro Nacional Eduardo Brito", query: "Teatro Nacional Eduardo Brito" },
+            { title: "Biblioteca Nacional Pedro Henríquez Ureña", query: "Biblioteca Nacional Pedro Henríquez Ureña" },
+            { title: "Museo del Hombre Dominicano", query: "Museo del Hombre Dominicano" },
+            { title: "Museo de Historia y Geografía", query: "Museo de Historia y Geografía", note: "Il y a un café et un restaurant dans la place." }
+          ]
+        },
+        {
+          title: "Restaurants italiens, espagnols et dominicains, et pizzerias, sur le chemin de la Plaza de la Cultura",
+          query: "restaurantes cerca de Gazcue"
+        },
+        { title: "Épiceries de quartier et supérettes à proximité", query: "colmados y minimercados" },
+        { title: "Pharmacies à distance de marche", query: "farmacias" },
+        { title: "Banques sur l’avenue Bolívar", query: "bancos Avenida Bolívar", note: "Les grandes banques y sont, par exemple la BHD." }
+      ],
+      faqTitle: "Questions fréquentes",
+      faq: [
+        {
+          q: "Comment arriver depuis l’aéroport ?",
+          a: "Aux arrivées, une file attend les taxis du syndicat officiel de l’aéroport. Vous pouvez aussi utiliser Uber."
+        },
+        {
+          q: "Comment se déplacer en ville ?",
+          a: "Une ligne de métro se rejoint à pied, près de la Plaza de la Cultura. Il y a aussi les corredores, des bus aux couleurs du drapeau avec des itinéraires fixes, et les carros públicos. Vous pouvez utiliser Uber, Uber Moto et Uber Eats, et des taxis appelés par téléphone. Les transports en commun sont très bon marché."
+        }
+      ],
+      reviewsTitle: "Avis des voyageurs",
     },
   };
 })();
