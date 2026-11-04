@@ -3,10 +3,10 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { compositeLogo } from "../../../visualize/js/composite.js";
 import { sendLeadEmail } from "./email.mjs";
-import { decodeImage, generateImage, extractWithModel, imageBackend, toPng } from "./images.mjs";
+import { decodeImage, generateImage, extractWithModel, identifyVehicle, imageBackend, toPng } from "./images.mjs";
 import { isPng } from "./png.mjs";
 import { quoteFor } from "./pricing.mjs";
-import { editPrompt, renderPrompt, scrapePrompt, zoneFor } from "./prompts.mjs";
+import { editPrompt, renderPrompt, scrapePrompt, vehiclePrompt, zoneFor } from "./prompts.mjs";
 import { assertPublicUrl, extractBusiness, fetchPublic, pageText } from "./scrape.mjs";
 import { stampConcept } from "./watermark.mjs";
 
@@ -14,11 +14,14 @@ export const BLOB_STORE = "arc-visualizer";
 export const DISCLAIMER = "AI-generated visual reference. Concept only, not a proof or a quote.";
 export const LIMITS = {
   minSessionMs: 3000,
-  ip: { scan: 30, render: 8, edit: 4, lead: 5, upload: 40, login: 10 },
-  sessionVariants: 2,
+  ip: { scan: 30, render: 16, edit: 4, lead: 5, upload: 40, login: 10 },
+  sessionVariants: 3,
+  sessionBatches: 2,
   sessionEdits: 1,
+  vehicleShots: 4,
   imageBytes: 4_500_000,
 };
+export const CONCEPT_COUNT = LIMITS.sessionVariants;
 export const ENV_KEYS = [
   "VISUALIZER_ADMIN_PASSWORD",
   "VISUALIZER_LEAD_TO",
@@ -44,10 +47,16 @@ export const ENV_KEYS = [
 
 const CATEGORIES = ["vehicle", "sign", "window"];
 const BODIES = ["car", "suv", "pickup", "cargo-van", "sprinter", "box-truck", "trailer"];
-const COVERAGE = ["lettering", "partial", "full"];
+const COVERAGE = ["lettering", "partial", "half", "full"];
+const STYLES = ["clean", "bold", "tech", "classic"];
+const PLACES = ["side", "hood", "rear", "doors", "fascia", "above-door", "wall", "window"];
 const SIGNS = ["channel-letters", "lightbox", "blade", "flat-panel", "awning"];
 const WINDOWS = ["perforated", "cut-vinyl", "frosted", "full-print"];
 const TIMING = {
+  asap: "ASAP",
+  weeks: "Within the next few weeks",
+  months: "1–3 months",
+  planning: "Just planning",
   "this-month": "Ready to talk this month",
   "few-months": "Next few months",
   exploring: "Just exploring",
@@ -66,6 +75,15 @@ export function newId() {
 
 function clean(value, max) {
   return String(value ?? "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").replace(/\s+/g, " ").trim().slice(0, max);
+}
+
+function words(value, maxWords, maxLen) {
+  return clean(value, maxLen).split(" ").filter(Boolean).slice(0, maxWords).join(" ");
+}
+
+function places(raw) {
+  const list = Array.isArray(raw) ? raw : String(raw || "").split(/[\s,]+/);
+  return [...new Set(list.map(item => clean(item, 20)).filter(item => PLACES.includes(item)))].slice(0, 4);
 }
 
 export function contextSlug(ctx) {
@@ -131,15 +149,15 @@ function assetPath(id) {
 
 function colorsOf(raw) {
   const list = Array.isArray(raw) ? raw : String(raw || "").split(/[\s,]+/);
-  return list.map(c => clean(c, 7).toLowerCase()).filter(c => /^#[0-9a-f]{6}$/.test(c)).slice(0, 6);
+  return list.map(c => clean(c, 7).toLowerCase()).filter(c => /^#[0-9a-f]{6}$/.test(c)).slice(0, 3);
 }
 
 function businessOf(raw = {}) {
   return {
-    name: clean(raw.name, 120),
-    phone: clean(raw.phone, 40),
+    name: words(raw.name, 5, 120),
+    phone: words(raw.phone, 3, 40),
     email: clean(raw.email, 160),
-    web: clean(raw.web, 300),
+    web: words(raw.web, 4, 300),
     tagline: clean(raw.tagline, 180),
     services: clean(raw.services, 400),
     colors: colorsOf(raw.colors),
@@ -163,6 +181,10 @@ function subjectOf(category, raw = {}) {
       widthFt, heightFt,
       illuminated: raw.illuminated === true || raw.illuminated === "yes",
       photo: true,
+      style: STYLES.includes(raw.style) ? raw.style : "",
+      namePlaces: places(raw.namePlaces),
+      phonePlaces: places(raw.phonePlaces),
+      webPlaces: places(raw.webPlaces),
     };
   }
   if (category === "window") {
@@ -170,6 +192,10 @@ function subjectOf(category, raw = {}) {
       windowType: WINDOWS.includes(raw.windowType) ? raw.windowType : "cut-vinyl",
       panes: clean(raw.panes, 80) || "the main storefront windows",
       photo: true,
+      style: STYLES.includes(raw.style) ? raw.style : "",
+      namePlaces: places(raw.namePlaces),
+      phonePlaces: places(raw.phonePlaces),
+      webPlaces: places(raw.webPlaces),
     };
   }
   const year = clean(raw.year, 4);
@@ -180,6 +206,11 @@ function subjectOf(category, raw = {}) {
     coverage: COVERAGE.includes(raw.coverage) ? raw.coverage : "partial",
     color: clean(raw.color, 40),
     photo: !!raw.photo,
+    stock: raw.stock === true,
+    style: STYLES.includes(raw.style) ? raw.style : "",
+    namePlaces: places(raw.namePlaces),
+    phonePlaces: places(raw.phonePlaces),
+    webPlaces: places(raw.webPlaces),
   };
 }
 
@@ -383,6 +414,7 @@ export async function handleVisualizer(req, deps) {
       deployContext: contextSlug(deps.deployContext),
       rendersUsed: 0,
       editsUsed: 0,
+      vehicleShots: 0,
       leadId: null,
     };
     await deps.records.createSession(session);
@@ -469,18 +501,72 @@ export async function handleVisualizer(req, deps) {
     return json(200, { business, logoId, logoUrl: logoId ? assetPath(logoId) : "", source });
   }
 
+  if (path === "/api/visualize/vehicle" && method === "POST") {
+    const body = await readJson(req);
+    if (!body) return fail(400, "Send JSON.");
+    const session = await deps.records.getSession(clean(body.sessionId, 32));
+    if (!session) return fail(404, "Start a new preview.");
+    if (session.category !== "vehicle") return fail(400, "This step is for a vehicle.");
+    if ((session.vehicleShots || 0) >= LIMITS.vehicleShots) return fail(409, "This preview has already regenerated the vehicle a few times. Edit the year, make, and model, or send a photo.");
+    if (tooSoon(session, now)) return fail(400, "Please take a moment and try again.");
+    const subject = subjectOf("vehicle", body.subject || {});
+    if (subject.error) return fail(400, subject.error);
+    if (!(subject.year && subject.make && subject.model)) return fail(400, "Enter a year, make, and model.");
+    if (!(await gate(deps.records, ipHash, day, "renders", 1))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
+    const prompt = vehiclePrompt(subject);
+    const row = await paintAndStore(deps, { ns, session, prompt, references: [], photoBytes: null, variant: 0, kind: "vehicle" });
+    await deps.records.updateSession(session.id, {
+      subject: { ...subject, photo: true },
+      photoKey: row.id,
+      vehicleShots: (session.vehicleShots || 0) + 1,
+    });
+    const label = [subject.year, subject.make, subject.model].filter(Boolean).join(" ");
+    return json(200, { render: publicRender(row), label, stub: !!row.stub, disclaimer: DISCLAIMER });
+  }
+
+  if (path === "/api/visualize/identify" && method === "POST") {
+    const body = await readJson(req);
+    if (!body) return fail(400, "Send JSON.");
+    const session = await deps.records.getSession(clean(body.sessionId, 32));
+    if (!session) return fail(404, "Start a new preview.");
+    const photo = await optionalFile(deps, ns, body.photoId || session.photoKey, session.id);
+    if (!photo) return fail(400, "Upload a photo first.");
+    let parsed = null;
+    try {
+      const raw = await (deps.identify || identifyVehicle)(env, photo.bytes, photo.mime);
+      parsed = parseJson(raw);
+    } catch (err) {
+      console.error("visualizer identify", err?.message || err);
+    }
+    const year = parsed && /^(19|20)\d{2}$/.test(clean(parsed.year, 4)) ? clean(parsed.year, 4) : "";
+    const vehicle = {
+      year,
+      make: parsed ? clean(parsed.make, 40) : "",
+      model: parsed ? clean(parsed.model, 40) : "",
+      color: parsed ? clean(parsed.color, 40) : "",
+    };
+    const named = [vehicle.year, vehicle.make, vehicle.model].filter(Boolean).join(" ");
+    if (named) {
+      await deps.records.updateSession(session.id, {
+        subject: { ...session.subject, ...vehicle, photo: true, color: vehicle.color || session.subject?.color || "" },
+      });
+    }
+    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "identify", createdAt: now.toISOString(), detail: { named: !!named } });
+    return json(200, { vehicle: named ? vehicle : { year: "", make: "", model: "", color: "" }, label: named || "your vehicle" });
+  }
+
   if (path === "/api/visualize/render" && method === "POST") {
     const body = await readJson(req);
     if (!body) return fail(400, "Send JSON.");
     const session = await deps.records.getSession(clean(body.sessionId, 32));
     if (!session) return fail(404, "Start a new preview.");
-    if (session.rendersUsed > 0) return fail(409, "This preview already has its two versions. You can request one revision, or start a new one.");
+    if (session.rendersUsed >= LIMITS.sessionBatches) return fail(409, "This preview already has its concepts. You can request one revision, or start a new one.");
     if (tooSoon(session, now)) return fail(400, "Please take a moment and try again.");
     if (!(await turnstileOk(env, body.turnstileToken, deps.ip, deps.fetchImpl))) return fail(400, "Confirm you are a person, then try again.");
     const business = businessOf(body.business);
     const subject = subjectOf(session.category, { ...body.subject, photo: !!(body.photoId || session.photoKey) });
     if (subject.error) return fail(400, subject.error);
-    if (session.category === "vehicle" && !subject.photo && !(subject.year && subject.make && subject.model)) {
+    if (session.category === "vehicle" && !subject.photo && !subject.stock && !(subject.year && subject.make && subject.model)) {
       return fail(400, "Enter a year, make, and model, or upload a photo of the vehicle.");
     }
     if ((session.category === "sign" || session.category === "window") && !subject.photo) {
@@ -490,22 +576,26 @@ export async function handleVisualizer(req, deps) {
     const inspo = await optionalFile(deps, ns, body.inspoId || session.inspoKey, session.id);
     const logo = await optionalFile(deps, ns, body.logoId || session.logoKey, session.id);
     if ((session.category === "sign" || session.category === "window") && !photo) return fail(400, "Upload a photo of the storefront.");
-    if (!(await gate(deps.records, ipHash, day, "renders", 2))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
+    const count = LIMITS.sessionVariants;
+    if (!(await gate(deps.records, ipHash, day, "renders", count))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
     const references = [];
     if (photo) references.push({ bytes: photo.bytes, mime: photo.mime, role: "photo" });
     if (inspo) references.push({ bytes: inspo.bytes, mime: inspo.mime, role: "inspo" });
     await deps.records.updateSession(session.id, {
-      business, subject, rendersUsed: 2,
+      business, subject, rendersUsed: (session.rendersUsed || 0) + 1,
       logoKey: logo ? (body.logoId || session.logoKey) : session.logoKey,
       photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
     });
-    const variants = await Promise.all([0, 1].map(async (variant) => {
+    const variants = await Promise.all(Array.from({ length: count }, (_, variant) => (async () => {
       const prompt = renderPrompt({ category: session.category, business, subject: { ...subject, photo: !!photo }, variant });
       const row = await paintAndStore(deps, { ns, session, prompt, references, photoBytes: photo?.bytes, variant, kind: "variant" });
       return publicRender(row);
-    }));
-    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub) } });
-    return json(200, { variants, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    })()));
+    if (variants.length !== count || variants.some(item => !item?.url)) {
+      return fail(502, "The preview did not finish all 3 concepts. Try again.");
+    }
+    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub), count } });
+    return json(200, { variants, count, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
   }
 
   if (path === "/api/visualize/edit" && method === "POST") {
@@ -584,15 +674,18 @@ export async function handleVisualizer(req, deps) {
     const composed = compositeKey === render.id ? baseFile : await loadFile(deps.blobs, ns, compositeKey, session.id);
     if (composed) files.push({ filename: "preview.png", bytes: composed.bytes });
     if (logo) files.push({ filename: "logo.png", bytes: logo.bytes });
+    const smsTransactional = body.smsTransactional === true;
+    const smsPromo = body.smsPromo === true;
     const leadCore = {
       name, phone, email, timing, timingLabel: TIMING[timing], category: session.category,
       business: session.business, subject: session.subject, quote, links, files,
+      smsTransactional, smsPromo,
     };
     const mailed = await (deps.sendEmail || sendLeadEmail)(env, leadCore, deps.fetchImpl);
     const lead = {
       id, sessionId: session.id, createdAt: now.toISOString(), name, phone, email, timing,
       category: session.category, renderId: render.id, compositeKey, quoteLabel: quote.label,
-      emailStatus: mailed.status, payload: { business: session.business, subject: session.subject, quote, links, model: render.model, stub: render.stub },
+      emailStatus: mailed.status, payload: { business: session.business, subject: session.subject, quote, links, model: render.model, stub: render.stub, smsTransactional: body.smsTransactional === true, smsPromo: body.smsPromo === true },
     };
     await deps.records.addLead(lead);
     await deps.records.updateSession(session.id, { leadId: id });

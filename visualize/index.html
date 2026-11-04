@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Arc Visualizer – Preview a Wrap, Sign, or Window | Arc Signage Co</title>
-<meta name="description" content="Preview a vehicle wrap, storefront sign, or window graphic with your logo. Arc Signage Co uses it as a concept only. The price is a custom quote after we talk.">
+<meta name="description" content="Preview a vehicle wrap, storefront sign, or window graphic. Arc Signage Co uses it as a concept only. The price is a custom quote after we talk.">
 <link rel="canonical" href="https://arcsignco.com/visualize/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arc Signage Co">
 <meta property="og:title" content="Arc Visualizer – Preview a Wrap, Sign, or Window | Arc Signage Co">
-<meta property="og:description" content="Preview a vehicle wrap, storefront sign, or window graphic with your logo. A concept for discussion. Custom quote after a site survey.">
+<meta property="og:description" content="Preview a vehicle wrap, storefront sign, or window graphic. A concept for discussion. Custom quote after a site survey.">
 <meta property="og:url" content="https://arcsignco.com/visualize/">
 <meta property="og:image" content="https://arcsignco.com/assets/img/og-image-1200x630.v1.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Arc Signage Co">
-<meta name="theme-color" content="#0b1d33">
+<meta name="theme-color" content="#0B1F3A">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -24,7 +24,7 @@
     {
       "@type": "Question",
       "name": "What is the Arc Visualizer?",
-      "acceptedAnswer": { "@type": "Answer", "text": "It makes a concept image of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote." }
+      "acceptedAnswer": { "@type": "Answer", "text": "It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote." }
     },
     {
       "@type": "Question",
@@ -43,333 +43,129 @@
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/assets/css/service-page.v6.css">
 <link rel="stylesheet" href="/visualize/visualize.css">
-<script src="/assets/js/arc-site-config.js"></script>
+<style>html,body{background:#0B1F3A;margin:0}</style>
 </head>
-<body>
-<a class="skip-link" href="#tool">Skip to the visualizer</a>
-<div id="busy" class="viz-busy" hidden>
-  <div>
-    <div class="viz-ring" aria-hidden="true"></div>
-    <p id="busyText">Preparing your preview…</p>
-    <p id="busySub">This usually finishes in under 40 seconds.</p>
-  </div>
-</div>
-<header class="topbar">
-  <div class="wrap nav">
-    <a class="brand" href="/" aria-label="Arc Signage Co home">
-      <picture>
-        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-360.v2.webp 360w, /assets/img/logo-lockup-white-560.v2.webp 560w, /assets/img/logo-lockup-white-847.v2.webp 847w" sizes="(max-width: 720px) 168px, 265px">
-        <img class="brand-logo" src="/assets/img/logo-lockup-white-560.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-360.v2.png 360w, /assets/img/logo-lockup-white-560.v2.png 560w, /assets/img/logo-lockup-white-847.v2.png 847w" sizes="(max-width: 720px) 168px, 265px" width="847" height="174" alt="Arc Signage Co">
-      </picture>
-    </a>
-    <nav class="navlinks" aria-label="Primary navigation">
-      <div class="navmenu" id="nav-menu">
-        <a href="/#about">About</a>
-        <div class="nav-services-group">
-          <a href="/#services" class="nav-services-label">Services</a>
-          <div class="nav-services-sub" aria-label="Service pages">
-            <a href="/sign-permits-shop-drawings/">Sign permits &amp; shop drawings</a>
-            <a href="/ada-signs/">ADA &amp; tactile signs</a>
-            <a href="/channel-letters/">Channel letters</a>
-            <a href="/construction-signs/">Construction site signs</a>
-            <a href="/wayfinding-signs/">Interior wayfinding</a>
-            <a href="/digital-signage/">Digital signage</a>
-            <a href="/awnings/">Storefront awnings</a>
-            <a href="/winter-enclosures/">Winter enclosures</a>
-            <a href="/window-graphics/">Window graphics</a>
-            <a href="/vehicle-wraps/">Vehicle wraps</a>
-            <a href="/traffic-signs/">Traffic signs</a>
-            <a href="/blade-signs/">Blade signs</a>
-            <a href="/sign-repair-maintenance/">Sign repair &amp; maintenance</a>
-            <a href="/restaurant-storefront-signs/">Restaurant storefront signs</a>
-            <a href="/design-consulting/">Design consulting</a>
-            <a href="/agencies-institutions/">Agencies &amp; institutions</a>
-          </div>
-        </div>
-        <a href="/#work">Scopes</a>
-        <a href="/portfolio/">Prior signage work</a>
-        <a href="/#selector">Scope Finder</a>
-        <a href="/tools/sign-mockup/">Free Sign Preview</a>
-      </div>
-      <a href="tel:+13474502110" class="btn ghost nav-call" aria-label="Call or text (347) 450-2110"><span class="call-long">Call or text (347) 450-2110</span><span class="call-short">Call or text</span></a>
-      <a href="/#quote" class="btn gold nav-cta">Request a quote</a>
-      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="nav-menu">Menu</button>
-    </nav>
+<body class="studio-body">
+<a class="skip-link" href="#chat" style="position:absolute;left:-999px">Skip to the design assistant</a>
+<header class="studio-bar">
+  <a class="studio-back" href="/">← See our website</a>
+  <a class="studio-mark" href="/" aria-label="Arc Signage Co home">
+    <img src="/assets/img/logo-icon-white-240.v1.png" width="46" height="46" alt="">
+    <span>Arc Signage Co.</span>
+  </a>
+  <div class="studio-contact">
+    <a href="tel:+13474502110">(347) 450-2110</a>
+    <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>
   </div>
 </header>
-
-<main id="main">
-  <section class="page-hero viz-hero">
-    <div class="wrap">
-      <nav class="crumbs" aria-label="Breadcrumb">
-        <ol>
-          <li><a href="/">Home</a></li>
-          <li><span aria-current="page">Visualizer</span></li>
-        </ol>
-      </nav>
-      <span class="eyebrow">Concept tool | Wraps, signs, windows</span>
-      <h1>See your name on the vehicle or the storefront</h1>
-      <p class="answer">Pick a vehicle wrap, a storefront sign, or window graphics. Scan a website for the business details, upload the logo, and get two concept versions plus one revision.</p>
-      <p class="viz-note" id="discHero">AI-generated visual reference. Concept only, not a proof or a quote.</p>
+<main class="studio-work" id="tool">
+  <section class="stage-card" id="stageCard" aria-label="Preview">
+    <div class="stage-tools">
+      <button type="button" id="reportBtn">Report a problem</button>
+      <button type="button" id="downloadBtn" aria-label="Download image">Download</button>
+      <button type="button" id="shareBtn" aria-label="Share">Share</button>
+      <button type="button" id="compareBtn">Before / after</button>
+      <button type="button" id="upBtn" aria-label="Thumbs up" aria-pressed="false">▲</button>
+      <button type="button" id="downBtn" aria-label="Thumbs down" aria-pressed="false">▼</button>
     </div>
-  </section>
-
-  <section class="viz-shell" id="tool">
-    <div class="wrap viz-layout">
-      <div class="viz-main">
-        <p class="viz-alert" id="alert" role="alert" hidden></p>
-        <ol class="viz-steps">
-          <li><button type="button" data-step="pick">Start</button></li>
-          <li><button type="button" data-step="business" disabled>Business</button></li>
-          <li><button type="button" data-step="subject" disabled>Subject</button></li>
-          <li><button type="button" data-step="result" disabled>Preview</button></li>
-        </ol>
-
-        <div id="step-pick">
-          <div class="viz-cards">
-            <button class="viz-card" type="button" data-category="vehicle"><span class="viz-kicker">Vehicle</span><b>Vehicle wrap</b><span>Year, make, and model, or a photo of the van, car, or truck. Lettering, partial, or full coverage.</span></button>
-            <button class="viz-card" type="button" data-category="sign"><span class="viz-kicker">Storefront</span><b>Storefront sign</b><span>Upload the facade. Channel letters, a cabinet, a blade, a flat panel, or an awning.</span></button>
-            <button class="viz-card" type="button" data-category="window"><span class="viz-kicker">Glass</span><b>Window graphics</b><span>Upload the storefront. Perforated film, cut vinyl, frosted privacy, or a full print.</span></button>
-          </div>
+    <div class="stage-frame">
+      <img id="stageImg" alt="Work van" src="/visualize/img/work-van.svg">
+      <span class="stage-wm">Arc Signage Co.</span>
+      <span class="stage-label" id="stageLabel">Work van</span>
+      <button class="stage-arrow prev" id="prevConcept" type="button" hidden aria-label="Previous concept">‹</button>
+      <button class="stage-arrow next" id="nextConcept" type="button" hidden aria-label="Next concept">›</button>
+      <div class="stage-busy" id="stageBusy" hidden>
+        <div>
+          <div class="pct-ring" id="pctRing" style="--p:0"><span id="pctText">0%</span></div>
+          <p id="busyTitle">Generating your car…</p>
+          <p class="wait-pill" id="busyPill">This usually takes 30 seconds to a minute — worth the wait!</p>
+          <p><button class="ghost-btn" id="cancelBtn" type="button" hidden>Cancel</button></p>
         </div>
-
-        <div id="step-business" class="viz-panel" hidden>
-          <h2>Business details</h2>
-          <p>Scan reads the public page for a name, phone, and colors. Nothing is published from this step.</p>
-          <div class="viz-scan">
-            <label class="viz-field">Website
-              <input id="bizWeb" type="url" inputmode="url" placeholder="https://" autocomplete="url">
-            </label>
-            <button class="btn ghost" id="scanBtn" type="button">Scan</button>
-          </div>
-          <div class="viz-grid" style="margin-top:12px">
-            <div class="viz-row two">
-              <label class="viz-field">Business name<input id="bizName" autocomplete="organization"></label>
-              <label class="viz-field">Phone<input id="bizPhone" type="tel" autocomplete="tel"></label>
-            </div>
-            <div class="viz-row two">
-              <label class="viz-field">Email on the site<input id="bizEmail" type="email" autocomplete="email"></label>
-              <label class="viz-field">Tagline<input id="tagline" maxlength="180"></label>
-            </div>
-            <label class="viz-field">Services to letter<input id="services" maxlength="400" placeholder="Coffee, catering, delivery"></label>
-            <div class="viz-field">Colors
-              <span class="viz-colors"><input id="colorA" type="color" value="#0b1d33" aria-label="First brand color"><input id="colorB" type="color" value="#d4a843" aria-label="Second brand color"></span>
-            </div>
-            <label class="viz-field">Logo file<input id="logoFile" type="file" accept="image/*,.heic,.heif"><span id="logoName"></span></label>
-            <label class="viz-field">Inspiration image, optional<input id="inspoFile" type="file" accept="image/*,.heic,.heif"><span id="inspoName"></span></label>
-          </div>
-          <div class="viz-actions"><button class="btn gold" id="toSubject" type="button">Continue</button></div>
-        </div>
-
-        <div id="step-subject" class="viz-panel" hidden>
-          <h2 id="subjectTitle">Subject</h2>
-          <p>For a measured sign pinned to the photo, without AI, use the <a class="viz-link" href="/tools/sign-mockup/">Free Sign Preview</a>.</p>
-          <div id="subject-vehicle" class="viz-grid">
-            <div class="viz-row three">
-              <label class="viz-field">Year<input id="year" inputmode="numeric" maxlength="4" placeholder="2024"></label>
-              <label class="viz-field">Make<input id="make" maxlength="40"></label>
-              <label class="viz-field">Model<input id="model" maxlength="40"></label>
-            </div>
-            <div class="viz-row three">
-              <label class="viz-field">Body
-                <select id="body">
-                  <option value="car">Car</option>
-                  <option value="suv">SUV</option>
-                  <option value="pickup">Pickup</option>
-                  <option value="cargo-van" selected>Cargo van</option>
-                  <option value="sprinter">Sprinter / high roof</option>
-                  <option value="box-truck">Box truck</option>
-                  <option value="trailer">Trailer</option>
-                </select>
-              </label>
-              <label class="viz-field">Coverage
-                <select id="coverage">
-                  <option value="lettering">Lettering</option>
-                  <option value="partial" selected>Partial wrap</option>
-                  <option value="full">Full wrap</option>
-                </select>
-              </label>
-              <label class="viz-field">Paint color<input id="paint" maxlength="40" placeholder="White"></label>
-            </div>
-          </div>
-          <div id="subject-sign" class="viz-grid" hidden>
-            <label class="viz-field">Sign type
-              <select id="signType">
-                <option value="channel-letters">Channel letters</option>
-                <option value="lightbox">Lightbox / cabinet</option>
-                <option value="blade">Blade / projecting</option>
-                <option value="flat-panel">Flat panel</option>
-                <option value="awning">Awning</option>
-              </select>
-            </label>
-            <div class="viz-row three">
-              <label class="viz-field">Width, feet<input id="signW" inputmode="decimal" placeholder="Optional"></label>
-              <label class="viz-field">Height, feet<input id="signH" inputmode="decimal" placeholder="Optional"></label>
-              <label class="viz-field">Illuminated
-                <select id="signLit"><option value="no">No</option><option value="yes">Yes</option></select>
-              </label>
-            </div>
-          </div>
-          <div id="subject-window" class="viz-grid" hidden>
-            <label class="viz-field">Window type
-              <select id="windowType">
-                <option value="perforated">Perforated one-way</option>
-                <option value="cut-vinyl" selected>Cut vinyl lettering</option>
-                <option value="frosted">Frosted / privacy</option>
-                <option value="full-print">Full print</option>
-              </select>
-            </label>
-            <label class="viz-field">Which panes<input id="panes" maxlength="80" placeholder="Both front windows"></label>
-          </div>
-          <label class="viz-field" style="margin-top:12px">Photo of the vehicle or storefront<input id="photoFile" type="file" accept="image/*,.heic,.heif"><span id="photoName"></span></label>
-          <div id="turnstileRender"></div>
-          <div class="viz-actions">
-            <button class="btn ghost" id="backBusiness" type="button">Back</button>
-            <button class="btn gold" id="generateBtn" type="button">Make 2 previews</button>
-          </div>
-        </div>
-
-        <div id="step-result" hidden>
-          <div class="viz-banner" id="stubBanner" hidden>The image service is not turned on for this deploy, so these are layout placeholders. Your logo is still placed from the file you uploaded.</div>
-          <div class="viz-stage" id="stageWrap">
-            <img class="viz-base" id="photoBehind" alt="">
-            <canvas id="stage" aria-label="Preview. Drag a gold corner to move the logo."></canvas>
-            <div id="handles"></div>
-          </div>
-          <label class="viz-compare" id="compareWrap" hidden>Original photo<input id="compare" type="range" min="0" max="100" value="100" aria-valuemin="0" aria-valuemax="100"></label>
-          <div class="viz-thumbs" id="thumbs" role="radiogroup" aria-label="Versions"></div>
-          <p class="viz-disclaimer" id="discResult"></p>
-          <div class="viz-quote"><strong id="quoteText">Custom quote</strong><p>No price is calculated here.</p></div>
-          <div class="viz-panel" style="margin-top:14px">
-            <h2>One revision</h2>
-            <label class="viz-field">What should change?<textarea id="editRequest" maxlength="400" placeholder="Make the van white and the lettering larger"></textarea></label>
-            <div class="viz-actions"><button class="btn ghost" id="editBtn" type="button">Apply revision</button></div>
-          </div>
-          <form class="viz-panel" id="leadForm" style="margin-top:14px">
-            <h2>Send this to Arc</h2>
-            <p>Name, phone, email, and timing. Arc reads it at arc@arcsignco.com.</p>
-            <div class="viz-hp" aria-hidden="true"><label>Fax<input id="fax" name="fax" tabindex="-1" autocomplete="off"></label></div>
-            <div class="viz-grid">
-              <div class="viz-row two">
-                <label class="viz-field">Your name<input id="leadName" required autocomplete="name"></label>
-                <label class="viz-field">Phone<input id="leadPhone" type="tel" required autocomplete="tel"></label>
-              </div>
-              <div class="viz-row two">
-                <label class="viz-field">Email<input id="leadEmail" type="email" required autocomplete="email"></label>
-                <label class="viz-field">Timing
-                  <select id="timing" required>
-                    <option value="">Choose</option>
-                    <option value="this-month">Ready to talk this month</option>
-                    <option value="few-months">Next few months</option>
-                    <option value="exploring">Just exploring</option>
-                    <option value="not-sure">Not sure</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-            <div id="turnstileLead"></div>
-            <div class="viz-actions"><button class="btn gold" type="submit">Send preview</button></div>
-          </form>
-        </div>
-
-        <div id="step-thanks" class="viz-panel" hidden>
-          <h2>Arc has this preview</h2>
-          <p>We'll follow up at the email or phone you entered.</p>
-          <p class="viz-disclaimer" id="discThanks"></p>
-          <div class="viz-quote"><strong id="thanksQuote">Custom quote</strong></div>
-          <p style="margin-top:12px">Image link: <a id="shareLink" class="viz-link" href=""></a></p>
-          <div class="viz-actions">
-            <a class="btn gold" href="/#quote">Request a quote</a>
-            <a class="btn ghost" href="tel:+13474502110">Call or text (347) 450-2110</a>
-          </div>
-        </div>
-      </div>
-      <aside class="viz-assist" aria-live="polite">
-        <p class="viz-assist-kicker">Arc</p>
-        <p id="assistText"></p>
-      </aside>
-    </div>
-  </section>
-
-  <section class="section alt" id="visualize-faq">
-    <div class="wrap">
-      <div class="section-head">
-        <span class="eyebrow">FAQ</span>
-        <h2>Visualizer questions</h2>
-      </div>
-      <div class="faq">
-        <article class="faq-item">
-          <h3>What is the Arc Visualizer?</h3>
-          <p>It makes a concept image of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote.</p>
-        </article>
-        <article class="faq-item">
-          <h3>Does the visualizer show a price?</h3>
-          <p>No. It shows Custom quote. Pricing comes in a formal written estimate after a site survey. This preview is a concept only.</p>
-        </article>
-        <article class="faq-item">
-          <h3>What should you send with the preview?</h3>
-          <p>Your name, phone, email, and when you want to talk. Arc follows up from <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>. For a measured storefront drawing without AI, use the <a href="/tools/sign-mockup/">Free Sign Preview</a>, or email <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
-        </article>
       </div>
     </div>
+    <div class="stage-dots" id="dots" hidden></div>
+    <p class="stage-note" id="discStage">This is a visual reference only. Previews are AI-generated — the exact color, finish and final result can differ.</p>
   </section>
-
-  <section class="cta-band">
-    <div class="wrap">
-      <div>
-        <span class="eyebrow">Next step</span>
-        <h2>Want Arc to price it?</h2>
-        <p>Call or text (347) 450-2110, or email arc@arcsignco.com and jc@arcsignco.com.</p>
-        <p><span class="hours">Hours: Mon–Fri 8 AM–6 PM</span></p>
-      </div>
-      <div class="hero-actions">
-        <a class="btn gold lg" href="/#quote">Request a quote</a>
-        <a class="btn ghost lg" href="mailto:arc@arcsignco.com">Email arc@arcsignco.com</a>
-      </div>
-    </div>
-  </section>
+  <aside class="chat" id="chat" aria-live="polite">
+    <div id="log"></div>
+    <div id="panel"></div>
+    <p class="stub-note" id="stubBanner" hidden>The image service is not turned on for this deploy, so these are layout placeholders. Your logo is still placed from the file you uploaded.</p>
+  </aside>
 </main>
+<section class="legal" id="sms-terms">
+  <h2>SMS terms</h2>
+  <p>If you check a box, Arc Signage Co may text the number you entered. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not required to get a quote. Call or text (347) 450-2110, or email jc@arcsignco.com.</p>
+</section>
+<section class="legal" id="privacy">
+  <h2>Privacy</h2>
+  <p>Arc uses your name, phone, email, and the concepts you select to reply about this quote. The note goes to arc@arcsignco.com. Arc does not sell this form.</p>
+</section>
+<section class="legal" id="visualize-faq">
+  <h2>Visualizer questions</h2>
+  <h3>What is the Arc Visualizer?</h3>
+  <p>It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote.</p>
+  <h3>Does the visualizer show a price?</h3>
+  <p>No. It shows Custom quote. Pricing comes in a formal written estimate after a site survey. This preview is a concept only.</p>
+  <h3>What should you send with the preview?</h3>
+  <p>Your name, phone, email, and when you want to talk. Arc follows up from <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>. For a measured storefront drawing without AI, use the <a href="/tools/sign-mockup/">Free Sign Preview</a>, or email <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
+</section>
 
-<footer>
-  <div class="wrap footer-grid">
-    <div>
-      <picture>
-        <source type="image/webp" srcset="/assets/img/logo-lockup-white-280.v2.webp 280w, /assets/img/logo-lockup-white-560.v2.webp 560w" sizes="134px">
-        <img src="/assets/img/logo-lockup-white-280.v2.png" srcset="/assets/img/logo-lockup-white-280.v2.png 280w, /assets/img/logo-lockup-white-560.v2.png 560w" sizes="134px" width="847" height="174" loading="lazy" decoding="async" alt="Arc Signage Co">
-      </picture>
-      <p>Full-service signage for New York and the tri-state area: design, permit coordination, and ADA signage. Larger fabrication and installation are through Arc's licensed partners. Arc does not file permits or stamp drawings.</p>
-    </div>
-    <div class="footer-links">
-      <a href="/#about">About</a>
-      <a href="/tools/sign-mockup/">Free Sign Preview</a>
-      <a href="/#quote">Contact</a>
-      <a id="gbpLink" href="" rel="noopener" target="_blank" hidden>Google Business Profile</a>
+<form id="leadForm" name="visualizer-quote" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="visualizer-quote">
+  <input type="hidden" name="subject" value="Arc Visualizer quote">
+  <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+  <input type="hidden" name="fax" id="fax" value="">
+  <label class="field">Your name<input name="name" id="leadName" autocomplete="name" required></label>
+  <label class="field">Phone number<input name="phone" id="leadPhone" type="tel" autocomplete="tel" required></label>
+  <label class="field">Email<input name="email" id="leadEmail" type="email" autocomplete="email" required></label>
+  <input type="hidden" name="company" id="leadCompany">
+  <input type="hidden" name="timing" id="leadTiming">
+  <input type="hidden" name="category" id="leadCategory">
+  <input type="hidden" name="vehicle" id="leadVehicle">
+  <input type="hidden" name="coverage" id="leadCoverage">
+  <input type="hidden" name="style" id="leadStyle">
+  <input type="hidden" name="colors" id="leadColors">
+  <input type="hidden" name="designs" id="leadDesigns">
+  <input type="hidden" name="message" id="leadMessage">
+  <div id="designPicks"></div>
+  <div class="summary" id="summaryCard"></div>
+  <label class="check"><input type="checkbox" name="sms-transactional" id="smsUpdates" value="yes"> Text me about my quote, appointments, and job updates.</label>
+  <label class="check"><input type="checkbox" name="sms-promo" id="smsPromos" value="yes"> Text me occasional deals and promotions.</label>
+  <p class="fine">By checking, you agree to receive SMS from Arc Signage Co. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not required to get a quote. <a href="#sms-terms">SMS terms</a> · <a href="#privacy">Privacy</a></p>
+  <button class="gold-btn" type="submit">Get My Quote</button>
+  <p class="fine">We'll email your quote — if you don't see it, check your spam or promotions folder.</p>
+</form>
+
+<form id="reportForm" name="visualizer-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="visualizer-report">
+  <input type="hidden" name="subject" value="Arc Visualizer problem">
+  <p hidden><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+  <label class="field">What went wrong?<textarea name="message" id="reportMessage" required></textarea></label>
+  <label class="field">Email, optional<input name="email" id="reportEmail" type="email" autocomplete="email"></label>
+  <button class="gold-btn" type="submit">Send</button>
+</form>
+
+<div class="modal" id="reportModal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reportTitle">
+    <h2 id="reportTitle">Report a problem</h2>
+    <div id="reportSlot"></div>
+    <button type="button" id="reportClose">Close</button>
+  </div>
+</div>
+<div class="modal" id="compareModal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="compareTitle">
+    <h2 id="compareTitle">Drag to compare</h2>
+    <button type="button" id="compareClose" aria-label="Close" style="position:absolute;top:12px;right:12px">×</button>
+    <div class="compare" id="compareBox" style="--x:50%">
+      <img id="compareBefore" alt="Before">
+      <img class="after" id="compareAfter" alt="After">
+      <div class="handle" id="compareHandle"></div>
     </div>
   </div>
-  <div class="wrap footer-meta">
-    <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
-    <span><a href="tel:+13474502110">Call or text (347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
-  </div>
-</footer>
-<noscript><p class="sm-noscript">The visualizer needs JavaScript. Email <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a> or call (347) 450-2110.</p></noscript>
-<script>
-const cfg = window.ARC_SITE_CONFIG || {};
-const gbpLink = document.getElementById("gbpLink");
-const gbpUrl = (cfg.gbpUrl || "").trim();
-if (gbpLink && /^https:\/\//.test(gbpUrl)) { gbpLink.href = gbpUrl; gbpLink.hidden = false; }
-const navToggle = document.getElementById("navToggle");
-const navMenu = document.getElementById("nav-menu");
-function setMenu(open) {
-  navMenu.classList.toggle("open", open);
-  document.body.classList.toggle("nav-open", open);
-  navToggle.setAttribute("aria-expanded", String(open));
-  navToggle.textContent = open ? "Close" : "Menu";
-}
-navToggle.addEventListener("click", () => setMenu(!navMenu.classList.contains("open")));
-navMenu.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
-</script>
+</div>
+<p class="toast" id="toast" hidden></p>
+<noscript><p class="legal">The visualizer needs JavaScript. Email <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a> or call (347) 450-2110.</p></noscript>
 <script type="module" src="/visualize/js/app.js"></script>
 </body>
 </html>

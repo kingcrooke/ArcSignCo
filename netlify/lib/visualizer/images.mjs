@@ -43,6 +43,35 @@ export function blankScene(category, variant) {
   return image;
 }
 
+function studioCard(category, variant) {
+  const width = 960, height = 600;
+  const data = new Uint8ClampedArray(width * height * 4);
+  fill(data, width, 0, 0, width, height, [232, 232, 232, 255]);
+  const image = { width, height, data };
+  const accent = variant === 2 ? [47, 111, 237, 255] : variant === 1 ? [22, 58, 120, 255] : GOLD;
+  if (category === "vehicle") {
+    fill(data, width, 140, 470, 700, 16, [210, 210, 210, 255]);
+    fill(data, width, 160, 200, 680, 250, [250, 250, 250, 255]);
+    fill(data, width, 180, 220, 190, 78, [214, 224, 232, 255]);
+    fill(data, width, 390, 220, 410, 78, [214, 224, 232, 255]);
+    fill(data, width, 160, 360, 680, 90, [28, 28, 28, 255]);
+    fill(data, width, 160, 330, 680, variant === 1 ? 28 : 14, accent);
+    fill(data, width, 230, 400, 96, 96, [24, 24, 24, 255]);
+    fill(data, width, 250, 420, 56, 56, [190, 190, 190, 255]);
+    fill(data, width, 650, 400, 96, 96, [24, 24, 24, 255]);
+    fill(data, width, 670, 420, 56, 56, [190, 190, 190, 255]);
+    fill(data, width, 160, 250, 16, 40, [180, 40, 40, 255]);
+    fill(data, width, 820, 300, 20, 24, [230, 230, 210, 255]);
+  } else {
+    fill(data, width, 70, 70, 820, 460, [246, 246, 246, 255]);
+    fill(data, width, 110, 120, 740, 70, accent);
+    fill(data, width, 180, 280, 150, 230, [196, 208, 216, 255]);
+    fill(data, width, 400, 280, 150, 230, [196, 208, 216, 255]);
+    fill(data, width, 620, 280, 150, 230, [196, 208, 216, 255]);
+  }
+  return image;
+}
+
 export async function decodeImage(bytes) {
   const buf = Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes);
   if (isPng(buf)) {
@@ -70,11 +99,10 @@ export async function placeholderRender({ category, variant, photoBytes }) {
       const photo = await decodeImage(photoBytes);
       image = { width: photo.width, height: photo.height, data: new Uint8ClampedArray(photo.data) };
       fill(image.data, image.width, 0, 0, image.width, Math.max(6, Math.round(image.height * 0.04)), variant === 0 ? GOLD : STEEL);
-      strokeZone(image, zoneFor(category));
     } catch {
       image = blankScene(category, variant);
     }
-  } else image = blankScene(category, variant);
+  } else image = studioCard(category, variant);
   return { bytes: Buffer.from(toPng(image)), model: "stub", stub: true, zone: zoneFor(category) };
 }
 
@@ -224,6 +252,21 @@ export async function generateImage(env, spec, fetchImpl = fetch) {
     }
   }
   return placeholderRender({ category, variant, photoBytes });
+}
+
+export async function identifyVehicle(env, bytes, mime) {
+  const prompt = "Identify this vehicle. Return JSON only with keys year, make, model, color. Use empty strings when you are not sure. Do not invent a year, make, or model.";
+  if (!(env.GEMINI_API_KEY || env.GOOGLE_GEMINI_BASE_URL)) return "";
+  const { GoogleGenAI } = await import("@google/genai");
+  const ai = new GoogleGenAI({});
+  const response = await ai.models.generateContent({
+    model: env.ARC_GEMINI_TEXT_MODEL || "gemini-2.5-flash",
+    contents: [
+      { text: prompt },
+      { inlineData: { mimeType: mime || "image/jpeg", data: Buffer.from(bytes).toString("base64") } },
+    ],
+  });
+  return response.text || "";
 }
 
 export async function extractWithModel(env, prompt) {
