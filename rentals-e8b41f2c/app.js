@@ -869,6 +869,14 @@
     node.dataset.tooLong = parts.tooLong ? "1" : "";
   }
 
+  function syncWarnTarget() {
+    var link = document.getElementById("warn-check-link");
+    if (!link) return;
+    var apt = document.getElementById("in-apt");
+    var id = apt && apt.value ? apt.value : "d12";
+    link.href = "../" + encodeURIComponent(id) + "/#warnings";
+  }
+
   function renderFormCalendar() {
     if (!document.getElementById("stay-calendar")) return;
     var listing = activeListing();
@@ -948,7 +956,10 @@
       link.textContent = window.RENTALS.email;
     });
     var warnLink = document.getElementById("warn-check-link");
-    if (warnLink) warnLink.textContent = t("warnCheck");
+    if (warnLink) {
+      warnLink.textContent = t("warnCheck");
+      syncWarnTarget();
+    }
     syncSubmit();
     syncExtras();
     var pageApt = document.body.getAttribute("data-apt");
@@ -993,12 +1004,28 @@
     var listing = listingById(id);
     if (!host || !listing) return;
     document.title = tr(listing.name) + " — EC Boutique Apartments";
-    host.innerHTML = oneApartment(listing) + sectorBlock(listing);
+    host.innerHTML = oneApartment(listing) + sectorBlock(listing) + houseNotes();
     if (listing.sector === "gazcue") {
       renderNeighborhood();
       renderNearby();
       renderFaq();
     }
+    renderRules();
+  }
+
+  function houseNotes() {
+    return '<section class="section" id="rules"><div class="wrap">' +
+      "<h2>" + esc(t("rulesTitle")) + "</h2>" +
+      '<p class="intro">' + esc(t("rulesIntro")) + "</p>" +
+      '<div id="rules-from-listings"></div></div></section>' +
+      '<section class="section warn-section" id="warnings"><div class="wrap"><div class="warn-card">' +
+      "<h2>" + esc(t("warnTitle")) + "</h2>" +
+      "<p>" + esc(t("warnLead")) + "</p><ul>" +
+      "<li>" + esc(t("warn1")) + "</li>" +
+      "<li>" + esc(t("warn2")) + "</li>" +
+      "<li>" + esc(t("warn3")) + "</li>" +
+      "<li>" + esc(t("warn4")) + "</li>" +
+      "</ul></div></div></section>";
   }
 
   function sectorBlock(listing) {
@@ -1198,6 +1225,7 @@
     renderFormCalendar();
     renderSheets();
     syncExtras();
+    syncWarnTarget();
   });
 
   function photoItems(list) {
@@ -1425,5 +1453,6 @@
   if (aptParam && aptField) {
     aptField.value = aptParam;
     syncExtras();
+    syncWarnTarget();
   }
 })();
