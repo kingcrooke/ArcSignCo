@@ -338,9 +338,9 @@
           city: "Santo Domingo",
           district: "Distrito Nacional",
           country: ADDRESS.country,
+          placeLine: "Residencial Mirador Sur, Santo Domingo, República Dominicana",
         },
-        geo: { lat: 18.45312, lng: -69.93333 },
-        mapQuery: "18.45312,-69.93333",
+        mapQuery: "Edificio Curvo, Residencial Mirador Sur, Santo Domingo, República Dominicana",
         mapZoom: 17,
         mapNote: {
           es: "El pin corresponde al Edificio Curvo, Parque Mirador Sur, Bella Vista.",

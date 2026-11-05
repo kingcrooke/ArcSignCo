@@ -108,7 +108,8 @@
       a.street,
       a.building,
       a.area + ", " + a.city,
-      a.district + ", " + tr(a.country)
+      a.district + ", " + tr(a.country),
+      a.placeLine
     ].filter(function (line) { return line && String(line).trim(); });
   }
 
