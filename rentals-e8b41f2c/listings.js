@@ -144,12 +144,17 @@
         layoutShort: { es: "1 habitación · mezzanine", en: "1 bedroom · mezzanine", fr: "1 chambre · mezzanine" },
         addressShort: { es: "César Nicolás Penson #38", en: "César Nicolás Penson #38", fr: "César Nicolás Penson n° 38" },
         floorChip: FLOOR_CHIP,
+        blockNote: {
+          es: "Bloque Este del condominio.",
+          en: "East block of the building.",
+          fr: "Bloc est de l’immeuble.",
+        },
         address: ADDRESS,
         mapNote: MAP_NOTE,
         summary: {
-          es: "Una habitación, con mezzanine.",
-          en: "One bedroom, with a mezzanine.",
-          fr: "Une chambre, avec mezzanine.",
+          es: "Loft amueblado, con mezzanine.",
+          en: "Furnished loft, with a mezzanine.",
+          fr: "Loft meublé, avec mezzanine.",
         },
         description: { es: "", en: "", fr: "" },
         kitchen: {
@@ -204,12 +209,17 @@
         layoutShort: { es: "1 habitación · línea blanca", en: "1 bedroom · appliances", fr: "1 chambre · électroménager" },
         addressShort: { es: "César Nicolás Penson #38", en: "César Nicolás Penson #38", fr: "César Nicolás Penson n° 38" },
         floorChip: FLOOR_CHIP,
+        blockNote: {
+          es: "Bloque Este del condominio.",
+          en: "East block of the building.",
+          fr: "Bloc est de l’immeuble.",
+        },
         address: ADDRESS,
         mapNote: MAP_NOTE,
         summary: {
-          es: "Una habitación. Todavía no hay fotos.",
-          en: "One bedroom. There are no photos yet.",
-          fr: "Une chambre. Il n’y a pas encore de photos.",
+          es: "Loft, con línea blanca.",
+          en: "Loft, with white goods / white-line appliances.",
+          fr: "Loft, avec électroménager (ligne blanche).",
         },
         description: { es: "", en: "", fr: "" },
         kitchen: {
@@ -254,13 +264,13 @@
         blocked: [],
         diagram: false,
         aptNumber: "26B",
-        name: { es: "Apartamento 26B", en: "Apartment 26B", fr: "Appartement 26B" },
+        name: { es: "26B · tres habitaciones", en: "26B · three bedrooms", fr: "26B · trois chambres" },
         layoutShort: { es: "3 habitaciones", en: "3 bedrooms", fr: "3 chambres" },
         addressShort: { es: "Tulio Arvelo #26 B", en: "Tulio Arvelo #26 B", fr: "Tulio Arvelo n° 26 B" },
         summary: {
-          es: "Se alquila por habitación para compartir con roommates.",
-          en: "Rented by the room, to share with roommates.",
-          fr: "Loué à la chambre, pour le partager avec des colocataires.",
+          es: "Amueblado. Se alquila por habitación para compartir con roommates.",
+          en: "Furnished. Rented by the room, to share with roommates.",
+          fr: "Meublé. Loué à la chambre, pour le partager avec des colocataires.",
         },
         layout: {
           es: "Segundo nivel, último piso. Sala y comedor, cocina, área de lavado, terraza techada, balcón con escalera de caracol de hierro hacia la azotea privada, un baño completo y tres habitaciones.",
@@ -316,14 +326,14 @@
         blocked: [],
         diagram: false,
         aptNumber: "508",
-        name: { es: "Curvo #508", en: "Curvo #508", fr: "Curvo n° 508" },
+        name: { es: "Curvo #508 · tres habitaciones", en: "Curvo #508 · three bedrooms", fr: "Curvo n° 508 · trois chambres" },
         layoutShort: { es: "—", en: "—", fr: "—" },
         addressShort: { es: "Edificio Curvo", en: "Edificio Curvo", fr: "Edificio Curvo" },
         summary: { es: "", en: "", fr: "" },
         cardAddress: {
-          es: "Calle Pedro A. Bobea, esquina Avenida Anacaona, Edificio Curvo, Bella Vista.",
-          en: "Calle Pedro A. Bobea at Avenida Anacaona, Edificio Curvo, Bella Vista.",
-          fr: "Calle Pedro A. Bobea, angle de l’avenue Anacaona, Edificio Curvo, Bella Vista.",
+          es: "Amueblado con terraza en azotea",
+          en: "Furnished, with a rooftop terrace.",
+          fr: "Meublé, avec terrasse sur le toit.",
         },
         missingDetail: {
           es: "PLACEHOLDER: no hay descripción, amenidades ni fotos de este apartamento. No se inventan.",
@@ -361,6 +371,11 @@
       { src: "media/colonial.webp", caption: { es: "Zona Colonial, Santo Domingo", en: "Colonial Zone, Santo Domingo", fr: "Zone coloniale, Santo Domingo" } },
       { src: "media/zona.webp", caption: { es: "Calle de la Zona Colonial", en: "A street in the Colonial Zone", fr: "Une rue de la zone coloniale" } },
       { src: "media/malecon.webp", caption: { es: "Costa de Santo Domingo", en: "The Santo Domingo coast", fr: "Le littoral de Santo Domingo" } },
+    ],
+    hondurasArea: [
+      { src: "media/honduras-area/honduras-referencia-1-vista-aerea.jpg", caption: { es: "Foto de referencia del área: vista aérea. No es el apartamento 26B.", en: "Area reference photo: aerial view. Not apartment 26B.", fr: "Photo de référence du quartier : vue aérienne. Ce n’est pas l’appartement 26B." } },
+      { src: "media/honduras-area/honduras-referencia-2-iglesia.jpg", caption: { es: "Foto de referencia del área: iglesia. No es el apartamento 26B.", en: "Area reference photo: church. Not apartment 26B.", fr: "Photo de référence du quartier : église. Ce n’est pas l’appartement 26B." } },
+      { src: "media/honduras-area/honduras-referencia-3-cruz-monumento.jpg", caption: { es: "Foto de referencia del área: cruz y monumento. No es el apartamento 26B.", en: "Area reference photo: cross and monument. Not apartment 26B.", fr: "Photo de référence du quartier : croix et monument. Ce n’est pas l’appartement 26B." } },
     ],
     // Real guest reviews. Leave this empty until one exists.
     // { name, stay: { es, en, fr }, apartment, stars (1–5), text: { es, en, fr } }

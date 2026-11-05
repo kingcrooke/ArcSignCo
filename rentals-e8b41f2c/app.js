@@ -1029,12 +1029,36 @@
       "</ul></div></div></section>";
   }
 
+  function sectorParagraphs(key) {
+    var pack = window.I18N[lang] || window.I18N.es;
+    var paras = pack[key] || [];
+    return paras.map(function (text) {
+      return '<p class="intro">' + esc(text) + "</p>";
+    }).join("");
+  }
+
+  function hondurasPhotos() {
+    var items = window.RENTALS.hondurasArea || [];
+    return '<div class="neighborhood">' + items.map(function (item) {
+      var label = tr(item.caption);
+      return '<figure><img src="' + esc(asset(item.src)) + '" alt="' + esc(label) + '"><figcaption>' + esc(label) + "</figcaption></figure>";
+    }).join("") + "</div>";
+  }
+
   function sectorBlock(listing) {
     if (listing.sector === "gazcue") {
       return '<section class="section sector-gazcue"><div class="wrap"><h2>' + esc(t("areaTitle")) + '</h2><p class="intro">' +
         esc(t("areaBody")) + '</p><div id="neighborhood" class="neighborhood"></div><div id="nearby" class="nearby"></div></div></section>' +
         '<section class="section" id="faq"><div class="wrap"><div class="section-title"><span class="sec-no">·</span><h2>' +
         esc(t("faqTitle")) + '</h2></div><div id="faq-list" class="faq"></div></div></section>';
+    }
+    if (listing.sector === "honduras") {
+      return '<section class="section sector-honduras"><div class="wrap"><h2>' + esc(t("hondurasTitle")) + "</h2>" +
+        sectorParagraphs("hondurasParas") + hondurasPhotos() + "</div></section>";
+    }
+    if (listing.sector === "bellavista") {
+      return '<section class="section sector-bellavista"><div class="wrap"><h2>' + esc(t("bellaTitle")) + "</h2>" +
+        sectorParagraphs("bellaParas") + "</div></section>";
     }
     return '<section class="section"><div class="wrap"><p class="marked-placeholder">' + esc(t("sectorMissing")) + "</p></div></section>";
   }
