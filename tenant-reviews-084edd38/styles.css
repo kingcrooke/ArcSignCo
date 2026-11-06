@@ -1,0 +1,232 @@
+:root {
+  --ink: #241c16;
+  --ink-soft: #5e534a;
+  --sand: #f4efe6;
+  --ivory: #fffaf4;
+  --line: rgba(36, 28, 22, 0.12);
+  --palm: #1c4f45;
+  --clay: #c4623a;
+  --clay-deep: #9d4528;
+  --serif: "Fraunces", "Iowan Old Style", Palatino, serif;
+  --sans: "Outfit", "Avenir Next", "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--ink);
+  background:
+    radial-gradient(900px 420px at 0% -10%, rgba(196, 98, 58, 0.1), transparent 55%),
+    var(--sand);
+}
+
+.survey-header,
+.survey-footer,
+.sheet {
+  width: min(42rem, calc(100% - 1.5rem));
+  margin-inline: auto;
+}
+
+.survey-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0 0.4rem;
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 560;
+}
+
+.lang {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  background: var(--ivory);
+  border-radius: 999px;
+}
+
+.lang button {
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 650;
+  min-width: 2.6rem;
+  min-height: 2.4rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.lang button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+.sheet {
+  background: var(--ivory);
+  border-radius: 28px;
+  padding: 1.4rem 1.1rem 1.5rem;
+  margin-top: 0.6rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 16px 40px rgba(36, 28, 22, 0.08);
+}
+
+.kicker {
+  margin: 0 0 0.4rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 650;
+  color: var(--clay-deep);
+}
+
+h1 {
+  margin: 0 0 0.7rem;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 560;
+  line-height: 1.05;
+}
+
+.intro { margin: 0 0 1.4rem; color: var(--ink-soft); }
+
+.q {
+  margin: 0 0 1.35rem;
+  padding: 0;
+  border: 0;
+}
+
+.q legend {
+  padding: 0;
+  margin-bottom: 0.7rem;
+  font-weight: 600;
+}
+
+.scale,
+.yesno {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.scale { grid-template-columns: repeat(5, 1fr); }
+.yesno { grid-template-columns: 1fr 1fr; }
+
+.tick {
+  position: relative;
+  display: block;
+}
+
+.tick input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.tick span {
+  display: grid;
+  place-items: center;
+  min-height: 2.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 650;
+}
+
+.tick input:checked + span {
+  background: var(--palm);
+  color: #fff;
+  border-color: var(--palm);
+}
+
+.tick input:focus-visible + span {
+  outline: 3px solid rgba(196, 98, 58, 0.45);
+  outline-offset: 2px;
+}
+
+.review-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.55rem;
+}
+
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0.8rem 0.9rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  resize: vertical;
+}
+
+.hint,
+.warn {
+  margin: 0.45rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.warn { color: var(--clay-deep); }
+
+.submit {
+  margin-top: 1.15rem;
+  width: 100%;
+  min-height: 3.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--clay);
+  color: #fff;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.submit:hover { background: var(--clay-deep); }
+
+.thanks h2 {
+  margin: 0.2rem 0 0.4rem;
+  font-family: var(--serif);
+  font-weight: 560;
+}
+
+.form-error {
+  margin: 0.8rem 0 0;
+  color: var(--clay-deep);
+}
+
+.survey-footer {
+  padding-bottom: 2rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.survey-footer a { color: var(--palm); }
+
+.hp {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+[hidden] { display: none !important; }
+
+@media (min-width: 720px) {
+  .sheet { padding: 2rem 2rem 2.1rem; }
+  .scale { grid-template-columns: repeat(10, 1fr); }
+}
