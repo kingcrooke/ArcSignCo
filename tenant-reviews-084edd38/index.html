@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Reseña de huéspedes — EC Boutique</title>
+  <meta name="description" content="Encuesta breve para quienes ya se hospedaron. EC Boutique Apartments.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&amp;family=Outfit:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="survey-header">
+    <p class="brand">EC Boutique</p>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button type="button" data-set-lang="es" lang="es">ES</button>
+      <button type="button" data-set-lang="en" lang="en">EN</button>
+      <button type="button" data-set-lang="fr" lang="fr">FR</button>
+    </div>
+  </header>
+  <main class="sheet">
+    <p class="kicker" data-i18n="kicker"></p>
+    <h1 data-i18n="title"></h1>
+    <p class="intro" data-i18n="intro"></p>
+    <form id="tenant-review" name="tenant-review" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="tenant-review">
+      <p class="hp"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <fieldset class="q"><legend data-i18n="q1"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_host" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_host" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_host" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_host" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_host" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_host" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_host" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_host" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_host" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_host" value="10"><span>10</span></label></div></fieldset><fieldset class="q"><legend data-i18n="q2"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_amenities" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_amenities" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_amenities" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_amenities" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_amenities" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_amenities" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_amenities" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_amenities" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_amenities" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_amenities" value="10"><span>10</span></label></div></fieldset><fieldset class="q"><legend data-i18n="q3"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_space" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_space" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_space" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_space" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_space" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_space" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_space" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_space" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_space" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_space" value="10"><span>10</span></label></div></fieldset><fieldset class="q"><legend data-i18n="q4"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_home" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_home" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_home" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_home" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_home" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_home" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_home" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_home" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_home" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_home" value="10"><span>10</span></label></div></fieldset><fieldset class="q"><legend data-i18n="q5a"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_return" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_return" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_return" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_return" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_return" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_return" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_return" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_return" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_return" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_return" value="10"><span>10</span></label></div></fieldset>
+      <fieldset class="q"><legend data-i18n="q5b"></legend><div class="yesno">
+<label class="tick"><input type="radio" name="would_rent_again" value="sí" required><span data-i18n="yes"></span></label>
+<label class="tick"><input type="radio" name="would_rent_again" value="no"><span data-i18n="no"></span></label>
+</div></fieldset>
+      <fieldset class="q"><legend data-i18n="q6"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_area" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_area" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_area" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_area" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_area" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_area" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_area" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_area" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_area" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_area" value="10"><span>10</span></label></div></fieldset><fieldset class="q"><legend data-i18n="q7"></legend><div class="scale"><label class="tick"><input type="radio" name="rating_access" value="1" required><span>1</span></label><label class="tick"><input type="radio" name="rating_access" value="2"><span>2</span></label><label class="tick"><input type="radio" name="rating_access" value="3"><span>3</span></label><label class="tick"><input type="radio" name="rating_access" value="4"><span>4</span></label><label class="tick"><input type="radio" name="rating_access" value="5"><span>5</span></label><label class="tick"><input type="radio" name="rating_access" value="6"><span>6</span></label><label class="tick"><input type="radio" name="rating_access" value="7"><span>7</span></label><label class="tick"><input type="radio" name="rating_access" value="8"><span>8</span></label><label class="tick"><input type="radio" name="rating_access" value="9"><span>9</span></label><label class="tick"><input type="radio" name="rating_access" value="10"><span>10</span></label></div></fieldset>
+      <label class="review-label" for="review" data-i18n="q8"></label>
+      <textarea id="review" name="review" rows="6"></textarea>
+      <p id="review-hint" class="hint" data-i18n="hint"></p>
+      <p id="form-error" class="form-error" role="alert"></p>
+      <button class="submit" type="submit" data-i18n="submit"></button>
+    </form>
+    <div id="thanks" class="thanks" hidden>
+      <h2 data-i18n="thanksTitle"></h2>
+      <p data-i18n="thanks"></p>
+    </div>
+  </main>
+  <footer class="survey-footer">
+    <p>EC Boutique Apartments · <a href="mailto:elicrooke25@gmail.com">elicrooke25@gmail.com</a></p>
+  </footer>
+  <script src="survey.js"></script>
+</body>
+</html>
