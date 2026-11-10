@@ -16,7 +16,7 @@ const FULL_WIDTH = 1080
 const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
-const RESULTS_BASENAMES = [1, 2, 3, 4, 5, 6, 7, 8].flatMap((w) =>
+const RESULTS_BASENAMES = [1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((w) =>
   [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
 )
 
@@ -28,16 +28,16 @@ const SLIDE_BASENAMES = [
       `w${w}-slide-${String(i + 1).padStart(2, '0')}`,
     ),
   ),
-  ...[1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((w) =>
+  ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((w) =>
     [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
   ),
   ...RESULTS_BASENAMES,
 ]
 
-/** Muse designer cards (results-w1..w8 + vs-w1..w9 previews). */
+/** Muse designer cards (results-w1..w9 + vs-w1..w10 previews). */
 export const MUSE_CARD_BASENAMES = [
   ...RESULTS_BASENAMES,
-  ...[1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((w) =>
+  ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((w) =>
     [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
   ),
 ]
