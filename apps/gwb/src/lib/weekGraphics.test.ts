@@ -194,7 +194,9 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(sections.map((s) => s.kind)).toEqual(['matchups'])
     expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
     expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['vs-w10-m1', 'vs-w10-m1', 'Crooke vs Matt'],
       ['vs-w10-m2', 'vs-w10-m2', 'Kayser vs Jamil'],
+      ['vs-w10-m3', 'vs-w10-m3', 'Mauricio vs Frankie'],
       ['vs-w10-m4', 'vs-w10-m4', 'Eric vs Hady'],
       ['vs-w10-m5', 'vs-w10-m5', 'Narking vs Manny'],
       ['vs-w10-m6', 'vs-w10-m6', 'Danny vs Steven'],
