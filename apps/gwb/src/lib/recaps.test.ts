@@ -167,4 +167,18 @@ describe('commissioner recaps timeline', () => {
     expect(final?.week).toBe(7)
     expect(final?.bodyMarkdown).toBe(week7Source)
   })
+
+  it('lists the week 9 final report', () => {
+    const week9Source = readFileSync(
+      join(fixtures, 'week9-commissioner-recap.md'),
+      'utf-8',
+    )
+    const week9 = filterCommissionerRecapsByWeek(recaps, 9)
+    const ids = week9.map((r) => r.id)
+    expect(ids).toEqual(['recap-19'])
+    const final = week9[0]
+    expect(final?.label).toBe('Final')
+    expect(final?.week).toBe(9)
+    expect(final?.bodyMarkdown).toBe(week9Source)
+  })
 })

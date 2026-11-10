@@ -250,9 +250,10 @@ const WEEK_9_MATCHUPS: PublishedSlide[] = [
   vs('vs-w9-m6', 'Danny vs Narking'),
 ]
 
-/** Week 10 previews: vs-w10-m1 and vs-w10-m3 land when Muse ships fixes. */
 const WEEK_10_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w10-m1', 'Crooke vs Matt'),
   vs('vs-w10-m2', 'Kayser vs Jamil'),
+  vs('vs-w10-m3', 'Mauricio vs Frankie'),
   vs('vs-w10-m4', 'Eric vs Hady'),
   vs('vs-w10-m5', 'Narking vs Manny'),
   vs('vs-w10-m6', 'Danny vs Steven'),
