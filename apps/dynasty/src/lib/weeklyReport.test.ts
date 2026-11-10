@@ -6,8 +6,8 @@ import {
 } from './weeklyReport'
 
 describe('weekly reports', () => {
-  it('has a Sleeper-backed report for 2026 weeks 1–8 and none after', () => {
-    for (const week of [1, 2, 3, 4, 5, 6, 7, 8]) {
+  it('has a Sleeper-backed report for 2026 weeks 1–9 and none after', () => {
+    for (const week of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
       const report = getWeeklyReport(2026, week)
       expect(report?.week).toBe(week)
       expect(report?.leagueId).toBe('1312077668782473216')
@@ -30,9 +30,9 @@ describe('weekly reports', () => {
         }
       }
     }
-    expect(getWeeklyReport(2026, 9)).toBeNull()
+    expect(getWeeklyReport(2026, 10)).toBeNull()
     expect(getWeeklyReport(2025, 5)).toBeNull()
-    expect(weeklyReportEmptyMessage(9)).toBe("Week 9 report isn't posted yet.")
+    expect(weeklyReportEmptyMessage(10)).toBe("Week 10 report isn't posted yet.")
   })
 
   it('records week 5 lines that match Sleeper scores', () => {
@@ -167,8 +167,55 @@ describe('weekly reports', () => {
     ])
   })
 
+  it('records week 9 final scores and league highlights', () => {
+    const report = getWeeklyReport('2026', 9)
+    expect(report?.highScore).toMatchObject({ name: 'Saints & Sinners', points: 215.88 })
+    expect(report?.lowScore).toMatchObject({ name: 'Team Name Hoes', points: 84.62 })
+    expect(report?.topPlayer).toMatchObject({
+      name: 'Jordan Love',
+      points: 39.18,
+      manager: 'Saints & Sinners',
+      started: true,
+    })
+    expect(report?.closest).toMatchObject({ margin: 8.66, matchupId: 4 })
+    expect(report?.blowout).toMatchObject({ margin: 131.12, matchupId: 5 })
+    expect(report?.waivers).toHaveLength(16)
+    expect(report?.trades).toEqual([])
+    const line = (winner: string, w: number, loser: string, l: number, margin: number) => {
+      const game = report?.matchups.find(
+        (g) => g.winner.name === winner && g.loser.name === loser,
+      )
+      expect(game?.winner.score).toBe(w)
+      expect(game?.loser.score).toBe(l)
+      expect(game?.margin).toBe(margin)
+      expect(game?.tie).toBe(false)
+    }
+    line('Nix in 5', 151.56, 'Chase’n Dubs', 127.28, 24.28)
+    line('Chalupa Batman', 117.2, 'Rubuilding', 90, 27.2)
+    line('Wolf Pack', 148.42, 'A-Lamb-e que tengo hambre', 125.28, 23.14)
+    line('MahomiesRidley4MooreJeffe', 93.28, 'Team Name Hoes', 84.62, 8.66)
+    line('Saints & Sinners', 215.88, 'Love Thy Nabers', 84.76, 131.12)
+    line('ramonguaraguao', 115.36, 'BigBlue', 96.7, 18.66)
+    const nix = report?.matchups.find((g) => g.matchupId === 1)
+    expect(nix?.upset).toBe(true)
+    expect(report?.standings.map((s) => [s.name, s.wins, s.losses, s.pointsFor])).toEqual([
+      ['Nix in 5', 7, 2, 1365.76],
+      ['Chase’n Dubs', 7, 2, 1256.14],
+      ['ramonguaraguao', 7, 2, 1241.4],
+      ['Saints & Sinners', 6, 3, 1308.3],
+      ['A-Lamb-e que tengo hambre', 5, 4, 1209.52],
+      ['Wolf Pack', 5, 4, 1192.94],
+      ['MahomiesRidley4MooreJeffe', 5, 4, 1011.02],
+      ['Chalupa Batman', 4, 5, 1084.44],
+      ['Love Thy Nabers', 4, 5, 1009.98],
+      ['Rubuilding', 2, 7, 931.26],
+      ['Team Name Hoes', 1, 8, 1033.8],
+      ['BigBlue', 1, 8, 1013.64],
+    ])
+  })
+
   it('sorts every week by Sleeper matchup_id, matching graphics m1..m6', () => {
-    for (const week of [1, 2, 3, 4, 5, 6, 7, 8]) {
+    for (const week of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
       const report = getWeeklyReport(2026, week)!
       const ordered = reportMatchupsBySleeperId(report.matchups)
       expect(ordered.map((g) => g.matchupId)).toEqual([1, 2, 3, 4, 5, 6])
