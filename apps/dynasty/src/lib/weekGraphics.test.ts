@@ -129,22 +129,75 @@ describe('weekGraphics manifest', () => {
     expect(sections[1].previewWeek).toBe(9)
   })
 
-  it('week 9 shows matchup cards only', () => {
+  it('week 9 has results and week 10 matchup previews', () => {
     const sections = getWeekGraphicsSections(2026, 9)
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections[0].slides.map((s) => s.id)).toEqual([
+      'results-w9-m1',
+      'results-w9-m2',
+      'results-w9-m3',
+      'results-w9-m4',
+      'results-w9-m5',
+      'results-w9-m6',
+    ])
+    expect(sections[0].slides[0].title).toBe(
+      'Nix in 5 151.56 - Chase’n Dubs 127.28',
+    )
+    expect(sections[0].slides[1].title).toBe(
+      'Chalupa Batman 117.20 - Rubuilding 90.00',
+    )
+    expect(sections[0].slides[2].title).toBe(
+      'Wolf Pack 148.42 - A-Lamb-e que tengo hambre 125.28',
+    )
+    expect(sections[0].slides[3].title).toBe(
+      'Team Name Hoes 84.62 - MahomiesRidley4MooreJeffe 93.28',
+    )
+    expect(sections[0].slides[4].title).toBe(
+      'Saints & Sinners 215.88 - Love Thy Nabers 84.76',
+    )
+    expect(sections[0].slides[5].title).toBe(
+      'BigBlue 96.70 - ramonguaraguao 115.36',
+    )
+    expect(sections[1].slides.map((s) => s.id)).toEqual([
+      'vs-w10-m1',
+      'vs-w10-m2',
+      'vs-w10-m3',
+      'vs-w10-m4',
+      'vs-w10-m5',
+      'vs-w10-m6',
+    ])
+    expect(sections[1].slides[0].title).toBe('Chase’n Dubs vs ramonguaraguao')
+    expect(sections[1].slides[1].title).toBe('Love Thy Nabers vs Rubuilding')
+    expect(sections[1].slides[2].title).toBe('Saints & Sinners vs Wolf Pack')
+    expect(sections[1].slides[3].title).toBe('BigBlue vs Team Name Hoes')
+    expect(sections[1].slides[4].title).toBe(
+      'Chalupa Batman vs MahomiesRidley4MooreJeffe',
+    )
+    expect(sections[1].slides[5].title).toBe(
+      'Nix in 5 vs A-Lamb-e que tengo hambre',
+    )
+    expect(sections[1].heading).toBe('Week 10 matchup previews')
+    expect(sections[1].previewWeek).toBe(10)
+  })
+
+  it('week 10 shows matchup cards only', () => {
+    const sections = getWeekGraphicsSections(2026, 10)
     expect(sections).toHaveLength(1)
     expect(sections[0].kind).toBe('matchups')
     expect(sections[0].heading).toBe('Matchups')
     expect(sections[0].previewWeek).toBeUndefined()
     expect(sections[0].slides.map((s) => s.id)).toEqual([
-      'vs-w9-m1',
-      'vs-w9-m2',
-      'vs-w9-m3',
-      'vs-w9-m4',
-      'vs-w9-m5',
-      'vs-w9-m6',
+      'vs-w10-m1',
+      'vs-w10-m2',
+      'vs-w10-m3',
+      'vs-w10-m4',
+      'vs-w10-m5',
+      'vs-w10-m6',
     ])
-    expect(sections[0].slides[0].title).toBe('Nix in 5 vs Chase’n Dubs')
-    expect(sections[0].slides[5].title).toBe('BigBlue vs ramonguaraguao')
+    expect(sections[0].slides[0].title).toBe('Chase’n Dubs vs ramonguaraguao')
+    expect(sections[0].slides[5].title).toBe(
+      'Nix in 5 vs A-Lamb-e que tengo hambre',
+    )
   })
 
   it('flattens slides in section order', () => {
@@ -160,20 +213,24 @@ describe('weekGraphics manifest', () => {
     const week8 = getWeekGraphicsSlides(2026, 8)
     expect(week8[0].id).toMatch(/^results-w8/)
     expect(week8[6].id).toMatch(/^vs-w9/)
+    const week9 = getWeekGraphicsSlides(2026, 9)
+    expect(week9[0].id).toMatch(/^results-w9/)
+    expect(week9[6].id).toMatch(/^vs-w10/)
   })
 
-  it('empty state for 2026 week 10 and 2025 week 5', () => {
-    expect(getWeekGraphicsSections(2026, 10)).toEqual([])
+  it('empty state for 2026 week 11 and 2025 week 5', () => {
+    expect(getWeekGraphicsSections(2026, 11)).toEqual([])
     expect(getWeekGraphicsSections(2025, 5)).toEqual([])
-    expect(weekGraphicsEmptyMessage(10)).toBe("Week 10 cards aren't posted yet.")
+    expect(weekGraphicsEmptyMessage(11)).toBe("Week 11 cards aren't posted yet.")
     expect(weekGraphicsEmptyMessage(5)).toBe("Week 5 cards aren't posted yet.")
   })
 
   it('defaults the graphics week to the latest week with a report or cards', () => {
-    expect(latestGraphicsContentWeek(2026)).toBe(9)
+    expect(latestGraphicsContentWeek(2026)).toBe(10)
     expect(weekHasPublishedGraphics(2026, 8)).toBe(true)
     expect(weekHasPublishedGraphics(2026, 9)).toBe(true)
-    expect(weekHasPublishedGraphics(2026, 10)).toBe(false)
+    expect(weekHasPublishedGraphics(2026, 10)).toBe(true)
+    expect(weekHasPublishedGraphics(2026, 11)).toBe(false)
     expect(latestGraphicsContentWeek(2025)).toBeNull()
     expect(
       resolveGraphicsWeek({
@@ -191,21 +248,21 @@ describe('weekGraphics manifest', () => {
     ).toBe(5)
     expect(
       resolveGraphicsWeek({
-        selectedWeek: 10,
+        selectedWeek: 11,
         pinnedWeek: null,
         season: 2026,
       }),
-    ).toBe(9)
+    ).toBe(10)
   })
 
   it('keeps an explicit empty week so the empty state can link back', () => {
     expect(
       resolveGraphicsWeek({
         selectedWeek: 6,
-        pinnedWeek: 10,
+        pinnedWeek: 11,
         season: 2026,
       }),
-    ).toBe(10)
+    ).toBe(11)
     expect(
       resolveGraphicsWeek({
         selectedWeek: 7,
