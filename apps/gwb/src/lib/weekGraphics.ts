@@ -34,6 +34,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     7: publish(WEEK_7_MATCHUPS),
     8: publish(WEEK_8_MATCHUPS),
     9: publish(WEEK_9_MATCHUPS),
+    10: publish(WEEK_10_MATCHUPS),
   }
   const matchups = matchupsByWeek[week]
   if (matchups?.length) {
@@ -49,6 +50,7 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     6: publish(RESULTS_W6),
     7: publish(RESULTS_W7),
     8: publish(RESULTS_W8),
+    9: publish(RESULTS_W9),
   }
   const results = resultsByWeek[week]
   if (results?.length) {
@@ -248,6 +250,14 @@ const WEEK_9_MATCHUPS: PublishedSlide[] = [
   vs('vs-w9-m6', 'Danny vs Narking'),
 ]
 
+/** Week 10 previews: vs-w10-m1 and vs-w10-m3 land when Muse ships fixes. */
+const WEEK_10_MATCHUPS: PublishedSlide[] = [
+  vs('vs-w10-m2', 'Kayser vs Jamil'),
+  vs('vs-w10-m4', 'Eric vs Hady'),
+  vs('vs-w10-m5', 'Narking vs Manny'),
+  vs('vs-w10-m6', 'Danny vs Steven'),
+]
+
 const WEEK_4_REPORT: PublishedSlide[] = [
   w4('w4-slide-01', 'The Frankie Zone Has Been Evacuated'),
   w4('w4-slide-02', 'Steven 180.56 def Narking'),
@@ -356,4 +366,13 @@ const RESULTS_W8: PublishedSlide[] = [
   result('results-w8-m4', 'Steven beats Kayser 137.64-94.32'),
   result('results-w8-m5', 'Mauricio beats Danny 121.69-112.27'),
   result('results-w8-m6', 'Hady beats Narking 179.93-97.97'),
+]
+
+const RESULTS_W9: PublishedSlide[] = [
+  result('results-w9-m1', 'Crooke beats Jamil 212.03-168.18'),
+  result('results-w9-m2', 'Matt beats Frankie 151.58-125.26'),
+  result('results-w9-m3', 'Eric beats Kayser 127.45-89.08'),
+  result('results-w9-m4', 'Manny beats Mauricio 136.11-110.89'),
+  result('results-w9-m5', 'Hady beats Steven 132.83-114.13'),
+  result('results-w9-m6', 'Danny beats Narking 156.01-118.34'),
 ]
