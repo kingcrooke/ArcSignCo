@@ -634,7 +634,7 @@ export async function handleVisualizer(req, deps) {
         const painted = await paintAndStore(deps, {
           ns, session, prompt,
           references: [{ bytes: base.bytes, mime: base.mime || "image/png", role: "base" }],
-          photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 22000,
+          photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 40000,
         });
         return publicRender(painted.row);
       }));
@@ -651,7 +651,7 @@ export async function handleVisualizer(req, deps) {
     });
     const firstPrompt = renderPrompt({ category: session.category, business, subject: subjectForPrompt, variant: 0 });
     const first = await paintAndStore(deps, {
-      ns, session, prompt: firstPrompt, references, photoBytes: photo?.bytes, variant: 0, kind: "variant", timeoutMs: 22000,
+      ns, session, prompt: firstPrompt, references, photoBytes: photo?.bytes, variant: 0, kind: "variant", timeoutMs: 40000,
     });
     if (phase === "first") {
       await deps.records.updateSession(session.id, { baseRenderId: first.row.id });
@@ -664,7 +664,7 @@ export async function handleVisualizer(req, deps) {
       const painted = await paintAndStore(deps, {
         ns, session, prompt,
         references: [{ bytes: first.raw, mime: first.mime, role: "base" }],
-        photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 22000,
+        photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 40000,
       });
       return publicRender(painted.row);
     }));
