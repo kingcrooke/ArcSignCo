@@ -16,7 +16,7 @@ function publish(slides: PublishedSlide[]): PublishedSlide[] {
   return slides.filter((s) => !HELD.has(s.id))
 }
 
-/** Finished week: optional preview matchups, then results and report; upcoming weeks may be matchups only. */
+/** Finished week: results (and report) first, preview matchups last; upcoming weeks may be matchups only. */
 export function getWeekGraphicsSlides(week: number): PublishedSlide[] {
   return getWeekGraphicsSections(week).flatMap((s) => s.slides)
 }
@@ -36,11 +36,6 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
     9: publish(WEEK_9_MATCHUPS),
     10: publish(WEEK_10_MATCHUPS),
   }
-  const matchups = matchupsByWeek[week]
-  if (matchups?.length) {
-    sections.push({ kind: 'matchups', heading: 'Matchups', slides: matchups })
-  }
-
   const resultsByWeek: Record<number, PublishedSlide[]> = {
     1: publish(RESULTS_W1),
     2: publish(RESULTS_W2),
@@ -67,6 +62,11 @@ export function getWeekGraphicsSections(week: number): WeekGraphicsSection[] {
   const report = reportByWeek[week]
   if (report?.length) {
     sections.push({ kind: 'report', heading: 'Report', slides: report })
+  }
+
+  const matchups = matchupsByWeek[week]
+  if (matchups?.length) {
+    sections.push({ kind: 'matchups', heading: 'Matchups', slides: matchups })
   }
 
   return sections
