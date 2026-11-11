@@ -7,9 +7,12 @@ import { fileURLToPath } from "node:url";
 import { compositeLogo } from "../visualize/js/composite.js";
 import { decodePng, encodePng } from "../netlify/lib/visualizer/png.mjs";
 import { quoteFor, QUOTE_LABEL } from "../netlify/lib/visualizer/pricing.mjs";
-import { renderPrompt, editPrompt } from "../netlify/lib/visualizer/prompts.mjs";
+import { inferBody, vehiclePhrase } from "../netlify/lib/visualizer/body.mjs";
+import { vehiclePanel } from "../netlify/lib/visualizer/panel.mjs";
+import { renderPrompt, editPrompt, vehiclePrompt } from "../netlify/lib/visualizer/prompts.mjs";
 import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/lib/visualizer/scrape.mjs";
-import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
+import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, identifyVehicle, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
+import { buildProofPdf } from "../visualize/js/proof.js";
 import { leadEmail } from "../netlify/lib/visualizer/email.mjs";
 import { ENV_KEYS, handleVisualizer } from "../netlify/lib/visualizer/handle.mjs";
 import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
@@ -48,7 +51,7 @@ test("png round trip keeps the logo bytes", () => {
   assert.deepEqual(Array.from(back.data.slice(0, 4)), [8, 9, 10, 255]);
 });
 
-test("prompts leave a blank logo area and estimates invent no price", () => {
+test("prompts name the real vehicle and invent no logo box or price", () => {
   const prompt = renderPrompt({
     category: "vehicle",
     business: { name: "North Bagels", phone: "718-555-1212", web: "https://north.example", services: "bagels" },
@@ -56,10 +59,26 @@ test("prompts leave a blank logo area and estimates invent no price", () => {
     variant: 0,
   });
   const other = renderPrompt({ category: "vehicle", business: { name: "North Bagels" }, subject: { year: "2024", make: "Ford", model: "Transit" }, variant: 1 });
-  assert.match(prompt, /do not draw any logo/i);
-  assert.doesNotMatch(prompt, /draw (the|a) logo/i);
+  const camry = renderPrompt({
+    category: "vehicle",
+    business: { name: "Arc Signage Co", phone: "(347) 450-2110", web: "arcsignco.com" },
+    subject: { year: "2023", make: "Toyota", model: "Camry", color: "white", coverage: "full" },
+    variant: 0,
+  });
+  assert.match(prompt, /do not draw a logo/i);
+  assert.doesNotMatch(prompt, /leave a (clear |blank )?rectangular/i);
+  assert.match(prompt, /2024 Ford Transit cargo van/);
+  assert.match(camry, /2023 Toyota Camry sedan/);
+  assert.doesNotMatch(camry, /cargo van/i);
+  assert.doesNotMatch(camry, /Custom Signs|Vehicle Wraps, Storefront/i);
+  assert.match(vehiclePrompt({ year: "2023", make: "Toyota", model: "Camry", color: "white" }), /2023 Toyota Camry sedan/);
+  assert.equal(inferBody({ make: "Toyota", model: "Camry" }), "car");
+  assert.equal(inferBody({ make: "Ford", model: "Transit" }), "cargo-van");
+  assert.match(vehiclePhrase({ year: "2023", make: "Toyota", model: "Camry" }), /sedan/);
   assert.notEqual(prompt, other);
-  assert.match(editPrompt("make the van white"), /Do not draw any logo/);
+  assert.match(other, /no services column/i);
+  assert.match(editPrompt("gloss black with only thin gold pinstripes"), /Do not draw a logo/);
+  assert.doesNotMatch(editPrompt("gloss black"), /blank rectangular/i);
   for (const env of [{}, { ARC_VISUALIZER_ESTIMATES: "1" }]) {
     const quote = quoteFor("vehicle", env);
     assert.equal(quote.label, QUOTE_LABEL);
@@ -186,12 +205,20 @@ test("a session can render, place the real logo, and store a lead without a pric
   assert.equal(Object.hasOwn(preview.quote, "low"), false);
   assert.equal(calls.length, 3);
   assert.deepEqual(calls[0].roles, []);
-  assert.match(calls[0].prompt, /do not draw any logo/i);
+  assert.deepEqual(calls[1].roles, ["base"]);
+  assert.deepEqual(calls[2].roles, ["base"]);
+  assert.match(calls[0].prompt, /do not draw a logo/i);
+  assert.match(calls[0].prompt, /Ford Transit/);
+  assert.doesNotMatch(calls[0].prompt, /leave a (clear |blank )?rectangular/i);
   assert.notEqual(calls[0].prompt, calls[1].prompt);
   assert.notEqual(calls[1].prompt, calls[2].prompt);
-  const edited = await call("/api/visualize/edit", { method: "POST", body: { sessionId: session.id, renderId: preview.variants[0].id, request: "make the van white" } });
-  assert.equal(edited.status, 200);
-  assert.deepEqual((await edited.json(), calls[3].roles), ["previous"]);
+  let lastEdit;
+  for (let n = 0; n < 3; n++) {
+    lastEdit = await call("/api/visualize/edit", { method: "POST", body: { sessionId: session.id, renderId: preview.variants[0].id, request: `change ${n} keep the van` } });
+    assert.equal(lastEdit.status, 200, await lastEdit.clone().text());
+  }
+  assert.equal((await lastEdit.json()).editsLeft, 0);
+  assert.deepEqual(calls.at(-1).roles, ["previous"]);
   const again = await call("/api/visualize/edit", { method: "POST", body: { sessionId: session.id, renderId: preview.variants[0].id, request: "again" } });
   assert.equal(again.status, 409);
   const quad = [
@@ -200,6 +227,20 @@ test("a session can render, place the real logo, and store a lead without a pric
     { x: 12 / 160, y: 12 / 100 },
     { x: 8 / 160, y: 12 / 100 },
   ];
+  const share = await call("/api/visualize/share", {
+    method: "POST",
+    body: { sessionId: session.id, renderId: preview.variants[0].id, quad },
+  });
+  assert.equal(share.status, 200, await share.clone().text());
+  const sharedUrl = (await share.json()).url;
+  const sharedImage = decodePng(Buffer.from(await (await call(sharedUrl)).arrayBuffer()));
+  assert.ok(sharedImage.height > 100);
+  const sharedAt = (x, y) => {
+    const i = (y * sharedImage.width + x) * 4;
+    return [sharedImage.data[i], sharedImage.data[i + 1], sharedImage.data[i + 2], sharedImage.data[i + 3]];
+  };
+  assert.deepEqual(sharedAt(8, 8), [200, 10, 20, 255]);
+  assert.deepEqual(sharedAt(4, sharedImage.height - 2).slice(0, 3), [11, 31, 58]);
   const leadRes = await call("/api/visualize/lead", {
     method: "POST",
     body: { sessionId: session.id, name: "Ada Baker", phone: "(718) 555-1212", email: "ada@north.example", timing: "this-month", renderId: preview.variants[0].id, quad },
@@ -250,8 +291,9 @@ test("a vehicle shot is the reference for all 3 concepts and identify invents no
   const preview = await wrapped.json();
   assert.equal(preview.variants.length, 3);
   assert.deepEqual(calls[1].roles, ["photo"]);
-  assert.deepEqual(calls[2].roles, ["photo"]);
-  assert.deepEqual(calls[3].roles, ["photo"]);
+  assert.deepEqual(calls[2].roles, ["base"]);
+  assert.deepEqual(calls[3].roles, ["base"]);
+  assert.match(calls[2].prompt, /identical vehicle/i);
   assert.match(calls[1].prompt, /bold and sporty/i);
   assert.match(calls[1].prompt, /Acme Plumbing Co Extra Words/);
   assert.doesNotMatch(calls[1].prompt, /Here/);
@@ -337,4 +379,149 @@ test("docs name every env key and the page does not invent a price", () => {
   assert.doesNotMatch(sitemap, /visualize\/admin/);
   const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
   assert.match(toml, /\/visualize\/admin/);
+});
+
+function paint(image, x, y, w, h, rgba) {
+  for (let yy = y; yy < y + h; yy++) {
+    for (let xx = x; xx < x + w; xx++) {
+      const i = (yy * image.width + xx) * 4;
+      image.data[i] = rgba[0];
+      image.data[i + 1] = rgba[1];
+      image.data[i + 2] = rgba[2];
+      image.data[i + 3] = rgba[3];
+    }
+  }
+}
+
+test("the logo panel sits on the vehicle and not on a person beside it", () => {
+  const image = solid(220, 120, [220, 220, 220, 255]);
+  paint(image, 50, 36, 140, 60, [248, 248, 248, 255]);
+  paint(image, 70, 42, 40, 16, [30, 30, 30, 255]);
+  paint(image, 145, 42, 36, 16, [30, 30, 30, 255]);
+  paint(image, 64, 78, 22, 22, [16, 16, 16, 255]);
+  paint(image, 155, 78, 22, 22, [16, 16, 16, 255]);
+  paint(image, 4, 16, 14, 90, [180, 40, 40, 255]);
+  const { zone, box } = vehiclePanel(image);
+  const cx = (zone.x + zone.w / 2) * image.width;
+  const cy = (zone.y + zone.h / 2) * image.height;
+  assert.ok(cx > 55 && cx < 185, `logo center x ${cx}`);
+  assert.ok(cy > 36 && cy < 100, `logo center y ${cy}`);
+  assert.ok(box.x * image.width > 30, "vehicle box includes the person");
+  assert.ok(zone.x > 0.15, "logo is still in the old rear-quarter box");
+});
+
+test("a pale vehicle is not reduced to its dark lower stripe", () => {
+  const image = solid(300, 160, [232, 232, 232, 255]);
+  paint(image, 30, 40, 240, 90, [250, 250, 250, 255]);
+  paint(image, 30, 100, 240, 28, [24, 24, 24, 255]);
+  paint(image, 50, 118, 30, 30, [16, 16, 16, 255]);
+  paint(image, 210, 118, 30, 30, [16, 16, 16, 255]);
+  const { zone } = vehiclePanel(image);
+  const cy = (zone.y + zone.h / 2) * image.height;
+  assert.ok(cy < 110, `logo sits on the stripe, y ${cy}`);
+  assert.ok(cy > 45, `logo is above the body, y ${cy}`);
+});
+
+test("a Camry request is prompted as a Camry sedan", async () => {
+  const { call, calls, later } = harness();
+  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  later();
+  const shot = await call("/api/visualize/vehicle", {
+    method: "POST",
+    body: { sessionId: session.id, subject: { year: "2023", make: "Toyota", model: "Camry", color: "white", body: "cargo-van" } },
+  });
+  assert.equal(shot.status, 200, await shot.clone().text());
+  const vehicle = await shot.json();
+  assert.equal(vehicle.body, "car");
+  assert.match(calls[0].prompt, /2023 Toyota Camry sedan/);
+  assert.doesNotMatch(calls[0].prompt, /cargo van/i);
+});
+
+test("a photo of a Camry is identified and used on the wrap", async () => {
+  const h = harness();
+  h.deps.identify = async () => JSON.stringify({ year: "2023", make: "Toyota", model: "Camry", color: "white", body: "sedan" });
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  const form = new FormData();
+  form.set("sessionId", session.id);
+  form.set("kind", "photo");
+  form.set("file", new Blob([logoPng], { type: "image/png" }), "camry.png");
+  const uploaded = await handleVisualizer(new Request("https://preview.test/api/visualize/upload", { method: "POST", body: form }), h.deps);
+  assert.equal(uploaded.status, 201);
+  const named = await h.call("/api/visualize/identify", { method: "POST", body: { sessionId: session.id } });
+  assert.equal(named.status, 200, await named.clone().text());
+  const id = await named.json();
+  assert.equal(id.vehicle.make, "Toyota");
+  assert.equal(id.vehicle.model, "Camry");
+  assert.equal(id.vehicle.body, "car");
+  assert.match(id.label, /Camry/);
+  h.later();
+  const rendered = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "Arc Signage Co", phone: "(347) 450-2110", web: "arcsignco.com", colors: ["#111111", "#d4a53c"] }, subject: { coverage: "full", style: "classic" } },
+  });
+  assert.equal(rendered.status, 200, await rendered.clone().text());
+  assert.match(h.calls[0].prompt, /2023 Toyota Camry sedan/);
+  assert.doesNotMatch(h.calls[0].prompt, /cargo van/i);
+  assert.doesNotMatch(h.calls[0].prompt, /Custom Signs/i);
+  assert.deepEqual(h.calls[1].roles, ["base"]);
+});
+
+test("concepts 2 and 3 can be requested after concept 1", async () => {
+  const { call, calls, later } = harness();
+  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  later();
+  const first = await call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, phase: "first", business: { name: "Arc Signage Co" }, subject: { year: "2023", make: "Toyota", model: "Camry", coverage: "full", style: "classic" } },
+  });
+  assert.equal(first.status, 200, await first.clone().text());
+  const opened = await first.json();
+  assert.equal(opened.partial, true);
+  assert.equal(opened.variants.length, 1);
+  assert.match(calls[0].prompt, /Camry sedan/);
+  const rest = await call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, phase: "rest", business: { name: "Arc Signage Co" }, subject: { coverage: "full", style: "classic" } },
+  });
+  assert.equal(rest.status, 200, await rest.clone().text());
+  const more = await rest.json();
+  assert.equal(more.variants.length, 2);
+  assert.deepEqual(calls[1].roles, ["base"]);
+  assert.deepEqual(calls[2].roles, ["base"]);
+});
+
+test("identify uses xAI vision when Gemini is not configured", async () => {
+  let seen;
+  const text = await identifyVehicle({ XAI_API_KEY: "test" }, Buffer.from([0xff, 0xd8, 0xff, 0xd9]), "image/jpeg", async (url, opts) => {
+    seen = { url, body: JSON.parse(opts.body) };
+    return new Response(JSON.stringify({ choices: [{ message: { content: '{"year":"2023","make":"Toyota","model":"Camry","color":"white","body":"sedan"}' } }] }), { status: 200 });
+  });
+  assert.match(seen.url, /\/chat\/completions$/);
+  assert.equal(seen.body.model, "grok-4.7");
+  assert.equal(seen.body.messages[0].content[0].type, "image_url");
+  assert.match(text, /Camry/);
+});
+
+test("proof pdf names the vehicle, colors, and Arc contact", () => {
+  const jpeg = Buffer.from("ffd8ffe000104a46494600010100000100010000ffdb004300080606070605080707070909080a0c140d0c0b0b0c1912130f141d1a1f1e1d1a1c1c20242e2720222c231c1c2837292c30313434341f27393d38323c2e333432ffc0000b080001000101011100ffc4001f0000010501010101010100000000000000000102030405060708090a0bffda00080001000100003f00fbffd9", "hex");
+  const pdf = Buffer.from(buildProofPdf({
+    jpeg,
+    lines: [
+      "Vehicle: 2023 Toyota Camry",
+      "Coverage: Full wrap",
+      "Style: Classic & Professional",
+      "Colors: Black, Gold",
+      "Contact Arc: arc@arcsignco.com · (347) 450-2110",
+      "This is an AI-generated concept, not a measured proof or a quote.",
+    ],
+  }));
+  assert.equal(pdf.subarray(0, 5).toString(), "%PDF-");
+  const text = pdf.toString("latin1");
+  assert.match(text, /2023 Toyota Camry/);
+  assert.match(text, /Full wrap/);
+  assert.match(text, /Classic & Professional/);
+  assert.match(text, /Black, Gold/);
+  assert.match(text, /arc@arcsignco.com/);
+  assert.match(text, /450-2110/);
+  assert.match(text, /not a measured proof/);
 });

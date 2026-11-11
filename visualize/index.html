@@ -24,7 +24,7 @@
     {
       "@type": "Question",
       "name": "What is the Arc Visualizer?",
-      "acceptedAnswer": { "@type": "Answer", "text": "It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote." }
+      "acceptedAnswer": { "@type": "Answer", "text": "It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the vehicle by the page, and you can drag it. It is an AI-generated visual reference. A downloaded PDF is a concept, not a measured proof or a quote." }
     },
     {
       "@type": "Question",
@@ -66,13 +66,20 @@
     <div class="stage-tools">
       <button type="button" id="reportBtn">Report a problem</button>
       <button type="button" id="downloadBtn" aria-label="Download image">Download</button>
+      <button type="button" id="proofBtn" aria-label="Download proof PDF">Proof PDF</button>
       <button type="button" id="shareBtn" aria-label="Share">Share</button>
       <button type="button" id="compareBtn">Before / after</button>
       <button type="button" id="upBtn" aria-label="Thumbs up" aria-pressed="false">▲</button>
       <button type="button" id="downBtn" aria-label="Thumbs down" aria-pressed="false">▼</button>
     </div>
-    <div class="stage-frame">
+    <div class="stage-frame" id="stageFrame">
       <img id="stageImg" alt="Work van" src="/visualize/img/work-van.svg">
+      <div id="logoEditor" class="logo-editor" hidden>
+        <div id="logoBox" class="logo-box">
+          <img id="logoGhost" alt="">
+          <button type="button" id="logoResize" class="logo-resize" aria-label="Resize logo"></button>
+        </div>
+      </div>
       <span class="stage-wm">Arc Signage Co.</span>
       <span class="stage-label" id="stageLabel">Work van</span>
       <button class="stage-arrow prev" id="prevConcept" type="button" hidden aria-label="Previous concept">‹</button>
@@ -87,6 +94,7 @@
       </div>
     </div>
     <div class="stage-dots" id="dots" hidden></div>
+    <p class="logo-hint" id="logoHint" hidden>Drag the logo onto the vehicle. Drag the gold corner to resize it.</p>
     <p class="stage-note" id="discStage">This is a visual reference only. Previews are AI-generated — the exact color, finish and final result can differ.</p>
   </section>
   <aside class="chat" id="chat" aria-live="polite">
@@ -107,7 +115,7 @@
 <section class="legal" id="visualize-faq">
   <h2>Visualizer questions</h2>
   <h3>What is the Arc Visualizer?</h3>
-  <p>It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote.</p>
+  <p>It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the vehicle by the page, and you can drag it. It is an AI-generated visual reference. A downloaded PDF is a concept, not a measured proof or a quote.</p>
   <h3>Does the visualizer show a price?</h3>
   <p>No. Pricing comes in a written estimate after a site survey. This preview is a concept only.</p>
   <h3>What to send with the preview</h3>

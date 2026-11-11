@@ -2,11 +2,14 @@
 // with an in-memory database and blob store.
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { compositeLogo } from "../../../visualize/js/composite.js";
+import { addBrandBar } from "./brand.mjs";
+import { inferBody, normalizeBody } from "./body.mjs";
 import { sendLeadEmail } from "./email.mjs";
 import { decodeImage, generateImage, extractWithModel, identifyVehicle, imageBackend, toPng } from "./images.mjs";
+import { vehiclePanel } from "./panel.mjs";
 import { isPng } from "./png.mjs";
 import { quoteFor } from "./pricing.mjs";
-import { editPrompt, renderPrompt, scrapePrompt, vehiclePrompt, zoneFor } from "./prompts.mjs";
+import { editPrompt, renderPrompt, scrapePrompt, variantPrompt, vehiclePrompt, zoneFor } from "./prompts.mjs";
 import { assertPublicUrl, extractBusiness, fetchPublic, pageText } from "./scrape.mjs";
 import { stampConcept } from "./watermark.mjs";
 
@@ -17,7 +20,7 @@ export const LIMITS = {
   ip: { scan: 30, render: 16, edit: 4, lead: 5, upload: 40, login: 10 },
   sessionVariants: 3,
   sessionBatches: 2,
-  sessionEdits: 1,
+  sessionEdits: 3,
   vehicleShots: 4,
   imageBytes: 4_500_000,
 };
@@ -36,6 +39,8 @@ export const ENV_KEYS = [
   "XAI_BASE_URL",
   "ARC_XAI_IMAGE_MODEL",
   "ARC_XAI_IMAGE_RESOLUTION",
+  "ARC_XAI_VISION_MODEL",
+  "ARC_OPENAI_VISION_MODEL",
   "ARC_GEMINI_IMAGE_MODEL",
   "ARC_GEMINI_TEXT_MODEL",
   "ARC_OPENAI_IMAGE_MODEL",
@@ -200,9 +205,16 @@ function subjectOf(category, raw = {}) {
   }
   const year = clean(raw.year, 4);
   if (year && !/^(19|20)\d{2}$/.test(year)) return { error: "Check the vehicle year." };
+  const make = clean(raw.make, 40);
+  const model = clean(raw.model, 40);
+  const inferred = inferBody({ make, model });
+  const picked = raw.bodyPicked === true && BODIES.includes(raw.body) ? raw.body : "";
+  let body = picked || inferred;
+  if (!body && BODIES.includes(raw.body) && raw.body !== "cargo-van") body = raw.body;
+  if (!body && raw.body === "cargo-van" && !inferred) body = "cargo-van";
+  if (!body && !make && !model && !raw.photo) body = "cargo-van";
   return {
-    year, make: clean(raw.make, 40), model: clean(raw.model, 40),
-    body: BODIES.includes(raw.body) ? raw.body : "cargo-van",
+    year, make, model, body,
     coverage: COVERAGE.includes(raw.coverage) ? raw.coverage : "partial",
     color: clean(raw.color, 40),
     photo: !!raw.photo,
@@ -261,10 +273,10 @@ async function saveImage(blobs, ns, id, bytes, metadata) {
   await blobs.set(fileKey(ns, id), bytes, { metadata });
 }
 
-async function paintAndStore(deps, { ns, session, prompt, references, photoBytes, variant, kind, parentId }) {
+async function paintAndStore(deps, { ns, session, prompt, references, photoBytes, variant, kind, parentId, timeoutMs }) {
   const started = Date.now();
   let out;
-  const spec = { prompt, references, category: session.category, variant, photoBytes };
+  const spec = { prompt, references, category: session.category, variant, photoBytes, timeoutMs };
   try {
     out = deps.imageClient ? { ...(await deps.imageClient(spec)), zone: zoneFor(session.category) } : await generateImage(deps.env, spec);
   } catch (err) {
@@ -276,11 +288,22 @@ async function paintAndStore(deps, { ns, session, prompt, references, photoBytes
     const { placeholderRender } = await import("./images.mjs");
     out = await placeholderRender({ category: session.category, variant, photoBytes });
   }
-  let image = await decodeImage(out.bytes);
+  let image;
+  try {
+    image = await decodeImage(out.bytes);
+  } catch (err) {
+    console.error("visualizer decode", err?.message || err);
+    const { placeholderRender } = await import("./images.mjs");
+    out = await placeholderRender({ category: session.category, variant, photoBytes });
+    image = await decodeImage(out.bytes);
+  }
+  const panel = session.category === "vehicle" ? vehiclePanel(image) : null;
+  const zone = panel?.zone || out.zone || zoneFor(session.category);
   image = stampConcept(image);
   const png = Buffer.from(toPng(image));
   const id = deps.makeId();
   await saveImage(deps.blobs, ns, id, png, { contentType: "image/png", sessionId: session.id, kind });
+  const raw = Buffer.from(out.bytes);
   const row = {
     id,
     sessionId: session.id,
@@ -289,25 +312,27 @@ async function paintAndStore(deps, { ns, session, prompt, references, photoBytes
     prompt,
     model: out.model || "stub",
     outputKey: id,
-    zone: out.zone || zoneFor(session.category),
+    zone,
+    vehicleBox: panel?.box || null,
     quad: null,
     ms: Date.now() - started,
     stub: out.stub == null ? (out.model === "stub" || !out.model) : !!out.stub,
     createdAt: deps.now().toISOString(),
   };
   await deps.records.addRender(row);
-  return row;
+  return { row, raw, mime: sniff(raw) || "image/png" };
 }
 
 function publicRender(row) {
-  const { x, y, w, h } = row.zone || zoneFor("vehicle");
+  const zone = row.zone || zoneFor("vehicle");
   return {
     id: row.id,
     url: assetPath(row.id),
     kind: row.kind,
     stub: !!row.stub,
     model: row.model,
-    zone: { x, y, w, h },
+    zone: { x: zone.x, y: zone.y, w: zone.w, h: zone.h },
+    vehicleBox: row.vehicleBox || null,
     ms: row.ms,
   };
 }
@@ -513,15 +538,17 @@ export async function handleVisualizer(req, deps) {
     if (subject.error) return fail(400, subject.error);
     if (!(subject.year && subject.make && subject.model)) return fail(400, "Enter a year, make, and model.");
     if (!(await gate(deps.records, ipHash, day, "renders", 1))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
+    if (!subject.body) subject.body = await classifyBody(env, subject);
     const prompt = vehiclePrompt(subject);
-    const row = await paintAndStore(deps, { ns, session, prompt, references: [], photoBytes: null, variant: 0, kind: "vehicle" });
+    const painted = await paintAndStore(deps, { ns, session, prompt, references: [], photoBytes: null, variant: 0, kind: "vehicle" });
+    const row = painted.row;
     await deps.records.updateSession(session.id, {
       subject: { ...subject, photo: true },
       photoKey: row.id,
       vehicleShots: (session.vehicleShots || 0) + 1,
     });
     const label = [subject.year, subject.make, subject.model].filter(Boolean).join(" ");
-    return json(200, { render: publicRender(row), label, stub: !!row.stub, disclaimer: DISCLAIMER });
+    return json(200, { render: publicRender(row), label, body: subject.body || "", stub: !!row.stub, disclaimer: DISCLAIMER });
   }
 
   if (path === "/api/visualize/identify" && method === "POST") {
@@ -533,17 +560,21 @@ export async function handleVisualizer(req, deps) {
     if (!photo) return fail(400, "Upload a photo first.");
     let parsed = null;
     try {
-      const raw = await (deps.identify || identifyVehicle)(env, photo.bytes, photo.mime);
+      const raw = await (deps.identify || ((e, b, m) => identifyVehicle(e, b, m, deps.fetchImpl)))(env, photo.bytes, photo.mime);
       parsed = parseJson(raw);
     } catch (err) {
       console.error("visualizer identify", err?.message || err);
     }
     const year = parsed && /^(19|20)\d{2}$/.test(clean(parsed.year, 4)) ? clean(parsed.year, 4) : "";
+    const make = parsed ? clean(parsed.make, 40) : "";
+    const model = parsed ? clean(parsed.model, 40) : "";
+    const bodyKind = normalizeBody(parsed?.body) || inferBody({ make, model });
     const vehicle = {
       year,
-      make: parsed ? clean(parsed.make, 40) : "",
-      model: parsed ? clean(parsed.model, 40) : "",
+      make,
+      model,
       color: parsed ? clean(parsed.color, 40) : "",
+      body: bodyKind,
     };
     const named = [vehicle.year, vehicle.make, vehicle.model].filter(Boolean).join(" ");
     if (named) {
@@ -552,7 +583,7 @@ export async function handleVisualizer(req, deps) {
       });
     }
     await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "identify", createdAt: now.toISOString(), detail: { named: !!named } });
-    return json(200, { vehicle: named ? vehicle : { year: "", make: "", model: "", color: "" }, label: named || "your vehicle" });
+    return json(200, { vehicle: named ? vehicle : { year: "", make: "", model: "", color: "", body: "" }, label: named || "your vehicle" });
   }
 
   if (path === "/api/visualize/render" && method === "POST") {
@@ -560,11 +591,23 @@ export async function handleVisualizer(req, deps) {
     if (!body) return fail(400, "Send JSON.");
     const session = await deps.records.getSession(clean(body.sessionId, 32));
     if (!session) return fail(404, "Start a new preview.");
-    if (session.rendersUsed >= LIMITS.sessionBatches) return fail(409, "This preview already has its concepts. You can request one revision, or start a new one.");
+    if (session.rendersUsed >= LIMITS.sessionBatches) return fail(409, "This preview already has its concepts. You can request a revision, or start a new one.");
     if (tooSoon(session, now)) return fail(400, "Please take a moment and try again.");
     if (!(await turnstileOk(env, body.turnstileToken, deps.ip, deps.fetchImpl))) return fail(400, "Confirm you are a person, then try again.");
     const business = businessOf(body.business);
-    const subject = subjectOf(session.category, { ...body.subject, photo: !!(body.photoId || session.photoKey) });
+    const prior = session.subject || {};
+    const incoming = body.subject || {};
+    const subject = subjectOf(session.category, {
+      ...prior,
+      ...incoming,
+      year: incoming.year || prior.year || "",
+      make: incoming.make || prior.make || "",
+      model: incoming.model || prior.model || "",
+      color: incoming.color || prior.color || "",
+      body: incoming.body || prior.body || "",
+      bodyPicked: incoming.bodyPicked === true,
+      photo: !!(body.photoId || session.photoKey),
+    });
     if (subject.error) return fail(400, subject.error);
     if (session.category === "vehicle" && !subject.photo && !subject.stock && !(subject.year && subject.make && subject.model)) {
       return fail(400, "Enter a year, make, and model, or upload a photo of the vehicle.");
@@ -576,26 +619,61 @@ export async function handleVisualizer(req, deps) {
     const inspo = await optionalFile(deps, ns, body.inspoId || session.inspoKey, session.id);
     const logo = await optionalFile(deps, ns, body.logoId || session.logoKey, session.id);
     if ((session.category === "sign" || session.category === "window") && !photo) return fail(400, "Upload a photo of the storefront.");
+    const phase = body.phase === "rest" ? "rest" : body.phase === "first" ? "first" : "all";
     const count = LIMITS.sessionVariants;
-    if (!(await gate(deps.records, ipHash, day, "renders", count))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
     const references = [];
     if (photo) references.push({ bytes: photo.bytes, mime: photo.mime, role: "photo" });
     if (inspo) references.push({ bytes: inspo.bytes, mime: inspo.mime, role: "inspo" });
+    const subjectForPrompt = { ...subject, photo: !!photo };
+    if (!subjectForPrompt.body && session.category === "vehicle") subjectForPrompt.body = inferBody(subjectForPrompt);
+    if (phase === "rest") {
+      const base = await loadFile(deps.blobs, ns, session.baseRenderId, session.id);
+      if (!base) return fail(409, "Generate the first concept before the other two.");
+      const rest = await Promise.all([1, 2].map(async (variant) => {
+        const prompt = variantPrompt({ category: session.category, business: session.business || business, subject: subjectForPrompt, variant });
+        const painted = await paintAndStore(deps, {
+          ns, session, prompt,
+          references: [{ bytes: base.bytes, mime: base.mime || "image/png", role: "base" }],
+          photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 40000,
+        });
+        return publicRender(painted.row);
+      }));
+      await deps.records.updateSession(session.id, { baseRenderId: null });
+      if (rest.length !== 2 || rest.some(item => !item?.url)) return fail(502, "The preview did not finish the other concepts. Try again.");
+      await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render-rest", createdAt: now.toISOString(), detail: { models: rest.map(v => v.model) } });
+      return json(200, { variants: rest, count: rest.length, partial: false, stub: rest.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    }
+    if (!(await gate(deps.records, ipHash, day, "renders", count))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
     await deps.records.updateSession(session.id, {
       business, subject, rendersUsed: (session.rendersUsed || 0) + 1,
       logoKey: logo ? (body.logoId || session.logoKey) : session.logoKey,
       photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
     });
-    const variants = await Promise.all(Array.from({ length: count }, (_, variant) => (async () => {
-      const prompt = renderPrompt({ category: session.category, business, subject: { ...subject, photo: !!photo }, variant });
-      const row = await paintAndStore(deps, { ns, session, prompt, references, photoBytes: photo?.bytes, variant, kind: "variant" });
-      return publicRender(row);
-    })()));
+    const firstPrompt = renderPrompt({ category: session.category, business, subject: subjectForPrompt, variant: 0 });
+    const first = await paintAndStore(deps, {
+      ns, session, prompt: firstPrompt, references, photoBytes: photo?.bytes, variant: 0, kind: "variant", timeoutMs: 40000,
+    });
+    if (phase === "first") {
+      await deps.records.updateSession(session.id, { baseRenderId: first.row.id });
+      const variants = [publicRender(first.row)];
+      await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: [first.row.model], partial: true } });
+      return json(200, { variants, count: 1, partial: true, stub: !!first.row.stub, quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    }
+    const rest = await Promise.all([1, 2].map(async (variant) => {
+      const prompt = variantPrompt({ category: session.category, business, subject: subjectForPrompt, variant });
+      const painted = await paintAndStore(deps, {
+        ns, session, prompt,
+        references: [{ bytes: first.raw, mime: first.mime, role: "base" }],
+        photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 40000,
+      });
+      return publicRender(painted.row);
+    }));
+    const variants = [publicRender(first.row), ...rest];
     if (variants.length !== count || variants.some(item => !item?.url)) {
       return fail(502, "The preview did not finish all 3 concepts. Try again.");
     }
     await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub), count } });
-    return json(200, { variants, count, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    return json(200, { variants, count, partial: false, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
   }
 
   if (path === "/api/visualize/edit" && method === "POST") {
@@ -603,7 +681,7 @@ export async function handleVisualizer(req, deps) {
     if (!body) return fail(400, "Send JSON.");
     const session = await deps.records.getSession(clean(body.sessionId, 32));
     if (!session) return fail(404, "Start a new preview.");
-    if (session.editsUsed >= LIMITS.sessionEdits) return fail(409, "This preview already used its one revision. Send it to Arc, or start a new one.");
+    if (session.editsUsed >= LIMITS.sessionEdits) return fail(409, "This preview already used its 3 revisions. Send it to Arc, or start a new one.");
     const request = clean(body.request, 400);
     if (request.length < 3) return fail(400, "Say what you want changed.");
     if (!(await gate(deps.records, ipHash, day, "edits"))) return fail(429, "This network has reached today's revision limit.");
@@ -612,14 +690,43 @@ export async function handleVisualizer(req, deps) {
     const previous = await loadFile(deps.blobs, ns, parent.outputKey, session.id);
     if (!previous) return fail(404, "That version was not found.");
     const prompt = editPrompt(request);
-    const row = await paintAndStore(deps, {
+    const painted = await paintAndStore(deps, {
       ns, session, prompt,
       references: [{ bytes: previous.bytes, mime: "image/png", role: "previous" }],
       photoBytes: previous.bytes, variant: 2, kind: "edit", parentId: parent.id,
     });
-    await deps.records.updateSession(session.id, { editsUsed: session.editsUsed + 1 });
+    const row = painted.row;
+    const editsUsed = session.editsUsed + 1;
+    await deps.records.updateSession(session.id, { editsUsed });
     await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "edit", createdAt: now.toISOString(), detail: { model: row.model } });
-    return json(200, { render: publicRender(row), disclaimer: DISCLAIMER });
+    return json(200, { render: publicRender(row), editsUsed, editsLeft: LIMITS.sessionEdits - editsUsed, disclaimer: DISCLAIMER });
+  }
+
+  if (path === "/api/visualize/share" && method === "POST") {
+    const body = await readJson(req);
+    if (!body) return fail(400, "Send JSON.");
+    const session = await deps.records.getSession(clean(body.sessionId, 32));
+    if (!session) return fail(404, "Start a new preview.");
+    if ((session.sharesUsed || 0) >= 12) return fail(429, "Too many share links for this preview.");
+    const render = await deps.records.getRender(clean(body.renderId, 32));
+    if (!render || render.sessionId !== session.id) return fail(404, "That version was not found.");
+    const baseFile = await loadFile(deps.blobs, ns, render.outputKey, session.id);
+    if (!baseFile) return fail(404, "That version was not found.");
+    let image = await decodeImage(baseFile.bytes);
+    const quad = cleanQuad(body.quad);
+    const logo = await optionalFile(deps, ns, session.logoKey, session.id);
+    if (logo && quad) {
+      const mark = await decodeImage(logo.bytes);
+      try { image = compositeLogo(image, mark, denorm(quad, image.width, image.height)); }
+      catch { return fail(400, "Move the logo so it stays on the preview."); }
+    }
+    image = addBrandBar(image);
+    const png = Buffer.from(toPng(image));
+    const id = makeId();
+    await saveImage(deps.blobs, ns, id, png, { contentType: "image/png", sessionId: session.id, kind: "share" });
+    await deps.records.updateSession(session.id, { sharesUsed: (session.sharesUsed || 0) + 1 });
+    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "share", createdAt: now.toISOString(), detail: {} });
+    return json(200, { url: assetPath(id) });
   }
 
   if (path === "/api/visualize/lead" && method === "POST") {
@@ -716,6 +823,19 @@ function publicLead(lead) {
 async function optionalFile(deps, ns, id, sessionId) {
   if (!id) return null;
   return loadFile(deps.blobs, ns, id, sessionId);
+}
+
+async function classifyBody(env, subject) {
+  if (subject.body) return subject.body;
+  if (!(subject.make && subject.model)) return "";
+  try {
+    const raw = await extractWithModel(env, `What is the body type of a ${subject.year} ${subject.make} ${subject.model}? Return JSON only {"body":"car"} where body is one of car, suv, pickup, cargo-van, sprinter, box-truck, trailer.`);
+    const parsed = parseJson(raw);
+    return normalizeBody(parsed?.body);
+  } catch (err) {
+    console.error("visualizer body", err?.message || err);
+    return "";
+  }
 }
 
 function parseJson(text) {

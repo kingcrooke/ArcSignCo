@@ -170,6 +170,11 @@ export function xaiImagePlan(env, { prompt, references = [] }) {
   return { url: `${base}/images/edits`, body };
 }
 
+function imageTimeout(spec) {
+  const ms = Number(spec?.timeoutMs);
+  return AbortSignal.timeout(Number.isFinite(ms) && ms > 1000 ? ms : 45000);
+}
+
 async function readXaiImage(res, fetchImpl) {
   if (!res.ok) throw new Error(`xai image ${res.status}`);
   const json = await res.json();
@@ -189,7 +194,7 @@ async function xaiImage(env, spec, fetchImpl) {
     method: "POST",
     headers: { Authorization: `Bearer ${env.XAI_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify(plan.body),
-    signal: AbortSignal.timeout(50000),
+    signal: imageTimeout(spec),
   });
   return { bytes: await readXaiImage(res, fetchImpl), model: plan.body.model, stub: false };
 }
@@ -207,7 +212,8 @@ async function geminiImage(env, { prompt, references }) {
   return { bytes: Buffer.from(part.inlineData.data, "base64"), model, stub: false };
 }
 
-async function openaiImage(env, { prompt, references }) {
+async function openaiImage(env, spec) {
+  const { prompt, references } = spec;
   const base = (env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
   const model = env.ARC_OPENAI_IMAGE_MODEL || "gpt-image-1";
   const size = "1536x1024";
@@ -218,13 +224,13 @@ async function openaiImage(env, { prompt, references }) {
     form.set("prompt", prompt);
     form.set("size", size);
     form.set("image", new Blob([references[0].bytes], { type: references[0].mime || "image/png" }), "photo.png");
-    res = await fetch(`${base}/images/edits`, { method: "POST", headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}` }, body: form, signal: AbortSignal.timeout(45000) });
+    res = await fetch(`${base}/images/edits`, { method: "POST", headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}` }, body: form, signal: imageTimeout(spec) });
   } else {
     res = await fetch(`${base}/images/generations`, {
       method: "POST",
       headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model, prompt, size }),
-      signal: AbortSignal.timeout(45000),
+      signal: imageTimeout(spec),
     });
   }
   if (!res.ok) throw new Error(`openai image ${res.status}`);
@@ -242,10 +248,10 @@ export async function generateImage(env, spec, fetchImpl = fetch) {
     if (backend === "stub") break;
     try {
       const out = backend === "xai"
-        ? await xaiImage(env, { prompt, references: pictures }, fetchImpl)
+        ? await xaiImage(env, { prompt, references: pictures, timeoutMs: spec.timeoutMs }, fetchImpl)
         : backend === "gemini"
           ? await geminiImage(env, { prompt, references: pictures })
-          : await openaiImage(env, { prompt, references: pictures });
+          : await openaiImage(env, { prompt, references: pictures, timeoutMs: spec.timeoutMs });
       return { ...out, zone };
     } catch (err) {
       console.error("visualizer image", backend, err?.message || err);
@@ -254,19 +260,116 @@ export async function generateImage(env, spec, fetchImpl = fetch) {
   return placeholderRender({ category, variant, photoBytes });
 }
 
-export async function identifyVehicle(env, bytes, mime) {
-  const prompt = "Identify this vehicle. Return JSON only with keys year, make, model, color. Use empty strings when you are not sure. Do not invent a year, make, or model.";
-  if (!(env.GEMINI_API_KEY || env.GOOGLE_GEMINI_BASE_URL)) return "";
+const IDENTIFY_PROMPT = [
+  "Identify the vehicle in this photo.",
+  "Return JSON only with keys year, make, model, color, body.",
+  "body is one of: car, suv, pickup, cargo-van, sprinter, box-truck, trailer.",
+  "Name the most likely year, make, and model when the shape or badge is recognizable, for example a Toyota Camry sedan.",
+  "Use an empty string only when the photo is not a vehicle or that field is truly unreadable.",
+].join(" ");
+
+function visionText(content) {
+  if (Array.isArray(content)) return content.map(part => part?.text || "").join("");
+  return content || "";
+}
+
+function namedVehicle(text) {
+  if (!text) return false;
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+  if (start < 0 || end < start) return false;
+  try {
+    const parsed = JSON.parse(text.slice(start, end + 1));
+    return !!(String(parsed.make || "").trim() || String(parsed.model || "").trim());
+  } catch {
+    return false;
+  }
+}
+
+async function visionJpeg(bytes, mime) {
+  if (mime === "image/jpeg" || mime === "image/png") return { bytes, mime: mime || "image/jpeg" };
+  const { default: sharp } = await import("sharp");
+  return { bytes: await sharp(bytes).jpeg({ quality: 82 }).toBuffer(), mime: "image/jpeg" };
+}
+
+async function geminiIdentify(env, bytes, mime) {
   const { GoogleGenAI } = await import("@google/genai");
   const ai = new GoogleGenAI({});
   const response = await ai.models.generateContent({
     model: env.ARC_GEMINI_TEXT_MODEL || "gemini-2.5-flash",
     contents: [
-      { text: prompt },
+      { text: IDENTIFY_PROMPT },
       { inlineData: { mimeType: mime || "image/jpeg", data: Buffer.from(bytes).toString("base64") } },
     ],
   });
   return response.text || "";
+}
+
+async function xaiIdentify(env, bytes, mime, fetchImpl) {
+  const base = (env.XAI_BASE_URL || "https://api.x.ai/v1").replace(/\/$/, "");
+  const model = env.ARC_XAI_VISION_MODEL || "grok-4.7";
+  const res = await fetchImpl(`${base}/chat/completions`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.XAI_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model,
+      messages: [{
+        role: "user",
+        content: [
+          { type: "image_url", image_url: { url: dataUri({ bytes, mime }), detail: "high" } },
+          { type: "text", text: IDENTIFY_PROMPT },
+        ],
+      }],
+    }),
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!res.ok) throw new Error(`xai vision ${res.status}`);
+  const json = await res.json();
+  return visionText(json.choices?.[0]?.message?.content);
+}
+
+async function openaiIdentify(env, bytes, mime, fetchImpl) {
+  const base = (env.OPENAI_BASE_URL || "https://api.openai.com/v1").replace(/\/$/, "");
+  const res = await fetchImpl(`${base}/chat/completions`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.OPENAI_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: env.ARC_OPENAI_VISION_MODEL || "gpt-4o-mini",
+      response_format: { type: "json_object" },
+      messages: [{
+        role: "user",
+        content: [
+          { type: "text", text: IDENTIFY_PROMPT },
+          { type: "image_url", image_url: { url: dataUri({ bytes, mime }) } },
+        ],
+      }],
+    }),
+    signal: AbortSignal.timeout(20000),
+  });
+  if (!res.ok) throw new Error(`openai vision ${res.status}`);
+  const json = await res.json();
+  return visionText(json.choices?.[0]?.message?.content);
+}
+
+export async function identifyVehicle(env, bytes, mime, fetchImpl = fetch) {
+  let picture;
+  try { picture = await visionJpeg(bytes, mime); }
+  catch { picture = { bytes, mime: mime || "image/jpeg" }; }
+  const runners = [];
+  if (env.GEMINI_API_KEY || env.GOOGLE_GEMINI_BASE_URL) runners.push(() => geminiIdentify(env, picture.bytes, picture.mime));
+  if (env.XAI_API_KEY) runners.push(() => xaiIdentify(env, picture.bytes, picture.mime, fetchImpl));
+  if (env.OPENAI_API_KEY) runners.push(() => openaiIdentify(env, picture.bytes, picture.mime, fetchImpl));
+  let last = "";
+  for (const run of runners) {
+    try {
+      const text = await run();
+      if (namedVehicle(text)) return text;
+      if (text) last = text;
+    } catch (err) {
+      console.error("visualizer identify", err?.message || err);
+    }
+  }
+  return last;
 }
 
 export async function extractWithModel(env, prompt) {
