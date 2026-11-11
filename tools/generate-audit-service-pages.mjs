@@ -114,7 +114,7 @@ const pages = [
     faqs: [
       {
         q: "Can Arc fix a sign the same week?",
-        a: "Timing depends on parts, access, and permits. Put URGENT in the email subject for active storefronts. Arc's 24-hour quote target starts once Arc has photos and the project street address.",
+        a: "Timing depends on parts, access, and permits. Put URGENT in the email subject for active storefronts. For small storefront jobs, the 24-hour quote target starts once Arc has the job details: photos with measurements, or drawings if you have them. Bids follow their own due dates.",
       },
       {
         q: "Does Arc service signs Arc did not fabricate?",

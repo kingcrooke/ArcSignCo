@@ -37,6 +37,7 @@ export function memoryRecords() {
   const sessions = new Map();
   const renders = new Map();
   const leads = new Map();
+  const jobs = new Map();
   const usage = new Map();
   const events = [];
   return {
@@ -66,6 +67,14 @@ export function memoryRecords() {
     },
     async addEvent(row) { events.push(row); },
     async listEvents() { return events.slice(); },
+    async addJob(row) { jobs.set(row.id, { ...row, variants: row.variants || [] }); return jobs.get(row.id); },
+    async getJob(id) { return jobs.get(id) || null; },
+    async updateJob(id, patch) {
+      const cur = jobs.get(id);
+      if (!cur) return null;
+      jobs.set(id, { ...cur, ...patch });
+      return jobs.get(id);
+    },
   };
 }
 
@@ -119,5 +128,14 @@ export function blobRecords(blobs, ns) {
       return (await read("usage", `${ipHash}_${day}`)) || { ...emptyUsage };
     },
     async addEvent(row) { await blobs.setJSON(key("events", row.id), row); },
+    async addJob(row) { await blobs.setJSON(key("jobs", row.id), row); return row; },
+    async getJob(id) { return read("jobs", id); },
+    async updateJob(id, patch) {
+      const cur = await read("jobs", id);
+      if (!cur) return null;
+      const next = { ...cur, ...patch };
+      await blobs.setJSON(key("jobs", id), next);
+      return next;
+    },
   };
 }

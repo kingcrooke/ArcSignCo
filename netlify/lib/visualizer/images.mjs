@@ -235,9 +235,10 @@ async function openaiImage(env, { prompt, references }) {
 }
 
 export async function generateImage(env, spec, fetchImpl = fetch) {
-  const { prompt, references = [], category, variant, photoBytes } = spec;
+  const { prompt, references = [], category } = spec;
   const pictures = references.filter(ref => ref?.role !== "logo");
   const zone = zoneFor(category);
+  let lastError = "The preview didn't finish. Try again.";
   for (const backend of imageChain(env)) {
     if (backend === "stub") break;
     try {
@@ -248,10 +249,11 @@ export async function generateImage(env, spec, fetchImpl = fetch) {
           : await openaiImage(env, { prompt, references: pictures });
       return { ...out, zone };
     } catch (err) {
-      console.error("visualizer image", backend, err?.message || err);
+      lastError = err?.message || lastError;
+      console.error("visualizer image", backend, lastError);
     }
   }
-  return placeholderRender({ category, variant, photoBytes });
+  return { bytes: null, error: "The preview didn't finish. Try again.", stub: false, model: "error", zone };
 }
 
 export async function identifyVehicle(env, bytes, mime) {

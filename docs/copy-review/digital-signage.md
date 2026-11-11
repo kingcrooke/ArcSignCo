@@ -127,7 +127,7 @@ You work with Arc from the first layout through install.
 
 ### What should I send for a digital signage quote?
 
-Send floor plans or a campus map, a list of screens or locations, brand guidelines, photos of each wall or kiosk location, your deadline, and the street address. Email arc@arcsignco.com with the project address in the subject line, or call or text (347) 450-2110. Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
+Send floor plans or a campus map, a list of screens or locations, brand guidelines, photos of each wall or kiosk location, your deadline, and the street address. Email arc@arcsignco.com with the project address in the subject line, or call or text (347) 450-2110. For small storefront jobs, the 24-hour quote target starts once Arc has the job details: photos with measurements, or drawings if you have them. Bids follow their own due dates.
 
 _Label: Related services_
 

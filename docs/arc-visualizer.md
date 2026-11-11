@@ -32,7 +32,7 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `GOOGLE_GEMINI_BASE_URL` | Automatic with AI Gateway | Do not set this yourself if you want gateway routing. |
 | `OPENAI_API_KEY` | No | Chat extraction, and image generation only when the base URL is OpenAI's own (the gateway does not serve image models). A gateway placeholder key is ignored for images. |
 | `OPENAI_BASE_URL` | Automatic with AI Gateway | Direct OpenAI image calls are skipped when this host is Netlify. |
-| `ARC_IMAGE_PROVIDER` | No | `auto` (default), `xai`, `gemini`, `openai`, or `stub`. `auto` tries xAI, then Gemini, then direct OpenAI images, then a layout placeholder. A failed call falls through to the next one. |
+| `ARC_IMAGE_PROVIDER` | No | `auto` (default), `xai`, `gemini`, `openai`, or `stub`. `auto` tries xAI, then Gemini, then direct OpenAI images. A failed call falls through to the next one. If every provider fails, the page says the preview didn't finish. It does not draw a placeholder. |
 | `ARC_GEMINI_IMAGE_MODEL` | No | Defaults to `gemini-2.5-flash-image`. |
 | `ARC_GEMINI_TEXT_MODEL` | No | Defaults to `gemini-2.5-flash`. |
 | `ARC_OPENAI_IMAGE_MODEL` | No | Defaults to `gpt-image-1`. |
@@ -40,21 +40,23 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `TURNSTILE_SITE_KEY` | No | Cloudflare Turnstile site key. Shown on generate and on the lead form when set. |
 | `TURNSTILE_SECRET_KEY` | No | Verified on generate and on the lead form. Other limits still apply when this is unset. |
 
-Missing image keys do not break the flow. The function draws a layout placeholder, says so on the page, and still pastes the uploaded logo.
+Missing image keys do not draw a placeholder. The page says the preview didn't finish and the visitor can email arc@arcsignco.com. A concept that does finish still pastes the uploaded logo.
 
 ## Grok Imagine
 
 Image calls go to `https://api.x.ai/v1` with model `grok-imagine-image-2.0` ([xAI image generation](https://docs.x.ai/developers/model-capabilities/images/generation), [image editing](https://docs.x.ai/developers/model-capabilities/images/editing)).
 
-- No uploaded photo: `POST /v1/images/generations`.
-- A vehicle photo, storefront photo, or a previous preview: `POST /v1/images/edits`. The picture is a base64 data URI (`image.url` plus `type: "image_url"`). An optional inspiration image is a second source. The API accepts up to five source images. The logo file is not one of them.
+- A template photograph, an uploaded photo, a storefront photo, or a previous preview: `POST /v1/images/edits`. The picture is a base64 data URI (`image.url` plus `type: "image_url"`). An optional inspiration image is a second source. The API accepts up to five source images. The logo file is not one of them.
+- Text-only `POST /v1/images/generations` is used only when no photograph is available.
 - The OpenAI SDK's multipart `images.edit()` is not the xAI edit call. xAI wants JSON.
 - Output is requested as `b64_json` because returned URLs are temporary. Resolution is `1k` unless `ARC_XAI_IMAGE_RESOLUTION=2k`. Text-only generations use aspect `3:2`. Edits leave aspect ratio unset so the uploaded photo's aspect is kept.
 - The real logo is still pasted afterward by `visualize/js/composite.js`. The prompt tells the model to leave that area blank.
 
 ## Limits
 
-Per session: 3 concepts each time (a second set is allowed once), 4 bare-vehicle studio shots, and 1 written revision that changes only the concept it was asked to change. The function always returns all 3 concepts; a failed image call is replaced with the layout placeholder so the count does not drop. Per IP per UTC day: 30 scans, 16 preview images (vehicle shots and concepts share this), 4 revisions, 5 leads, 40 uploads, 10 admin sign-in failures. A lead, a vehicle shot, or a concept set sooner than 3 seconds after the session starts is rejected. A hidden fax field is dropped. The function also has a Netlify rate limit of 40 requests a minute per IP.
+Per session: 3 concepts each time (a second set is allowed once), 4 bare-vehicle shots, and 1 written revision that changes only the concept it was asked to change. The three concepts run in a background function, one after another, and the page polls until each one is stored. A failed image is reported on the page and is not replaced with a drawn placeholder. Per IP per UTC day: 30 scans, 16 preview images (vehicle shots and concepts share this), 4 revisions, 5 leads, 40 uploads, 10 admin sign-in failures. A lead, a vehicle shot, or a concept set sooner than 3 seconds after the session starts is rejected. A hidden fax field is dropped. The function also has a Netlify rate limit of 40 requests a minute per IP.
+
+With no uploaded photo, the model edits a licensed template photograph in `visualize/img/templates/` (cargo van, box truck, pickup, sedan, or storefront). Sources are in `visualize/img/templates/CREDITS.md`. The logo is placed on the lower rear of a vehicle, or the right end of a sign, clear of the lettering. Every concept prompt repeats the wrap coverage the visitor chose.
 
 The page also posts the quote to the Netlify Form `visualizer-quote` (and problem notes to `visualizer-report`). Add an email notification for `visualizer-quote` to arc@arcsignco.com in Site configuration → Forms, the same place as `quote-request`. The existing Resend lead email still goes to arc@arcsignco.com when `RESEND_API_KEY` is set. SMS consent checkboxes are optional and start unchecked.
 

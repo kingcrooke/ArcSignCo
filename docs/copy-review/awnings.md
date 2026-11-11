@@ -255,7 +255,7 @@ _Label: Quote_
 
 ## Get a quote for this awning
 
-Send the style, a photo, and the project address. The 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
+Send the style, a photo, and the project address. For small storefront jobs, the 24-hour quote target starts once Arc has the job details: photos with measurements, or drawings if you have them. Bids follow their own due dates.
 
 - Photos of the storefront, straight on and from the sideRequired
 - Width, projection, drop, and sidewalk clearanceRequired
@@ -368,7 +368,7 @@ A business name usually sits on the valance or skirt, where it is easiest to rea
 
 ### What affects how long an awning project takes?
 
-Timing depends on a re-cover versus a new frame, the size, the fabric, lettering, lighting, landlord criteria, and whether Department of Buildings, Department of Transportation, or Landmarks Preservation Commission review applies. Arc does not publish a week count. The 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
+Timing depends on a re-cover versus a new frame, the size, the fabric, lettering, lighting, landlord criteria, and whether Department of Buildings, Department of Transportation, or Landmarks Preservation Commission review applies. Arc does not publish a week count. For small storefront jobs, the 24-hour quote target starts once Arc has the job details: photos with measurements, or drawings if you have them. Bids follow their own due dates.
 
 _Label: Sources_
 
