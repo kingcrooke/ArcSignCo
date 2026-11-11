@@ -18,6 +18,8 @@ export default async (req, context) => {
   const env = Object.fromEntries(ENV_KEYS.map(key => [key, envGet(key)]));
   const blobs = getStore({ name: BLOB_STORE, consistency: "strong" });
   const records = blobRecords(blobs, `v1/${contextSlug(context.deploy?.context)}`);
+  const host = (req.headers.get("x-forwarded-host") || "").split(",")[0].trim();
+  const siteUrl = envGet("DEPLOY_PRIME_URL") || (host ? `https://${host}` : "") || context.site?.url || new URL(req.url).origin;
   try {
     return await handleVisualizer(req, {
       blobs,
@@ -25,6 +27,10 @@ export default async (req, context) => {
       env,
       deployContext: context.deploy?.context,
       ip: context.ip,
+      siteUrl,
+      // The browser starts the background function. A server-side fetch to this
+      // site's own function did not return 202 on the deploy preview.
+      background: true,
     });
   } catch (err) {
     console.error("visualizer", err);
@@ -44,6 +50,7 @@ export const config = {
     "/api/visualize/vehicle",
     "/api/visualize/identify",
     "/api/visualize/render",
+    "/api/visualize/job/:id",
     "/api/visualize/edit",
     "/api/visualize/lead",
     "/api/visualize/asset/:id",
@@ -54,4 +61,5 @@ export const config = {
   ],
   method: ["GET", "POST"],
   rateLimit: { windowLimit: 40, windowSize: 60, aggregateBy: ["ip", "domain"] },
+  includedFiles: ["visualize/img/templates/*.jpg"],
 };

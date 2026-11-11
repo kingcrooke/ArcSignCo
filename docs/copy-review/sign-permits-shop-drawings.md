@@ -126,7 +126,7 @@ _Label: Quote_
 
 Email your files to arc@arcsignco.com with the project address in the subject line. Put URGENT in the subject for active jobsites.
 
-Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
+For small storefront jobs, the 24-hour quote target starts once Arc has the job details: photos with measurements, or drawings if you have them. Bids follow their own due dates.
 
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
