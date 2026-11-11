@@ -411,4 +411,6 @@ test("docs name every env key and the page does not invent a price", () => {
   assert.doesNotMatch(sitemap, /visualize\/admin/);
   const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
   assert.match(toml, /\/visualize\/admin/);
+  const fn = fs.readFileSync(path.join(root, "netlify/functions/visualizer.mjs"), "utf8");
+  assert.match(fn, /\/api\/visualize\/job\/:id/);
 });

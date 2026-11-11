@@ -50,6 +50,7 @@ export const config = {
     "/api/visualize/vehicle",
     "/api/visualize/identify",
     "/api/visualize/render",
+    "/api/visualize/job/:id",
     "/api/visualize/edit",
     "/api/visualize/lead",
     "/api/visualize/asset/:id",
