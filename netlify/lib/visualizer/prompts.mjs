@@ -130,7 +130,8 @@ export function renderPrompt({ category, business = {}, subject = {}, variant = 
     const kind = SIGNS[subject.signType] || "storefront";
     const size = subject.widthFt && subject.heightFt ? `about ${subject.widthFt} by ${subject.heightFt} ft, ` : "";
     const light = subject.illuminated ? "internally illuminated, evening glow" : "non-illuminated";
-    body = `Edit this storefront photograph. ${PHOTO} Add a ${kind} sign, ${size}above the entrance on the fascia, ${light}. The sign reads '${name}' in colors ${colors}. Keep the building, perspective, and surroundings unchanged. Realistic mounting, shadows, and scale. Keep this same sign type. ${words}`;
+    const lines = [name, phone, web].filter(Boolean).join(" / ");
+    body = `Edit this storefront photograph. ${PHOTO} Add a ${kind} sign, ${size}above the entrance on the fascia, ${light}. The sign shows only these exact lines: ${lines}. Copy every character, including the phone digits and the website. Do not invent a different number or domain. Colors: ${colors}. Keep the building, perspective, and surroundings unchanged. Realistic mounting, shadows, and scale. Keep this same sign type. ${words}`;
   } else if (category === "window") {
     const kind = WINDOWS[subject.windowType] || "window vinyl";
     const panes = clean(subject.panes, 80) || "the main storefront windows";

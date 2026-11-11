@@ -74,6 +74,15 @@ test("prompts leave a blank logo area and estimates invent no price", () => {
     assert.match(full, /Do not reduce a full or half wrap/);
     assert.ok(full.includes(coverageClause("full")));
   }
+  const sign = renderPrompt({
+    category: "sign",
+    business: { name: "Arc Signage Co", phone: "(347) 450-2110", web: "arcsignco.com" },
+    subject: { signType: "channel-letters" },
+    variant: 0,
+  });
+  assert.match(sign, /\(347\) 450-2110/);
+  assert.match(sign, /arcsignco\.com/);
+  assert.match(sign, /Do not invent a different number/);
   assert.match(editPrompt("make the van white"), /Do not draw any logo/);
   for (const env of [{}, { ARC_VISUALIZER_ESTIMATES: "1" }]) {
     const quote = quoteFor("vehicle", env);
