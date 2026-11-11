@@ -36,6 +36,7 @@ export default async (req, context) => {
 };
 
 export const config = {
+  timeout: 60,
   path: [
     "/api/visualize/config",
     "/api/visualize/session",
@@ -45,6 +46,7 @@ export const config = {
     "/api/visualize/identify",
     "/api/visualize/render",
     "/api/visualize/edit",
+    "/api/visualize/share",
     "/api/visualize/lead",
     "/api/visualize/asset/:id",
     "/api/visualize/admin/login",

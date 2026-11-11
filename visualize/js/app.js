@@ -1,10 +1,12 @@
 import { loadImageFile } from "/tools/sign-mockup/js/images.js";
 import { compositeLogo } from "./composite.js";
+import { buildProofPdf } from "./proof.js";
 
 const $ = (id) => document.getElementById(id);
 const STOCK = "/visualize/img/work-van.svg";
 const SAMPLE = "/tools/sign-mockup/img/sample-storefront.jpg";
 const CONCEPTS = 3;
+const EDITS = 3;
 const SWATCHES = [
   ["#e23b3b", "Red"], ["#f28c28", "Orange"], ["#d4a53c", "Gold"], ["#f2d34a", "Yellow"],
   ["#3aaa4a", "Green"], ["#1aa8a8", "Teal"], ["#2f6fed", "Blue"], ["#163a78", "Navy"],
@@ -45,7 +47,7 @@ let sessionReadyAt = 0;
 const state = {
   sessionId: "",
   category: "vehicle",
-  vehicle: { year: "", make: "", model: "", color: "white", body: "cargo-van", stock: true, label: "Work van" },
+  vehicle: { year: "", make: "", model: "", color: "white", body: "cargo-van", bodyPicked: false, stock: true, label: "Work van" },
   photoId: "",
   beforeUrl: STOCK,
   business: { name: "", phone: "", web: "", colors: [] },
@@ -56,6 +58,8 @@ const state = {
   places: { name: [], phone: [], web: [] },
   logoId: "",
   logoPixels: null,
+  logoUrl: "",
+  placements: {},
   concepts: [],
   index: 0,
   editsUsed: 0,
@@ -143,6 +147,8 @@ function showArrows(on) {
 }
 
 function startRing(title, pill, { cancel = false } = {}) {
+  $("logoEditor").hidden = true;
+  $("logoHint").hidden = true;
   $("stageCard").classList.add("is-busy");
   $("stageBusy").hidden = false;
   $("busyTitle").textContent = title;
@@ -192,7 +198,7 @@ async function choice() {
   await ensureSession("vehicle");
   setStage(STOCK, "Work van", "White work van");
   state.beforeUrl = STOCK;
-  state.vehicle = { year: "", make: "", model: "", color: "white", body: "cargo-van", stock: true, label: "Work van" };
+  state.vehicle = { year: "", make: "", model: "", color: "white", body: "cargo-van", bodyPicked: false, stock: true, label: "Work van" };
   await typeLine("I've started you on a work van. Use it, or pick a different vehicle?");
   const box = el("div");
   box.append(
@@ -228,14 +234,25 @@ async function vehicleForm() {
   await user("I'll enter my vehicle");
   clearPanel();
   await typeLine("Tell me about your vehicle:");
-  const year = el("input", { id: "year", inputmode: "numeric", maxlength: "4", placeholder: "2022" });
-  const make = el("input", { id: "make", maxlength: "40", placeholder: "Ford" });
-  const model = el("input", { id: "model", maxlength: "40", placeholder: "Transit" });
+  const year = el("input", { id: "year", inputmode: "numeric", maxlength: "4", placeholder: "2023" });
+  const make = el("input", { id: "make", maxlength: "40", placeholder: "Toyota" });
+  const model = el("input", { id: "model", maxlength: "40", placeholder: "Camry" });
   const color = el("input", { id: "paint", maxlength: "40", placeholder: "white" });
+  const body = el("select", { id: "bodyType" }, [
+    el("option", { value: "" }, "Match the model"),
+    el("option", { value: "car" }, "Sedan / car"),
+    el("option", { value: "suv" }, "SUV"),
+    el("option", { value: "pickup" }, "Pickup"),
+    el("option", { value: "cargo-van" }, "Cargo van"),
+    el("option", { value: "sprinter" }, "Sprinter"),
+    el("option", { value: "box-truck" }, "Box truck"),
+    el("option", { value: "trailer" }, "Trailer"),
+  ]);
   $("panel").append(
     el("label", { class: "field" }, ["Year", year]),
     el("label", { class: "field" }, ["Make", make]),
     el("label", { class: "field" }, ["Model", model]),
+    el("label", { class: "field" }, ["Body type", body]),
     el("label", { class: "field" }, ["Current body color (optional)", color]),
     el("button", { class: "gold-btn", type: "button", onclick: () => generateVehicle(false) }, "Generate my vehicle"),
   );
@@ -246,11 +263,15 @@ async function generateVehicle() {
   const make = $("make").value.trim();
   const model = $("model").value.trim();
   const color = $("paint").value.trim();
+  const body = $("bodyType").value;
   if (!/^(19|20)\d{2}$/.test(year) || !make || !model) {
     toast("Enter a year, make, and model.");
     return;
   }
-  state.vehicle = { year, make, model, color, body: "cargo-van", stock: false, label: [year, make, model].filter(Boolean).join(" ") };
+  state.vehicle = {
+    year, make, model, color, body, bodyPicked: !!body, stock: false,
+    label: [year, make, model].filter(Boolean).join(" "),
+  };
   await user([year, make, model, color].filter(Boolean).join(" "));
   clearPanel();
   const stop = startRing("Generating your car…", "This usually takes 30 to 60 seconds.");
@@ -258,8 +279,9 @@ async function generateVehicle() {
     await afterGate();
     const data = await apiRetry("/api/visualize/vehicle", jsonBody({
       sessionId: state.sessionId,
-      subject: { year, make, model, color, body: "cargo-van" },
+      subject: { year, make, model, color, body, bodyPicked: !!body },
     }));
+    if (data.body) state.vehicle.body = data.body;
     state.photoId = data.render.id;
     state.beforeUrl = data.render.url;
     state.vehicle.label = data.label || state.vehicle.label;
@@ -291,10 +313,14 @@ async function regenerate() {
     await afterGate();
     const data = await apiRetry("/api/visualize/vehicle", jsonBody({
       sessionId: state.sessionId,
-      subject: { year: state.vehicle.year, make: state.vehicle.make, model: state.vehicle.model, color: state.vehicle.color, body: "cargo-van" },
+      subject: {
+        year: state.vehicle.year, make: state.vehicle.make, model: state.vehicle.model,
+        color: state.vehicle.color, body: state.vehicle.body, bodyPicked: state.vehicle.bodyPicked,
+      },
     }));
     state.photoId = data.render.id;
     state.beforeUrl = data.render.url;
+    if (data.body) state.vehicle.body = data.body;
     setStage(data.render.url, state.vehicle.label, state.vehicle.label);
     stop();
     await confirmVehicle();
@@ -329,11 +355,14 @@ async function onPhoto(input) {
     state.photoId = uploaded.id;
     state.beforeUrl = uploaded.url;
     state.vehicle.stock = false;
+    state.vehicle.body = "";
+    state.vehicle.bodyPicked = false;
     const found = await api("/api/visualize/identify", jsonBody({ sessionId: state.sessionId, photoId: uploaded.id }));
     state.vehicle.year = found.vehicle.year || "";
     state.vehicle.make = found.vehicle.make || "";
     state.vehicle.model = found.vehicle.model || "";
     state.vehicle.color = found.vehicle.color || "";
+    state.vehicle.body = found.vehicle.body || "";
     state.vehicle.label = found.label || "your vehicle";
     setStage(uploaded.url, state.vehicle.label, "Your vehicle");
     stop();
@@ -458,7 +487,9 @@ async function scan(input) {
     if (data.logoId) {
       state.logoId = data.logoId;
       const res = await fetch(data.logoUrl);
-      state.logoPixels = await pixelsFromBlob(await res.blob());
+      const blob = await res.blob();
+      state.logoPixels = await pixelsFromBlob(blob);
+      state.logoUrl = URL.createObjectURL(blob);
     }
     toast("Details added. You can still edit each section.");
     await builder();
@@ -586,6 +617,7 @@ function buildSection(kind, refresh) {
         const data = await api("/api/visualize/upload", { method: "POST", body });
         state.logoId = data.id;
         state.logoPixels = await pixelsFromBlob(blob);
+        state.logoUrl = URL.createObjectURL(blob);
         name.textContent = "Logo added";
         refresh();
       } catch (err) { toast(err.message); }
@@ -631,10 +663,13 @@ function subjectBody() {
   };
   if (state.category === "sign") return { signType: state.signType, style: state.style, ...places, namePlaces: state.places.name, phonePlaces: state.places.phone, webPlaces: state.places.web };
   if (state.category === "window") return { windowType: state.windowType, panes: "the main storefront windows", ...places };
+  const stock = state.vehicle.stock && !state.photoId;
   return {
     year: state.vehicle.year, make: state.vehicle.make, model: state.vehicle.model,
-    body: state.vehicle.body || "cargo-van", color: state.vehicle.color || "white",
-    coverage: state.coverage, stock: state.vehicle.stock && !state.photoId, ...places,
+    body: stock ? "cargo-van" : (state.vehicle.body || ""),
+    bodyPicked: !stock && !!state.vehicle.bodyPicked,
+    color: state.vehicle.color || "white",
+    coverage: state.coverage, stock, ...places,
   };
 }
 
@@ -662,6 +697,7 @@ async function generateConcepts() {
     });
     if (!data.variants || data.variants.length !== CONCEPTS) throw new Error("The preview did not return 3 concepts. Try again.");
     state.concepts = data.variants;
+    state.placements = {};
     state.index = 0;
     $("stubBanner").hidden = !data.stub;
     stop();
@@ -685,10 +721,11 @@ async function showConcepts() {
   await presentConcept();
   await typeLine(`Here are your ${CONCEPTS} concepts — swipe through and pick the direction you like best.`);
   const box = el("div");
+  const left = EDITS - state.editsUsed;
   box.append(
     el("button", { class: "gold-btn", type: "button", onclick: useConcept }, "Use this concept — Next step"),
     el("button", { class: "line-btn", type: "button", onclick: anotherDesign }, "Create another design"),
-    el("button", { class: "line-btn", type: "button", onclick: askChange }, "Request a change"),
+    el("button", { class: "line-btn", type: "button", onclick: askChange }, left > 0 ? `Request a change (${left} left)` : "Revisions used"),
   );
   $("panel").append(box);
 }
@@ -714,34 +751,79 @@ async function pixelsFromBlob(blob) {
   return { width: canvas.width, height: canvas.height, data: frame.data };
 }
 
-function quadFromZone(zone) {
-  const { x, y, w, h } = zone;
-  return [{ x, y }, { x: x + w, y }, { x: x + w, y: y + h }, { x, y: y + h }];
+function clampPlace(rect, box) {
+  const limit = box || { x: 0.02, y: 0.02, w: 0.96, h: 0.96 };
+  const w = Math.min(Math.max(rect.w, 0.05), limit.w);
+  const h = Math.min(Math.max(rect.h, 0.05), limit.h);
+  const x = Math.min(Math.max(rect.x, limit.x), limit.x + limit.w - w);
+  const y = Math.min(Math.max(rect.y, limit.y), limit.y + limit.h - h);
+  return { x, y, w, h };
+}
+
+function currentConcept() {
+  return state.concepts[state.index] || null;
+}
+
+function placeFor(concept, img) {
+  if (state.placements[concept.id]) return state.placements[concept.id];
+  const zone = concept.zone || { x: 0.4, y: 0.42, w: 0.2, h: 0.22 };
+  const box = concept.vehicleBox;
+  if (!state.logoPixels || !img?.naturalWidth) return clampPlace({ ...zone }, box);
+  const normAspect = (state.logoPixels.width / state.logoPixels.height) * (img.naturalHeight / img.naturalWidth);
+  let h = Math.max(zone.h, 0.12);
+  let w = h * normAspect;
+  const maxW = (box?.w || 0.5) * 0.42;
+  if (w > maxW) {
+    w = maxW;
+    h = w / normAspect;
+  }
+  return clampPlace({ x: zone.x + zone.w / 2 - w / 2, y: zone.y + zone.h / 2 - h / 2, w, h }, box);
+}
+
+function frameMetrics() {
+  const frame = $("stageFrame").getBoundingClientRect();
+  const img = $("stageImg");
+  const nw = img.naturalWidth || 1;
+  const nh = img.naturalHeight || 1;
+  const scale = Math.min(frame.width / nw, frame.height / nh);
+  const w = nw * scale;
+  const h = nh * scale;
+  return { left: (frame.width - w) / 2, top: (frame.height - h) / 2, w, h };
+}
+
+function syncLogoEditor() {
+  const editor = $("logoEditor");
+  const concept = currentConcept();
+  const show = !!(concept && state.logoPixels && state.concepts.length && $("stageBusy").hidden);
+  editor.hidden = !show;
+  $("logoHint").hidden = !show;
+  if (!show) return;
+  if (!state.placements[concept.id]) state.placements[concept.id] = placeFor(concept, $("stageImg"));
+  const place = state.placements[concept.id];
+  const metrics = frameMetrics();
+  editor.style.left = `${metrics.left}px`;
+  editor.style.top = `${metrics.top}px`;
+  editor.style.width = `${metrics.w}px`;
+  editor.style.height = `${metrics.h}px`;
+  const box = $("logoBox");
+  box.style.left = `${place.x * 100}%`;
+  box.style.top = `${place.y * 100}%`;
+  box.style.width = `${place.w * 100}%`;
+  box.style.height = `${place.h * 100}%`;
+  if (state.logoUrl) $("logoGhost").src = state.logoUrl;
 }
 
 async function presentConcept() {
   const concept = state.concepts[state.index];
   if (!concept) return;
   $("stageLabel").textContent = `Concept ${state.index + 1} of ${state.concepts.length}`;
-  const res = await fetch(concept.url);
-  const blob = await res.blob();
-  let url = URL.createObjectURL(blob);
-  if (state.logoPixels && concept.zone) {
-    try {
-      const base = await pixelsFromBlob(blob);
-      const quad = quadFromZone(concept.zone).map(p => ({ x: p.x * base.width, y: p.y * base.height }));
-      const frame = compositeLogo(base, state.logoPixels, quad);
-      const canvas = document.createElement("canvas");
-      canvas.width = frame.width;
-      canvas.height = frame.height;
-      canvas.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(frame.data), frame.width, frame.height), 0, 0);
-      url = canvas.toDataURL("image/png");
-    } catch { /* the model image still shows */ }
-  }
-  $("stageImg").src = url;
-  $("stageImg").alt = `Concept ${state.index + 1} of ${state.concepts.length}`;
-  state.shownUrl = url;
+  const img = $("stageImg");
+  img.alt = `Concept ${state.index + 1} of ${state.concepts.length}`;
+  if (img.src !== new URL(concept.url, location.origin).href) img.src = concept.url;
+  state.shownUrl = concept.url;
   paintDots();
+  try { await img.decode(); } catch { /* the overlay waits for naturalWidth */ }
+  syncLogoEditor();
 }
 
 async function useConcept() {
@@ -764,9 +846,10 @@ async function anotherDesign() {
 }
 
 async function askChange() {
-  if (state.editsUsed) { toast("This preview already used its one revision. Send it to Arc, or start over."); return; }
+  if (state.editsUsed >= EDITS) { toast("This preview already used its 3 revisions. Send it to Arc, or start over."); return; }
   clearPanel();
-  await typeLine("Tell me the one thing to change. I'll keep the rest of this concept.");
+  const left = EDITS - state.editsUsed;
+  await typeLine(`Tell me what to change. I'll keep the rest of this concept. ${left} revision${left === 1 ? "" : "s"} left.`);
   const input = el("textarea", { id: "editRequest", maxlength: "400", placeholder: "Make the phone number bigger" });
   $("panel").append(
     el("label", { class: "field" }, ["Request a change", input]),
@@ -784,7 +867,8 @@ async function applyChange(input) {
     const current = state.concepts[state.index];
     const data = await api("/api/visualize/edit", jsonBody({ sessionId: state.sessionId, renderId: current.id, request }));
     state.concepts[state.index] = data.render;
-    state.editsUsed = 1;
+    delete state.placements[data.render.id];
+    state.editsUsed = data.editsUsed || state.editsUsed + 1;
     stop();
     await showConcepts();
   } catch (err) {
@@ -887,6 +971,7 @@ async function sendLead(ev) {
       renderId: ids[0],
       smsTransactional: $("smsUpdates").checked === true,
       smsPromo: $("smsPromos").checked === true,
+      quad: currentQuad(),
     }));
     const [formRes, apiRes] = await Promise.allSettled([posted, saved]);
     if (apiRes.status === "rejected" && formRes.status === "rejected") throw apiRes.reason;
@@ -912,6 +997,8 @@ async function startOver() {
   state.places = { name: [], phone: [], web: [] };
   state.logoId = "";
   state.logoPixels = null;
+  state.logoUrl = "";
+  state.placements = {};
   state.concepts = [];
   state.editsUsed = 0;
   state.selected = new Set();
@@ -922,9 +1009,48 @@ async function startOver() {
   await choice();
 }
 
+function currentQuad() {
+  const concept = currentConcept();
+  const place = concept && state.placements[concept.id];
+  if (!place) return undefined;
+  return [
+    { x: place.x, y: place.y },
+    { x: place.x + place.w, y: place.y },
+    { x: place.x + place.w, y: place.y + place.h },
+    { x: place.x, y: place.y + place.h },
+  ];
+}
+
+function colorNames() {
+  return state.business.colors.map(hex => SWATCHES.find(item => item[0] === hex)?.[1] || hex).join(", ");
+}
+
+function styleLabel() {
+  return STYLES.find(item => item[0] === state.style)?.[1] || state.style || "";
+}
+
+async function compositedPixels() {
+  const concept = currentConcept();
+  const src = concept?.url || $("stageImg").src;
+  const blob = await (await fetch(src)).blob();
+  const base = await pixelsFromBlob(blob);
+  const place = concept && state.placements[concept.id];
+  if (!state.logoPixels || !place) return base;
+  const quad = currentQuad().map(point => ({ x: point.x * base.width, y: point.y * base.height }));
+  return compositeLogo(base, state.logoPixels, quad);
+}
+
+function canvasFromPixels(frame) {
+  const canvas = document.createElement("canvas");
+  canvas.width = frame.width;
+  canvas.height = frame.height;
+  canvas.getContext("2d").putImageData(new ImageData(new Uint8ClampedArray(frame.data), frame.width, frame.height), 0, 0);
+  return canvas;
+}
+
 async function downloadImage() {
-  const img = $("stageImg");
-  const bitmap = await createImageBitmap(await (await fetch(img.src)).blob());
+  const frame = await compositedPixels();
+  const bitmap = await createImageBitmap(await new Promise(resolve => canvasFromPixels(frame).toBlob(resolve, "image/png")));
   const footer = 72;
   const canvas = document.createElement("canvas");
   canvas.width = bitmap.width;
@@ -943,7 +1069,7 @@ async function downloadImage() {
   g.fillText("Arc Signage Co.", 20, bitmap.height + 32);
   g.fillStyle = "#e7eef6";
   g.font = "16px sans-serif";
-  g.fillText("Concept only · (347) 450-2110", 20, bitmap.height + 56);
+  g.fillText("Concept only · (347) 450-2110 · arc@arcsignco.com", 20, bitmap.height + 56);
   const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.92));
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -952,8 +1078,49 @@ async function downloadImage() {
   toast("Download started");
 }
 
+async function proofLines() {
+  const vehicle = vehicleLabel();
+  return [
+    `Vehicle: ${vehicle}`,
+    `Coverage: ${coverageLabel() || "Wrap"}`,
+    `Style: ${styleLabel() || "Not set"}`,
+    `Colors: ${colorNames() || "Not set"}`,
+    `Business: ${state.business.name || "Not set"}`,
+    `Phone on the wrap: ${state.business.phone || "Not set"}`,
+    `Website on the wrap: ${state.business.web || "Not set"}`,
+    "Contact Arc: arc@arcsignco.com · (347) 450-2110",
+    "This is an AI-generated concept, not a measured proof or a quote.",
+    "Color, fit, and lettering can change after Arc reviews the vehicle.",
+  ];
+}
+
+async function downloadProof() {
+  const frame = await compositedPixels();
+  const jpeg = await new Promise(resolve => canvasFromPixels(frame).toBlob(resolve, "image/jpeg", 0.92));
+  const pdf = buildProofPdf({ jpeg: new Uint8Array(await jpeg.arrayBuffer()), lines: await proofLines() });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
+  a.download = "arc-signage-concept.pdf";
+  a.click();
+  toast("Proof downloaded");
+}
+
 async function shareImage() {
-  const url = new URL(state.concepts[state.index]?.url || state.shownUrl, location.origin).href;
+  const concept = currentConcept();
+  let url = new URL(concept?.url || state.shownUrl, location.origin).href;
+  if (concept && state.sessionId) {
+    try {
+      const shared = await api("/api/visualize/share", jsonBody({
+        sessionId: state.sessionId,
+        renderId: concept.id,
+        quad: currentQuad(),
+      }));
+      url = new URL(shared.url, location.origin).href;
+    } catch (err) {
+      toast(err.message);
+      return;
+    }
+  }
   if (navigator.share) {
     try {
       await navigator.share({ title: "Arc Signage Co concept", url });
@@ -971,9 +1138,14 @@ async function shareImage() {
   }
 }
 
-function openCompare() {
+async function openCompare() {
   $("compareBefore").src = state.beforeUrl || STOCK;
-  $("compareAfter").src = state.shownUrl;
+  try {
+    const frame = await compositedPixels();
+    $("compareAfter").src = canvasFromPixels(frame).toDataURL("image/jpeg", 0.9);
+  } catch {
+    $("compareAfter").src = state.shownUrl;
+  }
   $("compareBox").style.setProperty("--x", "50%");
   $("compareModal").hidden = false;
 }
@@ -1006,14 +1178,49 @@ $("reportForm").addEventListener("submit", async (ev) => {
     toast("Thanks — Arc has this note.");
   } catch (err) { toast(err.message); }
 });
-$("compareBtn").addEventListener("click", openCompare);
+$("compareBtn").addEventListener("click", () => openCompare().catch(err => toast(err.message)));
 $("compareClose").addEventListener("click", () => { $("compareModal").hidden = true; });
 $("downloadBtn").addEventListener("click", () => downloadImage().catch(err => toast(err.message)));
+$("proofBtn").addEventListener("click", () => downloadProof().catch(err => toast(err.message)));
 $("shareBtn").addEventListener("click", () => shareImage());
 $("upBtn").addEventListener("click", () => { $("upBtn").setAttribute("aria-pressed", "true"); $("downBtn").setAttribute("aria-pressed", "false"); toast("Thanks — that helps."); });
 $("downBtn").addEventListener("click", () => { $("downBtn").setAttribute("aria-pressed", "true"); $("upBtn").setAttribute("aria-pressed", "false"); toast("Thanks — that helps."); });
 $("prevConcept").addEventListener("click", () => { if (!state.concepts.length) return; state.index = (state.index + state.concepts.length - 1) % state.concepts.length; presentConcept(); });
 $("nextConcept").addEventListener("click", () => { if (!state.concepts.length) return; state.index = (state.index + 1) % state.concepts.length; presentConcept(); });
+window.addEventListener("resize", () => syncLogoEditor());
+
+function dragLogo(mode, ev) {
+  const concept = currentConcept();
+  if (!concept || !state.placements[concept.id]) return;
+  ev.preventDefault();
+  const editor = $("logoEditor").getBoundingClientRect();
+  const start = { x: ev.clientX, y: ev.clientY, place: { ...state.placements[concept.id] } };
+  const move = (e) => {
+    const dx = (e.clientX - start.x) / editor.width;
+    const dy = (e.clientY - start.y) / editor.height;
+    const box = concept.vehicleBox;
+    if (mode === "resize") {
+      const img = $("stageImg");
+      const aspect = state.logoPixels ? (state.logoPixels.width / state.logoPixels.height) * (img.naturalHeight / img.naturalWidth) : start.place.w / start.place.h;
+      const w = Math.max(0.06, start.place.w + dx);
+      state.placements[concept.id] = clampPlace({ ...start.place, w, h: w / aspect }, box);
+    } else {
+      state.placements[concept.id] = clampPlace({ ...start.place, x: start.place.x + dx, y: start.place.y + dy }, box);
+    }
+    syncLogoEditor();
+  };
+  const up = () => {
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", up);
+  };
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", up);
+}
+$("logoBox").addEventListener("pointerdown", (ev) => {
+  if (ev.target.id === "logoResize") return;
+  dragLogo("move", ev);
+});
+$("logoResize").addEventListener("pointerdown", (ev) => dragLogo("resize", ev));
 $("leadForm").addEventListener("submit", sendLead);
 $("cancelBtn").addEventListener("click", () => state.abort?.abort());
 

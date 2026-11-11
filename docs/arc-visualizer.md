@@ -2,7 +2,7 @@
 
 Concept previews for vehicle wraps, storefront signs, and window graphics. The page is `/visualize/`. Leads are listed at `/visualize/admin/` (noindex, not in the sitemap).
 
-The logo file is pasted by `visualize/js/composite.js` (the same module on the page and in the function), using the sign mockup's quad math in `tools/sign-mockup/js/geometry.js`. The image model is told to leave that area blank. It is never given the logo to redraw. Photos are opened with `tools/sign-mockup/js/images.js`, including iPhone HEIC. Prices stay on the sign mockup rule: the label is **Custom quote** until `ARC_VISUALIZER_ESTIMATES=1` and a rate exists in `netlify/lib/visualizer/pricing.mjs`. That rate table is empty. Do not type a dollar amount into it without Jesus's rates.
+The logo file is pasted by `visualize/js/composite.js` (the same module on the page and in the function), using the sign mockup's quad math in `tools/sign-mockup/js/geometry.js`. The page fits that logo to the vehicle panel `netlify/lib/visualizer/panel.mjs` finds, then the visitor can drag and resize it. The image model is not given the logo to redraw, and it is not asked to leave a blank box. A year, make, and model are named in the prompt with the body style from `netlify/lib/visualizer/body.mjs` (a Camry is a sedan, not a cargo van). Concept 1 is generated first; concepts 2 and 3 edit that image so the vehicle stays the same. Share stores a copy with the logo and an Arc footer. Proof PDF is built in the browser by `visualize/js/proof.js`. Photos are opened with `tools/sign-mockup/js/images.js`, including iPhone HEIC. Prices stay on the sign mockup rule: the label is **Custom quote** until `ARC_VISUALIZER_ESTIMATES=1` and a rate exists in `netlify/lib/visualizer/pricing.mjs`. That rate table is empty. Do not type a dollar amount into it without Jesus's rates.
 
 ## What is stored
 
@@ -28,6 +28,8 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `XAI_BASE_URL` | No | Defaults to `https://api.x.ai/v1`. |
 | `ARC_XAI_IMAGE_MODEL` | No | Defaults to `grok-imagine-image-2.0`, the current Imagine image model in the xAI docs. |
 | `ARC_XAI_IMAGE_RESOLUTION` | No | `1k` (default) or `2k`. |
+| `ARC_XAI_VISION_MODEL` | No | Vision model for a photo of the visitor's vehicle. Defaults to `grok-4.7`. |
+| `ARC_OPENAI_VISION_MODEL` | No | OpenAI vision fallback for that photo. Defaults to `gpt-4o-mini`. |
 | `GEMINI_API_KEY` | No | Fallback image model, and the website-scan text model. On Netlify, leave this unset and enable AI Gateway instead. The gateway injects `GEMINI_API_KEY` and `GOOGLE_GEMINI_BASE_URL`. Image model: `gemini-2.5-flash-image`. Text scan: `gemini-2.5-flash`. |
 | `GOOGLE_GEMINI_BASE_URL` | Automatic with AI Gateway | Do not set this yourself if you want gateway routing. |
 | `OPENAI_API_KEY` | No | Chat extraction, and image generation only when the base URL is OpenAI's own (the gateway does not serve image models). A gateway placeholder key is ignored for images. |
@@ -47,14 +49,15 @@ Missing image keys do not break the flow. The function draws a layout placeholde
 Image calls go to `https://api.x.ai/v1` with model `grok-imagine-image-2.0` ([xAI image generation](https://docs.x.ai/developers/model-capabilities/images/generation), [image editing](https://docs.x.ai/developers/model-capabilities/images/editing)).
 
 - No uploaded photo: `POST /v1/images/generations`.
-- A vehicle photo, storefront photo, or a previous preview: `POST /v1/images/edits`. The picture is a base64 data URI (`image.url` plus `type: "image_url"`). An optional inspiration image is a second source. The API accepts up to five source images. The logo file is not one of them.
+- A vehicle photo, storefront photo, concept 1, or a previous preview: `POST /v1/images/edits`. The picture is a base64 data URI (`image.url` plus `type: "image_url"`). An optional inspiration image is a second source. The API accepts up to five source images. The logo file is not one of them.
 - The OpenAI SDK's multipart `images.edit()` is not the xAI edit call. xAI wants JSON.
 - Output is requested as `b64_json` because returned URLs are temporary. Resolution is `1k` unless `ARC_XAI_IMAGE_RESOLUTION=2k`. Text-only generations use aspect `3:2`. Edits leave aspect ratio unset so the uploaded photo's aspect is kept.
-- The real logo is still pasted afterward by `visualize/js/composite.js`. The prompt tells the model to leave that area blank.
+- The real logo is pasted afterward by `visualize/js/composite.js`, on the panel detected in the picture. The prompt tells the model not to draw a logo, a blank box, or any words the visitor did not type.
+- A photo upload is identified with Gemini when that key is set, otherwise xAI `grok-4.7` (or `ARC_XAI_VISION_MODEL`), otherwise OpenAI vision. The year, make, model, and body are saved on the session and used in the wrap prompt.
 
 ## Limits
 
-Per session: 3 concepts each time (a second set is allowed once), 4 bare-vehicle studio shots, and 1 written revision that changes only the concept it was asked to change. The function always returns all 3 concepts; a failed image call is replaced with the layout placeholder so the count does not drop. Per IP per UTC day: 30 scans, 16 preview images (vehicle shots and concepts share this), 4 revisions, 5 leads, 40 uploads, 10 admin sign-in failures. A lead, a vehicle shot, or a concept set sooner than 3 seconds after the session starts is rejected. A hidden fax field is dropped. The function also has a Netlify rate limit of 40 requests a minute per IP.
+Per session: 3 concepts each time (a second set is allowed once; concepts 2 and 3 edit concept 1), 4 bare-vehicle studio shots, and 3 written revisions that change only the concept they were asked to change. The function always returns all 3 concepts; a failed image call is replaced with the layout placeholder so the count does not drop. Per IP per UTC day: 30 scans, 16 preview images (vehicle shots and concepts share this), 4 revisions, 5 leads, 40 uploads, 10 admin sign-in failures. A lead, a vehicle shot, or a concept set sooner than 3 seconds after the session starts is rejected. A hidden fax field is dropped. The function also has a Netlify rate limit of 40 requests a minute per IP. Share links are capped at 12 per session. The Proof PDF button downloads a one-page concept with the render, vehicle, coverage, style, colors, arc@arcsignco.com, and (347) 450-2110.
 
 The page also posts the quote to the Netlify Form `visualizer-quote` (and problem notes to `visualizer-report`). Add an email notification for `visualizer-quote` to arc@arcsignco.com in Site configuration → Forms, the same place as `quote-request`. The existing Resend lead email still goes to arc@arcsignco.com when `RESEND_API_KEY` is set. SMS consent checkboxes are optional and start unchecked.
 
