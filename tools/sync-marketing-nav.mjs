@@ -29,6 +29,7 @@ const files = [
   "portfolio.html",
   "thank-you.html",
   "404.html",
+  "contact/index.html",
   "tools/sign-mockup/index.html",
   "tools/sign-mockup/proof/index.html",
   ...[

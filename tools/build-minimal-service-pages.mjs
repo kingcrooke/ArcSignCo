@@ -110,7 +110,7 @@ function pageHtml(p) {
     "name": "Arc Signage Co",
     "url": "https://arcsignco.com/",
     "telephone": "+1-347-450-2110",
-    "email": "jc@arcsignco.com"
+    "email": "arc@arcsignco.com"
   },
   "areaServed": [
     { "@type": "State", "name": "New York" },
@@ -212,9 +212,9 @@ ${cycloneBlock}
         </ul>
         <div class="send-card">
           <h3>Send it to Arc</h3>
-          <p>Email files to jc@arcsignco.com with ${subjectLine} in the subject line. Put URGENT in the subject for active jobsites.</p>
+          <p>Email files to arc@arcsignco.com with ${subjectLine} in the subject line. Put URGENT in the subject for active jobsites.</p>
           <div class="contact-strip">
-            <a href="tel:+13474502110">(347) 450-2110</a> (call or text) · <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>
+            <a href="tel:+13474502110">(347) 450-2110</a> (call or text) · <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
             <span class="hours">Hours: Mon–Fri 8 AM–6 PM</span>
           </div>
           <a class="btn gold" href="/?type=${p.slug}#quote">Request a quote</a>
@@ -243,7 +243,7 @@ ${cycloneBlock}
       </div>
       <div class="hero-actions">
         <a class="btn gold" href="/?type=${p.slug}#quote">Request a quote</a>
-        <a class="btn ghost" href="mailto:jc@arcsignco.com">Email jc@arcsignco.com</a>
+        <a class="btn ghost" href="mailto:arc@arcsignco.com">Email arc@arcsignco.com</a>
       </div>
     </div>
   </section>
@@ -270,7 +270,7 @@ ${cycloneBlock}
   </nav>
   <div class="wrap footer-meta">
     <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
-    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a></span>
+    <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
   </div>
 </footer>
 <div class="mobile-cta" id="mobileCta">

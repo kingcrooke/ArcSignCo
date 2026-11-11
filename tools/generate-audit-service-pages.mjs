@@ -60,7 +60,7 @@ const pages = [
       },
       {
         q: "What should I send for a wrap quote?",
-        a: "Send vehicle make and model, photos of each side, any existing graphics to remove, your logo files, and the project street address or fleet yard location. Email jc@arcsignco.com with the address in the subject line.",
+        a: "Send vehicle make and model, photos of each side, any existing graphics to remove, your logo files, and the project street address or fleet yard location. Email arc@arcsignco.com with the address in the subject line.",
       },
       {
         q: "Can Arc wrap a food truck or delivery fleet?",
@@ -151,7 +151,7 @@ const pages = [
       },
       {
         q: "What should I send for a quote?",
-        a: "Facade photos with measurements, logo files, lease sign criteria, desired open date, and the street address. Email jc@arcsignco.com with the address in the subject line.",
+        a: "Facade photos with measurements, logo files, lease sign criteria, desired open date, and the street address. Email arc@arcsignco.com with the address in the subject line.",
       },
     ],
     ctaH2: "Opening or rebranding a restaurant storefront?",

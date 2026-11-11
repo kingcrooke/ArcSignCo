@@ -16,11 +16,11 @@
     "faqs": [
       ["Does window vinyl need a permit?", "Whether window vinyl needs a DOB permit depends on size, location and content; Arc checks at intake."],
       ["Can Arc match an existing storefront sign?", "Send photos and brand files. Arc lays out to match approved colors and type."],
-      ["What should I send for a quote?", "Straight-on facade photos with measurements, logo files, landlord criteria, and the street address. Email jc@arcsignco.com with the address in the subject line."]
+      ["What should I send for a quote?", "Straight-on facade photos with measurements, logo files, landlord criteria, and the street address. Email arc@arcsignco.com with the address in the subject line."]
     ],
     "faqTitle": "Window graphics questions",
     "ctaH2": "Need window graphics or storefront vinyl?",
-    "ctaP": "Email facade photos and logo files to jc@arcsignco.com with the project address in the subject line."
+    "ctaP": "Email facade photos and logo files to arc@arcsignco.com with the project address in the subject line."
   },
   {
     "slug": "vehicle-wraps",
@@ -35,14 +35,14 @@
     "glance": ["Wrap layouts from your logo and vehicle dimensions", "Print-ready files", "Install coordination with partner shops"],
     "faqs": [
       ["Does Arc install vehicle wraps?", "Application is through Arc's install partners. Arc handles design, file prep, and coordination with the shop doing the install."],
-      ["What should I send for a wrap quote?", "Send vehicle make and model, photos of each side, logo files, and the project street address or fleet yard location. Email jc@arcsignco.com with the address in the subject line."],
+      ["What should I send for a wrap quote?", "Send vehicle make and model, photos of each side, logo files, and the project street address or fleet yard location. Email arc@arcsignco.com with the address in the subject line."],
       ["Can Arc wrap a delivery fleet?", "Yes, when dimensions and artwork are available. Arc scopes each vehicle separately unless you provide a fleet count and schedule."]
     ],
     "quoteChecklist": ["Vehicle make and model", "Photos of each side", "Logo files", "Fleet yard location", "Target date"],
     "sendSubjectLine": "your company name or fleet yard location",
     "faqTitle": "Vehicle wrap questions",
     "ctaH2": "Planning a vehicle wrap or fleet rebrand?",
-    "ctaP": "Email vehicle photos, dimensions, and logo files to jc@arcsignco.com with your company name or fleet yard location in the subject line."
+    "ctaP": "Email vehicle photos, dimensions, and logo files to arc@arcsignco.com with your company name or fleet yard location in the subject line."
   },
   {
     "slug": "traffic-signs",
@@ -62,7 +62,7 @@
     ],
     "faqTitle": "Traffic sign questions",
     "ctaH2": "Need parking or site regulatory signs?",
-    "ctaP": "Email site plans or parking counts to jc@arcsignco.com with the project address in the subject line."
+    "ctaP": "Email site plans or parking counts to arc@arcsignco.com with the project address in the subject line."
   },
   {
     "slug": "sign-repair-maintenance",
@@ -82,7 +82,7 @@
     ],
     "faqTitle": "Sign repair questions",
     "ctaH2": "Need a sign repaired or its lights replaced?",
-    "ctaP": "Email straight-on photos and the street address to jc@arcsignco.com."
+    "ctaP": "Email straight-on photos and the street address to arc@arcsignco.com."
   },
   {
     "slug": "restaurant-storefront-signs",
@@ -102,7 +102,7 @@
     ],
     "faqTitle": "Restaurant storefront questions",
     "ctaH2": "Opening or rebranding a restaurant storefront?",
-    "ctaP": "Email facade photos, logo files, and open date to jc@arcsignco.com with the address in the subject line."
+    "ctaP": "Email facade photos, logo files, and open date to arc@arcsignco.com with the address in the subject line."
   },
   {
     "slug": "blade-signs",
@@ -122,7 +122,7 @@
     ],
     "faqTitle": "Blade sign questions",
     "ctaH2": "Planning a blade or projecting sign?",
-    "ctaP": "Email facade photos with measurements to jc@arcsignco.com with the project address in the subject line."
+    "ctaP": "Email facade photos with measurements to arc@arcsignco.com with the project address in the subject line."
   },
   {
     "slug": "design-consulting",
@@ -142,7 +142,7 @@
     ],
     "faqTitle": "Design consulting questions",
     "ctaH2": "Need sign program support before bid?",
-    "ctaP": "Email plans or a draft schedule to jc@arcsignco.com with the project address in the subject line."
+    "ctaP": "Email plans or a draft schedule to arc@arcsignco.com with the project address in the subject line."
   },
   {
     "slug": "agencies-institutions",
@@ -162,6 +162,6 @@
     ],
     "faqTitle": "Institutional signage questions",
     "ctaH2": "Planning an institutional signage package?",
-    "ctaP": "Email plans or a sign schedule to jc@arcsignco.com with the project address in the subject line."
+    "ctaP": "Email plans or a sign schedule to arc@arcsignco.com with the project address in the subject line."
   }
 ]

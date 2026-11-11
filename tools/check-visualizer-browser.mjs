@@ -41,7 +41,7 @@ const base = `http://127.0.0.1:${port}`;
 await page.goto(`${base}/visualize/`, { waitUntil: "networkidle" });
 await page.getByRole("button", { name: "Use this work van" }).waitFor();
 await page.getByRole("banner").getByRole("link", { name: "(347) 450-2110" }).waitFor();
-await page.getByRole("banner").getByRole("link", { name: "jc@arcsignco.com" }).waitFor();
+await page.getByRole("banner").getByRole("link", { name: "arc@arcsignco.com" }).waitFor();
 await shot("01-vehicle-choice.png");
 
 await page.getByRole("button", { name: "Use a different vehicle" }).click();
@@ -75,7 +75,7 @@ if (await page.getByRole("button", { name: "Generate", exact: true }).isDisabled
 await page.getByRole("button", { name: "Generate", exact: true }).click();
 await page.getByText("Concept 1 of 3").waitFor({ timeout: 20000 });
 await page.getByText("pick the direction you like best").waitFor();
-await page.getByText("layout placeholders").waitFor();
+await page.getByText("Previews are temporarily unavailable.").waitFor();
 const dots = page.locator("#dots button");
 if (await dots.count() !== 3) throw new Error(`expected 3 concepts, saw ${await dots.count()}`);
 await shot("06-concepts.png");
@@ -94,11 +94,11 @@ await page.getByText("Concept 1 of 3").waitFor();
 await shot("09-after-change.png");
 
 await page.getByRole("button", { name: "Use this concept — Next step" }).click();
-await page.getByRole("button", { name: "Get my quote!" }).click();
+await page.getByRole("button", { name: "Request a follow-up" }).click();
 await page.getByRole("button", { name: "Within the next few weeks" }).waitFor();
 await shot("10-timeline.png");
 await page.getByRole("button", { name: "Within the next few weeks" }).click();
-await page.getByRole("button", { name: "Get My Quote" }).waitFor();
+await page.getByRole("button", { name: "Request a follow-up" }).waitFor();
 const sms = page.locator("#smsUpdates");
 const promo = page.locator("#smsPromos");
 if (await sms.isChecked() || await promo.isChecked()) throw new Error("SMS consent must start unchecked");
@@ -112,8 +112,8 @@ await page.evaluate(() => {
   if (chat && form) form.scrollIntoView({ block: "center" });
 });
 await shot("11-lead-form.png");
-await page.getByRole("button", { name: "Get My Quote" }).click();
-await page.getByText("Arc has this.").waitFor({ timeout: 20000 });
+await page.getByRole("button", { name: "Request a follow-up" }).click();
+await page.getByText("Arc will email back from arc@arcsignco.com").waitFor({ timeout: 20000 });
 await shot("12-quote-sent.png");
 
 await page.getByRole("button", { name: "Report a problem" }).click();

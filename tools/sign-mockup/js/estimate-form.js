@@ -174,7 +174,7 @@ function markup(p) {
           <input type="file" data-photos multiple accept=".jpg,.jpeg,.png,.heic,.heif,.pdf,image/jpeg,image/png,image/heic,image/heif,application/pdf">
         </label>
         <p class="ef-hint">Wide storefront shot plus a close-up of where the sign goes; logo/artwork if you have it.</p>
-        <p class="ef-fine">JPG, PNG, HEIC or PDF, up to 10 MB each. Photos are resized before sending; everything together must stay under about 7.5 MB, so for more, email them to <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>.</p>
+        <p class="ef-fine">JPG, PNG, HEIC or PDF, up to 10 MB each. Photos are resized before sending; everything together must stay under about 7.5 MB, so for more, email them to <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>.</p>
         <ul class="ef-files" data-photo-list></ul>
       </div>
       <div class="ef-grid">
@@ -235,7 +235,7 @@ export async function preparePhotos(files, budget = MAX_UPLOAD_BYTES) {
     }
     if (out.reduce((n, f) => n + f.size, 0) <= budget) return out;
   }
-  throw new Error(`The photos are too large to send together. Remove a few, or email them to jc@arcsignco.com.`);
+  throw new Error(`The photos are too large to send together. Remove a few, or email them to arc@arcsignco.com.`);
 }
 
 // ---------- mount ----------
@@ -356,9 +356,9 @@ export function mountEstimateForm(container, { context }) {
     try {
       const ready = await preparePhotos(photos);
       const art = el("artwork").files[0];
-      if (art && art.size > MAX_FILE_BYTES) throw new Error("The artwork file is over 10 MB. Email it to jc@arcsignco.com instead.");
+      if (art && art.size > MAX_FILE_BYTES) throw new Error("The artwork file is over 10 MB. Email it to arc@arcsignco.com instead.");
       const fileBytes = ready.reduce((n, f) => n + f.size, 0) + (art?.size || 0);
-      if (fileBytes > MAX_UPLOAD_BYTES) throw new Error("The photos and artwork are too large to send together. Remove a photo, or email files to jc@arcsignco.com.");
+      if (fileBytes > MAX_UPLOAD_BYTES) throw new Error("The photos and artwork are too large to send together. Remove a photo, or email files to arc@arcsignco.com.");
       const flags = flagsFor(v);
       const body = new FormData();
       body.set("form-name", FORM_NAME);
