@@ -685,3 +685,47 @@
   text-decoration: none;
   border-radius: 999px;
 }
+
+.wizard-main,
+.interview-main {
+  padding: 0 0.75rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.wizard-header .header-inner {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .wizard-shell {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 100%;
+  }
+
+  .wizard-top {
+    flex-wrap: wrap;
+  }
+
+  .wizard-card {
+    background: linear-gradient(180deg, #fffef9 0%, #f2ebe0 100%);
+    border-color: #c9baa8;
+    border-top: 3px solid var(--accent);
+  }
+
+  .in-app-banner p {
+    font-size: 0.82rem;
+  }
+
+  .thank-you-card {
+    margin: 0.5rem 0;
+    border-top: 3px solid var(--gold);
+    background: linear-gradient(180deg, #fffef9 0%, #f0ebe0 100%);
+  }
+
+  .share-block .btn-wa {
+    white-space: normal;
+    line-height: 1.35;
+  }
+}
