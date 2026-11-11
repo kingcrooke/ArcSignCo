@@ -1,5 +1,7 @@
 // Generates the three concepts after the visitor's request has already returned.
 // A background function can run for 15 minutes, so one slow image does not end the whole set with a 504.
+// It also stops when this handler returns, so runRenderJob awaits the concept email
+// (20s cap) instead of leaving that send as a floating promise.
 import { getStore } from "@netlify/blobs";
 import { BLOB_STORE, ENV_KEYS, contextSlug, runRenderJob } from "../lib/visualizer/handle.mjs";
 import { blobRecords } from "../lib/visualizer/records.mjs";
@@ -31,6 +33,9 @@ export default async (req, context) => {
     ip: context.ip,
     siteUrl: envGet("DEPLOY_PRIME_URL") || context.site?.url || "",
     now: () => new Date(),
+    // Tracks the same bounded send runRenderJob already awaits. waitUntil alone
+    // cannot keep a background function alive after this handler returns.
+    waitUntil: typeof context.waitUntil === "function" ? (promise) => context.waitUntil(promise) : undefined,
   }, jobId);
   return new Response("ok");
 };
