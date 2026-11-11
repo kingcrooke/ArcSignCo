@@ -20,11 +20,11 @@ _Label: ADA & Code Signs | New York / Tri-State_
 
 # Tactile and Braille sign packages for New York buildouts
 
-Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code. Arc does the sign schedule and sign-type drawings in-house and manages fabrication and install through trusted subs, with drawings prepared for architect and inspector review.
+Under the 2010 ADA Standards, signs that identify permanent rooms and spaces, like restrooms, room numbers, and floor levels, need raised characters and Grade 2 Braille. So do signs identifying doors at exit stairways, exit passageways, and exit discharge. Tactile signs mount within a set height range, usually beside the door on the latch side. Directional and informational signs need readable visual characters, not Braille. NYC projects also follow the NYC Building Code. Arc does the sign schedule and sign-type drawings in-house. Fabrication and installation are through Arc's licensed partners, with drawings prepared for architect and inspector review. Arc does not promise a sign-off.
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=ada-signs#quote)
 
-[Button: Call (347) 450-2110](tel:+13474502110)
+[Button: Call or text (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
@@ -116,13 +116,11 @@ Email your files to arc@arcsignco.com with the project address in the subject li
 
 Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
-[Link: jc@arcsignco.com](mailto:jc@arcsignco.com)
-
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
 [Link: (347) 450-2110](tel:+13474502110)
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=ada-signs#quote)
 
 _Label: FAQ_
 
@@ -146,7 +144,7 @@ Yes. The 2022 NYC Building Code's accessibility chapter references ICC A117.1 (2
 
 ### Can you help with signs on a TCO or accessibility punch list?
 
-Yes. Arc works from the sign schedule and a field survey, prepares sign-type drawings for review, then fabricates and installs the signs. The architect and the inspector decide whether the signs are accepted, so Arc doesn't promise a sign-off. If the job has a near-term TCO or inspection date, put URGENT in your email subject line.
+Yes. Arc works from the sign schedule and a field survey and prepares sign-type drawings for review. Fabrication and installation are through Arc's licensed partners. The architect, code consultant, and inspector decide what is accepted, so Arc does not promise a sign-off. If the job has a near-term TCO or inspection date, put URGENT in your email subject line.
 
 ### What do you need to quote an ADA sign package?
 
@@ -178,6 +176,6 @@ _Label: Request a quote_
 
 Email the schedule, plans, and photos to arc@arcsignco.com with the project address in the subject line. No schedule yet? Use the quote form and Arc will tell you what's needed.
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=ada-signs#quote)
 
 [Button: Email arc@arcsignco.com](mailto:arc@arcsignco.com)

@@ -8,9 +8,9 @@ Generated from `channel-letters/index.html` by `tools/export-copy.mjs`. This is 
 
 - Proposed URL: https://arcsignco.com/channel-letters/
 - Title tag: Channel Letters & Illuminated Signs NYC | Arc Signage Co
-- Meta description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos with measurements for a quote; drawings welcome.
+- Meta description: NYC channel letters: front-lit, halo-lit, and reverse LED signs with permit and electrical coordination. Send facade photos with measurements for a quote.
 - Social share title: Channel Letters & Illuminated Signs NYC | Arc Signage Co
-- Social share description: Channel letters in NYC: front-lit, halo-lit, and reverse LED letters with permit and electrical coordination. Send facade photos with measurements for a quote; drawings welcome.
+- Social share description: NYC channel letters: front-lit, halo-lit, and reverse LED signs with permit and electrical coordination. Send facade photos with measurements for a quote.
 
 ## Page text
 
@@ -20,11 +20,11 @@ _Label: LED & Illuminated | New York / Tri-State_
 
 # Front-lit, halo-lit, and reverse channel letters for New York storefronts
 
-Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and engineering drawings in-house (stamped by a third-party licensed PE when the job needs it), runs fabrication and install through trusted subs, and coordinates the sign permit with the licensed applicant and the power handoff with the project's electrician.
+Channel letters are individual three-dimensional letters, usually aluminum with acrylic faces, lit from inside by LEDs. Front-lit letters glow through the face. Halo-lit, or reverse, letters throw light onto the wall behind them. Some letters do both. In New York City, an illuminated storefront sign typically needs a DOB sign permit plus a separate electrical permit filed by a licensed electrician. Arc does the design and shop drawings in-house (third-party PE stamping when required), coordinates fabrication and installation through Arc's licensed partners, coordinates the sign permit with the licensed applicant, and coordinates the power handoff with the project's electrician. Arc does not file permits or stamp drawings.
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=channel-letters#quote)
 
-[Button: Call (347) 450-2110](tel:+13474502110)
+[Button: Call or text (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
@@ -84,7 +84,7 @@ _Label: Approvals_
 
 ## Permits, power, and approvals in NYC
 
-- **Sign permit.** DOB says signs smaller than six square feet that are not illuminated do not need a permit, and it lists other exceptions in Construction Code §28-105.4.5. Illuminated channel letters generally need a sign (SG) permit, filed through DOB NOW: Build.
+- **Sign permit.** A non-illuminated wall sign of not more than six square feet does not need a sign permit (AC §28-105.4.5). Other signs, including illuminated and non-wall signs, still need one unless another exception applies. Zoning and LPC still apply. Illuminated channel letters generally need a sign (SG) permit, filed through DOB NOW: Build.
 - **Electrical permit.** A sign that needs an electrical connection needs a separate electrical permit, filed by a licensed electrician through DOB NOW: Build.
 - **Electrical inspection.** The NYC Electrical Code adds a local rule, §600.3(C): electric signs made for installation in the city are inspected and approved by DOB before installation. DOB can direct the inspection to happen at the factory before final assembly or at the install location.
 - **Annual illuminated sign permit.** If an illuminated sign extends beyond the building line, DOB says an annual illuminated sign permit may also be required. This comes up more with projecting and blade signs than with wall-mounted letters.
@@ -124,13 +124,11 @@ Email your files to arc@arcsignco.com with the project address in the subject li
 
 Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
-[Link: jc@arcsignco.com](mailto:jc@arcsignco.com)
-
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
 [Link: (347) 450-2110](tel:+13474502110)
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=channel-letters#quote)
 
 _Label: FAQ_
 
@@ -142,7 +140,7 @@ Front-lit letters have translucent faces, so the face of each letter glows. Halo
 
 ### Do channel letters need a permit in NYC?
 
-Generally, yes. The NYC Department of Buildings (DOB) says signs smaller than six square feet that are not illuminated do not need a permit, and it lists other exceptions in Construction Code §28-105.4.5. Illuminated letters generally need a sign (SG) permit plus a separate electrical permit. If an illuminated sign extends beyond the building line, an annual illuminated sign permit may also be required, which matters more for projecting signs than for wall-mounted letters.
+Generally, yes. A non-illuminated wall sign of not more than six square feet does not need a sign permit (AC §28-105.4.5). Other signs, including illuminated and non-wall signs, still need one unless another exception applies. Zoning and LPC still apply. Illuminated letters generally need a sign (SG) permit plus a separate electrical permit. If an illuminated sign extends beyond the building line, an annual illuminated sign permit may also be required, which matters more for projecting signs than for wall-mounted letters.
 
 ### Who handles the electrical for an illuminated sign?
 
@@ -188,6 +186,6 @@ _Label: Request a quote_
 
 Email facade photos with measurements and your logo artwork to arc@arcsignco.com with the project address in the subject line. For a storefront sign, lit letters included, that's enough to quote. No photos yet? Use the quote form and Arc will tell you what's needed.
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=channel-letters#quote)
 
 [Button: Email arc@arcsignco.com](mailto:arc@arcsignco.com)

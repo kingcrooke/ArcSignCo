@@ -23,7 +23,7 @@ The proof page (`tools/sign-mockup/proof/`) is built for phones. The client can:
 - post comments
 - approve with their name; the server records the time
 - download the PDF (the same three pages as the editor, plus an approval stamp once approved)
-- email Arc (a prefilled `mailto:` to arc@ with jc@ on copy)
+- email Arc (a prefilled `mailto:` to arc@arcsignco.com, the same address shown on the page)
 
 The id is a random 128-bit hex string in the URL **fragment** (`#…`). Browsers don't send fragments
 to servers, so the id stays out of access logs and `Referer` headers. Anyone who has the link can

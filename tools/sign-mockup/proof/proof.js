@@ -70,7 +70,7 @@ function mailtoHref() {
     "Hi Arc,", "", `About this ${noun} proof: ${location.href}`, "",
     sheet.approval ? `Concept approved, request a formal estimate: ${sheet.approval.name}, ${when(sheet.approval.at)}.` : "", "",
   ];
-  return `mailto:jc@arcsignco.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
+  return `mailto:arc@arcsignco.com&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
 }
 
 function renderApproval() {

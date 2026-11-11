@@ -85,7 +85,7 @@ If it can't be backed up, soften or remove it.
   It posts to `/thank-you`, accepts one photo, and stores the project address in `sessionStorage` the
   same way. Set the notification email to arc@arcsignco.com for `awning-quote` as well. Styles for that
   page are in `assets/css/awnings.v1.css`.
-- Public contact emails on the site: jc@arcsignco.com and arc@arcsignco.com (lowercase). Homepage business JSON-LD uses jc@.
+- Public contact email on the site: arc@arcsignco.com (lowercase). Homepage business JSON-LD uses arc@.
 
 ## Location and address
 

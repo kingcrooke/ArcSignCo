@@ -8,9 +8,9 @@ Generated from `sign-permits-shop-drawings/index.html` by `tools/export-copy.mjs
 
 - Proposed URL: https://arcsignco.com/sign-permits-shop-drawings/
 - Title tag: NYC Sign Permits & Shop Drawings | Arc Signage Co
-- Meta description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send drawings for a quote.
+- Meta description: NYC sign permits: Arc prepares shop drawings and coordinates with the licensed applicant. Arc does not file or stamp permits. Send drawings for a quote.
 - Social share title: NYC Sign Permits & Shop Drawings | Arc Signage Co
-- Social share description: Need a sign permit in NYC? Arc Signage Co prepares shop drawings and coordinates DOB, LPC, landlord, and architect approvals. Send drawings for a quote.
+- Social share description: NYC sign permits: Arc prepares shop drawings and coordinates with the licensed applicant. Arc does not file or stamp permits. Send drawings for a quote.
 
 ## Page text
 
@@ -20,11 +20,11 @@ _Label: Permits & Submittals | New York / Tri-State_
 
 # Sign permit coordination and shop drawings for New York projects
 
-Most business signs in New York City need a Department of Buildings (DOB) sign permit. Signs smaller than six square feet that are not illuminated are the main exception. Illuminated signs also need a separate electrical permit filed by a licensed electrician. A Licensed Sign Hanger or a registered engineer or architect files the sign permit, depending on the sign. Arc prepares the drawings and schedules, and coordinates with those parties.
+Most business signs in New York City need a Department of Buildings (DOB) sign permit. A non-illuminated wall sign of not more than six square feet does not need a sign permit (AC §28-105.4.5). Other signs, including illuminated and non-wall signs, still need one unless another exception applies. Zoning and LPC still apply. Illuminated signs also need a separate electrical permit filed by a licensed electrician. A Licensed Sign Hanger or a registered engineer or architect files the sign permit, depending on the sign. Arc prepares the drawings and schedules, and coordinates with the licensed applicant. Larger fabrication and installation are through Arc's licensed partners. Arc does not file permits or stamp drawings.
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=sign-permits-shop-drawings#quote)
 
-[Button: Call (347) 450-2110](tel:+13474502110)
+[Button: Call or text (347) 450-2110](tel:+13474502110)
 
 ### What Arc handles (sidebar)
 
@@ -59,7 +59,7 @@ Sign work in the city involves several parties. This is how the roles usually sp
 
 | Party | Typical role |
 | --- | --- |
-| Arc Signage Co | Sign design, shop drawings, sign and message schedules, fabrication, and install coordination. Arc coordinates with the licensed parties below where the job requires them, instead of filing as one of them. |
+| Arc Signage Co | Sign design, shop drawings, sign and message schedules, and fabrication and install coordination. Arc coordinates with the licensed parties below where the job requires them, instead of filing as one of them. |
 | Licensed Sign Hanger (Master or Special) | Performs or directly supervises exterior sign installation, except for the signs exempted in Construction Code §28-415.2. Can also act as the permit applicant for smaller wall-mounted accessory signs: up to 150 square feet and 300 pounds, projecting no more than 18 inches, and mounted entirely below the second-story ceiling (1 RCNY §105-04). |
 | Registered design professional (PE or RA) | Files the sign permit when the sign falls outside the Licensed Sign Hanger limits, and designs any structural work beyond a basic frame or support. |
 | Licensed electrician | Files the electrical permit for an illuminated sign through DOB NOW: Build and makes the electrical connection. |
@@ -128,13 +128,11 @@ Email your files to arc@arcsignco.com with the project address in the subject li
 
 Arc's 24-hour quote target starts once Arc has photos with measurements (or drawings, if you have them) and the project street address.
 
-[Link: jc@arcsignco.com](mailto:jc@arcsignco.com)
-
 [Link: arc@arcsignco.com](mailto:arc@arcsignco.com)
 
 [Link: (347) 450-2110](tel:+13474502110)
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=sign-permits-shop-drawings#quote)
 
 _Label: FAQ_
 
@@ -142,7 +140,7 @@ _Label: FAQ_
 
 ### Do I need a permit for a business sign in NYC?
 
-Usually, yes. The NYC Department of Buildings (DOB) says signs smaller than six square feet that are not illuminated do not need a permit, and it lists the other exceptions in Construction Code §28-105.4.5. Signs that don't need a permit still have to meet the Construction Codes, the Zoning Resolution, and City rules. On a landmarked building or in a historic district, a Landmarks Preservation Commission (LPC) permit is also needed for signs and awnings.
+Usually, yes. A non-illuminated wall sign of not more than six square feet does not need a sign permit (AC §28-105.4.5). Other signs, including illuminated and non-wall signs, still need one unless another exception applies. Zoning and LPC still apply. On a landmarked building or in a historic district, a Landmarks Preservation Commission (LPC) permit is also needed for signs and awnings.
 
 ### Who can file a sign permit in NYC?
 
@@ -193,6 +191,6 @@ _Label: Request a quote_
 
 Email drawings and photos to arc@arcsignco.com with the project address in the subject line. No drawings yet? Use the quote form and Arc will tell you what's needed.
 
-[Button: Request a quote](/#quote)
+[Button: Request a quote](/?type=sign-permits-shop-drawings#quote)
 
 [Button: Email arc@arcsignco.com](mailto:arc@arcsignco.com)

@@ -57,7 +57,7 @@ function patch(html, p) {
   html = html.replace(/ADA sign questions/g, p.faqTitle);
   html = html.replace(/Planning an ADA package\?/g, p.ctaH2);
   html = html.replace(
-    /Email drawings or a sign schedule to jc@arcsignco\.com with the project address in the subject line\. No files yet\? Use the quote form\./,
+    /Email drawings or a sign schedule to arc@arcsignco\.com with the project address in the subject line\. No files yet\? Use the quote form\./,
     p.ctaP,
   );
   const faqJson = p.faqs.map(([q, a]) =>

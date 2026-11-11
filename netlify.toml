@@ -340,16 +340,6 @@
   status = 301
 
 [[redirects]]
-  from = "/contact/"
-  to = "/#quote"
-  status = 301
-
-[[redirects]]
-  from = "/contact"
-  to = "/#quote"
-  status = 301
-
-[[redirects]]
   from = "/services/"
   to = "/#services"
   status = 301

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Arc Visualizer – Preview a Wrap, Sign, or Window | Arc Signage Co</title>
-<meta name="description" content="Preview a vehicle wrap, storefront sign, or window graphic. Arc Signage Co uses it as a concept only. The price is a custom quote after we talk.">
+<meta name="description" content="Preview a vehicle wrap, storefront sign, or window graphic. A concept for discussion. Pricing comes in a written estimate after a site survey.">
 <link rel="canonical" href="https://arcsignco.com/visualize/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Arc Signage Co">
@@ -33,8 +33,8 @@
     },
     {
       "@type": "Question",
-      "name": "What should you send with the preview?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Your name, phone, email, and when you want to talk. Arc follows up from arc@arcsignco.com. For a measured storefront drawing without AI, use the Free Sign Preview, or email jc@arcsignco.com, or call or text (347) 450-2110." }
+      "name": "What to send with the preview",
+      "acceptedAnswer": { "@type": "Answer", "text": "Your name, phone, email, and when you want to talk. Arc follows up from arc@arcsignco.com. For a measured storefront drawing without AI, use the Free Sign Preview, or email arc@arcsignco.com, or call or text (347) 450-2110." }
     }
   ]
 }
@@ -49,17 +49,19 @@
 <body class="studio-body">
 <a class="skip-link" href="#chat" style="position:absolute;left:-999px">Skip to the design assistant</a>
 <header class="studio-bar">
-  <a class="studio-back" href="/">← See our website</a>
+  <a class="studio-back" href="/">← arcsignco.com</a>
   <a class="studio-mark" href="/" aria-label="Arc Signage Co home">
     <img src="/assets/img/logo-icon-white-240.v1.png" width="46" height="46" alt="">
     <span>Arc Signage Co.</span>
   </a>
   <div class="studio-contact">
     <a href="tel:+13474502110">(347) 450-2110</a>
-    <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>
+    <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>
   </div>
 </header>
-<main class="studio-work" id="tool">
+<main id="tool">
+  <h1 class="studio-title">Preview a wrap, sign, or window graphic on a photo.</h1>
+  <div class="studio-work">
   <section class="stage-card" id="stageCard" aria-label="Preview">
     <div class="stage-tools">
       <button type="button" id="reportBtn">Report a problem</button>
@@ -79,7 +81,7 @@
         <div>
           <div class="pct-ring" id="pctRing" style="--p:0"><span id="pctText">0%</span></div>
           <p id="busyTitle">Generating your car…</p>
-          <p class="wait-pill" id="busyPill">This usually takes 30 seconds to a minute — worth the wait!</p>
+          <p class="wait-pill" id="busyPill">This usually takes 30 to 60 seconds.</p>
           <p><button class="ghost-btn" id="cancelBtn" type="button" hidden>Cancel</button></p>
         </div>
       </div>
@@ -90,12 +92,13 @@
   <aside class="chat" id="chat" aria-live="polite">
     <div id="log"></div>
     <div id="panel"></div>
-    <p class="stub-note" id="stubBanner" hidden>The image service is not turned on for this deploy, so these are layout placeholders. Your logo is still placed from the file you uploaded.</p>
+    <p class="stub-note" id="stubBanner" hidden>Previews are temporarily unavailable. Send a photo and Arc will follow up.</p>
   </aside>
+  </div>
 </main>
 <section class="legal" id="sms-terms">
   <h2>SMS terms</h2>
-  <p>If you check a box, Arc Signage Co may text the number you entered. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not required to get a quote. Call or text (347) 450-2110, or email jc@arcsignco.com.</p>
+  <p>If you check a box, Arc Signage Co may text the number you entered. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not required to get a quote. Call or text (347) 450-2110, or email arc@arcsignco.com.</p>
 </section>
 <section class="legal" id="privacy">
   <h2>Privacy</h2>
@@ -107,8 +110,8 @@
   <p>It makes three concept images of a vehicle wrap, a storefront sign, or window graphics from a description or a photo you upload. Your logo file is placed on the image by the page. It is an AI-generated visual reference, not a proof or a quote.</p>
   <h3>Does the visualizer show a price?</h3>
   <p>No. Pricing comes in a written estimate after a site survey. This preview is a concept only.</p>
-  <h3>What should you send with the preview?</h3>
-  <p>Your name, phone, email, and when you want to talk. Arc follows up from <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>. For a measured storefront drawing without AI, use the <a href="/tools/sign-mockup/">Free Sign Preview</a>, or email <a href="mailto:jc@arcsignco.com">jc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
+  <h3>What to send with the preview</h3>
+  <p>Your name, phone, email, and when you want to talk. Arc follows up from <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>. For a measured storefront drawing without AI, use the <a href="/tools/sign-mockup/">Free Sign Preview</a>, or email <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a>, or call or text <a href="tel:+13474502110">(347) 450-2110</a>.</p>
 </section>
 
 <form id="leadForm" name="visualizer-quote" method="POST" action="/thank-you" data-netlify="true" netlify-honeypot="bot-field" hidden>
@@ -133,8 +136,8 @@
   <label class="check"><input type="checkbox" name="sms-transactional" id="smsUpdates" value="yes"> Text me about my quote, appointments, and job updates.</label>
   <label class="check"><input type="checkbox" name="sms-promo" id="smsPromos" value="yes"> Text me occasional deals and promotions.</label>
   <p class="fine">By checking, you agree to receive SMS from Arc Signage Co. Message frequency varies. Message and data rates may apply. Reply HELP for help or STOP to opt out. Consent is not required to get a quote. <a href="#sms-terms">SMS terms</a> · <a href="#privacy">Privacy</a></p>
-  <button class="gold-btn" type="submit">Get My Quote</button>
-  <p class="fine">We'll email your quote — if you don't see it, check your spam or promotions folder.</p>
+  <button class="gold-btn" type="submit">Request a follow-up</button>
+  <p class="fine">Arc will email back from arc@arcsignco.com (check spam or promotions).</p>
 </form>
 
 <form id="reportForm" name="visualizer-report" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>

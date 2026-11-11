@@ -29,7 +29,7 @@ const COLORS = {
 export const CONTACT = {
   phone: "(347) 450-2110",
   phoneHref: "tel:+13474502110",
-  emails: ["jc@arcsignco.com"],
+  emails: ["arc@arcsignco.com"],
   site: "arcsignco.com",
   area: "New York / Tri-State",
   name: "Arc Signage Co",

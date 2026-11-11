@@ -223,7 +223,7 @@ Five steps. Arc does not publish a week count. Timing depends on the storefront,
 
 _Label: Style examples_
 
-## Awning styles we can design and install
+## Awning styles Arc can design, with install through Arc's licensed partners
 
 These photos are style examples, not Arc Signage Co projects.
 
@@ -270,9 +270,9 @@ Leave this field empty:
 
 ### Awning quote
 
-Fields marked optional can be skipped. One photo, up to 8 MB. Email more files to jc@arcsignco.com with the project address in the subject line.
+Fields marked optional can be skipped. One photo, up to 8 MB. Email more files to arc@arcsignco.com with the project address in the subject line.
 
-Arc replies from jc@arcsignco.com. Texts are fine at (347) 450-2110. The homepage quote form is still at [Request a quote](/#quote).
+Arc replies from arc@arcsignco.com. Texts are fine at (347) 450-2110. The homepage quote form is still at [Request a quote](/?type=awnings#quote).
 
 _Label: Graphics_
 
@@ -352,7 +352,7 @@ Only when the product documentation for that fabric says so. The Landmarks Prese
 
 ### What should I send for a quote?
 
-Send photos of the storefront, dimensions, frame details if an awning is already there, artwork and the wording, landlord criteria, landmark status, the deadline, and the street address. Email jc@arcsignco.com or arc@arcsignco.com with the project address in the subject line, or call or text (347) 450-2110.
+Send photos of the storefront, dimensions, frame details if an awning is already there, artwork and the wording, landlord criteria, landmark status, the deadline, and the street address. Email arc@arcsignco.com with the project address in the subject line, or call or text (347) 450-2110.
 
 ### When is a re-cover enough, and when does the frame need to be new?
 
@@ -405,14 +405,14 @@ The sign permits and shop drawings page is where filing questions belong, includ
 - [Interior wayfinding](/wayfinding-signs/): Lobby directories, floor IDs, room signs, and directional packages
 - [Digital signage](/digital-signage/): Directories, room boards, and video walls
 - [Construction site signs](/construction-signs/): Project information panels, jobsite, and temporary signs
-- [Request a quote](/#quote): Send photos, dimensions, or drawings
+- [Request a quote](/?type=awnings#quote): Send photos, dimensions, or drawings
 
 _Label: Request a quote_
 
 ## Planning a storefront awning?
 
-Email jc@arcsignco.com or arc@arcsignco.com with photos, dimensions, or drawings and the project address in the subject line. To try a shape on the facade first, [preview your awning](/tools/sign-mockup/) in the Free Sign Preview.
+Email arc@arcsignco.com with photos, dimensions, or drawings and the project address in the subject line. To try a shape on the facade first, [preview your awning](/tools/sign-mockup/) in the Free Sign Preview.
 
 [Button: Get a quote](#awning-quote)
 
-[Button: Email jc@arcsignco.com](mailto:jc@arcsignco.com)
+[Button: Email arc@arcsignco.com](mailto:arc@arcsignco.com)

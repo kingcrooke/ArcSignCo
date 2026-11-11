@@ -253,7 +253,7 @@ async function generateVehicle() {
   state.vehicle = { year, make, model, color, body: "cargo-van", stock: false, label: [year, make, model].filter(Boolean).join(" ") };
   await user([year, make, model, color].filter(Boolean).join(" "));
   clearPanel();
-  const stop = startRing("Generating your car…", "This usually takes 30 seconds to a minute — worth the wait!");
+  const stop = startRing("Generating your car…", "This usually takes 30 to 60 seconds.");
   try {
     await afterGate();
     const data = await apiRetry("/api/visualize/vehicle", jsonBody({
@@ -286,7 +286,7 @@ async function confirmVehicle() {
 
 async function regenerate() {
   await user("Not quite — regenerate");
-  const stop = startRing("Generating your car…", "This usually takes 30 seconds to a minute — worth the wait!");
+  const stop = startRing("Generating your car…", "This usually takes 30 to 60 seconds.");
   try {
     await afterGate();
     const data = await apiRetry("/api/visualize/vehicle", jsonBody({
@@ -424,10 +424,10 @@ async function builder() {
   clearPanel();
   showArrows(false);
   const intro = state.category === "vehicle"
-    ? "Let's build your commercial wrap. Tap each section, then hit Generate — we'll render it on your vehicle."
+    ? "Commercial wrap. Tap each section, then hit Generate. The preview renders on the vehicle."
     : state.category === "sign"
-      ? "Let's build your storefront sign. Tap each section, then hit Generate — we'll render it on your wall."
-      : "Let's build your window graphics. Tap each section, then hit Generate — we'll render it on the glass.";
+      ? "Storefront sign. Tap each section, then hit Generate. The preview renders on the wall."
+      : "Window graphics. Tap each section, then hit Generate. The preview renders on the glass.";
   await typeLine(intro);
   const root = el("div");
   root.append(scanBlock(), section("coverage"), section("style"), section("colors"), section("logo"), section("name"), section("phone"), section("web"));
@@ -753,7 +753,7 @@ async function useConcept() {
     ? "Here's your fully customized ride! Everything look good?"
     : "Here's your concept. Everything look good?");
   $("panel").append(
-    el("button", { class: "gold-btn", type: "button", onclick: timeline }, "Get my quote!"),
+    el("button", { class: "gold-btn", type: "button", onclick: timeline }, "Request a follow-up"),
     el("button", { class: "line-btn", type: "button", onclick: startOver }, "Start over"),
   );
 }
@@ -813,7 +813,7 @@ async function timeline() {
 async function lead() {
   clearPanel();
   showArrows(true);
-  await typeLine("Last step — drop your info and we'll get you a quote.");
+  await typeLine("Last step. Add a name, phone, and email. Arc will follow up.");
   const form = $("leadForm");
   form.hidden = false;
   $("panel").append(form);
@@ -896,7 +896,7 @@ async function sendLead(ev) {
     stop();
     $("leadForm").hidden = true;
     clearPanel();
-    await typeLine("Arc has this. We'll email your quote — if you don't see it, check your spam or promotions folder.");
+    await typeLine("Arc will email back from arc@arcsignco.com (check spam or promotions).");
     $("panel").append(el("a", { class: "gold-btn", href: "tel:+13474502110" }, "Call or text (347) 450-2110"));
   } catch (err) {
     stop();
