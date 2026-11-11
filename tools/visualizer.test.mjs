@@ -330,6 +330,7 @@ test("a queued render stays under the request and the daily cap is still 16", as
   assert.equal(accepted.status, 202, await accepted.clone().text());
   const started = await accepted.json();
   assert.equal(started.jobId, queued);
+  assert.equal(started.kick, "/.netlify/functions/visualizer-render-background");
   assert.equal(h.calls.length, 0);
   await runRenderJob(h.deps, started.jobId);
   assert.equal(h.calls.length, 3);

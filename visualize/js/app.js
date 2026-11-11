@@ -691,6 +691,14 @@ async function generateConcepts() {
         photoId: state.photoId,
       }),
     });
+    if (data.jobId && data.kick) {
+      fetch(data.kick, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId: data.jobId, ns: data.ns }),
+        signal: controller.signal,
+      }).catch(() => {});
+    }
     if (data.jobId && !data.variants) data = await pollJob(data.jobId, controller.signal);
     const ready = (data.variants || []).filter(item => item.url);
     if (!ready.length) {

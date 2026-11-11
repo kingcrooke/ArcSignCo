@@ -18,7 +18,8 @@ export default async (req, context) => {
   const env = Object.fromEntries(ENV_KEYS.map(key => [key, envGet(key)]));
   const blobs = getStore({ name: BLOB_STORE, consistency: "strong" });
   const records = blobRecords(blobs, `v1/${contextSlug(context.deploy?.context)}`);
-  const siteUrl = envGet("DEPLOY_PRIME_URL") || context.site?.url || new URL(req.url).origin;
+  const host = (req.headers.get("x-forwarded-host") || "").split(",")[0].trim();
+  const siteUrl = envGet("DEPLOY_PRIME_URL") || (host ? `https://${host}` : "") || context.site?.url || new URL(req.url).origin;
   try {
     return await handleVisualizer(req, {
       blobs,
@@ -27,15 +28,9 @@ export default async (req, context) => {
       deployContext: context.deploy?.context,
       ip: context.ip,
       siteUrl,
-      enqueue: async (job) => {
-        const target = new URL("/.netlify/functions/visualizer-render-background", siteUrl);
-        const res = await fetch(target, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ jobId: job.id, ns: job.ns }),
-        });
-        if (res.status !== 202 && !res.ok) throw new Error(`background ${res.status}`);
-      },
+      // The browser starts the background function. A server-side fetch to this
+      // site's own function did not return 202 on the deploy preview.
+      background: true,
     });
   } catch (err) {
     console.error("visualizer", err);

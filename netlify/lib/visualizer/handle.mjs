@@ -664,15 +664,18 @@ export async function handleVisualizer(req, deps) {
       logoKey: logo ? (body.logoId || session.logoKey) : session.logoKey,
       photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
     });
-    if (deps.enqueue) {
-      try {
-        await deps.enqueue(job);
-      } catch (err) {
-        console.error("visualizer enqueue", err?.message || err);
-        await deps.records.updateJob(job.id, { status: "error", error: "The preview didn't start. Try again." });
-        return fail(503, "The preview didn't start. Try again.");
+    if (deps.enqueue || deps.background) {
+      if (deps.enqueue) {
+        try { await deps.enqueue(job); } catch (err) { console.error("visualizer enqueue", err?.message || err); }
       }
-      return json(202, { jobId: job.id, status: "queued", count, disclaimer: DISCLAIMER });
+      return json(202, {
+        jobId: job.id,
+        status: "queued",
+        count,
+        ns: job.ns,
+        kick: "/.netlify/functions/visualizer-render-background",
+        disclaimer: DISCLAIMER,
+      });
     }
     const done = await runRenderJob(deps, job.id);
     return json(200, {
