@@ -288,7 +288,15 @@ async function paintAndStore(deps, { ns, session, prompt, references, photoBytes
     const { placeholderRender } = await import("./images.mjs");
     out = await placeholderRender({ category: session.category, variant, photoBytes });
   }
-  let image = await decodeImage(out.bytes);
+  let image;
+  try {
+    image = await decodeImage(out.bytes);
+  } catch (err) {
+    console.error("visualizer decode", err?.message || err);
+    const { placeholderRender } = await import("./images.mjs");
+    out = await placeholderRender({ category: session.category, variant, photoBytes });
+    image = await decodeImage(out.bytes);
+  }
   const panel = session.category === "vehicle" ? vehiclePanel(image) : null;
   const zone = panel?.zone || out.zone || zoneFor(session.category);
   image = stampConcept(image);
@@ -611,28 +619,52 @@ export async function handleVisualizer(req, deps) {
     const inspo = await optionalFile(deps, ns, body.inspoId || session.inspoKey, session.id);
     const logo = await optionalFile(deps, ns, body.logoId || session.logoKey, session.id);
     if ((session.category === "sign" || session.category === "window") && !photo) return fail(400, "Upload a photo of the storefront.");
+    const phase = body.phase === "rest" ? "rest" : body.phase === "first" ? "first" : "all";
     const count = LIMITS.sessionVariants;
-    if (!(await gate(deps.records, ipHash, day, "renders", count))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
     const references = [];
     if (photo) references.push({ bytes: photo.bytes, mime: photo.mime, role: "photo" });
     if (inspo) references.push({ bytes: inspo.bytes, mime: inspo.mime, role: "inspo" });
+    const subjectForPrompt = { ...subject, photo: !!photo };
+    if (!subjectForPrompt.body && session.category === "vehicle") subjectForPrompt.body = inferBody(subjectForPrompt);
+    if (phase === "rest") {
+      const base = await loadFile(deps.blobs, ns, session.baseRenderId, session.id);
+      if (!base) return fail(409, "Generate the first concept before the other two.");
+      const rest = await Promise.all([1, 2].map(async (variant) => {
+        const prompt = variantPrompt({ category: session.category, business: session.business || business, subject: subjectForPrompt, variant });
+        const painted = await paintAndStore(deps, {
+          ns, session, prompt,
+          references: [{ bytes: base.bytes, mime: base.mime || "image/png", role: "base" }],
+          photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 22000,
+        });
+        return publicRender(painted.row);
+      }));
+      await deps.records.updateSession(session.id, { baseRenderId: null });
+      if (rest.length !== 2 || rest.some(item => !item?.url)) return fail(502, "The preview did not finish the other concepts. Try again.");
+      await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render-rest", createdAt: now.toISOString(), detail: { models: rest.map(v => v.model) } });
+      return json(200, { variants: rest, count: rest.length, partial: false, stub: rest.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    }
+    if (!(await gate(deps.records, ipHash, day, "renders", count))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
     await deps.records.updateSession(session.id, {
       business, subject, rendersUsed: (session.rendersUsed || 0) + 1,
       logoKey: logo ? (body.logoId || session.logoKey) : session.logoKey,
       photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
     });
-    const subjectForPrompt = { ...subject, photo: !!photo };
-    if (!subjectForPrompt.body && session.category === "vehicle") subjectForPrompt.body = inferBody(subjectForPrompt);
     const firstPrompt = renderPrompt({ category: session.category, business, subject: subjectForPrompt, variant: 0 });
     const first = await paintAndStore(deps, {
-      ns, session, prompt: firstPrompt, references, photoBytes: photo?.bytes, variant: 0, kind: "variant", timeoutMs: 26000,
+      ns, session, prompt: firstPrompt, references, photoBytes: photo?.bytes, variant: 0, kind: "variant", timeoutMs: 22000,
     });
+    if (phase === "first") {
+      await deps.records.updateSession(session.id, { baseRenderId: first.row.id });
+      const variants = [publicRender(first.row)];
+      await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: [first.row.model], partial: true } });
+      return json(200, { variants, count: 1, partial: true, stub: !!first.row.stub, quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    }
     const rest = await Promise.all([1, 2].map(async (variant) => {
       const prompt = variantPrompt({ category: session.category, business, subject: subjectForPrompt, variant });
       const painted = await paintAndStore(deps, {
         ns, session, prompt,
         references: [{ bytes: first.raw, mime: first.mime, role: "base" }],
-        photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 26000,
+        photoBytes: photo?.bytes, variant, kind: "variant", timeoutMs: 22000,
       });
       return publicRender(painted.row);
     }));
@@ -641,7 +673,7 @@ export async function handleVisualizer(req, deps) {
       return fail(502, "The preview did not finish all 3 concepts. Try again.");
     }
     await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub), count } });
-    return json(200, { variants, count, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    return json(200, { variants, count, partial: false, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
   }
 
   if (path === "/api/visualize/edit" && method === "POST") {

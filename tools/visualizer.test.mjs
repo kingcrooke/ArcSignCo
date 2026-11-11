@@ -466,6 +466,30 @@ test("a photo of a Camry is identified and used on the wrap", async () => {
   assert.deepEqual(h.calls[1].roles, ["base"]);
 });
 
+test("concepts 2 and 3 can be requested after concept 1", async () => {
+  const { call, calls, later } = harness();
+  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  later();
+  const first = await call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, phase: "first", business: { name: "Arc Signage Co" }, subject: { year: "2023", make: "Toyota", model: "Camry", coverage: "full", style: "classic" } },
+  });
+  assert.equal(first.status, 200, await first.clone().text());
+  const opened = await first.json();
+  assert.equal(opened.partial, true);
+  assert.equal(opened.variants.length, 1);
+  assert.match(calls[0].prompt, /Camry sedan/);
+  const rest = await call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, phase: "rest", business: { name: "Arc Signage Co" }, subject: { coverage: "full", style: "classic" } },
+  });
+  assert.equal(rest.status, 200, await rest.clone().text());
+  const more = await rest.json();
+  assert.equal(more.variants.length, 2);
+  assert.deepEqual(calls[1].roles, ["base"]);
+  assert.deepEqual(calls[2].roles, ["base"]);
+});
+
 test("identify uses xAI vision when Gemini is not configured", async () => {
   let seen;
   const text = await identifyVehicle({ XAI_API_KEY: "test" }, Buffer.from([0xff, 0xd8, 0xff, 0xd9]), "image/jpeg", async (url, opts) => {

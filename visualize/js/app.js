@@ -683,20 +683,29 @@ async function generateConcepts() {
   $("cancelBtn").onclick = () => controller.abort();
   try {
     await afterGate();
-    const data = await apiRetry("/api/visualize/render", {
+    const payload = {
+      sessionId: state.sessionId,
+      business: { name: state.business.name, phone: state.business.phone, web: state.business.web, colors: state.business.colors },
+      subject: subjectBody(),
+      logoId: state.logoId,
+      photoId: state.photoId,
+    };
+    const first = await apiRetry("/api/visualize/render", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
-      body: JSON.stringify({
-        sessionId: state.sessionId,
-        business: { name: state.business.name, phone: state.business.phone, web: state.business.web, colors: state.business.colors },
-        subject: subjectBody(),
-        logoId: state.logoId,
-        photoId: state.photoId,
-      }),
+      body: JSON.stringify({ ...payload, phase: "first" }),
     });
-    if (!data.variants || data.variants.length !== CONCEPTS) throw new Error("The preview did not return 3 concepts. Try again.");
-    state.concepts = data.variants;
+    const rest = first.partial ? await apiRetry("/api/visualize/render", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({ ...payload, phase: "rest" }),
+    }) : { variants: [] };
+    const variants = [...(first.variants || []), ...(rest.variants || [])];
+    if (variants.length !== CONCEPTS) throw new Error("The preview did not return 3 concepts. Try again.");
+    state.concepts = variants;
+    const data = { stub: variants.every(item => item.stub) };
     state.placements = {};
     state.index = 0;
     $("stubBanner").hidden = !data.stub;
