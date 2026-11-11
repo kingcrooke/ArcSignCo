@@ -264,11 +264,14 @@ function WeeklyAddsStrip({
       >
         This week&apos;s adds
       </h3>
-      <ul className="flex gap-2 overflow-x-auto pb-1" role="list">
+      <ul
+        className="grid grid-cols-1 gap-2 pb-1 min-[420px]:grid-cols-2"
+        role="list"
+      >
         {adds.map((m) => (
           <li
             key={m.id}
-            className="min-w-[9.5rem] shrink-0 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2 text-xs"
+            className="min-w-0 rounded-lg border border-[var(--gwb-border)] bg-[var(--gwb-surface)] px-3 py-2 text-xs"
           >
             <p className="font-medium">{managerName(m.rosterId)}</p>
             <p className="mt-0.5 text-[var(--gwb-muted)]">

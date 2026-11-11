@@ -45,8 +45,11 @@ type Props = {
 
 function PathTracker({ losses }: { losses: number }) {
   return (
-    <div className="overflow-x-auto pb-1">
-      <ol className="flex min-w-max gap-1.5" aria-label="Winless path tracker">
+    <div className="pb-1">
+      <ol
+        className="flex flex-wrap gap-1.5"
+        aria-label="Winless path tracker"
+      >
         {ZONE_PATH_STEPS.map((step) => {
           const here = step === losses
           const isRecord = step === FRANKIE_ZONE_RECORD.lossesWithoutWin

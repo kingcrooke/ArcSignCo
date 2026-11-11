@@ -1,15 +1,18 @@
 import { describe, expect, it } from 'vitest'
-import { MUSE_CARD_SLIDE_SIZE } from './weekGraphics'
-import { getWeekGraphicsSections } from './weekGraphics'
+import {
+  MUSE_CARD_SLIDE_SIZE,
+  getWeekGraphicsSections,
+  getWeekGraphicsSlides,
+} from './weekGraphics'
 
 describe('getWeekGraphicsSections week 4', () => {
-  it('lists Matchups, Results, and Report for finished Week 4', () => {
+  it('lists Results, Report, and Matchups for finished Week 4', () => {
     const sections = getWeekGraphicsSections(4)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'report', 'matchups'])
     expect(sections.map((s) => s.heading)).toEqual([
-      'Matchups',
       'Results',
       'Report',
+      'Matchups',
     ])
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides).toHaveLength(6)
@@ -29,10 +32,10 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(report?.slides[1]?.title).toBe('199.39: One Point From 200')
   })
 
-  it('lists Muse preview matchups plus results and report for finished weeks 1–3', () => {
+  it('lists results, report, then Muse preview matchups for finished weeks 1–3', () => {
     for (const week of [1, 2, 3]) {
       const sections = getWeekGraphicsSections(week)
-      expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
+      expect(sections.map((s) => s.kind)).toEqual(['results', 'report', 'matchups'])
       const matchups = sections.find((s) => s.kind === 'matchups')
       expect(matchups?.slides).toHaveLength(6)
       expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
@@ -75,9 +78,9 @@ describe('getWeekGraphicsSections week 4', () => {
     ])
   })
 
-  it('lists Matchups, Results, and Report for finished Week 5', () => {
+  it('lists Results, Report, and Matchups for finished Week 5', () => {
     const sections = getWeekGraphicsSections(5)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results', 'report'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'report', 'matchups'])
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides).toHaveLength(6)
     expect(matchups?.slides[0]).toMatchObject({
@@ -92,10 +95,10 @@ describe('getWeekGraphicsSections week 4', () => {
     )
   })
 
-  it('lists Matchups and Results for finished Week 6 at Muse card size', () => {
+  it('lists Results then Matchups for finished Week 6 at Muse card size', () => {
     const sections = getWeekGraphicsSections(6)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Matchups'])
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w6-m1', 'vs-w6-m1', 'Crooke vs Manny'],
@@ -111,10 +114,10 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(results?.slides[0]?.title).toBe('FINAL: CROOKE TAKES IT')
   })
 
-  it('lists Matchups then Results for finished Week 7 at Muse card size', () => {
+  it('lists Results then Matchups for finished Week 7 at Muse card size', () => {
     const sections = getWeekGraphicsSections(7)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Matchups'])
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w7-m1', 'vs-w7-m1', 'Eric vs Crooke'],
@@ -137,10 +140,10 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
 
-  it('lists Matchups then Results for finished Week 8 at Muse card size', () => {
+  it('lists Results then Matchups for finished Week 8 at Muse card size', () => {
     const sections = getWeekGraphicsSections(8)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Matchups'])
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w8-m1', 'vs-w8-m1', 'Crooke vs Frankie'],
@@ -163,10 +166,10 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
 
-  it('lists Matchups then Results for finished Week 9 at Muse card size', () => {
+  it('lists Results then Matchups for finished Week 9 at Muse card size', () => {
     const sections = getWeekGraphicsSections(9)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups', 'results'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups', 'Results'])
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Matchups'])
     const matchups = sections.find((s) => s.kind === 'matchups')
     expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w9-m1', 'vs-w9-m1', 'Crooke vs Jamil'],
@@ -187,6 +190,8 @@ describe('getWeekGraphicsSections week 4', () => {
       ['results-w9-m6', 'results-w9-m6', 'Danny beats Narking 156.01-118.34'],
     ])
     expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    expect(sections[0]?.slides[0]?.id).toBe('results-w9-m1')
+    expect(getWeekGraphicsSlides(9)[0]?.id).toBe('results-w9-m1')
   })
 
   it('lists Matchups only for upcoming Week 10 at Muse card size', () => {
