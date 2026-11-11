@@ -7,20 +7,29 @@
   --gold: #2e7d32;
   --cream-wool: #f6f3ec;
   --cream: #faf8f2;
+  --band-pillars: #d4f0e2;
+  --band-about: #f8e7c8;
+  --band-program: #d7e3f2;
+  --band-faith: #e3f6ea;
+  --band-safety: #e7f6ee;
+  --band-rates: #f8d9d9;
+  --band-gallery: #d8f2e4;
+  --band-stories: #f6edd4;
+  --band-faq: #eef6f1;
+  --band-contact: #d6e4f4;
+  --band-photos: #f7efe4;
 }
 
 body.version-v4 .hero {
-  background: linear-gradient(160deg, #ffffff 0%, #f0f7f2 45%, rgba(214, 40, 40, 0.05) 100%);
+  background:
+    radial-gradient(80% 70% at 100% 0%, rgba(214, 40, 40, 0.14), transparent 48%),
+    linear-gradient(160deg, #f4fbf6 0%, #cfeedd 42%, #f8e7c8 100%);
 }
 
 body.version-v4 .brand-logo,
 body.version-v4 .hero-logo-large {
   border-radius: 20px;
   border-color: var(--gold);
-}
-
-body.version-v4 .pillar-card {
-  border-top: 3px solid var(--larimar);
 }
 
 body.version-v4 .schedule-item time {

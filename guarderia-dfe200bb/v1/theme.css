@@ -8,11 +8,23 @@
   --cream-wool: #f4f7fb;
   --cream: #fafcff;
   --shadow: 0 8px 24px rgba(0, 45, 114, 0.14);
+  --band-pillars: #d4e6f8;
+  --band-about: #f8d5dc;
+  --band-program: #c5d8f2;
+  --band-faith: #f4d0d6;
+  --band-safety: #e4eef9;
+  --band-rates: #f7e0e5;
+  --band-gallery: #dceaf8;
+  --band-stories: #f6e4e8;
+  --band-faq: #e8f0fa;
+  --band-contact: #d0e2f6;
+  --band-photos: #fdeff2;
 }
 
 body.version-v1 .hero {
-  background: linear-gradient(160deg, #ffffff 0%, #eef4fc 55%, rgba(206, 17, 38, 0.06) 100%);
-  border-color: rgba(0, 45, 114, 0.15);
+  background:
+    radial-gradient(80% 70% at 100% 0%, rgba(206, 17, 38, 0.18), transparent 50%),
+    linear-gradient(160deg, #f3f7fd 0%, #d4e4f8 55%, #f8d5dc 100%);
 }
 
 body.version-v1 .verse-block {

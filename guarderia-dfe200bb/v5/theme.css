@@ -7,10 +7,23 @@
   --gold: #f4c430;
   --cream-wool: #fff9eb;
   --cream: #fffdf5;
+  --band-pillars: #d7f4fa;
+  --band-about: #ffe8a3;
+  --band-program: #fff1c2;
+  --band-faith: #ffe08a;
+  --band-safety: #e5f7fb;
+  --band-rates: #f8dce0;
+  --band-gallery: #d4f3fa;
+  --band-stories: #ffe9b0;
+  --band-faq: #fff6dc;
+  --band-contact: #d9e6f6;
+  --band-photos: #fff0cc;
 }
 
 body.version-v5 .hero {
-  background: linear-gradient(165deg, #fffef8 0%, #fff4cc 35%, rgba(62, 198, 224, 0.12) 100%);
+  background:
+    radial-gradient(70% 80% at 90% 0%, rgba(62, 198, 224, 0.45), transparent 50%),
+    linear-gradient(165deg, #fff8dc 0%, #ffe08a 42%, #c9eef6 100%);
 }
 
 body.version-v5 .brand-logo,
