@@ -22,7 +22,8 @@ Set these in Netlify (Site configuration → Environment variables). Do not comm
 | `VISUALIZER_ADMIN_PASSWORD` | Yes, for the leads list | Password for `/visualize/admin/`. If unset, sign-in returns 503. |
 | `RESEND_API_KEY` | Yes, to email leads | [Resend](https://resend.com) API key. Without it the lead is still stored and the admin row says `saved-no-email-key`. |
 | `VISUALIZER_EMAIL_FROM` | Yes, to email leads | From address Resend will accept, for example `Arc Signage Co <arc@arcsignco.com>` after the domain is verified. |
-| `VISUALIZER_LEAD_TO` | No | Inbox. Defaults to `arc@arcsignco.com`. |
+| `VISUALIZER_LEAD_TO` | No | Lead-form inbox. Defaults to `arc@arcsignco.com`. |
+| `VISUALIZER_RENDER_TO` | No | Inbox when a visitor finishes a 3-concept preview (no lead form yet). Defaults to `VISUALIZER_LEAD_TO`, then `arc@arcsignco.com`. Uses the same Resend key and from address as leads. |
 | `VISUALIZER_IP_SALT` | No | Salt for the daily IP hash. Defaults to a fixed string. |
 | `XAI_API_KEY` | No, for Grok images | xAI API key. When set, image generation uses Grok Imagine first. |
 | `XAI_BASE_URL` | No | Defaults to `https://api.x.ai/v1`. |

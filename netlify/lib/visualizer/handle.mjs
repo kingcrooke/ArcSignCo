@@ -2,7 +2,7 @@
 // with an in-memory database and blob store.
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { compositeLogo } from "../../../visualize/js/composite.js";
-import { sendLeadEmail } from "./email.mjs";
+import { sendLeadEmail, sendRenderEmail } from "./email.mjs";
 import { decodeImage, generateImage, extractWithModel, identifyVehicle, imageBackend, toPng } from "./images.mjs";
 import { isPng } from "./png.mjs";
 import { quoteFor } from "./pricing.mjs";
@@ -25,6 +25,7 @@ export const CONCEPT_COUNT = LIMITS.sessionVariants;
 export const ENV_KEYS = [
   "VISUALIZER_ADMIN_PASSWORD",
   "VISUALIZER_LEAD_TO",
+  "VISUALIZER_RENDER_TO",
   "VISUALIZER_EMAIL_FROM",
   "VISUALIZER_IP_SALT",
   "RESEND_API_KEY",
@@ -594,8 +595,25 @@ export async function handleVisualizer(req, deps) {
     if (variants.length !== count || variants.some(item => !item?.url)) {
       return fail(502, "The preview did not finish all 3 concepts. Try again.");
     }
-    await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub), count } });
-    return json(200, { variants, count, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    const eventId = makeId();
+    await deps.records.addEvent({ id: eventId, sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub), count } });
+    const response = json(200, { variants, count, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
+    queueRenderNotify(deps, {
+      env,
+      url,
+      ns,
+      session,
+      eventId,
+      business,
+      subject,
+      variants,
+      batch: (session.rendersUsed || 0) + 1,
+      photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
+      logoKey: session.logoKey,
+      inspoKey: session.inspoKey,
+      createdAt: now.toISOString(),
+    });
+    return response;
   }
 
   if (path === "/api/visualize/edit" && method === "POST") {
@@ -716,6 +734,53 @@ function publicLead(lead) {
 async function optionalFile(deps, ns, id, sessionId) {
   if (!id) return null;
   return loadFile(deps.blobs, ns, id, sessionId);
+}
+
+function queueRenderNotify(deps, spec) {
+  const run = deps.sendRenderEmail || sendRenderEmail;
+  void deliverRenderNotify(deps, spec, run).catch((err) => {
+    console.error("visualizer render notify", err?.message || err);
+  });
+}
+
+async function deliverRenderNotify(deps, spec, sendFn) {
+  const { env, url, ns, session, eventId, business, subject, variants, batch, photoKey, logoKey, inspoKey, createdAt } = spec;
+  const fresh = await deps.records.getSession(session.id);
+  if ((fresh?.renderNotifyBatch || 0) >= batch) return;
+  await deps.records.updateSession(session.id, { renderNotifyBatch: batch, renderNotifyAt: deps.now().toISOString() });
+  const origin = url.origin;
+  const links = [
+    ...(photoKey ? [{ label: "Uploaded / reference photo", url: `${origin}${assetPath(photoKey)}` }] : []),
+    ...(logoKey ? [{ label: "Logo file", url: `${origin}${assetPath(logoKey)}` }] : []),
+    ...(inspoKey ? [{ label: "Inspiration image", url: `${origin}${assetPath(inspoKey)}` }] : []),
+    ...variants.map((v, i) => ({ label: `Concept ${i + 1}${v.stub ? " (placeholder)" : ""}`, url: `${origin}${v.url}` })),
+  ];
+  const files = [];
+  for (let i = 0; i < variants.length; i += 1) {
+    const v = variants[i];
+    const got = await loadFile(deps.blobs, ns, v.id, session.id);
+    if (got) files.push({ filename: `concept-${i + 1}.png`, bytes: got.bytes });
+  }
+  const payload = {
+    jobId: eventId,
+    sessionId: session.id,
+    createdAt,
+    category: session.category,
+    business,
+    subject,
+    quote: quoteFor(session.category, env),
+    stub: variants.every(v => v.stub),
+    links,
+    files,
+  };
+  const mailed = await sendFn(env, payload, deps.fetchImpl);
+  await deps.records.addEvent({
+    id: deps.makeId(),
+    sessionId: session.id,
+    name: "render-notify",
+    createdAt: deps.now().toISOString(),
+    detail: { emailStatus: mailed.status, jobId: eventId },
+  });
 }
 
 function parseJson(text) {
