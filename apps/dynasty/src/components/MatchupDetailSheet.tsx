@@ -250,7 +250,7 @@ export function MatchupDetailSheet({
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-[var(--dyn-bg)] px-2 py-3"
         data-testid="matchup-detail-scroll"
       >
-        <div className="mx-auto grid max-w-4xl grid-cols-2 gap-2 sm:gap-3">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-3">
           <LineupSide
             matchup={left}
             team={teamL}

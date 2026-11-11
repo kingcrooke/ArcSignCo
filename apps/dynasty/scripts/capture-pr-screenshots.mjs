@@ -4,37 +4,67 @@ import { chromium } from 'playwright'
 
 const OUT =
   process.env.DYNASTY_SCREENSHOTS_OUT ??
-  '/opt/cursor/artifacts/dynasty-w5-graphics'
+  '/opt/cursor/artifacts/dynasty-visual-mobile'
 const BASE = process.env.DYNASTY_URL ?? 'http://127.0.0.1:4173/dynasty-1581d86a/'
 
-async function captureGallery(page, week, filename) {
-  await page.goto(`${BASE}?week=${week}&tab=gallery`, {
+const TAB_SHOTS = [
+  { tab: 'standings', file: 'standings' },
+  { tab: 'live', file: 'live' },
+  { tab: 'gallery', file: 'graphics', week: 9 },
+  { tab: 'waiver', file: 'waiver' },
+  { tab: 'awards', file: 'awards' },
+  { tab: 'bestgames', file: 'bestgames' },
+]
+
+async function shot(page, viewport, suffix, query) {
+  await page.setViewportSize(viewport)
+  await page.goto(`${BASE}?${query}`, { waitUntil: 'domcontentloaded' })
+  await page.waitForTimeout(12_000)
+  await page.screenshot({
+    path: path.join(OUT, `${suffix}.png`),
+    fullPage: true,
+  })
+}
+
+async function shotPickerClip(page, viewport, suffix) {
+  await page.setViewportSize(viewport)
+  await page.goto(`${BASE}?season=2026&week=9&tab=standings`, {
     waitUntil: 'domcontentloaded',
   })
-  await page.waitForTimeout(5000)
-  await page.screenshot({ path: path.join(OUT, filename), fullPage: true })
+  await page.waitForTimeout(12_000)
+  const pickers = page.locator('[data-testid="dynasty-pickers"]')
+  await pickers.waitFor({ state: 'visible' })
+  const box = await pickers.boundingBox()
+  if (!box) throw new Error('picker row not found')
+  await page.screenshot({
+    path: path.join(OUT, `pickers-${suffix}.png`),
+    clip: {
+      x: Math.max(0, box.x - 8),
+      y: Math.max(0, box.y - 8),
+      width: box.width + 16,
+      height: box.height + 16,
+    },
+  })
 }
 
 async function main() {
   await mkdir(OUT, { recursive: true })
   const browser = await chromium.launch()
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } })
-  await page.goto(`${BASE}?week=5&tab=standings`, { waitUntil: 'domcontentloaded' })
-  await page.waitForTimeout(10000)
-  await page.screenshot({ path: path.join(OUT, 'standings-week5.png'), fullPage: true })
+  const page = await browser.newPage()
 
-  await page.goto(`${BASE}?week=5&tab=live`, { waitUntil: 'domcontentloaded' })
-  await page.waitForTimeout(10000)
-  await page.screenshot({ path: path.join(OUT, 'live-week5.png'), fullPage: true })
+  await shotPickerClip(page, { width: 360, height: 800 }, '360')
+  await shotPickerClip(page, { width: 1280, height: 900 }, '1280')
 
-  await page.goto(`${BASE}?week=5&tab=waiver`, { waitUntil: 'domcontentloaded' })
-  await page.waitForTimeout(12000)
-  await page.screenshot({ path: path.join(OUT, 'waiver-week5-champion.png'), fullPage: true })
-
-  for (const week of [1, 2, 3, 4, 5]) {
-    await captureGallery(page, week, `graphics-week${week}-results.png`)
+  for (const { tab, file, week } of TAB_SHOTS) {
+    const weekParam = week ?? 9
+    const query = `season=2026&week=${weekParam}&tab=${tab}`
+    for (const [label, viewport] of [
+      ['360', { width: 360, height: 800 }],
+      ['1280', { width: 1280, height: 900 }],
+    ]) {
+      await shot(page, viewport, `${file}-${label}`, query)
+    }
   }
-  await captureGallery(page, 6, 'graphics-week6-matchups.png')
 
   await browser.close()
   console.log('saved', OUT)

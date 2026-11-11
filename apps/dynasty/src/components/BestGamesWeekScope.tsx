@@ -26,7 +26,7 @@ export function BestGamesWeekScope({
         Games by week
       </span>
       <div
-        className="dyn-week-scope-chips flex gap-1 overflow-x-auto rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
+        className="dyn-week-scope-chips flex flex-wrap gap-1 rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
         role="group"
         aria-label="Filter best games by week"
       >
@@ -69,8 +69,8 @@ function ScopeChip({
       disabled={disabled}
       className={
         active
-          ? 'dyn-week-scope-chip dyn-week-scope-chip--active shrink-0 px-3 py-2 text-xs'
-          : 'dyn-week-scope-chip shrink-0 px-3 py-2 text-xs'
+          ? 'dyn-week-scope-chip dyn-week-scope-chip--active px-3 py-2 text-xs'
+          : 'dyn-week-scope-chip px-3 py-2 text-xs'
       }
       aria-pressed={active}
       onClick={onClick}

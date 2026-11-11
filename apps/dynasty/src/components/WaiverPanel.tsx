@@ -265,11 +265,11 @@ function WeeklyAddsStrip({
       >
         This week&apos;s adds
       </h3>
-      <ul className="flex gap-2 overflow-x-auto pb-1" role="list">
+      <ul className="flex flex-wrap gap-2 pb-1" role="list">
         {adds.map((m) => (
           <li
             key={m.id}
-            className="min-w-[9.5rem] shrink-0 rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2 text-xs"
+            className="min-w-0 flex-1 basis-[8.5rem] rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2 text-xs"
           >
             <div className="flex items-center gap-2">
               {teams.get(m.rosterId) && (
@@ -540,7 +540,7 @@ function SeasonBoard({
         ))}
       </div>
       <div className="hidden overflow-x-auto rounded-xl border border-[var(--dyn-border)] sm:block">
-        <table className="w-full min-w-[880px] text-left text-sm">
+        <table className="w-full text-left text-sm">
           <thead className="bg-[var(--dyn-surface)] text-xs uppercase tracking-wider text-[var(--dyn-muted)]">
             <tr>
               <th className="px-3 py-2">#</th>

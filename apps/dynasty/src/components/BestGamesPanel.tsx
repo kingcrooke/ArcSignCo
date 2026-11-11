@@ -59,16 +59,16 @@ function ScoreSide({
   const manager = managerLabel(team, rosterId)
   return (
     <div
-      className={`flex min-w-0 flex-1 items-center gap-2 ${
+      className={`flex min-w-0 flex-1 items-start gap-2 ${
         winning ? 'rounded-lg ring-1 ring-[var(--dyn-accent)]/50' : ''
       }`}
     >
       <TeamAvatar team={team} size="sm" />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold leading-tight">
+        <p className="break-words text-sm font-semibold leading-tight">
           {team?.teamName ?? `Team ${rosterId}`}
         </p>
-        <p className="truncate text-xs text-[var(--dyn-muted)]">{manager}</p>
+        <p className="break-words text-xs text-[var(--dyn-muted)]">{manager}</p>
       </div>
       <p
         className={`shrink-0 text-lg font-bold tabular-nums ${
@@ -97,7 +97,7 @@ function ExpandedLineup({
       <div className="mb-2 flex items-center gap-2">
         <TeamAvatar team={team} size="sm" />
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">{team?.teamName ?? 'Team'}</p>
+          <p className="break-words text-sm font-semibold">{team?.teamName ?? 'Team'}</p>
           <p className="text-xs font-bold tabular-nums text-[var(--dyn-accent)]">
             {matchup.points.toFixed(2)} pts
           </p>
