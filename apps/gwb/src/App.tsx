@@ -36,6 +36,7 @@ import { useSound } from './hooks/useSound'
 import { GoatCounterVisitor } from './components/GoatCounterVisitor'
 import { trackGwbTab } from './lib/goatcounter'
 import { type AppTab } from './hooks/useUrlState'
+import { workflowForTab } from './lib/workflowTheme'
 
 const BASE_TABS: { id: AppTab; label: string }[] = [
   { id: 'standings', label: 'Standings' },
@@ -273,6 +274,7 @@ export default function App() {
       className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${
         tab === 'gallery' || tab === 'waiver' ? 'max-w-6xl' : 'max-w-3xl'
       }`}
+      data-active-workflow={state === 'ready' ? tab : undefined}
     >
       <header className="mb-6 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -336,7 +338,7 @@ export default function App() {
 
           <nav
             ref={navRef}
-            className="gwb-section-tabs mb-6 flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1"
+            className="gwb-section-tabs mb-6 flex w-full min-w-0 gap-1 rounded-xl border border-[var(--gwb-border)] bg-[var(--gwb-surface)] p-1.5"
             aria-label="Sections"
           >
             {tabs.map((t) => {
@@ -345,6 +347,8 @@ export default function App() {
                 <button
                   key={t.id}
                   type="button"
+                  data-workflow={t.id}
+                  title={workflowForTab(t.id).label}
                   className={
                     active
                       ? 'gwb-section-tab gwb-section-tab--active'
@@ -360,8 +364,11 @@ export default function App() {
           </nav>
 
           {tab === 'live' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="live"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                 Week {data.selectedWeek} scoreboard
                 {data.isSelectedWeekLive && (
                   <span className="ml-2 text-sm font-normal text-amber-300">
@@ -384,8 +391,11 @@ export default function App() {
             </section>
           )}
           {tab === 'standings' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="standings"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                 Standings
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.standingsThroughWeek}
@@ -409,8 +419,11 @@ export default function App() {
             </section>
           )}
           {tab === 'powerrankings' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="powerrankings"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                 Power Rankings
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.powerRankingsThroughWeek}
@@ -424,8 +437,13 @@ export default function App() {
             </section>
           )}
           {tab === 'bestgames' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Best Games</h2>
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="bestgames"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
+                Best Games
+              </h2>
               <BestGamesPanel
                 matchupsByWeek={data.matchupsByWeek}
                 league={data.league}
@@ -446,8 +464,11 @@ export default function App() {
             </section>
           )}
           {tab === 'gallery' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="gallery"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                 Week {data.selectedWeek} graphics
               </h2>
               <WeekGraphicsPanel
@@ -464,9 +485,14 @@ export default function App() {
             </section>
           )}
           {tab === 'recaps' && (
-            <section className="min-w-0 w-full space-y-8">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full space-y-8"
+              data-workflow="recaps"
+            >
               <div>
-                <h2 className="mb-3 text-lg font-semibold">Commissioner&apos;s recaps</h2>
+                <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
+                  Commissioner&apos;s recaps
+                </h2>
                 <CommissionerRecapsPanel
                   week={data.selectedWeek}
                   focusRecapId={recapFocusId}
@@ -474,7 +500,7 @@ export default function App() {
                 />
               </div>
               <div>
-                <h2 className="mb-3 text-lg font-semibold">
+                <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                   Week {data.selectedWeek} matchup recaps
                   {data.isSelectedWeekLive ? ' (live scores)' : ''}
                 </h2>
@@ -499,8 +525,13 @@ export default function App() {
             </section>
           )}
           {tab === 'mulligans' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Mulligans</h2>
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="mulligans"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
+                Mulligans
+              </h2>
               <MulligansPanel
                 rows={data.standings}
                 selectedWeek={data.selectedWeek}
@@ -512,8 +543,11 @@ export default function App() {
             </section>
           )}
           {tab === 'frankie' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="frankie"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                 Frankie Zone
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.standingsThroughWeek}
@@ -542,8 +576,13 @@ export default function App() {
             </section>
           )}
           {tab === 'trades' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Trade log</h2>
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="trades"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
+                Trade log
+              </h2>
               <TradeLogPanel
                 trades={data.tradeLog}
                 priorSeasonsIncluded={data.tradePriorSeasonsIncluded}
@@ -557,14 +596,24 @@ export default function App() {
             </section>
           )}
           {tab === 'awards' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Weekly awards</h2>
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="awards"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
+                Weekly awards
+              </h2>
               <WeeklyAwardsPanel weeks={data.weeklyAwards} />
             </section>
           )}
           {tab === 'managers' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">Managers</h2>
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="managers"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
+                Managers
+              </h2>
               <p className="mb-4 text-sm text-[var(--gwb-muted)]">
                 Profiles, history, trades, and archived rosters — one stop for league lore.
               </p>
@@ -588,8 +637,11 @@ export default function App() {
             </section>
           )}
           {tab === 'waiver' && (
-            <section className="min-w-0 w-full">
-              <h2 className="mb-3 text-lg font-semibold">
+            <section
+              className="gwb-workflow-panel min-w-0 w-full"
+              data-workflow="waiver"
+            >
+              <h2 className="gwb-workflow-heading mb-3 text-lg font-semibold">
                 Waiver Wire Champion
                 <span className="ml-2 text-sm font-normal text-[var(--gwb-muted)]">
                   through Week {data.standingsThroughWeek}

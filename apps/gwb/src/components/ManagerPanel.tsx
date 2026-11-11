@@ -512,8 +512,26 @@ export function ManagerPanel({
               <p className="text-xs text-[var(--gwb-muted)]">
                 {finishSummaryLine(selectedPast)}
               </p>
-              <div className="mt-3 -mx-3 overflow-x-auto px-3">
-                <table className="w-full min-w-[320px] text-left text-sm">
+              <ul className="mt-3 space-y-2 sm:hidden" role="list">
+                {buildPastRosterRows(selectedPast, players).map((r) => (
+                  <li
+                    key={r.id}
+                    className="rounded-lg border border-[var(--gwb-border)] bg-[#0d1319] px-3 py-2 text-sm"
+                  >
+                    <p className="font-medium">{r.name}</p>
+                    <p className="mt-0.5 text-xs text-[var(--gwb-muted)]">
+                      {r.pos} · {r.nfl} ·{' '}
+                      {r.starter ? (
+                        <span className="text-[var(--gwb-accent)]">Start</span>
+                      ) : (
+                        <span>Bench</span>
+                      )}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-3 hidden sm:block">
+                <table className="w-full text-left text-sm">
                   <thead>
                     <tr className="border-b border-[var(--gwb-border)] text-[10px] uppercase tracking-wide text-[var(--gwb-muted)]">
                       <th className="py-2 pr-2 font-semibold">Player</th>
@@ -529,13 +547,9 @@ export function ManagerPanel({
                         className="border-b border-[var(--gwb-border)]/60 last:border-0"
                       >
                         <td className="max-w-[140px] truncate py-2 pr-2">{r.name}</td>
-                        <td className="whitespace-nowrap px-2 py-2 text-[var(--gwb-muted)]">
-                          {r.pos}
-                        </td>
-                        <td className="whitespace-nowrap px-2 py-2 text-[var(--gwb-muted)]">
-                          {r.nfl}
-                        </td>
-                        <td className="whitespace-nowrap py-2 pl-2 text-right text-xs uppercase">
+                        <td className="px-2 py-2 text-[var(--gwb-muted)]">{r.pos}</td>
+                        <td className="px-2 py-2 text-[var(--gwb-muted)]">{r.nfl}</td>
+                        <td className="py-2 pl-2 text-right text-xs uppercase">
                           {r.starter ? (
                             <span className="text-[var(--gwb-accent)]">Start</span>
                           ) : (

@@ -31,6 +31,20 @@
   --gwb-accent: #e8b923;
   --gwb-text: #f4f7fb;
   --gwb-muted: #8fa3b8;
+  /* Section workflow accents (tabs + panels) */
+  --gwb-flow-standings: #5dce8a;
+  --gwb-flow-powerrankings: #b794f6;
+  --gwb-flow-live: #fb923c;
+  --gwb-flow-gallery: #f472b6;
+  --gwb-flow-recaps: #38bdf8;
+  --gwb-flow-mulligans: #f9a8d4;
+  --gwb-flow-frankie: #2dd4bf;
+  --gwb-flow-waiver: #86efac;
+  --gwb-flow-bestgames: #60a5fa;
+  --gwb-flow-trades: #4ade80;
+  --gwb-flow-awards: #fcd34d;
+  --gwb-flow-managers: #a5b4fc;
+  --gwb-flow-ink: #0a0f14;
 }
 
 html {
@@ -68,21 +82,81 @@ body {
   height: 0;
 }
 
-/* Section tabs — instant active swap (no bg transition; avoids double-highlight glitch) */
+/* Section tabs — workflow color + wrap on narrow viewports (no horizontal scroll strip). */
+nav.gwb-section-tabs {
+  position: relative;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.35rem;
+}
+
 nav.gwb-section-tabs button.gwb-section-tab {
-  flex: 0 0 auto;
+  flex: 1 1 calc(50% - 0.25rem);
+  min-width: min(100%, 7.25rem);
   max-width: 100%;
-  white-space: nowrap;
+  white-space: normal;
   text-align: center;
   border-radius: 0.5rem;
-  padding: 0.625rem 0.75rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.8125rem;
+  line-height: 1.2;
   font-weight: 500;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  background-color: transparent;
+  background-color: #0d1319;
   color: var(--gwb-muted);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gwb-flow-accent, var(--gwb-border)) 38%, transparent);
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gwb-flow-accent, var(--gwb-border)) 14%, transparent),
+    transparent 72%
+  );
+}
+
+@media (min-width: 640px) {
+  nav.gwb-section-tabs button.gwb-section-tab {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    padding: 0.625rem 0.75rem;
+  }
+}
+
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='standings'] {
+  --gwb-flow-accent: var(--gwb-flow-standings);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='powerrankings'] {
+  --gwb-flow-accent: var(--gwb-flow-powerrankings);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='live'] {
+  --gwb-flow-accent: var(--gwb-flow-live);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='gallery'] {
+  --gwb-flow-accent: var(--gwb-flow-gallery);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='recaps'] {
+  --gwb-flow-accent: var(--gwb-flow-recaps);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='mulligans'] {
+  --gwb-flow-accent: var(--gwb-flow-mulligans);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='frankie'] {
+  --gwb-flow-accent: var(--gwb-flow-frankie);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='waiver'] {
+  --gwb-flow-accent: var(--gwb-flow-waiver);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='bestgames'] {
+  --gwb-flow-accent: var(--gwb-flow-bestgames);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='trades'] {
+  --gwb-flow-accent: var(--gwb-flow-trades);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='awards'] {
+  --gwb-flow-accent: var(--gwb-flow-awards);
+}
+nav.gwb-section-tabs button.gwb-section-tab[data-workflow='managers'] {
+  --gwb-flow-accent: var(--gwb-flow-managers);
 }
 
 nav.gwb-section-tabs button.gwb-section-tab:hover {
@@ -91,13 +165,15 @@ nav.gwb-section-tabs button.gwb-section-tab:hover {
 
 nav.gwb-section-tabs button.gwb-section-tab--active,
 nav.gwb-section-tabs button.gwb-section-tab.gwb-section-tab--active {
-  background-color: var(--gwb-accent);
-  color: #1a1200;
+  background-color: var(--gwb-flow-accent);
+  background-image: none;
+  color: var(--gwb-flow-ink);
   font-weight: 600;
+  box-shadow: none;
 }
 
 nav.gwb-section-tabs button.gwb-section-tab--active:hover {
-  color: #1a1200;
+  color: var(--gwb-flow-ink);
 }
 
 nav.gwb-section-tabs button.gwb-section-tab:focus {
@@ -105,7 +181,7 @@ nav.gwb-section-tabs button.gwb-section-tab:focus {
 }
 
 nav.gwb-section-tabs button.gwb-section-tab:focus-visible {
-  outline: 2px solid var(--gwb-accent);
+  outline: 2px solid var(--gwb-flow-accent, var(--gwb-accent));
   outline-offset: 2px;
 }
 
@@ -113,18 +189,81 @@ nav.gwb-section-tabs button.gwb-section-tab--active:focus-visible {
   outline-color: var(--gwb-text);
 }
 
-/* Single-row tab strip; horizontal scroll on narrow viewports. */
-nav.gwb-section-tabs {
-  position: relative;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
+.gwb-workflow-panel {
+  --gwb-flow-current: var(--gwb-accent);
+  border-radius: 0.75rem;
+  border: 1px solid var(--gwb-border);
+  border-top-width: 3px;
+  border-top-color: var(--gwb-flow-current);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--gwb-flow-current) 10%, var(--gwb-surface)),
+    var(--gwb-bg) 2.5rem
+  );
+  padding: 1rem 1rem 1.25rem;
 }
 
-/* Best Games week scope chips (same gold active look as section tabs) */
+.gwb-workflow-panel[data-workflow='standings'] {
+  --gwb-flow-current: var(--gwb-flow-standings);
+}
+.gwb-workflow-panel[data-workflow='powerrankings'] {
+  --gwb-flow-current: var(--gwb-flow-powerrankings);
+}
+.gwb-workflow-panel[data-workflow='live'] {
+  --gwb-flow-current: var(--gwb-flow-live);
+}
+.gwb-workflow-panel[data-workflow='gallery'] {
+  --gwb-flow-current: var(--gwb-flow-gallery);
+}
+.gwb-workflow-panel[data-workflow='recaps'] {
+  --gwb-flow-current: var(--gwb-flow-recaps);
+}
+.gwb-workflow-panel[data-workflow='mulligans'] {
+  --gwb-flow-current: var(--gwb-flow-mulligans);
+}
+.gwb-workflow-panel[data-workflow='frankie'] {
+  --gwb-flow-current: var(--gwb-flow-frankie);
+}
+.gwb-workflow-panel[data-workflow='waiver'] {
+  --gwb-flow-current: var(--gwb-flow-waiver);
+}
+.gwb-workflow-panel[data-workflow='bestgames'] {
+  --gwb-flow-current: var(--gwb-flow-bestgames);
+}
+.gwb-workflow-panel[data-workflow='trades'] {
+  --gwb-flow-current: var(--gwb-flow-trades);
+}
+.gwb-workflow-panel[data-workflow='awards'] {
+  --gwb-flow-current: var(--gwb-flow-awards);
+}
+.gwb-workflow-panel[data-workflow='managers'] {
+  --gwb-flow-current: var(--gwb-flow-managers);
+}
+
+.gwb-workflow-heading {
+  color: var(--gwb-text);
+}
+
+.gwb-workflow-heading::before {
+  content: '';
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.45rem;
+  border-radius: 999px;
+  background: var(--gwb-flow-current, var(--gwb-accent));
+  vertical-align: 0.15em;
+}
+
+/* Best Games week scope chips — wrap like section tabs; gold active */
+.gwb-week-scope-chips {
+  flex-wrap: wrap;
+}
+
 .gwb-week-scope-chips button.gwb-week-scope-chip {
-  flex: 0 0 auto;
-  min-width: max-content;
-  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: min(100%, 4.5rem);
+  white-space: normal;
   border-radius: 0.5rem;
   border: 1px solid transparent;
   cursor: pointer;
