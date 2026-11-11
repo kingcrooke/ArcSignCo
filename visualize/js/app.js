@@ -2,8 +2,14 @@ import { loadImageFile } from "/tools/sign-mockup/js/images.js";
 import { compositeLogo } from "./composite.js";
 
 const $ = (id) => document.getElementById(id);
-const STOCK = "/visualize/img/work-van.svg";
-const SAMPLE = "/tools/sign-mockup/img/sample-storefront.jpg";
+const TEMPLATES = {
+  "cargo-van": { src: "/visualize/img/templates/cargo-van.jpg", label: "Work van", alt: "Cargo van, side view" },
+  pickup: { src: "/visualize/img/templates/pickup.jpg", label: "Pickup", alt: "Pickup truck, side view" },
+  "box-truck": { src: "/visualize/img/templates/box-truck.jpg", label: "Box truck", alt: "Box truck, side view" },
+  car: { src: "/visualize/img/templates/sedan.jpg", label: "Sedan", alt: "Sedan, side view" },
+};
+const STOCK = TEMPLATES["cargo-van"].src;
+const SAMPLE = "/visualize/img/templates/storefront.jpg";
 const CONCEPTS = 3;
 const SWATCHES = [
   ["#e23b3b", "Red"], ["#f28c28", "Orange"], ["#d4a53c", "Gold"], ["#f2d34a", "Yellow"],
@@ -91,6 +97,11 @@ function toast(text) {
 async function api(path, options = {}) {
   const res = await fetch(path, options);
   const data = await res.json().catch(() => ({}));
+  if (res.status === 504) {
+    const error = new Error("The preview took too long. Try again.");
+    error.status = 504;
+    throw error;
+  }
   if (!res.ok) {
     const error = new Error(data.error || "Something went wrong. Try again.");
     error.status = res.status;
@@ -182,7 +193,7 @@ async function afterGate() {
 
 function vehicleLabel() {
   if (state.category !== "vehicle") return state.category === "sign" ? "Storefront" : "Windows";
-  if (state.vehicle.stock) return "Work van";
+  if (state.vehicle.stock) return state.vehicle.label || "Work van";
   return [state.vehicle.year, state.vehicle.make, state.vehicle.model].filter(Boolean).join(" ") || "Your vehicle";
 }
 
@@ -190,7 +201,7 @@ async function choice() {
   clearPanel();
   showArrows(false);
   await ensureSession("vehicle");
-  setStage(STOCK, "Work van", "White work van");
+  setStage(STOCK, "Work van", TEMPLATES["cargo-van"].alt);
   state.beforeUrl = STOCK;
   state.vehicle = { year: "", make: "", model: "", color: "white", body: "cargo-van", stock: true, label: "Work van" };
   await typeLine("I've started you on a work van. Use it, or pick a different vehicle?");
@@ -201,6 +212,9 @@ async function choice() {
       el("b", {}, "Use this work van"),
       el("small", {}, "Full wrap on the van shown."),
     ]),
+    el("button", { class: "line-btn", type: "button", onclick: () => useTemplate("pickup") }, "Pickup"),
+    el("button", { class: "line-btn", type: "button", onclick: () => useTemplate("box-truck") }, "Box truck"),
+    el("button", { class: "line-btn", type: "button", onclick: () => useTemplate("car") }, "Sedan"),
     el("button", { class: "choice", type: "button", onclick: vehicleForm }, [
       el("b", {}, "Use a different vehicle"),
       el("small", {}, "Enter year, make, model & color"),
@@ -218,9 +232,20 @@ async function choice() {
 
 async function useStock() {
   await user("Use this work van");
-  state.vehicle.stock = true;
+  state.vehicle = { year: "", make: "", model: "", color: "white", body: "cargo-van", stock: true, label: "Work van" };
   state.photoId = "";
   state.beforeUrl = STOCK;
+  setStage(STOCK, "Work van", TEMPLATES["cargo-van"].alt);
+  await builder();
+}
+
+async function useTemplate(body) {
+  const item = TEMPLATES[body];
+  await user(item.label);
+  state.vehicle = { year: "", make: "", model: "", color: "white", body, stock: true, label: item.label };
+  state.photoId = "";
+  state.beforeUrl = item.src;
+  setStage(item.src, item.label, item.alt);
   await builder();
 }
 
@@ -232,10 +257,15 @@ async function vehicleForm() {
   const make = el("input", { id: "make", maxlength: "40", placeholder: "Ford" });
   const model = el("input", { id: "model", maxlength: "40", placeholder: "Transit" });
   const color = el("input", { id: "paint", maxlength: "40", placeholder: "white" });
+  const bodyType = el("select", { id: "bodyType" });
+  for (const [value, label] of [["cargo-van", "Cargo van"], ["pickup", "Pickup"], ["box-truck", "Box truck"], ["car", "Sedan"]]) {
+    bodyType.append(el("option", { value, selected: value === "cargo-van" }, label));
+  }
   $("panel").append(
     el("label", { class: "field" }, ["Year", year]),
     el("label", { class: "field" }, ["Make", make]),
     el("label", { class: "field" }, ["Model", model]),
+    el("label", { class: "field" }, ["Body", bodyType]),
     el("label", { class: "field" }, ["Current body color (optional)", color]),
     el("button", { class: "gold-btn", type: "button", onclick: () => generateVehicle(false) }, "Generate my vehicle"),
   );
@@ -246,11 +276,12 @@ async function generateVehicle() {
   const make = $("make").value.trim();
   const model = $("model").value.trim();
   const color = $("paint").value.trim();
+  const bodyType = $("bodyType")?.value || "cargo-van";
   if (!/^(19|20)\d{2}$/.test(year) || !make || !model) {
     toast("Enter a year, make, and model.");
     return;
   }
-  state.vehicle = { year, make, model, color, body: "cargo-van", stock: false, label: [year, make, model].filter(Boolean).join(" ") };
+  state.vehicle = { year, make, model, color, body: bodyType, stock: false, label: [year, make, model].filter(Boolean).join(" ") };
   await user([year, make, model, color].filter(Boolean).join(" "));
   clearPanel();
   const stop = startRing("Generating your car…", "This usually takes 30 to 60 seconds.");
@@ -258,7 +289,7 @@ async function generateVehicle() {
     await afterGate();
     const data = await apiRetry("/api/visualize/vehicle", jsonBody({
       sessionId: state.sessionId,
-      subject: { year, make, model, color, body: "cargo-van" },
+      subject: { year, make, model, color, body: bodyType },
     }));
     state.photoId = data.render.id;
     state.beforeUrl = data.render.url;
@@ -291,7 +322,7 @@ async function regenerate() {
     await afterGate();
     const data = await apiRetry("/api/visualize/vehicle", jsonBody({
       sessionId: state.sessionId,
-      subject: { year: state.vehicle.year, make: state.vehicle.make, model: state.vehicle.model, color: state.vehicle.color, body: "cargo-van" },
+      subject: { year: state.vehicle.year, make: state.vehicle.make, model: state.vehicle.model, color: state.vehicle.color, body: state.vehicle.body || "cargo-van" },
     }));
     state.photoId = data.render.id;
     state.beforeUrl = data.render.url;
@@ -648,7 +679,7 @@ async function generateConcepts() {
   $("cancelBtn").onclick = () => controller.abort();
   try {
     await afterGate();
-    const data = await apiRetry("/api/visualize/render", {
+    let data = await apiRetry("/api/visualize/render", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       signal: controller.signal,
@@ -660,10 +691,25 @@ async function generateConcepts() {
         photoId: state.photoId,
       }),
     });
-    if (!data.variants || data.variants.length !== CONCEPTS) throw new Error("The preview did not return 3 concepts. Try again.");
-    state.concepts = data.variants;
+    if (data.jobId && data.kick) {
+      fetch(data.kick, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobId: data.jobId, ns: data.ns }),
+        signal: controller.signal,
+      }).catch(() => {});
+    }
+    if (data.jobId && !data.variants) data = await pollJob(data.jobId, controller.signal);
+    const ready = (data.variants || []).filter(item => item.url);
+    if (!ready.length) {
+      $("stubBanner").hidden = false;
+      $("stubBanner").textContent = data.error || "The preview didn't finish. Try again, or email arc@arcsignco.com.";
+      throw new Error(data.error || "The preview didn't finish. Try again.");
+    }
+    state.concepts = ready;
     state.index = 0;
-    $("stubBanner").hidden = !data.stub;
+    $("stubBanner").hidden = true;
+    if (data.error && ready.length < (data.variants || []).length) toast(data.error);
     stop();
     await showConcepts();
   } catch (err) {
@@ -678,12 +724,36 @@ async function generateConcepts() {
   }
 }
 
+async function pollJob(jobId, signal) {
+  const started = Date.now();
+  while (Date.now() - started < 170000) {
+    if (signal?.aborted) throw new DOMException("Cancelled.", "AbortError");
+    const job = await api(`/api/visualize/job/${jobId}`, { signal });
+    const ready = (job.variants || []).filter(item => item.url).length;
+    const total = job.count || CONCEPTS;
+    if (ready) {
+      $("busyTitle").textContent = `Concept ${ready} of ${total} is ready…`;
+      $("busyPill").textContent = ready < total ? "Working on the next one." : "Finishing.";
+    }
+    if (job.status === "done" || job.status === "error") return job;
+    await new Promise(resolve => {
+      const timer = setTimeout(resolve, 1500);
+      signal?.addEventListener("abort", () => { clearTimeout(timer); resolve(); }, { once: true });
+    });
+    if (signal?.aborted) throw new DOMException("Cancelled.", "AbortError");
+  }
+  throw new Error("The preview is taking too long. Try again.");
+}
+
 async function showConcepts() {
   clearPanel();
   showArrows(true);
   paintDots();
   await presentConcept();
-  await typeLine(`Here are your ${CONCEPTS} concepts — swipe through and pick the direction you like best.`);
+  const line = state.concepts.length === CONCEPTS
+    ? `Here are your ${CONCEPTS} concepts — swipe through and pick the direction you like best.`
+    : "Here are the concepts that finished. One didn't, so you can try again.";
+  await typeLine(line);
   const box = el("div");
   box.append(
     el("button", { class: "gold-btn", type: "button", onclick: useConcept }, "Use this concept — Next step"),
@@ -721,7 +791,7 @@ function quadFromZone(zone) {
 
 async function presentConcept() {
   const concept = state.concepts[state.index];
-  if (!concept) return;
+  if (!concept?.url) return;
   $("stageLabel").textContent = `Concept ${state.index + 1} of ${state.concepts.length}`;
   const res = await fetch(concept.url);
   const blob = await res.blob();

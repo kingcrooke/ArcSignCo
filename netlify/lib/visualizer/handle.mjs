@@ -7,6 +7,7 @@ import { decodeImage, generateImage, extractWithModel, identifyVehicle, imageBac
 import { isPng } from "./png.mjs";
 import { quoteFor } from "./pricing.mjs";
 import { editPrompt, renderPrompt, scrapePrompt, vehiclePrompt, zoneFor } from "./prompts.mjs";
+import { loadTemplate, templateKeyFor } from "./templates.mjs";
 import { assertPublicUrl, extractBusiness, fetchPublic, pageText } from "./scrape.mjs";
 import { stampConcept } from "./watermark.mjs";
 
@@ -234,9 +235,12 @@ function denorm(quad, w, h) {
   return quad.map(p => ({ x: snap(p.x * w), y: snap(p.y * h) }));
 }
 
+const LIMIT_KEY = { scans: "scan", renders: "render", edits: "edit", leads: "lead", uploads: "upload", logins: "login" };
+
 async function gate(records, ipHash, day, field, by = 1) {
   const cur = await records.getUsage(ipHash, day);
-  if ((cur[field] || 0) + by > LIMITS.ip[field]) return false;
+  const limit = LIMITS.ip[LIMIT_KEY[field] || field];
+  if ((cur[field] || 0) + by > limit) return false;
   await records.bumpUsage(ipHash, day, field, by);
   return true;
 }
@@ -262,20 +266,20 @@ async function saveImage(blobs, ns, id, bytes, metadata) {
   await blobs.set(fileKey(ns, id), bytes, { metadata });
 }
 
-async function paintAndStore(deps, { ns, session, prompt, references, photoBytes, variant, kind, parentId }) {
+export const PREVIEW_MISS = "The preview didn't finish. Try again, or email arc@arcsignco.com.";
+
+async function paintAndStore(deps, { ns, session, prompt, references, variant, kind, parentId }) {
   const started = Date.now();
   let out;
-  const spec = { prompt, references, category: session.category, variant, photoBytes };
+  const spec = { prompt, references, category: session.category, variant };
   try {
     out = deps.imageClient ? { ...(await deps.imageClient(spec)), zone: zoneFor(session.category) } : await generateImage(deps.env, spec);
   } catch (err) {
     console.error("visualizer image", err?.message || err);
-    const { placeholderRender } = await import("./images.mjs");
-    out = await placeholderRender({ category: session.category, variant, photoBytes });
+    return { error: "That concept didn't finish. Try again.", stub: false };
   }
   if (!out?.bytes?.length) {
-    const { placeholderRender } = await import("./images.mjs");
-    out = await placeholderRender({ category: session.category, variant, photoBytes });
+    return { error: out?.error || "That concept didn't finish. Try again.", stub: false };
   }
   let image = await decodeImage(out.bytes);
   image = stampConcept(image);
@@ -313,6 +317,65 @@ function publicRender(row) {
   };
 }
 
+export async function runRenderJob(deps, jobId) {
+  const existing = await deps.records.getJob(jobId);
+  if (!existing) return null;
+  if (existing.status === "running" || existing.status === "done" || existing.status === "error") return existing;
+  await deps.records.updateJob(jobId, { status: "running" });
+  const makeId = deps.makeId || newId;
+  deps = { ...deps, makeId, now: deps.now || (() => new Date()), fetchImpl: deps.fetchImpl || fetch };
+  const session = { id: existing.sessionId, category: existing.category };
+  try {
+    let photo = null;
+    if (existing.photoKey) photo = await loadFile(deps.blobs, existing.ns, existing.photoKey, session.id);
+    if (!photo && existing.templateKey) {
+      photo = await loadTemplate(existing.templateKey, { fetchImpl: deps.fetchImpl, siteUrl: deps.siteUrl });
+    }
+    const inspo = existing.inspoKey ? await loadFile(deps.blobs, existing.ns, existing.inspoKey, session.id) : null;
+    const references = [];
+    if (photo) references.push({ bytes: photo.bytes, mime: photo.mime, role: "photo" });
+    if (inspo) references.push({ bytes: inspo.bytes, mime: inspo.mime, role: "inspo" });
+    const subject = { ...existing.subject, photo: !!photo };
+    const variants = [];
+    for (let variant = 0; variant < existing.count; variant++) {
+      const prompt = renderPrompt({ category: existing.category, business: existing.business, subject, variant });
+      const row = await paintAndStore(deps, { ns: existing.ns, session, prompt, references, variant, kind: "variant" });
+      variants.push(row.error ? { index: variant, error: row.error } : publicRender(row));
+      await deps.records.updateJob(jobId, { variants, done: variants.filter(item => item.url).length });
+    }
+    const ready = variants.filter(item => item.url);
+    const error = ready.length === variants.length ? "" : ready.length ? "One concept didn't finish. The others are ready." : PREVIEW_MISS;
+    await deps.records.addEvent({
+      id: makeId(), sessionId: session.id, name: "render", createdAt: deps.now().toISOString(),
+      detail: { models: variants.map(item => item.model || "error"), count: ready.length },
+    });
+    const updated = await deps.records.updateJob(jobId, { status: ready.length ? "done" : "error", variants, error });
+    if (ready.length) {
+      const fullSession = await deps.records.getSession(existing.sessionId);
+      const origin = String(deps.siteUrl || "").replace(/\/$/, "") || "https://arcsignco.com";
+      queueRenderNotify(deps, {
+        env: deps.env || {},
+        url: new URL(origin),
+        ns: existing.ns,
+        session: fullSession || { id: existing.sessionId, category: existing.category },
+        eventId: jobId,
+        business: existing.business,
+        subject: existing.subject,
+        variants: ready,
+        batch: fullSession?.rendersUsed || 1,
+        photoKey: existing.photoKey || fullSession?.photoKey || "",
+        logoKey: fullSession?.logoKey || "",
+        inspoKey: existing.inspoKey || fullSession?.inspoKey || "",
+        createdAt: existing.createdAt,
+      });
+    }
+    return updated;
+  } catch (err) {
+    console.error("visualizer job", err?.message || err);
+    return deps.records.updateJob(jobId, { status: "error", error: PREVIEW_MISS, variants: [] });
+  }
+}
+
 function needRecords(records) {
   if (records) return null;
   return fail(503, "Saving is not available until Netlify Database is provisioned for this site.");
@@ -341,6 +404,23 @@ export async function handleVisualizer(req, deps) {
       quote: quoteFor("vehicle", env),
       disclaimer: DISCLAIMER,
       storage: deps.records ? "blobs" : "unconfigured",
+    });
+  }
+
+  const jobPath = path.match(/^\/api\/visualize\/job\/([0-9a-f]{32})$/);
+  if (jobPath && method === "GET") {
+    const blocked = needRecords(deps.records);
+    if (blocked) return blocked;
+    const job = await deps.records.getJob(jobPath[1]);
+    if (!job) return fail(404, "That preview was not found.");
+    return json(200, {
+      id: job.id,
+      status: job.status,
+      count: job.count,
+      done: (job.variants || []).filter(item => item.url).length,
+      variants: job.variants || [],
+      error: job.error || "",
+      disclaimer: DISCLAIMER,
     });
   }
 
@@ -514,8 +594,12 @@ export async function handleVisualizer(req, deps) {
     if (subject.error) return fail(400, subject.error);
     if (!(subject.year && subject.make && subject.model)) return fail(400, "Enter a year, make, and model.");
     if (!(await gate(deps.records, ipHash, day, "renders", 1))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
-    const prompt = vehiclePrompt(subject);
-    const row = await paintAndStore(deps, { ns, session, prompt, references: [], photoBytes: null, variant: 0, kind: "vehicle" });
+    const template = await loadTemplate(templateKeyFor("vehicle", subject), { fetchImpl: deps.fetchImpl, siteUrl: deps.siteUrl });
+    const prompt = vehiclePrompt(subject, { hasPhoto: !!template });
+    const row = await paintAndStore(deps, {
+      ns, session, prompt, references: template ? [template] : [], variant: 0, kind: "vehicle",
+    });
+    if (row.error) return fail(502, row.error);
     await deps.records.updateSession(session.id, {
       subject: { ...subject, photo: true },
       photoKey: row.id,
@@ -579,41 +663,51 @@ export async function handleVisualizer(req, deps) {
     if ((session.category === "sign" || session.category === "window") && !photo) return fail(400, "Upload a photo of the storefront.");
     const count = LIMITS.sessionVariants;
     if (!(await gate(deps.records, ipHash, day, "renders", count))) return fail(429, "This network has reached today's preview limit. Call Arc and we'll mock it up with you.");
-    const references = [];
-    if (photo) references.push({ bytes: photo.bytes, mime: photo.mime, role: "photo" });
-    if (inspo) references.push({ bytes: inspo.bytes, mime: inspo.mime, role: "inspo" });
+    const job = {
+      id: makeId(),
+      sessionId: session.id,
+      ns,
+      status: "queued",
+      count,
+      category: session.category,
+      business,
+      subject,
+      photoKey: photo ? (body.photoId || session.photoKey) : "",
+      inspoKey: inspo ? (body.inspoId || session.inspoKey) : "",
+      templateKey: photo ? "" : templateKeyFor(session.category, subject),
+      variants: [],
+      error: "",
+      createdAt: now.toISOString(),
+    };
+    await deps.records.addJob(job);
     await deps.records.updateSession(session.id, {
       business, subject, rendersUsed: (session.rendersUsed || 0) + 1,
       logoKey: logo ? (body.logoId || session.logoKey) : session.logoKey,
       photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
     });
-    const variants = await Promise.all(Array.from({ length: count }, (_, variant) => (async () => {
-      const prompt = renderPrompt({ category: session.category, business, subject: { ...subject, photo: !!photo }, variant });
-      const row = await paintAndStore(deps, { ns, session, prompt, references, photoBytes: photo?.bytes, variant, kind: "variant" });
-      return publicRender(row);
-    })()));
-    if (variants.length !== count || variants.some(item => !item?.url)) {
-      return fail(502, "The preview did not finish all 3 concepts. Try again.");
+    if (deps.enqueue || deps.background) {
+      if (deps.enqueue) {
+        try { await deps.enqueue(job); } catch (err) { console.error("visualizer enqueue", err?.message || err); }
+      }
+      return json(202, {
+        jobId: job.id,
+        status: "queued",
+        count,
+        ns: job.ns,
+        kick: "/.netlify/functions/visualizer-render-background",
+        disclaimer: DISCLAIMER,
+      });
     }
-    const eventId = makeId();
-    await deps.records.addEvent({ id: eventId, sessionId: session.id, name: "render", createdAt: now.toISOString(), detail: { models: variants.map(v => v.model), stub: variants.every(v => v.stub), count } });
-    const response = json(200, { variants, count, stub: variants.every(v => v.stub), quote: quoteFor(session.category, env), disclaimer: DISCLAIMER });
-    queueRenderNotify(deps, {
-      env,
-      url,
-      ns,
-      session,
-      eventId,
-      business,
-      subject,
-      variants,
-      batch: (session.rendersUsed || 0) + 1,
-      photoKey: photo ? (body.photoId || session.photoKey) : session.photoKey,
-      logoKey: session.logoKey,
-      inspoKey: session.inspoKey,
-      createdAt: now.toISOString(),
+    const done = await runRenderJob(deps, job.id);
+    return json(200, {
+      jobId: job.id,
+      variants: done?.variants || [],
+      count,
+      stub: false,
+      error: done?.error || "",
+      quote: quoteFor(session.category, env),
+      disclaimer: DISCLAIMER,
     });
-    return response;
   }
 
   if (path === "/api/visualize/edit" && method === "POST") {
@@ -633,8 +727,9 @@ export async function handleVisualizer(req, deps) {
     const row = await paintAndStore(deps, {
       ns, session, prompt,
       references: [{ bytes: previous.bytes, mime: "image/png", role: "previous" }],
-      photoBytes: previous.bytes, variant: 2, kind: "edit", parentId: parent.id,
+      variant: 2, kind: "edit", parentId: parent.id,
     });
+    if (row.error) return fail(502, row.error);
     await deps.records.updateSession(session.id, { editsUsed: session.editsUsed + 1 });
     await deps.records.addEvent({ id: makeId(), sessionId: session.id, name: "edit", createdAt: now.toISOString(), detail: { model: row.model } });
     return json(200, { render: publicRender(row), disclaimer: DISCLAIMER });

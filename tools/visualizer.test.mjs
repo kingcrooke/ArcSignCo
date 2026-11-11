@@ -7,11 +7,12 @@ import { fileURLToPath } from "node:url";
 import { compositeLogo } from "../visualize/js/composite.js";
 import { decodePng, encodePng } from "../netlify/lib/visualizer/png.mjs";
 import { quoteFor, QUOTE_LABEL } from "../netlify/lib/visualizer/pricing.mjs";
-import { renderPrompt, editPrompt } from "../netlify/lib/visualizer/prompts.mjs";
+import { renderPrompt, editPrompt, coverageClause } from "../netlify/lib/visualizer/prompts.mjs";
+import { loadTemplate } from "../netlify/lib/visualizer/templates.mjs";
 import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/lib/visualizer/scrape.mjs";
 import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
 import { leadEmail, renderEmail, renderNotifyTo } from "../netlify/lib/visualizer/email.mjs";
-import { ENV_KEYS, handleVisualizer } from "../netlify/lib/visualizer/handle.mjs";
+import { ENV_KEYS, handleVisualizer, runRenderJob } from "../netlify/lib/visualizer/handle.mjs";
 import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -57,8 +58,31 @@ test("prompts leave a blank logo area and estimates invent no price", () => {
   });
   const other = renderPrompt({ category: "vehicle", business: { name: "North Bagels" }, subject: { year: "2024", make: "Ford", model: "Transit" }, variant: 1 });
   assert.match(prompt, /do not draw any logo/i);
+  assert.match(prompt, /photograph/i);
+  assert.match(prompt, /not an illustration/i);
+  assert.match(prompt, /outside that rectangle/i);
   assert.doesNotMatch(prompt, /draw (the|a) logo/i);
   assert.notEqual(prompt, other);
+  for (const variant of [0, 1, 2]) {
+    const full = renderPrompt({
+      category: "vehicle",
+      business: { name: "North Bagels" },
+      subject: { coverage: "full", photo: true },
+      variant,
+    });
+    assert.match(full, /Wrap coverage is full/);
+    assert.match(full, /Do not reduce a full or half wrap/);
+    assert.ok(full.includes(coverageClause("full")));
+  }
+  const sign = renderPrompt({
+    category: "sign",
+    business: { name: "Arc Signage Co", phone: "(347) 450-2110", web: "arcsignco.com" },
+    subject: { signType: "channel-letters" },
+    variant: 0,
+  });
+  assert.match(sign, /\(347\) 450-2110/);
+  assert.match(sign, /arcsignco\.com/);
+  assert.match(sign, /Do not invent a different number/);
   assert.match(editPrompt("make the van white"), /Do not draw any logo/);
   for (const env of [{}, { ARC_VISUALIZER_ESTIMATES: "1" }]) {
     const quote = quoteFor("vehicle", env);
@@ -114,8 +138,19 @@ test("xAI edits an uploaded photo and never sends the logo", async () => {
     variant: 1,
     references: [],
   }, async () => new Response("no", { status: 503 }));
-  assert.equal(fallback.stub, true);
-  assert.equal(fallback.model, "stub");
+  assert.equal(fallback.stub, false);
+  assert.equal(fallback.bytes, null);
+  assert.match(fallback.error, /didn't finish/i);
+});
+
+test("template photos are real jpeg files", async () => {
+  for (const key of ["cargo-van", "pickup", "box-truck", "car", "storefront"]) {
+    const photo = await loadTemplate(key);
+    assert.ok(photo?.bytes?.length > 10000, key);
+    assert.equal(photo.bytes[0], 0xff);
+    assert.equal(photo.bytes[1], 0xd8);
+    assert.equal(photo.role, "photo");
+  }
 });
 
 test("website scan rejects private addresses and reads a public page", async () => {
@@ -144,6 +179,7 @@ function harness(env = {}) {
     records: memoryRecords(),
     env,
     deployContext: "deploy-preview",
+    siteUrl: "https://preview.test",
     ip: "203.0.113.9",
     now: () => new Date(t),
     makeId: () => (++n).toString(16).padStart(32, "0"),
@@ -185,7 +221,9 @@ test("a session can render, place the real logo, and store a lead without a pric
   assert.equal(preview.quote.label, "Custom quote");
   assert.equal(Object.hasOwn(preview.quote, "low"), false);
   assert.equal(calls.length, 3);
-  assert.deepEqual(calls[0].roles, []);
+  assert.deepEqual(calls[0].roles, ["photo"]);
+  assert.match(calls[0].prompt, /Wrap coverage is partial/);
+  assert.match(calls[2].prompt, /Wrap coverage is partial/);
   assert.match(calls[0].prompt, /do not draw any logo/i);
   assert.notEqual(calls[0].prompt, calls[1].prompt);
   assert.notEqual(calls[1].prompt, calls[2].prompt);
@@ -253,6 +291,9 @@ test("a vehicle shot is the reference for all 3 concepts and identify invents no
   assert.deepEqual(calls[2].roles, ["photo"]);
   assert.deepEqual(calls[3].roles, ["photo"]);
   assert.match(calls[1].prompt, /bold and sporty/i);
+  assert.match(calls[1].prompt, /Wrap coverage is full/);
+  assert.match(calls[2].prompt, /Wrap coverage is full/);
+  assert.match(calls[3].prompt, /Wrap coverage is full/);
   assert.match(calls[1].prompt, /Acme Plumbing Co Extra Words/);
   assert.doesNotMatch(calls[1].prompt, /Here/);
   assert.doesNotMatch(calls[1].prompt, /#ffffff/);
@@ -280,7 +321,50 @@ test("a failed concept still comes back so the set stays at 3", async () => {
   assert.equal(rendered.status, 200, await rendered.clone().text());
   const preview = await rendered.json();
   assert.equal(preview.variants.length, 3);
-  assert.equal(preview.variants.filter(item => item.stub).length, 1);
+  assert.equal(preview.variants.filter(item => item.url).length, 2);
+  assert.equal(preview.variants.filter(item => item.error).length, 1);
+  assert.equal(preview.variants.filter(item => item.stub).length, 0);
+  assert.match(preview.error, /didn't finish/i);
+});
+
+test("a queued render stays under the request and the daily cap is still 16", async () => {
+  const h = harness();
+  let queued = "";
+  h.deps.enqueue = async (job) => { queued = job.id; };
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  h.later();
+  const accepted = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { stock: true, coverage: "half", style: "clean" } },
+  });
+  assert.equal(accepted.status, 202, await accepted.clone().text());
+  const started = await accepted.json();
+  assert.equal(started.jobId, queued);
+  assert.equal(started.kick, "/.netlify/functions/visualizer-render-background");
+  assert.equal(h.calls.length, 0);
+  await runRenderJob(h.deps, started.jobId);
+  assert.equal(h.calls.length, 3);
+  assert.match(h.calls[0].prompt, /Wrap coverage is half/);
+  const job = await (await h.call(`/api/visualize/job/${started.jobId}`)).json();
+  assert.equal(job.status, "done");
+  assert.equal(job.variants.filter(item => item.url).length, 3);
+  const again = harness();
+  for (let i = 0; i < 5; i++) {
+    const next = await (await again.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+    again.later();
+    const res = await again.call("/api/visualize/render", {
+      method: "POST",
+      body: { sessionId: next.id, business: { name: "North" }, subject: { stock: true, coverage: "full", style: "clean" } },
+    });
+    assert.equal(res.status, 200, await res.clone().text());
+  }
+  const last = await (await again.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  again.later();
+  const blocked = await again.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: last.id, business: { name: "North" }, subject: { stock: true, coverage: "full", style: "clean" } },
+  });
+  assert.equal(blocked.status, 429);
 });
 
 const wait = (ms = 30) => new Promise(resolve => setTimeout(resolve, ms));
@@ -394,4 +478,6 @@ test("docs name every env key and the page does not invent a price", () => {
   assert.doesNotMatch(sitemap, /visualize\/admin/);
   const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
   assert.match(toml, /\/visualize\/admin/);
+  const fn = fs.readFileSync(path.join(root, "netlify/functions/visualizer.mjs"), "utf8");
+  assert.match(fn, /\/api\/visualize\/job\/:id/);
 });
