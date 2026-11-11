@@ -10,10 +10,10 @@ export function SeasonPicker({
   onChange: (season: string) => void
 }) {
   return (
-    <label className="flex flex-col gap-1 text-sm text-[var(--dyn-muted)]">
-      Season
+    <label className="dyn-picker">
+      <span className="dyn-picker-label">Season</span>
       <select
-        className="rounded-lg border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-3 py-2.5 text-[var(--dyn-text)] text-base"
+        className="dyn-picker-select"
         value={season}
         onChange={(e) => onChange(e.target.value)}
       >

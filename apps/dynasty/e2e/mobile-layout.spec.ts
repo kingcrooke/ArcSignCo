@@ -12,6 +12,44 @@ const MOBILE_TABS: { id: string; heading: RegExp }[] = [
   { id: 'managers', heading: /^Managers$/i },
 ]
 
+async function waitForShell(page: import('@playwright/test').Page) {
+  await expect(
+    page.getByRole('heading', { name: /Dynasty of Champions/i }),
+  ).toBeVisible({ timeout: 90_000 })
+}
+
+test.describe('picker alignment', () => {
+  for (const size of [
+    { width: 360, height: 800 },
+    { width: 1280, height: 900 },
+  ]) {
+    test(`season and week selects align at ${size.width}px`, async ({ page }) => {
+      await page.setViewportSize(size)
+      await page.goto('/?tab=standings', { waitUntil: 'domcontentloaded' })
+      await waitForShell(page)
+      const pickers = page.locator('[data-testid="dynasty-pickers"] select')
+      await expect(pickers).toHaveCount(2, { timeout: 90_000 })
+
+      const delta = await page.evaluate(() => {
+        const root = document.querySelector('[data-testid="dynasty-pickers"]')
+        if (!root) return null
+        const selects = [...root.querySelectorAll('select')]
+        if (selects.length < 2) return null
+        const a = selects[0].getBoundingClientRect()
+        const b = selects[1].getBoundingClientRect()
+        return {
+          top: Math.abs(a.top - b.top),
+          bottom: Math.abs(a.bottom - b.bottom),
+        }
+      })
+
+      expect(delta).not.toBeNull()
+      expect(delta!.top).toBeLessThan(0.5)
+      expect(delta!.bottom).toBeLessThan(0.5)
+    })
+  }
+})
+
 test.describe('mobile layout 360px', () => {
   test.use({ viewport: { width: 360, height: 800 } })
 

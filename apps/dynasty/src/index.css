@@ -273,3 +273,30 @@ nav.dyn-section-tabs {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+.dyn-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--dyn-muted);
+}
+
+.dyn-picker-label {
+  display: block;
+  min-height: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+.dyn-picker-select {
+  border-radius: 0.5rem;
+  border: 1px solid var(--dyn-border);
+  background: var(--dyn-surface);
+  padding: 0.625rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: var(--dyn-text);
+}

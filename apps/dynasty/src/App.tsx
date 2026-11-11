@@ -258,7 +258,10 @@ export default function App() {
       {state === 'ready' && data && (
         <>
           <div className="mb-4 flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div className="flex flex-wrap gap-3">
+            <div
+              className="flex flex-wrap items-end gap-3"
+              data-testid="dynasty-pickers"
+            >
               <SeasonPicker
                 seasons={LEAGUE_SEASONS}
                 season={season}
