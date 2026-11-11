@@ -50,6 +50,22 @@ function attachmentsFromFiles(files) {
   return attachments;
 }
 
+function logBody(text) {
+  return String(text || "")
+    .replace(/Bearer\s+\S+/gi, "Bearer [redacted]")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 500);
+}
+
+export function visualizerEmailSentLine(id) {
+  return `visualizer email sent id=${id || "unknown"}`;
+}
+
+export function visualizerEmailFailedLine(status, body) {
+  return `visualizer email failed status=${status} body=${logBody(body)}`;
+}
+
 async function postResend(env, message, { attachments = [], replyTo } = {}, fetchImpl) {
   if (!env.RESEND_API_KEY) return { status: "saved-no-email-key" };
   if (!env.VISUALIZER_EMAIL_FROM) return { status: "saved-no-from-address" };
@@ -66,11 +82,17 @@ async function postResend(env, message, { attachments = [], replyTo } = {}, fetc
       attachments,
     }),
   });
+  let raw = "";
+  try { raw = await res.text(); } catch { raw = ""; }
+  const body = logBody(raw);
   if (!res.ok) {
-    console.error("visualizer email", res.status);
+    console.error(visualizerEmailFailedLine(res.status, body));
     return { status: "email-failed" };
   }
-  return { status: "sent" };
+  let id = "";
+  try { id = JSON.parse(raw)?.id || ""; } catch { id = ""; }
+  console.log(visualizerEmailSentLine(id));
+  return { status: "sent", id };
 }
 
 export function renderNotifyTo(env) {

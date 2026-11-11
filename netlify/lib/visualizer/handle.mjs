@@ -2,7 +2,7 @@
 // with an in-memory database and blob store.
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { compositeLogo } from "../../../visualize/js/composite.js";
-import { sendLeadEmail, sendRenderEmail } from "./email.mjs";
+import { sendLeadEmail, sendRenderEmail, visualizerEmailFailedLine } from "./email.mjs";
 import { decodeImage, generateImage, extractWithModel, identifyVehicle, imageBackend, toPng } from "./images.mjs";
 import { isPng } from "./png.mjs";
 import { quoteFor } from "./pricing.mjs";
@@ -353,7 +353,9 @@ export async function runRenderJob(deps, jobId) {
     if (ready.length) {
       const fullSession = await deps.records.getSession(existing.sessionId);
       const origin = String(deps.siteUrl || "").replace(/\/$/, "") || "https://arcsignco.com";
-      queueRenderNotify(deps, {
+      // The background function ends when this returns. Await the send, with a
+      // cap, so Netlify does not freeze the isolate before Resend answers.
+      await awaitRenderNotify(deps, {
         env: deps.env || {},
         url: new URL(origin),
         ns: existing.ns,
@@ -368,6 +370,7 @@ export async function runRenderJob(deps, jobId) {
         inspoKey: existing.inspoKey || fullSession?.inspoKey || "",
         createdAt: existing.createdAt,
       });
+      return (await deps.records.getJob(jobId)) || updated;
     }
     return updated;
   } catch (err) {
@@ -420,6 +423,7 @@ export async function handleVisualizer(req, deps) {
       done: (job.variants || []).filter(item => item.url).length,
       variants: job.variants || [],
       error: job.error || "",
+      emailStatus: job.emailStatus || "",
       disclaimer: DISCLAIMER,
     });
   }
@@ -831,17 +835,95 @@ async function optionalFile(deps, ns, id, sessionId) {
   return loadFile(deps.blobs, ns, id, sessionId);
 }
 
-function queueRenderNotify(deps, spec) {
+const RENDER_NOTIFY_MS = 20_000;
+
+function jobEmailStatus(status) {
+  if (status === "sent" || status === "saved-no-email-key" || status === "saved-no-from-address") return status;
+  if (status) return "failed";
+  return "";
+}
+
+function notifyTimeoutMs(deps) {
+  const n = Number(deps.notifyTimeoutMs);
+  return Number.isFinite(n) && n > 0 ? n : RENDER_NOTIFY_MS;
+}
+
+function timeoutLabel(ms) {
+  return ms % 1000 === 0 ? `${ms / 1000}s` : `${ms}ms`;
+}
+
+async function rememberEmailStatus(deps, jobId, emailStatus) {
+  try {
+    return await deps.records.updateJob(jobId, { emailStatus });
+  } catch (err) {
+    console.error(visualizerEmailFailedLine("error", err?.message || err));
+    return null;
+  }
+}
+
+// Bounds the Resend call so a hung request cannot hold the background function
+// open. deps.waitUntil, when the Netlify context provides it, tracks this same
+// bounded promise. It does not replace the await: a background function stops
+// when the handler returns, which is what dropped the floating send.
+async function awaitRenderNotify(deps, spec) {
   const run = deps.sendRenderEmail || sendRenderEmail;
-  void deliverRenderNotify(deps, spec, run).catch((err) => {
-    console.error("visualizer render notify", err?.message || err);
+  const ms = notifyTimeoutMs(deps);
+  const ac = new AbortController();
+  const baseFetch = deps.fetchImpl || fetch;
+  const scoped = {
+    ...deps,
+    fetchImpl(url, opts = {}) {
+      return baseFetch(url, { ...opts, signal: opts.signal || ac.signal });
+    },
+  };
+  const work = deliverRenderNotify(scoped, spec, run).then(
+    (value) => ({ value }),
+    (err) => ({ err }),
+  );
+  let settled = false;
+  const pending = new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      ac.abort();
+      resolve({ timedOut: true });
+    }, ms);
+    work.then((result) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      resolve(result);
+    });
   });
+  if (typeof deps.waitUntil === "function") {
+    try { deps.waitUntil(pending); } catch { /* some runtimes reject waitUntil */ }
+  }
+  const result = await pending;
+  if (result.timedOut) {
+    console.error(visualizerEmailFailedLine("timeout", `render notify timed out after ${timeoutLabel(ms)}`));
+    await rememberEmailStatus(deps, spec.eventId, "failed");
+    return "failed";
+  }
+  if (result.err) {
+    const aborted = ac.signal.aborted || result.err?.name === "AbortError";
+    const status = aborted ? "timeout" : "error";
+    const body = aborted
+      ? `render notify timed out after ${timeoutLabel(ms)}`
+      : String(result.err?.message || result.err);
+    console.error(visualizerEmailFailedLine(status, body));
+    await rememberEmailStatus(deps, spec.eventId, "failed");
+    return "failed";
+  }
+  if (result.value?.skipped) return "";
+  const emailStatus = jobEmailStatus(result.value?.status);
+  if (emailStatus) await rememberEmailStatus(deps, spec.eventId, emailStatus);
+  return emailStatus;
 }
 
 async function deliverRenderNotify(deps, spec, sendFn) {
   const { env, url, ns, session, eventId, business, subject, variants, batch, photoKey, logoKey, inspoKey, createdAt } = spec;
   const fresh = await deps.records.getSession(session.id);
-  if ((fresh?.renderNotifyBatch || 0) >= batch) return;
+  if ((fresh?.renderNotifyBatch || 0) >= batch) return { skipped: true };
   await deps.records.updateSession(session.id, { renderNotifyBatch: batch, renderNotifyAt: deps.now().toISOString() });
   const origin = url.origin;
   const links = [
@@ -876,6 +958,7 @@ async function deliverRenderNotify(deps, spec, sendFn) {
     createdAt: deps.now().toISOString(),
     detail: { emailStatus: mailed.status, jobId: eventId },
   });
+  return mailed;
 }
 
 function parseJson(text) {

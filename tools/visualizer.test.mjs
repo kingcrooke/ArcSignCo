@@ -11,7 +11,7 @@ import { renderPrompt, editPrompt, coverageClause } from "../netlify/lib/visuali
 import { loadTemplate } from "../netlify/lib/visualizer/templates.mjs";
 import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/lib/visualizer/scrape.mjs";
 import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
-import { leadEmail, renderEmail, renderNotifyTo } from "../netlify/lib/visualizer/email.mjs";
+import { leadEmail, renderEmail, renderNotifyTo, sendRenderEmail, visualizerEmailFailedLine, visualizerEmailSentLine } from "../netlify/lib/visualizer/email.mjs";
 import { ENV_KEYS, handleVisualizer, runRenderJob } from "../netlify/lib/visualizer/handle.mjs";
 import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
 
@@ -410,6 +410,10 @@ test("concept render emails Arc with links and does not duplicate", async () => 
   const row = await deps.records.getSession(session.id);
   assert.equal(row.renderNotifyBatch, 1);
   assert.ok(row.renderNotifyAt);
+  const preview = await rendered.json();
+  const job = await (await call(`/api/visualize/job/${preview.jobId}`)).json();
+  assert.equal(job.emailStatus, "sent");
+  assert.equal(job.status, "done");
 });
 
 test("render response succeeds when concept email fails", async () => {
@@ -422,6 +426,132 @@ test("render response succeeds when concept email fails", async () => {
     body: { sessionId: session.id, business: { name: "North" }, subject: { year: "2022", make: "Ram", model: "ProMaster" } },
   });
   assert.equal(rendered.status, 200, await rendered.clone().text());
+  const preview = await rendered.json();
+  const job = await (await call(`/api/visualize/job/${preview.jobId}`)).json();
+  assert.equal(job.emailStatus, "failed");
+  assert.equal(job.status, "done");
+});
+
+test("runRenderJob waits for the concept email before it returns", async () => {
+  const h = harness({ RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>", VISUALIZER_RENDER_TO: "renders@arcsignco.com" });
+  let release;
+  const hold = new Promise((resolve) => { release = resolve; });
+  let sendStarted = false;
+  let waited;
+  h.deps.waitUntil = (promise) => { waited = promise; };
+  h.deps.fetchImpl = async () => {
+    sendStarted = true;
+    await hold;
+    return new Response(JSON.stringify({ id: "re_msg_123" }), { status: 200 });
+  };
+  h.deps.enqueue = async () => {};
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  h.later();
+  const accepted = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { stock: true, coverage: "half", style: "clean" } },
+  });
+  assert.equal(accepted.status, 202);
+  const started = await accepted.json();
+  let returned = false;
+  const jobDone = runRenderJob(h.deps, started.jobId).then((row) => { returned = true; return row; });
+  const deadline = Date.now() + 3000;
+  while (!sendStarted && Date.now() < deadline) await wait(10);
+  assert.equal(sendStarted, true);
+  await wait(40);
+  assert.equal(returned, false);
+  release();
+  const row = await jobDone;
+  assert.equal(returned, true);
+  assert.equal(row.emailStatus, "sent");
+  assert.equal(typeof waited?.then, "function");
+  const job = await (await h.call(`/api/visualize/job/${started.jobId}`)).json();
+  assert.equal(job.status, "done");
+  assert.equal(job.emailStatus, "sent");
+  assert.equal(job.variants.filter(item => item.url).length, 3);
+});
+
+test("render email log lines name the Resend id or the failure body", async () => {
+  assert.equal(visualizerEmailSentLine("re_msg_123"), "visualizer email sent id=re_msg_123");
+  assert.equal(visualizerEmailSentLine(""), "visualizer email sent id=unknown");
+  assert.equal(
+    visualizerEmailFailedLine(422, "invalid from address\nBearer re_secret"),
+    "visualizer email failed status=422 body=invalid from address Bearer [redacted]",
+  );
+  let posted;
+  const sent = await sendRenderEmail(
+    { RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>", VISUALIZER_RENDER_TO: "renders@arcsignco.com" },
+    { jobId: "abc", sessionId: "0".repeat(32), business: { name: "North" }, links: [], files: [{ filename: "big.png", bytes: Buffer.alloc(1_500_001) }] },
+    async (_url, opts) => {
+      posted = JSON.parse(opts.body);
+      return new Response(JSON.stringify({ id: "re_msg_123" }), { status: 200 });
+    },
+  );
+  assert.equal(sent.status, "sent");
+  assert.equal(sent.id, "re_msg_123");
+  assert.deepEqual(posted.to, ["renders@arcsignco.com"]);
+  assert.deepEqual(posted.attachments, []);
+  const failed = await sendRenderEmail(
+    { RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>" },
+    { jobId: "abc", business: { name: "North" }, links: [], files: [] },
+    async () => new Response("invalid from address", { status: 422 }),
+  );
+  assert.equal(failed.status, "email-failed");
+});
+
+test("a rejected Resend response marks the public job failed", async () => {
+  const h = harness({ RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>" });
+  h.deps.enqueue = async () => {};
+  h.deps.fetchImpl = async () => new Response("invalid from address", { status: 422 });
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  h.later();
+  const accepted = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { stock: true } },
+  });
+  const started = await accepted.json();
+  const row = await runRenderJob(h.deps, started.jobId);
+  assert.equal(row.status, "done");
+  assert.equal(row.emailStatus, "failed");
+  const job = await (await h.call(`/api/visualize/job/${started.jobId}`)).json();
+  assert.equal(job.emailStatus, "failed");
+});
+
+test("a hung concept email cannot hold the job past the notify timeout", async () => {
+  const h = harness({ RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>" });
+  h.deps.notifyTimeoutMs = 50;
+  h.deps.enqueue = async () => {};
+  h.deps.sendRenderEmail = () => new Promise(() => {});
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  h.later();
+  const accepted = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { stock: true } },
+  });
+  const started = await accepted.json();
+  const began = Date.now();
+  const row = await runRenderJob(h.deps, started.jobId);
+  assert.ok(Date.now() - began < 2000);
+  assert.equal(row.status, "done");
+  assert.equal(row.emailStatus, "failed");
+  const job = await (await h.call(`/api/visualize/job/${started.jobId}`)).json();
+  assert.equal(job.emailStatus, "failed");
+});
+
+test("a concept set with no Resend key records saved-no-email-key", async () => {
+  const h = harness();
+  h.deps.enqueue = async () => {};
+  const session = await (await h.call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  h.later();
+  const accepted = await h.call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { stock: true } },
+  });
+  const started = await accepted.json();
+  await runRenderJob(h.deps, started.jobId);
+  const job = await (await h.call(`/api/visualize/job/${started.jobId}`)).json();
+  assert.equal(job.emailStatus, "saved-no-email-key");
+  assert.equal(job.status, "done");
 });
 
 test("lead email goes to arc@ and is skipped cleanly without a key", async () => {
