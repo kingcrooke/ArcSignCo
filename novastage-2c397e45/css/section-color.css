@@ -1,0 +1,263 @@
+/* Section color bands and narrow-screen wrapping.
+   Loaded last so these accents stay visible on every palette, including invert. */
+
+body .hero {
+  background: linear-gradient(180deg, transparent 70%, color-mix(in srgb, #f2c94c 28%, var(--palette-bg)) 100%);
+}
+
+body .hero .section-panel.section-panel--hero {
+  box-shadow: inset 0 -8px 0 #f2c94c, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body .section.about {
+  background: color-mix(in srgb, #148fb5 50%, var(--palette-bg));
+}
+
+body .section.programs {
+  background: color-mix(in srgb, #c9971a 48%, var(--palette-bg));
+}
+
+body .section.schools {
+  background: color-mix(in srgb, #d4764e 42%, var(--palette-bg));
+}
+
+body .section.production {
+  background: color-mix(in srgb, #0e4d63 62%, var(--palette-bg));
+}
+
+body .section.contact {
+  background: color-mix(in srgb, #efe6c8 34%, var(--palette-bg));
+}
+
+body .section.about .section-panel {
+  background: color-mix(in srgb, #148fb5 36%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #7ee7ff, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body .section.programs .section-panel {
+  background: color-mix(in srgb, #c9971a 32%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #ffe08a, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body .section.schools .section-panel {
+  background: color-mix(in srgb, #d4764e 30%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #ffb199, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body .section.production .section-panel {
+  background: color-mix(in srgb, #0e4d63 40%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #7fd3c1, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body .section.contact .section-panel {
+  background: color-mix(in srgb, #efe6c8 28%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #f2c94c, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body .portfolio-hero {
+  background: linear-gradient(180deg, color-mix(in srgb, #148fb5 36%, var(--palette-bg)), color-mix(in srgb, #f2c94c 24%, var(--palette-bg)));
+}
+
+body .portfolio-hero-panel {
+  box-shadow: inset 0 8px 0 #f2c94c, 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+body #portfolio-bio {
+  background: color-mix(in srgb, #148fb5 50%, var(--palette-bg));
+}
+
+body #portfolio-timeline {
+  background: color-mix(in srgb, #c9971a 48%, var(--palette-bg));
+}
+
+body #portfolio-work {
+  background: color-mix(in srgb, #d4764e 42%, var(--palette-bg));
+}
+
+body #portfolio-expertise {
+  background: color-mix(in srgb, #0e4d63 62%, var(--palette-bg));
+}
+
+body #portfolio-orgs {
+  background: color-mix(in srgb, #efe6c8 34%, var(--palette-bg));
+}
+
+body #portfolio-teaching {
+  background: color-mix(in srgb, #1a8fb5 46%, var(--palette-bg));
+}
+
+body #portfolio-press {
+  background: color-mix(in srgb, #e07a5f 40%, var(--palette-bg));
+}
+
+body #portfolio-media {
+  background: color-mix(in srgb, #123a52 58%, var(--palette-bg));
+}
+
+body #portfolio-booking {
+  background: color-mix(in srgb, #f2c94c 30%, var(--palette-bg));
+}
+
+body #portfolio-bio .section-panel {
+  background: color-mix(in srgb, #148fb5 36%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #7ee7ff, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-timeline .section-panel {
+  background: color-mix(in srgb, #c9971a 32%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #ffe08a, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-work .section-panel {
+  background: color-mix(in srgb, #d4764e 30%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #ffb199, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-expertise .section-panel {
+  background: color-mix(in srgb, #0e4d63 40%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #7fd3c1, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-orgs .section-panel {
+  background: color-mix(in srgb, #efe6c8 28%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #f2c94c, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-teaching .section-panel {
+  background: color-mix(in srgb, #1a8fb5 34%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #9ee7ff, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-press .section-panel {
+  background: color-mix(in srgb, #e07a5f 32%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #ffc7b3, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-media .section-panel {
+  background: color-mix(in srgb, #123a52 42%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #8fd0e0, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+body #portfolio-booking .section-panel {
+  background: color-mix(in srgb, #f2c94c 26%, var(--palette-panel));
+  box-shadow: inset 0 8px 0 #ffe08a, 0 20px 60px rgba(0, 0, 0, 0.28);
+}
+
+.orbit {
+  width: min(320px, 88%);
+}
+
+.orbit.second {
+  width: min(240px, 66%);
+}
+
+.orbit.third {
+  width: min(165px, 46%);
+}
+
+.footer-inner > div {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .lockup-wordmark {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.12em;
+    max-width: 100%;
+    font-size: clamp(2rem, 12vw, 3.4rem);
+  }
+
+  .portfolio-name,
+  .display-title,
+  .portfolio-display {
+    overflow-wrap: break-word;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --version-bar-height: 4.85rem;
+  }
+
+  .version-switcher {
+    height: auto;
+    min-height: var(--version-bar-height);
+    flex-wrap: wrap;
+    align-content: center;
+    row-gap: 2px;
+    overflow: hidden;
+  }
+
+  .version-switcher__music,
+  .version-switcher__invert {
+    white-space: normal;
+    line-height: 1.15;
+    text-align: center;
+    max-width: calc(50% - 4px);
+  }
+
+  .version-switcher__tabs {
+    flex: 1 1 100%;
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  body.has-version-switcher .hero,
+  body.has-version-switcher .portfolio-hero {
+    padding-top: max(10.6rem, 22vh);
+  }
+}
+
+@media (max-width: 420px) {
+  .topbar {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .nav-shell {
+    width: 100%;
+  }
+
+  .hero,
+  .portfolio-hero {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .section,
+  .portfolio-section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .section-panel,
+  .portfolio-hero-panel,
+  .portfolio-section-inner.section-panel {
+    padding: 22px 14px;
+  }
+
+  .section-panel--hero {
+    padding: 28px 12px;
+  }
+
+  .program-card,
+  .portfolio-card {
+    min-height: 0;
+    padding: 18px 14px;
+  }
+
+  .school-point,
+  .portfolio-timeline-item,
+  .production-list div {
+    padding: 16px 12px;
+    gap: 12px;
+  }
+
+  .manifesto {
+    min-height: 240px;
+  }
+}
