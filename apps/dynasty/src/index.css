@@ -30,14 +30,81 @@
   --dyn-border: #2f2640;
   --dyn-text: #f3f0f7;
   --dyn-muted: #a397b5;
+  --dyn-row-alt: rgb(13 6 20 / 0.55);
+
+  --tab-hint-standings: #ca8a04;
+  --tab-hint-live: #059669;
+  --tab-hint-drafts: #0d9488;
+  --tab-hint-gallery: #db2777;
+  --tab-hint-waiver: #ea580c;
+  --tab-hint-bestgames: #0891b2;
+  --tab-hint-trades: #2563eb;
+  --tab-hint-awards: #eab308;
+  --tab-hint-managers: #a855f7;
+}
+
+.dynasty-app {
   --dyn-accent: #a855f7;
   --dyn-accent-bright: #c084fc;
   --dyn-on-accent: #0d0614;
-  --dyn-row-alt: rgb(13 6 20 / 0.55);
   --dyn-live-bg: color-mix(in srgb, var(--dyn-accent) 22%, transparent);
   --dyn-live-text: var(--dyn-accent-bright);
   --dyn-deferral-border: color-mix(in srgb, var(--dyn-accent) 38%, var(--dyn-border));
   --dyn-deferral-bg: color-mix(in srgb, var(--dyn-accent) 10%, var(--dyn-surface));
+}
+
+.dynasty-app[data-active-tab='standings'] {
+  --dyn-accent: #ca8a04;
+  --dyn-accent-bright: #facc15;
+  --dyn-on-accent: #140e00;
+}
+
+.dynasty-app[data-active-tab='live'] {
+  --dyn-accent: #059669;
+  --dyn-accent-bright: #34d399;
+  --dyn-on-accent: #031a12;
+}
+
+.dynasty-app[data-active-tab='drafts'] {
+  --dyn-accent: #0d9488;
+  --dyn-accent-bright: #2dd4bf;
+  --dyn-on-accent: #041a18;
+}
+
+.dynasty-app[data-active-tab='gallery'] {
+  --dyn-accent: #db2777;
+  --dyn-accent-bright: #f472b6;
+  --dyn-on-accent: #1a0510;
+}
+
+.dynasty-app[data-active-tab='waiver'] {
+  --dyn-accent: #ea580c;
+  --dyn-accent-bright: #fb923c;
+  --dyn-on-accent: #1a0a02;
+}
+
+.dynasty-app[data-active-tab='bestgames'] {
+  --dyn-accent: #0891b2;
+  --dyn-accent-bright: #22d3ee;
+  --dyn-on-accent: #021a22;
+}
+
+.dynasty-app[data-active-tab='trades'] {
+  --dyn-accent: #2563eb;
+  --dyn-accent-bright: #60a5fa;
+  --dyn-on-accent: #050d1a;
+}
+
+.dynasty-app[data-active-tab='awards'] {
+  --dyn-accent: #eab308;
+  --dyn-accent-bright: #fde047;
+  --dyn-on-accent: #1a1500;
+}
+
+.dynasty-app[data-active-tab='managers'] {
+  --dyn-accent: #a855f7;
+  --dyn-accent-bright: #c084fc;
+  --dyn-on-accent: #0d0614;
 }
 
 html {
@@ -91,77 +158,59 @@ body {
   color: var(--dyn-accent-bright);
 }
 
-/* Section tabs */
-.dyn-section-tabs-wrap {
-  position: relative;
+.dyn-section-title {
+  color: var(--dyn-text);
 }
 
-.dyn-section-tabs-wrap--fade-left::before,
-.dyn-section-tabs-wrap--fade-right::after {
-  content: '';
-  position: absolute;
-  top: 1px;
-  bottom: 1px;
-  width: 3.25rem;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.dyn-section-tabs-wrap--fade-left::before {
-  left: 1px;
-  border-radius: 0.7rem 0 0 0.7rem;
-  background: linear-gradient(
-    to right,
-    var(--dyn-surface) 0%,
-    var(--dyn-surface) 42%,
-    transparent 100%
-  );
-}
-
-.dyn-section-tabs-wrap--fade-right::after {
-  right: 1px;
-  border-radius: 0 0.7rem 0.7rem 0;
-  background: linear-gradient(
-    to left,
-    var(--dyn-surface) 0%,
-    var(--dyn-surface) 42%,
-    transparent 100%
-  );
-}
-
-.dyn-section-tabs-hint {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
-  transform: translateY(-50%);
-  pointer-events: none;
+.dyn-section-title strong,
+.dyn-section-title .dyn-section-title-accent {
   color: var(--dyn-accent-bright);
-  font-size: 1.35rem;
-  font-weight: 700;
-  line-height: 1;
 }
 
-.dyn-section-tabs-hint--left {
-  left: 0.35rem;
-}
-
-.dyn-section-tabs-hint--right {
-  right: 0.35rem;
-}
-
+/* Section tabs */
 nav.dyn-section-tabs button.dyn-section-tab {
-  flex: 0 0 auto;
-  white-space: nowrap;
+  flex: 1 1 auto;
+  min-width: min(100%, 7.5rem);
   text-align: center;
   border-radius: 0.5rem;
   padding: 0.625rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   line-height: 1.25rem;
   font-weight: 500;
   border: none;
   cursor: pointer;
   background-color: transparent;
   color: var(--dyn-muted);
+  box-shadow: inset 3px 0 0
+    color-mix(in srgb, var(--tab-hint, var(--dyn-muted)) 42%, transparent);
+}
+
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='standings'] {
+  --tab-hint: var(--tab-hint-standings);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='live'] {
+  --tab-hint: var(--tab-hint-live);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='drafts'] {
+  --tab-hint: var(--tab-hint-drafts);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='gallery'] {
+  --tab-hint: var(--tab-hint-gallery);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='waiver'] {
+  --tab-hint: var(--tab-hint-waiver);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='bestgames'] {
+  --tab-hint: var(--tab-hint-bestgames);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='trades'] {
+  --tab-hint: var(--tab-hint-trades);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='awards'] {
+  --tab-hint: var(--tab-hint-awards);
+}
+nav.dyn-section-tabs button.dyn-section-tab[data-section-tab='managers'] {
+  --tab-hint: var(--tab-hint-managers);
 }
 
 nav.dyn-section-tabs button.dyn-section-tab:hover {
@@ -173,6 +222,7 @@ nav.dyn-section-tabs button.dyn-section-tab.dyn-section-tab--active {
   background-color: var(--dyn-accent);
   color: var(--dyn-on-accent);
   font-weight: 600;
+  box-shadow: none;
 }
 
 nav.dyn-section-tabs button.dyn-section-tab--active:hover {
@@ -194,7 +244,32 @@ nav.dyn-section-tabs button.dyn-section-tab--active:focus-visible {
 
 nav.dyn-section-tabs {
   position: relative;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scroll-padding-inline: 1.75rem;
+}
+
+.dyn-week-scope-chips {
+  flex-wrap: wrap;
+}
+
+.dyn-week-scope-chip {
+  border-radius: 0.5rem;
+  font-weight: 500;
+  color: var(--dyn-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.dyn-week-scope-chip:hover:not(:disabled) {
+  color: var(--dyn-text);
+}
+
+.dyn-week-scope-chip--active {
+  background: var(--dyn-accent);
+  color: var(--dyn-on-accent);
+  font-weight: 600;
+}
+
+.dyn-week-scope-chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }

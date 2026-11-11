@@ -239,7 +239,7 @@ export function DynastyWeekGraphicsPanel({
                       loadImmediately={loadImmediately}
                       buttonRef={isDeepLinkTarget ? openButtonRef : undefined}
                     />
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
                       <ShareCardButton basename={slide.basename} title={slide.title} />
                       <button
                         type="button"

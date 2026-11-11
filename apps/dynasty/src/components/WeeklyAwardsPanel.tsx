@@ -12,12 +12,33 @@ function AwardCell({
   if (!winner) return <>—</>
   const team = teams.get(winner.rosterId)
   return (
-    <span className="inline-flex items-center gap-2">
+    <span className="inline-flex flex-wrap items-center gap-2">
       {team && <TeamAvatar team={team} size="sm" />}
       <span>
         {winner.managerName} ({winner.detail})
       </span>
     </span>
+  )
+}
+
+function AwardRow({
+  label,
+  winner,
+  teams,
+}: {
+  label: string
+  winner: WeeklyAwardWinner | null
+  teams: Map<number, TeamInfo>
+}) {
+  return (
+    <div className="flex flex-col gap-0.5 border-t border-[var(--dyn-border)] py-2 first:border-t-0 first:pt-0 sm:flex-row sm:gap-3">
+      <span className="text-xs font-semibold uppercase tracking-wide text-[var(--dyn-muted)] sm:w-28 sm:shrink-0">
+        {label}
+      </span>
+      <div className="min-w-0 text-sm">
+        <AwardCell winner={winner} teams={teams} />
+      </div>
+    </div>
   )
 }
 
@@ -37,37 +58,56 @@ export function WeeklyAwardsPanel({
   }
 
   return (
-    <div className="overflow-x-auto" id="weekly-awards-panel">
-      <table className="w-full min-w-[520px] border-collapse text-sm">
-        <thead>
-          <tr className="border-b border-[var(--dyn-border)] text-left text-xs uppercase text-[var(--dyn-muted)]">
-            <th className="px-3 py-2">Week</th>
-            <th className="px-3 py-2">High score</th>
-            <th className="px-3 py-2">Low score</th>
-            <th className="px-3 py-2">Closest win</th>
-            <th className="px-3 py-2">Most bench</th>
-          </tr>
-        </thead>
-        <tbody>
-          {weeks.map((w) => (
-            <tr key={w.week} className="border-t border-[var(--dyn-border)]">
-              <td className="px-3 py-2 font-semibold tabular-nums">{w.week}</td>
-              <td className="px-3 py-2">
-                <AwardCell winner={w.highScore} teams={teams} />
-              </td>
-              <td className="px-3 py-2">
-                <AwardCell winner={w.lowScore} teams={teams} />
-              </td>
-              <td className="px-3 py-2">
-                <AwardCell winner={w.closestWin} teams={teams} />
-              </td>
-              <td className="px-3 py-2">
-                <AwardCell winner={w.mostBench} teams={teams} />
-              </td>
+    <div id="weekly-awards-panel">
+      <div className="space-y-3 sm:hidden">
+      {weeks.map((w) => (
+        <article
+          key={w.week}
+          className="rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] px-4 py-3"
+        >
+          <p className="font-['Bebas_Neue'] text-xl tracking-wide text-[var(--dyn-accent)]">
+            Week {w.week}
+          </p>
+          <AwardRow label="High score" winner={w.highScore} teams={teams} />
+          <AwardRow label="Low score" winner={w.lowScore} teams={teams} />
+          <AwardRow label="Closest win" winner={w.closestWin} teams={teams} />
+          <AwardRow label="Most bench" winner={w.mostBench} teams={teams} />
+        </article>
+      ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-xl border border-[var(--dyn-border)] sm:block">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-[var(--dyn-border)] text-left text-xs uppercase text-[var(--dyn-muted)]">
+              <th className="px-3 py-2">Week</th>
+              <th className="px-3 py-2">High score</th>
+              <th className="px-3 py-2">Low score</th>
+              <th className="px-3 py-2">Closest win</th>
+              <th className="px-3 py-2">Most bench</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {weeks.map((w) => (
+              <tr key={w.week} className="border-t border-[var(--dyn-border)]">
+                <td className="px-3 py-2 font-semibold tabular-nums">{w.week}</td>
+                <td className="px-3 py-2">
+                  <AwardCell winner={w.highScore} teams={teams} />
+                </td>
+                <td className="px-3 py-2">
+                  <AwardCell winner={w.lowScore} teams={teams} />
+                </td>
+                <td className="px-3 py-2">
+                  <AwardCell winner={w.closestWin} teams={teams} />
+                </td>
+                <td className="px-3 py-2">
+                  <AwardCell winner={w.mostBench} teams={teams} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

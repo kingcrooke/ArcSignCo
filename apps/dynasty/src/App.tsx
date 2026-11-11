@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BestGamesPanel } from './components/BestGamesPanel'
 import type { BestGamesScope } from './components/BestGamesWeekScope'
 import { DraftsPanel } from './components/DraftsPanel'
@@ -75,10 +75,7 @@ export default function App() {
   )
   const [gallerySlideId, setGallerySlideId] = useState<string | null>(null)
   const [graphicsWeekPin, setGraphicsWeekPin] = useState<number | null>(null)
-  const [tabFade, setTabFade] = useState({ left: false, right: true })
   const sound = useSound()
-  const navRef = useRef<HTMLElement>(null)
-  const didInitialTabScroll = useRef(false)
   const skipGoatcounterTab = useRef(true)
 
   const maxWeek = data
@@ -171,51 +168,6 @@ export default function App() {
     galleryWeek,
   ])
 
-  const scrollActiveTabIntoView = useCallback((behavior: ScrollBehavior) => {
-    const nav = navRef.current
-    if (!nav) return
-    nav
-      .querySelector<HTMLElement>('.dyn-section-tab--active')
-      ?.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior })
-  }, [])
-
-  const updateTabFade = useCallback(() => {
-    const nav = navRef.current
-    if (!nav) return
-    const max = nav.scrollWidth - nav.clientWidth
-    setTabFade({
-      left: nav.scrollLeft > 2,
-      right: max > 2 && nav.scrollLeft < max - 2,
-    })
-  }, [])
-
-  useEffect(() => {
-    if (state !== 'ready' || !data) return
-    const behavior = didInitialTabScroll.current ? 'smooth' : 'instant'
-    didInitialTabScroll.current = true
-    requestAnimationFrame(() => {
-      scrollActiveTabIntoView(behavior)
-      updateTabFade()
-    })
-  }, [tab, state, data, scrollActiveTabIntoView, updateTabFade])
-
-  useEffect(() => {
-    if (state !== 'ready') return
-    const nav = navRef.current
-    if (!nav) return
-    updateTabFade()
-    nav.addEventListener('scroll', updateTabFade, { passive: true })
-    const observer =
-      typeof ResizeObserver === 'undefined'
-        ? null
-        : new ResizeObserver(() => updateTabFade())
-    observer?.observe(nav)
-    return () => {
-      nav.removeEventListener('scroll', updateTabFade)
-      observer?.disconnect()
-    }
-  }, [state, data, updateTabFade])
-
   useEffect(() => {
     if (PLAYER_TABS.includes(tab)) data?.ensurePlayers()
   }, [tab, data])
@@ -257,7 +209,8 @@ export default function App() {
 
   return (
     <div
-      className={`mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${
+      data-active-tab={tab}
+      className={`dynasty-app mx-auto flex min-h-dvh w-full min-w-0 flex-col overflow-x-clip px-4 pb-8 pt-6 ${
         wideTab ? 'max-w-6xl' : 'max-w-3xl'
       }`}
     >
@@ -328,46 +281,30 @@ export default function App() {
             </p>
           </div>
 
-          <div
-            className={`dyn-section-tabs-wrap mb-6${
-              tabFade.left ? ' dyn-section-tabs-wrap--fade-left' : ''
-            }${tabFade.right ? ' dyn-section-tabs-wrap--fade-right' : ''}`}
+          <nav
+            className="dyn-section-tabs mb-6 flex w-full min-w-0 flex-wrap gap-1 rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
+            aria-label="Sections"
           >
-            <nav
-              ref={navRef}
-              className="dyn-section-tabs flex w-full min-w-0 flex-nowrap gap-1 overflow-x-auto rounded-xl border border-[var(--dyn-border)] bg-[var(--dyn-surface)] p-1"
-              aria-label="Sections"
-            >
-              {BASE_TABS.map((t) => {
-                const active = tab === t.id
-                return (
-                  <button
-                    key={t.id}
-                    type="button"
-                    className={
-                      active
-                        ? 'dyn-section-tab dyn-section-tab--active'
-                        : 'dyn-section-tab'
-                    }
-                    aria-current={active ? 'page' : undefined}
-                    onClick={() => onTabChange(t.id)}
-                  >
-                    {t.label}
-                  </button>
-                )
-              })}
-            </nav>
-            {tabFade.left && (
-              <span className="dyn-section-tabs-hint dyn-section-tabs-hint--left" aria-hidden="true">
-                ‹
-              </span>
-            )}
-            {tabFade.right && (
-              <span className="dyn-section-tabs-hint dyn-section-tabs-hint--right" aria-hidden="true">
-                ›
-              </span>
-            )}
-          </div>
+            {BASE_TABS.map((t) => {
+              const active = tab === t.id
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  data-section-tab={t.id}
+                  className={
+                    active
+                      ? 'dyn-section-tab dyn-section-tab--active'
+                      : 'dyn-section-tab'
+                  }
+                  aria-current={active ? 'page' : undefined}
+                  onClick={() => onTabChange(t.id)}
+                >
+                  {t.label}
+                </button>
+              )
+            })}
+          </nav>
 
           <div className="sr-only" aria-hidden="true">
             {' '}
