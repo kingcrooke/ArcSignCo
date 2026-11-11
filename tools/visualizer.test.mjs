@@ -11,7 +11,7 @@ import { renderPrompt, editPrompt, coverageClause } from "../netlify/lib/visuali
 import { loadTemplate } from "../netlify/lib/visualizer/templates.mjs";
 import { assertPublicUrl, extractBusiness, isPrivateAddress } from "../netlify/lib/visualizer/scrape.mjs";
 import { blankScene, toPng, imageBackend, imageChain, xaiImagePlan, generateImage, XAI_IMAGE_MODEL } from "../netlify/lib/visualizer/images.mjs";
-import { leadEmail } from "../netlify/lib/visualizer/email.mjs";
+import { leadEmail, renderEmail, renderNotifyTo } from "../netlify/lib/visualizer/email.mjs";
 import { ENV_KEYS, handleVisualizer, runRenderJob } from "../netlify/lib/visualizer/handle.mjs";
 import { blobRecords, memoryBlobs, memoryRecords } from "../netlify/lib/visualizer/records.mjs";
 
@@ -179,6 +179,7 @@ function harness(env = {}) {
     records: memoryRecords(),
     env,
     deployContext: "deploy-preview",
+    siteUrl: "https://preview.test",
     ip: "203.0.113.9",
     now: () => new Date(t),
     makeId: () => (++n).toString(16).padStart(32, "0"),
@@ -364,6 +365,63 @@ test("a queued render stays under the request and the daily cap is still 16", as
     body: { sessionId: last.id, business: { name: "North" }, subject: { stock: true, coverage: "full", style: "clean" } },
   });
   assert.equal(blocked.status, 429);
+});
+
+const wait = (ms = 30) => new Promise(resolve => setTimeout(resolve, ms));
+
+test("concept render emails Arc with links and does not duplicate", async () => {
+  assert.equal(renderNotifyTo({}), "arc@arcsignco.com");
+  assert.equal(renderNotifyTo({ VISUALIZER_RENDER_TO: "renders@example.com" }), "renders@example.com");
+  assert.equal(renderNotifyTo({ VISUALIZER_LEAD_TO: "leads@example.com" }), "leads@example.com");
+  const msg = renderEmail({}, {
+    jobId: "aaaabbbb",
+    sessionId: "0".repeat(32),
+    createdAt: "2026-11-03T15:00:00.000Z",
+    category: "sign",
+    business: { name: "North Bagels" },
+    subject: { signType: "channel-letters" },
+    quote: { label: "Custom quote" },
+    links: [{ label: "Concept 1", url: "https://preview.test/api/visualize/asset/abc" }],
+  });
+  assert.match(msg.subject, /North Bagels/);
+  assert.match(msg.html, /has not submitted the lead form/);
+  assert.match(msg.html, /channel-letters/);
+
+  const { call, later, deps } = harness({ RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>", VISUALIZER_RENDER_TO: "renders@arcsignco.com" });
+  const posts = [];
+  deps.fetchImpl = async (url, opts) => {
+    posts.push({ url, body: JSON.parse(opts.body) });
+    return new Response("{}", { status: 200 });
+  };
+  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  later();
+  const rendered = await call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { year: "2022", make: "Ram", model: "ProMaster" } },
+  });
+  assert.equal(rendered.status, 200, await rendered.clone().text());
+  await wait();
+  assert.equal(posts.length, 1);
+  assert.equal(posts[0].url, "https://api.resend.com/emails");
+  assert.deepEqual(posts[0].body.to, ["renders@arcsignco.com"]);
+  assert.match(posts[0].body.subject, /Concepts: North/i);
+  assert.equal(posts[0].body.attachments.length, 3);
+  assert.equal(posts[0].body.attachments[0].filename, "concept-1.png");
+  const row = await deps.records.getSession(session.id);
+  assert.equal(row.renderNotifyBatch, 1);
+  assert.ok(row.renderNotifyAt);
+});
+
+test("render response succeeds when concept email fails", async () => {
+  const { call, later, deps } = harness({ RESEND_API_KEY: "re_test", VISUALIZER_EMAIL_FROM: "Arc <arc@arcsignco.com>" });
+  deps.sendRenderEmail = async () => { throw new Error("resend down"); };
+  const session = await (await call("/api/visualize/session", { method: "POST", body: { category: "vehicle" } })).json();
+  later();
+  const rendered = await call("/api/visualize/render", {
+    method: "POST",
+    body: { sessionId: session.id, business: { name: "North" }, subject: { year: "2022", make: "Ram", model: "ProMaster" } },
+  });
+  assert.equal(rendered.status, 200, await rendered.clone().text());
 });
 
 test("lead email goes to arc@ and is skipped cleanly without a key", async () => {
