@@ -922,15 +922,26 @@ main > article.section-card.voice-clip {
   }
 
   #panel-home {
-    padding: 0.85rem 0.75rem 1rem;
-    margin-left: -0.15rem;
-    margin-right: -0.15rem;
+    padding: 0.85rem 0.5rem 1rem;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   #panel-origins {
-    padding: 0.85rem 0.75rem 0.25rem;
-    margin-left: -0.15rem;
-    margin-right: -0.15rem;
+    padding: 0.85rem 0.5rem 0.25rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .hero-cover > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .crest-frame {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .member-row {
