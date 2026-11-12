@@ -116,7 +116,7 @@ function GraphicThumb({
           </p>
         </div>
       )}
-      <p className="truncate px-2 py-1.5 text-xs text-[var(--dyn-muted)]">
+      <p className="min-w-0 whitespace-normal break-words px-2 py-1.5 text-xs leading-snug text-[var(--dyn-muted)]">
         {slide.title}
       </p>
     </button>
