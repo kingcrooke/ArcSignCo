@@ -105,11 +105,11 @@ export function SlideLightbox({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <div className="flex shrink-0 items-center justify-between gap-3 px-4 py-3 sm:px-6">
-        <p className="truncate text-sm text-white/80">
+      <div className="flex shrink-0 flex-col items-stretch gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+        <p className="min-w-0 whitespace-normal break-words text-sm leading-snug text-white/80 sm:flex-1">
           {index + 1} / {slides.length} · {slide.title}
         </p>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center justify-end gap-2">
           <ShareCardButton
             basename={slide.basename}
             title={slide.title}
