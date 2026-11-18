@@ -194,17 +194,44 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(getWeekGraphicsSlides(9)[0]?.id).toBe('results-w9-m1')
   })
 
-  it('lists Matchups only for upcoming Week 10 at Muse card size', () => {
+  it('lists Results then Matchups for finished Week 10 at Muse card size', () => {
     const sections = getWeekGraphicsSections(10)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
-    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Matchups'])
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w10-m1', 'vs-w10-m1', 'Crooke vs Matt'],
       ['vs-w10-m2', 'vs-w10-m2', 'Kayser vs Jamil'],
       ['vs-w10-m3', 'vs-w10-m3', 'Mauricio vs Frankie'],
       ['vs-w10-m4', 'vs-w10-m4', 'Eric vs Hady'],
       ['vs-w10-m5', 'vs-w10-m5', 'Narking vs Manny'],
       ['vs-w10-m6', 'vs-w10-m6', 'Danny vs Steven'],
+    ])
+    expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    const results = sections.find((s) => s.kind === 'results')
+    expect(results?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['results-w10-m1', 'results-w10-m1', 'Matt beats Crooke 198.73-166.04'],
+      ['results-w10-m2', 'results-w10-m2', 'Kayser beats Jamil 108.58-105.98'],
+      ['results-w10-m3', 'results-w10-m3', 'Mauricio beats Frankie 195.10-135.40'],
+      ['results-w10-m4', 'results-w10-m4', 'Hady beats Eric 187.16-168.88'],
+      ['results-w10-m5', 'results-w10-m5', 'Manny beats Narking 188.22-139.86'],
+      ['results-w10-m6', 'results-w10-m6', 'Steven beats Danny 147.78-111.08'],
+    ])
+    expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    expect(sections[0]?.slides[0]?.id).toBe('results-w10-m1')
+    expect(getWeekGraphicsSlides(10)[0]?.id).toBe('results-w10-m1')
+  })
+
+  it('lists Matchups only for upcoming Week 11 (m2 pending) at Muse card size', () => {
+    const sections = getWeekGraphicsSections(11)
+    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
+    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['vs-w11-m1', 'vs-w11-m1', 'Kayser vs Crooke'],
+      ['vs-w11-m3', 'vs-w11-m3', 'Hady vs Jamil'],
+      ['vs-w11-m4', 'vs-w11-m4', 'Narking vs Frankie'],
+      ['vs-w11-m5', 'vs-w11-m5', 'Danny vs Eric'],
+      ['vs-w11-m6', 'vs-w11-m6', 'Steven vs Manny'],
     ])
     expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
   })
