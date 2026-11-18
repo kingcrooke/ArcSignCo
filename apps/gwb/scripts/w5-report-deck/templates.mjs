@@ -5,6 +5,14 @@ import { COLORS, MARGIN, fileUrl, wrapHtml } from '../remake-held/shared-css.mjs
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const RESULT_ASSETS = path.join(__dirname, '../w5-result-cards/assets')
+/**
+ * Slide 02 winner is the buffalo cropped from the live results-w5-m1 card
+ * (Parker Washington, JAX #11). results-w5-m1-winner.jpg is still the
+ * purple #8 panel and must not be used here.
+ * Crop on the 1000×1400 source: x 64–436, y 398–867 (below the record pill,
+ * left of the W medal, above the WINNER badge).
+ */
+const SLIDE_02_WINNER = path.join(__dirname, 'assets/w5-slide-02-winner.png')
 
 export function loadReport() {
   return JSON.parse(readFileSync(path.join(__dirname, 'report-data.json'), 'utf8'))
@@ -20,13 +28,17 @@ function pickHeroSide(slide) {
   return slide.heroSide === 'loser' ? 'loser' : 'winner'
 }
 
-function heroPair(heroId, side = 'winner') {
+function heroPair(heroId, side = 'winner', winnerFile = null) {
   if (!heroId) return null
   const pick = side === 'loser' ? 'loser' : 'winner'
   return {
-    winner: fileUrl(path.join(RESULT_ASSETS, `${heroId}-winner.jpg`)),
+    winner: fileUrl(winnerFile ?? path.join(RESULT_ASSETS, `${heroId}-winner.jpg`)),
     loser: fileUrl(path.join(RESULT_ASSETS, `${heroId}-loser.jpg`)),
-    focus: fileUrl(path.join(RESULT_ASSETS, `${heroId}-${pick}.jpg`)),
+    focus: fileUrl(
+      winnerFile && pick === 'winner'
+        ? winnerFile
+        : path.join(RESULT_ASSETS, `${heroId}-${pick}.jpg`),
+    ),
   }
 }
 
@@ -132,7 +144,8 @@ function layoutCover(slide, pageNum) {
 }
 
 function layoutMatchup(slide, pageNum) {
-  const heroes = heroPair(slide.hero)
+  const winnerFile = slide.id === 'w5-slide-02' ? SLIDE_02_WINNER : null
+  const heroes = heroPair(slide.hero, 'winner', winnerFile)
   const body = (slide.body ?? []).map((line) => `<p>${esc(line)}</p>`).join('')
   const cards = heroes
     ? `<div class="dual-cards">
