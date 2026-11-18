@@ -168,6 +168,23 @@ describe('commissioner recaps timeline', () => {
     expect(final?.bodyMarkdown).toBe(week7Source)
   })
 
+  it('lists the week 8 final report', () => {
+    const week8Source = readFileSync(
+      join(fixtures, 'week8-commissioner-recap.md'),
+      'utf-8',
+    )
+    const week8 = filterCommissionerRecapsByWeek(recaps, 8)
+    const ids = week8.map((r) => r.id)
+    expect(ids).toEqual(['recap-20'])
+    const final = week8[0]
+    expect(final?.label).toBe('Final')
+    expect(final?.week).toBe(8)
+    expect(final?.postedAt).toBe('2026-11-17')
+    expect(final?.title).toContain('FRANKIE GOES NUCLEAR')
+    expect(final?.bodyMarkdown).toBe(week8Source)
+    expect(final?.bodyMarkdown).not.toMatch(/Hadi|HADI|Kaiser/)
+  })
+
   it('lists the week 9 final report', () => {
     const week9Source = readFileSync(
       join(fixtures, 'week9-commissioner-recap.md'),
@@ -180,5 +197,22 @@ describe('commissioner recaps timeline', () => {
     expect(final?.label).toBe('Final')
     expect(final?.week).toBe(9)
     expect(final?.bodyMarkdown).toBe(week9Source)
+  })
+
+  it('lists the week 10 final report', () => {
+    const week10Source = readFileSync(
+      join(fixtures, 'week10-commissioner-recap.md'),
+      'utf-8',
+    )
+    const week10 = filterCommissionerRecapsByWeek(recaps, 10)
+    const ids = week10.map((r) => r.id)
+    expect(ids).toEqual(['recap-21'])
+    const final = week10[0]
+    expect(final?.label).toBe('Final')
+    expect(final?.week).toBe(10)
+    expect(final?.postedAt).toBe('2026-11-17')
+    expect(final?.title).toContain('NINE STRAIGHT')
+    expect(final?.bodyMarkdown).toBe(week10Source)
+    expect(final?.bodyMarkdown).not.toMatch(/Hadi|HADI|Kaiser/)
   })
 })
