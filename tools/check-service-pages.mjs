@@ -30,14 +30,23 @@ export const SERVICE_SLUGS = [
   "design-consulting",
   "agencies-institutions",
 ];
-const pages = [{ slug: "", file: "index.html" }, ...SERVICE_SLUGS.map(slug => ({ slug, file: `${slug}/index.html` }))];
+const NON_SERVICE_PAGES = new Set(["contact"]);
+const pages = [
+  { slug: "", file: "index.html" },
+  { slug: "contact", file: "contact/index.html" },
+  ...SERVICE_SLUGS.map(slug => ({ slug, file: `${slug}/index.html` })),
+];
 
 const BUSINESS_ID = "https://arcsignco.com/#business";
 const APPROVED_ADDRESS = {
+  streetAddress: "1974 Crotona Ave A",
+  addressLocality: "Bronx",
   addressRegion: "NY",
+  postalCode: "10457",
   addressCountry: "US",
 };
-const FORBIDDEN_ADDRESS_KEYS = ["streetAddress", "addressLocality", "postalCode"];
+const FORBIDDEN_ADDRESS_KEYS = [];
+const APPROVED_ADDRESS_FULL = "1974 Crotona Ave A, Bronx, NY 10457";
 
 // Claims the site must not make (case-insensitive, visible text only).
 const BANNED = [
@@ -97,19 +106,16 @@ for (const { slug, file } of pages) {
 
   const nodes = flattenLd(blocks);
   const keys = walkKeys(blocks);
-  if (slug) {
+  if (slug && !NON_SERVICE_PAGES.has(slug)) {
     const bad = FORBIDDEN_LD_KEYS_SERVICE.filter(k => keys.includes(k));
     if (bad.length) fail(label, `JSON-LD contains forbidden keys: ${bad.join(", ")}`);
     else pass(label, "JSON-LD has no address, hours, ratings, or reviews");
-  } else {
+  } else if (!slug) {
     if (keys.includes("openingHours") || keys.includes("openingHoursSpecification") || keys.includes("aggregateRating") || keys.includes("review")) {
       fail(label, "JSON-LD contains forbidden keys: hours or ratings");
     }
     const ldText = JSON.stringify(blocks);
     if (/83 Post Ave/i.test(ldText)) fail(label, "JSON-LD contains forbidden address 83 Post Ave");
-    if (/1974 Crotona/i.test(ldText)) fail(label, "JSON-LD contains forbidden street address 1974 Crotona Ave");
-    if (keys.includes("streetAddress")) fail(label, "JSON-LD contains forbidden key streetAddress");
-    if (/Apt\s*A/i.test(ldText)) fail(label, "JSON-LD contains forbidden Apt A in address");
     const biz = nodes.find(n => n["@id"] === BUSINESS_ID);
     if (!biz) fail(label, `no JSON-LD node with @id ${BUSINESS_ID}`);
     else if (!addressMatches(biz)) fail(label, "homepage business address does not match approved PostalAddress");
@@ -139,12 +145,16 @@ for (const { slug, file } of pages) {
   const visible = norm(body.textContent);
   for (const re of BANNED) if (re.test(visible)) fail(label, `visible text matches banned claim ${re}`);
   for (const re of EDITOR_NOTE_SCAN) if (re.test(html)) fail(label, `page HTML contains editor note ${re}`);
-  if (/\d+\s+[A-Z][a-z]+ (Street|St\.|Avenue|Ave\.|Blvd|Road)/.test(visible)) fail(label, "visible text looks like it contains a street address");
+  if (visible.includes("83 Post Ave")) fail(label, "visible text contains forbidden address 83 Post Ave");
+  if ((slug === "" || slug === "contact") && !visible.includes(APPROVED_ADDRESS_FULL)) {
+    fail(label, `homepage/contact should show approved address ${APPROVED_ADDRESS_FULL}`);
+  }
+  if (slug === "" || slug === "contact") pass(label, "approved street address visible where required");
   if (!visible.includes("arc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
   if (html.includes("mailto:jc@arcsignco.com")) fail(label, "page still has a jc@ mailto link");
   if (visible.includes("+13474502110")) fail(label, "visible text contains raw E.164 phone");
-  if (slug && !visible.includes("Hours: Mon–Fri 8 AM–6 PM")) fail(label, "missing contact-strip hours");
-  if (slug && !/Call or text \(347\) 450-2110/.test(visible)) fail(label, "nav/hero/mobile call wording missing");
+  if (slug && !NON_SERVICE_PAGES.has(slug) && !visible.includes("Hours: Mon–Fri 8 AM–6 PM")) fail(label, "missing contact-strip hours");
+  if (slug && !NON_SERVICE_PAGES.has(slug) && !/Call or text \(347\) 450-2110/.test(visible)) fail(label, "nav/hero/mobile call wording missing");
 
   const faq = nodes.find(b => b["@type"] === "FAQPage");
   const items = [...document.querySelectorAll(".faq-item")].map(el => ({
@@ -158,8 +168,14 @@ for (const { slug, file } of pages) {
     for (const u of ["https://www.instagram.com/arcsignco", "https://www.facebook.com/1201574029704014"]) {
       if (!same.includes(u)) fail(label, `business sameAs missing ${u}`);
     }
-    if (biz?.["@type"] !== "ProfessionalService") fail(label, "business @type is not ProfessionalService");
+    const bizTypes = Array.isArray(biz?.["@type"]) ? biz["@type"] : [biz?.["@type"]];
+    if (!bizTypes.includes("ProfessionalService")) fail(label, "business @type missing ProfessionalService");
+    if (!bizTypes.includes("LocalBusiness")) fail(label, "business @type missing LocalBusiness");
     pass(label, `ProfessionalService sameAs: ${same.join(", ")}`);
+  } else if (NON_SERVICE_PAGES.has(slug)) {
+    const crumbs = nodes.find(b => b["@type"] === "BreadcrumbList");
+    if (!crumbs || crumbs.itemListElement?.at(-1)?.item !== url) fail(label, "BreadcrumbList missing or last item is not this page");
+    else pass(label, "contact page breadcrumb ok");
   } else {
     const service = nodes.find(b => b["@type"] === "Service");
     if (!service) fail(label, "no Service block");
@@ -175,7 +191,9 @@ for (const { slug, file } of pages) {
     if (!crumbs || crumbs.itemListElement?.at(-1)?.item !== url) fail(label, "BreadcrumbList missing or last item is not this page");
   }
 
-  if (!faq) { fail(label, "no FAQPage block"); }
+  if (NON_SERVICE_PAGES.has(slug)) {
+    pass(label, "non-service page skips FAQ pairing");
+  } else if (!faq) { fail(label, "no FAQPage block"); }
   else if (!items.length) { fail(label, "FAQPage block but no visible .faq-item elements"); }
   else {
     const ld = faq.mainEntity.map(m => ({ q: norm(m.name), a: norm(m.acceptedAnswer.text) }));
@@ -191,7 +209,7 @@ for (const { slug, file } of pages) {
     pass(label, `${matched}/${ld.length} FAQ question+answer pairs match the visible text exactly`);
   }
 
-  if (slug) {
+  if (slug && !NON_SERVICE_PAGES.has(slug)) {
     const quoteHref = `/?type=${slug}#quote`;
     const quoteLinks = [...document.querySelectorAll(`a[href="${quoteHref}"]`)].filter(a => a.textContent.includes("Request a quote")).length;
     if (!quoteLinks) fail(label, `no Request a quote link to ${quoteHref}`);
@@ -239,6 +257,11 @@ for (const { slug, file } of pages) {
 
 if (sitemap.includes("sign-mockup/proof")) fail("sitemap", "proof pages are listed");
 else pass("sitemap", "proof pages are not listed");
+for (const path of ["/privacy/", "/terms/"]) {
+  const loc = `https://arcsignco.com${path}`;
+  if (!sitemap.includes(`<loc>${loc}</loc>`)) fail("sitemap", `missing ${loc}`);
+  else pass("sitemap", `lists ${path}`);
+}
 const homeNav = fs.readFileSync(path.join(root, "index.html"), "utf8");
 for (const href of ["/wayfinding-signs/", "/digital-signage/", "/awnings/", "/window-graphics/", "/vehicle-wraps/", "/visualize/"]) {
   if (!homeNav.includes(`href="${href}"`)) fail("/", `homepage missing link to ${href}`);

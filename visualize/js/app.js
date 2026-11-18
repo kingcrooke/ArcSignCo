@@ -47,6 +47,11 @@ const PLACES = {
 };
 
 let sessionReadyAt = 0;
+let turnstileSiteKey = "";
+let turnstileRenderToken = "";
+let turnstileLeadToken = "";
+let turnstileRenderWidget = null;
+let turnstileLeadWidget = null;
 
 const state = {
   sessionId: "",
@@ -122,6 +127,46 @@ async function apiRetry(path, options) {
 
 function jsonBody(extra) {
   return { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(extra) };
+}
+
+function canGenerate() {
+  return requiredReady() && (!turnstileSiteKey || !!turnstileRenderToken);
+}
+
+async function loadTurnstileScript() {
+  if (!turnstileSiteKey || window.turnstile) return;
+  await new Promise((resolve) => {
+    const s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    s.async = true;
+    s.onload = () => resolve();
+    s.onerror = () => resolve();
+    document.head.appendChild(s);
+  });
+}
+
+function mountTurnstile(container, priorId, onToken) {
+  if (!turnstileSiteKey || !window.turnstile) return null;
+  if (priorId != null) {
+    try { window.turnstile.remove(priorId); } catch { /* noop */ }
+  }
+  container.replaceChildren();
+  container.hidden = false;
+  return window.turnstile.render(container, {
+    sitekey: turnstileSiteKey,
+    callback: (token) => onToken(token || ""),
+    "expired-callback": () => onToken(""),
+  });
+}
+
+async function initVisualizerConfig() {
+  try {
+    const cfg = await api("/api/visualize/config");
+    turnstileSiteKey = (cfg.turnstileSiteKey || "").trim();
+    await loadTurnstileScript();
+  } catch {
+    turnstileSiteKey = "";
+  }
 }
 
 async function typeLine(text, kind = "bot") {
@@ -462,11 +507,19 @@ async function builder() {
   await typeLine(intro);
   const root = el("div");
   root.append(scanBlock(), section("coverage"), section("style"), section("colors"), section("logo"), section("name"), section("phone"), section("web"));
+  const turnstileBox = el("div", { class: "turnstile-mount", id: "turnstileRenderMount", hidden: !turnstileSiteKey ? true : false });
   const generate = el("button", { class: "gold-btn", id: "generateBtn", type: "button", onclick: generateConcepts }, "Generate");
-  generate.disabled = !requiredReady();
-  root.append(generate);
+  generate.disabled = !canGenerate();
+  root.append(turnstileBox, generate);
   $("panel").append(root);
   state._gen = generate;
+  if (turnstileSiteKey) {
+    turnstileRenderToken = "";
+    turnstileRenderWidget = mountTurnstile(turnstileBox, turnstileRenderWidget, (token) => {
+      turnstileRenderToken = token;
+      if (state._gen) state._gen.disabled = !canGenerate();
+    });
+  }
 }
 
 function scanBlock() {
@@ -527,7 +580,7 @@ function section(kind) {
     );
   };
   paintHead();
-  const body = buildSection(kind, () => { paintHead(); if (state._gen) state._gen.disabled = !requiredReady(); });
+  const body = buildSection(kind, () => { paintHead(); if (state._gen) state._gen.disabled = !canGenerate(); });
   open.append(body);
   open.hidden = true;
   head.addEventListener("click", () => { open.hidden = !open.hidden; });
@@ -671,6 +724,10 @@ function subjectBody() {
 
 async function generateConcepts() {
   if (!requiredReady()) return;
+  if (turnstileSiteKey && !turnstileRenderToken) {
+    toast("Complete the security check, then tap Generate.");
+    return;
+  }
   await user("Generate");
   clearPanel();
   const controller = new AbortController();
@@ -689,6 +746,7 @@ async function generateConcepts() {
         subject: subjectBody(),
         logoId: state.logoId,
         photoId: state.photoId,
+        turnstileToken: turnstileRenderToken,
       }),
     });
     if (data.jobId && data.kick) {
@@ -888,6 +946,11 @@ async function lead() {
   form.hidden = false;
   $("panel").append(form);
   $("leadTiming").value = state.timing;
+  const leadMount = $("turnstileLeadMount");
+  if (turnstileSiteKey && leadMount) {
+    turnstileLeadToken = "";
+    turnstileLeadWidget = mountTurnstile(leadMount, turnstileLeadWidget, (token) => { turnstileLeadToken = token; });
+  } else if (leadMount) leadMount.hidden = true;
   const picks = $("designPicks");
   picks.replaceChildren(el("p", { class: "hint" }, "Which designs do you want a quote on? Tap to select."));
   const row = el("div", { class: "thumbs" });
@@ -931,6 +994,10 @@ async function sendLead(ev) {
     return;
   }
   if (!state.selected.size) { toast("Tap at least one design."); return; }
+  if (turnstileSiteKey && !turnstileLeadToken) {
+    toast("Complete the security check, then submit.");
+    return;
+  }
   const ids = [...state.selected];
   const urls = state.concepts.filter(item => state.selected.has(item.id)).map(item => new URL(item.url, location.origin).href);
   $("leadCompany").value = state.business.name;
@@ -957,6 +1024,7 @@ async function sendLead(ev) {
       renderId: ids[0],
       smsTransactional: $("smsUpdates").checked === true,
       smsPromo: $("smsPromos").checked === true,
+      turnstileToken: turnstileLeadToken,
     }));
     const [formRes, apiRes] = await Promise.allSettled([posted, saved]);
     if (apiRes.status === "rejected" && formRes.status === "rejected") throw apiRes.reason;
@@ -1097,4 +1165,4 @@ $("stageImg").addEventListener("touchend", (ev) => {
   presentConcept();
 });
 
-choice().catch(err => toast(err.message));
+initVisualizerConfig().then(() => choice()).catch(err => toast(err.message));

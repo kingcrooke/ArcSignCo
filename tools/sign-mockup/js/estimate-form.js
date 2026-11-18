@@ -203,6 +203,7 @@ function markup(p) {
 
   <p class="ef-error" role="alert" hidden></p>
   <button type="submit" class="btn gold lg ef-submit">Request a formal estimate</button>
+  <p class="ef-fine">By submitting, you agree to our <a href="/privacy/">Privacy Policy</a>.</p>
   <p class="ef-fine">Arc replies with a formal written estimate. Call or text <a href="tel:+13474502110">(347) 450-2110</a> with questions.</p>
 </form>
 <div class="ef-done" tabindex="-1" hidden>

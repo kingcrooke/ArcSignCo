@@ -371,6 +371,18 @@
   status = 404
   force = true
 
+# Canonical trailing slash for the sign mockup tool (sitemap uses /tools/sign-mockup/).
+[[redirects]]
+  from = "/tools/sign-mockup"
+  to = "/tools/sign-mockup/"
+  status = 301
+
+# /visualize/ is the canonical visualizer URL (sitemap uses trailing slash).
+[[redirects]]
+  from = "/visualize"
+  to = "/visualize/"
+  status = 301
+
 # /tools/sign-mockup/ is the only published path under /tools/. This rule must stay above the
 # /tools/* block so the repo's build scripts in /tools/ keep returning 404.
 [[redirects]]
