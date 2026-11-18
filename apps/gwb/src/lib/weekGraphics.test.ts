@@ -222,12 +222,13 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(getWeekGraphicsSlides(10)[0]?.id).toBe('results-w10-m1')
   })
 
-  it('lists Matchups only for upcoming Week 11 (m2 pending) at Muse card size', () => {
+  it('lists Matchups only for upcoming Week 11 at Muse card size', () => {
     const sections = getWeekGraphicsSections(11)
     expect(sections.map((s) => s.kind)).toEqual(['matchups'])
     expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
     expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w11-m1', 'vs-w11-m1', 'Kayser vs Crooke'],
+      ['vs-w11-m2', 'vs-w11-m2', 'Mauricio vs Matt'],
       ['vs-w11-m3', 'vs-w11-m3', 'Hady vs Jamil'],
       ['vs-w11-m4', 'vs-w11-m4', 'Narking vs Frankie'],
       ['vs-w11-m5', 'vs-w11-m5', 'Danny vs Eric'],

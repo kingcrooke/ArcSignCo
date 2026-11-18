@@ -24,7 +24,7 @@ const VS_PREVIEW_BASENAMES = [
   ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((w) =>
     [1, 2, 3, 4, 5, 6].map((m) => `vs-w${w}-m${m}`),
   ),
-  ...[1, 3, 4, 5, 6].map((m) => `vs-w11-m${m}`),
+  ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w11-m${m}`),
 ]
 
 const REPORT_WEEKS = [1, 2, 3, 4, 5]

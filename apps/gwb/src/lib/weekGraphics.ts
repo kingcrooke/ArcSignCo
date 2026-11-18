@@ -261,9 +261,9 @@ const WEEK_10_MATCHUPS: PublishedSlide[] = [
   vs('vs-w10-m6', 'Danny vs Steven'),
 ]
 
-/** Week 11 previews: vs-w11-m2 (Mauricio vs Matt) lands when Muse ships the fix. */
 const WEEK_11_MATCHUPS: PublishedSlide[] = [
   vs('vs-w11-m1', 'Kayser vs Crooke'),
+  vs('vs-w11-m2', 'Mauricio vs Matt'),
   vs('vs-w11-m3', 'Hady vs Jamil'),
   vs('vs-w11-m4', 'Narking vs Frankie'),
   vs('vs-w11-m5', 'Danny vs Eric'),
