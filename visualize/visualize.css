@@ -351,6 +351,7 @@
 .compare .handle::after {
   content: ""; position: absolute; top: 50%; left: -16px; width: 32px; height: 32px; border-radius: 50%; background: #fff;
 }
+.turnstile-mount { margin: 12px 0 6px; min-height: 65px; }
 .legal { padding: 8px 22px 40px; color: #9aabbd; font-size: 13px; }
 .legal h2 { font-size: 16px; color: #d7e4d6; }
 .stub-note { background: #3a2a10; color: #f3e2b8; border-radius: 12px; padding: 8px 10px; font-size: 13px; }

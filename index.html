@@ -26,7 +26,7 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "ProfessionalService",
+      "@type": ["ProfessionalService", "LocalBusiness"],
       "@id": "https://arcsignco.com/#business",
       "name": "Arc Signage Co",
       "legalName": "Arc Signage Co. LLC",
@@ -38,7 +38,10 @@
       "logo": "https://arcsignco.com/icon-192.png",
       "address": {
         "@type": "PostalAddress",
+        "streetAddress": "1974 Crotona Ave A",
+        "addressLocality": "Bronx",
         "addressRegion": "NY",
+        "postalCode": "10457",
         "addressCountry": "US"
       },
       "areaServed": [
@@ -1471,6 +1474,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
               </div>
             </details>
             <button class="btn gold lg submit" type="submit">Send quote request</button>
+            <p class="form-note">By submitting, you agree to our <a href="/privacy/">Privacy Policy</a>.</p>
             <p class="form-note">Arc replies from arc@arcsignco.com. Texts are fine at (347) 450-2110.</p>
           </div>
         </form>
@@ -1502,6 +1506,8 @@ footer p { color: #cfd9e6; font-size: 13px; }
       <a href="/tools/sign-mockup/">Free Sign Preview</a>
       <a href="/visualize/">Arc Visualizer</a>
       <a href="/contact/">Contact</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
       <!-- TODO(GBP): put the confirmed Google Business Profile URL in href (and in JSON-LD "sameAs"). Hidden until href is an https URL. -->
       <a id="gbpLink" href="" rel="noopener" target="_blank" hidden>Google Business Profile</a>
     </div>
@@ -1525,9 +1531,11 @@ footer p { color: #cfd9e6; font-size: 13px; }
     <a href="/design-consulting/">Design consulting</a>
     <a href="/agencies-institutions/">Agencies &amp; institutions</a>
   </nav>
-  <div class="wrap footer-meta">
+    <div class="wrap footer-meta">
     <span>&copy; 2026 Arc Signage Co. LLC &mdash; New York / Tri-State</span>
+    <span>1974 Crotona Ave A, Bronx, NY 10457</span>
     <span><a href="tel:+13474502110">(347) 450-2110</a> &nbsp;|&nbsp; <a href="mailto:arc@arcsignco.com">arc@arcsignco.com</a></span>
+    <span><a href="/privacy/">Privacy</a> &nbsp;|&nbsp; <a href="/terms/">Terms</a></span>
   </div>
 </footer>
 

@@ -301,7 +301,7 @@ check(/<strong>Concept approved, request a formal estimate<\/strong>/.test(proof
 check(STAMP_TITLE === "CONCEPT APPROVED, REQUEST A FORMAL ESTIMATE", "the PDF approval stamp reads \"Concept approved, request a formal estimate\"");
 for (const f of own) {
   const body = fs.readFileSync(path.join(toolDir, f), "utf8");
-  const bare = [...body.matchAll(/\(347\) 450-2110/g)].filter(m => !/(call or text\s*(<a [^>]*>)?|phone: ")$/i.test(body.slice(Math.max(0, m.index - 80), m.index)));
+  const bare = [...body.matchAll(/\(347\) 450-2110/g)].filter(m => !/(call or text\s*(<a [^>]*>)?|phone: "|tel:\+13474502110">)$/i.test(body.slice(Math.max(0, m.index - 80), m.index)));
   check(!bare.length, `${f}: every phone line reads "Call or text (347) 450-2110"${bare.length ? ` (${bare.length} bare)` : ""}`);
 }
 check((proofHtml.split(DISCLAIMER_FULL).length - 1) === 2, "proof page carries the full disclaimer in the price box and the footer");
@@ -347,6 +347,7 @@ check(!/googletagmanager|gtag\(/.test(html), "no analytics on the tool page");
 const sitemap = fs.readFileSync(path.join(root, "sitemap.xml"), "utf8");
 const toml = fs.readFileSync(path.join(root, "netlify.toml"), "utf8");
 check(sitemap.includes("<loc>https://arcsignco.com/tools/sign-mockup/</loc>"), "sitemap lists the sign mockup tool");
+check(/from = "\/tools\/sign-mockup"\n  to = "\/tools\/sign-mockup\/"\n  status = 301/.test(toml), "netlify.toml 301 redirect from /tools/sign-mockup to trailing slash");
 check(!sitemap.includes("/tools/sign-mockup/proof"), "sitemap does not list proof pages");
 check(!toml.includes('for = "/tools/sign-mockup/*"\n  [headers.values]\n    X-Robots-Tag = "noindex"'), "netlify.toml does not noindex the whole mockup tool");
 const allow = toml.indexOf('from = "/tools/sign-mockup/*"'), block = toml.indexOf('from = "/tools/*"');
