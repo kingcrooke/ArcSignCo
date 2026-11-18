@@ -5,6 +5,15 @@ import { COLORS, MARGIN, fileUrl, wrapHtml } from '../remake-held/shared-css.mjs
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const RESULT_ASSETS = path.join(__dirname, '../w5-result-cards/assets')
+/**
+ * Slide 02 winner is the buffalo cropped from the live results-w5-m1 card
+ * (Parker Washington, JAX #11) and scaled to the left card.
+ * Source rect on the 1000×1400 card: x 70–436, y 318–810 (horn tip through
+ * the jersey, left of the W medal, above the WINNER badge), then fit to the
+ * 414×514 frame with the head near the top. No extra zoom.
+ * results-w5-m1-winner.jpg is still the purple #8 panel.
+ */
+const SLIDE_02_WINNER = path.join(__dirname, 'assets/w5-slide-02-winner.png')
 
 export function loadReport() {
   return JSON.parse(readFileSync(path.join(__dirname, 'report-data.json'), 'utf8'))
@@ -20,13 +29,17 @@ function pickHeroSide(slide) {
   return slide.heroSide === 'loser' ? 'loser' : 'winner'
 }
 
-function heroPair(heroId, side = 'winner') {
+function heroPair(heroId, side = 'winner', winnerFile = null) {
   if (!heroId) return null
   const pick = side === 'loser' ? 'loser' : 'winner'
   return {
-    winner: fileUrl(path.join(RESULT_ASSETS, `${heroId}-winner.jpg`)),
+    winner: fileUrl(winnerFile ?? path.join(RESULT_ASSETS, `${heroId}-winner.jpg`)),
     loser: fileUrl(path.join(RESULT_ASSETS, `${heroId}-loser.jpg`)),
-    focus: fileUrl(path.join(RESULT_ASSETS, `${heroId}-${pick}.jpg`)),
+    focus: fileUrl(
+      winnerFile && pick === 'winner'
+        ? winnerFile
+        : path.join(RESULT_ASSETS, `${heroId}-${pick}.jpg`),
+    ),
   }
 }
 
@@ -56,6 +69,7 @@ const cssBase = `
 }
 .dual-cards .card.dim { border-color: #4a5058; }
 .dual-cards img { width: 100%; height: 100%; object-fit: cover; object-position: center 14%; transform: scale(1.05); }
+.dual-cards img.fit { object-position: center center; transform: none; }
 .info-stack {
   position: absolute; left: 96px; right: 96px; top: 868px; z-index: 3;
   background: rgba(18, 24, 32, 0.96); border-left: 4px solid ${COLORS.gold}; padding: 22px 28px;
@@ -132,11 +146,13 @@ function layoutCover(slide, pageNum) {
 }
 
 function layoutMatchup(slide, pageNum) {
-  const heroes = heroPair(slide.hero)
+  const winnerFile = slide.id === 'w5-slide-02' ? SLIDE_02_WINNER : null
+  const heroes = heroPair(slide.hero, 'winner', winnerFile)
   const body = (slide.body ?? []).map((line) => `<p>${esc(line)}</p>`).join('')
+  const winnerClass = winnerFile ? ' class="fit"' : ''
   const cards = heroes
     ? `<div class="dual-cards">
-    <div class="card"><img src="${heroes.winner}" alt=""/></div>
+    <div class="card"><img${winnerClass} src="${heroes.winner}" alt=""/></div>
     <div class="card dim"><img src="${heroes.loser}" alt=""/></div>
   </div>`
     : ''
