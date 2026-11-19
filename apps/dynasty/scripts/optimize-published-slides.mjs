@@ -16,7 +16,7 @@ const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
 const DEFAULT_BASENAMES = [
-  ...[1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap((w) =>
+  ...[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((w) =>
     [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
   ),
   ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w6-m${m}`),
@@ -24,6 +24,7 @@ const DEFAULT_BASENAMES = [
   ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w8-m${m}`),
   ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w9-m${m}`),
   ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w10-m${m}`),
+  ...[1, 2, 3, 4, 5, 6].map((m) => `vs-w11-m${m}`),
 ]
 
 async function findSource(basename) {
