@@ -105,8 +105,12 @@ html.ba-js .ba-interactive { display: block; }
   margin-top: 24px;
 }
 .ba-detail img { border-radius: 8px; }
-.ba-compact .ba-interactive .ba-layer img { max-height: 340px; object-fit: cover; width: 100%; }
-.ba-compact .ba-sidebyside img { max-height: 280px; object-fit: cover; width: 100%; }
+.ba-compact .ba-interactive .ba-layer img,
+.ba-compact .ba-sidebyside img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
 @media (max-width: 720px) {
   .ba-sidebyside { grid-template-columns: 1fr; }
 }
