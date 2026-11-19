@@ -8,17 +8,17 @@ describe('DynastyWeekGraphicsPanel empty week', () => {
     render(
       <DynastyWeekGraphicsPanel
         season="2026"
-        week={11}
+        week={12}
         weekComplete={false}
-        latestContentWeek={10}
+        latestContentWeek={11}
         onSelectWeek={onSelectWeek}
       />,
     )
-    const links = screen.getAllByRole('button', { name: 'View Week 10' })
+    const links = screen.getAllByRole('button', { name: 'View Week 11' })
     expect(links.length).toBeGreaterThan(0)
-    expect(screen.getByText(/Week 11 cards aren't posted yet/)).toBeInTheDocument()
+    expect(screen.getByText(/Week 12 cards aren't posted yet/)).toBeInTheDocument()
     fireEvent.click(links[0])
-    expect(onSelectWeek).toHaveBeenCalledWith(10)
+    expect(onSelectWeek).toHaveBeenCalledWith(11)
   })
 
   it('wraps long matchup titles under Graphics thumbnails', () => {
