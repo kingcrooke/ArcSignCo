@@ -1,0 +1,116 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.ba { margin: 0; }
+.ba-sidebyside {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.ba-sidebyside figure { margin: 0; }
+.ba-sidebyside img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.ba-sidebyside figcaption { font-size: 12px; color: var(--muted, #4a5870); margin-top: 6px; }
+.ba-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  color: #4a5870;
+}
+html.ba-js .ba-sidebyside { display: none; }
+.ba-interactive {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #0b1d33;
+  touch-action: none;
+  user-select: none;
+}
+html.ba-js .ba-interactive { display: block; }
+.ba-interactive { min-height: 120px; }
+.ba-layer {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+.ba-interactive > .ba-layer.ba-before { position: relative; z-index: 0; }
+.ba-after-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+.ba-layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+.ba-label {
+  position: absolute;
+  top: 12px;
+  z-index: 3;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: rgba(11, 29, 51, 0.82);
+  color: #fff;
+  pointer-events: none;
+}
+.ba-label--before { left: 12px; }
+.ba-label--after { right: 12px; }
+.ba-range {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  z-index: 4;
+  width: calc(100% - 32px);
+  margin: 0 16px;
+  accent-color: #c4a35a;
+}
+.ba-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--ba-pct, 50%);
+  width: 3px;
+  margin-left: -1.5px;
+  background: #c4a35a;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(11, 29, 51, 0.35);
+}
+.ba-credit {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted, #4a5870);
+}
+.ba-detail {
+  max-width: 420px;
+  margin-top: 24px;
+}
+.ba-detail img { border-radius: 8px; }
+.ba-compact .ba-interactive .ba-layer img,
+.ba-compact .ba-sidebyside img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+@media (max-width: 720px) {
+  .ba-sidebyside { grid-template-columns: 1fr; }
+}
