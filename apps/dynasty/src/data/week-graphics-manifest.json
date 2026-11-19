@@ -456,6 +456,7 @@
     },
     "11": {
       "matchups": {
+        "previewWeek": 11,
         "slides": [
           {
             "id": "vs-w11-m1",
