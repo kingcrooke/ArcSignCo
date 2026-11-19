@@ -229,12 +229,26 @@ describe('weekGraphics manifest', () => {
     expect(sections[1].previewWeek).toBe(11)
   })
 
+  it('every matchup section has previewWeek and a week-specific heading', () => {
+    for (const week of [5, 6, 7, 8, 9, 10, 11]) {
+      const matchups = getWeekGraphicsSections(2026, week).find(
+        (s) => s.kind === 'matchups',
+      )
+      expect(matchups, `week ${week}`).toBeDefined()
+      expect(matchups!.previewWeek, `week ${week}`).toBeDefined()
+      expect(matchups!.heading, `week ${week}`).toMatch(
+        /^Week \d+ matchup previews$/,
+      )
+      expect(matchups!.heading, `week ${week}`).not.toBe('Matchups')
+    }
+  })
+
   it('week 11 shows matchup cards only', () => {
     const sections = getWeekGraphicsSections(2026, 11)
     expect(sections).toHaveLength(1)
     expect(sections[0].kind).toBe('matchups')
-    expect(sections[0].heading).toBe('Matchups')
-    expect(sections[0].previewWeek).toBeUndefined()
+    expect(sections[0].heading).toBe('Week 11 matchup previews')
+    expect(sections[0].previewWeek).toBe(11)
     expect(sections[0].slides.map((s) => s.id)).toEqual([
       'vs-w11-m1',
       'vs-w11-m2',

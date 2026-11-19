@@ -44,6 +44,21 @@ describe('DynastyWeekGraphicsPanel empty week', () => {
     expect(dialogTitle?.className).not.toContain('truncate')
   })
 
+  it('labels week 11 matchup previews with the preview week heading', () => {
+    render(
+      <DynastyWeekGraphicsPanel
+        season="2026"
+        week={11}
+        weekComplete={false}
+        teams={new Map()}
+      />,
+    )
+    expect(
+      screen.getByRole('heading', { name: 'Week 11 matchup previews' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Matchups' })).toBeNull()
+  })
+
   it('does not offer a jump link on a week that already has cards', () => {
     render(
       <DynastyWeekGraphicsPanel
