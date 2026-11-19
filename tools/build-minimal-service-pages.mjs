@@ -54,8 +54,7 @@ function pageHtml(p) {
   </section>`
     : "";
 
-  // Cyclone Bagels shop photo stays off window-graphics until a good exterior photo exists.
-  const cycloneBlock = "";
+  const featuredCaseStudyBlock = "";
 
   const checklist = (
     p.quoteChecklist || [
@@ -199,7 +198,7 @@ ${faqJson}
     </div>
   </section>
 ${scopeBlock}
-${cycloneBlock}
+${featuredCaseStudyBlock}
   <section class="section${p.slug === "window-graphics" ? "" : " alt"}" id="what-to-send">
     <div class="wrap">
       <div class="section-head">
