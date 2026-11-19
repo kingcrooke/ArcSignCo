@@ -21,6 +21,7 @@
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/css/before-after.v1.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -673,13 +674,32 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <p><a href="/portfolio/tursian/">Read case study</a> · <a href="/window-graphics/">Window graphics service</a></p>
         </div>
         <div class="pf-media">
-          <figure class="pf-fig pf-natural">
-            <picture>
-              <source type="image/avif" srcset="/assets/portfolio/tursian-9-bleecker-hero-480.v1.avif 480w, /assets/portfolio/tursian-9-bleecker-hero-800.v1.avif 800w, /assets/portfolio/tursian-9-bleecker-hero-1200.v1.avif 1200w, /assets/portfolio/tursian-9-bleecker-hero-1600.v1.avif 1600w" sizes="(max-width: 900px) 100vw, 50vw">
-              <source type="image/webp" srcset="/assets/portfolio/tursian-9-bleecker-hero-480.v1.webp 480w, /assets/portfolio/tursian-9-bleecker-hero-800.v1.webp 800w, /assets/portfolio/tursian-9-bleecker-hero-1200.v1.webp 1200w, /assets/portfolio/tursian-9-bleecker-hero-1600.v1.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw">
-              <img src="/assets/portfolio/tursian-9-bleecker-hero-800.v1.jpg" srcset="/assets/portfolio/tursian-9-bleecker-hero-480.v1.jpg 480w, /assets/portfolio/tursian-9-bleecker-hero-800.v1.jpg 800w, /assets/portfolio/tursian-9-bleecker-hero-1200.v1.jpg 1200w, /assets/portfolio/tursian-9-bleecker-hero-1600.v1.jpg 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="1800" height="1350" loading="lazy" decoding="async" alt="Straight-on nighttime view of the TURSIAN storefront at 9 Bleecker Street, New York, NY, with second-surface window graphics on both panes.">
-            </picture>
-            <figcaption>TURSIAN at 9 Bleecker Street after evening install.</figcaption>
+          <figure class="pf-fig pf-natural ba ba-compact" data-before-after aria-label="TURSIAN 9 Bleecker before and after storefront">
+            <div class="ba-sidebyside">
+              <div>
+                <span class="ba-tag">Before</span>
+                <img src="/assets/portfolio/tursian-9-bleecker-before-storefront-800.v1.jpg" srcset="/assets/portfolio/tursian-9-bleecker-before-storefront-480.v1.jpg 480w, /assets/portfolio/tursian-9-bleecker-before-storefront-800.v1.jpg 800w, /assets/portfolio/tursian-9-bleecker-before-storefront-1200.v1.jpg 1200w" sizes="(max-width: 900px) 100vw, 50vw" width="1800" height="1350" loading="lazy" decoding="async" alt="Daytime straight-on view of the 9 Bleecker Street storefront before install, with torn posters on the facade and yellow BR and UK graffiti on both window panes.">
+              </div>
+              <div>
+                <span class="ba-tag">After</span>
+                <img src="/assets/portfolio/tursian-9-bleecker-hero-800.v1.jpg" srcset="/assets/portfolio/tursian-9-bleecker-hero-480.v1.jpg 480w, /assets/portfolio/tursian-9-bleecker-hero-800.v1.jpg 800w, /assets/portfolio/tursian-9-bleecker-hero-1200.v1.jpg 1200w" sizes="(max-width: 900px) 100vw, 50vw" width="1800" height="1350" loading="lazy" decoding="async" alt="Straight-on nighttime view of the TURSIAN storefront at 9 Bleecker Street, New York, NY, with second-surface window graphics on both panes.">
+              </div>
+            </div>
+            <div class="ba-interactive">
+              <div class="ba-layer ba-before">
+                <img src="/assets/portfolio/tursian-9-bleecker-before-storefront-800.v1.jpg" srcset="/assets/portfolio/tursian-9-bleecker-before-storefront-480.v1.jpg 480w, /assets/portfolio/tursian-9-bleecker-before-storefront-800.v1.jpg 800w, /assets/portfolio/tursian-9-bleecker-before-storefront-1200.v1.jpg 1200w" sizes="100vw" width="1800" height="1350" alt="Daytime straight-on view of the 9 Bleecker Street storefront before install, with torn posters on the facade and yellow BR and UK graffiti on both window panes.">
+              </div>
+              <div class="ba-after-wrap">
+                <div class="ba-layer ba-after">
+                  <img src="/assets/portfolio/tursian-9-bleecker-hero-800.v1.jpg" srcset="/assets/portfolio/tursian-9-bleecker-hero-480.v1.jpg 480w, /assets/portfolio/tursian-9-bleecker-hero-800.v1.jpg 800w, /assets/portfolio/tursian-9-bleecker-hero-1200.v1.jpg 1200w" sizes="100vw" width="1800" height="1350" alt="Straight-on nighttime view of the TURSIAN storefront at 9 Bleecker Street, New York, NY, with second-surface window graphics on both panes.">
+                </div>
+              </div>
+              <span class="ba-label ba-label--before">Before</span>
+              <span class="ba-label ba-label--after">After</span>
+              <div class="ba-divider" aria-hidden="true"></div>
+              <input type="range" class="ba-range" min="0" max="100" value="50" aria-label="Compare TURSIAN storefront before and after">
+            </div>
+            <figcaption>Before and after at 9 Bleecker Street. Before photos by the client (August–September 2026).</figcaption>
           </figure>
         </div>
       </article>
@@ -1044,6 +1064,7 @@ if (typeof lightbox.showModal === "function") {
   });
 }
 </script>
+<script src="/assets/js/before-after.js"></script>
 <script data-goatcounter="https://arcsignco.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
