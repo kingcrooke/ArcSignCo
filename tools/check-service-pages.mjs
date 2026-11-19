@@ -30,10 +30,11 @@ export const SERVICE_SLUGS = [
   "design-consulting",
   "agencies-institutions",
 ];
-const NON_SERVICE_PAGES = new Set(["contact"]);
+const NON_SERVICE_PAGES = new Set(["contact", "about"]);
 const pages = [
   { slug: "", file: "index.html" },
   { slug: "contact", file: "contact/index.html" },
+  { slug: "about", file: "about/index.html" },
   ...SERVICE_SLUGS.map(slug => ({ slug, file: `${slug}/index.html` })),
 ];
 
@@ -146,10 +147,10 @@ for (const { slug, file } of pages) {
   for (const re of BANNED) if (re.test(visible)) fail(label, `visible text matches banned claim ${re}`);
   for (const re of EDITOR_NOTE_SCAN) if (re.test(html)) fail(label, `page HTML contains editor note ${re}`);
   if (visible.includes("83 Post Ave")) fail(label, "visible text contains forbidden address 83 Post Ave");
-  if ((slug === "" || slug === "contact") && !visible.includes(APPROVED_ADDRESS_FULL)) {
-    fail(label, `homepage/contact should show approved address ${APPROVED_ADDRESS_FULL}`);
+  if ((slug === "" || slug === "contact" || slug === "about") && !visible.includes(APPROVED_ADDRESS_FULL)) {
+    fail(label, `homepage/contact/about should show approved address ${APPROVED_ADDRESS_FULL}`);
   }
-  if (slug === "" || slug === "contact") pass(label, "approved street address visible where required");
+  if (slug === "" || slug === "contact" || slug === "about") pass(label, "approved street address visible where required");
   if (!visible.includes("arc@arcsignco.com") || !visible.includes("(347) 450-2110")) fail(label, "missing visible email or phone");
   if (html.includes("mailto:jc@arcsignco.com")) fail(label, "page still has a jc@ mailto link");
   if (visible.includes("+13474502110")) fail(label, "visible text contains raw E.164 phone");

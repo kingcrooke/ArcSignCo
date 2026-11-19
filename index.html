@@ -817,6 +817,18 @@ h1 {
 .arc-feature h3 a:hover { color: var(--navy-3); }
 .arc-feature p { color: var(--muted); font-size: 14px; margin-bottom: 12px; }
 .arc-feature-link { font-weight: 900; color: var(--navy); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.case-label--concept {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  background: rgba(11, 29, 51, 0.08);
+  color: var(--muted);
+}
 .specs { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .specs div { display: flex; justify-content: space-between; gap: 14px; font-size: 12px; }
 .specs span:first-child { color: var(--muted); font-weight: 800; }
@@ -1121,7 +1133,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
     </a>
     <nav class="navlinks" aria-label="Primary navigation">
       <div class="navmenu" id="nav-menu">
-        <a href="#about">About</a>
+        <a href="/about/">About</a>
         <div class="nav-services-group">
           <a href="#services" class="nav-services-label">Services</a>
           <div class="nav-services-sub" aria-label="Service pages">
@@ -1218,7 +1230,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
           <span class="eyebrow">Why Arc</span>
           <h2>Signage for NYC jobs, drawn for review.</h2>
         </div>
-        <p class="lead">Arc Signage Co handles signage for restaurant, bar, and storefront owners, then GCs, architects, and property managers, across the five boroughs and all of New Jersey and Connecticut.</p>
+        <p class="lead">Arc Signage Co handles signage for restaurant, bar, and storefront owners, then GCs, architects, and property managers, across the five boroughs and all of New Jersey and Connecticut. <a href="/about/">About Arc</a></p>
       </div>
       <div class="revision-list">
         <article class="revision"><b>1</b><h3>One point of contact</h3><p>One point of contact from first review to closeout. Arc does design, shop drawings, vinyl and small 3D-printed parts in-house, with third-party PE stamping when required. Larger fabrication and installation are through Arc's licensed partners, and the project's licensed electrician handles electrical. Arc does not file permits or stamp drawings; it coordinates with the licensed applicant.</p></article>
@@ -1290,13 +1302,14 @@ footer p { color: #cfd9e6; font-size: 13px; }
         </div>
         <div class="arc-feature-body">
           <span class="arc-feature-tag">Completed Arc job</span>
-          <h3 id="arc-feature-title"><a href="/window-graphics/">Cyclone Bagels — Coney Island window graphic</a></h3>
+          <h3 id="arc-feature-title"><a href="/portfolio/cyclone-bagels/">Cyclone Bagels — Coney Island window graphic</a></h3>
           <p>A completed Arc Signage Co job: a Coney Island window graphic for Cyclone Bagels.</p>
-          <a class="arc-feature-link" href="/window-graphics/">View project</a>
+          <a class="arc-feature-link" href="/portfolio/cyclone-bagels/">Read case study</a>
         </div>
       </article>
       <div class="experience-showcase">
         <figure class="project-collage">
+          <span class="case-label case-label--concept">Concept</span>
           <picture>
             <source type="image/avif" srcset="/assets/img/scope-collage-800.v1.avif 800w, /assets/img/scope-collage-1200.v1.avif 1200w, /assets/img/scope-collage-1774.v1.avif 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px">
             <source type="image/webp" srcset="/assets/img/scope-collage-800.v1.webp 800w, /assets/img/scope-collage-1200.v1.webp 1200w, /assets/img/scope-collage-1774.v1.webp 1774w" sizes="(max-width: 720px) calc(100vw - 36px), (max-width: 1040px) calc(50vw - 26px), 771px">
@@ -1497,7 +1510,7 @@ footer p { color: #cfd9e6; font-size: 13px; }
       </div>
     </div>
     <div class="footer-links">
-      <a href="#about">About</a>
+      <a href="/about/">About</a>
       <a href="#services">Services</a>
       <a href="#work">Scopes</a>
       <a href="/portfolio">Prior signage work</a>
