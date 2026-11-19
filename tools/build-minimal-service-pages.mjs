@@ -54,8 +54,7 @@ function pageHtml(p) {
   </section>`
     : "";
 
-  // Cyclone Bagels shop photo stays off window-graphics until a good exterior photo exists.
-  const cycloneBlock = "";
+  const featuredCaseStudyBlock = "";
 
   const checklist = (
     p.quoteChecklist || [
@@ -152,7 +151,7 @@ ${faqJson}
     </a>
     <nav class="navlinks" aria-label="Primary navigation">
       <div class="navmenu" id="nav-menu">
-        <a href="/#about">About</a>
+        <a href="/about/">About</a>
         <div class="nav-services-group">
           <a href="/#services" class="nav-services-label">Services</a>
           <div class="nav-services-sub" aria-label="Service pages">${NAV}
@@ -199,7 +198,7 @@ ${faqJson}
     </div>
   </section>
 ${scopeBlock}
-${cycloneBlock}
+${featuredCaseStudyBlock}
   <section class="section${p.slug === "window-graphics" ? "" : " alt"}" id="what-to-send">
     <div class="wrap">
       <div class="section-head">
@@ -258,7 +257,7 @@ ${cycloneBlock}
       <p>Full-service signage for New York / Tri-State: design, permit coordination, and ADA signage. Larger fabrication is through Arc's licensed partners. Vinyl, window graphics, and wrap installation are in-house. Electrical and structural installation are through Arc's licensed partners. Arc does not file permits or stamp drawings.</p>
     </div>
     <div class="footer-links">
-      <a href="/#about">About</a>
+      <a href="/about/">About</a>
       <a href="/#services">Services</a>
       <a href="/portfolio">Prior signage work</a>
       <a href="/?type=${p.slug}#quote">Contact</a>
