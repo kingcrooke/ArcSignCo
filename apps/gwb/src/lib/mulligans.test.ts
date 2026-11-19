@@ -19,13 +19,16 @@ import state from '../test/fixtures/state-nfl.json'
 import type { NflState, SleeperLeague } from './types'
 
 describe('mulligans', () => {
-  it('lists all eight confirmed uses in ledger order', () => {
-    expect(mulliganLedgerEntries()).toHaveLength(8)
-    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(8)
+  it('lists all nine confirmed uses in ledger order', () => {
+    expect(mulliganLedgerEntries()).toHaveLength(9)
+    expect(MULLIGAN_LEDGER_ENTRIES).toHaveLength(9)
+    expect(mulliganLedgerEntries().map((e) => e.week)).toEqual([
+      1, 2, 2, 3, 3, 4, 4, 6, 10,
+    ])
   })
 
-  it('marks rosters 1, 2, 3, 4, 8, 9, 10, 12 as used and leaves others available', () => {
-    for (const id of [1, 2, 3, 4, 8, 9, 10, 12]) {
+  it('marks rosters 1, 2, 3, 4, 6, 8, 9, 10, 12 as used and leaves others available', () => {
+    for (const id of [1, 2, 3, 4, 6, 8, 9, 10, 12]) {
       expect(mulliganStatusForRoster(id).used).toBe(true)
     }
     expect(mulliganLabel(mulliganStatusForRoster(4))).toContain('Used')
@@ -34,8 +37,12 @@ describe('mulligans', () => {
     expect(mulliganLabel(mulliganStatusForRoster(12))).toContain('Week 2')
     expect(mulliganLabel(mulliganStatusForRoster(12))).toContain('DJ Moore')
     expect(mulliganLabel(mulliganStatusForRoster(8))).toContain('Washington')
-    expect(mulliganStatusForRoster(11).used).toBe(false)
-    expect(mulliganLabel(mulliganStatusForRoster(11))).toBe('Available')
+    expect(mulliganLabel(mulliganStatusForRoster(6))).toContain('Drake Maye')
+    expect(mulliganLabel(mulliganStatusForRoster(6))).not.toBe('Available')
+    for (const id of [5, 7, 11]) {
+      expect(mulliganStatusForRoster(id).used).toBe(false)
+      expect(mulliganLabel(mulliganStatusForRoster(id))).toBe('Available')
+    }
   })
 
   it('uses Hady, +7.3, Mauricio note, and Matt failed tag', () => {
@@ -124,6 +131,16 @@ describe('mulligans', () => {
     expect(mulligansUsedThroughWeek(4)).toBe(7)
     expect(mulligansUsedThroughWeek(5)).toBe(7)
     expect(mulligansUsedThroughWeek(6)).toBe(8)
+    expect(mulligansUsedThroughWeek(7)).toBe(8)
+    expect(mulligansUsedThroughWeek(8)).toBe(8)
+    expect(mulligansUsedThroughWeek(9)).toBe(8)
+    expect(mulligansUsedThroughWeek(10)).toBe(9)
+    expect(mulliganEntriesForWeek(7)).toHaveLength(0)
+    expect(mulliganEntriesForWeek(8)).toHaveLength(0)
+    expect(mulliganEntriesForWeek(9)).toHaveLength(0)
+    expect(mulliganEntriesForWeek(10)).toHaveLength(1)
+    expect(mulliganStatusForRoster(6, 9).used).toBe(false)
+    expect(mulliganStatusForRoster(6, 10).used).toBe(true)
     expect(mulliganStatusForRoster(10).used).toBe(true)
     expect(mulliganStatusForRoster(10, 5).used).toBe(false)
     expect(mulliganStatusForRoster(9, 1).used).toBe(false)
@@ -165,6 +182,42 @@ describe('mulligans', () => {
     expect(formatMulliganLedgerLine(jamil)).not.toContain('Outcome TBD')
     expect(mulliganEntriesForWeek(6)).toHaveLength(1)
     expect(mulliganLabel(mulliganStatusForRoster(10))).toContain('Andrews')
+  })
+
+  it('shows Hady week 10 Maye-to-Penix swap as a win that did not flip', () => {
+    const hady = mulliganForRoster(6)!
+    expect(hady.id).toBe('w10-hady')
+    expect(hady.week).toBe(10)
+    expect(hady.managerShort).toBe('Hady')
+    expect(hady.won).toBe(true)
+    expect(hady.flipped).toBe(false)
+    expect(hady.resultPending).toBeUndefined()
+    expect(hady.out.points).toBe(3.32)
+    expect(hady.in.name).toBe('Michael Penix Jr.')
+    expect(hady.in.points).toBe(17.06)
+    expect(hady.netImpact).toBe(13.74)
+    expect(hady.scoreWith).toBe(187.16)
+    expect(hady.scoreWithout).toBe(173.42)
+    expect(hady.opponentScore).toBe(168.88)
+    expect(hady.opponentRosterId).toBe(5)
+    const parts = mulliganReceiptParts(hady)
+    expect(parts.manager).toBe('Hady')
+    expect(parts.outLine).toBe('OUT Drake Maye 3.32')
+    expect(parts.inLine).toBe('IN Michael Penix Jr. 17.06')
+    expect(parts.netLine).toBe('Net +13.74')
+    expect(parts.resultLine).toBe('W 187.16–168.88')
+    expect(parts.versusLine).toBe('Won vs Eric')
+    expect(parts.withoutLine).toBe("Would've been 173.42 without it")
+    expect(parts.flipLine).toBe('No flip')
+    expect(parts.footnote).toContain('173.42')
+    expect(formatMulliganReceipt(hady)).toContain('Hady')
+    expect(formatMulliganReceipt(hady)).not.toMatch(/Hadi/i)
+    expect(formatMulliganLedgerLine(hady)).toContain('QB NE')
+    expect(formatMulliganLedgerLine(hady)).toContain('Won')
+    expect(formatMulliganLedgerLine(hady)).toContain('No flip')
+    expect(mulliganEntriesForWeek(10).map((e) => e.managerShort)).toEqual([
+      'Hady',
+    ])
   })
 
   it('uses live mulligan deferral copy when ledger week is in progress', () => {
