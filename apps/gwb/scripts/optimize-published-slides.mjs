@@ -16,7 +16,7 @@ const FULL_WIDTH = 1080
 const THUMB_WIDTH = 540
 const WEBP_QUALITY = 80
 
-const RESULTS_BASENAMES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].flatMap((w) =>
+const RESULTS_BASENAMES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].flatMap((w) =>
   [1, 2, 3, 4, 5, 6].map((m) => `results-w${w}-m${m}`),
 )
 

@@ -222,11 +222,22 @@ describe('getWeekGraphicsSections week 4', () => {
     expect(getWeekGraphicsSlides(10)[0]?.id).toBe('results-w10-m1')
   })
 
-  it('lists Matchups only for upcoming Week 11 at Muse card size', () => {
+  it('lists Results then Matchups for finished Week 11 at Muse card size', () => {
     const sections = getWeekGraphicsSections(11)
-    expect(sections.map((s) => s.kind)).toEqual(['matchups'])
-    expect(sections.map((s) => s.heading)).toEqual(['Matchups'])
-    expect(sections[0]?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+    expect(sections.map((s) => s.kind)).toEqual(['results', 'matchups'])
+    expect(sections.map((s) => s.heading)).toEqual(['Results', 'Matchups'])
+    const results = sections.find((s) => s.kind === 'results')
+    expect(results?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
+      ['results-w11-m1', 'results-w11-m1', 'Crooke beats Kayser 143.00-115.88'],
+      ['results-w11-m2', 'results-w11-m2', 'Mauricio beats Matt 153.42-143.87'],
+      ['results-w11-m3', 'results-w11-m3', 'Hady beats Jamil 113.49-83.91'],
+      ['results-w11-m4', 'results-w11-m4', 'Narking beats Frankie 142.38-84.40'],
+      ['results-w11-m5', 'results-w11-m5', 'Eric beats Danny 170.68-106.77'],
+      ['results-w11-m6', 'results-w11-m6', 'Manny beats Steven 154.61-114.96'],
+    ])
+    expect(results?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    const matchups = sections.find((s) => s.kind === 'matchups')
+    expect(matchups?.slides.map((s) => [s.id, s.basename, s.title])).toEqual([
       ['vs-w11-m1', 'vs-w11-m1', 'Kayser vs Crooke'],
       ['vs-w11-m2', 'vs-w11-m2', 'Mauricio vs Matt'],
       ['vs-w11-m3', 'vs-w11-m3', 'Hady vs Jamil'],
@@ -234,7 +245,9 @@ describe('getWeekGraphicsSections week 4', () => {
       ['vs-w11-m5', 'vs-w11-m5', 'Danny vs Eric'],
       ['vs-w11-m6', 'vs-w11-m6', 'Steven vs Manny'],
     ])
-    expect(sections[0]?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    expect(matchups?.slides[0]).toMatchObject(MUSE_CARD_SLIDE_SIZE)
+    expect(sections[0]?.slides[0]?.id).toBe('results-w11-m1')
+    expect(getWeekGraphicsSlides(11)[0]?.id).toBe('results-w11-m1')
   })
 
   it('publishes the six final result cards with approved headlines', () => {
